@@ -27,6 +27,13 @@ function NavItem({ icon, label, isActive }: NavItemProps) {
 export function Sidebar() {
   return (
     <div className="p-8 h-full flex flex-col">
+      <div className="flex items-center gap-3 px-3 py-2 mb-6">
+        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-8 h-8 flex items-center justify-center rounded-md">
+          U
+        </div>
+        <span className="text-[#1A1A1A] font-medium">User's Space</span>
+      </div>
+      
       <div className="text-sm text-[#9EA3AD] font-semibold mb-6">WORKSPACE</div>
       <div className="space-y-1">
         <NavItem
@@ -42,15 +49,6 @@ export function Sidebar() {
           icon="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/aed2de8395d4d607024afd11386607b1be368ac0"
           label="Transactions"
         />
-      </div>
-      
-      <div className="mt-auto">
-        <div className="flex items-center gap-3 px-3 py-2">
-          <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-8 h-8 flex items-center justify-center rounded-md">
-            U
-          </div>
-          <span className="text-[#1A1A1A] font-medium">User's Space</span>
-        </div>
       </div>
     </div>
   );
