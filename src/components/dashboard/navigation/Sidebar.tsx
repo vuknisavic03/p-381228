@@ -36,7 +36,7 @@ export function Sidebar() {
         onClick={() => navigate("/profile")}
         className="flex items-center gap-3 px-4 py-3 mb-6 h-auto hover:bg-[#F6F6F7] w-full justify-start"
       >
-        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-10 h-10 flex items-center justify-center rounded-md">
+        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-bold w-12 h-12 flex items-center justify-center rounded-md text-lg">
           U
         </div>
         <span className="text-[#1A1A1A] font-medium text-base">User's Space</span>
