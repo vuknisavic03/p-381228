@@ -26,7 +26,7 @@ function NavItem({ icon, label, isActive }: NavItemProps) {
 
 export function Sidebar() {
   return (
-    <div className="p-8">
+    <div className="p-6 md:p-8 h-full flex flex-col">
       <div className="text-sm text-[#9EA3AD] font-semibold mb-4">WORKSPACE</div>
       <div className="space-y-2">
         <NavItem
@@ -44,16 +44,14 @@ export function Sidebar() {
         />
       </div>
       
-      <div className="mt-8 space-y-4">
+      <div className="mt-auto">
         <div className="flex items-center gap-2 bg-white px-2 py-1.5">
           <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-[26px] h-[26px] flex items-center justify-center rounded">
             U
           </div>
           <span className="text-[#1A1A1A] font-medium">User's Space</span>
         </div>
-        <div className="text-[#9EA3AD] text-sm font-semibold px-2">Edited just now</div>
       </div>
     </div>
   );
 }
-
