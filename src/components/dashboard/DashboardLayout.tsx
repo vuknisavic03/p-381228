@@ -4,7 +4,11 @@ import { Sidebar } from "./navigation/Sidebar";
 import { Header } from "./Header";
 import { ChartsGrid } from "./charts/ChartsGrid";
 
-export function DashboardLayout() {
+interface DashboardLayoutProps {
+  children?: React.ReactNode;
+}
+
+export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen bg-white">
       <div className="w-[280px] min-w-[280px] border-r border-[#E4E5EA]">
@@ -14,12 +18,16 @@ export function DashboardLayout() {
         <div className="px-10 pt-12">
           <Header />
         </div>
-        <div className="flex-1 px-10 pt-8">
-          <div className="text-[#9EA3AD] text-sm font-medium">Edited just now</div>
-          <div className="mt-6">
-            <ChartsGrid />
+        {children ? (
+          children
+        ) : (
+          <div className="flex-1 px-10 pt-8">
+            <div className="text-[#9EA3AD] text-sm font-medium">Edited just now</div>
+            <div className="mt-6">
+              <ChartsGrid />
+            </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );
