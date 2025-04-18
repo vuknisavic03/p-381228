@@ -1,6 +1,8 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface NavItemProps {
   icon: string;
@@ -25,14 +27,20 @@ function NavItem({ icon, label, isActive }: NavItemProps) {
 }
 
 export function Sidebar() {
+  const navigate = useNavigate();
+
   return (
     <div className="p-8 h-full flex flex-col">
-      <div className="flex items-center gap-3 px-4 py-2.5 mb-6">
-        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-8 h-8 flex items-center justify-center rounded-md">
+      <Button
+        variant="ghost"
+        onClick={() => navigate("/profile")}
+        className="flex items-center gap-3 px-4 py-3 mb-6 h-auto hover:bg-[#F6F6F7] w-full justify-start"
+      >
+        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-10 h-10 flex items-center justify-center rounded-md">
           U
         </div>
-        <span className="text-[#1A1A1A] font-medium">User's Space</span>
-      </div>
+        <span className="text-[#1A1A1A] font-medium text-base">User's Space</span>
+      </Button>
       
       <div className="text-sm text-[#9EA3AD] font-semibold mb-6 px-4">WORKSPACE</div>
       <div className="space-y-1">
