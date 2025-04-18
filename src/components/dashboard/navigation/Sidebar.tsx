@@ -19,12 +19,24 @@ function NavItem({ icon, label, path, isActive }: NavItemProps) {
       className={cn(
         "flex items-center gap-3 px-4 py-2.5 rounded-md transition-all duration-200 ease-in-out cursor-pointer",
         "hover:bg-[#F6F6F7] hover:translate-x-1",
-        isActive ? "bg-[#F6F6F7] text-[#1A1A1A] font-semibold" : "text-[#9EA3AD]"
+        isActive 
+          ? "bg-[#F6F6F7]" 
+          : "text-[#1A1A1A]"
       )}
       onClick={() => navigate(path)}
     >
-      <img src={icon} className="w-5 h-5" alt={`${label} icon`} />
-      <span className="text-base">
+      <img 
+        src={icon} 
+        className={cn(
+          "w-5 h-5",
+          isActive ? "filter-[#1EAEDB] brightness-0 saturate-100 invert-[39%] sepia-[93%] saturate-[2000%] hue-rotate-[165deg]" : ""
+        )} 
+        alt={`${label} icon`}
+      />
+      <span className={cn(
+        "text-base text-[#1A1A1A]",
+        isActive ? "font-bold" : "font-normal"
+      )}>
         {label}
       </span>
     </div>
