@@ -17,7 +17,8 @@ function NavItem({ icon, label, path, isActive }: NavItemProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 px-4 py-2.5 rounded-md transition-colors cursor-pointer",
+        "flex items-center gap-3 px-4 py-2.5 rounded-md transition-all duration-200 ease-in-out cursor-pointer",
+        "hover:bg-[#F6F6F7] hover:translate-x-1",
         isActive && "bg-[#F6F6F7]"
       )}
       onClick={() => navigate(path)}
@@ -39,7 +40,7 @@ export function Sidebar() {
       <Button
         variant="ghost"
         onClick={() => navigate("/profile")}
-        className="flex items-center gap-3 px-4 py-3 mb-6 h-auto hover:bg-[#F6F6F7] w-full justify-start"
+        className="flex items-center gap-3 px-4 py-3 mb-6 h-auto hover:bg-[#F6F6F7] hover:translate-x-1 transition-all duration-200 ease-in-out w-full justify-start"
       >
         <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-10 h-10 flex items-center justify-center rounded-md">
           U
