@@ -10,7 +10,7 @@ interface AnalyticsCardProps {
 
 export function AnalyticsCard({ title, icon: Icon, color }: AnalyticsCardProps) {
   return (
-    <Card className="p-6">
+    <Card className="p-6 shadow-sm border border-[#E7E8EC]">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
