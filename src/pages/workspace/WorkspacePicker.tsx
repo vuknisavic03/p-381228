@@ -1,7 +1,7 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Plus } from 'lucide-react';
+import { CreateWorkspaceDialog } from '@/components/workspace/CreateWorkspaceDialog';
 
 interface Workspace {
   name: string;
@@ -19,6 +19,7 @@ const workspaces: Workspace[] = [
 
 export default function WorkspacePicker() {
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div className="h-screen bg-white">
@@ -26,8 +27,11 @@ export default function WorkspacePicker() {
         <div className="p-4 border-b border-[#E4E5EA]">
           <div className="flex items-center justify-between">
             <h2 className="text-[#1A1A1A] text-lg font-semibold">Choose Workspace</h2>
-            <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100">
-              <span className="text-2xl text-[#1A1A1A]">+</span>
+            <button 
+              onClick={() => setIsDialogOpen(true)}
+              className="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100"
+            >
+              <Plus className="w-4 h-4 text-[#1A1A1A]" />
             </button>
           </div>
         </div>
@@ -52,6 +56,10 @@ export default function WorkspacePicker() {
           ))}
         </div>
       </div>
+      <CreateWorkspaceDialog 
+        open={isDialogOpen} 
+        onOpenChange={setIsDialogOpen}
+      />
     </div>
   );
 }
