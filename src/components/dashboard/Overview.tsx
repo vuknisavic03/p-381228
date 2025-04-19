@@ -1,13 +1,12 @@
 
 import React from "react";
 import { DashboardLayout } from "./DashboardLayout";
+import { WorkspaceOverview } from "../workspace/WorkspaceOverview";
 
 export function Overview() {
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <h1 className="text-2xl font-semibold">Overview</h1>
-      </div>
+      <WorkspaceOverview />
     </DashboardLayout>
   );
 }
