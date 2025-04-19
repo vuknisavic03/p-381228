@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Sidebar } from "../navigation/Sidebar";
+import { WorkspaceNav } from "../workspace/WorkspaceNav";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen">
-      <Sidebar />
+      <WorkspaceNav />
       <main className="flex-1 overflow-auto">
         {children}
       </main>

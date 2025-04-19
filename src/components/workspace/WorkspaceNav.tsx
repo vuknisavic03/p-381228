@@ -1,10 +1,10 @@
 
-import React from "react";
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useNavigate, useLocation } from "react-router-dom";
+import { LayoutDashboard, List, BarChart } from 'lucide-react';
 
-export function Sidebar() {
+export function WorkspaceNav() {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -30,11 +30,7 @@ export function Sidebar() {
             )}
             onClick={() => navigate('/dashboard')}
           >
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/4d45b3f00f54d0b9b021c6c0492b60eeeac9b73d"
-              className="w-5 h-5"
-              alt="Overview icon"
-            />
+            <LayoutDashboard className="w-5 h-5" />
             <span className={cn(
               "text-[#1A1A1A]",
               isActive('/dashboard') ? "font-semibold" : "font-medium"
@@ -47,11 +43,7 @@ export function Sidebar() {
             )}
             onClick={() => navigate('/listings')}
           >
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/33648ba2911e7b4a132f0393b030f068f0e68c68"
-              className="w-5 h-5"
-              alt="Listings icon"
-            />
+            <List className="w-5 h-5" />
             <span className={cn(
               "text-[#1A1A1A]",
               isActive('/listings') ? "font-semibold" : "font-medium"
@@ -64,11 +56,7 @@ export function Sidebar() {
             )}
             onClick={() => navigate('/transactions')}
           >
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/aed2de8395d4d607024afd11386607b1be368ac0"
-              className="w-5 h-5"
-              alt="Transactions icon"
-            />
+            <BarChart className="w-5 h-5" />
             <span className={cn(
               "text-[#1A1A1A]",
               isActive('/transactions') ? "font-semibold" : "font-medium"
