@@ -6,7 +6,7 @@ export default function Listings() {
   return (
     <DashboardLayout>
       <div className="p-8">
-        <h1 className="text-2xl font-semibold mb-6">Listings</h1>
+        {/* Removed the Listings title */}
       </div>
     </DashboardLayout>
   );
