@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Header } from "@/components/dashboard/Header";
+import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
 
 export function WorkspaceOverview() {
   return (
@@ -9,7 +10,7 @@ export function WorkspaceOverview() {
         <Header />
       </div>
       <div className="flex-1 p-8 min-h-0">
-        {/* Content goes here */}
+        <AnalyticsGrid />
       </div>
     </div>
   );
