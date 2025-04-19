@@ -13,12 +13,15 @@ export function WorkspaceNav() {
   return (
     <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white">
       <div className="p-4 border-b border-[#E4E5EA]">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[#1A1A1A] text-lg font-semibold">Choose Workspace</h2>
-          <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100">
-            <span className="text-2xl text-[#1A1A1A]">+</span>
-          </button>
-        </div>
+        <button 
+          onClick={() => navigate('/')}
+          className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
+        >
+          <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
+            U
+          </div>
+          <span className="text-[#1A1A1A] font-medium">User's Space</span>
+        </button>
       </div>
       <div className="p-4">
         <div className="text-sm text-[#9EA3AD] font-semibold mb-4">WORKSPACE</div>
