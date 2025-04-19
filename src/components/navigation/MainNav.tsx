@@ -8,7 +8,7 @@ export function MainNav() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="flex space-x-4 p-4 border-b border-[#E4E5EA]">
+    <nav className="flex space-x-4">
       <Link
         to="/dashboard"
         className={`px-3 py-2 rounded-md ${
