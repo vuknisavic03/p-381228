@@ -1,3 +1,4 @@
+
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ function NavItem({ icon, label, path, isActive }: NavItemProps) {
         src={icon} 
         className={cn(
           "w-5 h-5",
-          isActive ? "" : "brightness-0"
+          isActive ? "filter-[#1EAEDB] brightness-0 saturate-100 invert-[39%] sepia-[93%] saturate-[2000%] hue-rotate-[165deg]" : "brightness-0"
         )} 
         alt={`${label} icon`}
       />
