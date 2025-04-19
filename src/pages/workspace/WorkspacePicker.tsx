@@ -2,8 +2,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 interface Workspace {
   name: string;
