@@ -2,18 +2,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Workspace {
   name: string;
   owner: string;
+  initials: string;
 }
 
 const workspaces: Workspace[] = [
-  { name: "Kevin's Workspace", owner: "Kevin Anderson" },
-  { name: "Lucas's Workspace", owner: "Lucas Everett" },
-  { name: "Mia's Workspace", owner: "Mia Holloway" },
-  { name: "Nathan's Workspace", owner: "Nathan Caldwell" },
-  { name: "Sophia's Workspace", owner: "Sophia Riggins" },
+  { name: "Kevin's Workspace", owner: "Kevin Anderson", initials: "KA" },
+  { name: "Lucas's Workspace", owner: "Lucas Everett", initials: "LE" },
+  { name: "Mia's Workspace", owner: "Mia Holloway", initials: "MH" },
+  { name: "Nathan's Workspace", owner: "Nathan Caldwell", initials: "NC" },
+  { name: "Sophia's Workspace", owner: "Sophia Riggins", initials: "SR" },
 ];
 
 export default function WorkspacePicker() {
@@ -34,12 +37,17 @@ export default function WorkspacePicker() {
           {workspaces.map((workspace) => (
             <button
               key={workspace.name}
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left"
               onClick={() => navigate('/dashboard')}
+              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left"
             >
-              <div>
-                <div className="text-[#1A1A1A] font-medium">{workspace.name}</div>
-                <div className="text-sm text-[#9EA3AD]">{workspace.owner}</div>
+              <div className="flex items-center gap-3">
+                <div className="min-w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
+                  {workspace.initials}
+                </div>
+                <div>
+                  <div className="text-[#1A1A1A] font-medium">{workspace.name}</div>
+                  <div className="text-sm text-[#9EA3AD]">{workspace.owner}</div>
+                </div>
               </div>
               <ChevronRight className="w-5 h-5 text-[#9EA3AD]" />
             </button>
