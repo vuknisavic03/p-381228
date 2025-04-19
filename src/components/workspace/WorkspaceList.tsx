@@ -1,6 +1,11 @@
 
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+interface WorkspaceListProps {
+  returnTo?: string;
+}
 
 interface Workspace {
   name: string;
@@ -15,7 +20,15 @@ const workspaces: Workspace[] = [
   { name: "Sophia's Workspace", owner: "Sophia Riggins" },
 ];
 
-export function WorkspaceList() {
+export function WorkspaceList({ returnTo }: WorkspaceListProps) {
+  const navigate = useNavigate();
+
+  const handleWorkspaceSelect = () => {
+    if (returnTo) {
+      navigate(returnTo);
+    }
+  };
+
   return (
     <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white">
       <div className="p-4 border-b border-[#E4E5EA]">
@@ -31,6 +44,7 @@ export function WorkspaceList() {
           <button
             key={workspace.name}
             className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left"
+            onClick={handleWorkspaceSelect}
           >
             <div>
               <div className="text-[#1A1A1A] font-medium">{workspace.name}</div>

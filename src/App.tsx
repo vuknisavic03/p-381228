@@ -9,7 +9,7 @@ import Profile from "./pages/Profile";
 import Listings from "./pages/Listings";
 import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
-import UserSpace from "./pages/UserSpace";
+import WorkspacePicker from "./pages/WorkspacePicker";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +20,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<UserSpace />} />
+          <Route path="/" element={<WorkspacePicker />} />
+          <Route path="/workspace-picker" element={<WorkspacePicker />} />
           <Route path="/dashboard" element={<Index />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/listings" element={<Listings />} />
