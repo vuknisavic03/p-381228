@@ -1,8 +1,6 @@
 
 import React from "react";
 import { Sidebar } from "./navigation/Sidebar";
-import { Header } from "./Header";
-import { ChartsGrid } from "./charts/ChartsGrid";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -15,19 +13,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <Sidebar />
       </div>
       <main className="flex-1 flex flex-col">
-        <div className="px-10 pt-12">
-          <Header />
-        </div>
-        {children ? (
-          children
-        ) : (
-          <div className="flex-1 px-10 pt-8">
-            <div className="text-[#9EA3AD] text-sm font-medium">Edited just now</div>
-            <div className="mt-6">
-              <ChartsGrid />
-            </div>
-          </div>
-        )}
+        {children}
       </main>
     </div>
   );
