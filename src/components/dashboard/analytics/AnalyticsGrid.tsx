@@ -4,7 +4,7 @@ import { AnalyticsCard } from "./AnalyticsCard";
 
 export function AnalyticsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 max-w-[1400px] mx-auto px-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 max-w-[1400px] mx-auto p-4 lg:p-8">
       <AnalyticsCard
         title="Total Revenue"
         icon={BarChart}
