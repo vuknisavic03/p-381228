@@ -46,19 +46,19 @@ export function Sidebar() {
   const location = useLocation();
 
   return (
-    <div className="p-8 h-full flex flex-col">
+    <div className="p-4 h-full flex flex-col"> {/* Reduced padding from p-8 to p-4 */}
       <Button
         variant="ghost"
         onClick={() => navigate("/profile")}
-        className="flex items-center gap-3 px-4 py-3 mb-6 h-auto hover:bg-[#F6F6F7] hover:translate-x-1 transition-all duration-200 ease-in-out w-full justify-start"
+        className="flex items-center gap-2 px-2 py-2 mb-4 h-auto hover:bg-[#F6F6F7] hover:translate-x-1 transition-all duration-200 ease-in-out w-full justify-start" // Reduced padding and gap
       >
-        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-10 h-10 flex items-center justify-center rounded-md">
+        <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-8 h-8 flex items-center justify-center rounded-md"> {/* Slightly smaller user icon */}
           U
         </div>
         <span className="text-[#1A1A1A] font-medium text-base">User's Space</span>
       </Button>
       
-      <div className="text-sm text-[#9EA3AD] font-semibold mb-6 px-4">WORKSPACE</div>
+      <div className="text-xs text-[#9EA3AD] font-semibold mb-4 px-2">WORKSPACE</div> {/* Reduced text size and padding */}
       <div className="space-y-1">
         <NavItem
           icon="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/4d45b3f00f54d0b9b021c6c0492b60eeeac9b73d"
