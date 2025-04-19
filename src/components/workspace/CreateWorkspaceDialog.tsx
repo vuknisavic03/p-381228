@@ -63,21 +63,18 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
                   key={field.id}
                   className="relative p-6 bg-gray-50 rounded-lg border border-gray-100 transition-all hover:border-gray-200"
                 >
+                  {index > 0 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => remove(index)}
+                      className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full bg-white border border-gray-200 hover:bg-red-50 hover:border-red-200"
+                    >
+                      <X className="h-3 w-3 text-gray-500 hover:text-red-500" />
+                    </Button>
+                  )}
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-semibold text-gray-700">Property {index + 1}</h3>
-                      {index > 0 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => remove(index)}
-                          className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full bg-white border border-gray-200 hover:bg-red-50 hover:border-red-200"
-                        >
-                          <X className="h-3 w-3 text-gray-500 hover:text-red-500" />
-                        </Button>
-                      )}
-                    </div>
                     <FormField
                       control={form.control}
                       name={`properties.${index}.propertyType`}
@@ -143,3 +140,4 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
     </Dialog>
   );
 }
+
