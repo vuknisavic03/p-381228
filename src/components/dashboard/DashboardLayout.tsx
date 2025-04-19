@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Sidebar } from "./navigation/Sidebar";
+import { WorkspaceList } from "../workspace/WorkspaceList";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -9,9 +9,7 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen bg-white">
-      <div className="w-[280px] min-w-[280px] border-r border-[#E4E5EA]">
-        <Sidebar />
-      </div>
+      <WorkspaceList />
       <main className="flex-1 flex flex-col">
         {children}
       </main>
