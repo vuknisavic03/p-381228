@@ -2,7 +2,6 @@
 import React from 'react';
 import { Header } from "@/components/dashboard/Header";
 import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
-import { ChartsGrid } from "@/components/dashboard/charts/ChartsGrid";
 
 export function WorkspaceOverview() {
   return (
@@ -10,7 +9,7 @@ export function WorkspaceOverview() {
       <div className="flex-none px-8 pt-8">
         <Header />
       </div>
-      <div className="flex-1 py-8">
+      <div className="flex-1 py-8 pb-16">
         <AnalyticsGrid />
       </div>
     </div>
