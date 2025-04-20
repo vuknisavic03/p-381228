@@ -18,10 +18,10 @@ export default function Listings() {
           </Button>
         </div>
         <div className="flex-1 flex overflow-hidden">
-          <div className="w-[600px]">
+          <div className="w-[600px] bg-white">
             <ListingForm />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 bg-white">
             <ListingList />
           </div>
         </div>
