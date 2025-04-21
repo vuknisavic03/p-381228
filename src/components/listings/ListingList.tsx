@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Filter } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ListingForm } from "./ListingForm";
 import {
   Sheet,
   SheetContent,
@@ -59,18 +60,12 @@ export function ListingList() {
       </ScrollArea>
 
       <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <SheetContent side="right" className="w-[90%] sm:w-[540px] bg-white">
+        <SheetContent side="right" className="w-[90%] sm:w-[540px] bg-white overflow-y-auto">
           <SheetHeader className="border-b pb-4">
             <SheetTitle>Edit Listing #{selectedListing !== null ? selectedListing + 1 : ''}</SheetTitle>
           </SheetHeader>
           <div className="py-6">
-            <div className="space-y-6">
-              {selectedListing !== null && (
-                <div className="text-sm text-[#8D95A1]">
-                  Editing listing #{selectedListing + 1}
-                </div>
-              )}
-            </div>
+            <ListingForm isEditing={true} listingId={selectedListing !== null ? selectedListing + 1 : undefined} />
           </div>
         </SheetContent>
       </Sheet>
