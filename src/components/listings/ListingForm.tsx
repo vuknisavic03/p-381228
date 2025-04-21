@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,8 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
 
   const Required = () => <span className="text-[#1EAEDB] ml-1">*</span>;
 
+  const inputClassName = "h-11 text-sm text-[#222] bg-transparent border-0 rounded-none focus-visible:ring-0 placeholder:text-[#A0A8B5]";
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto">
@@ -49,7 +52,7 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
           <div>
             <SectionHeader>Listing details</SectionHeader>
             <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
-              <div className="flex justify-between items-center px-4 py-2 border-b border-[#E7E8EC]">
+              <div className="flex justify-between items-center px-4 py-3 border-b border-[#E7E8EC]">
                 <span className="text-xs text-[#A0A8B5]">Listing ID</span>
                 <span className="text-xs font-bold text-[#222]">#{listingId || 1}</span>
               </div>
@@ -57,27 +60,27 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
                 <div className="bg-white px-4 py-2 flex items-center">
                   <Input
                     placeholder="City"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                    className={inputClassName}
                   />
                   <Required />
                 </div>
                 <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Address"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                    className={inputClassName}
                   />
                   <Required />
                 </div>
                 <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Country"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                    className={inputClassName}
                   />
                 </div>
                 <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Postal Code"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                    className={inputClassName}
                   />
                 </div>
               </div>
@@ -106,14 +109,14 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
               <div className="bg-white px-4 py-2 flex items-center">
                 <Input
                   placeholder="Type"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className={inputClassName}
                 />
                 <Required />
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                 <Input
                   placeholder="Category"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className={inputClassName}
                 />
                 <Required />
               </div>
@@ -149,14 +152,14 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
                   <div className="bg-white px-4 py-2 flex items-center">
                     <Input
                       placeholder="Name"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                      className={inputClassName}
                     />
                     <Required />
                   </div>
                   <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                     <Input
                       placeholder="Surname"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                      className={inputClassName}
                     />
                   </div>
                 </>
@@ -165,14 +168,14 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
                   <div className="bg-white px-4 py-2 flex items-center">
                     <Input
                       placeholder="Company Name"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                      className={inputClassName}
                     />
                     <Required />
                   </div>
                   <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                     <Input
                       placeholder="Registration Number"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                      className={inputClassName}
                     />
                   </div>
                 </>
@@ -180,13 +183,13 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                 <Input
                   placeholder="Phone"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className={inputClassName}
                 />
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                 <Input
                   placeholder="Email"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className={inputClassName}
                 />
               </div>
             </div>
@@ -198,13 +201,13 @@ export function ListingForm({ isEditing = false, listingId }: ListingFormProps) 
               <div className="bg-white px-4 py-2 flex items-center">
                 <Input
                   placeholder="Revenue"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className={inputClassName}
                 />
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                 <Input
                   placeholder="Expenses"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className={inputClassName}
                 />
               </div>
             </div>
