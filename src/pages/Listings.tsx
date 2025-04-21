@@ -8,10 +8,10 @@ export default function Listings() {
   return (
     <DashboardLayout>
       <div className="h-screen flex">
-        <div className="w-[380px] min-w-[380px] bg-white border-r border-[#E7E8EC]">
+        <div className="w-[480px] min-w-[480px] bg-white border-r border-[#EBECED]">
           <ListingForm />
         </div>
-        <div className="flex-1 bg-[#F6F6F7]">
+        <div className="flex-1 bg-[#FBFBFC]">
           <ListingList />
         </div>
       </div>
