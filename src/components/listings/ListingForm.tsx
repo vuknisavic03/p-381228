@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -42,11 +43,11 @@ export function ListingForm() {
       <div className="flex items-center justify-between p-4 border-b border-[#E7E8EC]">
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center justify-center bg-[#F3F6F9] shadow-sm rounded w-7 h-7">
-            <span className="w-2 h-2 bg-[#006FB5] rounded-full" />
+            <span className="w-2 h-2 bg-[#1EAEDB] rounded-full" />
           </span>
           <h2 className="text-lg font-semibold text-[#222]">Listing details</h2>
         </div>
-        <Button variant="default" className="bg-[#006FB5] hover:bg-[#006FB5]/90">
+        <Button variant="default" className="bg-[#1EAEDB] hover:bg-[#1EAEDB]/90">
           Add listing
         </Button>
       </div>
@@ -56,8 +57,8 @@ export function ListingForm() {
           {/* Listing Info */}
           <div>
             <SectionHeader>Listing details</SectionHeader>
-            <div className="mt-3 mb-1 bg-[#FAFAFB]">
-              <div className="flex justify-between items-center px-4 py-2">
+            <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
+              <div className="flex justify-between items-center px-4 py-2 border-b border-[#E7E8EC]">
                 <span className="text-xs text-[#A0A8B5]">Listing ID</span>
                 <span className="text-xs font-bold text-[#222]">#1</span>
               </div>
@@ -69,20 +70,20 @@ export function ListingForm() {
                   />
                   <Required />
                 </div>
-                <div className="bg-white px-4 py-2 flex items-center">
+                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Address"
                     className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
                   />
                   <Required />
                 </div>
-                <div className="bg-white px-4 py-2 flex items-center">
+                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Country"
                     className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
                   />
                 </div>
-                <div className="bg-white px-4 py-2 flex items-center">
+                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Postal Code"
                     className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
