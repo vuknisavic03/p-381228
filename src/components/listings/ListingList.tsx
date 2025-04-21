@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, ArrowUp, ArrowDown, ArrowRight } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function ListingList() {
@@ -38,6 +38,7 @@ export function ListingList() {
               tenant={`Alexander Whitmore ${index + 1}`}
               phone="000-000-0000"
               category={index % 3 === 0 ? "Retail" : index % 2 === 0 ? "Office" : "Restaurant"}
+              onSelect={() => console.log(`Select listing ${index + 1} for editing`)}
             />
           ))}
         </div>
@@ -53,40 +54,23 @@ interface ListingCardProps {
   tenant: string;
   phone: string;
   category: string;
+  onSelect: () => void;
 }
 
-function ListingCard({ id, address, propertyType, tenant, phone, category }: ListingCardProps) {
-  const [isHovered, setIsHovered] = React.useState(false);
-
+function ListingCard({ id, address, propertyType, tenant, phone, category, onSelect }: ListingCardProps) {
   return (
     <div 
       className="rounded-lg border border-transparent bg-white p-4 space-y-3 hover:border-[#EBECED] hover:shadow-sm transition-all cursor-pointer group animate-fade-in"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onClick={onSelect}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-base font-medium text-[#8D95A1]">#{id}</span>
           <span className="text-base text-[#3D4149] font-medium tracking-tight">{address}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium transition-colors group-hover:border-[#D1D5DB]">
-            {propertyType}
-          </span>
-          {isHovered && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0"
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("View details for listing", id);
-              }}
-            >
-              <ArrowRight className="w-4 h-4 text-[#8D95A1]" />
-            </Button>
-          )}
-        </div>
+        <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium transition-colors group-hover:border-[#D1D5DB]">
+          {propertyType}
+        </span>
       </div>
       <div className="h-px bg-[#F4F4F8]" />
       <div className="flex items-center justify-between">
