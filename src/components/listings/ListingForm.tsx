@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ export function ListingForm() {
           {/* Listing Info */}
           <div>
             <SectionHeader>Listing details</SectionHeader>
-            <div className="mt-3 mb-1 rounded-lg overflow-hidden bg-[#FAFAFB]">
+            <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
               <div className="flex justify-between items-center px-4 py-2 border-b border-[#E7E8EC]">
                 <span className="text-xs text-[#A0A8B5]">Listing ID</span>
                 <span className="text-xs font-bold text-[#222]">#1</span>
@@ -111,7 +112,7 @@ export function ListingForm() {
             >
               Add unit details
             </SectionHeader>
-            <div className="mt-2 rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
+            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
               <div className="bg-white px-4 py-2 flex items-center">
                 <Input
                   placeholder="Type"
@@ -153,7 +154,7 @@ export function ListingForm() {
             >
               Add tenant details
             </SectionHeader>
-            <div className="mt-2 rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
+            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
               <div className="bg-white px-4 py-2 flex items-center">
                 <Input
                   placeholder={tenantType === "individual" ? "Company" : "Company"}
@@ -179,7 +180,7 @@ export function ListingForm() {
           {/* Payment details */}
           <div>
             <SectionHeader>Add payment details</SectionHeader>
-            <div className="mt-2 rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
+            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
               <div className="bg-white px-4 py-2 flex items-center">
                 <Input
                   placeholder="Revenue"
@@ -211,7 +212,7 @@ export function ListingForm() {
             >
               Add some additional details
             </SectionHeader>
-            <div className="mt-2 rounded-lg bg-[#FAFAFB] p-3">
+            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] p-3">
               <Textarea
                 placeholder="Type here..."
                 className="border-0 bg-white shadow-none text-sm text-[#222] px-2 py-2 resize-none min-h-[80px] focus-visible:ring-0"
