@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -70,20 +69,20 @@ function ListingCard({ id, address, propertyType, tenant, phone, category }: Lis
     <div className="rounded-lg border border-transparent bg-white p-4 space-y-3 hover:border-[#EBECED] hover:shadow-sm transition-all cursor-pointer group">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-medium text-[#8D95A1] opacity-0 group-hover:opacity-100 transition-opacity">#{id}</span>
-          <span className="text-sm text-[#3D4149] font-medium tracking-tight">{address}</span>
+          <span className="text-sm font-medium text-[#8D95A1]">#{id}</span>
+          <span className="text-base text-[#3D4149] font-medium tracking-tight">{address}</span>
         </div>
-        <span className="text-xs bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
+        <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
           {propertyType}
         </span>
       </div>
       <div className="h-px bg-[#F4F4F8]" />
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 text-xs">
-          <span className="text-[#8D95A1] font-medium">{tenant}</span>
-          <span className="text-[#3D4149]">{phone}</span>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-[#8D95A1] font-medium">{tenant}</span>
+          <span className="text-sm text-[#3D4149]">{phone}</span>
         </div>
-        <span className="text-xs bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
+        <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
           {category}
         </span>
       </div>
