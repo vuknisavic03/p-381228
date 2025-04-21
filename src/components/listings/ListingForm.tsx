@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,7 @@ export function ListingForm() {
                 <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                   <Input
                     placeholder="Country"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1 focus:ring-0 focus-visible:ring-0"
+                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
                   />
                 </div>
                 <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
