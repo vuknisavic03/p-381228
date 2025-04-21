@@ -2,7 +2,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Plus, Save, Upload, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Upload, User, Users, Save } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 export function ListingForm() {
@@ -36,6 +36,13 @@ export function ListingForm() {
   // A simple required star
   const Required = () => <span className="text-[#1EAEDB] ml-1">*</span>;
 
+  // --- NEW (toggle for Individual/Company) ---
+  const [tenantType, setTenantType] = React.useState<"individual" | "company">("individual");
+  const handleToggleTenantType = () => {
+    setTenantType((prev) => (prev === "individual" ? "company" : "individual"));
+  };
+
+  // -- ADJUST container to fit height without scrolling --
   return (
     <div className="flex flex-col h-full w-full px-4 py-4 bg-white rounded-2xl shadow-sm border border-[#edeefa]">
       {/* Listing details top bar */}
@@ -49,13 +56,13 @@ export function ListingForm() {
           size="sm"
           className="text-xs font-semibold text-[#403E43] border-[#edeefa] bg-[#f8f9fa] hover:bg-[#f5f6f7] h-8 px-6 rounded"
         >
-          <Save className="h-4 w-4 mr-1" />
-          Save
+          <Plus className="h-4 w-4 mr-1" />
+          Add listing
         </Button>
       </div>
 
-      {/* Timeline/content */}
-      <div className="flex-1 flex flex-col gap-8">
+      {/* Timeline/content - We'll use overflow-y-auto only if content is too long */}
+      <div className="flex-1 flex flex-col gap-8 min-h-0">
         {/* Step 1 - Listing Info */}
         <div>
           <SectionHeader>Listing details</SectionHeader>
@@ -139,9 +146,18 @@ export function ListingForm() {
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs gap-1 h-7 font-medium border-[#E7E8EC] bg-[#f8f9fa] text-[#555] hover:bg-[#f1f2f6] px-3 py-0 rounded"
+                className={`text-xs gap-1 h-7 font-medium border-[#E7E8EC] bg-[#f8f9fa] text-[#555] hover:bg-[#f1f2f6] px-3 py-0 rounded`}
+                onClick={handleToggleTenantType}
               >
-                <User className="h-3 w-3" /> Individual
+                {tenantType === "individual" ? (
+                  <>
+                    <User className="h-3 w-3" /> Individual
+                  </>
+                ) : (
+                  <>
+                    <Users className="h-3 w-3" /> Company
+                  </>
+                )}
               </Button>
             }
           >
@@ -150,7 +166,7 @@ export function ListingForm() {
           <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
             <div className="bg-white px-4 py-2 flex items-center">
               <Input
-                placeholder="Name"
+                placeholder={tenantType === "individual" ? "Name" : "Company"}
                 className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
               />
               <Required />
