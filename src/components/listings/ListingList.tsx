@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,23 +15,14 @@ export function ListingList() {
             placeholder="Search listings..." 
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-7 px-3 text-sm font-normal border-[#EBECED] bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] text-[#3D4149] transition-colors"
-          >
-            Edit
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-7 px-2.5 text-sm font-normal border-[#EBECED] bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] text-[#3D4149] transition-colors"
-          >
-            <Filter className="w-3.5 h-3.5 mr-1.5" />
-            Filter
-          </Button>
-        </div>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="h-7 px-2.5 text-sm font-normal border-[#EBECED] bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] text-[#3D4149] transition-colors"
+        >
+          <Filter className="w-3.5 h-3.5 mr-1.5" />
+          Filter
+        </Button>
       </div>
 
       <div className="space-y-2">
@@ -41,14 +33,6 @@ export function ListingList() {
           tenant="Alexander Whitmore"
           phone="000-000-0000"
           category="Retail"
-        />
-        <ListingCard
-          id="2"
-          address="New Belgrade, Block 23"
-          propertyType="Residential"
-          tenant="Maria Johnson"
-          phone="111-111-1111"
-          category="Apartment"
         />
       </div>
     </div>
@@ -69,7 +53,7 @@ function ListingCard({ id, address, propertyType, tenant, phone, category }: Lis
     <div className="rounded-lg border border-transparent bg-white p-4 space-y-3 hover:border-[#EBECED] hover:shadow-sm transition-all cursor-pointer group">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-[#8D95A1]">#{id}</span>
+          <span className="text-base font-medium text-[#8D95A1]">#{id}</span>
           <span className="text-base text-[#3D4149] font-medium tracking-tight">{address}</span>
         </div>
         <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
@@ -79,8 +63,8 @@ function ListingCard({ id, address, propertyType, tenant, phone, category }: Lis
       <div className="h-px bg-[#F4F4F8]" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <span className="text-sm text-[#8D95A1] font-medium">{tenant}</span>
-          <span className="text-sm text-[#3D4149]">{phone}</span>
+          <span className="text-base text-[#8D95A1] font-medium">{tenant}</span>
+          <span className="text-base text-[#3D4149]">{phone}</span>
         </div>
         <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
           {category}
