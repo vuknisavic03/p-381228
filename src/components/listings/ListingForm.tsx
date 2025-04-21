@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,21 +38,21 @@ export function ListingForm() {
   const Required = () => <span className="text-[#1EAEDB] ml-1">*</span>;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between p-4 border-b border-[#E7E8EC]">
+    <div className="flex flex-col h-screen">
+      <div className="flex items-center justify-between p-3 border-b border-[#E7E8EC]">
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center justify-center bg-[#F3F6F9] shadow-sm rounded w-7 h-7">
-            <span className="w-2 h-2 bg-[#1EAEDB] rounded-full" />
+          <span className="inline-flex items-center justify-center bg-[#F8F9FA] rounded w-6 h-6">
+            <span className="w-1.5 h-1.5 bg-[#1EAEDB] rounded-full" />
           </span>
-          <h2 className="text-lg font-semibold text-[#222]">Listing details</h2>
+          <h2 className="text-[15px] font-medium text-[#1A1F2C]">Listing details</h2>
         </div>
-        <Button variant="default" className="bg-[#1EAEDB] hover:bg-[#1EAEDB]/90">
+        <Button variant="default" size="sm" className="h-7 bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-xs">
           Add listing
         </Button>
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="p-4 space-y-5">
+        <div className="p-3 space-y-4">
           {/* Listing Info */}
           <div>
             <SectionHeader>Listing details</SectionHeader>
