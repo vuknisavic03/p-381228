@@ -3,8 +3,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Filter } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 export function ListingList() {
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
+  const [selectedListing, setSelectedListing] = React.useState<number | null>(null);
+
+  const handleSelectListing = (index: number) => {
+    setSelectedListing(index);
+    setIsEditOpen(true);
+  };
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-6 space-y-6 flex-shrink-0">
@@ -38,11 +52,28 @@ export function ListingList() {
               tenant={`Alexander Whitmore ${index + 1}`}
               phone="000-000-0000"
               category={index % 3 === 0 ? "Retail" : index % 2 === 0 ? "Office" : "Restaurant"}
-              onSelect={() => console.log(`Select listing ${index + 1} for editing`)}
+              onSelect={() => handleSelectListing(index)}
             />
           ))}
         </div>
       </ScrollArea>
+
+      <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <SheetContent side="right" className="w-[90%] sm:w-[540px] bg-white">
+          <SheetHeader className="border-b pb-4">
+            <SheetTitle>Edit Listing #{selectedListing !== null ? selectedListing + 1 : ''}</SheetTitle>
+          </SheetHeader>
+          <div className="py-6">
+            <div className="space-y-6">
+              {selectedListing !== null && (
+                <div className="text-sm text-[#8D95A1]">
+                  Editing listing #{selectedListing + 1}
+                </div>
+              )}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
