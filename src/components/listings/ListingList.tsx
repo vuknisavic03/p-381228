@@ -6,11 +6,11 @@ import { Search, Filter } from "lucide-react";
 export function ListingList() {
   return (
     <div className="p-4 space-y-4">
-      <div className="rounded-lg bg-white border border-[#E7E8EC] shadow-sm p-2.5 flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex-1 relative flex items-center rounded-md border border-[#E7E8EC] px-2.5 py-2">
-          <Search className="w-3.5 h-3.5 text-[#9EA3AD] mr-2" />
+      <div className="rounded-lg bg-white border border-[#E7E8EC] shadow-sm p-2 flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex-1 relative flex items-center rounded-md border border-[#E7E8EC] h-7">
+          <Search className="w-3.5 h-3.5 text-[#9EA3AD] ml-2" />
           <Input 
-            className="border-0 p-0 text-xs text-[#9EA3AD] font-normal focus-visible:ring-0" 
+            className="border-0 p-0 h-7 text-xs text-[#9EA3AD] font-normal focus-visible:ring-0" 
             placeholder="Search..." 
           />
         </div>
