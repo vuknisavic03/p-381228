@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Plus, Upload, User, Users } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
-export function ListingForm() {
+interface ListingFormProps {
+  isEditing?: boolean;
+  listingId?: number;
+}
+
+export function ListingForm({ isEditing = false, listingId }: ListingFormProps) {
   const [tenantType, setTenantType] = useState<"individual" | "company">("individual");
   const handleToggleTenantType = () => {
     setTenantType((prev) => (prev === "individual" ? "company" : "individual"));
@@ -46,7 +51,7 @@ export function ListingForm() {
             <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
               <div className="flex justify-between items-center px-4 py-2 border-b border-[#E7E8EC]">
                 <span className="text-xs text-[#A0A8B5]">Listing ID</span>
-                <span className="text-xs font-bold text-[#222]">#1</span>
+                <span className="text-xs font-bold text-[#222]">#{listingId || 1}</span>
               </div>
               <div className="flex flex-col gap-[1px]">
                 <div className="bg-white px-4 py-2 flex items-center">
@@ -231,7 +236,7 @@ export function ListingForm() {
       </div>
       <div className="p-4 border-t border-[#E7E8EC] bg-white">
         <Button className="w-full bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-white">
-          Create Listing
+          {isEditing ? "Save Changes" : "Create Listing"}
         </Button>
       </div>
     </div>

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,10 @@ export function ListingList() {
             <SheetTitle>Edit Listing #{selectedListing !== null ? selectedListing + 1 : ''}</SheetTitle>
           </SheetHeader>
           <div className="py-6">
-            <ListingForm isEditing={true} listingId={selectedListing !== null ? selectedListing + 1 : undefined} />
+            <ListingForm 
+              isEditing={true} 
+              listingId={selectedListing !== null ? selectedListing + 1 : undefined} 
+            />
           </div>
         </SheetContent>
       </Sheet>
