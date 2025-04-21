@@ -18,7 +18,7 @@ export default function Listings() {
           </Button>
         </div>
         <div className="flex-1 flex overflow-hidden bg-[#F6F6F7]">
-          <div className="w-[450px] bg-white border-r border-[#E7E8EC] overflow-y-auto">
+          <div className="w-[350px] min-w-[350px] bg-white border-r border-[#E7E8EC] overflow-hidden">
             <ListingForm />
           </div>
           <div className="flex-1 overflow-y-auto p-4">
