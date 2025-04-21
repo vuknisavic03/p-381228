@@ -2,7 +2,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Plus, Save, Upload, Individual } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Save, Upload, User } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 export function ListingForm() {
@@ -141,7 +141,7 @@ export function ListingForm() {
                 size="sm"
                 className="text-xs gap-1 h-7 font-medium border-[#E7E8EC] bg-[#f8f9fa] text-[#555] hover:bg-[#f1f2f6] px-3 py-0 rounded"
               >
-                <Individual className="h-3 w-3" /> Individual
+                <User className="h-3 w-3" /> Individual
               </Button>
             }
           >
