@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, ArrowUp, ArrowDown } from "lucide-react";
+import { Search, Filter, ArrowUp, ArrowDown, ArrowRight } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function ListingList() {
@@ -102,4 +101,3 @@ function ListingCard({ id, address, propertyType, tenant, phone, category }: Lis
     </div>
   );
 }
-
