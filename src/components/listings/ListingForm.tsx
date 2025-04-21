@@ -62,7 +62,7 @@ export function ListingForm() {
       </div>
 
       {/* Timeline/content - We'll use overflow-y-auto only if content is too long */}
-      <div className="flex-1 flex flex-col gap-8 min-h-0">
+      <div className="flex-1 flex flex-col gap-8 min-h-0 overflow-y-auto">
         {/* Step 1 - Listing Info */}
         <div>
           <SectionHeader>Listing details</SectionHeader>
@@ -87,9 +87,10 @@ export function ListingForm() {
                 <Required />
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
+                {/* Remove black border specifically for Country input */}
                 <Input
                   placeholder="Country"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1 focus:ring-0 focus-visible:ring-0"
                 />
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
@@ -166,7 +167,7 @@ export function ListingForm() {
           <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
             <div className="bg-white px-4 py-2 flex items-center">
               <Input
-                placeholder={tenantType === "individual" ? "Name" : "Company"}
+                placeholder={tenantType === "individual" ? "Company" : "Company"}
                 className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
               />
               <Required />

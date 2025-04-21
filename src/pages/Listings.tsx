@@ -1,9 +1,8 @@
+
 import React from 'react';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 
 export default function Listings() {
   return (
