@@ -153,7 +153,6 @@ export function ListingForm() {
                       placeholder="Surname"
                       className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
                     />
-                    <Required />
                   </div>
                 </>
               ) : (
