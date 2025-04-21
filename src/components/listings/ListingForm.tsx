@@ -53,7 +53,6 @@ export function ListingForm() {
 
       <div className="flex-1 overflow-y-auto">
         <div className="p-3 space-y-4">
-          {/* Listing Info */}
           <div>
             <SectionHeader>Listing details</SectionHeader>
             <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
@@ -92,7 +91,6 @@ export function ListingForm() {
             </div>
           </div>
 
-          {/* Unit details */}
           <div>
             <SectionHeader
               action={
@@ -129,7 +127,6 @@ export function ListingForm() {
             </div>
           </div>
 
-          {/* Tenant details */}
           <div>
             <SectionHeader
               action={
@@ -153,14 +150,30 @@ export function ListingForm() {
             >
               Add tenant details
             </SectionHeader>
-            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
+            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFBFC] flex flex-col gap-[1px] overflow-hidden">
               <div className="bg-white px-4 py-2 flex items-center">
                 <Input
-                  placeholder={tenantType === "individual" ? "Company" : "Company"}
+                  placeholder={tenantType === "individual" ? "Full Name" : "Company Name"}
                   className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
                 />
                 <Required />
               </div>
+              {tenantType === "individual" && (
+                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
+                  <Input
+                    placeholder="Occupation"
+                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  />
+                </div>
+              )}
+              {tenantType === "company" && (
+                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
+                  <Input
+                    placeholder="Registration Number"
+                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
+                  />
+                </div>
+              )}
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                 <Input
                   placeholder="Phone"
@@ -169,14 +182,13 @@ export function ListingForm() {
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
                 <Input
-                  placeholder="Mail"
+                  placeholder="Email"
                   className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
                 />
               </div>
             </div>
           </div>
 
-          {/* Payment details */}
           <div>
             <SectionHeader>Add payment details</SectionHeader>
             <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
@@ -195,7 +207,6 @@ export function ListingForm() {
             </div>
           </div>
 
-          {/* Additional details */}
           <div>
             <SectionHeader
               action={
