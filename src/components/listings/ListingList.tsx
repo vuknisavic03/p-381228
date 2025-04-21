@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,8 +7,6 @@ import { ListingForm } from "./ListingForm";
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
 } from "@/components/ui/sheet";
 
 export function ListingList() {
@@ -61,10 +58,7 @@ export function ListingList() {
       </ScrollArea>
 
       <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <SheetContent side="right" className="w-[90%] sm:w-[540px] bg-white overflow-y-auto">
-          <SheetHeader className="border-b pb-4">
-            <SheetTitle>Edit Listing #{selectedListing !== null ? selectedListing + 1 : ''}</SheetTitle>
-          </SheetHeader>
+        <SheetContent side="right" className="w-[95%] sm:w-[700px] bg-white overflow-y-auto">
           <div className="py-6">
             <ListingForm 
               isEditing={true} 
