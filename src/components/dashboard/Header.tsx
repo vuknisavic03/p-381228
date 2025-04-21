@@ -6,13 +6,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { DateRange } from "react-day-picker";
 
 export function Header() {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date(),
-  });
+  const [date, setDate] = React.useState<Date>(new Date());
 
   return (
     <div className="flex justify-between items-start">
@@ -33,28 +29,16 @@ export function Header() {
             >
               <CalendarIcon className="w-4 h-4 text-[#1A1A1A]" />
               <span className="text-sm font-medium text-[#1A1A1A]">
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "LLL dd")} - {format(date.to, "LLL dd")}
-                    </>
-                  ) : (
-                    format(date.from, "LLL dd")
-                  )
-                ) : (
-                  "Pick dates"
-                )}
+                {format(date, "MMM dd")}
               </span>
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">
             <Calendar
               initialFocus
-              mode="range"
-              defaultMonth={date?.from}
+              mode="single"
               selected={date}
-              onSelect={setDate}
-              numberOfMonths={2}
+              onSelect={(newDate) => newDate && setDate(newDate)}
               className={cn("p-3 pointer-events-auto")}
             />
           </PopoverContent>

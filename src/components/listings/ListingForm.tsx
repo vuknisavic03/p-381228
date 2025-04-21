@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -42,27 +41,18 @@ export function ListingForm() {
     setTenantType((prev) => (prev === "individual" ? "company" : "individual"));
   };
 
-  // -- ADJUST container to fit height without scrolling --
   return (
-    <div className="flex flex-col h-full w-full px-4 py-4 bg-white rounded-2xl shadow-sm border border-[#edeefa]">
-      {/* Listing details top bar */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col h-full w-full px-4 py-4 bg-white">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center justify-center bg-[#F3F6F9] shadow-sm rounded w-7 h-7"><span className="w-2 h-2 bg-[#1EAEDB] rounded-full" /></span>
+          <span className="inline-flex items-center justify-center bg-[#F3F6F9] shadow-sm rounded w-7 h-7">
+            <span className="w-2 h-2 bg-[#1EAEDB] rounded-full" />
+          </span>
           <h2 className="text-lg font-semibold text-[#222]">Listing details</h2>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-xs font-semibold text-[#403E43] border-[#edeefa] bg-[#f8f9fa] hover:bg-[#f5f6f7] h-8 px-6 rounded"
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          Add listing
-        </Button>
       </div>
 
-      {/* Timeline/content - We'll use overflow-y-auto only if content is too long */}
-      <div className="flex-1 flex flex-col gap-8 min-h-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
         {/* Step 1 - Listing Info */}
         <div>
           <SectionHeader>Listing details</SectionHeader>
@@ -87,7 +77,6 @@ export function ListingForm() {
                 <Required />
               </div>
               <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                {/* Remove black border specifically for Country input */}
                 <Input
                   placeholder="Country"
                   className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1 focus:ring-0 focus-visible:ring-0"
