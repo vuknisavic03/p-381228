@@ -38,21 +38,9 @@ export function ListingForm() {
   const Required = () => <span className="text-[#1EAEDB] ml-1">*</span>;
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex items-center justify-between p-3 border-b border-[#E7E8EC]">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center justify-center bg-[#F8F9FA] rounded w-6 h-6">
-            <span className="w-1.5 h-1.5 bg-[#1EAEDB] rounded-full" />
-          </span>
-          <h2 className="text-[15px] font-medium text-[#1A1F2C]">Listing details</h2>
-        </div>
-        <Button variant="default" size="sm" className="h-7 bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-xs">
-          Add listing
-        </Button>
-      </div>
-
+    <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto">
-        <div className="p-3 space-y-4">
+        <div className="p-6 space-y-6">
           <div>
             <SectionHeader>Listing details</SectionHeader>
             <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
@@ -241,6 +229,11 @@ export function ListingForm() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="p-4 border-t border-[#E7E8EC] bg-white">
+        <Button className="w-full bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-white">
+          Create Listing
+        </Button>
       </div>
     </div>
   );
