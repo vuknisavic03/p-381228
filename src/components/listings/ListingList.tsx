@@ -6,27 +6,35 @@ import { Search, Filter } from "lucide-react";
 
 export function ListingList() {
   return (
-    <div className="p-4 space-y-4">
-      <div className="rounded-md bg-white border border-[#EBECED] p-1.5 flex items-center justify-between gap-3">
-        <div className="flex-1 relative flex items-center rounded-md border border-[#EBECED] h-7 bg-[#FBFBFC]">
-          <Search className="w-3.5 h-3.5 text-[#8D95A1] ml-2" />
+    <div className="p-6 space-y-6">
+      <div className="rounded-lg bg-white border border-[#EBECED] p-1.5 flex items-center justify-between gap-3 shadow-sm">
+        <div className="flex-1 relative flex items-center rounded-md border border-[#EBECED] h-7 bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] transition-colors">
+          <Search className="w-3.5 h-3.5 text-[#8D95A1] ml-2.5" />
           <Input 
-            className="border-0 p-0 h-7 text-sm text-[#3D4149] font-normal focus-visible:ring-0 bg-transparent" 
+            className="border-0 p-0 pl-1 h-7 text-sm text-[#3D4149] font-normal focus-visible:ring-0 bg-transparent" 
             placeholder="Search listings..." 
           />
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-7 px-3 text-sm font-normal border-[#EBECED] bg-[#FBFBFC] hover:bg-[#F5F5F7] text-[#3D4149]">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-7 px-3 text-sm font-normal border-[#EBECED] bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] text-[#3D4149] transition-colors"
+          >
             Edit
           </Button>
-          <Button variant="outline" size="sm" className="h-7 px-2.5 text-sm font-normal border-[#EBECED] bg-[#FBFBFC] hover:bg-[#F5F5F7] text-[#3D4149]">
-            <Filter className="w-3.5 h-3.5 mr-1" />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-7 px-2.5 text-sm font-normal border-[#EBECED] bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] text-[#3D4149] transition-colors"
+          >
+            <Filter className="w-3.5 h-3.5 mr-1.5" />
             Filter
           </Button>
         </div>
       </div>
 
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <ListingCard
           id="1"
           address="Belgrade, Dunavska 12"
@@ -59,23 +67,23 @@ interface ListingCardProps {
 
 function ListingCard({ id, address, propertyType, tenant, phone, category }: ListingCardProps) {
   return (
-    <div className="rounded-md border border-transparent bg-white p-3 space-y-2.5 hover:border-[#EBECED] hover:shadow-sm transition-all cursor-pointer">
+    <div className="rounded-lg border border-transparent bg-white p-4 space-y-3 hover:border-[#EBECED] hover:shadow-sm transition-all cursor-pointer group">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-xs text-[#8D95A1]">#{id}</span>
-          <span className="text-sm text-[#3D4149] font-medium">{address}</span>
+          <span className="text-xs font-medium text-[#8D95A1] opacity-0 group-hover:opacity-100 transition-opacity">#{id}</span>
+          <span className="text-sm text-[#3D4149] font-medium tracking-tight">{address}</span>
         </div>
-        <span className="text-xs bg-[#FBFBFC] text-[#8D95A1] px-2 py-0.5 rounded-sm border border-[#EBECED]">
+        <span className="text-xs bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
           {propertyType}
         </span>
       </div>
       <div className="h-px bg-[#F4F4F8]" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 text-xs">
-          <span className="text-[#8D95A1]">{tenant}</span>
+          <span className="text-[#8D95A1] font-medium">{tenant}</span>
           <span className="text-[#3D4149]">{phone}</span>
         </div>
-        <span className="text-xs bg-[#FBFBFC] text-[#8D95A1] px-2 py-0.5 rounded-sm border border-[#EBECED]">
+        <span className="text-xs bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium">
           {category}
         </span>
       </div>
