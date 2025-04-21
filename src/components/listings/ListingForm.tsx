@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { City, MapPin, Flag, SaveIcon, Upload, Euro } from "lucide-react";
+import { Building, MapPin, Flag, SaveIcon, Upload, Euro } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function ListingForm() {
@@ -32,7 +31,7 @@ export function ListingForm() {
             </div>
             
             <div className="flex items-center border-t border-[#E7E8EC] px-3 py-2">
-              <City className="h-3.5 w-3.5 text-[#9EA3AD] mr-2" />
+              <Building className="h-3.5 w-3.5 text-[#9EA3AD] mr-2" />
               <Input 
                 placeholder="City" 
                 className="border-0 shadow-none p-0 h-auto text-xs focus-visible:ring-0" 
