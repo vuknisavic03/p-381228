@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -114,6 +113,7 @@ export function ListingForm() {
           onChange={(e) => setCategory(e.target.value)}
         />
 
+        {/* Tenant details */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="font-medium text-sm">Tenant details</h3>
