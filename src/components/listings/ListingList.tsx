@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Search, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -27,7 +26,6 @@ export function ListingList() {
       <div className="p-4 bg-white border-b">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-xl font-bold">Listings</h1>
-          <Button size="sm">Add listing</Button>
         </div>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">

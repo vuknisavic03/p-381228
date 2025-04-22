@@ -134,8 +134,8 @@ export function ListingForm() {
     <div className="p-6 h-full overflow-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold">Listing details</h2>
-        <Button onClick={handleSave} variant="outline" size="sm">
-          Save
+        <Button onClick={handleSave} size="sm">
+          Add listing
         </Button>
       </div>
 
