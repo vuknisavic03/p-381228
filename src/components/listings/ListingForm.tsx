@@ -175,35 +175,44 @@ export function ListingForm() {
                   onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0" align="start">
-                <div className="grid gap-2 p-2">
-                  <div className="grid gap-1">
-                    {[
-                      { value: "rent", label: "Rent" },
-                      { value: "facility", label: "Facility Fees" },
-                      { value: "maintenance", label: "Maintenance Fees" },
-                      { value: "optional", label: "Optional Fees" },
-                      { value: "lease", label: "Lease-Related Fees" },
-                      { value: "utility", label: "Utility & Service Fees" },
-                      { value: "refunds", label: "Refunds" },
-                      { value: "condo", label: "Condo / HOA fees" },
-                      { value: "key", label: "Key & Access Fees" },
-                      { value: "misc", label: "Miscellaneous Fees" },
-                    ].map((item) => (
-                      <div
-                        key={item.value}
-                        className="flex items-center px-2 py-1 cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm"
-                        onClick={() => setRevenueCategory(item.value)}
-                      >
-                        <div className="flex-1">{item.label}</div>
-                        {revenueCategory === item.value && (
-                          <div className="w-4 h-4 flex items-center justify-center">
-                            <div className="w-2 h-2 rounded-full bg-primary" />
-                          </div>
-                        )}
+              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { value: "rent", label: "Rent", icon: "house-size" },
+                    { value: "facility", label: "Facility Fees", icon: "water-tap" },
+                    { value: "maintenance", label: "Maintenance Fees", icon: "paint-roller" },
+                    { value: "optional", label: "Optional Fees", icon: "plants" },
+                    { value: "lease", label: "Lease-Related Fees", icon: "contract-papers" },
+                    { value: "utility", label: "Utility & Service Fees", icon: "air-conditioner" },
+                    { value: "refunds", label: "Refunds", icon: "fund-raising" },
+                    { value: "condo", label: "Condo / HOA fees", icon: "office-building" },
+                    { value: "key", label: "Key & Access Fees", icon: "house-key" },
+                    { value: "misc", label: "Miscellaneous Fees", icon: "hierarchy-chart" },
+                  ].map((item) => (
+                    <div
+                      key={item.value}
+                      onClick={() => setRevenueCategory(item.value)}
+                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
+                        revenueCategory === item.value
+                          ? "bg-primary/5"
+                          : "hover:bg-accent hover:text-accent-foreground"
+                      }`}
+                    >
+                      <div className="relative w-6 h-6">
+                        <img
+                          src={`/icons/${item.icon}.svg`}
+                          alt=""
+                          className="w-full h-full object-contain"
+                        />
                       </div>
-                    ))}
-                  </div>
+                      <span className="flex-1 text-sm">{item.label}</span>
+                      {revenueCategory === item.value && (
+                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </PopoverContent>
             </Popover>
