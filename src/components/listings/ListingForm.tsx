@@ -26,7 +26,6 @@ import {
   Receipt,
   Megaphone,
   Briefcase,
-  User
 } from "lucide-react";
 
 export function ListingForm() {
@@ -58,7 +57,6 @@ export function ListingForm() {
     { value: "taxes", label: "Taxes", Icon: Receipt },
     { value: "marketing", label: "Marketing", Icon: Megaphone },
     { value: "professional", label: "Professional Services", Icon: Briefcase },
-    { value: "leasing", label: "Leasing Agent", Icon: User },
   ];
 
   const toggleTenantType = () => {
@@ -194,42 +192,13 @@ export function ListingForm() {
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Payment details</h3>
           <div className="space-y-4">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Input
-                  className={inputClassName}
-                  type="number"
-                  placeholder={revenueCategory ? categories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
-                  value={revenue}
-                  onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
-                />
-              </PopoverTrigger>
-              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                <div className="grid grid-cols-2 gap-2">
-                  {categories.map((item) => (
-                    <div
-                      key={item.value}
-                      onClick={() => setRevenueCategory(item.value)}
-                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                        revenueCategory === item.value
-                          ? "bg-primary/5"
-                          : "hover:bg-accent hover:text-accent-foreground"
-                      }`}
-                    >
-                      <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                        <item.Icon size={20} />
-                      </div>
-                      <span className="flex-1 text-sm">{item.label}</span>
-                      {revenueCategory === item.value && (
-                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-primary" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+            <Input
+              className={inputClassName}
+              type="number"
+              placeholder="Revenue"
+              value={revenue}
+              onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
+            />
 
             <Popover>
               <PopoverTrigger asChild>
