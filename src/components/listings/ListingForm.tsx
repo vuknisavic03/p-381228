@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,11 +17,11 @@ import {
 } from "@/components/ui/popover";
 import { 
   Wrench,
-  Tools,
+  Settings,
   Bolt,
   Home,
   HandCoins,
-  Broom,
+  Brush,
   Shield,
   Receipt,
   Megaphone,
@@ -48,11 +49,11 @@ export function ListingForm() {
 
   const categories = [
     { value: "maintenance", label: "Maintenance", Icon: Wrench },
-    { value: "repairs", label: "Repairs", Icon: Tools },
+    { value: "repairs", label: "Repairs", Icon: Settings },
     { value: "utilities", label: "Utilities", Icon: Bolt },
     { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
     { value: "dues", label: "Dues and Fees", Icon: HandCoins },
-    { value: "cleaning", label: "Cleaning", Icon: Broom },
+    { value: "cleaning", label: "Cleaning", Icon: Brush },
     { value: "insurance", label: "Insurance", Icon: Shield },
     { value: "taxes", label: "Taxes", Icon: Receipt },
     { value: "marketing", label: "Marketing", Icon: Megaphone },
