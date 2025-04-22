@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ListingForm() {
   const [listingId, setListingId] = useState("");
@@ -18,6 +25,7 @@ export function ListingForm() {
   const [expenses, setExpenses] = useState<number | "">("");
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
+  const [revenueCategory, setRevenueCategory] = useState("");
 
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
@@ -36,10 +44,12 @@ export function ListingForm() {
         name: tenantName,
         phone: tenantPhone,
         email: tenantEmail,
+        type: tenantType,
       },
       payment: {
         revenue: revenue === "" ? null : revenue,
         expenses: expenses === "" ? null : expenses,
+        revenueCategory,
       },
       notes,
     };
@@ -118,7 +128,6 @@ export function ListingForm() {
           onChange={(e) => setCategory(e.target.value)}
         />
 
-        {/* Tenant details */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="font-medium text-sm">Tenant details</h3>
@@ -151,6 +160,24 @@ export function ListingForm() {
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Payment details</h3>
           <div className="space-y-4">
+            <Select value={revenueCategory} onValueChange={setRevenueCategory}>
+              <SelectTrigger className={inputClassName}>
+                <SelectValue placeholder="Revenue Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="rent">Rent</SelectItem>
+                <SelectItem value="facility">Facility Fees</SelectItem>
+                <SelectItem value="maintenance">Maintenance Fees</SelectItem>
+                <SelectItem value="optional">Optional Fees</SelectItem>
+                <SelectItem value="lease">Lease-Related Fees</SelectItem>
+                <SelectItem value="utility">Utility & Service Fees</SelectItem>
+                <SelectItem value="refunds">Refunds</SelectItem>
+                <SelectItem value="condo">Condo / HOA fees</SelectItem>
+                <SelectItem value="key">Key & Access Fees</SelectItem>
+                <SelectItem value="misc">Miscellaneous Fees</SelectItem>
+              </SelectContent>
+            </Select>
+
             <Input
               className={inputClassName}
               type="number"
