@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,6 +25,15 @@ import {
   Receipt,
   Megaphone,
   Briefcase,
+  Key,
+  Building2,
+  Coins,
+  UtilityPole,
+  Building,
+  Tool,
+  BadgePlus,
+  RotateCcw,
+  ScrollText,
 } from "lucide-react";
 
 export function ListingForm() {
@@ -46,7 +54,20 @@ export function ListingForm() {
   const [revenueCategory, setRevenueCategory] = useState("");
   const [expensesCategory, setExpensesCategory] = useState("");
 
-  const categories = [
+  const revenueCategories = [
+    { value: "rent", label: "Rent", Icon: Home },
+    { value: "facility", label: "Facility Fees", Icon: Building2 },
+    { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
+    { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
+    { value: "key", label: "Key & Access Fees", Icon: Key },
+    { value: "maintenance", label: "Maintenance Fees", Icon: Tool },
+    { value: "optional", label: "Optional Fees", Icon: BadgePlus },
+    { value: "refunds", label: "Refunds", Icon: RotateCcw },
+    { value: "condo", label: "Condo / HOA fees", Icon: Building },
+    { value: "misc", label: "Miscellaneous Fees", Icon: Coins },
+  ];
+
+  const expenseCategories = [
     { value: "maintenance", label: "Maintenance", Icon: Wrench },
     { value: "repairs", label: "Repairs", Icon: Settings },
     { value: "utilities", label: "Utilities", Icon: Bolt },
@@ -197,14 +218,14 @@ export function ListingForm() {
                 <Input
                   className={inputClassName}
                   type="number"
-                  placeholder={revenueCategory ? categories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
+                  placeholder={revenueCategory ? revenueCategories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
                   value={revenue}
                   onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
                 />
               </PopoverTrigger>
               <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
                 <div className="grid grid-cols-2 gap-2">
-                  {categories.map((item) => (
+                  {revenueCategories.map((item) => (
                     <div
                       key={item.value}
                       onClick={() => setRevenueCategory(item.value)}
@@ -234,14 +255,14 @@ export function ListingForm() {
                 <Input
                   className={inputClassName}
                   type="number"
-                  placeholder={expensesCategory ? categories.find(c => c.value === expensesCategory)?.label || "Expenses" : "Expenses"}
+                  placeholder={expensesCategory ? expenseCategories.find(c => c.value === expensesCategory)?.label || "Expenses" : "Expenses"}
                   value={expenses}
                   onChange={(e) => setExpenses(e.target.value === "" ? "" : +e.target.value)}
                 />
               </PopoverTrigger>
               <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
                 <div className="grid grid-cols-2 gap-2">
-                  {categories.map((item) => (
+                  {expenseCategories.map((item) => (
                     <div
                       key={item.value}
                       onClick={() => setExpensesCategory(item.value)}
