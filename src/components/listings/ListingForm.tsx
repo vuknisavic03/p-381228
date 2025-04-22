@@ -47,8 +47,8 @@ export function ListingForm() {
   const [tenantName, setTenantName] = useState("");
   const [tenantPhone, setTenantPhone] = useState("");
   const [tenantEmail, setTenantEmail] = useState("");
-  const [revenue, setRevenue] = useState<number | "">("");
-  const [expenses, setExpenses] = useState<number | "">("");
+  const [revenue, setRevenue] = useState("");
+  const [expenses, setExpenses] = useState("");
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
   const [revenueCategory, setRevenueCategory] = useState("");
@@ -100,8 +100,8 @@ export function ListingForm() {
         type: tenantType,
       },
       payment: {
-        revenue: revenue === "" ? null : revenue,
-        expenses: expenses === "" ? null : expenses,
+        revenue,
+        expenses,
         revenueCategory,
       },
       notes,
@@ -126,7 +126,7 @@ export function ListingForm() {
     }
   };
 
-  const inputClassName = "h-10 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+  const inputClassName = "h-10 w-full";
 
   return (
     <div className="p-6 h-full overflow-auto">
@@ -217,10 +217,10 @@ export function ListingForm() {
               <PopoverTrigger asChild>
                 <Input
                   className={inputClassName}
-                  type="number"
+                  type="text"
                   placeholder={revenueCategory ? revenueCategories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
                   value={revenue}
-                  onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
+                  onChange={(e) => setRevenue(e.target.value)}
                 />
               </PopoverTrigger>
               <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
@@ -254,10 +254,10 @@ export function ListingForm() {
               <PopoverTrigger asChild>
                 <Input
                   className={inputClassName}
-                  type="number"
+                  type="text"
                   placeholder={expensesCategory ? expenseCategories.find(c => c.value === expensesCategory)?.label || "Expenses" : "Expenses"}
                   value={expenses}
-                  onChange={(e) => setExpenses(e.target.value === "" ? "" : +e.target.value)}
+                  onChange={(e) => setExpenses(e.target.value)}
                 />
               </PopoverTrigger>
               <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
@@ -290,12 +290,7 @@ export function ListingForm() {
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h3 className="font-medium text-sm">Additional details</h3>
-            <Button variant="outline" size="sm">
-              Upload documents
-            </Button>
-          </div>
+          <h3 className="font-medium text-sm">Additional details</h3>
           <Textarea
             className="min-h-[100px] w-full"
             placeholder="Notes"
