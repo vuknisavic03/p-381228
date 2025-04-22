@@ -15,16 +15,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { 
+  Wrench,
+  Tools,
+  Bolt,
   Home,
-  Droplets,
-  Paintbrush2,
-  Trees,
-  FileText,
-  Fan,
-  CircleDollarSign,
-  Building2,
-  Key,
-  LayoutGrid
+  HandCoins,
+  Broom,
+  Shield,
+  Receipt,
+  Megaphone,
+  Briefcase,
+  User
 } from "lucide-react";
 
 export function ListingForm() {
@@ -43,6 +44,21 @@ export function ListingForm() {
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
   const [revenueCategory, setRevenueCategory] = useState("");
+  const [expensesCategory, setExpensesCategory] = useState("");
+
+  const categories = [
+    { value: "maintenance", label: "Maintenance", Icon: Wrench },
+    { value: "repairs", label: "Repairs", Icon: Tools },
+    { value: "utilities", label: "Utilities", Icon: Bolt },
+    { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
+    { value: "dues", label: "Dues and Fees", Icon: HandCoins },
+    { value: "cleaning", label: "Cleaning", Icon: Broom },
+    { value: "insurance", label: "Insurance", Icon: Shield },
+    { value: "taxes", label: "Taxes", Icon: Receipt },
+    { value: "marketing", label: "Marketing", Icon: Megaphone },
+    { value: "professional", label: "Professional Services", Icon: Briefcase },
+    { value: "leasing", label: "Leasing Agent", Icon: User },
+  ];
 
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
@@ -182,25 +198,14 @@ export function ListingForm() {
                 <Input
                   className={inputClassName}
                   type="number"
-                  placeholder="Revenue"
+                  placeholder={revenueCategory ? categories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
                   value={revenue}
                   onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
                 />
               </PopoverTrigger>
               <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
                 <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { value: "rent", label: "Rent", Icon: Home },
-                    { value: "facility", label: "Facility Fees", Icon: Droplets },
-                    { value: "maintenance", label: "Maintenance Fees", Icon: Paintbrush2 },
-                    { value: "optional", label: "Optional Fees", Icon: Trees },
-                    { value: "lease", label: "Lease-Related Fees", Icon: FileText },
-                    { value: "utility", label: "Utility & Service Fees", Icon: Fan },
-                    { value: "refunds", label: "Refunds", Icon: CircleDollarSign },
-                    { value: "condo", label: "Condo / HOA fees", Icon: Building2 },
-                    { value: "key", label: "Key & Access Fees", Icon: Key },
-                    { value: "misc", label: "Miscellaneous Fees", Icon: LayoutGrid },
-                  ].map((item) => (
+                  {categories.map((item) => (
                     <div
                       key={item.value}
                       onClick={() => setRevenueCategory(item.value)}
@@ -225,13 +230,42 @@ export function ListingForm() {
               </PopoverContent>
             </Popover>
 
-            <Input
-              className={inputClassName}
-              type="number"
-              placeholder="Expenses"
-              value={expenses}
-              onChange={(e) => setExpenses(e.target.value === "" ? "" : +e.target.value)}
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Input
+                  className={inputClassName}
+                  type="number"
+                  placeholder={expensesCategory ? categories.find(c => c.value === expensesCategory)?.label || "Expenses" : "Expenses"}
+                  value={expenses}
+                  onChange={(e) => setExpenses(e.target.value === "" ? "" : +e.target.value)}
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+                <div className="grid grid-cols-2 gap-2">
+                  {categories.map((item) => (
+                    <div
+                      key={item.value}
+                      onClick={() => setExpensesCategory(item.value)}
+                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
+                        expensesCategory === item.value
+                          ? "bg-primary/5"
+                          : "hover:bg-accent hover:text-accent-foreground"
+                      }`}
+                    >
+                      <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
+                        <item.Icon size={20} />
+                      </div>
+                      <span className="flex-1 text-sm">{item.label}</span>
+                      {expensesCategory === item.value && (
+                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
