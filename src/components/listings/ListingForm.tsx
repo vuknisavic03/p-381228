@@ -17,6 +17,11 @@ export function ListingForm() {
   const [revenue, setRevenue] = useState<number | "">("");
   const [expenses, setExpenses] = useState<number | "">("");
   const [notes, setNotes] = useState("");
+  const [tenantType, setTenantType] = useState("individual");
+
+  const toggleTenantType = () => {
+    setTenantType(tenantType === "individual" ? "company" : "individual");
+  };
 
   const handleSave = async () => {
     const payload = {
@@ -117,14 +122,14 @@ export function ListingForm() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="font-medium text-sm">Tenant details</h3>
-            <Button variant="outline" size="sm">
-              Individual
+            <Button variant="outline" size="sm" onClick={toggleTenantType}>
+              {tenantType === "individual" ? "Individual" : "Company"}
             </Button>
           </div>
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
             <Input
               className={inputClassName}
-              placeholder="Name"
+              placeholder={tenantType === "individual" ? "Name" : "Company Name"}
               value={tenantName}
               onChange={(e) => setTenantName(e.target.value)}
             />
@@ -135,7 +140,7 @@ export function ListingForm() {
               onChange={(e) => setTenantPhone(e.target.value)}
             />
             <Input
-              className={inputClassName}
+              className={`${inputClassName} col-span-2`}
               placeholder="Email"
               value={tenantEmail}
               onChange={(e) => setTenantEmail(e.target.value)}
@@ -151,18 +156,14 @@ export function ListingForm() {
               type="number"
               placeholder="Revenue"
               value={revenue}
-              onChange={(e) =>
-                setRevenue(e.target.value === "" ? "" : +e.target.value)
-              }
+              onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
             />
             <Input
               className={inputClassName}
               type="number"
               placeholder="Expenses"
               value={expenses}
-              onChange={(e) =>
-                setExpenses(e.target.value === "" ? "" : +e.target.value)
-              }
+              onChange={(e) => setExpenses(e.target.value === "" ? "" : +e.target.value)}
             />
           </div>
         </div>
