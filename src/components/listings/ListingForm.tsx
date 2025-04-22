@@ -9,6 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export function ListingForm() {
   const [listingId, setListingId] = useState("");
@@ -160,31 +165,49 @@ export function ListingForm() {
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Payment details</h3>
           <div className="space-y-4">
-            <Select value={revenueCategory} onValueChange={setRevenueCategory}>
-              <SelectTrigger className={inputClassName}>
-                <SelectValue placeholder="Revenue Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="rent">Rent</SelectItem>
-                <SelectItem value="facility">Facility Fees</SelectItem>
-                <SelectItem value="maintenance">Maintenance Fees</SelectItem>
-                <SelectItem value="optional">Optional Fees</SelectItem>
-                <SelectItem value="lease">Lease-Related Fees</SelectItem>
-                <SelectItem value="utility">Utility & Service Fees</SelectItem>
-                <SelectItem value="refunds">Refunds</SelectItem>
-                <SelectItem value="condo">Condo / HOA fees</SelectItem>
-                <SelectItem value="key">Key & Access Fees</SelectItem>
-                <SelectItem value="misc">Miscellaneous Fees</SelectItem>
-              </SelectContent>
-            </Select>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Input
+                  className={inputClassName}
+                  type="number"
+                  placeholder="Revenue"
+                  value={revenue}
+                  onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0" align="start">
+                <div className="grid gap-2 p-2">
+                  <div className="grid gap-1">
+                    {[
+                      { value: "rent", label: "Rent" },
+                      { value: "facility", label: "Facility Fees" },
+                      { value: "maintenance", label: "Maintenance Fees" },
+                      { value: "optional", label: "Optional Fees" },
+                      { value: "lease", label: "Lease-Related Fees" },
+                      { value: "utility", label: "Utility & Service Fees" },
+                      { value: "refunds", label: "Refunds" },
+                      { value: "condo", label: "Condo / HOA fees" },
+                      { value: "key", label: "Key & Access Fees" },
+                      { value: "misc", label: "Miscellaneous Fees" },
+                    ].map((item) => (
+                      <div
+                        key={item.value}
+                        className="flex items-center px-2 py-1 cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm"
+                        onClick={() => setRevenueCategory(item.value)}
+                      >
+                        <div className="flex-1">{item.label}</div>
+                        {revenueCategory === item.value && (
+                          <div className="w-4 h-4 flex items-center justify-center">
+                            <div className="w-2 h-2 rounded-full bg-primary" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
 
-            <Input
-              className={inputClassName}
-              type="number"
-              placeholder="Revenue"
-              value={revenue}
-              onChange={(e) => setRevenue(e.target.value === "" ? "" : +e.target.value)}
-            />
             <Input
               className={inputClassName}
               type="number"
