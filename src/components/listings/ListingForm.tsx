@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,6 @@ import {
   Coins,
   UtilityPole,
   Building,
-  // Replace Tool with Settings - this is the fix
   Settings as Tools,
   BadgePlus,
   RotateCcw,
@@ -128,7 +126,7 @@ export function ListingForm() {
     }
   };
 
-  const inputClassName = "h-10 w-full";
+  const inputClassName = "h-10 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
   return (
     <div className="p-6 h-full overflow-auto">
