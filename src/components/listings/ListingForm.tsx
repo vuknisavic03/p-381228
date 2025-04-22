@@ -1,243 +1,186 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Plus, Upload, User, Users } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
-interface ListingFormProps {
-  isEditing?: boolean;
-  listingId?: number;
-}
+export function ListingForm() {
+  const [listingId, setListingId] = useState("");
+  const [city, setCity] = useState("");
+  const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [typeField, setTypeField] = useState("");
+  const [category, setCategory] = useState("");
+  const [tenantName, setTenantName] = useState("");
+  const [tenantPhone, setTenantPhone] = useState("");
+  const [tenantEmail, setTenantEmail] = useState("");
+  const [revenue, setRevenue] = useState<number | "">("");
+  const [expenses, setExpenses] = useState<number | "">("");
+  const [notes, setNotes] = useState("");
 
-export function ListingForm({ isEditing = false, listingId }: ListingFormProps) {
-  const [tenantType, setTenantType] = useState<"individual" | "company">("individual");
-  const handleToggleTenantType = () => {
-    setTenantType((prev) => (prev === "individual" ? "company" : "individual"));
+  const handleSave = async () => {
+    const payload = {
+      listingId,
+      city,
+      address,
+      country,
+      postalCode,
+      type: typeField,
+      category,
+      tenant: {
+        name: tenantName,
+        phone: tenantPhone,
+        email: tenantEmail,
+      },
+      payment: {
+        revenue: revenue === "" ? null : revenue,
+        expenses: expenses === "" ? null : expenses,
+      },
+      notes,
+    };
+    
+    try {
+      const res = await fetch("http://localhost:5000/listings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server responded with status ${res.status}`);
+      }
+
+      await res.json();
+    } catch (err) {
+      console.error("Error saving:", err);
+    }
   };
 
-  const StepDot = ({ last }: { last?: boolean }) => (
-    <div className="flex flex-col items-center">
-      <div className="w-2 h-2 rounded-full bg-[#1EAEDB] mb-0.5" />
-      {!last && <div className="flex-1 w-[2px] bg-[#E4E5EA]" />}
-    </div>
-  );
-
-  const SectionHeader = ({
-    children,
-    action,
-    last,
-  }: {
-    children: React.ReactNode;
-    action?: React.ReactNode;
-    last?: boolean;
-  }) => (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2 mr-2">
-        <StepDot last={last} />
-        <span className="text-[15px] font-medium text-[#1A1A1A]">{children}</span>
-      </div>
-      {action && <div>{action}</div>}
-    </div>
-  );
-
-  const Required = () => <span className="text-[#1EAEDB] ml-1">*</span>;
+  const inputClassName = "h-10 w-full";
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-6 space-y-6">
-          <div>
-            <SectionHeader>Listing details</SectionHeader>
-            <div className="mt-3 mb-1 border border-[#E7E8EC] rounded-lg overflow-hidden bg-[#FAFAFB]">
-              <div className="flex justify-between items-center px-4 py-2 border-b border-[#E7E8EC]">
-                <span className="text-xs text-[#A0A8B5]">Listing ID</span>
-                <span className="text-xs font-bold text-[#222]">#{listingId || 1}</span>
-              </div>
-              <div className="flex flex-col gap-[1px]">
-                <div className="bg-white px-4 py-2 flex items-center">
-                  <Input
-                    placeholder="City"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                  />
-                  <Required />
-                </div>
-                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                  <Input
-                    placeholder="Address"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                  />
-                  <Required />
-                </div>
-                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                  <Input
-                    placeholder="Country"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                  />
-                </div>
-                <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                  <Input
-                    placeholder="Postal Code"
-                    className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="p-6 h-full overflow-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-semibold">Listing details</h2>
+        <Button onClick={handleSave} variant="outline" size="sm">
+          Save
+        </Button>
+      </div>
 
-          <div>
-            <SectionHeader
-              action={
-                <div className="flex items-center gap-2">
-                  <Button size="icon" variant="ghost" className="h-6 w-6 hover:bg-[#F3F6F9] text-[#A0A8B5]">
-                    <ChevronLeft className="w-3 h-3" />
-                  </Button>
-                  <Button size="icon" variant="ghost" className="h-6 w-6 hover:bg-[#F3F6F9] text-[#A0A8B5]">
-                    <ChevronRight className="w-3 h-3" />
-                  </Button>
-                  <Button size="icon" variant="ghost" className="h-6 w-6 hover:bg-[#E6F2FA] text-[#1EAEDB]">
-                    <Plus className="w-3 h-3" />
-                  </Button>
-                </div>
-              }
-            >
-              Add unit details
-            </SectionHeader>
-            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
-              <div className="bg-white px-4 py-2 flex items-center">
-                <Input
-                  placeholder="Type"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                />
-                <Required />
-              </div>
-              <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                <Input
-                  placeholder="Category"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                />
-                <Required />
-              </div>
-            </div>
-          </div>
+      <div className="space-y-4">
+        <Input
+          className={inputClassName}
+          placeholder="Listing ID"
+          value={listingId}
+          onChange={(e) => setListingId(e.target.value)}
+        />
+        <Input
+          className={inputClassName}
+          placeholder="City"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <Input
+          className={inputClassName}
+          placeholder="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <Input
+          className={inputClassName}
+          placeholder="Country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        />
+        <Input
+          className={inputClassName}
+          placeholder="Postal Code"
+          value={postalCode}
+          onChange={(e) => setPostalCode(e.target.value)}
+        />
+        <Input
+          className={inputClassName}
+          placeholder="Type"
+          value={typeField}
+          onChange={(e) => setTypeField(e.target.value)}
+        />
+        <Input
+          className={inputClassName}
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
 
-          <div>
-            <SectionHeader
-              action={
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs gap-1 h-7 font-medium border-[#E7E8EC] bg-[#f8f9fa] text-[#555] hover:bg-[#f1f2f6] px-3 py-0 rounded"
-                  onClick={handleToggleTenantType}
-                >
-                  {tenantType === "individual" ? (
-                    <>
-                      <User className="h-3 w-3" /> Individual
-                    </>
-                  ) : (
-                    <>
-                      <Users className="h-3 w-3" /> Company
-                    </>
-                  )}
-                </Button>
-              }
-            >
-              Add tenant details
-            </SectionHeader>
-            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFBFC] flex flex-col gap-[1px] overflow-hidden">
-              {tenantType === "individual" ? (
-                <>
-                  <div className="bg-white px-4 py-2 flex items-center">
-                    <Input
-                      placeholder="Name"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                    />
-                    <Required />
-                  </div>
-                  <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                    <Input
-                      placeholder="Surname"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="bg-white px-4 py-2 flex items-center">
-                    <Input
-                      placeholder="Company Name"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                    />
-                    <Required />
-                  </div>
-                  <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                    <Input
-                      placeholder="Registration Number"
-                      className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                    />
-                  </div>
-                </>
-              )}
-              <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                <Input
-                  placeholder="Phone"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                />
-              </div>
-              <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                <Input
-                  placeholder="Email"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                />
-              </div>
-            </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium text-sm">Tenant details</h3>
+            <Button variant="outline" size="sm">
+              Individual
+            </Button>
           </div>
-
-          <div>
-            <SectionHeader>Add payment details</SectionHeader>
-            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] flex flex-col gap-[1px] overflow-hidden">
-              <div className="bg-white px-4 py-2 flex items-center">
-                <Input
-                  placeholder="Revenue"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                />
-              </div>
-              <div className="bg-white px-4 py-2 flex items-center border-t border-[#F4F4F8]">
-                <Input
-                  placeholder="Expenses"
-                  className="border-0 rounded-none text-sm text-[#222] placeholder-[#A0A8B5] p-0 h-auto bg-transparent flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <SectionHeader
-              action={
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs gap-1 h-7 font-medium border-[#E7E8EC] bg-[#f8f9fa] text-[#555] hover:bg-[#f1f2f6] px-3 py-0 rounded"
-                >
-                  <Upload className="h-3 w-3" /> Upload documents
-                </Button>
-              }
-              last
-            >
-              Add some additional details
-            </SectionHeader>
-            <div className="mt-2 border border-[#E7E8EC] rounded-lg bg-[#FAFAFB] p-3">
-              <Textarea
-                placeholder="Type here..."
-                className="border-0 bg-white shadow-none text-sm text-[#222] px-2 py-2 resize-none min-h-[80px] focus-visible:ring-0"
-              />
-            </div>
+          <div className="space-y-4">
+            <Input
+              className={inputClassName}
+              placeholder="Name"
+              value={tenantName}
+              onChange={(e) => setTenantName(e.target.value)}
+            />
+            <Input
+              className={inputClassName}
+              placeholder="Phone"
+              value={tenantPhone}
+              onChange={(e) => setTenantPhone(e.target.value)}
+            />
+            <Input
+              className={inputClassName}
+              placeholder="Email"
+              value={tenantEmail}
+              onChange={(e) => setTenantEmail(e.target.value)}
+            />
           </div>
         </div>
-      </div>
-      <div className="p-4 border-t border-[#E7E8EC] bg-white">
-        <Button className="w-full bg-[#1EAEDB] hover:bg-[#1EAEDB]/90 text-white">
-          {isEditing ? "Save Changes" : "Create Listing"}
-        </Button>
+
+        <div className="space-y-2">
+          <h3 className="font-medium text-sm">Payment details</h3>
+          <div className="space-y-4">
+            <Input
+              className={inputClassName}
+              type="number"
+              placeholder="Revenue"
+              value={revenue}
+              onChange={(e) =>
+                setRevenue(e.target.value === "" ? "" : +e.target.value)
+              }
+            />
+            <Input
+              className={inputClassName}
+              type="number"
+              placeholder="Expenses"
+              value={expenses}
+              onChange={(e) =>
+                setExpenses(e.target.value === "" ? "" : +e.target.value)
+              }
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium text-sm">Additional details</h3>
+            <Button variant="outline" size="sm">
+              Upload documents
+            </Button>
+          </div>
+          <Textarea
+            className="min-h-[100px] w-full"
+            placeholder="Notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </div>
       </div>
     </div>
   );

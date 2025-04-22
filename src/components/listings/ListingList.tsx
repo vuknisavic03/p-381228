@@ -1,111 +1,61 @@
 
-import React from "react";
+import { useState, useEffect } from "react";
+import { Search, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { ListingForm } from "./ListingForm";
-import {
-  Sheet,
-  SheetContent,
-} from "@/components/ui/sheet";
+import { Card } from "@/components/ui/card";
 
 export function ListingList() {
-  const [isEditOpen, setIsEditOpen] = React.useState(false);
-  const [selectedListing, setSelectedListing] = React.useState<number | null>(null);
+  const [listings, setListings] = useState<any[]>([]);
 
-  const handleSelectListing = (index: number) => {
-    setSelectedListing(index);
-    setIsEditOpen(true);
+  const fetchListings = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/listings");
+      const data = await res.json();
+      setListings(data);
+    } catch (error) {
+      console.error("Error fetching listings:", error);
+    }
   };
 
+  useEffect(() => {
+    fetchListings();
+  }, []);
+
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-6 space-y-6 flex-shrink-0">
-        <div className="rounded-lg bg-white border border-[#EBECED] p-1.5 flex items-center justify-between gap-3 shadow-sm">
-          <div className="flex-1 relative flex items-center rounded-md border border-[#EBECED] h-7 bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] transition-colors">
-            <Search className="w-3.5 h-3.5 text-[#8D95A1] ml-2.5" />
-            <Input 
-              className="border-0 p-0 pl-1 h-7 text-sm text-[#3D4149] font-normal focus-visible:ring-0 bg-transparent" 
-              placeholder="Search listings..." 
-            />
+    <div className="flex-1 flex flex-col">
+      <div className="p-4 bg-white border-b">
+        <div className="flex items-center justify-between mb-3">
+          <h1 className="text-xl font-bold">Listings</h1>
+          <Button size="sm">Add listing</Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+            <Input placeholder="Search..." className="pl-8 h-9" />
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-7 px-2.5 text-sm font-normal border-[#EBECED] bg-[#FAFBFC] hover:bg-white hover:border-[#D1D5DB] text-[#3D4149] transition-colors"
-          >
-            <Filter className="w-3.5 h-3.5 mr-1.5" />
-            Filter
-          </Button>
+          <Button variant="outline" size="sm">Filter</Button>
         </div>
       </div>
-
-      <ScrollArea className="flex-1 px-6 pb-6">
-        <div className="space-y-2">
-          {[...Array(10)].map((_, index) => (
-            <ListingCard
-              key={index + 1}
-              id={`${index + 1}`}
-              address={`Belgrade, Dunavska ${12 + index}`}
-              propertyType={index % 2 === 0 ? "Commercial" : "Residential"}
-              tenant={`Alexander Whitmore ${index + 1}`}
-              phone="000-000-0000"
-              category={index % 3 === 0 ? "Retail" : index % 2 === 0 ? "Office" : "Restaurant"}
-              onSelect={() => handleSelectListing(index)}
-            />
+      <div className="flex-1 p-4 overflow-auto">
+        <div className="grid gap-2">
+          {listings.map((listing) => (
+            <Card key={listing.id} className="p-3 hover:bg-gray-50 cursor-pointer">
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-blue-500 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-medium">{listing.address}</h3>
+                  <p className="text-xs text-gray-500">
+                    {listing.city}, {listing.country}
+                  </p>
+                  <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-gray-100 rounded-full">
+                    {listing.type}
+                  </span>
+                </div>
+              </div>
+            </Card>
           ))}
         </div>
-      </ScrollArea>
-
-      <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <SheetContent side="right" className="w-[95%] sm:w-[800px] bg-white overflow-y-auto">
-          <div className="py-6">
-            <ListingForm 
-              isEditing={true} 
-              listingId={selectedListing !== null ? selectedListing + 1 : undefined} 
-            />
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
-  );
-}
-
-interface ListingCardProps {
-  id: string;
-  address: string;
-  propertyType: string;
-  tenant: string;
-  phone: string;
-  category: string;
-  onSelect: () => void;
-}
-
-function ListingCard({ id, address, propertyType, tenant, phone, category, onSelect }: ListingCardProps) {
-  return (
-    <div 
-      className="rounded-lg border border-transparent bg-white p-4 space-y-3 hover:border-[#EBECED] hover:shadow-sm transition-all cursor-pointer group animate-fade-in"
-      onClick={onSelect}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-base font-medium text-[#8D95A1]">#{id}</span>
-          <span className="text-base text-[#3D4149] font-medium tracking-tight">{address}</span>
-        </div>
-        <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium transition-colors group-hover:border-[#D1D5DB]">
-          {propertyType}
-        </span>
-      </div>
-      <div className="h-px bg-[#F4F4F8]" />
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <span className="text-base text-[#8D95A1] font-medium">{tenant}</span>
-          <span className="text-base text-[#3D4149]">{phone}</span>
-        </div>
-        <span className="text-sm bg-[#F5F5F7] text-[#8D95A1] px-2 py-0.5 rounded border border-[#EBECED] font-medium transition-colors group-hover:border-[#D1D5DB]">
-          {category}
-        </span>
       </div>
     </div>
   );
