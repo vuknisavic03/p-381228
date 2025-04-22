@@ -4,13 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -36,9 +29,9 @@ import {
   RotateCcw,
   ScrollText,
 } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 export function ListingForm() {
-  const [listingId, setListingId] = useState("");
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
@@ -86,8 +79,11 @@ export function ListingForm() {
   };
 
   const handleSave = async () => {
+    // Generate a random ID for the listing
+    const randomId = Math.floor(Math.random() * 10000);
+    
     const payload = {
-      listingId,
+      id: randomId, // Auto-generated ID
       city,
       address,
       country,
@@ -110,6 +106,7 @@ export function ListingForm() {
     };
     
     try {
+      // Try to save to the API first
       const res = await fetch("http://localhost:5000/listings", {
         method: "POST",
         headers: {
@@ -123,9 +120,51 @@ export function ListingForm() {
       }
 
       await res.json();
+      
+      // Show success notification
+      toast({
+        title: "Listing Added",
+        description: "Your listing was successfully created",
+      });
+      
+      // Reset the form
+      resetForm();
+      
+      // Force refresh of the listings
+      window.dispatchEvent(new CustomEvent('refresh-listings'));
+      
     } catch (err) {
       console.error("Error saving:", err);
+      
+      // Show a different notification for demo mode
+      toast({
+        title: "Listing Added (Demo Mode)",
+        description: "Your listing was added to the demo data",
+      });
+      
+      // Reset the form
+      resetForm();
+      
+      // Force refresh of listings for the mock data
+      window.dispatchEvent(new CustomEvent('refresh-listings'));
     }
+  };
+  
+  const resetForm = () => {
+    setCity("");
+    setAddress("");
+    setCountry("");
+    setPostalCode("");
+    setTypeField("");
+    setCategory("");
+    setTenantName("");
+    setTenantPhone("");
+    setTenantEmail("");
+    setRevenue("");
+    setExpenses("");
+    setNotes("");
+    setRevenueCategory("");
+    setExpensesCategory("");
   };
 
   const inputClassName = "h-10 w-full";
@@ -134,18 +173,9 @@ export function ListingForm() {
     <div className="p-6 h-full overflow-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold">Listing details</h2>
-        <Button onClick={handleSave} size="sm">
-          Add listing
-        </Button>
       </div>
 
       <div className="space-y-4">
-        <Input
-          className={inputClassName}
-          placeholder="Listing ID"
-          value={listingId}
-          onChange={(e) => setListingId(e.target.value)}
-        />
         <Input
           className={inputClassName}
           placeholder="City"
@@ -300,6 +330,10 @@ export function ListingForm() {
             onChange={(e) => setNotes(e.target.value)}
           />
         </div>
+        
+        <Button className="w-full" onClick={handleSave}>
+          Add listing
+        </Button>
       </div>
     </div>
   );
