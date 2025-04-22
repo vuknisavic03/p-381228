@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -30,7 +31,8 @@ import {
   Coins,
   UtilityPole,
   Building,
-  Tool,
+  // Replace Tool with Settings - this is the fix
+  Settings as Tools,
   BadgePlus,
   RotateCcw,
   ScrollText,
@@ -60,7 +62,7 @@ export function ListingForm() {
     { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
     { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
     { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Tool },
+    { value: "maintenance", label: "Maintenance Fees", Icon: Tools },
     { value: "optional", label: "Optional Fees", Icon: BadgePlus },
     { value: "refunds", label: "Refunds", Icon: RotateCcw },
     { value: "condo", label: "Condo / HOA fees", Icon: Building },
