@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -264,7 +263,7 @@ export function ListingList() {
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All types</SelectItem>
+                      <SelectItem value="all_types">All types</SelectItem>
                       {types.map(type => (
                         <SelectItem key={type} value={type}>{type}</SelectItem>
                       ))}
@@ -282,7 +281,7 @@ export function ListingList() {
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All categories</SelectItem>
+                      <SelectItem value="all_categories">All categories</SelectItem>
                       {categories.map(category => (
                         <SelectItem key={category} value={category}>{category}</SelectItem>
                       ))}
@@ -300,7 +299,7 @@ export function ListingList() {
                       <SelectValue placeholder="Select tenant type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All tenant types</SelectItem>
+                      <SelectItem value="all_tenant_types">All tenant types</SelectItem>
                       <SelectItem value="individual">Individual</SelectItem>
                       <SelectItem value="company">Company</SelectItem>
                     </SelectContent>
@@ -317,7 +316,7 @@ export function ListingList() {
                       <SelectValue placeholder="Select country" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All countries</SelectItem>
+                      <SelectItem value="all_countries">All countries</SelectItem>
                       {countries.map(country => (
                         <SelectItem key={country} value={country}>{country}</SelectItem>
                       ))}
@@ -335,7 +334,7 @@ export function ListingList() {
                       <SelectValue placeholder="Select city" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All cities</SelectItem>
+                      <SelectItem value="all_cities">All cities</SelectItem>
                       {cities.map(city => (
                         <SelectItem key={city} value={city}>{city}</SelectItem>
                       ))}
