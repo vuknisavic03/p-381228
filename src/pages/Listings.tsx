@@ -8,7 +8,6 @@ export default function Listings() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
-    // Listen for refresh-listings event
     const handleRefresh = () => {
       setRefreshTrigger(prev => prev + 1);
     };
@@ -22,8 +21,8 @@ export default function Listings() {
 
   return (
     <DashboardLayout>
-      <div className="h-screen flex">
-        <div className="w-[480px] min-w-[480px] bg-white border-r border-[#EBECED]">
+      <div className="h-screen flex flex-col lg:flex-row">
+        <div className="w-full lg:w-[480px] lg:min-w-[480px] bg-white border-b lg:border-r border-[#EBECED] overflow-y-auto">
           <ListingForm />
         </div>
         <div className="flex-1 bg-[#FAFBFC] overflow-y-auto">

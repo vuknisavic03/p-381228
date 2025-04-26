@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
 
 const mockListings = [
@@ -75,8 +75,10 @@ export function ListingList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchListings = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch("http://localhost:5000/listings");
       const data = await res.json();
@@ -86,6 +88,8 @@ export function ListingList() {
     } catch (error) {
       console.error("Error fetching listings:", error);
       // Keep using mock data on error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,7 +110,7 @@ export function ListingList() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="p-4 bg-white border-b">
+      <div className="p-4 bg-white border-b sticky top-0 z-10 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-xl font-bold">Listings</h1>
         </div>
@@ -114,73 +118,91 @@ export function ListingList() {
           <div className="relative flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             <Input 
-              placeholder="Search..." 
-              className="pl-8 h-9" 
+              placeholder="Search by address, tenant or ID..." 
+              className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20" 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button variant="outline" size="sm">Filter</Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="min-w-[80px] transition-all duration-200 hover:bg-primary/5"
+          >
+            Filter
+          </Button>
         </div>
       </div>
       <div className="flex-1 p-4 overflow-auto">
-        <div className="space-y-2">
-          {filteredListings.length > 0 ? (
-            filteredListings.map((listing) => (
-              <Card 
-                key={listing.id} 
-                className="p-1 hover:bg-gray-50/50 cursor-pointer transition-colors"
-                onClick={() => handleListingClick(listing)}
-              >
-                <div className="flex flex-col">
-                  <div className="flex items-center justify-between p-4 pb-2">
-                    <div className="flex items-center gap-6 text-sm">
-                      <span className="text-[#9EA3AD]">#{listing.id}</span>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-blue-500" />
-                        <span className="font-medium">{listing.address}</span>
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full text-muted-foreground">
+            <Loader2 className="h-6 w-6 animate-spin mr-2" />
+            <span>Loading listings...</span>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {filteredListings.length > 0 ? (
+              filteredListings.map((listing) => (
+                <Card 
+                  key={listing.id} 
+                  className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
+                  onClick={() => handleListingClick(listing)}
+                >
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between p-4 pb-2">
+                      <div className="flex items-center gap-6 text-sm">
+                        <span className="text-[#9EA3AD] font-medium">#{listing.id}</span>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-primary/80" />
+                          <span className="font-medium">{listing.address}</span>
+                        </div>
                       </div>
+                      <span className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium">
+                        {listing.type}
+                      </span>
                     </div>
-                    <span className="px-2.5 py-1 bg-[#F3F3F6] text-[#9EA3AD] text-sm rounded">
-                      {listing.type}
-                    </span>
-                  </div>
-                  
-                  <div className="h-px bg-[#E4E5EA] mx-4" />
-                  
-                  <div className="flex items-center justify-between p-4 pt-2">
-                    <div className="flex items-center gap-8 text-sm">
-                      <span className="text-[#9EA3AD]">{listing.tenant?.name || 'No tenant'}</span>
-                      <div className="flex items-center gap-8">
-                        {listing.tenant?.phone && (
-                          <div className="flex items-center gap-2">
-                            <Phone className="h-4 w-4 text-[#9EA3AD]" />
-                            <span>{listing.tenant.phone}</span>
-                          </div>
-                        )}
-                        {listing.tenant?.email && (
-                          <div className="flex items-center gap-2">
-                            <Mail className="h-4 w-4 text-[#9EA3AD]" />
-                            <span>{listing.tenant.email}</span>
-                          </div>
-                        )}
+                    
+                    <div className="h-px bg-[#E4E5EA] mx-4" />
+                    
+                    <div className="flex items-center justify-between p-4 pt-2">
+                      <div className="flex items-center gap-8 text-sm">
+                        <span className="text-[#9EA3AD] font-medium">{listing.tenant?.name || 'No tenant'}</span>
+                        <div className="flex items-center gap-8">
+                          {listing.tenant?.phone && (
+                            <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
+                              <Phone className="h-4 w-4 text-[#9EA3AD]" />
+                              <span>{listing.tenant.phone}</span>
+                            </div>
+                          )}
+                          {listing.tenant?.email && (
+                            <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
+                              <Mail className="h-4 w-4 text-[#9EA3AD]" />
+                              <span>{listing.tenant.email}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
+                      <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
+                        {listing.category}
+                      </span>
                     </div>
-                    <span className="px-2.5 py-1 bg-[#F3F3F6] text-[#9EA3AD] text-sm rounded">
-                      {listing.category}
-                    </span>
                   </div>
-                </div>
-              </Card>
-            ))
-          ) : (
-            <div className="text-center py-8 text-gray-500">No listings found</div>
-          )}
-        </div>
+                </Card>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                {searchTerm ? 'No listings found matching your search' : 'No listings available'}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
-        <SheetContent side="right" className="w-[480px] sm:w-[540px] p-0">
+        <SheetContent 
+          side="right" 
+          className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
+        >
           {selectedListing && (
             <EditListingForm 
               listing={selectedListing} 
