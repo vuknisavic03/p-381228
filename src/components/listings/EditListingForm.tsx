@@ -30,6 +30,7 @@ import {
   Check,
   ChevronDown,
 } from "lucide-react";
+import { PaymentDetailsInput } from "./PaymentDetailsInput";
 
 interface EditListingFormProps {
   listing: any;
@@ -276,43 +277,26 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   onChange={handleChange}
                 />
                 
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between">
-                      <span className="truncate">
-                        {formData.revenueCategories.length > 0
-                          ? `${formData.revenueCategories.length} categories selected`
-                          : "Select revenue categories"}
-                      </span>
-                      <ChevronDown className="h-4 w-4 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                    <div className="grid grid-cols-2 gap-2">
-                      {revenueCategoriesList.map((item) => (
-                        <div
-                          key={item.value}
-                          onClick={() => toggleRevenueCategory(item.value)}
-                          className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                            formData.revenueCategories.includes(item.value)
-                              ? "bg-primary/5"
-                              : "hover:bg-accent hover:text-accent-foreground"
-                          }`}
-                        >
-                          <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                            <item.Icon size={20} />
-                          </div>
-                          <span className="flex-1 text-sm">{item.label}</span>
-                          {formData.revenueCategories.includes(item.value) && (
-                            <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                              <Check className="h-3 w-3 text-primary" />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                <PaymentDetailsInput
+                  revenueCategories={formData.revenueCategories}
+                  expensesCategories={formData.expensesCategories}
+                  onToggleRevenueCategory={(value) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      revenueCategories: prev.revenueCategories.includes(value)
+                        ? prev.revenueCategories.filter(item => item !== value)
+                        : [...prev.revenueCategories, value]
+                    }));
+                  }}
+                  onToggleExpenseCategory={(value) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      expensesCategories: prev.expensesCategories.includes(value)
+                        ? prev.expensesCategories.filter(item => item !== value)
+                        : [...prev.expensesCategories, value]
+                    }));
+                  }}
+                />
               </div>
               
               <div className="space-y-2">
@@ -324,44 +308,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   value={formData.expenses}
                   onChange={handleChange}
                 />
-                
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between">
-                      <span className="truncate">
-                        {formData.expensesCategories.length > 0
-                          ? `${formData.expensesCategories.length} categories selected`
-                          : "Select expense categories"}
-                      </span>
-                      <ChevronDown className="h-4 w-4 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                    <div className="grid grid-cols-2 gap-2">
-                      {expenseCategoriesList.map((item) => (
-                        <div
-                          key={item.value}
-                          onClick={() => toggleExpenseCategory(item.value)}
-                          className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                            formData.expensesCategories.includes(item.value)
-                              ? "bg-primary/5"
-                              : "hover:bg-accent hover:text-accent-foreground"
-                          }`}
-                        >
-                          <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                            <item.Icon size={20} />
-                          </div>
-                          <span className="flex-1 text-sm">{item.label}</span>
-                          {formData.expensesCategories.includes(item.value) && (
-                            <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                              <Check className="h-3 w-3 text-primary" />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
               </div>
             </div>
           </div>
