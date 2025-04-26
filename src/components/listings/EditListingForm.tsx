@@ -26,7 +26,7 @@ import {
   Coins,
   UtilityPole,
   Building,
-  Tools,
+  Wrench as Tools,  // Use Wrench as Tools to maintain original code
   BadgePlus,
   RotateCcw,
   ScrollText,
