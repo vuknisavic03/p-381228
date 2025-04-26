@@ -1,15 +1,10 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { PaymentDetailsInput } from "./PaymentDetailsInput";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { 
   Wrench,
   Settings,
   Bolt,
@@ -59,29 +54,29 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   });
 
   const revenueCategoriesList = [
-    { value: "rent", label: "Rent", Icon: Home },
-    { value: "facility", label: "Facility Fees", Icon: Building2 },
-    { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
-    { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
-    { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Tools },
-    { value: "optional", label: "Optional Fees", Icon: BadgePlus },
-    { value: "refunds", label: "Refunds", Icon: RotateCcw },
-    { value: "condo", label: "Condo / HOA fees", Icon: Building },
-    { value: "misc", label: "Miscellaneous Fees", Icon: Coins },
+    { value: "rent", label: "Rent" },
+    { value: "facility", label: "Facility Fees" },
+    { value: "lease", label: "Lease-Related Fees" },
+    { value: "utility", label: "Utility & Service Fees" },
+    { value: "key", label: "Key & Access Fees" },
+    { value: "maintenance", label: "Maintenance Fees" },
+    { value: "optional", label: "Optional Fees" },
+    { value: "refunds", label: "Refunds" },
+    { value: "condo", label: "Condo / HOA fees" },
+    { value: "misc", label: "Miscellaneous Fees" },
   ];
 
   const expenseCategoriesList = [
-    { value: "maintenance", label: "Maintenance", Icon: Wrench },
-    { value: "repairs", label: "Repairs", Icon: Settings },
-    { value: "utilities", label: "Utilities", Icon: Bolt },
-    { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
-    { value: "dues", label: "Dues and Fees", Icon: HandCoins },
-    { value: "cleaning", label: "Cleaning", Icon: Brush },
-    { value: "insurance", label: "Insurance", Icon: Shield },
-    { value: "taxes", label: "Taxes", Icon: Receipt },
-    { value: "marketing", label: "Marketing", Icon: Megaphone },
-    { value: "professional", label: "Professional Services", Icon: Briefcase },
+    { value: "maintenance", label: "Maintenance" },
+    { value: "repairs", label: "Repairs" },
+    { value: "utilities", label: "Utilities" },
+    { value: "turnover", label: "Turnover / Make Ready" },
+    { value: "dues", label: "Dues and Fees" },
+    { value: "cleaning", label: "Cleaning" },
+    { value: "insurance", label: "Insurance" },
+    { value: "taxes", label: "Taxes" },
+    { value: "marketing", label: "Marketing" },
+    { value: "professional", label: "Professional Services" },
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -191,7 +186,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       </div>
       
       <div className="flex-1 overflow-auto p-6">
-        <div className="space-y-4">
+        <div className="space-y-6">
           <Input
             className={inputClassName}
             name="city"
@@ -267,107 +262,27 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm">Payment details</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Input
-                  className={inputClassName}
-                  name="revenue"
-                  type="text"
-                  placeholder="Revenue"
-                  value={formData.revenue}
-                  onChange={handleChange}
-                />
-                
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between">
-                      <span className="truncate">
-                        {formData.revenueCategories.length > 0
-                          ? `${formData.revenueCategories.length} categories selected`
-                          : "Select revenue categories"}
-                      </span>
-                      <ChevronDown className="h-4 w-4 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                    <div className="grid grid-cols-2 gap-2">
-                      {revenueCategoriesList.map((item) => (
-                        <div
-                          key={item.value}
-                          onClick={() => toggleRevenueCategory(item.value)}
-                          className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                            formData.revenueCategories.includes(item.value)
-                              ? "bg-primary/5"
-                              : "hover:bg-accent hover:text-accent-foreground"
-                          }`}
-                        >
-                          <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                            <item.Icon size={20} />
-                          </div>
-                          <span className="flex-1 text-sm">{item.label}</span>
-                          {formData.revenueCategories.includes(item.value) && (
-                            <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                              <Check className="h-3 w-3 text-primary" />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              
-              <div className="space-y-2">
-                <Input
-                  className={inputClassName}
-                  name="expenses"
-                  type="text"
-                  placeholder="Expenses"
-                  value={formData.expenses}
-                  onChange={handleChange}
-                />
-                
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between">
-                      <span className="truncate">
-                        {formData.expensesCategories.length > 0
-                          ? `${formData.expensesCategories.length} categories selected`
-                          : "Select expense categories"}
-                      </span>
-                      <ChevronDown className="h-4 w-4 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                    <div className="grid grid-cols-2 gap-2">
-                      {expenseCategoriesList.map((item) => (
-                        <div
-                          key={item.value}
-                          onClick={() => toggleExpenseCategory(item.value)}
-                          className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                            formData.expensesCategories.includes(item.value)
-                              ? "bg-primary/5"
-                              : "hover:bg-accent hover:text-accent-foreground"
-                          }`}
-                        >
-                          <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                            <item.Icon size={20} />
-                          </div>
-                          <span className="flex-1 text-sm">{item.label}</span>
-                          {formData.expensesCategories.includes(item.value) && (
-                            <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                              <Check className="h-3 w-3 text-primary" />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Payment details</h3>
+            
+            <PaymentDetailsInput
+              label="Revenue"
+              value={formData.revenue}
+              categories={revenueCategoriesList}
+              selectedCategories={formData.revenueCategories}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, revenue: value }))}
+              onCategoryToggle={toggleRevenueCategory}
+              className="mb-4"
+            />
+
+            <PaymentDetailsInput
+              label="Expenses"
+              value={formData.expenses}
+              categories={expenseCategoriesList}
+              selectedCategories={formData.expensesCategories}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, expenses: value }))}
+              onCategoryToggle={toggleExpenseCategory}
+            />
           </div>
 
           <div className="space-y-2">

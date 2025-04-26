@@ -1,37 +1,9 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { 
-  Wrench,
-  Settings,
-  Bolt,
-  Home,
-  HandCoins,
-  Brush,
-  Shield,
-  Receipt,
-  Megaphone,
-  Briefcase,
-  Key,
-  Building2,
-  Coins,
-  UtilityPole,
-  Building,
-  Settings as Tools,
-  BadgePlus,
-  RotateCcw,
-  ScrollText,
-  Check,
-  ChevronDown,
-} from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
+import { PaymentDetailsInput } from "./PaymentDetailsInput";
 
 export function ListingForm() {
   const [city, setCity] = useState("");
@@ -51,29 +23,29 @@ export function ListingForm() {
   const [expensesCategories, setExpensesCategories] = useState<string[]>([]);
 
   const revenueCategoriesList = [
-    { value: "rent", label: "Rent", Icon: Home },
-    { value: "facility", label: "Facility Fees", Icon: Building2 },
-    { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
-    { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
-    { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Tools },
-    { value: "optional", label: "Optional Fees", Icon: BadgePlus },
-    { value: "refunds", label: "Refunds", Icon: RotateCcw },
-    { value: "condo", label: "Condo / HOA fees", Icon: Building },
-    { value: "misc", label: "Miscellaneous Fees", Icon: Coins },
+    { value: "rent", label: "Rent" },
+    { value: "facility", label: "Facility Fees" },
+    { value: "lease", label: "Lease-Related Fees" },
+    { value: "utility", label: "Utility & Service Fees" },
+    { value: "key", label: "Key & Access Fees" },
+    { value: "maintenance", label: "Maintenance Fees" },
+    { value: "optional", label: "Optional Fees" },
+    { value: "refunds", label: "Refunds" },
+    { value: "condo", label: "Condo / HOA fees" },
+    { value: "misc", label: "Miscellaneous Fees" },
   ];
 
   const expenseCategoriesList = [
-    { value: "maintenance", label: "Maintenance", Icon: Wrench },
-    { value: "repairs", label: "Repairs", Icon: Settings },
-    { value: "utilities", label: "Utilities", Icon: Bolt },
-    { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
-    { value: "dues", label: "Dues and Fees", Icon: HandCoins },
-    { value: "cleaning", label: "Cleaning", Icon: Brush },
-    { value: "insurance", label: "Insurance", Icon: Shield },
-    { value: "taxes", label: "Taxes", Icon: Receipt },
-    { value: "marketing", label: "Marketing", Icon: Megaphone },
-    { value: "professional", label: "Professional Services", Icon: Briefcase },
+    { value: "maintenance", label: "Maintenance" },
+    { value: "repairs", label: "Repairs" },
+    { value: "utilities", label: "Utilities" },
+    { value: "turnover", label: "Turnover / Make Ready" },
+    { value: "dues", label: "Dues and Fees" },
+    { value: "cleaning", label: "Cleaning" },
+    { value: "insurance", label: "Insurance" },
+    { value: "taxes", label: "Taxes" },
+    { value: "marketing", label: "Marketing" },
+    { value: "professional", label: "Professional Services" },
   ];
 
   const toggleTenantType = () => {
@@ -97,11 +69,10 @@ export function ListingForm() {
   };
 
   const handleSave = async () => {
-    // Generate a random ID for the listing
     const randomId = Math.floor(Math.random() * 10000);
     
     const payload = {
-      id: randomId, // Auto-generated ID
+      id: randomId,
       city,
       address,
       country,
@@ -124,7 +95,6 @@ export function ListingForm() {
     };
     
     try {
-      // Try to save to the API first
       const res = await fetch("http://localhost:5000/listings", {
         method: "POST",
         headers: {
@@ -139,31 +109,25 @@ export function ListingForm() {
 
       await res.json();
       
-      // Show success notification
       toast({
         title: "Listing Added",
         description: "Your listing was successfully created",
       });
       
-      // Reset the form
       resetForm();
       
-      // Force refresh of the listings
       window.dispatchEvent(new CustomEvent('refresh-listings'));
       
     } catch (err) {
       console.error("Error saving:", err);
       
-      // Show a different notification for demo mode
       toast({
         title: "Listing Added (Demo Mode)",
         description: "Your listing was added to the demo data",
       });
       
-      // Reset the form
       resetForm();
       
-      // Force refresh of listings for the mock data
       window.dispatchEvent(new CustomEvent('refresh-listings'));
     }
   };
@@ -193,7 +157,7 @@ export function ListingForm() {
         <h2 className="text-lg font-semibold">Listing details</h2>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <Input
           className={inputClassName}
           placeholder="City"
@@ -263,101 +227,24 @@ export function ListingForm() {
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Payment details</h3>
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                className={inputClassName}
-                type="text"
-                placeholder="Revenue"
-                value={revenue}
-                onChange={(e) => setRevenue(e.target.value)}
-              />
-              
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    <span className="truncate">
-                      {revenueCategories.length > 0
-                        ? `${revenueCategories.length} categories selected`
-                        : "Select revenue categories"}
-                    </span>
-                    <ChevronDown className="h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                  <div className="grid grid-cols-2 gap-2">
-                    {revenueCategoriesList.map((item) => (
-                      <div
-                        key={item.value}
-                        onClick={() => toggleRevenueCategory(item.value)}
-                        className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                          revenueCategories.includes(item.value)
-                            ? "bg-primary/5"
-                            : "hover:bg-accent hover:text-accent-foreground"
-                        }`}
-                      >
-                        <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                          <item.Icon size={20} />
-                        </div>
-                        <span className="flex-1 text-sm">{item.label}</span>
-                        {revenueCategories.includes(item.value) && (
-                          <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                            <Check className="h-3 w-3 text-primary" />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-            
-            <div className="space-y-2">
-              <Input
-                className={inputClassName}
-                type="text"
-                placeholder="Expenses"
-                value={expenses}
-                onChange={(e) => setExpenses(e.target.value)}
-              />
-              
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    <span className="truncate">
-                      {expensesCategories.length > 0
-                        ? `${expensesCategories.length} categories selected`
-                        : "Select expense categories"}
-                    </span>
-                    <ChevronDown className="h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                  <div className="grid grid-cols-2 gap-2">
-                    {expenseCategoriesList.map((item) => (
-                      <div
-                        key={item.value}
-                        onClick={() => toggleExpenseCategory(item.value)}
-                        className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                          expensesCategories.includes(item.value)
-                            ? "bg-primary/5"
-                            : "hover:bg-accent hover:text-accent-foreground"
-                        }`}
-                      >
-                        <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                          <item.Icon size={20} />
-                        </div>
-                        <span className="flex-1 text-sm">{item.label}</span>
-                        {expensesCategories.includes(item.value) && (
-                          <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                            <Check className="h-3 w-3 text-primary" />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
+            <PaymentDetailsInput
+              label="Revenue"
+              value={revenue}
+              categories={revenueCategoriesList}
+              selectedCategories={revenueCategories}
+              onValueChange={setRevenue}
+              onCategoryToggle={toggleRevenueCategory}
+              className="mb-4"
+            />
+
+            <PaymentDetailsInput
+              label="Expenses"
+              value={expenses}
+              categories={expenseCategoriesList}
+              selectedCategories={expensesCategories}
+              onValueChange={setExpenses}
+              onCategoryToggle={toggleExpenseCategory}
+            />
           </div>
         </div>
 
