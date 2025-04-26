@@ -6,10 +6,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
 
-export function Header() {
-  const [date, setDate] = React.useState<Date>(new Date());
+interface HeaderProps {
+  dateRange: DateRange | undefined;
+  onDateRangeChange: (range: DateRange | undefined) => void;
+}
 
+export function Header({ dateRange, onDateRangeChange }: HeaderProps) {
   return (
     <div className="flex justify-between items-start">
       <div>
@@ -20,25 +24,45 @@ export function Header() {
           Today, {format(new Date(), "MMM dd")}
         </p>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-4">
         <Popover>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="flex items-center gap-2.5 border border-[#E7E8EC] rounded-md px-4 py-2.5"
+              className={cn(
+                "h-11 px-4 border border-[#E7E8EC] rounded-md hover:bg-[#F6F6F7] transition-colors",
+                "flex items-center gap-2.5"
+              )}
             >
               <CalendarIcon className="w-4 h-4 text-[#1A1A1A]" />
               <span className="text-sm font-medium text-[#1A1A1A]">
-                {format(date, "MMM dd")}
+                {dateRange?.from ? (
+                  dateRange.to ? (
+                    <>
+                      {format(dateRange.from, "LLL dd")} -{" "}
+                      {format(dateRange.to, "LLL dd, yyyy")}
+                    </>
+                  ) : (
+                    format(dateRange.from, "LLL dd, yyyy")
+                  )
+                ) : (
+                  "Select date range"
+                )}
               </span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
+          <PopoverContent 
+            className="w-auto p-0" 
+            align="end"
+            sideOffset={8}
+          >
             <Calendar
               initialFocus
-              mode="single"
-              selected={date}
-              onSelect={(newDate) => newDate && setDate(newDate)}
+              mode="range"
+              defaultMonth={dateRange?.from}
+              selected={dateRange}
+              onSelect={onDateRangeChange}
+              numberOfMonths={2}
               className={cn("p-3 pointer-events-auto")}
             />
           </PopoverContent>
