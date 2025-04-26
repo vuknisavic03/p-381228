@@ -4,6 +4,27 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PaymentDetailsInput } from "./PaymentDetailsInput";
 import { toast } from "@/components/ui/use-toast";
+import {
+  Home,
+  Building2,
+  ScrollText,
+  UtilityPole,
+  Key,
+  Tools,
+  BadgePlus,
+  RotateCcw,
+  Building,
+  Coins,
+  Wrench,
+  Settings,
+  Bolt,
+  HandCoins,
+  Brush,
+  Shield,
+  Receipt,
+  Megaphone,
+  Briefcase
+} from "lucide-react";
 
 export function ListingForm() {
   const [city, setCity] = useState("");
