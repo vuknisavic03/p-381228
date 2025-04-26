@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -166,7 +167,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between p-6 border-b">
-        <h2 className="text-lg font-semibold">Edit listing #{listing.id}</h2>
+        <h2 className="text-lg font-semibold">Listing #{listing.id}</h2>
       </div>
       
       <div className="flex-1 overflow-auto p-6">
