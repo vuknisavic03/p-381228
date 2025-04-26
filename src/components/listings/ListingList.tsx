@@ -70,7 +70,7 @@ const mockListings = [
   }
 ];
 
-export function ListingList({ selectedDate }: { selectedDate?: Date }) {
+export function ListingList() {
   const [listings, setListings] = useState<any[]>(mockListings);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
@@ -102,19 +102,11 @@ export function ListingList({ selectedDate }: { selectedDate?: Date }) {
     setIsEditSheetOpen(true);
   };
 
-  const filteredListings = listings.filter(listing => {
-    const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      String(listing.id).includes(searchTerm);
-
-    if (selectedDate) {
-      // Add date filtering logic here when you have actual dates in your listings
-      // For now, we'll just return the search results
-      return matchesSearch;
-    }
-
-    return matchesSearch;
-  });
+  const filteredListings = listings.filter(listing => 
+    listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(listing.id).includes(searchTerm)
+  );
 
   return (
     <div className="flex-1 flex flex-col">
