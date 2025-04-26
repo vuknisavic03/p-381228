@@ -1,22 +1,10 @@
 import { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2, Filter, X } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const mockListings = [
   {
@@ -29,14 +17,7 @@ const mockListings = [
     tenant: {
       name: "Alexander Whitmore",
       phone: "000-000-0000",
-      email: "alex@example.com",
-      type: "individual"
-    },
-    payment: {
-      revenue: "2500",
-      expenses: "500",
-      revenueCategories: ["rent", "facility"],
-      expensesCategories: ["maintenance", "utilities"]
+      email: "alex@example.com"
     }
   },
   {
@@ -49,14 +30,7 @@ const mockListings = [
     tenant: {
       name: "Sarah Johnson",
       phone: "111-222-3333",
-      email: "sarah@example.com",
-      type: "individual"
-    },
-    payment: {
-      revenue: "3500",
-      expenses: "800",
-      revenueCategories: ["rent"],
-      expensesCategories: ["maintenance", "taxes"]
+      email: "sarah@example.com"
     }
   },
   {
@@ -69,14 +43,7 @@ const mockListings = [
     tenant: {
       name: "John Watson",
       phone: "444-555-6666",
-      email: "watson@example.com",
-      type: "company"
-    },
-    payment: {
-      revenue: "4200",
-      expenses: "1200",
-      revenueCategories: ["rent", "optional"],
-      expensesCategories: ["utilities", "taxes"]
+      email: "watson@example.com"
     }
   },
   {
@@ -89,14 +56,7 @@ const mockListings = [
     tenant: {
       name: "Marie Dubois",
       phone: "777-888-9999",
-      email: "marie@example.com",
-      type: "company"
-    },
-    payment: {
-      revenue: "5000",
-      expenses: "1500",
-      revenueCategories: ["rent", "facility"],
-      expensesCategories: ["maintenance", "marketing"]
+      email: "marie@example.com"
     }
   },
   {
@@ -106,13 +66,7 @@ const mockListings = [
     country: "Japan",
     type: "Commercial",
     category: "Restaurant",
-    tenant: null,
-    payment: {
-      revenue: "0",
-      expenses: "500",
-      revenueCategories: [],
-      expensesCategories: ["maintenance"]
-    }
+    tenant: null
   }
 ];
 
@@ -122,17 +76,7 @@ export function ListingList() {
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  
-  // Filter states
-  const [filters, setFilters] = useState({
-    type: "",
-    category: "",
-    tenantType: "",
-    country: "",
-    city: "",
-  });
-  
+
   const fetchListings = async () => {
     setIsLoading(true);
     try {
@@ -157,48 +101,12 @@ export function ListingList() {
     setSelectedListing(listing);
     setIsEditSheetOpen(true);
   };
-  
-  const handleFilterChange = (field: string, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-  
-  const clearFilters = () => {
-    setFilters({
-      type: "",
-      category: "",
-      tenantType: "",
-      country: "",
-      city: "",
-    });
-  };
-  
-  const hasActiveFilters = Object.values(filters).some(value => value !== "");
-  
-  // Extract unique values for filter options
-  const types = Array.from(new Set(listings.map(item => item.type))).filter(Boolean);
-  const categories = Array.from(new Set(listings.map(item => item.category))).filter(Boolean);
-  const countries = Array.from(new Set(listings.map(item => item.country))).filter(Boolean);
-  const cities = Array.from(new Set(listings.map(item => item.city))).filter(Boolean);
 
-  const filteredListings = listings.filter(listing => {
-    // Search term filtering
-    const matchesSearch = 
-      listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      String(listing.id).includes(searchTerm);
-    
-    // Additional filters
-    const matchesType = filters.type === "" || listing.type === filters.type;
-    const matchesCategory = filters.category === "" || listing.category === filters.category;
-    const matchesTenantType = filters.tenantType === "" || listing.tenant?.type === filters.tenantType;
-    const matchesCountry = filters.country === "" || listing.country === filters.country;
-    const matchesCity = filters.city === "" || listing.city === filters.city;
-    
-    return matchesSearch && matchesType && matchesCategory && matchesTenantType && matchesCountry && matchesCity;
-  });
+  const filteredListings = listings.filter(listing => 
+    listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(listing.id).includes(searchTerm)
+  );
 
   return (
     <div className="flex-1 flex flex-col">
@@ -216,155 +124,14 @@ export function ListingList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-            <PopoverTrigger asChild>
-              <Button 
-                variant={hasActiveFilters ? "default" : "outline"}
-                size="sm"
-                className={`relative min-w-[80px] transition-all duration-200 ${
-                  hasActiveFilters 
-                    ? "bg-primary text-primary-foreground" 
-                    : "hover:bg-primary/5"
-                }`}
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                Filter
-                {hasActiveFilters && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {Object.values(filters).filter(Boolean).length}
-                  </span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80 p-4" align="end">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-sm">Filters</h3>
-                  {hasActiveFilters && (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-xs h-7 px-2 text-red-500 hover:text-red-600 hover:bg-red-50"
-                      onClick={clearFilters}
-                    >
-                      <X className="h-3 w-3 mr-1" />
-                      Clear all
-                    </Button>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Type</label>
-                  <Select 
-                    value={filters.type} 
-                    onValueChange={(value) => handleFilterChange("type", value)}
-                  >
-                    <SelectTrigger className="w-full h-9">
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all_types">All types</SelectItem>
-                      {types.map(type => (
-                        <SelectItem key={type} value={type}>{type}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Category</label>
-                  <Select 
-                    value={filters.category} 
-                    onValueChange={(value) => handleFilterChange("category", value)}
-                  >
-                    <SelectTrigger className="w-full h-9">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all_categories">All categories</SelectItem>
-                      {categories.map(category => (
-                        <SelectItem key={category} value={category}>{category}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Tenant Type</label>
-                  <Select 
-                    value={filters.tenantType} 
-                    onValueChange={(value) => handleFilterChange("tenantType", value)}
-                  >
-                    <SelectTrigger className="w-full h-9">
-                      <SelectValue placeholder="Select tenant type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all_tenant_types">All tenant types</SelectItem>
-                      <SelectItem value="individual">Individual</SelectItem>
-                      <SelectItem value="company">Company</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Country</label>
-                  <Select 
-                    value={filters.country} 
-                    onValueChange={(value) => handleFilterChange("country", value)}
-                  >
-                    <SelectTrigger className="w-full h-9">
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all_countries">All countries</SelectItem>
-                      {countries.map(country => (
-                        <SelectItem key={country} value={country}>{country}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">City</label>
-                  <Select 
-                    value={filters.city} 
-                    onValueChange={(value) => handleFilterChange("city", value)}
-                  >
-                    <SelectTrigger className="w-full h-9">
-                      <SelectValue placeholder="Select city" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all_cities">All cities</SelectItem>
-                      {cities.map(city => (
-                        <SelectItem key={city} value={city}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="min-w-[80px] transition-all duration-200 hover:bg-primary/5"
+          >
+            Filter
+          </Button>
         </div>
-        {hasActiveFilters && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {Object.entries(filters).map(([key, value]) => {
-              if (!value) return null;
-              return (
-                <div key={key} className="bg-primary/10 text-primary px-2 py-1 rounded-md text-xs flex items-center">
-                  <span>{key}: {value}</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-4 w-4 p-0 ml-1 text-primary hover:bg-primary/20"
-                    onClick={() => handleFilterChange(key, "")}
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
       <div className="flex-1 p-4 overflow-auto">
         {isLoading ? (
@@ -424,7 +191,7 @@ export function ListingList() {
               ))
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                {searchTerm || hasActiveFilters ? 'No listings found matching your criteria' : 'No listings available'}
+                {searchTerm ? 'No listings found matching your search' : 'No listings available'}
               </div>
             )}
           </div>
