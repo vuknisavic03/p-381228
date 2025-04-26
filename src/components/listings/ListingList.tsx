@@ -3,6 +3,8 @@ import { Search, MapPin, Phone, Mail } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { EditListingForm } from "./EditListingForm";
 
 const mockListings = [
   {
@@ -71,6 +73,8 @@ const mockListings = [
 export function ListingList() {
   const [listings, setListings] = useState<any[]>(mockListings);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedListing, setSelectedListing] = useState<any | null>(null);
+  const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
 
   const fetchListings = async () => {
     try {
@@ -88,6 +92,11 @@ export function ListingList() {
   useEffect(() => {
     fetchListings();
   }, []);
+
+  const handleListingClick = (listing: any) => {
+    setSelectedListing(listing);
+    setIsEditSheetOpen(true);
+  };
 
   const filteredListings = listings.filter(listing => 
     listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -121,9 +130,9 @@ export function ListingList() {
               <Card 
                 key={listing.id} 
                 className="p-1 hover:bg-gray-50/50 cursor-pointer transition-colors"
+                onClick={() => handleListingClick(listing)}
               >
                 <div className="flex flex-col">
-                  {/* Header */}
                   <div className="flex items-center justify-between p-4 pb-2">
                     <div className="flex items-center gap-6 text-sm">
                       <span className="text-[#9EA3AD]">#{listing.id}</span>
@@ -137,10 +146,8 @@ export function ListingList() {
                     </span>
                   </div>
                   
-                  {/* Divider */}
                   <div className="h-px bg-[#E4E5EA] mx-4" />
                   
-                  {/* Footer */}
                   <div className="flex items-center justify-between p-4 pt-2">
                     <div className="flex items-center gap-8 text-sm">
                       <span className="text-[#9EA3AD]">{listing.tenant?.name || 'No tenant'}</span>
@@ -171,6 +178,23 @@ export function ListingList() {
           )}
         </div>
       </div>
+
+      <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
+        <SheetContent side="right" className="w-[480px] sm:w-[540px] p-0">
+          {selectedListing && (
+            <EditListingForm 
+              listing={selectedListing} 
+              onClose={() => setIsEditSheetOpen(false)}
+              onUpdate={(updatedListing) => {
+                setListings(listings.map(l => 
+                  l.id === updatedListing.id ? updatedListing : l
+                ));
+                setIsEditSheetOpen(false);
+              }}
+            />
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
