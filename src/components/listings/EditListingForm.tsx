@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +24,6 @@ import {
   Coins,
   UtilityPole,
   Building,
-  Wrench as Tools,
   BadgePlus,
   RotateCcw,
   ScrollText,
@@ -64,7 +62,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
     { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
     { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Tools },
+    { value: "maintenance", label: "Maintenance Fees", Icon: Wrench },
     { value: "optional", label: "Optional Fees", Icon: BadgePlus },
     { value: "refunds", label: "Refunds", Icon: RotateCcw },
     { value: "condo", label: "Condo / HOA fees", Icon: Building },
@@ -135,7 +133,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         }
       };
 
-      // Try to update via API first
       const res = await fetch(`http://localhost:5000/listings/${listing.id}`, {
         method: "PUT",
         headers: {
@@ -157,7 +154,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     } catch (err) {
       console.error("Error updating:", err);
       
-      // Show demo mode notification
       toast({
         title: "Listing Updated (Demo Mode)",
         description: "Your changes have been saved in the demo data",
