@@ -1,8 +1,6 @@
-
 import React, { useState } from "react";
-import { X } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -26,7 +24,7 @@ import {
   Coins,
   UtilityPole,
   Building,
-  Wrench as Tools,  // Use Wrench as Tools to maintain original code
+  Wrench as Tools,
   BadgePlus,
   RotateCcw,
   ScrollText,
@@ -169,9 +167,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between p-6 border-b">
         <h2 className="text-lg font-semibold">Edit listing #{listing.id}</h2>
-        <Button variant="ghost" size="icon" onClick={onClose}>
-          <X className="h-4 w-4" />
-        </Button>
       </div>
       
       <div className="flex-1 overflow-auto p-6">
