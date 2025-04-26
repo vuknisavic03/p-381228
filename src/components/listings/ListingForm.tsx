@@ -1,30 +1,10 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PaymentDetailsInput } from "./PaymentDetailsInput";
 import { toast } from "@/components/ui/use-toast";
-import {
-  Home,
-  Building2,
-  ScrollText,
-  UtilityPole,
-  Key,
-  Wrench as Tools,
-  BadgePlus,
-  RotateCcw,
-  Building,
-  Coins,
-  Wrench,
-  Settings,
-  Bolt,
-  HandCoins,
-  Brush,
-  Shield,
-  Receipt,
-  Megaphone,
-  Briefcase
-} from "lucide-react";
 
 export function ListingForm() {
   const [city, setCity] = useState("");
@@ -40,53 +20,9 @@ export function ListingForm() {
   const [expenses, setExpenses] = useState("");
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
-  const [revenueCategories, setRevenueCategories] = useState<string[]>([]);
-  const [expensesCategories, setExpensesCategories] = useState<string[]>([]);
-
-  const revenueCategoriesList = [
-    { value: "rent", label: "Rent", Icon: Home },
-    { value: "facility", label: "Facility Fees", Icon: Building2 },
-    { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
-    { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
-    { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Tools },
-    { value: "optional", label: "Optional Fees", Icon: BadgePlus },
-    { value: "refunds", label: "Refunds", Icon: RotateCcw },
-    { value: "condo", label: "Condo / HOA fees", Icon: Building },
-    { value: "misc", label: "Miscellaneous Fees", Icon: Coins },
-  ];
-
-  const expenseCategoriesList = [
-    { value: "maintenance", label: "Maintenance", Icon: Wrench },
-    { value: "repairs", label: "Repairs", Icon: Settings },
-    { value: "utilities", label: "Utilities", Icon: Bolt },
-    { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
-    { value: "dues", label: "Dues and Fees", Icon: HandCoins },
-    { value: "cleaning", label: "Cleaning", Icon: Brush },
-    { value: "insurance", label: "Insurance", Icon: Shield },
-    { value: "taxes", label: "Taxes", Icon: Receipt },
-    { value: "marketing", label: "Marketing", Icon: Megaphone },
-    { value: "professional", label: "Professional Services", Icon: Briefcase },
-  ];
 
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
-  };
-
-  const toggleRevenueCategory = (value: string) => {
-    setRevenueCategories(prev => 
-      prev.includes(value) 
-        ? prev.filter(item => item !== value) 
-        : [...prev, value]
-    );
-  };
-
-  const toggleExpenseCategory = (value: string) => {
-    setExpensesCategories(prev => 
-      prev.includes(value) 
-        ? prev.filter(item => item !== value) 
-        : [...prev, value]
-    );
   };
 
   const handleSave = async () => {
@@ -109,8 +45,6 @@ export function ListingForm() {
       payment: {
         revenue,
         expenses,
-        revenueCategories,
-        expensesCategories,
       },
       notes,
     };
@@ -166,8 +100,6 @@ export function ListingForm() {
     setRevenue("");
     setExpenses("");
     setNotes("");
-    setRevenueCategories([]);
-    setExpensesCategories([]);
   };
 
   const inputClassName = "h-10 w-full";
@@ -247,31 +179,12 @@ export function ListingForm() {
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              className={inputClassName}
-              type="text"
-              placeholder="Revenue"
-              value={revenue}
-              onChange={(e) => setRevenue(e.target.value)}
-            />
-            <Input
-              className={inputClassName}
-              type="text"
-              placeholder="Expenses"
-              value={expenses}
-              onChange={(e) => setExpenses(e.target.value)}
-            />
-          </div>
-          
-          <PaymentDetailsInput
-            revenueCategories={revenueCategories}
-            expensesCategories={expensesCategories}
-            onToggleRevenueCategory={toggleRevenueCategory}
-            onToggleExpenseCategory={toggleExpenseCategory}
-          />
-        </div>
+        <PaymentDetailsInput
+          revenue={revenue}
+          expenses={expenses}
+          onRevenueChange={setRevenue}
+          onExpensesChange={setExpenses}
+        />
 
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Additional details</h3>

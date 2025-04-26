@@ -1,35 +1,9 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { 
-  Wrench,
-  Settings,
-  Bolt,
-  Home,
-  HandCoins,
-  Brush,
-  Shield,
-  Receipt,
-  Megaphone,
-  Briefcase,
-  Key,
-  Building2,
-  Coins,
-  UtilityPole,
-  Building,
-  BadgePlus,
-  RotateCcw,
-  ScrollText,
-  Check,
-  ChevronDown,
-} from "lucide-react";
 import { PaymentDetailsInput } from "./PaymentDetailsInput";
 
 interface EditListingFormProps {
@@ -52,36 +26,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     tenantType: listing.tenant?.type || "individual",
     revenue: listing.payment?.revenue || "",
     expenses: listing.payment?.expenses || "",
-    revenueCategories: listing.payment?.revenueCategories || [],
-    expensesCategories: listing.payment?.expensesCategories || [],
     notes: listing.notes || "",
   });
-
-  const revenueCategoriesList = [
-    { value: "rent", label: "Rent", Icon: Home },
-    { value: "facility", label: "Facility Fees", Icon: Building2 },
-    { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
-    { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
-    { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Wrench },
-    { value: "optional", label: "Optional Fees", Icon: BadgePlus },
-    { value: "refunds", label: "Refunds", Icon: RotateCcw },
-    { value: "condo", label: "Condo / HOA fees", Icon: Building },
-    { value: "misc", label: "Miscellaneous Fees", Icon: Coins },
-  ];
-
-  const expenseCategoriesList = [
-    { value: "maintenance", label: "Maintenance", Icon: Wrench },
-    { value: "repairs", label: "Repairs", Icon: Settings },
-    { value: "utilities", label: "Utilities", Icon: Bolt },
-    { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
-    { value: "dues", label: "Dues and Fees", Icon: HandCoins },
-    { value: "cleaning", label: "Cleaning", Icon: Brush },
-    { value: "insurance", label: "Insurance", Icon: Shield },
-    { value: "taxes", label: "Taxes", Icon: Receipt },
-    { value: "marketing", label: "Marketing", Icon: Megaphone },
-    { value: "professional", label: "Professional Services", Icon: Briefcase },
-  ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -94,24 +40,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     setFormData(prev => ({
       ...prev,
       tenantType: prev.tenantType === "individual" ? "company" : "individual"
-    }));
-  };
-
-  const toggleRevenueCategory = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      revenueCategories: prev.revenueCategories.includes(value)
-        ? prev.revenueCategories.filter(item => item !== value)
-        : [...prev.revenueCategories, value]
-    }));
-  };
-
-  const toggleExpenseCategory = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      expensesCategories: prev.expensesCategories.includes(value)
-        ? prev.expensesCategories.filter(item => item !== value)
-        : [...prev.expensesCategories, value]
     }));
   };
 
@@ -129,8 +57,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         payment: {
           revenue: formData.revenue,
           expenses: formData.expenses,
-          revenueCategories: formData.revenueCategories,
-          expensesCategories: formData.expensesCategories,
         }
       };
 
@@ -172,8 +98,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         payment: {
           revenue: formData.revenue,
           expenses: formData.expenses,
-          revenueCategories: formData.revenueCategories,
-          expensesCategories: formData.expensesCategories,
         }
       });
     }
@@ -264,53 +188,12 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm">Payment details</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Input
-                  className={inputClassName}
-                  name="revenue"
-                  type="text"
-                  placeholder="Revenue"
-                  value={formData.revenue}
-                  onChange={handleChange}
-                />
-                
-                <PaymentDetailsInput
-                  revenueCategories={formData.revenueCategories}
-                  expensesCategories={formData.expensesCategories}
-                  onToggleRevenueCategory={(value) => {
-                    setFormData(prev => ({
-                      ...prev,
-                      revenueCategories: prev.revenueCategories.includes(value)
-                        ? prev.revenueCategories.filter(item => item !== value)
-                        : [...prev.revenueCategories, value]
-                    }));
-                  }}
-                  onToggleExpenseCategory={(value) => {
-                    setFormData(prev => ({
-                      ...prev,
-                      expensesCategories: prev.expensesCategories.includes(value)
-                        ? prev.expensesCategories.filter(item => item !== value)
-                        : [...prev.expensesCategories, value]
-                    }));
-                  }}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Input
-                  className={inputClassName}
-                  name="expenses"
-                  type="text"
-                  placeholder="Expenses"
-                  value={formData.expenses}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          </div>
+          <PaymentDetailsInput
+            revenue={formData.revenue}
+            expenses={formData.expenses}
+            onRevenueChange={(value) => setFormData(prev => ({ ...prev, revenue: value }))}
+            onExpensesChange={(value) => setFormData(prev => ({ ...prev, expenses: value }))}
+          />
 
           <div className="space-y-2">
             <h3 className="font-medium text-sm">Additional details</h3>
