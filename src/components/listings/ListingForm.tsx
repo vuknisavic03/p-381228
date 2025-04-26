@@ -224,28 +224,27 @@ export function ListingForm() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-sm">Payment details</h3>
-          <div className="space-y-4">
-            <PaymentDetailsInput
-              label="Revenue"
-              value={revenue}
-              categories={revenueCategoriesList}
-              selectedCategories={revenueCategories}
-              onValueChange={setRevenue}
-              onCategoryToggle={toggleRevenueCategory}
-              className="mb-4"
-            />
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Payment details</h3>
+          
+          <PaymentDetailsInput
+            label="Revenue"
+            value={revenue}
+            categories={revenueCategoriesList}
+            selectedCategories={revenueCategories}
+            onValueChange={setRevenue}
+            onCategoryToggle={toggleRevenueCategory}
+            className="mb-4"
+          />
 
-            <PaymentDetailsInput
-              label="Expenses"
-              value={expenses}
-              categories={expenseCategoriesList}
-              selectedCategories={expensesCategories}
-              onValueChange={setExpenses}
-              onCategoryToggle={toggleExpenseCategory}
-            />
-          </div>
+          <PaymentDetailsInput
+            label="Expenses"
+            value={expenses}
+            categories={expenseCategoriesList}
+            selectedCategories={expensesCategories}
+            onValueChange={setExpenses}
+            onCategoryToggle={toggleExpenseCategory}
+          />
         </div>
 
         <div className="space-y-2">
