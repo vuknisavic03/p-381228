@@ -8,29 +8,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { 
-  Wrench,
-  Settings,
-  Bolt,
   Home,
-  HandCoins,
-  Brush,
-  Shield,
-  Receipt,
-  Megaphone,
-  Briefcase,
-  Key,
   Building2,
-  Coins,
-  UtilityPole,
-  Building,
-  Settings as Tools,
-  BadgePlus,
-  RotateCcw,
-  ScrollText,
   Factory,
-  Hotel,
   Store,
+  Building,
   Warehouse,
+  Hotel,
+  Briefcase,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -88,16 +73,51 @@ export function ListingForm() {
     { value: "mixed", label: "Mixed Use", Icon: Briefcase },
   ];
 
-  const propertyCategories = [
-    { value: "apartment", label: "Apartment", Icon: Building2 },
-    { value: "house", label: "House", Icon: Home },
-    { value: "condo", label: "Condominium", Icon: Building },
-    { value: "office", label: "Office", Icon: Briefcase },
-    { value: "retail", label: "Retail Space", Icon: Store },
-    { value: "industrial", label: "Industrial Space", Icon: Factory },
-    { value: "hotel", label: "Hotel/Motel", Icon: Hotel },
-    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-  ];
+  const typeToCategoryMap = {
+    residential: [
+      { value: "apartment", label: "Apartment", Icon: Building2 },
+      { value: "house", label: "House", Icon: Home },
+      { value: "condo", label: "Condominium", Icon: Building },
+    ],
+    commercial: [
+      { value: "office", label: "Office", Icon: Building2 },
+      { value: "retail", label: "Retail Space", Icon: Store },
+    ],
+    industrial: [
+      { value: "warehouse", label: "Warehouse", Icon: Warehouse },
+      { value: "factory", label: "Factory", Icon: Factory },
+    ],
+    retail: [
+      { value: "store", label: "Store", Icon: Store },
+      { value: "shop", label: "Shop", Icon: Store },
+      { value: "mall", label: "Mall", Icon: Building },
+    ],
+    office: [
+      { value: "private", label: "Private Office", Icon: Building2 },
+      { value: "coworking", label: "Coworking", Icon: Building2 },
+      { value: "business", label: "Business Center", Icon: Building2 },
+    ],
+    warehouse: [
+      { value: "storage", label: "Storage", Icon: Warehouse },
+      { value: "distribution", label: "Distribution", Icon: Warehouse },
+      { value: "logistics", label: "Logistics", Icon: Warehouse },
+    ],
+    hotel: [
+      { value: "hotel", label: "Hotel", Icon: Hotel },
+      { value: "motel", label: "Motel", Icon: Hotel },
+      { value: "resort", label: "Resort", Icon: Hotel },
+    ],
+    mixed: [
+      { value: "residential-commercial", label: "Residential-Commercial", Icon: Building },
+      { value: "live-work", label: "Live-Work", Icon: Home },
+      { value: "multi-purpose", label: "Multi-Purpose", Icon: Building },
+    ],
+  };
+
+  const getAvailableCategories = () => {
+    if (!typeField) return [];
+    return typeToCategoryMap[typeField as keyof typeof typeToCategoryMap] || [];
+  };
 
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
@@ -233,7 +253,10 @@ export function ListingForm() {
               {typeCategories.map((item) => (
                 <div
                   key={item.value}
-                  onClick={() => setTypeField(item.value)}
+                  onClick={() => {
+                    setTypeField(item.value);
+                    setCategory(""); // Reset category when type changes
+                  }}
                   className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
                     typeField === item.value
                       ? "bg-primary/5"
@@ -260,14 +283,15 @@ export function ListingForm() {
             <Input
               className={inputClassName}
               type="text"
-              placeholder={category ? propertyCategories.find(c => c.value === category)?.label || "Category" : "Category"}
+              placeholder={category ? getAvailableCategories().find(c => c.value === category)?.label || "Category" : "Category"}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
+              disabled={!typeField}
             />
           </PopoverTrigger>
           <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
             <div className="grid grid-cols-2 gap-2">
-              {propertyCategories.map((item) => (
+              {getAvailableCategories().map((item) => (
                 <div
                   key={item.value}
                   onClick={() => setCategory(item.value)}
