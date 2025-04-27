@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -75,7 +75,11 @@ const mockListings = [
   }
 ];
 
-export function ListingList() {
+interface ListingListProps {
+  dateRange?: DateRange;
+}
+
+export function ListingList({ dateRange }: ListingListProps) {
   const [listings, setListings] = useState<any[]>(mockListings);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
