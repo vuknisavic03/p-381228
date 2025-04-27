@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2 } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Loader2, CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 const mockListings = [
   {
@@ -76,6 +81,10 @@ export function ListingList() {
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: new Date(),
+    to: new Date(),
+  });
 
   const fetchListings = async () => {
     setIsLoading(true);
@@ -103,9 +112,9 @@ export function ListingList() {
   };
 
   const filteredListings = listings.filter(listing => 
-    listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    String(listing.id).includes(searchTerm)
+    String(listing.id).includes(searchTerm))
   );
 
   return (
@@ -124,13 +133,41 @@ export function ListingList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="min-w-[80px] transition-all duration-200 hover:bg-primary/5"
-          >
-            Filter
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="min-w-[80px] transition-all duration-200 hover:bg-primary/5 flex items-center gap-2.5 border border-[#E7E8EC] rounded-md px-4 py-2.5"
+              >
+                <CalendarIcon className="w-4 h-4 text-[#1A1A1A]" />
+                <span className="text-sm font-medium text-[#1A1A1A]">
+                  {date?.from ? (
+                    date.to ? (
+                      <>
+                        {format(date.from, "MMM dd")} - {format(date.to, "MMM dd")}
+                      </>
+                    ) : (
+                      format(date.from, "MMM dd")
+                    )
+                  ) : (
+                    "Pick dates"
+                  )}
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={setDate}
+                numberOfMonths={2}
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
       <div className="flex-1 p-4 overflow-auto">
