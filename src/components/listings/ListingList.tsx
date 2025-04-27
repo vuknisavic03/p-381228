@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -157,53 +156,48 @@ export function ListingList() {
             />
           </div>
           
-          {/* Type Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
               <ListFilter className="h-4 w-4 mr-1" />
-              Type {filters.types.length > 0 && `(${filters.types.length})`}
+              Filter {(filters.types.length > 0 || filters.categories.length > 0) && 
+                `(${filters.types.length + filters.categories.length})`}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
-              {uniqueTypes.map((type) => (
-                <DropdownMenuItem
-                  key={type}
-                  className="flex items-center justify-between"
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    handleFilterChange('types', type);
-                  }}
-                >
-                  <span>{type}</span>
-                  {filters.types.includes(type) && (
-                    <div className="h-2 w-2 rounded-full bg-primary" />
-                  )}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Category Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
-              <ListFilter className="h-4 w-4 mr-1" />
-              Category {filters.categories.length > 0 && `(${filters.categories.length})`}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
-              {uniqueCategories.map((category) => (
-                <DropdownMenuItem
-                  key={category}
-                  className="flex items-center justify-between"
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    handleFilterChange('categories', category);
-                  }}
-                >
-                  <span>{category}</span>
-                  {filters.categories.includes(category) && (
-                    <div className="h-2 w-2 rounded-full bg-primary" />
-                  )}
-                </DropdownMenuItem>
-              ))}
+            <DropdownMenuContent align="end" className="w-56">
+              <div className="p-2">
+                <div className="font-medium text-sm mb-2">Type</div>
+                {uniqueTypes.map((type) => (
+                  <DropdownMenuItem
+                    key={type}
+                    className="flex items-center justify-between"
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      handleFilterChange('types', type);
+                    }}
+                  >
+                    <span>{type}</span>
+                    {filters.types.includes(type) && (
+                      <div className="h-2 w-2 rounded-full bg-primary" />
+                    )}
+                  </DropdownMenuItem>
+                ))}
+                <div className="h-px bg-border my-2" />
+                <div className="font-medium text-sm mb-2">Category</div>
+                {uniqueCategories.map((category) => (
+                  <DropdownMenuItem
+                    key={category}
+                    className="flex items-center justify-between"
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      handleFilterChange('categories', category);
+                    }}
+                  >
+                    <span>{category}</span>
+                    {filters.categories.includes(category) && (
+                      <div className="h-2 w-2 rounded-full bg-primary" />
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
