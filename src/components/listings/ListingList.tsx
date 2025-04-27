@@ -1,18 +1,16 @@
 
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2, Filter } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const mockListings = [
   {
@@ -158,52 +156,56 @@ export function ListingList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="min-w-[80px] transition-all duration-200 hover:bg-primary/5"
-              >
-                <Filter className="h-4 w-4 mr-1" />
-                Filter
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80 p-4">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium">Type</h4>
-                  <div className="grid grid-cols-1 gap-2">
-                    {uniqueTypes.map((type) => (
-                      <div key={type} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`type-${type}`}
-                          checked={filters.types.includes(type)}
-                          onCheckedChange={() => handleFilterChange('types', type)}
-                        />
-                        <Label htmlFor={`type-${type}`}>{type}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-medium">Category</h4>
-                  <div className="grid grid-cols-1 gap-2">
-                    {uniqueCategories.map((category) => (
-                      <div key={category} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`category-${category}`}
-                          checked={filters.categories.includes(category)}
-                          onCheckedChange={() => handleFilterChange('categories', category)}
-                        />
-                        <Label htmlFor={`category-${category}`}>{category}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+          
+          {/* Type Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+              <ListFilter className="h-4 w-4 mr-1" />
+              Type {filters.types.length > 0 && `(${filters.types.length})`}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              {uniqueTypes.map((type) => (
+                <DropdownMenuItem
+                  key={type}
+                  className="flex items-center justify-between"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    handleFilterChange('types', type);
+                  }}
+                >
+                  <span>{type}</span>
+                  {filters.types.includes(type) && (
+                    <div className="h-2 w-2 rounded-full bg-primary" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Category Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+              <ListFilter className="h-4 w-4 mr-1" />
+              Category {filters.categories.length > 0 && `(${filters.categories.length})`}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              {uniqueCategories.map((category) => (
+                <DropdownMenuItem
+                  key={category}
+                  className="flex items-center justify-between"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    handleFilterChange('categories', category);
+                  }}
+                >
+                  <span>{category}</span>
+                  {filters.categories.includes(category) && (
+                    <div className="h-2 w-2 rounded-full bg-primary" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
