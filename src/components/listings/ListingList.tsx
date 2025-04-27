@@ -94,6 +94,29 @@ export function ListingList() {
   const uniqueTypes = Array.from(new Set(mockListings.map(l => l.type)));
   const uniqueCategories = Array.from(new Set(mockListings.map(l => l.category)));
 
+  const typeToCategoryMap = {
+    residential: ["apartment", "house", "condo"],
+    commercial: ["office", "retail"],
+    industrial: ["warehouse", "factory"],
+    retail: ["store", "shop", "mall"],
+    office: ["private office", "coworking", "business center"],
+    warehouse: ["storage", "distribution", "logistics"],
+    hotel: ["hotel", "motel", "resort"],
+    mixed: ["residential-commercial", "live-work", "multi-purpose"]
+  };
+
+  const getAvailableCategories = () => {
+    if (filters.types.length === 0) {
+      return uniqueCategories;
+    }
+    
+    const availableCategories = filters.types.flatMap(type => 
+      typeToCategoryMap[type as keyof typeof typeToCategoryMap] || []
+    );
+    
+    return uniqueCategories.filter(category => availableCategories.includes(category));
+  };
+
   const fetchListings = async () => {
     setIsLoading(true);
     try {
@@ -120,12 +143,25 @@ export function ListingList() {
   };
 
   const handleFilterChange = (filterType: 'types' | 'categories', value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterType]: prev[filterType].includes(value)
-        ? prev[filterType].filter(t => t !== value)
-        : [...prev[filterType], value]
-    }));
+    setFilters(prev => {
+      const updated = { ...prev };
+      if (filterType === 'types') {
+        if (updated.types.includes(value)) {
+          updated.types = updated.types.filter(t => t !== value);
+          const availableCategories = getAvailableCategories();
+          updated.categories = updated.categories.filter(c => availableCategories.includes(c));
+        } else {
+          updated.types = [...updated.types, value];
+        }
+      } else {
+        if (updated.categories.includes(value)) {
+          updated.categories = updated.categories.filter(c => c !== value);
+        } else {
+          updated.categories = [...updated.categories, value];
+        }
+      }
+      return updated;
+    });
   };
 
   const filteredListings = listings.filter(listing => {
@@ -140,11 +176,8 @@ export function ListingList() {
   });
 
   return (
-    <div className="flex-1 flex flex-col">
-      <div className="p-4 bg-white border-b sticky top-0 z-10 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <h1 className="text-xl font-bold">Listings</h1>
-        </div>
+    <div className="h-full">
+      <div className="p-4 border-b">
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
@@ -182,7 +215,7 @@ export function ListingList() {
                 ))}
                 <div className="h-px bg-border my-2" />
                 <div className="font-medium text-sm mb-2">Category</div>
-                {uniqueCategories.map((category) => (
+                {getAvailableCategories().map((category) => (
                   <DropdownMenuItem
                     key={category}
                     className="flex items-center justify-between"
