@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { 
+import {
   Wrench,
   Settings,
   Bolt,
@@ -167,58 +167,75 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between p-6 border-b">
-        <h2 className="text-lg font-semibold">Listing #{listing.id}</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Listing #{listing.id}</h2>
+        <Button variant="ghost" size="sm" onClick={onClose}>×</Button>
       </div>
       
-      <div className="flex-1 overflow-auto p-6">
-        <div className="space-y-4">
-          <Input
-            className={inputClassName}
-            name="city"
-            placeholder="City"
-            value={formData.city}
-            onChange={handleChange}
-          />
-          <Input
-            className={inputClassName}
-            name="address"
-            placeholder="Address"
-            value={formData.address}
-            onChange={handleChange}
-          />
-          <Input
-            className={inputClassName}
-            name="country"
-            placeholder="Country"
-            value={formData.country}
-            onChange={handleChange}
-          />
-          <Input
-            className={inputClassName}
-            name="postalCode"
-            placeholder="Postal Code"
-            value={formData.postalCode}
-            onChange={handleChange}
-          />
-          <Input
-            className={inputClassName}
-            name="type"
-            placeholder="Type"
-            value={formData.type}
-            onChange={handleChange}
-          />
-          <Input
-            className={inputClassName}
-            name="category"
-            placeholder="Category"
-            value={formData.category}
-            onChange={handleChange}
-          />
+      <div className="flex-1 overflow-auto">
+        <div className="space-y-6 p-6">
+          <div className="space-y-4">
+            <h3 className="font-medium text-sm text-gray-700">Location Details</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                className={inputClassName}
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+              />
+              <Input
+                className={inputClassName}
+                name="postalCode"
+                placeholder="Postal Code"
+                value={formData.postalCode}
+                onChange={handleChange}
+              />
+            </div>
+            <Input
+              className={inputClassName}
+              name="address"
+              placeholder="Street Address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+            <Input
+              className={inputClassName}
+              name="country"
+              placeholder="Country"
+              value={formData.country}
+              onChange={handleChange}
+            />
+          </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
+            <h3 className="font-medium text-sm text-gray-700">Property Information</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                className={inputClassName}
+                name="type"
+                placeholder="Property Type"
+                value={formData.type}
+                onChange={handleChange}
+              />
+              <Input
+                className={inputClassName}
+                name="category"
+                placeholder="Category"
+                value={formData.category}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-medium text-sm">Tenant details</h3>
-              <Button variant="outline" size="sm" onClick={toggleTenantType}>
+              <h3 className="font-medium text-sm text-gray-700">Tenant Details</h3>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={toggleTenantType}
+                className="text-xs"
+              >
                 {formData.tenantType === "individual" ? "Individual" : "Company"}
               </Button>
             </div>
@@ -226,30 +243,30 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               <Input
                 className={inputClassName}
                 name="tenantName"
-                placeholder={formData.tenantType === "individual" ? "Name" : "Company Name"}
+                placeholder={formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                 value={formData.tenantName}
                 onChange={handleChange}
               />
               <Input
                 className={inputClassName}
                 name="tenantPhone"
-                placeholder="Phone"
+                placeholder="Phone Number"
                 value={formData.tenantPhone}
                 onChange={handleChange}
               />
               <Input
-                className={`${inputClassName} col-span-2`}
+                className="col-span-2"
                 name="tenantEmail"
-                placeholder="Email"
+                placeholder="Email Address"
                 value={formData.tenantEmail}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm">Payment details</h3>
-            <div className="space-y-4">
+          <div className="space-y-4">
+            <h3 className="font-medium text-sm text-gray-700">Financial Details</h3>
+            <div className="space-y-3">
               <Popover>
                 <PopoverTrigger asChild>
                   <Input
@@ -261,7 +278,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     onChange={handleChange}
                   />
                 </PopoverTrigger>
-                <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+                <PopoverContent className="w-[468px] p-3" align="start">
                   <div className="grid grid-cols-2 gap-2">
                     {revenueCategories.map((item) => (
                       <div
@@ -299,7 +316,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     onChange={handleChange}
                   />
                 </PopoverTrigger>
-                <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+                <PopoverContent className="w-[468px] p-3" align="start">
                   <div className="grid grid-cols-2 gap-2">
                     {expenseCategories.map((item) => (
                       <div
@@ -328,12 +345,12 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm">Additional details</h3>
+          <div className="space-y-4">
+            <h3 className="font-medium text-sm text-gray-700">Additional Notes</h3>
             <Textarea
-              className="min-h-[100px] w-full"
+              className="min-h-[100px] resize-none"
               name="notes"
-              placeholder="Notes"
+              placeholder="Add any additional information about the listing..."
               value={formData.notes}
               onChange={handleChange}
             />
@@ -343,7 +360,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
       <div className="border-t p-6">
         <Button className="w-full" onClick={handleSubmit}>
-          Save changes
+          Save Changes
         </Button>
       </div>
     </div>
