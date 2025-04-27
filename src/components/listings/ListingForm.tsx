@@ -4,6 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -13,13 +18,19 @@ import {
 import {
   Home,
   Building2,
+  Factory,
+  Store,
+  Building,
+  Warehouse,
+  Hotel,
+  Briefcase,
+  // Additional icons for revenue categories
   FileText,
   Power,
   KeyRound,
   WrenchIcon,
   PlusCircle,
   RotateCcw as RotateCcwIcon,
-  Building,
   Wallet,
   // Additional icons for expense categories
   WrenchIcon as RepairIcon,
@@ -81,12 +92,12 @@ export function ListingForm() {
   const typeCategories = [
     { value: "residential", label: "Residential", Icon: Home },
     { value: "commercial", label: "Commercial", Icon: Building },
-    { value: "industrial", label: "Industrial", Icon: Building },
-    { value: "retail", label: "Retail", Icon: Building },
+    { value: "industrial", label: "Industrial", Icon: Factory },
+    { value: "retail", label: "Retail", Icon: Store },
     { value: "office", label: "Office Space", Icon: Building2 },
-    { value: "warehouse", label: "Warehouse", Icon: Building },
-    { value: "hotel", label: "Hotel", Icon: Building },
-    { value: "mixed", label: "Mixed Use", Icon: Building },
+    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
+    { value: "hotel", label: "Hotel", Icon: Hotel },
+    { value: "mixed", label: "Mixed Use", Icon: Briefcase },
   ];
 
   const typeToCategoryMap = {
@@ -97,15 +108,15 @@ export function ListingForm() {
     ],
     commercial: [
       { value: "office", label: "Office", Icon: Building2 },
-      { value: "retail", label: "Retail Space", Icon: Building },
+      { value: "retail", label: "Retail Space", Icon: Store },
     ],
     industrial: [
-      { value: "warehouse", label: "Warehouse", Icon: Building },
-      { value: "factory", label: "Factory", Icon: Building },
+      { value: "warehouse", label: "Warehouse", Icon: Warehouse },
+      { value: "factory", label: "Factory", Icon: Factory },
     ],
     retail: [
-      { value: "store", label: "Store", Icon: Building },
-      { value: "shop", label: "Shop", Icon: Building },
+      { value: "store", label: "Store", Icon: Store },
+      { value: "shop", label: "Shop", Icon: Store },
       { value: "mall", label: "Mall", Icon: Building },
     ],
     office: [
@@ -114,14 +125,14 @@ export function ListingForm() {
       { value: "business", label: "Business Center", Icon: Building2 },
     ],
     warehouse: [
-      { value: "storage", label: "Storage", Icon: Building },
-      { value: "distribution", label: "Distribution", Icon: Building },
-      { value: "logistics", label: "Logistics", Icon: Building },
+      { value: "storage", label: "Storage", Icon: Warehouse },
+      { value: "distribution", label: "Distribution", Icon: Warehouse },
+      { value: "logistics", label: "Logistics", Icon: Warehouse },
     ],
     hotel: [
-      { value: "hotel", label: "Hotel", Icon: Building },
-      { value: "motel", label: "Motel", Icon: Building },
-      { value: "resort", label: "Resort", Icon: Building },
+      { value: "hotel", label: "Hotel", Icon: Hotel },
+      { value: "motel", label: "Motel", Icon: Hotel },
+      { value: "resort", label: "Resort", Icon: Hotel },
     ],
     mixed: [
       { value: "residential-commercial", label: "Residential-Commercial", Icon: Building },
@@ -348,85 +359,79 @@ export function ListingForm() {
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Payment details</h3>
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Select value={revenueCategory} onValueChange={setRevenueCategory}>
-                <SelectTrigger className="w-full">
-                  <div className="flex items-center gap-2">
-                    {revenueCategory ? (
-                      <>
-                        {revenueCategories.find(cat => cat.value === revenueCategory)?.Icon && (
-                          <revenueCategories.find(cat => cat.value === revenueCategory)!.Icon className="h-4 w-4" />
-                        )}
-                        <span>{revenueCategories.find(cat => cat.value === revenueCategory)?.label}</span>
-                      </>
-                    ) : (
-                      <span>Select revenue type</span>
-                    )}
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  {revenueCategories.map((category) => (
-                    <SelectItem 
-                      key={category.value} 
-                      value={category.value}
-                      className="flex items-center gap-2 cursor-pointer"
+            <Popover>
+              <PopoverTrigger asChild>
+                <Input
+                  className={inputClassName}
+                  type="text"
+                  placeholder={revenueCategory ? revenueCategories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
+                  value={revenue}
+                  onChange={(e) => setRevenue(e.target.value)}
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+                <div className="grid grid-cols-2 gap-2">
+                  {revenueCategories.map((item) => (
+                    <div
+                      key={item.value}
+                      onClick={() => setRevenueCategory(item.value)}
+                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
+                        revenueCategory === item.value
+                          ? "bg-primary/5"
+                          : "hover:bg-accent hover:text-accent-foreground"
+                      }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <category.Icon className="h-4 w-4" />
-                        <span>{category.label}</span>
+                      <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
+                        <item.Icon size={20} />
                       </div>
-                    </SelectItem>
+                      <span className="flex-1 text-sm">{item.label}</span>
+                      {revenueCategory === item.value && (
+                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      )}
+                    </div>
                   ))}
-                </SelectContent>
-              </Select>
-              <Input
-                className="w-full"
-                type="text"
-                placeholder="Amount"
-                value={revenue}
-                onChange={(e) => setRevenue(e.target.value)}
-              />
-            </div>
+                </div>
+              </PopoverContent>
+            </Popover>
 
-            <div className="space-y-2">
-              <Select value={expensesCategory} onValueChange={setExpensesCategory}>
-                <SelectTrigger className="w-full">
-                  <div className="flex items-center gap-2">
-                    {expensesCategory ? (
-                      <>
-                        {expenseCategories.find(cat => cat.value === expensesCategory)?.Icon && (
-                          <expenseCategories.find(cat => cat.value === expensesCategory)!.Icon className="h-4 w-4" />
-                        )}
-                        <span>{expenseCategories.find(cat => cat.value === expensesCategory)?.label}</span>
-                      </>
-                    ) : (
-                      <span>Select expense type</span>
-                    )}
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  {expenseCategories.map((category) => (
-                    <SelectItem 
-                      key={category.value} 
-                      value={category.value}
-                      className="flex items-center gap-2 cursor-pointer"
+            <Popover>
+              <PopoverTrigger asChild>
+                <Input
+                  className={inputClassName}
+                  type="text"
+                  placeholder={expensesCategory ? expenseCategories.find(c => c.value === expensesCategory)?.label || "Expenses" : "Expenses"}
+                  value={expenses}
+                  onChange={(e) => setExpenses(e.target.value)}
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+                <div className="grid grid-cols-2 gap-2">
+                  {expenseCategories.map((item) => (
+                    <div
+                      key={item.value}
+                      onClick={() => setExpensesCategory(item.value)}
+                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
+                        expensesCategory === item.value
+                          ? "bg-primary/5"
+                          : "hover:bg-accent hover:text-accent-foreground"
+                      }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <category.Icon className="h-4 w-4" />
-                        <span>{category.label}</span>
+                      <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
+                        <item.Icon size={20} />
                       </div>
-                    </SelectItem>
+                      <span className="flex-1 text-sm">{item.label}</span>
+                      {expensesCategory === item.value && (
+                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      )}
+                    </div>
                   ))}
-                </SelectContent>
-              </Select>
-              <Input
-                className="w-full"
-                type="text"
-                placeholder="Amount"
-                value={expenses}
-                onChange={(e) => setExpenses(e.target.value)}
-              />
-            </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
@@ -447,4 +452,3 @@ export function ListingForm() {
     </div>
   );
 }
-
