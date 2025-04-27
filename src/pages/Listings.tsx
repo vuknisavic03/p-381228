@@ -3,14 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
-import { DateRange } from "react-day-picker";
 
 export default function Listings() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date(),
-  });
 
   useEffect(() => {
     const handleRefresh = () => {
@@ -31,7 +26,7 @@ export default function Listings() {
           <ListingForm />
         </div>
         <div className="flex-1 bg-[#FAFBFC] overflow-y-auto">
-          <ListingList key={refreshTrigger} dateRange={dateRange} />
+          <ListingList key={refreshTrigger} />
         </div>
       </div>
     </DashboardLayout>
