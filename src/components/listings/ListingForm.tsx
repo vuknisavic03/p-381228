@@ -1,7 +1,13 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -32,10 +38,10 @@ import {
   Zap,
   HomeIcon,
   WalletCards,
-  BrushIcon,
-  ShieldIcon,
-  ReceiptIcon,
-  MegaphoneIcon,
+  Brush as BrushIcon,
+  Shield as ShieldIcon,
+  Receipt as ReceiptIcon,
+  Megaphone as MegaphoneIcon,
   Briefcase as ServicesIcon,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
