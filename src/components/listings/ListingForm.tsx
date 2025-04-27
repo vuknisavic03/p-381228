@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,25 @@ import {
   Warehouse,
   Hotel,
   Briefcase,
+  // Additional icons for revenue categories
+  FileText,
+  Power,
+  KeyRound,
+  WrenchIcon,
+  PlusCircle,
+  RotateCcw as RotateCcwIcon,
+  Wallet,
+  // Additional icons for expense categories
+  WrenchIcon as RepairIcon,
+  Settings,
+  Zap,
+  HomeIcon,
+  WalletCards,
+  BrushIcon,
+  ShieldIcon,
+  ReceiptIcon,
+  MegaphoneIcon,
+  Briefcase as ServicesIcon,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -39,27 +59,27 @@ export function ListingForm() {
   const revenueCategories = [
     { value: "rent", label: "Rent", Icon: Home },
     { value: "facility", label: "Facility Fees", Icon: Building2 },
-    { value: "lease", label: "Lease-Related Fees", Icon: ScrollText },
-    { value: "utility", label: "Utility & Service Fees", Icon: UtilityPole },
-    { value: "key", label: "Key & Access Fees", Icon: Key },
-    { value: "maintenance", label: "Maintenance Fees", Icon: Tools },
-    { value: "optional", label: "Optional Fees", Icon: BadgePlus },
-    { value: "refunds", label: "Refunds", Icon: RotateCcw },
+    { value: "lease", label: "Lease-Related Fees", Icon: FileText },
+    { value: "utility", label: "Utility & Service Fees", Icon: Power },
+    { value: "key", label: "Key & Access Fees", Icon: KeyRound },
+    { value: "maintenance", label: "Maintenance Fees", Icon: WrenchIcon },
+    { value: "optional", label: "Optional Fees", Icon: PlusCircle },
+    { value: "refunds", label: "Refunds", Icon: RotateCcwIcon },
     { value: "condo", label: "Condo / HOA fees", Icon: Building },
-    { value: "misc", label: "Miscellaneous Fees", Icon: Coins },
+    { value: "misc", label: "Miscellaneous Fees", Icon: Wallet },
   ];
 
   const expenseCategories = [
-    { value: "maintenance", label: "Maintenance", Icon: Wrench },
+    { value: "maintenance", label: "Maintenance", Icon: RepairIcon },
     { value: "repairs", label: "Repairs", Icon: Settings },
-    { value: "utilities", label: "Utilities", Icon: Bolt },
-    { value: "turnover", label: "Turnover / Make Ready", Icon: Home },
-    { value: "dues", label: "Dues and Fees", Icon: HandCoins },
-    { value: "cleaning", label: "Cleaning", Icon: Brush },
-    { value: "insurance", label: "Insurance", Icon: Shield },
-    { value: "taxes", label: "Taxes", Icon: Receipt },
-    { value: "marketing", label: "Marketing", Icon: Megaphone },
-    { value: "professional", label: "Professional Services", Icon: Briefcase },
+    { value: "utilities", label: "Utilities", Icon: Zap },
+    { value: "turnover", label: "Turnover / Make Ready", Icon: HomeIcon },
+    { value: "dues", label: "Dues and Fees", Icon: WalletCards },
+    { value: "cleaning", label: "Cleaning", Icon: BrushIcon },
+    { value: "insurance", label: "Insurance", Icon: ShieldIcon },
+    { value: "taxes", label: "Taxes", Icon: ReceiptIcon },
+    { value: "marketing", label: "Marketing", Icon: MegaphoneIcon },
+    { value: "professional", label: "Professional Services", Icon: ServicesIcon },
   ];
 
   const typeCategories = [
