@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -80,12 +81,12 @@ export function ListingForm() {
   const typeCategories = [
     { value: "residential", label: "Residential", Icon: Home },
     { value: "commercial", label: "Commercial", Icon: Building },
-    { value: "industrial", label: "Industrial", Icon: Factory },
-    { value: "retail", label: "Retail", Icon: Store },
+    { value: "industrial", label: "Industrial", Icon: Building },
+    { value: "retail", label: "Retail", Icon: Building },
     { value: "office", label: "Office Space", Icon: Building2 },
-    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-    { value: "hotel", label: "Hotel", Icon: Hotel },
-    { value: "mixed", label: "Mixed Use", Icon: Briefcase },
+    { value: "warehouse", label: "Warehouse", Icon: Building },
+    { value: "hotel", label: "Hotel", Icon: Building },
+    { value: "mixed", label: "Mixed Use", Icon: Building },
   ];
 
   const typeToCategoryMap = {
@@ -96,15 +97,15 @@ export function ListingForm() {
     ],
     commercial: [
       { value: "office", label: "Office", Icon: Building2 },
-      { value: "retail", label: "Retail Space", Icon: Store },
+      { value: "retail", label: "Retail Space", Icon: Building },
     ],
     industrial: [
-      { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-      { value: "factory", label: "Factory", Icon: Factory },
+      { value: "warehouse", label: "Warehouse", Icon: Building },
+      { value: "factory", label: "Factory", Icon: Building },
     ],
     retail: [
-      { value: "store", label: "Store", Icon: Store },
-      { value: "shop", label: "Shop", Icon: Store },
+      { value: "store", label: "Store", Icon: Building },
+      { value: "shop", label: "Shop", Icon: Building },
       { value: "mall", label: "Mall", Icon: Building },
     ],
     office: [
@@ -113,14 +114,14 @@ export function ListingForm() {
       { value: "business", label: "Business Center", Icon: Building2 },
     ],
     warehouse: [
-      { value: "storage", label: "Storage", Icon: Warehouse },
-      { value: "distribution", label: "Distribution", Icon: Warehouse },
-      { value: "logistics", label: "Logistics", Icon: Warehouse },
+      { value: "storage", label: "Storage", Icon: Building },
+      { value: "distribution", label: "Distribution", Icon: Building },
+      { value: "logistics", label: "Logistics", Icon: Building },
     ],
     hotel: [
-      { value: "hotel", label: "Hotel", Icon: Hotel },
-      { value: "motel", label: "Motel", Icon: Hotel },
-      { value: "resort", label: "Resort", Icon: Hotel },
+      { value: "hotel", label: "Hotel", Icon: Building },
+      { value: "motel", label: "Motel", Icon: Building },
+      { value: "resort", label: "Resort", Icon: Building },
     ],
     mixed: [
       { value: "residential-commercial", label: "Residential-Commercial", Icon: Building },
@@ -446,3 +447,4 @@ export function ListingForm() {
     </div>
   );
 }
+
