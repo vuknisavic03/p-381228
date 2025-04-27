@@ -1,12 +1,8 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -23,36 +19,8 @@ import {
   Warehouse,
   Hotel,
   Briefcase,
-  // Additional icons for revenue categories
-  FileText,
-  Power,
-  KeyRound,
-  WrenchIcon,
-  PlusCircle,
-  RotateCcw as RotateCcwIcon,
-  Wallet,
-  // Additional icons for expense categories
-  WrenchIcon as RepairIcon,
-  Settings,
-  Zap,
-  HomeIcon,
-  WalletCards,
-  Brush as BrushIcon,
-  Shield as ShieldIcon,
-  Receipt as ReceiptIcon,
-  Megaphone as MegaphoneIcon,
-  Briefcase as ServicesIcon,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import {
-  Receipt as ReceiptIcon2,
-  FileText as FileTextIcon,
-  Banknote as BanknoteIcon,
-  Coins as CoinsIcon,
-  CreditCard as CreditCardIcon,
-  BadgeDollarSign as BadgeDollarSignIcon
-} from "lucide-react";
 
 export function ListingForm() {
   const [city, setCity] = useState("");
@@ -64,94 +32,8 @@ export function ListingForm() {
   const [tenantName, setTenantName] = useState("");
   const [tenantPhone, setTenantPhone] = useState("");
   const [tenantEmail, setTenantEmail] = useState("");
-  const [revenue, setRevenue] = useState("");
-  const [expenses, setExpenses] = useState("");
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
-  const [revenueCategory, setRevenueCategory] = useState("");
-  const [expensesCategory, setExpensesCategory] = useState("");
-  
-  const [selectedRevenues, setSelectedRevenues] = useState<Array<{
-    type: string;
-    amount: string;
-  }>>([]);
-  
-  const [selectedExpenses, setSelectedExpenses] = useState<Array<{
-    type: string;
-    amount: string;
-  }>>([]);
-
-  const revenueCategories = [
-    { value: "rent", label: "Rent", Icon: Home },
-    { value: "facility", label: "Facility Fees", Icon: Building2 },
-    { value: "lease", label: "Lease-Related Fees", Icon: FileText },
-    { value: "utility", label: "Utility & Service Fees", Icon: Power },
-    { value: "key", label: "Key & Access Fees", Icon: KeyRound },
-    { value: "maintenance", label: "Maintenance Fees", Icon: WrenchIcon },
-    { value: "optional", label: "Optional Fees", Icon: PlusCircle },
-    { value: "refunds", label: "Refunds", Icon: RotateCcwIcon },
-    { value: "condo", label: "Condo / HOA fees", Icon: Building },
-    { value: "misc", label: "Miscellaneous Fees", Icon: Wallet },
-  ];
-
-  const expenseCategories = [
-    { value: "maintenance", label: "Maintenance", Icon: RepairIcon },
-    { value: "repairs", label: "Repairs", Icon: Settings },
-    { value: "utilities", label: "Utilities", Icon: Zap },
-    { value: "turnover", label: "Turnover / Make Ready", Icon: HomeIcon },
-    { value: "dues", label: "Dues and Fees", Icon: WalletCards },
-    { value: "cleaning", label: "Cleaning", Icon: BrushIcon },
-    { value: "insurance", label: "Insurance", Icon: ShieldIcon },
-    { value: "taxes", label: "Taxes", Icon: ReceiptIcon },
-    { value: "marketing", label: "Marketing", Icon: MegaphoneIcon },
-    { value: "professional", label: "Professional Services", Icon: ServicesIcon },
-  ];
-
-  const revenueTypes = [
-    { value: "rent", label: "Rent", icon: BadgeDollarSignIcon },
-    { value: "utility", label: "Utility Fees", icon: ReceiptIcon2 },
-    { value: "service", label: "Service Fees", icon: FileTextIcon },
-    { value: "deposit", label: "Deposits", icon: BanknoteIcon },
-    { value: "extra", label: "Extra Charges", icon: CoinsIcon },
-    { value: "maintenance", label: "Maintenance Fees", icon: CreditCardIcon },
-  ];
-
-  const expenseTypes = [
-    { value: "mortgage", label: "Mortgage", icon: BadgeDollarSignIcon },
-    { value: "maintenance", label: "Maintenance", icon: CreditCardIcon },
-    { value: "utilities", label: "Utilities", icon: ReceiptIcon2 },
-    { value: "taxes", label: "Taxes", icon: FileTextIcon },
-    { value: "insurance", label: "Insurance", icon: BanknoteIcon },
-    { value: "management", label: "Management", icon: CoinsIcon },
-  ];
-
-  const handleAddRevenue = (type: string) => {
-    setSelectedRevenues([...selectedRevenues, { type, amount: "" }]);
-  };
-
-  const handleAddExpense = (type: string) => {
-    setSelectedExpenses([...selectedExpenses, { type, amount: "" }]);
-  };
-
-  const handleRemoveRevenue = (index: number) => {
-    setSelectedRevenues(selectedRevenues.filter((_, i) => i !== index));
-  };
-
-  const handleRemoveExpense = (index: number) => {
-    setSelectedExpenses(selectedExpenses.filter((_, i) => i !== index));
-  };
-
-  const handleRevenueAmountChange = (index: number, amount: string) => {
-    const newRevenues = [...selectedRevenues];
-    newRevenues[index].amount = amount;
-    setSelectedRevenues(newRevenues);
-  };
-
-  const handleExpenseAmountChange = (index: number, amount: string) => {
-    const newExpenses = [...selectedExpenses];
-    newExpenses[index].amount = amount;
-    setSelectedExpenses(newExpenses);
-  };
 
   const typeCategories = [
     { value: "residential", label: "Residential", Icon: Home },
@@ -249,12 +131,6 @@ export function ListingForm() {
         email: tenantEmail,
         type: tenantType,
       },
-      payment: {
-        revenue,
-        expenses,
-        revenueCategory,
-        expensesCategory,
-      },
       notes,
     };
     
@@ -306,19 +182,10 @@ export function ListingForm() {
     setTenantName("");
     setTenantPhone("");
     setTenantEmail("");
-    setRevenue("");
-    setExpenses("");
     setNotes("");
-    setRevenueCategory("");
-    setExpensesCategory("");
   };
 
   const inputClassName = "h-10 w-full";
-
-  const getIconComponent = (items: typeof revenueTypes, value: string) => {
-    const item = items.find((i) => i.value === value);
-    return item ? item.icon : BadgeDollarSignIcon;
-  };
 
   return (
     <div className="p-6 h-full overflow-auto">
@@ -423,106 +290,6 @@ export function ListingForm() {
               onChange={(e) => setTenantEmail(e.target.value)}
             />
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="font-medium text-sm">Revenue details</h3>
-          <Select onValueChange={handleAddRevenue}>
-            <SelectTrigger>
-              <SelectValue placeholder="Add revenue type" />
-            </SelectTrigger>
-            <SelectContent>
-              {revenueTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  <div className="flex items-center gap-2">
-                    <type.icon className="h-4 w-4" />
-                    <span>{type.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {selectedRevenues.map((revenue, index) => {
-            const IconComponent = getIconComponent(revenueTypes, revenue.type);
-            const label = revenueTypes.find(t => t.value === revenue.type)?.label;
-            
-            return (
-              <div key={index} className="flex items-center gap-2">
-                <Badge 
-                  variant="outline" 
-                  className="flex items-center gap-2 px-3 py-1"
-                >
-                  <IconComponent className="h-4 w-4" />
-                  <span>{label}</span>
-                </Badge>
-                <Input
-                  type="text"
-                  placeholder="Amount"
-                  value={revenue.amount}
-                  onChange={(e) => handleRevenueAmountChange(index, e.target.value)}
-                  className="flex-1"
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleRemoveRevenue(index)}
-                >
-                  Remove
-                </Button>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="space-y-2">
-          <h3 className="font-medium text-sm">Expense details</h3>
-          <Select onValueChange={handleAddExpense}>
-            <SelectTrigger>
-              <SelectValue placeholder="Add expense type" />
-            </SelectTrigger>
-            <SelectContent>
-              {expenseTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  <div className="flex items-center gap-2">
-                    <type.icon className="h-4 w-4" />
-                    <span>{type.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {selectedExpenses.map((expense, index) => {
-            const IconComponent = getIconComponent(expenseTypes, expense.type);
-            const label = expenseTypes.find(t => t.value === expense.type)?.label;
-            
-            return (
-              <div key={index} className="flex items-center gap-2">
-                <Badge 
-                  variant="outline" 
-                  className="flex items-center gap-2 px-3 py-1"
-                >
-                  <IconComponent className="h-4 w-4" />
-                  <span>{label}</span>
-                </Badge>
-                <Input
-                  type="text"
-                  placeholder="Amount"
-                  value={expense.amount}
-                  onChange={(e) => handleExpenseAmountChange(index, e.target.value)}
-                  className="flex-1"
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleRemoveExpense(index)}
-                >
-                  Remove
-                </Button>
-              </div>
-            );
-          })}
         </div>
 
         <div className="space-y-2">
