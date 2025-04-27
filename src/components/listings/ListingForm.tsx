@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -45,6 +44,15 @@ import {
   Briefcase as ServicesIcon,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import {
+  Receipt as ReceiptIcon2,
+  FileText as FileTextIcon,
+  Banknote as BanknoteIcon,
+  Coins as CoinsIcon,
+  CreditCard as CreditCardIcon,
+  BadgeDollarSign as BadgeDollarSignIcon
+} from "lucide-react";
 
 export function ListingForm() {
   const [city, setCity] = useState("");
@@ -62,6 +70,16 @@ export function ListingForm() {
   const [tenantType, setTenantType] = useState("individual");
   const [revenueCategory, setRevenueCategory] = useState("");
   const [expensesCategory, setExpensesCategory] = useState("");
+  
+  const [selectedRevenues, setSelectedRevenues] = useState<Array<{
+    type: string;
+    amount: string;
+  }>>([]);
+  
+  const [selectedExpenses, setSelectedExpenses] = useState<Array<{
+    type: string;
+    amount: string;
+  }>>([]);
 
   const revenueCategories = [
     { value: "rent", label: "Rent", Icon: Home },
@@ -88,6 +106,52 @@ export function ListingForm() {
     { value: "marketing", label: "Marketing", Icon: MegaphoneIcon },
     { value: "professional", label: "Professional Services", Icon: ServicesIcon },
   ];
+
+  const revenueTypes = [
+    { value: "rent", label: "Rent", icon: BadgeDollarSignIcon },
+    { value: "utility", label: "Utility Fees", icon: ReceiptIcon2 },
+    { value: "service", label: "Service Fees", icon: FileTextIcon },
+    { value: "deposit", label: "Deposits", icon: BanknoteIcon },
+    { value: "extra", label: "Extra Charges", icon: CoinsIcon },
+    { value: "maintenance", label: "Maintenance Fees", icon: CreditCardIcon },
+  ];
+
+  const expenseTypes = [
+    { value: "mortgage", label: "Mortgage", icon: BadgeDollarSignIcon },
+    { value: "maintenance", label: "Maintenance", icon: CreditCardIcon },
+    { value: "utilities", label: "Utilities", icon: ReceiptIcon2 },
+    { value: "taxes", label: "Taxes", icon: FileTextIcon },
+    { value: "insurance", label: "Insurance", icon: BanknoteIcon },
+    { value: "management", label: "Management", icon: CoinsIcon },
+  ];
+
+  const handleAddRevenue = (type: string) => {
+    setSelectedRevenues([...selectedRevenues, { type, amount: "" }]);
+  };
+
+  const handleAddExpense = (type: string) => {
+    setSelectedExpenses([...selectedExpenses, { type, amount: "" }]);
+  };
+
+  const handleRemoveRevenue = (index: number) => {
+    setSelectedRevenues(selectedRevenues.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveExpense = (index: number) => {
+    setSelectedExpenses(selectedExpenses.filter((_, i) => i !== index));
+  };
+
+  const handleRevenueAmountChange = (index: number, amount: string) => {
+    const newRevenues = [...selectedRevenues];
+    newRevenues[index].amount = amount;
+    setSelectedRevenues(newRevenues);
+  };
+
+  const handleExpenseAmountChange = (index: number, amount: string) => {
+    const newExpenses = [...selectedExpenses];
+    newExpenses[index].amount = amount;
+    setSelectedExpenses(newExpenses);
+  };
 
   const typeCategories = [
     { value: "residential", label: "Residential", Icon: Home },
@@ -251,6 +315,11 @@ export function ListingForm() {
 
   const inputClassName = "h-10 w-full";
 
+  const getIconComponent = (items: typeof revenueTypes, value: string) => {
+    const item = items.find((i) => i.value === value);
+    return item ? item.icon : BadgeDollarSignIcon;
+  };
+
   return (
     <div className="p-6 h-full overflow-auto">
       <div className="flex items-center justify-between mb-6">
@@ -357,82 +426,103 @@ export function ListingForm() {
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-medium text-sm">Payment details</h3>
-          <div className="space-y-4">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Input
-                  className={inputClassName}
-                  type="text"
-                  placeholder={revenueCategory ? revenueCategories.find(c => c.value === revenueCategory)?.label || "Revenue" : "Revenue"}
-                  value={revenue}
-                  onChange={(e) => setRevenue(e.target.value)}
-                />
-              </PopoverTrigger>
-              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                <div className="grid grid-cols-2 gap-2">
-                  {revenueCategories.map((item) => (
-                    <div
-                      key={item.value}
-                      onClick={() => setRevenueCategory(item.value)}
-                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                        revenueCategory === item.value
-                          ? "bg-primary/5"
-                          : "hover:bg-accent hover:text-accent-foreground"
-                      }`}
-                    >
-                      <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                        <item.Icon size={20} />
-                      </div>
-                      <span className="flex-1 text-sm">{item.label}</span>
-                      {revenueCategory === item.value && (
-                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-primary" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+          <h3 className="font-medium text-sm">Revenue details</h3>
+          <Select onValueChange={handleAddRevenue}>
+            <SelectTrigger>
+              <SelectValue placeholder="Add revenue type" />
+            </SelectTrigger>
+            <SelectContent>
+              {revenueTypes.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  <div className="flex items-center gap-2">
+                    <type.icon className="h-4 w-4" />
+                    <span>{type.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-            <Popover>
-              <PopoverTrigger asChild>
+          {selectedRevenues.map((revenue, index) => {
+            const IconComponent = getIconComponent(revenueTypes, revenue.type);
+            const label = revenueTypes.find(t => t.value === revenue.type)?.label;
+            
+            return (
+              <div key={index} className="flex items-center gap-2">
+                <Badge 
+                  variant="outline" 
+                  className="flex items-center gap-2 px-3 py-1"
+                >
+                  <IconComponent className="h-4 w-4" />
+                  <span>{label}</span>
+                </Badge>
                 <Input
-                  className={inputClassName}
                   type="text"
-                  placeholder={expensesCategory ? expenseCategories.find(c => c.value === expensesCategory)?.label || "Expenses" : "Expenses"}
-                  value={expenses}
-                  onChange={(e) => setExpenses(e.target.value)}
+                  placeholder="Amount"
+                  value={revenue.amount}
+                  onChange={(e) => handleRevenueAmountChange(index, e.target.value)}
+                  className="flex-1"
                 />
-              </PopoverTrigger>
-              <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-                <div className="grid grid-cols-2 gap-2">
-                  {expenseCategories.map((item) => (
-                    <div
-                      key={item.value}
-                      onClick={() => setExpensesCategory(item.value)}
-                      className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                        expensesCategory === item.value
-                          ? "bg-primary/5"
-                          : "hover:bg-accent hover:text-accent-foreground"
-                      }`}
-                    >
-                      <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                        <item.Icon size={20} />
-                      </div>
-                      <span className="flex-1 text-sm">{item.label}</span>
-                      {expensesCategory === item.value && (
-                        <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-primary" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleRemoveRevenue(index)}
+                >
+                  Remove
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="font-medium text-sm">Expense details</h3>
+          <Select onValueChange={handleAddExpense}>
+            <SelectTrigger>
+              <SelectValue placeholder="Add expense type" />
+            </SelectTrigger>
+            <SelectContent>
+              {expenseTypes.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  <div className="flex items-center gap-2">
+                    <type.icon className="h-4 w-4" />
+                    <span>{type.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {selectedExpenses.map((expense, index) => {
+            const IconComponent = getIconComponent(expenseTypes, expense.type);
+            const label = expenseTypes.find(t => t.value === expense.type)?.label;
+            
+            return (
+              <div key={index} className="flex items-center gap-2">
+                <Badge 
+                  variant="outline" 
+                  className="flex items-center gap-2 px-3 py-1"
+                >
+                  <IconComponent className="h-4 w-4" />
+                  <span>{label}</span>
+                </Badge>
+                <Input
+                  type="text"
+                  placeholder="Amount"
+                  value={expense.amount}
+                  onChange={(e) => handleExpenseAmountChange(index, e.target.value)}
+                  className="flex-1"
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleRemoveExpense(index)}
+                >
+                  Remove
+                </Button>
+              </div>
+            );
+          })}
         </div>
 
         <div className="space-y-2">
