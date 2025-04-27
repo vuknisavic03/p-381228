@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,8 +27,12 @@ import {
   BadgePlus,
   RotateCcw,
   ScrollText,
+  Factory,
+  Hotel,
+  Store,
+  Warehouse,
 } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 export function ListingForm() {
   const [city, setCity] = useState("");
@@ -74,16 +77,37 @@ export function ListingForm() {
     { value: "professional", label: "Professional Services", Icon: Briefcase },
   ];
 
+  const typeCategories = [
+    { value: "residential", label: "Residential", Icon: Home },
+    { value: "commercial", label: "Commercial", Icon: Building },
+    { value: "industrial", label: "Industrial", Icon: Factory },
+    { value: "retail", label: "Retail", Icon: Store },
+    { value: "office", label: "Office Space", Icon: Building2 },
+    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
+    { value: "hotel", label: "Hotel", Icon: Hotel },
+    { value: "mixed", label: "Mixed Use", Icon: Briefcase },
+  ];
+
+  const propertyCategories = [
+    { value: "apartment", label: "Apartment", Icon: Building2 },
+    { value: "house", label: "House", Icon: Home },
+    { value: "condo", label: "Condominium", Icon: Building },
+    { value: "office", label: "Office", Icon: Briefcase },
+    { value: "retail", label: "Retail Space", Icon: Store },
+    { value: "industrial", label: "Industrial Space", Icon: Factory },
+    { value: "hotel", label: "Hotel/Motel", Icon: Hotel },
+    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
+  ];
+
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
   };
 
   const handleSave = async () => {
-    // Generate a random ID for the listing
     const randomId = Math.floor(Math.random() * 10000);
     
     const payload = {
-      id: randomId, // Auto-generated ID
+      id: randomId,
       city,
       address,
       country,
@@ -106,7 +130,6 @@ export function ListingForm() {
     };
     
     try {
-      // Try to save to the API first
       const res = await fetch("http://localhost:5000/listings", {
         method: "POST",
         headers: {
@@ -121,31 +144,25 @@ export function ListingForm() {
 
       await res.json();
       
-      // Show success notification
       toast({
         title: "Listing Added",
         description: "Your listing was successfully created",
       });
       
-      // Reset the form
       resetForm();
       
-      // Force refresh of the listings
       window.dispatchEvent(new CustomEvent('refresh-listings'));
       
     } catch (err) {
       console.error("Error saving:", err);
       
-      // Show a different notification for demo mode
       toast({
         title: "Listing Added (Demo Mode)",
         description: "Your listing was added to the demo data",
       });
       
-      // Reset the form
       resetForm();
       
-      // Force refresh of listings for the mock data
       window.dispatchEvent(new CustomEvent('refresh-listings'));
     }
   };
@@ -200,18 +217,80 @@ export function ListingForm() {
           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
         />
-        <Input
-          className={inputClassName}
-          placeholder="Type"
-          value={typeField}
-          onChange={(e) => setTypeField(e.target.value)}
-        />
-        <Input
-          className={inputClassName}
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Input
+              className={inputClassName}
+              type="text"
+              placeholder={typeField ? typeCategories.find(c => c.value === typeField)?.label || "Type" : "Type"}
+              value={typeField}
+              onChange={(e) => setTypeField(e.target.value)}
+            />
+          </PopoverTrigger>
+          <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+            <div className="grid grid-cols-2 gap-2">
+              {typeCategories.map((item) => (
+                <div
+                  key={item.value}
+                  onClick={() => setTypeField(item.value)}
+                  className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
+                    typeField === item.value
+                      ? "bg-primary/5"
+                      : "hover:bg-accent hover:text-accent-foreground"
+                  }`}
+                >
+                  <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
+                    <item.Icon size={20} />
+                  </div>
+                  <span className="flex-1 text-sm">{item.label}</span>
+                  {typeField === item.value && (
+                    <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-primary" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Input
+              className={inputClassName}
+              type="text"
+              placeholder={category ? propertyCategories.find(c => c.value === category)?.label || "Category" : "Category"}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </PopoverTrigger>
+          <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
+            <div className="grid grid-cols-2 gap-2">
+              {propertyCategories.map((item) => (
+                <div
+                  key={item.value}
+                  onClick={() => setCategory(item.value)}
+                  className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
+                    category === item.value
+                      ? "bg-primary/5"
+                      : "hover:bg-accent hover:text-accent-foreground"
+                  }`}
+                >
+                  <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
+                    <item.Icon size={20} />
+                  </div>
+                  <span className="flex-1 text-sm">{item.label}</span>
+                  {category === item.value && (
+                    <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-primary" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
