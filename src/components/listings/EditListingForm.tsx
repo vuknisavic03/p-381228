@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -168,46 +167,49 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }
   };
 
-  const inputClassName = "h-10 w-full";
-
   return (
-    <div className="p-6 h-full w-[800px] overflow-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Edit listing #{listing.id}</h2>
+    <div className="p-6 h-full w-[1000px] max-w-[90vw] mx-auto overflow-auto">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-xl font-bold text-gray-800">Edit Listing #{listing.id}</h2>
         <Button variant="outline" onClick={onClose}>Close</Button>
       </div>
 
-      <div className="space-y-4">
-        <Input
-          className={inputClassName}
-          placeholder="City"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-        />
-        <Input
-          className={inputClassName}
-          placeholder="Address"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-        />
-        <Input
-          className={inputClassName}
-          placeholder="Country"
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-        />
-        <Input
-          className={inputClassName}
-          placeholder="Postal Code"
-          name="postalCode"
-          value={formData.postalCode}
-          onChange={handleChange}
-        />
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-6">
+          <Input
+            className="h-11 w-full"
+            placeholder="City"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+          />
+          <Input
+            className="h-11 w-full"
+            placeholder="Address"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+          />
+        </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-6">
+          <Input
+            className="h-11 w-full"
+            placeholder="Country"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+          />
+          <Input
+            className="h-11 w-full"
+            placeholder="Postal Code"
+            name="postalCode"
+            value={formData.postalCode}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-6">
           <Select
             value={formData.type}
             onValueChange={(value) => {
@@ -218,7 +220,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               }));
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="h-11">
               <SelectValue placeholder="Select property type" />
             </SelectTrigger>
             <SelectContent>
@@ -243,7 +245,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             }}
             disabled={!formData.type}
           >
-            <SelectTrigger>
+            <SelectTrigger className="h-11">
               <SelectValue placeholder={formData.type ? "Select category" : "Select type first"} />
             </SelectTrigger>
             <SelectContent>
@@ -259,30 +261,35 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </Select>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium text-sm">Tenant details</h3>
-            <Button variant="outline" size="sm" onClick={toggleTenantType}>
+            <h3 className="font-semibold text-gray-700">Tenant Details</h3>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleTenantType}
+              className="text-xs"
+            >
               {formData.tenantType === "individual" ? "Individual" : "Company"}
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <Input
-              className={inputClassName}
+              className="h-11 w-full"
               placeholder={formData.tenantType === "individual" ? "Name" : "Company Name"}
               name="tenantName"
               value={formData.tenantName}
               onChange={handleChange}
             />
             <Input
-              className={inputClassName}
+              className="h-11 w-full"
               placeholder="Phone"
               name="tenantPhone"
               value={formData.tenantPhone}
               onChange={handleChange}
             />
             <Input
-              className={`${inputClassName} col-span-2`}
+              className="h-11 w-full col-span-2"
               placeholder="Email"
               name="tenantEmail"
               value={formData.tenantEmail}
@@ -291,23 +298,23 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-sm">Additional details</h3>
+        <div className="space-y-4">
+          <h3 className="font-semibold text-gray-700">Additional Notes</h3>
           <Textarea
-            className="min-h-[100px] w-full"
-            placeholder="Notes"
+            className="min-h-[120px] w-full"
+            placeholder="Add any additional notes or comments"
             name="notes"
             value={formData.notes}
             onChange={handleChange}
           />
         </div>
         
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex justify-end gap-4 mt-6">
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
           <Button onClick={handleSubmit}>
-            Save changes
+            Save Changes
           </Button>
         </div>
       </div>
