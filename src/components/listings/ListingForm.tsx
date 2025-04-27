@@ -1,14 +1,15 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Home,
   Building2,
   Factory,
@@ -144,6 +145,24 @@ export function ListingForm() {
   };
 
   const handleSave = async () => {
+    if (!typeField) {
+      toast({
+        title: "Type Required",
+        description: "Please select a property type",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!category) {
+      toast({
+        title: "Category Required",
+        description: "Please select a property category",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const randomId = Math.floor(Math.random() * 10000);
     
     const payload = {
@@ -258,83 +277,49 @@ export function ListingForm() {
           onChange={(e) => setPostalCode(e.target.value)}
         />
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <Input
-              className={inputClassName}
-              type="text"
-              placeholder={typeField ? typeCategories.find(c => c.value === typeField)?.label || "Type" : "Type"}
-              value={typeField}
-              onChange={(e) => setTypeField(e.target.value)}
-            />
-          </PopoverTrigger>
-          <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-            <div className="grid grid-cols-2 gap-2">
-              {typeCategories.map((item) => (
-                <div
-                  key={item.value}
-                  onClick={() => {
-                    setTypeField(item.value);
-                    setCategory(""); // Reset category when type changes
-                  }}
-                  className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                    typeField === item.value
-                      ? "bg-primary/5"
-                      : "hover:bg-accent hover:text-accent-foreground"
-                  }`}
-                >
-                  <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                    <item.Icon size={20} />
+        <div className="space-y-4">
+          <Select
+            value={typeField}
+            onValueChange={(value) => {
+              setTypeField(value);
+              setCategory(""); // Reset category when type changes
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select property type" />
+            </SelectTrigger>
+            <SelectContent>
+              {typeCategories.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  <div className="flex items-center gap-2">
+                    <type.Icon className="h-4 w-4" />
+                    <span>{type.label}</span>
                   </div>
-                  <span className="flex-1 text-sm">{item.label}</span>
-                  {typeField === item.value && (
-                    <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                    </div>
-                  )}
-                </div>
+                </SelectItem>
               ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+            </SelectContent>
+          </Select>
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <Input
-              className={inputClassName}
-              type="text"
-              placeholder={category ? getAvailableCategories().find(c => c.value === category)?.label || "Category" : "Category"}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              disabled={!typeField}
-            />
-          </PopoverTrigger>
-          <PopoverContent className="w-[468px] p-3 bg-white rounded shadow-lg" align="start">
-            <div className="grid grid-cols-2 gap-2">
-              {getAvailableCategories().map((item) => (
-                <div
-                  key={item.value}
-                  onClick={() => setCategory(item.value)}
-                  className={`flex items-center gap-2 p-2 cursor-pointer rounded-md transition-colors ${
-                    category === item.value
-                      ? "bg-primary/5"
-                      : "hover:bg-accent hover:text-accent-foreground"
-                  }`}
-                >
-                  <div className="relative w-6 h-6 flex items-center justify-center text-gray-600">
-                    <item.Icon size={20} />
+          <Select
+            value={category}
+            onValueChange={setCategory}
+            disabled={!typeField}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
+            </SelectTrigger>
+            <SelectContent>
+              {getAvailableCategories().map((cat) => (
+                <SelectItem key={cat.value} value={cat.value}>
+                  <div className="flex items-center gap-2">
+                    <cat.Icon className="h-4 w-4" />
+                    <span>{cat.label}</span>
                   </div>
-                  <span className="flex-1 text-sm">{item.label}</span>
-                  {category === item.value && (
-                    <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                    </div>
-                  )}
-                </div>
+                </SelectItem>
               ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+            </SelectContent>
+          </Select>
+        </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
