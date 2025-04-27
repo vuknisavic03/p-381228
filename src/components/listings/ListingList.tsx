@@ -1,10 +1,18 @@
-import { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2 } from "lucide-react";
+
+import React, { useState, useEffect } from "react";
+import { Search, MapPin, Phone, Mail, Loader2, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const mockListings = [
   {
@@ -70,12 +78,24 @@ const mockListings = [
   }
 ];
 
+interface FilterState {
+  types: string[];
+  categories: string[];
+}
+
 export function ListingList() {
   const [listings, setListings] = useState<any[]>(mockListings);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterState>({
+    types: [],
+    categories: []
+  });
+
+  const uniqueTypes = Array.from(new Set(mockListings.map(l => l.type)));
+  const uniqueCategories = Array.from(new Set(mockListings.map(l => l.category)));
 
   const fetchListings = async () => {
     setIsLoading(true);
@@ -102,11 +122,25 @@ export function ListingList() {
     setIsEditSheetOpen(true);
   };
 
-  const filteredListings = listings.filter(listing => 
-    listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    String(listing.id).includes(searchTerm)
-  );
+  const handleFilterChange = (filterType: 'types' | 'categories', value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType].includes(value)
+        ? prev[filterType].filter(t => t !== value)
+        : [...prev[filterType], value]
+    }));
+  };
+
+  const filteredListings = listings.filter(listing => {
+    const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(listing.id).includes(searchTerm);
+
+    const matchesType = filters.types.length === 0 || filters.types.includes(listing.type);
+    const matchesCategory = filters.categories.length === 0 || filters.categories.includes(listing.category);
+
+    return matchesSearch && matchesType && matchesCategory;
+  });
 
   return (
     <div className="flex-1 flex flex-col">
@@ -124,15 +158,55 @@ export function ListingList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="min-w-[80px] transition-all duration-200 hover:bg-primary/5"
-          >
-            Filter
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="min-w-[80px] transition-all duration-200 hover:bg-primary/5"
+              >
+                <Filter className="h-4 w-4 mr-1" />
+                Filter
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium">Type</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    {uniqueTypes.map((type) => (
+                      <div key={type} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`type-${type}`}
+                          checked={filters.types.includes(type)}
+                          onCheckedChange={() => handleFilterChange('types', type)}
+                        />
+                        <Label htmlFor={`type-${type}`}>{type}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium">Category</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    {uniqueCategories.map((category) => (
+                      <div key={category} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`category-${category}`}
+                          checked={filters.categories.includes(category)}
+                          onCheckedChange={() => handleFilterChange('categories', category)}
+                        />
+                        <Label htmlFor={`category-${category}`}>{category}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
+
       <div className="flex-1 p-4 overflow-auto">
         {isLoading ? (
           <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -191,7 +265,9 @@ export function ListingList() {
               ))
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                {searchTerm ? 'No listings found matching your search' : 'No listings available'}
+                {searchTerm || filters.types.length > 0 || filters.categories.length > 0 
+                  ? 'No listings found matching your filters' 
+                  : 'No listings available'}
               </div>
             )}
           </div>
