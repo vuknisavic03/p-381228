@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,7 @@ import {
   Warehouse,
   Hotel,
   Briefcase,
+  X
 } from "lucide-react";
 import {
   Select,
@@ -169,43 +169,46 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   };
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto p-6 w-full max-w-full sm:max-w-xl mx-auto">
+    <div className="h-screen flex flex-col p-6 w-full max-w-full sm:max-w-xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold">Edit listing #{listing.id}</h2>
-        <Button variant="outline" onClick={onClose} className="hidden sm:flex">Close</Button>
+        <Button variant="outline" onClick={onClose}>
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </Button>
       </div>
 
-      <div className="space-y-5">
+      <div className="grid gap-5">
         <Input
-          className="h-12 w-full"
+          className="h-12"
           placeholder="City"
           name="city"
           value={formData.city}
           onChange={handleChange}
         />
         <Input
-          className="h-12 w-full"
+          className="h-12"
           placeholder="Address"
           name="address"
           value={formData.address}
           onChange={handleChange}
         />
         <Input
-          className="h-12 w-full"
+          className="h-12"
           placeholder="Country"
           name="country"
           value={formData.country}
           onChange={handleChange}
         />
         <Input
-          className="h-12 w-full"
+          className="h-12"
           placeholder="Postal Code"
           name="postalCode"
           value={formData.postalCode}
           onChange={handleChange}
         />
 
-        <div className="space-y-5">
+        <div className="grid gap-5">
           <Select
             value={formData.type}
             onValueChange={(value) => {
@@ -257,23 +260,23 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </Select>
         </div>
 
-        <div className="pt-2">
+        <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-medium text-base">Tenant details</h3>
             <Button variant="outline" size="sm" onClick={toggleTenantType}>
               {formData.tenantType === "individual" ? "Individual" : "Company"}
             </Button>
           </div>
-          <div className="space-y-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
+          <div className="grid sm:grid-cols-2 gap-4">
             <Input
-              className="h-12 w-full"
+              className="h-12"
               placeholder={formData.tenantType === "individual" ? "Name" : "Company Name"}
               name="tenantName"
               value={formData.tenantName}
               onChange={handleChange}
             />
             <Input
-              className="h-12 w-full"
+              className="h-12"
               placeholder="Phone"
               name="tenantPhone"
               value={formData.tenantPhone}
@@ -282,7 +285,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
           <div className="mt-4">
             <Input
-              className="h-12 w-full"
+              className="h-12"
               placeholder="Email"
               name="tenantEmail"
               value={formData.tenantEmail}
@@ -291,10 +294,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
 
-        <div className="pt-2">
+        <div>
           <h3 className="font-medium text-base mb-3">Additional details</h3>
           <Textarea
-            className="min-h-[120px] w-full"
             placeholder="Notes"
             name="notes"
             value={formData.notes}
@@ -302,10 +304,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           />
         </div>
         
-        <div className="flex justify-end gap-3 pt-4">
-          <Button variant="outline" onClick={onClose} className="sm:hidden">
-            Cancel
-          </Button>
+        <div className="flex justify-end gap-3 mt-auto">
           <Button onClick={handleSubmit} className="w-full sm:w-auto">
             Save changes
           </Button>
