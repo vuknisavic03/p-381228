@@ -9,6 +9,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
 const mockListings = [
@@ -80,6 +82,58 @@ interface FilterState {
   categories: string[];
 }
 
+const propertyTypes = [
+  { value: "residential", label: "Residential" },
+  { value: "commercial", label: "Commercial" },
+  { value: "industrial", label: "Industrial" },
+  { value: "retail", label: "Retail" },
+  { value: "office", label: "Office" },
+  { value: "warehouse", label: "Warehouse" },
+  { value: "hotel", label: "Hotel" },
+  { value: "mixed", label: "Mixed Use" },
+];
+
+const propertyCategories = {
+  residential: [
+    { value: "apartment", label: "Apartment" },
+    { value: "house", label: "House" },
+    { value: "condo", label: "Condo" },
+  ],
+  commercial: [
+    { value: "office", label: "Office" },
+    { value: "retail", label: "Retail" },
+  ],
+  industrial: [
+    { value: "warehouse", label: "Warehouse" },
+    { value: "factory", label: "Factory" },
+  ],
+  retail: [
+    { value: "store", label: "Store" },
+    { value: "shop", label: "Shop" },
+    { value: "mall", label: "Mall" },
+  ],
+  office: [
+    { value: "private office", label: "Private Office" },
+    { value: "coworking", label: "Coworking" },
+    { value: "business center", label: "Business Center" },
+  ],
+  warehouse: [
+    { value: "storage", label: "Storage" },
+    { value: "distribution", label: "Distribution" },
+    { value: "logistics", label: "Logistics" },
+  ],
+  hotel: [
+    { value: "hotel", label: "Hotel" },
+    { value: "motel", label: "Motel" },
+    { value: "resort", label: "Resort" },
+  ],
+  mixed: [
+    { value: "residential-commercial", label: "Residential-Commercial" },
+    { value: "live-work", label: "Live-Work" },
+    { value: "multi-purpose", label: "Multi-Purpose" },
+  ],
+};
+
 export function ListingList() {
   const [listings, setListings] = useState<any[]>(mockListings);
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,27 +148,14 @@ export function ListingList() {
   const uniqueTypes = Array.from(new Set(mockListings.map(l => l.type)));
   const uniqueCategories = Array.from(new Set(mockListings.map(l => l.category)));
 
-  const typeToCategoryMap = {
-    residential: ["apartment", "house", "condo"],
-    commercial: ["office", "retail"],
-    industrial: ["warehouse", "factory"],
-    retail: ["store", "shop", "mall"],
-    office: ["private office", "coworking", "business center"],
-    warehouse: ["storage", "distribution", "logistics"],
-    hotel: ["hotel", "motel", "resort"],
-    mixed: ["residential-commercial", "live-work", "multi-purpose"]
-  };
-
   const getAvailableCategories = () => {
     if (filters.types.length === 0) {
-      return uniqueCategories;
+      return Object.values(propertyCategories).flat();
     }
     
-    const availableCategories = filters.types.flatMap(type => 
-      typeToCategoryMap[type as keyof typeof typeToCategoryMap] || []
+    return filters.types.flatMap(type => 
+      propertyCategories[type as keyof typeof propertyCategories] || []
     );
-    
-    return uniqueCategories.filter(category => availableCategories.includes(category));
   };
 
   const fetchListings = async () => {
@@ -149,7 +190,9 @@ export function ListingList() {
         if (updated.types.includes(value)) {
           updated.types = updated.types.filter(t => t !== value);
           const availableCategories = getAvailableCategories();
-          updated.categories = updated.categories.filter(c => availableCategories.includes(c));
+          updated.categories = updated.categories.filter(c => 
+            availableCategories.some(ac => ac.value === c)
+          );
         } else {
           updated.types = [...updated.types, value];
         }
@@ -169,8 +212,8 @@ export function ListingList() {
       listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       String(listing.id).includes(searchTerm);
 
-    const matchesType = filters.types.length === 0 || filters.types.includes(listing.type);
-    const matchesCategory = filters.categories.length === 0 || filters.categories.includes(listing.category);
+    const matchesType = filters.types.length === 0 || filters.types.includes(listing.type.toLowerCase());
+    const matchesCategory = filters.categories.length === 0 || filters.categories.includes(listing.category.toLowerCase());
 
     return matchesSearch && matchesType && matchesCategory;
   });
@@ -197,35 +240,37 @@ export function ListingList() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <div className="p-2">
-                <div className="font-medium text-sm mb-2">Type</div>
-                {uniqueTypes.map((type) => (
+                <DropdownMenuLabel>Property Type</DropdownMenuLabel>
+                {propertyTypes.map((type) => (
                   <DropdownMenuItem
-                    key={type}
+                    key={type.value}
                     className="flex items-center justify-between"
                     onSelect={(e) => {
                       e.preventDefault();
-                      handleFilterChange('types', type);
+                      handleFilterChange('types', type.value);
                     }}
                   >
-                    <span>{type}</span>
-                    {filters.types.includes(type) && (
+                    <span>{type.label}</span>
+                    {filters.types.includes(type.value) && (
                       <div className="h-2 w-2 rounded-full bg-primary" />
                     )}
                   </DropdownMenuItem>
                 ))}
-                <div className="h-px bg-border my-2" />
-                <div className="font-medium text-sm mb-2">Category</div>
+                
+                <DropdownMenuSeparator />
+                
+                <DropdownMenuLabel>Category</DropdownMenuLabel>
                 {getAvailableCategories().map((category) => (
                   <DropdownMenuItem
-                    key={category}
+                    key={category.value}
                     className="flex items-center justify-between"
                     onSelect={(e) => {
                       e.preventDefault();
-                      handleFilterChange('categories', category);
+                      handleFilterChange('categories', category.value);
                     }}
                   >
-                    <span>{category}</span>
-                    {filters.categories.includes(category) && (
+                    <span>{category.label}</span>
+                    {filters.categories.includes(category.value) && (
                       <div className="h-2 w-2 rounded-full bg-primary" />
                     )}
                   </DropdownMenuItem>
