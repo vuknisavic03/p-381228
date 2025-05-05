@@ -48,10 +48,10 @@ export function TransactionForm() {
   });
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto">
-      <div className="flex flex-col space-y-6">
+    <div className="p-4 md:p-6 max-w-full mx-auto">
+      <div className="flex flex-col space-y-5">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#EBF5FF] text-[#006FB5]">
               <Search className="h-5 w-5" />
@@ -74,7 +74,7 @@ export function TransactionForm() {
 
         {/* Main Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-3 w-full max-w-md bg-[#F6F7F9] p-1 rounded-lg">
+          <TabsList className="grid grid-cols-3 w-full bg-[#F6F7F9] p-1 rounded-lg">
             <TabsTrigger 
               value="details" 
               className="data-[state=active]:bg-white data-[state=active]:text-[#006FB5] data-[state=active]:shadow-sm rounded-md py-2"
@@ -96,22 +96,22 @@ export function TransactionForm() {
           </TabsList>
 
           {/* Transaction Details Tab */}
-          <TabsContent value="details" className="mt-6 space-y-6 animate-fade-in">
-            <Card className="bg-white border border-[#E7E8EC] rounded-lg p-6 shadow-sm">
+          <TabsContent value="details" className="mt-4 animate-fade-in">
+            <Card className="bg-white border border-[#E7E8EC] rounded-lg p-5 md:p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-5">
-                <div className="h-1 w-1 rounded-full bg-[#006FB5]"></div>
+                <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
                 <h2 className="text-lg font-medium">Transaction Details</h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                 {/* Listing Selection */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <FileText className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Listing</h3>
                   </div>
                   <Select>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-12">
                       <SelectValue placeholder="Select a listing" />
                     </SelectTrigger>
                     <SelectContent>
@@ -123,13 +123,13 @@ export function TransactionForm() {
                 </div>
                 
                 {/* Category Selection */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <ShoppingCart className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Category</h3>
                   </div>
                   <Select>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-12">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -141,13 +141,13 @@ export function TransactionForm() {
                 </div>
                 
                 {/* Relationship Selection */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <BriefcaseIcon className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Relationship</h3>
                   </div>
                   <Select>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-12">
                       <SelectValue placeholder="Select a relationship" />
                     </SelectTrigger>
                     <SelectContent>
@@ -159,34 +159,34 @@ export function TransactionForm() {
                 </div>
                 
                 {/* Amount Input */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <Wallet className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Amount</h3>
                   </div>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                    <Input type="number" placeholder="0.00" className="pl-8" />
+                    <Input type="number" placeholder="0.00" className="pl-8 h-12" />
                   </div>
                 </div>
                 
                 {/* Date Selection */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <Calendar className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Date</h3>
                   </div>
-                  <Input type="date" />
+                  <Input type="date" className="h-12" />
                 </div>
                 
                 {/* Payment Method */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <CreditCard className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Payment Method</h3>
                   </div>
                   <Select>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full h-12">
                       <SelectValue placeholder="Select payment method" />
                     </SelectTrigger>
                     <SelectContent>
@@ -201,61 +201,61 @@ export function TransactionForm() {
           </TabsContent>
           
           {/* Payer Details Tab */}
-          <TabsContent value="payer" className="mt-6 space-y-6 animate-fade-in">
-            <Card className="bg-white border border-[#E7E8EC] rounded-lg p-6 shadow-sm">
+          <TabsContent value="payer" className="mt-4 animate-fade-in">
+            <Card className="bg-white border border-[#E7E8EC] rounded-lg p-5 md:p-6 shadow-sm">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="h-1 w-1 rounded-full bg-[#006FB5]"></div>
+                  <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
                   <h2 className="text-lg font-medium">Payer Details</h2>
                 </div>
                 
                 <div className="flex items-center border border-[#E7E8EC] rounded-md px-3 py-2 bg-white shadow-sm">
-                  <Euro className="h-4 w-4 mr-2 text-gray-700" />
+                  <User className="h-4 w-4 mr-2 text-gray-700" />
                   <span className="text-sm font-medium">Individual</span>
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                 {/* Name Input */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <User className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Name</h3>
                   </div>
-                  <Input placeholder="Enter full name" />
+                  <Input placeholder="Enter full name" className="h-12" />
                 </div>
                 
                 {/* Email Input */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <Mail className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Email</h3>
                   </div>
-                  <Input type="email" placeholder="Enter email address" />
+                  <Input type="email" placeholder="Enter email address" className="h-12" />
                 </div>
                 
                 {/* Phone Input */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2 text-gray-700">
                     <Phone className="h-4 w-4" />
                     <h3 className="text-sm font-medium">Phone</h3>
                   </div>
-                  <Input type="tel" placeholder="Enter phone number" />
+                  <Input type="tel" placeholder="Enter phone number" className="h-12" />
                 </div>
               </div>
             </Card>
           </TabsContent>
           
           {/* Additional Info Tab */}
-          <TabsContent value="additional" className="mt-6 space-y-6 animate-fade-in">
-            <Card className="bg-white border border-[#E7E8EC] rounded-lg p-6 shadow-sm">
+          <TabsContent value="additional" className="mt-4 animate-fade-in">
+            <Card className="bg-white border border-[#E7E8EC] rounded-lg p-5 md:p-6 shadow-sm">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="h-1 w-1 rounded-full bg-[#006FB5]"></div>
+                  <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
                   <h2 className="text-lg font-medium">Additional Details</h2>
                 </div>
                 
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button variant="outline" size="sm" className="gap-2 h-10">
                   <Upload className="h-4 w-4" />
                   Upload documents
                 </Button>
@@ -264,13 +264,13 @@ export function TransactionForm() {
               <div className="space-y-4">
                 <Textarea 
                   placeholder="Add notes or additional details about this transaction..."
-                  className="min-h-[120px]"
+                  className="min-h-[140px]"
                 />
               </div>
               
               <div className="flex items-center justify-between mt-6 pt-6 border-t border-[#E7E8EC]">
                 <div className="flex items-center gap-3">
-                  <div className="h-1 w-1 rounded-full bg-[#006FB5]"></div>
+                  <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
                   <h3 className="text-base font-medium">Create a rule for next time?</h3>
                 </div>
                 
@@ -291,7 +291,7 @@ export function TransactionForm() {
                   <p className="text-sm text-[#9EA3AD] font-medium">Action</p>
                   <div className="mt-3">
                     <Select>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select an action" />
                       </SelectTrigger>
                       <SelectContent>

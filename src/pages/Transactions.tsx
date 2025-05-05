@@ -36,7 +36,7 @@ export default function Transactions() {
           </Sheet>
         ) : (
           <>
-            <div className="w-[350px] bg-white border-r border-[#EBECED] overflow-y-auto h-full">
+            <div className="w-[300px] bg-white border-r border-[#EBECED] overflow-y-auto h-full">
               <TransactionActivity />
             </div>
             <div className="flex-1 bg-[#FAFBFC] overflow-y-auto">
