@@ -5,7 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Euro, Search, Upload } from "lucide-react";
+import { 
+  CreditCard, 
+  Search, 
+  Upload, 
+  Euro, 
+  FileText,
+  ShoppingCart,
+  Wallet,
+  BriefcaseIcon
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function TransactionForm() {
   return (
@@ -32,26 +42,87 @@ export function TransactionForm() {
         </div>
         
         <div className="ml-11 mb-5">
-          <div className="border border-[#E7E8EC] rounded-lg p-2 mb-5">
-            <div className="text-right text-[#9EA3AD] text-xs">*</div>
-            <div className="px-3 mb-2">
-              <label className="text-[#9EA3AD] text-sm font-medium">Listing</label>
-            </div>
-            <hr className="border-t border-[#E7E8EC]" />
+          <Tabs defaultValue="listing" className="w-full">
+            <TabsList className="flex mb-4 bg-transparent border-b border-[#E7E8EC] w-full p-0 h-auto gap-4 justify-start">
+              <TabsTrigger 
+                value="listing" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                <FileText className="h-4 w-4 mr-2 text-gray-700" />
+                Listing
+              </TabsTrigger>
+              <TabsTrigger 
+                value="category" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                <ShoppingCart className="h-4 w-4 mr-2 text-gray-700" />
+                Category
+              </TabsTrigger>
+              <TabsTrigger 
+                value="relationship" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                <BriefcaseIcon className="h-4 w-4 mr-2 text-gray-700" />
+                Relationship
+              </TabsTrigger>
+            </TabsList>
             
-            <div className="text-right text-[#9EA3AD] text-xs">*</div>
-            <div className="px-3 mb-2">
-              <label className="text-[#9EA3AD] text-sm font-medium">Category</label>
-            </div>
-            <hr className="border-t border-[#E7E8EC]" />
+            <TabsContent value="listing" className="pt-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-[#9EA3AD]">Select Listing</label>
+                  <Select>
+                    <SelectTrigger className="border-[#E7E8EC] focus:border-[#E7E8EC]">
+                      <SelectValue placeholder="Select a listing" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="listing1">Listing 1</SelectItem>
+                      <SelectItem value="listing2">Listing 2</SelectItem>
+                      <SelectItem value="listing3">Listing 3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </TabsContent>
             
-            <div className="text-right text-[#9EA3AD] text-xs">*</div>
-            <div className="px-3">
-              <label className="text-[#9EA3AD] text-sm font-medium">Relationship</label>
-            </div>
-          </div>
+            <TabsContent value="category" className="pt-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-[#9EA3AD]">Select Category</label>
+                  <Select>
+                    <SelectTrigger className="border-[#E7E8EC] focus:border-[#E7E8EC]">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="income">Income</SelectItem>
+                      <SelectItem value="expense">Expense</SelectItem>
+                      <SelectItem value="investment">Investment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="relationship" className="pt-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-[#9EA3AD]">Select Relationship</label>
+                  <Select>
+                    <SelectTrigger className="border-[#E7E8EC] focus:border-[#E7E8EC]">
+                      <SelectValue placeholder="Select a relationship" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="client">Client</SelectItem>
+                      <SelectItem value="vendor">Vendor</SelectItem>
+                      <SelectItem value="partner">Partner</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
           
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between my-6">
             <div className="flex items-center gap-6">
               <div className="w-2 h-2 rounded-full bg-[#006FB5]"></div>
               <span className="text-base font-medium">Confirm these payer details</span>
@@ -63,46 +134,103 @@ export function TransactionForm() {
             </div>
           </div>
           
-          <div className="border border-[#E7E8EC] rounded-lg p-2 mb-5">
-            <div className="text-right text-[#9EA3AD] text-xs">*</div>
-            <div className="px-3 mb-3">
-              <label className="text-[#9EA3AD] text-sm font-medium">Name</label>
-            </div>
-            <hr className="border-t border-[#E7E8EC]" />
+          <Tabs defaultValue="name" className="w-full">
+            <TabsList className="flex mb-4 bg-transparent border-b border-[#E7E8EC] w-full p-0 h-auto gap-4 justify-start">
+              <TabsTrigger 
+                value="name" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                Name
+              </TabsTrigger>
+              <TabsTrigger 
+                value="phone" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                Phone
+              </TabsTrigger>
+              <TabsTrigger 
+                value="email" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                Email
+              </TabsTrigger>
+            </TabsList>
             
-            <div className="px-3 mb-3 mt-3">
-              <label className="text-[#9EA3AD] text-sm font-medium">Phone</label>
-            </div>
-            <hr className="border-t border-[#E7E8EC]" />
+            <TabsContent value="name" className="pt-4">
+              <div className="space-y-4">
+                <Input placeholder="Enter name" className="border-[#E7E8EC] focus:border-[#E7E8EC]" />
+              </div>
+            </TabsContent>
             
-            <div className="px-3 mt-3">
-              <label className="text-[#9EA3AD] text-sm font-medium">Mail</label>
-            </div>
-          </div>
+            <TabsContent value="phone" className="pt-4">
+              <div className="space-y-4">
+                <Input placeholder="Enter phone number" className="border-[#E7E8EC] focus:border-[#E7E8EC]" />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="email" className="pt-4">
+              <div className="space-y-4">
+                <Input placeholder="Enter email address" className="border-[#E7E8EC] focus:border-[#E7E8EC]" />
+              </div>
+            </TabsContent>
+          </Tabs>
           
           <div className="flex items-center gap-6 mb-6 mt-12">
             <div className="w-2 h-2 rounded-full bg-[#006FB5]"></div>
             <span className="text-base font-medium">Confirm these transaction details</span>
           </div>
           
-          <div className="border border-[#E7E8EC] rounded-lg p-2 mb-5">
-            <div className="text-right text-[#9EA3AD] text-xs">*</div>
-            <div className="px-3 mb-2.5">
-              <label className="text-[#9EA3AD] text-sm font-medium">Amount</label>
-            </div>
-            <hr className="border-t border-[#E7E8EC]" />
+          <Tabs defaultValue="amount" className="w-full">
+            <TabsList className="flex mb-4 bg-transparent border-b border-[#E7E8EC] w-full p-0 h-auto gap-4 justify-start">
+              <TabsTrigger 
+                value="amount" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                <Wallet className="h-4 w-4 mr-2 text-gray-700" />
+                Amount
+              </TabsTrigger>
+              <TabsTrigger 
+                value="date" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                Date
+              </TabsTrigger>
+              <TabsTrigger 
+                value="payment" 
+                className="py-2 px-2 border-b-2 border-transparent data-[state=active]:border-[#006FB5] data-[state=active]:bg-transparent rounded-none text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-none"
+              >
+                <CreditCard className="h-4 w-4 mr-2 text-gray-700" />
+                Payment
+              </TabsTrigger>
+            </TabsList>
             
-            <div className="text-right text-[#9EA3AD] text-xs">*</div>
-            <div className="px-3 mb-2.5 mt-2">
-              <label className="text-[#9EA3AD] text-sm font-medium">Date</label>
-            </div>
-            <hr className="border-t border-[#E7E8EC]" />
+            <TabsContent value="amount" className="pt-4">
+              <div className="space-y-4">
+                <Input placeholder="Enter amount" type="number" className="border-[#E7E8EC] focus:border-[#E7E8EC]" />
+              </div>
+            </TabsContent>
             
-            <div className="text-right text-[#9EA3AD] text-xs mt-2">*</div>
-            <div className="px-3 mt-2">
-              <label className="text-[#9EA3AD] text-sm font-medium">Payment</label>
-            </div>
-          </div>
+            <TabsContent value="date" className="pt-4">
+              <div className="space-y-4">
+                <Input placeholder="Select date" type="date" className="border-[#E7E8EC] focus:border-[#E7E8EC]" />
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="payment" className="pt-4">
+              <div className="space-y-4">
+                <Select>
+                  <SelectTrigger className="border-[#E7E8EC] focus:border-[#E7E8EC]">
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="card">Credit Card</SelectItem>
+                    <SelectItem value="bank">Bank Transfer</SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </TabsContent>
+          </Tabs>
           
           <div className="flex items-center justify-between mb-5 mt-12">
             <div className="flex items-center gap-6">
