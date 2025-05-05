@@ -7,11 +7,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, LayoutList } from "lucide-react";
-import { 
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle
-} from "@/components/ui/resizable";
 
 export default function Transactions() {
   const isMobile = useIsMobile();
@@ -52,21 +47,14 @@ export default function Transactions() {
             </SheetContent>
           </Sheet>
         ) : (
-          <ResizablePanelGroup direction="horizontal" className="h-full">
-            <ResizablePanel defaultSize={65} className="h-full">
-              <div className="bg-white overflow-y-auto h-full shadow-sm">
-                <TransactionForm />
-              </div>
-            </ResizablePanel>
-            
-            <ResizableHandle withHandle />
-            
-            <ResizablePanel defaultSize={35} className="h-full">
-              <div className="flex-1 bg-white overflow-y-auto h-full border-l border-gray-200">
-                <TransactionActivity />
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+          <div className="flex w-full h-full">
+            <div className="w-1/4 bg-white overflow-y-auto h-full shadow-sm">
+              <TransactionForm />
+            </div>
+            <div className="w-3/4 bg-white overflow-y-auto h-full border-l border-gray-200">
+              <TransactionActivity />
+            </div>
+          </div>
         )}
       </div>
     </DashboardLayout>
