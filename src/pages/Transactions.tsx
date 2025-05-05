@@ -16,11 +16,11 @@ export default function Transactions() {
       <div className="h-full flex flex-col md:flex-row">
         {isMobile ? (
           <Sheet>
-            <div className="flex-1 bg-white overflow-y-auto">
+            <div className="flex-1 bg-gradient-to-b from-[#F8FAFF] to-white overflow-y-auto">
               <div className="sticky top-0 z-10 bg-white border-b border-[#EBECED] p-4 flex justify-between items-center shadow-sm">
-                <h2 className="text-lg font-medium">Transaction Details</h2>
+                <h2 className="text-xl font-semibold text-[#1A1F2C]">Transaction Details</h2>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="flex items-center gap-2 border-[#D6BCFA] text-[#8B5CF6] hover:bg-[#F5EFFE]">
                     <LayoutList className="h-4 w-4" />
                     Activity
                   </Button>
@@ -34,11 +34,11 @@ export default function Transactions() {
               <div className="h-full bg-white border-l border-[#EBECED] flex flex-col">
                 <div className="p-4 border-b border-[#EBECED] flex items-center gap-2">
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="text-[#8B5CF6] hover:bg-[#F5EFFE]">
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                   </SheetTrigger>
-                  <h2 className="text-lg font-medium">Transaction Activity</h2>
+                  <h2 className="text-lg font-semibold text-[#1A1F2C]">Transaction Activity</h2>
                 </div>
                 <div className="flex-1 overflow-auto">
                   <TransactionActivity />
@@ -48,10 +48,10 @@ export default function Transactions() {
           </Sheet>
         ) : (
           <>
-            <div className="w-[280px] bg-white border-r border-[#EBECED] overflow-y-auto h-full">
+            <div className="w-[320px] bg-white border-r border-[#EBECED] overflow-y-auto h-full shadow-sm">
               <TransactionActivity />
             </div>
-            <div className="flex-1 bg-white overflow-y-auto">
+            <div className="flex-1 bg-gradient-to-b from-[#F8FAFF] to-white overflow-y-auto">
               <TransactionForm />
             </div>
           </>

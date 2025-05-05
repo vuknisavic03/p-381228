@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -20,7 +18,6 @@ import {
   ShoppingCart,
   Wallet,
   BriefcaseIcon,
-  ChevronDown,
   Calendar,
   Mail,
   Phone,
@@ -31,7 +28,6 @@ import {
 
 export function TransactionForm() {
   const [activeTab, setActiveTab] = useState("details");
-  const [expanded, setExpanded] = useState(true);
   const [createRule, setCreateRule] = useState(false);
   
   const form = useForm({
@@ -49,28 +45,28 @@ export function TransactionForm() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-5 md:p-8">
+    <div className="max-w-4xl mx-auto p-6 md:p-8">
       {/* Header Section */}
-      <div className="bg-white rounded-lg shadow-sm border border-[#E7E8EC] p-5 mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#EBF5FF] text-[#006FB5]">
-              <Search className="h-6 w-6" />
+      <div className="bg-white rounded-xl shadow-md border border-[#E7E8EC] p-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
+              <Search className="h-7 w-7" />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-medium text-gray-900">Categorize Transaction</h1>
-              <p className="text-sm text-gray-500 mt-1">Assign this transaction to the right category</p>
+              <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1F2C]">Categorize Transaction</h1>
+              <p className="text-[#8E9196] mt-1">Assign this transaction to the right category</p>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="flex items-center border border-[#E7E8EC] rounded-md px-4 py-2 bg-white shadow-sm">
-              <Euro className="h-5 w-5 mr-2 text-gray-700" />
+            <div className="flex items-center px-4 py-2.5 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
+              <Euro className="h-5 w-5 mr-2" />
               <span className="text-sm font-medium">Revenue</span>
             </div>
             
-            <Button className="bg-[#006FB5] hover:bg-[#005A92] text-white font-medium px-5 py-2 h-auto">
-              <Check className="h-4 w-4 mr-2" />
+            <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-medium px-6 py-2.5 h-auto rounded-lg">
+              <Check className="h-5 w-5 mr-2" />
               Confirm
             </Button>
           </div>
@@ -79,44 +75,35 @@ export function TransactionForm() {
 
       {/* Main Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3 w-full bg-[#F6F7F9] p-1 rounded-lg mb-6">
-          <TabsTrigger 
-            value="details" 
-            className="data-[state=active]:bg-white data-[state=active]:text-[#006FB5] data-[state=active]:shadow-sm rounded-md py-3"
-          >
+        <TabsList className="grid grid-cols-3 w-full p-1 rounded-xl mb-8 shadow-sm">
+          <TabsTrigger value="details" className="rounded-lg py-3">
             Transaction Details
           </TabsTrigger>
-          <TabsTrigger 
-            value="payer" 
-            className="data-[state=active]:bg-white data-[state=active]:text-[#006FB5] data-[state=active]:shadow-sm rounded-md py-3"
-          >
+          <TabsTrigger value="payer" className="rounded-lg py-3">
             Payer Details
           </TabsTrigger>
-          <TabsTrigger 
-            value="additional" 
-            className="data-[state=active]:bg-white data-[state=active]:text-[#006FB5] data-[state=active]:shadow-sm rounded-md py-3"
-          >
+          <TabsTrigger value="additional" className="rounded-lg py-3">
             Additional Info
           </TabsTrigger>
         </TabsList>
 
         {/* Transaction Details Tab */}
-        <TabsContent value="details" className="animate-fade-in">
-          <Card className="bg-white border border-[#E7E8EC] rounded-lg p-5 md:p-6 shadow-sm">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
-              <h2 className="text-lg font-medium">Transaction Details</h2>
+        <TabsContent value="details">
+          <Card className="bg-white border border-[#E7E8EC] rounded-xl p-6 md:p-7 shadow-md">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
+              <h2 className="text-xl font-semibold text-[#1A1F2C]">Transaction Details</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               {/* Listing Selection */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <FileText className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Listing</h3>
+                  <h3 className="text-base font-medium">Listing</h3>
                 </div>
                 <Select>
-                  <SelectTrigger className="w-full h-12">
+                  <SelectTrigger className="w-full h-14 text-base">
                     <SelectValue placeholder="Select a listing" />
                   </SelectTrigger>
                   <SelectContent>
@@ -129,12 +116,12 @@ export function TransactionForm() {
               
               {/* Category Selection */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <ShoppingCart className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Category</h3>
+                  <h3 className="text-base font-medium">Category</h3>
                 </div>
                 <Select>
-                  <SelectTrigger className="w-full h-12">
+                  <SelectTrigger className="w-full h-14 text-base">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -147,12 +134,12 @@ export function TransactionForm() {
               
               {/* Relationship Selection */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <BriefcaseIcon className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Relationship</h3>
+                  <h3 className="text-base font-medium">Relationship</h3>
                 </div>
                 <Select>
-                  <SelectTrigger className="w-full h-12">
+                  <SelectTrigger className="w-full h-14 text-base">
                     <SelectValue placeholder="Select a relationship" />
                   </SelectTrigger>
                   <SelectContent>
@@ -165,33 +152,33 @@ export function TransactionForm() {
               
               {/* Amount Input */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <Wallet className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Amount</h3>
+                  <h3 className="text-base font-medium">Amount</h3>
                 </div>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                  <Input type="number" placeholder="0.00" className="pl-8 h-12" />
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#1A1F2C]">$</span>
+                  <Input type="number" placeholder="0.00" className="pl-8 h-14" />
                 </div>
               </div>
               
               {/* Date Selection */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <Calendar className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Date</h3>
+                  <h3 className="text-base font-medium">Date</h3>
                 </div>
-                <Input type="date" className="h-12" />
+                <Input type="date" className="h-14" />
               </div>
               
               {/* Payment Method */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <CreditCard className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Payment Method</h3>
+                  <h3 className="text-base font-medium">Payment Method</h3>
                 </div>
                 <Select>
-                  <SelectTrigger className="w-full h-12">
+                  <SelectTrigger className="w-full h-14 text-base">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
                   <SelectContent>
@@ -203,92 +190,92 @@ export function TransactionForm() {
               </div>
             </div>
 
-            <div className="flex justify-end mt-6">
+            <div className="flex justify-end mt-8">
               <Button 
                 onClick={() => setActiveTab("payer")}
-                className="flex items-center gap-1 bg-[#006FB5] hover:bg-[#005A92] text-white"
+                className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-6 py-2.5 h-auto rounded-lg"
               >
                 Next
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
           </Card>
         </TabsContent>
         
         {/* Payer Details Tab */}
-        <TabsContent value="payer" className="animate-fade-in">
-          <Card className="bg-white border border-[#E7E8EC] rounded-lg p-5 md:p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-5">
+        <TabsContent value="payer">
+          <Card className="bg-white border border-[#E7E8EC] rounded-xl p-6 md:p-7 shadow-md">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
-                <h2 className="text-lg font-medium">Payer Details</h2>
+                <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
+                <h2 className="text-xl font-semibold text-[#1A1F2C]">Payer Details</h2>
               </div>
               
-              <div className="flex items-center border border-[#E7E8EC] rounded-md px-3 py-2 bg-white shadow-sm">
-                <User className="h-4 w-4 mr-2 text-gray-700" />
+              <div className="flex items-center px-4 py-2 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
+                <User className="h-4 w-4 mr-2" />
                 <span className="text-sm font-medium">Individual</span>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               {/* Name Input */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <User className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Name</h3>
+                  <h3 className="text-base font-medium">Name</h3>
                 </div>
-                <Input placeholder="Enter full name" className="h-12" />
+                <Input placeholder="Enter full name" className="h-14" />
               </div>
               
               {/* Email Input */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <Mail className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Email</h3>
+                  <h3 className="text-base font-medium">Email</h3>
                 </div>
-                <Input type="email" placeholder="Enter email address" className="h-12" />
+                <Input type="email" placeholder="Enter email address" className="h-14" />
               </div>
               
               {/* Phone Input */}
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
+                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
                   <Phone className="h-4 w-4" />
-                  <h3 className="text-sm font-medium">Phone</h3>
+                  <h3 className="text-base font-medium">Phone</h3>
                 </div>
-                <Input type="tel" placeholder="Enter phone number" className="h-12" />
+                <Input type="tel" placeholder="Enter phone number" className="h-14" />
               </div>
             </div>
             
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-between mt-8">
               <Button 
                 variant="outline"
                 onClick={() => setActiveTab("details")}
-                className="flex items-center gap-1"
+                className="flex items-center gap-2 border-[#E7E8EC] hover:border-[#D6BCFA] hover:bg-[#F5EFFE] px-6 py-2.5 h-auto rounded-lg"
               >
                 Back
               </Button>
               
               <Button 
                 onClick={() => setActiveTab("additional")}
-                className="flex items-center gap-1 bg-[#006FB5] hover:bg-[#005A92] text-white"
+                className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-6 py-2.5 h-auto rounded-lg"
               >
                 Next
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
           </Card>
         </TabsContent>
         
         {/* Additional Info Tab */}
-        <TabsContent value="additional" className="animate-fade-in">
-          <Card className="bg-white border border-[#E7E8EC] rounded-lg p-5 md:p-6 shadow-sm">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+        <TabsContent value="additional">
+          <Card className="bg-white border border-[#E7E8EC] rounded-xl p-6 md:p-7 shadow-md">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
-                <h2 className="text-lg font-medium">Additional Details</h2>
+                <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
+                <h2 className="text-xl font-semibold text-[#1A1F2C]">Additional Details</h2>
               </div>
               
-              <Button variant="outline" size="sm" className="gap-2 h-10">
+              <Button variant="outline" className="gap-2 h-10 border-[#D6BCFA] text-[#8B5CF6] hover:bg-[#F5EFFE]">
                 <Upload className="h-4 w-4" />
                 Upload documents
               </Button>
@@ -297,34 +284,35 @@ export function TransactionForm() {
             <div className="space-y-4">
               <Textarea 
                 placeholder="Add notes or additional details about this transaction..."
-                className="min-h-[120px]"
+                className="min-h-[180px] text-base"
               />
             </div>
             
-            <div className="flex items-center justify-between mt-6 pt-6 border-t border-[#E7E8EC]">
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#E7E8EC]">
               <div className="flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-[#006FB5]"></div>
-                <h3 className="text-base font-medium">Create a rule for next time?</h3>
+                <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
+                <h3 className="text-lg font-semibold text-[#1A1F2C]">Create a rule for next time?</h3>
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-medium text-[#8E9196]">
+                  {createRule ? 'Yes' : 'No'}
+                </span>
                 <Switch 
                   id="create-rule" 
                   checked={createRule} 
-                  onCheckedChange={setCreateRule} 
+                  onCheckedChange={setCreateRule}
+                  className="data-[state=checked]:bg-[#8B5CF6]" 
                 />
-                <span className="text-sm font-medium">
-                  {createRule ? 'Yes' : 'No'}
-                </span>
               </div>
             </div>
             
             {createRule && (
-              <div className="mt-4 p-5 bg-[#FAFAFC] border border-[#E7E8EC] rounded-lg">
-                <p className="text-sm text-[#727980] font-medium mb-3">Auto-categorize similar transactions</p>
+              <div className="mt-6 p-6 bg-[#F8FAFF] border border-[#E7E8EC] rounded-xl shadow-sm animate-fade-in">
+                <p className="text-sm text-[#8E9196] font-medium mb-4">Auto-categorize similar transactions</p>
                 <div className="space-y-4">
                   <Select>
-                    <SelectTrigger className="h-12">
+                    <SelectTrigger className="h-14 text-base">
                       <SelectValue placeholder="Select an action" />
                     </SelectTrigger>
                     <SelectContent>
@@ -337,19 +325,19 @@ export function TransactionForm() {
               </div>
             )}
             
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-between mt-8">
               <Button 
                 variant="outline"
                 onClick={() => setActiveTab("payer")}
-                className="flex items-center gap-1"
+                className="flex items-center gap-2 border-[#E7E8EC] hover:border-[#D6BCFA] hover:bg-[#F5EFFE] px-6 py-2.5 h-auto rounded-lg"
               >
                 Back
               </Button>
               
               <Button 
-                className="bg-[#006FB5] hover:bg-[#005A92] text-white"
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-6 py-2.5 h-auto rounded-lg"
               >
-                <Check className="h-4 w-4 mr-2" />
+                <Check className="h-5 w-5 mr-2" />
                 Confirm Transaction
               </Button>
             </div>
