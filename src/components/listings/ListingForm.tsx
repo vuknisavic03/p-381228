@@ -185,8 +185,6 @@ export function ListingForm() {
     setNotes("");
   };
 
-  const inputClassName = "h-10 w-full";
-
   return (
     <div className="p-6 h-full overflow-auto">
       <div className="flex items-center justify-between mb-6">
@@ -195,25 +193,25 @@ export function ListingForm() {
 
       <div className="space-y-4">
         <Input
-          className={inputClassName}
+          className="h-10 w-full border-gray-200"
           placeholder="City"
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
         <Input
-          className={inputClassName}
+          className="h-10 w-full border-gray-200"
           placeholder="Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
         <Input
-          className={inputClassName}
+          className="h-10 w-full border-gray-200"
           placeholder="Country"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         />
         <Input
-          className={inputClassName}
+          className="h-10 w-full border-gray-200"
           placeholder="Postal Code"
           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
@@ -227,7 +225,7 @@ export function ListingForm() {
               setCategory(""); // Reset category when type changes
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="border-gray-200">
               <SelectValue placeholder="Select property type" />
             </SelectTrigger>
             <SelectContent>
@@ -247,7 +245,7 @@ export function ListingForm() {
             onValueChange={setCategory}
             disabled={!typeField}
           >
-            <SelectTrigger>
+            <SelectTrigger className="border-gray-200">
               <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
             </SelectTrigger>
             <SelectContent>
@@ -272,19 +270,19 @@ export function ListingForm() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input
-              className={inputClassName}
+              className="h-10 w-full border-gray-200"
               placeholder={tenantType === "individual" ? "Name" : "Company Name"}
               value={tenantName}
               onChange={(e) => setTenantName(e.target.value)}
             />
             <Input
-              className={inputClassName}
+              className="h-10 w-full border-gray-200"
               placeholder="Phone"
               value={tenantPhone}
               onChange={(e) => setTenantPhone(e.target.value)}
             />
             <Input
-              className={`${inputClassName} col-span-2`}
+              className="h-10 w-full col-span-2 border-gray-200"
               placeholder="Email"
               value={tenantEmail}
               onChange={(e) => setTenantEmail(e.target.value)}
@@ -295,7 +293,7 @@ export function ListingForm() {
         <div className="space-y-2">
           <h3 className="font-medium text-sm">Additional details</h3>
           <Textarea
-            className="min-h-[100px] w-full"
+            className="min-h-[100px] w-full border-gray-200"
             placeholder="Notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}

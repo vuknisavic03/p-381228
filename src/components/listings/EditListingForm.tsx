@@ -200,30 +200,30 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         </SheetClose>
       </div>
 
-      <div className="grid gap-5 overflow-y-auto pr-2">
+      <div className="grid gap-5">
         <Input
-          className="h-12"
+          className="h-12 border-gray-200"
           placeholder="City"
           name="city"
           value={formData.city}
           onChange={handleChange}
         />
         <Input
-          className="h-12"
+          className="h-12 border-gray-200"
           placeholder="Address"
           name="address"
           value={formData.address}
           onChange={handleChange}
         />
         <Input
-          className="h-12"
+          className="h-12 border-gray-200"
           placeholder="Country"
           name="country"
           value={formData.country}
           onChange={handleChange}
         />
         <Input
-          className="h-12"
+          className="h-12 border-gray-200"
           placeholder="Postal Code"
           name="postalCode"
           value={formData.postalCode}
@@ -241,7 +241,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               }));
             }}
           >
-            <SelectTrigger className="h-12">
+            <SelectTrigger className="h-12 border-gray-200">
               <SelectValue placeholder="Select property type">
                 {formData.type && TypeIcon && (
                   <div className="flex items-center gap-2">
@@ -273,7 +273,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             }}
             disabled={!formData.type}
           >
-            <SelectTrigger className="h-12">
+            <SelectTrigger className="h-12 border-gray-200">
               <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
                 {formData.category && CategoryIcon && (
                   <div className="flex items-center gap-2">
@@ -305,14 +305,14 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <Input
-              className="h-12"
+              className="h-12 border-gray-200"
               placeholder={formData.tenantType === "individual" ? "Name" : "Company Name"}
               name="tenantName"
               value={formData.tenantName}
               onChange={handleChange}
             />
             <Input
-              className="h-12"
+              className="h-12 border-gray-200"
               placeholder="Phone"
               name="tenantPhone"
               value={formData.tenantPhone}
@@ -321,7 +321,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
           <div className="mt-4">
             <Input
-              className="h-12"
+              className="h-12 border-gray-200"
               placeholder="Email"
               name="tenantEmail"
               value={formData.tenantEmail}
@@ -337,6 +337,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             name="notes"
             value={formData.notes}
             onChange={handleChange}
+            className="border-gray-200 min-h-[120px]"
           />
         </div>
       </div>

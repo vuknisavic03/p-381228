@@ -83,7 +83,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
                           <FormLabel className="text-gray-600">Property type</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-white">
+                              <SelectTrigger className="bg-white border-gray-200 focus:border-gray-300">
                                 <SelectValue placeholder="Select property type" />
                               </SelectTrigger>
                             </FormControl>
@@ -107,7 +107,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
                             <Input
                               type="number"
                               placeholder="Enter number"
-                              className="bg-white"
+                              className="bg-white border-gray-200 focus:border-gray-300"
                               {...field}
                             />
                           </FormControl>
@@ -125,7 +125,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
               variant="outline"
               size="sm"
               onClick={() => append({ propertyType: "", numberOfListings: "" })}
-              className="w-full bg-white hover:bg-gray-50 border-dashed"
+              className="w-full bg-white hover:bg-gray-50 border-dashed border-gray-200"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add another property type
@@ -140,4 +140,3 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
     </Dialog>
   );
 }
-
