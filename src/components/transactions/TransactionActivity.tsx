@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Euro, Search, Calendar, ChevronDown, Filter } from "lucide-react";
+import { DollarSign, Search, Calendar, ChevronDown, Filter } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function TransactionActivity() {
@@ -11,11 +11,11 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="sticky top-0 z-10 bg-white p-4 border-b border-[#EBECED]">
+      <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-semibold text-[#1A1F2C]">Activity</h2>
-          <div className="flex items-center px-3 py-2 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
-            <Euro className="h-4 w-4 mr-2" />
+          <h2 className="text-xl font-semibold text-gray-900">Activity</h2>
+          <div className="flex items-center px-3 py-2 rounded-full bg-gray-100 text-gray-700">
+            <DollarSign className="h-4 w-4 mr-2" />
             <span className="text-sm font-medium">Revenue</span>
           </div>
         </div>
@@ -25,7 +25,7 @@ export function TransactionActivity() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input 
               placeholder="Search transactions" 
-              className="pl-10 bg-[#F8FAFF] border-[#E7E8EC]" 
+              className="pl-10 bg-gray-50 border-gray-200" 
             />
           </div>
           
@@ -33,7 +33,7 @@ export function TransactionActivity() {
             <Button 
               variant="outline" 
               size="sm" 
-              className="text-xs flex items-center gap-1 border-[#E7E8EC] bg-white hover:border-[#D6BCFA] hover:bg-[#F5EFFE]"
+              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50"
               onClick={() => setFilterOpen(!filterOpen)}
             >
               <Filter className="h-3 w-3" />
@@ -44,7 +44,7 @@ export function TransactionActivity() {
             <Button 
               variant="outline" 
               size="sm" 
-              className="text-xs flex items-center gap-1 border-[#E7E8EC] bg-white hover:border-[#D6BCFA] hover:bg-[#F5EFFE]"
+              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50"
             >
               <Calendar className="h-3 w-3" />
               Last 30 days
@@ -54,7 +54,7 @@ export function TransactionActivity() {
       </div>
       
       {filterOpen && (
-        <div className="mx-4 mt-4 mb-2 p-4 border border-[#E7E8EC] rounded-lg bg-[#F8F9FB] space-y-3 animate-fade-in shadow-sm">
+        <div className="mx-4 mt-4 mb-2 p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-3 animate-fade-in shadow-sm">
           <Select>
             <SelectTrigger className="h-10 text-sm">
               <SelectValue placeholder="Transaction Type" />
@@ -80,12 +80,12 @@ export function TransactionActivity() {
         </div>
       )}
       
-      <div className="flex-1 flex flex-col items-center justify-center m-4 p-6 bg-[#F8F9FB] rounded-lg border border-dashed border-[#E7E8EC] min-h-[400px]">
-        <div className="w-16 h-16 rounded-full bg-[#F5EFFE] flex items-center justify-center mb-4">
-          <Euro className="h-8 w-8 text-[#8B5CF6]" />
+      <div className="flex-1 flex flex-col items-center justify-center m-4 p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200 min-h-[400px]">
+        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+          <DollarSign className="h-8 w-8 text-gray-700" />
         </div>
-        <span className="text-[#1A1F2C] font-semibold text-base mb-2">No activity yet</span>
-        <p className="text-sm text-center text-[#8E9196] max-w-[240px]">
+        <span className="text-gray-900 font-semibold text-base mb-2">No activity yet</span>
+        <p className="text-sm text-center text-gray-500 max-w-[240px]">
           Transactions will appear here once they're created or imported from your connected accounts.
         </p>
       </div>

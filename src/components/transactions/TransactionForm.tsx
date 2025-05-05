@@ -13,7 +13,7 @@ import {
   CreditCard, 
   Search,
   Upload, 
-  Euro, 
+  DollarSign, 
   FileText,
   ShoppingCart,
   Wallet,
@@ -23,7 +23,8 @@ import {
   Phone,
   User,
   Check,
-  ChevronRight
+  ChevronRight,
+  Building
 } from "lucide-react";
 
 export function TransactionForm() {
@@ -45,303 +46,270 @@ export function TransactionForm() {
   });
 
   return (
-    <div className="max-w-3xl mx-auto p-6 md:p-8">
+    <div className="p-6 h-full overflow-auto">
       {/* Header Section */}
-      <div className="bg-white rounded-xl shadow-md border border-[#E7E8EC] p-6 mb-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
-              <Search className="h-7 w-7" />
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1F2C]">Categorize Transaction</h1>
-              <p className="text-[#8E9196] mt-1">Assign this transaction to the right category</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="flex items-center px-4 py-2.5 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
-              <Euro className="h-5 w-5 mr-2" />
-              <span className="text-sm font-medium">Revenue</span>
-            </div>
-            
-            <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-medium px-6 py-2.5 h-auto rounded-lg">
-              <Check className="h-5 w-5 mr-2" />
-              Confirm
-            </Button>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-semibold">Transaction details</h2>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700">
+            <DollarSign className="h-3.5 w-3.5 mr-1" />
+            <span className="text-xs font-medium">Revenue</span>
           </div>
         </div>
       </div>
 
       {/* Main Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3 w-full p-1 rounded-xl mb-8 shadow-sm">
-          <TabsTrigger value="details" className="rounded-lg py-3">
+        <TabsList className="grid grid-cols-3 w-full p-1 rounded-md mb-6">
+          <TabsTrigger value="details" className="text-xs">
             Transaction Details
           </TabsTrigger>
-          <TabsTrigger value="payer" className="rounded-lg py-3">
+          <TabsTrigger value="payer" className="text-xs">
             Payer Details
           </TabsTrigger>
-          <TabsTrigger value="additional" className="rounded-lg py-3">
+          <TabsTrigger value="additional" className="text-xs">
             Additional Info
           </TabsTrigger>
         </TabsList>
 
         {/* Transaction Details Tab */}
-        <TabsContent value="details">
-          <Card className="bg-white border border-[#E7E8EC] rounded-xl p-6 md:p-7 shadow-md">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
-              <h2 className="text-xl font-semibold text-[#1A1F2C]">Transaction Details</h2>
+        <TabsContent value="details" className="space-y-4">
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <FileText className="h-4 w-4" />
+              <h3>Listing</h3>
             </div>
-            
-            <div className="space-y-6">
-              {/* Listing Selection */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <FileText className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Listing</h3>
-                </div>
-                <Select>
-                  <SelectTrigger className="w-full h-14 text-base">
-                    <SelectValue placeholder="Select a listing" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="listing1">Apartment Rental</SelectItem>
-                    <SelectItem value="listing2">Office Space</SelectItem>
-                    <SelectItem value="listing3">Commercial Property</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              {/* Category Selection */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <ShoppingCart className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Category</h3>
-                </div>
-                <Select>
-                  <SelectTrigger className="w-full h-14 text-base">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expense</SelectItem>
-                    <SelectItem value="investment">Investment</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              {/* Relationship Selection */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <BriefcaseIcon className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Relationship</h3>
-                </div>
-                <Select>
-                  <SelectTrigger className="w-full h-14 text-base">
-                    <SelectValue placeholder="Select a relationship" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="client">Client</SelectItem>
-                    <SelectItem value="vendor">Vendor</SelectItem>
-                    <SelectItem value="partner">Partner</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              {/* Amount Input */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <Wallet className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Amount</h3>
-                </div>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#1A1F2C]">$</span>
-                  <Input type="number" placeholder="0.00" className="pl-8 h-14" />
-                </div>
-              </div>
-              
-              {/* Date Selection */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Date</h3>
-                </div>
-                <Input type="date" className="h-14" />
-              </div>
-              
-              {/* Payment Method */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <CreditCard className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Payment Method</h3>
-                </div>
-                <Select>
-                  <SelectTrigger className="w-full h-14 text-base">
-                    <SelectValue placeholder="Select payment method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="card">Credit Card</SelectItem>
-                    <SelectItem value="bank">Bank Transfer</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <Select>
+              <SelectTrigger className="w-full border-gray-200">
+                <SelectValue placeholder="Select a listing" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="listing1">Apartment Rental</SelectItem>
+                <SelectItem value="listing2">Office Space</SelectItem>
+                <SelectItem value="listing3">Commercial Property</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <ShoppingCart className="h-4 w-4" />
+              <h3>Category</h3>
             </div>
+            <Select>
+              <SelectTrigger className="w-full border-gray-200">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="income">Income</SelectItem>
+                <SelectItem value="expense">Expense</SelectItem>
+                <SelectItem value="investment">Investment</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <BriefcaseIcon className="h-4 w-4" />
+              <h3>Relationship</h3>
+            </div>
+            <Select>
+              <SelectTrigger className="w-full border-gray-200">
+                <SelectValue placeholder="Select a relationship" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="client">Client</SelectItem>
+                <SelectItem value="vendor">Vendor</SelectItem>
+                <SelectItem value="partner">Partner</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <Wallet className="h-4 w-4" />
+              <h3>Amount</h3>
+            </div>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+              <Input type="number" placeholder="0.00" className="pl-7 border-gray-200" />
+            </div>
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <Calendar className="h-4 w-4" />
+              <h3>Date</h3>
+            </div>
+            <Input type="date" className="border-gray-200" />
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <CreditCard className="h-4 w-4" />
+              <h3>Payment Method</h3>
+            </div>
+            <Select>
+              <SelectTrigger className="w-full border-gray-200">
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="card">Credit Card</SelectItem>
+                <SelectItem value="bank">Bank Transfer</SelectItem>
+                <SelectItem value="cash">Cash</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            <div className="flex justify-end mt-8">
-              <Button 
-                onClick={() => setActiveTab("payer")}
-                className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-6 py-2.5 h-auto rounded-lg"
-              >
-                Next
-                <ChevronRight className="h-5 w-5" />
-              </Button>
-            </div>
-          </Card>
+          <div className="flex justify-end mt-6">
+            <Button 
+              onClick={() => setActiveTab("payer")}
+              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white h-9 rounded-md"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </TabsContent>
         
         {/* Payer Details Tab */}
-        <TabsContent value="payer">
-          <Card className="bg-white border border-[#E7E8EC] rounded-xl p-6 md:p-7 shadow-md">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
-                <h2 className="text-xl font-semibold text-[#1A1F2C]">Payer Details</h2>
-              </div>
-              
-              <div className="flex items-center px-4 py-2 rounded-full bg-[#F5EFFE] text-[#8B5CF6]">
-                <User className="h-4 w-4 mr-2" />
-                <span className="text-sm font-medium">Individual</span>
-              </div>
+        <TabsContent value="payer" className="space-y-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <User className="h-4 w-4" />
+              <h3>Payer Details</h3>
             </div>
             
-            <div className="space-y-6">
-              {/* Name Input */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <User className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Name</h3>
-                </div>
-                <Input placeholder="Enter full name" className="h-14" />
-              </div>
-              
-              {/* Email Input */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <Mail className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Email</h3>
-                </div>
-                <Input type="email" placeholder="Enter email address" className="h-14" />
-              </div>
-              
-              {/* Phone Input */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
-                  <Phone className="h-4 w-4" />
-                  <h3 className="text-base font-medium">Phone</h3>
-                </div>
-                <Input type="tel" placeholder="Enter phone number" className="h-14" />
-              </div>
+            <div className="flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700">
+              <User className="h-3.5 w-3.5 mr-1" />
+              <span className="text-xs font-medium">Individual</span>
             </div>
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <User className="h-4 w-4" />
+              <h3>Name</h3>
+            </div>
+            <Input placeholder="Enter full name" className="border-gray-200" />
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <Mail className="h-4 w-4" />
+              <h3>Email</h3>
+            </div>
+            <Input type="email" placeholder="Enter email address" className="border-gray-200" />
+          </div>
+          
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <Phone className="h-4 w-4" />
+              <h3>Phone</h3>
+            </div>
+            <Input type="tel" placeholder="Enter phone number" className="border-gray-200" />
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <Building className="h-4 w-4" />
+              <h3>Company</h3>
+            </div>
+            <Input placeholder="Enter company name (optional)" className="border-gray-200" />
+          </div>
+          
+          <div className="flex justify-between mt-6">
+            <Button 
+              variant="outline"
+              onClick={() => setActiveTab("details")}
+              className="border-gray-200 hover:bg-gray-50 h-9 rounded-md"
+            >
+              Back
+            </Button>
             
-            <div className="flex justify-between mt-8">
-              <Button 
-                variant="outline"
-                onClick={() => setActiveTab("details")}
-                className="flex items-center gap-2 border-[#E7E8EC] hover:border-[#D6BCFA] hover:bg-[#F5EFFE] px-6 py-2.5 h-auto rounded-lg"
-              >
-                Back
-              </Button>
-              
-              <Button 
-                onClick={() => setActiveTab("additional")}
-                className="flex items-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-6 py-2.5 h-auto rounded-lg"
-              >
-                Next
-                <ChevronRight className="h-5 w-5" />
-              </Button>
-            </div>
-          </Card>
+            <Button 
+              onClick={() => setActiveTab("additional")}
+              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white h-9 rounded-md"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </TabsContent>
         
         {/* Additional Info Tab */}
-        <TabsContent value="additional">
-          <Card className="bg-white border border-[#E7E8EC] rounded-xl p-6 md:p-7 shadow-md">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
-                <h2 className="text-xl font-semibold text-[#1A1F2C]">Additional Details</h2>
-              </div>
-              
-              <Button variant="outline" className="gap-2 h-10 border-[#D6BCFA] text-[#8B5CF6] hover:bg-[#F5EFFE]">
-                <Upload className="h-4 w-4" />
-                Upload documents
-              </Button>
+        <TabsContent value="additional" className="space-y-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <FileText className="h-4 w-4" />
+              <h3>Additional Details</h3>
             </div>
             
-            <div className="space-y-4">
-              <Textarea 
-                placeholder="Add notes or additional details about this transaction..."
-                className="min-h-[180px] text-base"
+            <Button variant="outline" className="h-8 text-xs gap-1 border-gray-200 hover:bg-gray-50">
+              <Upload className="h-3.5 w-3.5" />
+              Upload documents
+            </Button>
+          </div>
+          
+          <div>
+            <Textarea 
+              placeholder="Add notes or additional details about this transaction..."
+              className="min-h-[120px] border-gray-200"
+            />
+          </div>
+          
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Check className="h-4 w-4" />
+              <h3>Create a rule for next time?</h3>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">
+                {createRule ? 'Yes' : 'No'}
+              </span>
+              <Switch 
+                id="create-rule" 
+                checked={createRule} 
+                onCheckedChange={setCreateRule}
               />
             </div>
-            
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#E7E8EC]">
-              <div className="flex items-center gap-3">
-                <div className="h-3 w-3 rounded-full bg-[#8B5CF6]"></div>
-                <h3 className="text-lg font-semibold text-[#1A1F2C]">Create a rule for next time?</h3>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-[#8E9196]">
-                  {createRule ? 'Yes' : 'No'}
-                </span>
-                <Switch 
-                  id="create-rule" 
-                  checked={createRule} 
-                  onCheckedChange={setCreateRule}
-                  className="data-[state=checked]:bg-[#8B5CF6]" 
-                />
+          </div>
+          
+          {createRule && (
+            <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm animate-fade-in">
+              <p className="text-xs text-gray-500 font-medium mb-3">Auto-categorize similar transactions</p>
+              <div className="space-y-3">
+                <Select>
+                  <SelectTrigger className="h-9 text-sm border-gray-200">
+                    <SelectValue placeholder="Select an action" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="categorize">Auto-categorize</SelectItem>
+                    <SelectItem value="assign">Assign to listing</SelectItem>
+                    <SelectItem value="notify">Send notification</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
+          )}
+          
+          <div className="flex justify-between mt-6">
+            <Button 
+              variant="outline"
+              onClick={() => setActiveTab("payer")}
+              className="border-gray-200 hover:bg-gray-50 h-9 rounded-md"
+            >
+              Back
+            </Button>
             
-            {createRule && (
-              <div className="mt-6 p-6 bg-[#F8FAFF] border border-[#E7E8EC] rounded-xl shadow-sm animate-fade-in">
-                <p className="text-sm text-[#8E9196] font-medium mb-4">Auto-categorize similar transactions</p>
-                <div className="space-y-4">
-                  <Select>
-                    <SelectTrigger className="h-14 text-base">
-                      <SelectValue placeholder="Select an action" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="categorize">Auto-categorize</SelectItem>
-                      <SelectItem value="assign">Assign to listing</SelectItem>
-                      <SelectItem value="notify">Send notification</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            )}
-            
-            <div className="flex justify-between mt-8">
-              <Button 
-                variant="outline"
-                onClick={() => setActiveTab("payer")}
-                className="flex items-center gap-2 border-[#E7E8EC] hover:border-[#D6BCFA] hover:bg-[#F5EFFE] px-6 py-2.5 h-auto rounded-lg"
-              >
-                Back
-              </Button>
-              
-              <Button 
-                className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white px-6 py-2.5 h-auto rounded-lg"
-              >
-                <Check className="h-5 w-5 mr-2" />
-                Confirm Transaction
-              </Button>
-            </div>
-          </Card>
+            <Button 
+              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white h-9 rounded-md"
+            >
+              <Check className="h-4 w-4 mr-1" />
+              Confirm Transaction
+            </Button>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
