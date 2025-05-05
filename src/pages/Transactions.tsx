@@ -3,17 +3,46 @@ import React from 'react';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionActivity } from "@/components/transactions/TransactionActivity";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 
 export default function Transactions() {
+  const isMobile = useIsMobile();
+  
   return (
     <DashboardLayout>
-      <div className="h-screen flex flex-col lg:flex-row">
-        <div className="w-full lg:w-[35%] lg:min-w-[350px] bg-white border-b lg:border-r border-[#EBECED] overflow-y-auto">
-          <TransactionActivity />
-        </div>
-        <div className="flex-1 bg-[#FAFBFC] overflow-y-auto">
-          <TransactionForm />
-        </div>
+      <div className="h-full flex flex-col md:flex-row">
+        {isMobile ? (
+          <Sheet>
+            <div className="bg-white border-b border-[#EBECED] p-4 flex justify-between items-center">
+              <h2 className="text-lg font-medium">Transaction Form</h2>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                  Activity <ChevronRight className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+            </div>
+            <div className="flex-1 bg-[#FAFBFC] overflow-y-auto">
+              <TransactionForm />
+            </div>
+            <SheetContent side="left" className="w-full sm:max-w-md p-0">
+              <div className="h-full bg-white">
+                <TransactionActivity />
+              </div>
+            </SheetContent>
+          </Sheet>
+        ) : (
+          <>
+            <div className="w-[350px] bg-white border-r border-[#EBECED] overflow-y-auto h-full">
+              <TransactionActivity />
+            </div>
+            <div className="flex-1 bg-[#FAFBFC] overflow-y-auto">
+              <TransactionForm />
+            </div>
+          </>
+        )}
       </div>
     </DashboardLayout>
   );
