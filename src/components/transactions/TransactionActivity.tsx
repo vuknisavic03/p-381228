@@ -11,12 +11,12 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-200">
+      <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-semibold text-gray-900">Activity</h2>
-          <div className="flex items-center px-3 py-2 rounded-full bg-gray-100 text-gray-700">
-            <DollarSign className="h-4 w-4 mr-2" />
-            <span className="text-sm font-medium">Revenue</span>
+          <h2 className="text-xl font-semibold text-gray-800">Activity</h2>
+          <div className="flex items-center px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">
+            <DollarSign className="h-3.5 w-3.5 mr-1.5" />
+            <span className="text-xs">Revenue</span>
           </div>
         </div>
         
@@ -25,7 +25,7 @@ export function TransactionActivity() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input 
               placeholder="Search transactions" 
-              className="pl-10 bg-gray-50 border-gray-200" 
+              className="pl-10 bg-white border-gray-200 hover:border-gray-300 transition-colors" 
             />
           </div>
           
@@ -33,18 +33,18 @@ export function TransactionActivity() {
             <Button 
               variant="outline" 
               size="sm" 
-              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50"
+              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50 transition-colors"
               onClick={() => setFilterOpen(!filterOpen)}
             >
               <Filter className="h-3 w-3" />
               Filters
-              <ChevronDown className="h-3 w-3 ml-1" />
+              <ChevronDown className={`h-3 w-3 ml-1 transition-transform duration-200 ${filterOpen ? 'rotate-180' : ''}`} />
             </Button>
             
             <Button 
               variant="outline" 
               size="sm" 
-              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50"
+              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50 transition-colors"
             >
               <Calendar className="h-3 w-3" />
               Last 30 days
@@ -54,20 +54,21 @@ export function TransactionActivity() {
       </div>
       
       {filterOpen && (
-        <div className="mx-4 mt-4 mb-2 p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-3 animate-fade-in shadow-sm">
+        <div className="mx-5 mt-4 mb-2 p-5 border border-gray-100 rounded-lg bg-gray-50 space-y-4 animate-fade-in shadow-sm">
           <Select>
-            <SelectTrigger className="h-10 text-sm">
+            <SelectTrigger className="h-10 text-sm bg-white border-gray-200">
               <SelectValue placeholder="Transaction Type" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="income">Income</SelectItem>
               <SelectItem value="expense">Expense</SelectItem>
+              <SelectItem value="investment">Investment</SelectItem>
             </SelectContent>
           </Select>
           
           <Select>
-            <SelectTrigger className="h-10 text-sm">
+            <SelectTrigger className="h-10 text-sm bg-white border-gray-200">
               <SelectValue placeholder="Payment Method" />
             </SelectTrigger>
             <SelectContent>
@@ -75,17 +76,18 @@ export function TransactionActivity() {
               <SelectItem value="card">Credit Card</SelectItem>
               <SelectItem value="bank">Bank Transfer</SelectItem>
               <SelectItem value="cash">Cash</SelectItem>
+              <SelectItem value="check">Check</SelectItem>
             </SelectContent>
           </Select>
         </div>
       )}
       
-      <div className="flex-1 flex flex-col items-center justify-center m-4 p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200 min-h-[400px]">
-        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-          <DollarSign className="h-8 w-8 text-gray-700" />
+      <div className="flex-1 flex flex-col items-center justify-center m-5 p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 min-h-[400px]">
+        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-5">
+          <DollarSign className="h-8 w-8 text-gray-400" />
         </div>
-        <span className="text-gray-900 font-semibold text-base mb-2">No activity yet</span>
-        <p className="text-sm text-center text-gray-500 max-w-[240px]">
+        <span className="text-gray-800 font-semibold text-lg mb-2">No activity yet</span>
+        <p className="text-sm text-center text-gray-500 max-w-[280px]">
           Transactions will appear here once they're created or imported from your connected accounts.
         </p>
       </div>
