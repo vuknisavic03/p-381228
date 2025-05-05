@@ -48,10 +48,10 @@ export default function Transactions() {
           </Sheet>
         ) : (
           <div className="flex w-full h-full">
-            <div className="w-3/4 bg-white overflow-y-auto h-full shadow-sm">
+            <div className="w-1/2 bg-white overflow-y-auto h-full shadow-sm">
               <TransactionForm />
             </div>
-            <div className="w-1/4 bg-white overflow-y-auto h-full border-l border-gray-200">
+            <div className="w-1/2 bg-white overflow-y-auto h-full border-l border-gray-200">
               <TransactionActivity />
             </div>
           </div>
