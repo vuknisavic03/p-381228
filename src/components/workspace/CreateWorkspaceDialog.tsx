@@ -49,7 +49,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] border border-[#EBECED] bg-white shadow-sm">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center mb-6">
             Create new workspace
@@ -61,7 +61,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="relative p-6 bg-[#FAFBFC] rounded-lg border border-[#EBECED] transition-all hover:border-[#EBECED]"
+                  className="relative p-6 bg-gray-50 rounded-lg border border-gray-100 transition-all hover:border-gray-200"
                 >
                   {index > 0 && (
                     <Button
@@ -69,7 +69,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
                       variant="ghost"
                       size="sm"
                       onClick={() => remove(index)}
-                      className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full bg-white border border-[#EBECED] hover:bg-red-50 hover:border-red-200"
+                      className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full bg-white border border-gray-200 hover:bg-red-50 hover:border-red-200"
                     >
                       <X className="h-3 w-3 text-gray-500 hover:text-red-500" />
                     </Button>
@@ -80,10 +80,10 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
                       name={`properties.${index}.propertyType`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#8E9196]">Property type</FormLabel>
+                          <FormLabel className="text-gray-600">Property type</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-white border-[#EBECED]">
+                              <SelectTrigger className="bg-white border-gray-200 focus:border-gray-300">
                                 <SelectValue placeholder="Select property type" />
                               </SelectTrigger>
                             </FormControl>
@@ -102,12 +102,12 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
                       name={`properties.${index}.numberOfListings`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#8E9196]">Number of listings</FormLabel>
+                          <FormLabel className="text-gray-600">Number of listings</FormLabel>
                           <FormControl>
                             <Input
                               type="number"
                               placeholder="Enter number"
-                              className="bg-white border-[#EBECED]"
+                              className="bg-white border-gray-200 focus:border-gray-300"
                               {...field}
                             />
                           </FormControl>
@@ -125,7 +125,7 @@ export function CreateWorkspaceDialog({ open, onOpenChange }: CreateWorkspaceDia
               variant="outline"
               size="sm"
               onClick={() => append({ propertyType: "", numberOfListings: "" })}
-              className="w-full bg-white hover:bg-[#FAFBFC] border-dashed border-[#EBECED]"
+              className="w-full bg-white hover:bg-gray-50 border-dashed border-gray-200"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add another property type
