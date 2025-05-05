@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SheetClose } from "../ui/sheet";
 
 interface EditListingFormProps {
   listing: any;
@@ -34,14 +36,23 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     address: listing.address || "",
     country: listing.country || "",
     postalCode: listing.postalCode || "",
-    type: listing.type || "",
-    category: listing.category || "",
+    type: listing.type?.toLowerCase() || "",
+    category: listing.category?.toLowerCase() || "",
     tenantName: listing.tenant?.name || "",
     tenantPhone: listing.tenant?.phone || "",
     tenantEmail: listing.tenant?.email || "",
     tenantType: listing.tenant?.type || "individual",
     notes: listing.notes || "",
   });
+
+  // Ensure type and category are properly set when component mounts
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      type: listing.type?.toLowerCase() || "",
+      category: listing.category?.toLowerCase() || ""
+    }));
+  }, [listing]);
 
   const typeCategories = [
     { value: "residential", label: "Residential", Icon: Home },
@@ -168,17 +179,28 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }
   };
 
+  // Find the currently selected type option
+  const selectedTypeOption = typeCategories.find(type => type.value === formData.type);
+  const TypeIcon = selectedTypeOption?.Icon;
+
+  // Find the currently selected category option
+  const selectedCategoryOptions = getAvailableCategories();
+  const selectedCategoryOption = selectedCategoryOptions.find(cat => cat.value === formData.category);
+  const CategoryIcon = selectedCategoryOption?.Icon;
+
   return (
-    <div className="h-screen flex flex-col p-6 w-full max-w-full sm:max-w-xl mx-auto">
+    <div className="flex flex-col p-6 w-full h-full">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold">Edit listing #{listing.id}</h2>
-        <Button variant="outline" onClick={onClose}>
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </Button>
+        <SheetClose asChild>
+          <Button variant="outline" size="icon">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </Button>
+        </SheetClose>
       </div>
 
-      <div className="grid gap-5">
+      <div className="grid gap-5 overflow-y-auto pr-2">
         <Input
           className="h-12"
           placeholder="City"
@@ -220,7 +242,14 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             }}
           >
             <SelectTrigger className="h-12">
-              <SelectValue placeholder="Select property type" />
+              <SelectValue placeholder="Select property type">
+                {formData.type && TypeIcon && (
+                  <div className="flex items-center gap-2">
+                    <TypeIcon className="h-4 w-4" />
+                    <span>{selectedTypeOption?.label}</span>
+                  </div>
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {typeCategories.map((type) => (
@@ -245,7 +274,14 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             disabled={!formData.type}
           >
             <SelectTrigger className="h-12">
-              <SelectValue placeholder={formData.type ? "Select category" : "Select type first"} />
+              <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
+                {formData.category && CategoryIcon && (
+                  <div className="flex items-center gap-2">
+                    <CategoryIcon className="h-4 w-4" />
+                    <span>{selectedCategoryOption?.label}</span>
+                  </div>
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {getAvailableCategories().map((cat) => (
@@ -303,12 +339,12 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             onChange={handleChange}
           />
         </div>
+      </div>
         
-        <div className="flex justify-end gap-3 mt-auto">
-          <Button onClick={handleSubmit} className="w-full sm:w-auto">
-            Save changes
-          </Button>
-        </div>
+      <div className="flex justify-end gap-3 mt-6">
+        <Button onClick={handleSubmit} className="w-full sm:w-auto">
+          Save changes
+        </Button>
       </div>
     </div>
   );
