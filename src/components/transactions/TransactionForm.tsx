@@ -45,7 +45,7 @@ export function TransactionForm() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-6 md:p-8">
+    <div className="max-w-3xl mx-auto p-6 md:p-8">
       {/* Header Section */}
       <div className="bg-white rounded-xl shadow-md border border-[#E7E8EC] p-6 mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
@@ -95,7 +95,7 @@ export function TransactionForm() {
               <h2 className="text-xl font-semibold text-[#1A1F2C]">Transaction Details</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            <div className="space-y-6">
               {/* Listing Selection */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">
@@ -217,7 +217,7 @@ export function TransactionForm() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            <div className="space-y-6">
               {/* Name Input */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-[#1A1F2C] mb-2">

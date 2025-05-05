@@ -80,7 +80,7 @@ export function TransactionActivity() {
         </div>
       )}
       
-      <div className="flex-1 flex flex-col items-center justify-center m-4 p-6 bg-[#F8F9FB] rounded-lg border border-dashed border-[#E7E8EC]">
+      <div className="flex-1 flex flex-col items-center justify-center m-4 p-6 bg-[#F8F9FB] rounded-lg border border-dashed border-[#E7E8EC] min-h-[400px]">
         <div className="w-16 h-16 rounded-full bg-[#F5EFFE] flex items-center justify-center mb-4">
           <Euro className="h-8 w-8 text-[#8B5CF6]" />
         </div>
