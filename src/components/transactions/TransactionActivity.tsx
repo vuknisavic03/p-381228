@@ -3,21 +3,42 @@ import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Search, Calendar, ChevronDown, Filter } from "lucide-react";
+import { DollarSign, Search, Calendar, ChevronDown, Filter, TrendingDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function TransactionActivity() {
   const [filterOpen, setFilterOpen] = useState(false);
+  const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
+
+  const toggleTransactionType = () => {
+    setTransactionType(transactionType === 'revenue' ? 'expense' : 'revenue');
+  };
 
   return (
     <div className="h-full flex flex-col">
       <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-xl font-semibold text-gray-800">Activity</h2>
-          <div className="flex items-center px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">
-            <DollarSign className="h-3.5 w-3.5 mr-1.5" />
-            <span className="text-xs">Revenue</span>
-          </div>
+          <button 
+            onClick={toggleTransactionType}
+            className={`flex items-center px-3 py-1.5 rounded-full font-medium transition-colors duration-200 ${
+              transactionType === 'revenue' 
+                ? 'bg-emerald-50 text-emerald-700' 
+                : 'bg-red-50 text-red-700'
+            }`}
+          >
+            {transactionType === 'revenue' ? (
+              <>
+                <DollarSign className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-xs">Revenue</span>
+              </>
+            ) : (
+              <>
+                <TrendingDown className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-xs">Expenses</span>
+              </>
+            )}
+          </button>
         </div>
         
         <div className="space-y-4">
@@ -83,12 +104,20 @@ export function TransactionActivity() {
       )}
       
       <div className="flex-1 flex flex-col items-center justify-center m-5 p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 min-h-[400px]">
-        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-5">
-          <DollarSign className="h-8 w-8 text-gray-400" />
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 ${
+          transactionType === 'revenue' ? 'bg-emerald-50' : 'bg-red-50'
+        }`}>
+          {transactionType === 'revenue' ? (
+            <DollarSign className="h-8 w-8 text-emerald-400" />
+          ) : (
+            <TrendingDown className="h-8 w-8 text-red-400" />
+          )}
         </div>
-        <span className="text-gray-800 font-semibold text-lg mb-2">No activity yet</span>
+        <span className="text-gray-800 font-semibold text-lg mb-2">No {transactionType} yet</span>
         <p className="text-sm text-center text-gray-500 max-w-[280px]">
-          Transactions will appear here once they're created or imported from your connected accounts.
+          {transactionType === 'revenue' 
+            ? "Revenue transactions will appear here once they're created or imported from your connected accounts."
+            : "Expense transactions will appear here once they're created or imported from your connected accounts."}
         </p>
       </div>
     </div>

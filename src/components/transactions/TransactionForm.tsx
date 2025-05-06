@@ -8,7 +8,10 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useForm } from "react-hook-form";
+import { format } from "date-fns";
 import { 
   CreditCard, 
   Search,
@@ -18,7 +21,7 @@ import {
   ShoppingCart,
   Wallet,
   BriefcaseIcon,
-  Calendar,
+  Calendar as CalendarIcon,
   Mail,
   Phone,
   User,
@@ -27,10 +30,12 @@ import {
   Building
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 export function TransactionForm() {
   const [activeTab, setActiveTab] = useState("details");
   const [createRule, setCreateRule] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
   
   const form = useForm({
@@ -42,7 +47,7 @@ export function TransactionForm() {
       email: "",
       phone: "",
       amount: "",
-      date: "",
+      date: new Date(),
       payment: ""
     }
   });
@@ -169,13 +174,32 @@ export function TransactionForm() {
               
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
-                  <Calendar className="h-4 w-4 text-gray-500" />
+                  <CalendarIcon className="h-4 w-4 text-gray-500" />
                   <h3>Date</h3>
                 </div>
-                <Input 
-                  type="date" 
-                  className="border-gray-200 bg-white hover:border-gray-300 transition-colors" 
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left border-gray-200 bg-white hover:bg-gray-50 transition-colors",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP") : <span>Select date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 z-50" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
               
               <div>
