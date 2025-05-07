@@ -1,7 +1,6 @@
 
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { useClientComponent } from "@/hooks/use-client-component";
 import React, { useEffect, useState } from "react";
 
 interface AnalyticsCardProps {
@@ -77,7 +76,7 @@ export function AnalyticsCard({
                       color === 'bg-[#D946EF]' ? '#D946EF' : '#9b87f5';
 
     switch (title) {
-      case "Total Revenue":
+      case "Revenue":
         return {
           ...baseOptions,
           colors: [colorValue],
@@ -95,12 +94,12 @@ export function AnalyticsCard({
             }
           },
         };
-      case "Active Users":
+      case "Profit":
         return {
           ...baseOptions,
           colors: [colorValue],
           series: [{
-            name: 'Users',
+            name: 'Profit',
             data: [11, 32, 45, 32, 34, 52, 41],
           }],
           fill: {
@@ -113,11 +112,11 @@ export function AnalyticsCard({
             }
           },
         };
-      case "Conversion Rate":
+      case "Income":
         return {
           ...baseOptions,
           colors: [colorValue, '#F3F4F6'],
-          labels: ['Converted', 'Not Converted'],
+          labels: ['Income', 'Expenses'],
           series: [67, 33],
           chart: {
             ...baseOptions.chart,
@@ -139,7 +138,7 @@ export function AnalyticsCard({
                   total: {
                     show: true,
                     showAlways: true,
-                    label: 'Conversion',
+                    label: 'Income',
                     fontSize: '16px',
                     fontWeight: 500,
                     color: '#333',
@@ -158,12 +157,12 @@ export function AnalyticsCard({
             show: false
           }
         };
-      case "Average Score":
+      case "Peak Profit Achieved":
         return {
           ...baseOptions,
           colors: [colorValue],
           series: [{
-            name: 'Score',
+            name: 'Profit',
             data: [80, 50, 30, 40, 100, 20],
           }],
           fill: {
@@ -188,7 +187,7 @@ export function AnalyticsCard({
   };
 
   const getChartType = () => {
-    if (title === "Conversion Rate") {
+    if (title === "Income") {
       return 'donut';
     } 
     return 'area';
