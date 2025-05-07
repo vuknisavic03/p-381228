@@ -1,10 +1,12 @@
+
 import React from "react";
 import { DashboardLayout } from "./DashboardLayout";
+import { WorkspaceOverview } from "../workspace/WorkspaceOverview";
 
 export function Overview() {
   return (
     <DashboardLayout>
-      {/* Empty content - only sidebar remains */}
+      <WorkspaceOverview />
     </DashboardLayout>
   );
 }
