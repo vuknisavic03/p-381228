@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -30,7 +30,9 @@ import {
   Building,
   TrendingDown,
   Home,
-  MapPin
+  MapPin,
+  CheckCircle,
+  Store
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -181,6 +183,22 @@ export function TransactionForm() {
 
   const selectedListingDetails = getSelectedListingDetails();
 
+  // Get icon for listing category
+  const getListingCategoryIcon = (category: string) => {
+    switch(category.toLowerCase()) {
+      case 'retail':
+        return <Store className="h-4 w-4" />;
+      case 'office':
+        return <BriefcaseIcon className="h-4 w-4" />;
+      case 'apartment':
+        return <Home className="h-4 w-4" />;
+      case 'restaurant':
+        return <ShoppingCart className="h-4 w-4" />;
+      default:
+        return <Building className="h-4 w-4" />;
+    }
+  };
+
   return (
     <div className="p-6 h-full overflow-auto">
       {/* Header Section */}
@@ -244,83 +262,192 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
+                  {/* Enhanced Select Component with Better Visual Differentiation */}
                   <Select value={selectedListing} onValueChange={setSelectedListing}>
                     <SelectTrigger 
                       className={cn(
                         "w-full border-gray-200 bg-white hover:border-gray-300 transition-colors",
-                        selectedListing && "border-blue-300 ring-1 ring-blue-100"
+                        selectedListing && "border-blue-300 ring-1 ring-blue-100",
+                        !selectedListing && "border-dashed border-2 border-gray-300 hover:border-gray-400"
                       )}
                     >
                       <SelectValue placeholder="Select a listing" />
                     </SelectTrigger>
                     <SelectContent className="max-h-72">
-                      {mockListings.map((listing) => (
-                        <SelectItem key={listing.id} value={listing.id.toString()} className="py-2.5">
-                          <div className="flex flex-col">
-                            <span className="font-medium">{listing.address}</span>
-                            <span className="text-xs text-gray-500 mt-0.5">
-                              {listing.type} | {listing.category}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
+                      <div className="sticky top-0 z-10 bg-white p-2 border-b border-gray-100">
+                        <div className="relative">
+                          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Input 
+                            placeholder="Search listings..." 
+                            className="pl-8 h-9 text-sm" 
+                          />
+                        </div>
+                      </div>
+                      <div className="p-2">
+                        <div className="flex flex-col gap-1 mb-3">
+                          <span className="text-xs font-medium text-gray-500 px-2">Commercial Properties</span>
+                          {mockListings.filter(l => l.type === 'Commercial').map((listing) => (
+                            <SelectItem key={listing.id} value={listing.id.toString()} className="py-3">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-md flex items-center justify-center bg-indigo-100 text-indigo-700`}>
+                                  {getListingCategoryIcon(listing.category)}
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="font-medium text-gray-800">{listing.address}</span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs text-gray-500">
+                                      {listing.category}
+                                    </span>
+                                    <span className="h-1 w-1 rounded-full bg-gray-300"></span>
+                                    <span className="text-xs text-gray-500">
+                                      {listing.city}, {listing.country}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </div>
+                        
+                        <div className="flex flex-col gap-1 mb-2">
+                          <span className="text-xs font-medium text-gray-500 px-2">Residential Properties</span>
+                          {mockListings.filter(l => l.type === 'Residential').map((listing) => (
+                            <SelectItem key={listing.id} value={listing.id.toString()} className="py-3">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-md flex items-center justify-center bg-amber-100 text-amber-700`}>
+                                  <Home className="h-4 w-4" />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="font-medium text-gray-800">{listing.address}</span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs text-gray-500">
+                                      {listing.category}
+                                    </span>
+                                    <span className="h-1 w-1 rounded-full bg-gray-300"></span>
+                                    <span className="text-xs text-gray-500">
+                                      {listing.city}, {listing.country}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </div>
+                      </div>
                     </SelectContent>
                   </Select>
                   
+                  {/* Enhanced Selected Listing Card */}
                   {selectedListingDetails && (
-                    <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-md animate-fade-in">
-                      <div className="flex items-start gap-3">
-                        <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
-                          selectedListingDetails.type === 'Commercial' 
-                            ? 'bg-indigo-100 text-indigo-700' 
-                            : 'bg-amber-100 text-amber-700'
-                        }`}>
-                          {selectedListingDetails.type === 'Commercial' ? (
-                            <Building className="h-4 w-4" />
-                          ) : (
-                            <Home className="h-4 w-4" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-sm font-medium text-gray-800 mb-0.5">
-                            {selectedListingDetails.address}
-                          </h4>
-                          <div className="flex items-center text-xs text-gray-500 gap-1">
-                            <MapPin className="h-3 w-3" />
-                            <span>{selectedListingDetails.city}, {selectedListingDetails.country}</span>
-                          </div>
-                          <div className="flex gap-2 mt-2">
-                            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
-                              {selectedListingDetails.type}
-                            </span>
-                            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
-                              {selectedListingDetails.category}
-                            </span>
+                    <div className="mt-4 animate-fade-in">
+                      <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white overflow-hidden">
+                        <div className="absolute top-3 right-3">
+                          <div className="h-6 w-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <CheckCircle className="h-4 w-4" />
                           </div>
                         </div>
+                        <CardContent className="p-5">
+                          <div className="flex items-start gap-4">
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                              selectedListingDetails.type === 'Commercial' 
+                                ? 'bg-indigo-100 text-indigo-700' 
+                                : 'bg-amber-100 text-amber-700'
+                            }`}>
+                              {selectedListingDetails.type === 'Commercial' ? (
+                                getListingCategoryIcon(selectedListingDetails.category)
+                              ) : (
+                                <Home className="h-6 w-6" />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex flex-col">
+                                <h4 className="text-base font-medium text-gray-800 mb-1">
+                                  {selectedListingDetails.address}
+                                </h4>
+                                <div className="flex items-center text-xs text-gray-500 gap-1 mb-3">
+                                  <MapPin className="h-3 w-3" />
+                                  <span>{selectedListingDetails.city}, {selectedListingDetails.country}</span>
+                                </div>
+                                <div className="flex gap-2">
+                                  <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                    {selectedListingDetails.type}
+                                  </span>
+                                  <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                    {selectedListingDetails.category}
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              {/* Tenant Information */}
+                              {selectedListingDetails.tenant ? (
+                                <div className="mt-4 pt-4 border-t border-blue-100">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <User className="h-3.5 w-3.5 text-gray-500" />
+                                    <span className="text-sm font-medium text-gray-700">Tenant Information</span>
+                                  </div>
+                                  
+                                  <div className="flex items-center gap-4">
+                                    <div className="h-9 w-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
+                                      {selectedListingDetails.tenant.type === 'company' ? (
+                                        <Building className="h-4 w-4" />
+                                      ) : (
+                                        <User className="h-4 w-4" />
+                                      )}
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium text-gray-800">
+                                        {selectedListingDetails.tenant.name}
+                                      </p>
+                                      <p className="text-xs text-gray-500 mt-0.5">
+                                        {selectedListingDetails.tenant.type === 'company' ? 'Company' : 'Individual'}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="grid grid-cols-2 gap-3 mt-3">
+                                    <div className="flex items-center gap-1.5 text-xs">
+                                      <Mail className="h-3 w-3 text-gray-400" />
+                                      <span className="text-gray-600">{selectedListingDetails.tenant.email}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-xs">
+                                      <Phone className="h-3 w-3 text-gray-400" />
+                                      <span className="text-gray-600">{selectedListingDetails.tenant.phone}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="mt-4 pt-4 border-t border-blue-100">
+                                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <User className="h-3.5 w-3.5" />
+                                    <span>No tenant associated with this listing</span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+                  
+                  {/* Prompt to Select a Listing When None is Selected */}
+                  {!selectedListing && (
+                    <div className="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-lg text-center animate-fade-in">
+                      <div className="flex flex-col items-center">
+                        <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+                          <Search className="h-4 w-4 text-gray-500" />
+                        </div>
+                        <p className="text-sm font-medium text-gray-700">Select a listing</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Choose a property to associate with this transaction
+                        </p>
                       </div>
-                      {selectedListingDetails.tenant ? (
-                        <div className="mt-2 pt-2 border-t border-blue-100">
-                          <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                            <User className="h-3 w-3" />
-                            <span>
-                              Tenant: <span className="font-medium">{selectedListingDetails.tenant.name}</span>
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-2 pt-2 border-t border-blue-100">
-                          <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                            <User className="h-3 w-3" />
-                            <span>No tenant associated with this listing</span>
-                          </div>
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
               </div>
               
+              {/* Category */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
                   <ShoppingCart className="h-4 w-4 text-gray-500" />
@@ -351,6 +478,7 @@ export function TransactionForm() {
                 </Select>
               </div>
               
+              {/* Relationship */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
                   <BriefcaseIcon className="h-4 w-4 text-gray-500" />
@@ -370,6 +498,7 @@ export function TransactionForm() {
                 </Select>
               </div>
               
+              {/* Amount */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
                   <Wallet className="h-4 w-4 text-gray-500" />
@@ -385,6 +514,7 @@ export function TransactionForm() {
                 </div>
               </div>
               
+              {/* Date */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
                   <CalendarIcon className="h-4 w-4 text-gray-500" />
@@ -415,6 +545,7 @@ export function TransactionForm() {
                 </Popover>
               </div>
               
+              {/* Payment Method */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
                   <CreditCard className="h-4 w-4 text-gray-500" />
