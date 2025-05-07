@@ -1,27 +1,41 @@
 
 import React from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
+import { useAnalyticsData } from "@/services/analyticsService";
 
 export function Header() {
+  // Set default date range to the last 7 days
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(),
+    from: subDays(new Date(), 7),
     to: new Date(),
   });
 
+  const { refetch } = useAnalyticsData();
+
+  // Handle date change
+  const handleDateChange = (newDate: DateRange | undefined) => {
+    setDate(newDate);
+    
+    // Call refetch when date range changes
+    if (newDate?.from && newDate?.to) {
+      refetch();
+    }
+  };
+
   return (
-    <div className="flex justify-between items-start">
+    <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
       <div>
-        <h1 className="text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
-          Good morning, Kevin
+        <h1 className="text-3xl md:text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
+          Dashboard Overview
         </h1>
-        <p className="text-[28px] text-[#9EA3AD] font-medium leading-none">
-          Today, {format(new Date(), "MMM dd")}
+        <p className="text-xl md:text-[24px] text-[#9EA3AD] font-medium leading-none">
+          Today, {format(new Date(), "MMM dd, yyyy")}
         </p>
       </div>
       <div className="flex items-center">
@@ -29,7 +43,7 @@ export function Header() {
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="flex items-center gap-2.5 border border-[#E7E8EC] rounded-md px-4 py-2.5"
+              className="flex items-center gap-2.5 border border-[#E7E8EC] rounded-md px-4 py-2.5 hover:bg-gray-50 transition-colors"
             >
               <CalendarIcon className="w-4 h-4 text-[#1A1A1A]" />
               <span className="text-sm font-medium text-[#1A1A1A]">
@@ -53,7 +67,7 @@ export function Header() {
               mode="range"
               defaultMonth={date?.from}
               selected={date}
-              onSelect={setDate}
+              onSelect={handleDateChange}
               numberOfMonths={2}
               className={cn("p-3 pointer-events-auto")}
             />
