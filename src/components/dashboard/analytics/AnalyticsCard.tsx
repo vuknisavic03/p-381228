@@ -3,6 +3,10 @@ import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useClientComponent } from "@/hooks/use-client-component";
 import React from "react";
+import dynamic from "next/dynamic";
+
+// Import ApexCharts dynamically to avoid SSR issues
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface AnalyticsCardProps {
   title: string;
@@ -15,8 +19,6 @@ export function AnalyticsCard({
   icon: Icon,
   color
 }: AnalyticsCardProps) {
-  const Chart = useClientComponent(() => import('react-apexcharts'));
-
   // Configure chart options based on card type
   const getChartOptions = () => {
     const baseOptions = {
@@ -102,13 +104,13 @@ export function AnalyticsCard({
       case "Conversion Rate":
         return {
           ...baseOptions,
+          colors: [colorValue, '#F3F4F6'],
+          labels: ['Converted', 'Not Converted'],
           series: [67, 33],
           chart: {
             ...baseOptions.chart,
             type: 'donut',
           },
-          colors: [colorValue, '#F3F4F6'],
-          labels: ['Converted', 'Not Converted'],
           stroke: {
             width: 0
           },
@@ -194,14 +196,12 @@ export function AnalyticsCard({
       </CardHeader>
       
       <div className="mt-4 flex-grow">
-        {Chart && (
-          <Chart
-            options={getChartOptions()}
-            series={getChartOptions().series}
-            type={getChartType()}
-            height={getChartHeight()}
-          />
-        )}
+        {React.createElement(ReactApexChart, {
+          options: getChartOptions(),
+          series: getChartOptions().series,
+          type: getChartType(),
+          height: getChartHeight()
+        })}
       </div>
     </Card>
   );
