@@ -103,12 +103,7 @@ const mockListings = [
   }
 ];
 
-interface TransactionFormProps {
-  transactionType: 'revenue' | 'expense';
-  onTransactionTypeChange: (type: 'revenue' | 'expense') => void;
-}
-
-export function TransactionForm({ transactionType, onTransactionTypeChange }: TransactionFormProps) {
+export function TransactionForm() {
   const [activeTab, setActiveTab] = useState("details");
   const [createRule, setCreateRule] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -120,6 +115,7 @@ export function TransactionForm({ transactionType, onTransactionTypeChange }: Tr
     phone: "",
     company: "",
   });
+  const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const { toast } = useToast();
   
   const form = useForm({
@@ -161,10 +157,9 @@ export function TransactionForm({ transactionType, onTransactionTypeChange }: Tr
     }
   }, [selectedListing]);
 
-  // Updated toggle function to use the shared callback
+  // Local toggle function that only affects the form
   const toggleTransactionType = () => {
-    const newType = transactionType === 'revenue' ? 'expense' : 'revenue';
-    onTransactionTypeChange(newType);
+    setTransactionType(prevType => prevType === 'revenue' ? 'expense' : 'revenue');
   };
 
   const handleConfirm = () => {

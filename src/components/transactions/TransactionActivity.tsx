@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,18 +5,13 @@ import { Button } from "@/components/ui/button";
 import { DollarSign, Search, Calendar, ChevronDown, Filter, TrendingDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface TransactionActivityProps {
-  transactionType: 'revenue' | 'expense';
-  onTransactionTypeChange: (type: 'revenue' | 'expense') => void;
-}
-
-export function TransactionActivity({ transactionType, onTransactionTypeChange }: TransactionActivityProps) {
+export function TransactionActivity() {
   const [filterOpen, setFilterOpen] = useState(false);
+  const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
 
-  // Update to use the shared callback function
+  // Local toggle function that only affects the activity center
   const toggleTransactionType = () => {
-    const newType = transactionType === 'revenue' ? 'expense' : 'revenue';
-    onTransactionTypeChange(newType);
+    setTransactionType(prevType => prevType === 'revenue' ? 'expense' : 'revenue');
   };
 
   return (

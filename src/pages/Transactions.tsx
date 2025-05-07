@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionActivity } from "@/components/transactions/TransactionActivity";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
@@ -10,13 +10,6 @@ import { ChevronLeft, LayoutList } from "lucide-react";
 
 export default function Transactions() {
   const isMobile = useIsMobile();
-  const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
-  
-  // Create a single function to handle transaction type changes that will be shared by both components
-  const handleTransactionTypeChange = (type: 'revenue' | 'expense') => {
-    setTransactionType(type);
-    console.log("Transaction type changed to:", type);
-  };
   
   return (
     <DashboardLayout>
@@ -34,10 +27,7 @@ export default function Transactions() {
                 </SheetTrigger>
               </div>
               <div className="pb-20">
-                <TransactionForm 
-                  transactionType={transactionType} 
-                  onTransactionTypeChange={handleTransactionTypeChange} 
-                />
+                <TransactionForm />
               </div>
             </div>
             <SheetContent side="right" className="w-full sm:max-w-md p-0">
@@ -51,10 +41,7 @@ export default function Transactions() {
                   <h2 className="text-lg font-semibold text-gray-900">Transaction Activity</h2>
                 </div>
                 <div className="flex-1 overflow-auto">
-                  <TransactionActivity 
-                    transactionType={transactionType} 
-                    onTransactionTypeChange={handleTransactionTypeChange} 
-                  />
+                  <TransactionActivity />
                 </div>
               </div>
             </SheetContent>
@@ -62,16 +49,10 @@ export default function Transactions() {
         ) : (
           <div className="flex w-full h-full">
             <div className="w-1/2 bg-white overflow-y-auto h-full shadow-sm">
-              <TransactionForm 
-                transactionType={transactionType} 
-                onTransactionTypeChange={handleTransactionTypeChange} 
-              />
+              <TransactionForm />
             </div>
             <div className="w-1/2 bg-white overflow-y-auto h-full border-l border-gray-200">
-              <TransactionActivity 
-                transactionType={transactionType} 
-                onTransactionTypeChange={handleTransactionTypeChange} 
-              />
+              <TransactionActivity />
             </div>
           </div>
         )}
