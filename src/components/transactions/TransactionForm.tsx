@@ -26,7 +26,8 @@ import {
   User,
   Check,
   ChevronRight,
-  Building
+  Building,
+  TrendingDown
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -102,7 +103,12 @@ const mockListings = [
   }
 ];
 
-export function TransactionForm() {
+interface TransactionFormProps {
+  transactionType: 'revenue' | 'expense';
+  onTransactionTypeChange: (type: 'revenue' | 'expense') => void;
+}
+
+export function TransactionForm({ transactionType, onTransactionTypeChange }: TransactionFormProps) {
   const [activeTab, setActiveTab] = useState("details");
   const [createRule, setCreateRule] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -157,10 +163,14 @@ export function TransactionForm() {
 
   const handleConfirm = () => {
     toast({
-      title: "Transaction created",
-      description: "Your transaction has been created successfully.",
+      title: `${transactionType === 'revenue' ? 'Revenue' : 'Expense'} transaction created`,
+      description: `Your ${transactionType} transaction has been created successfully.`,
       duration: 5000,
     });
+  };
+
+  const toggleTransactionType = () => {
+    onTransactionTypeChange(transactionType === 'revenue' ? 'expense' : 'revenue');
   };
 
   return (
@@ -169,10 +179,26 @@ export function TransactionForm() {
       <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
         <h2 className="text-xl font-semibold text-gray-800">Transaction details</h2>
         <div className="flex items-center gap-2">
-          <div className="flex items-center px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">
-            <DollarSign className="h-3.5 w-3.5 mr-1.5" />
-            <span className="text-xs">Revenue</span>
-          </div>
+          <button 
+            onClick={toggleTransactionType}
+            className={`flex items-center px-3 py-1.5 rounded-full font-medium transition-colors duration-200 ${
+              transactionType === 'revenue' 
+                ? 'bg-emerald-50 text-emerald-700' 
+                : 'bg-red-50 text-red-700'
+            }`}
+          >
+            {transactionType === 'revenue' ? (
+              <>
+                <DollarSign className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-xs">Revenue</span>
+              </>
+            ) : (
+              <>
+                <TrendingDown className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-xs">Expenses</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
 
@@ -232,11 +258,22 @@ export function TransactionForm() {
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expense</SelectItem>
-                    <SelectItem value="investment">Investment</SelectItem>
-                    <SelectItem value="tax">Tax</SelectItem>
-                    <SelectItem value="insurance">Insurance</SelectItem>
+                    {transactionType === 'revenue' ? (
+                      <>
+                        <SelectItem value="rent">Rent</SelectItem>
+                        <SelectItem value="deposit">Deposit</SelectItem>
+                        <SelectItem value="fee">Fee</SelectItem>
+                        <SelectItem value="other-income">Other Income</SelectItem>
+                      </>
+                    ) : (
+                      <>
+                        <SelectItem value="maintenance">Maintenance</SelectItem>
+                        <SelectItem value="utilities">Utilities</SelectItem>
+                        <SelectItem value="insurance">Insurance</SelectItem>
+                        <SelectItem value="tax">Tax</SelectItem>
+                        <SelectItem value="other-expense">Other Expense</SelectItem>
+                      </>
+                    )}
                   </SelectContent>
                 </Select>
               </div>

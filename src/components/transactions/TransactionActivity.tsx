@@ -6,12 +6,16 @@ import { Button } from "@/components/ui/button";
 import { DollarSign, Search, Calendar, ChevronDown, Filter, TrendingDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export function TransactionActivity() {
+interface TransactionActivityProps {
+  transactionType: 'revenue' | 'expense';
+  onTransactionTypeChange: (type: 'revenue' | 'expense') => void;
+}
+
+export function TransactionActivity({ transactionType, onTransactionTypeChange }: TransactionActivityProps) {
   const [filterOpen, setFilterOpen] = useState(false);
-  const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
 
   const toggleTransactionType = () => {
-    setTransactionType(transactionType === 'revenue' ? 'expense' : 'revenue');
+    onTransactionTypeChange(transactionType === 'revenue' ? 'expense' : 'revenue');
   };
 
   return (
