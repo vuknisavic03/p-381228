@@ -14,22 +14,14 @@ export function Header() {
     to: new Date(),
   });
 
-  // Get the time of day for personalized greeting
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
-  };
-
   return (
     <div className="flex justify-between items-start">
       <div>
-        <h1 className="text-[32px] text-[#1A1A1A] font-semibold leading-tight mb-1">
-          {getGreeting()}, Kevin
+        <h1 className="text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
+          Good morning, Kevin
         </h1>
-        <p className="text-lg text-[#9EA3AD] font-medium leading-none">
-          Welcome to your dashboard • Today, {format(new Date(), "MMM dd, yyyy")}
+        <p className="text-[28px] text-[#9EA3AD] font-medium leading-none">
+          Today, {format(new Date(), "MMM dd")}
         </p>
       </div>
       <div className="flex items-center">
@@ -37,7 +29,7 @@ export function Header() {
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="flex items-center gap-2.5 border border-[#E7E8EC] rounded-md px-4 py-2.5 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2.5 border border-[#E7E8EC] rounded-md px-4 py-2.5"
             >
               <CalendarIcon className="w-4 h-4 text-[#1A1A1A]" />
               <span className="text-sm font-medium text-[#1A1A1A]">
