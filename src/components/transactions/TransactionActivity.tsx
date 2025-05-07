@@ -14,8 +14,10 @@ interface TransactionActivityProps {
 export function TransactionActivity({ transactionType, onTransactionTypeChange }: TransactionActivityProps) {
   const [filterOpen, setFilterOpen] = useState(false);
 
+  // Update to use the shared callback function
   const toggleTransactionType = () => {
-    onTransactionTypeChange(transactionType === 'revenue' ? 'expense' : 'revenue');
+    const newType = transactionType === 'revenue' ? 'expense' : 'revenue';
+    onTransactionTypeChange(newType);
   };
 
   return (

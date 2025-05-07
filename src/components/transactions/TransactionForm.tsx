@@ -161,16 +161,18 @@ export function TransactionForm({ transactionType, onTransactionTypeChange }: Tr
     }
   }, [selectedListing]);
 
+  // Updated toggle function to use the shared callback
+  const toggleTransactionType = () => {
+    const newType = transactionType === 'revenue' ? 'expense' : 'revenue';
+    onTransactionTypeChange(newType);
+  };
+
   const handleConfirm = () => {
     toast({
       title: `${transactionType === 'revenue' ? 'Revenue' : 'Expense'} transaction created`,
       description: `Your ${transactionType} transaction has been created successfully.`,
       duration: 5000,
     });
-  };
-
-  const toggleTransactionType = () => {
-    onTransactionTypeChange(transactionType === 'revenue' ? 'expense' : 'revenue');
   };
 
   return (

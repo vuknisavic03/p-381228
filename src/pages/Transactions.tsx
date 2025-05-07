@@ -12,6 +12,12 @@ export default function Transactions() {
   const isMobile = useIsMobile();
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   
+  // Create a single function to handle transaction type changes that will be shared by both components
+  const handleTransactionTypeChange = (type: 'revenue' | 'expense') => {
+    setTransactionType(type);
+    console.log("Transaction type changed to:", type);
+  };
+  
   return (
     <DashboardLayout>
       <div className="h-full flex flex-col md:flex-row">
@@ -30,7 +36,7 @@ export default function Transactions() {
               <div className="pb-20">
                 <TransactionForm 
                   transactionType={transactionType} 
-                  onTransactionTypeChange={setTransactionType} 
+                  onTransactionTypeChange={handleTransactionTypeChange} 
                 />
               </div>
             </div>
@@ -47,7 +53,7 @@ export default function Transactions() {
                 <div className="flex-1 overflow-auto">
                   <TransactionActivity 
                     transactionType={transactionType} 
-                    onTransactionTypeChange={setTransactionType} 
+                    onTransactionTypeChange={handleTransactionTypeChange} 
                   />
                 </div>
               </div>
@@ -58,13 +64,13 @@ export default function Transactions() {
             <div className="w-1/2 bg-white overflow-y-auto h-full shadow-sm">
               <TransactionForm 
                 transactionType={transactionType} 
-                onTransactionTypeChange={setTransactionType} 
+                onTransactionTypeChange={handleTransactionTypeChange} 
               />
             </div>
             <div className="w-1/2 bg-white overflow-y-auto h-full border-l border-gray-200">
               <TransactionActivity 
                 transactionType={transactionType} 
-                onTransactionTypeChange={setTransactionType} 
+                onTransactionTypeChange={handleTransactionTypeChange} 
               />
             </div>
           </div>
