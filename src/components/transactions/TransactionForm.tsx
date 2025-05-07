@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -267,7 +266,7 @@ export function TransactionForm() {
                     <SelectTrigger 
                       className={cn(
                         "w-full border-gray-200 bg-white hover:border-gray-300 transition-colors",
-                        selectedListing && "border-blue-300 ring-1 ring-blue-100",
+                        selectedListing && "border-indigo-400 ring-2 ring-indigo-100 shadow-sm",
                         !selectedListing && "border-dashed border-2 border-gray-300 hover:border-gray-400"
                       )}
                     >
@@ -337,21 +336,21 @@ export function TransactionForm() {
                     </SelectContent>
                   </Select>
                   
-                  {/* Enhanced Selected Listing Card */}
+                  {/* Enhanced Selected Listing Card with better outline */}
                   {selectedListingDetails && (
                     <div className="mt-4 animate-fade-in">
-                      <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white overflow-hidden">
+                      <Card className="border-indigo-200 bg-gradient-to-br from-indigo-50 to-white shadow-md rounded-xl overflow-hidden">
                         <div className="absolute top-3 right-3">
-                          <div className="h-6 w-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                            <CheckCircle className="h-4 w-4" />
+                          <div className="h-6 w-6 rounded-full bg-indigo-500 text-white flex items-center justify-center">
+                            <CheckCircle className="h-3.5 w-3.5" />
                           </div>
                         </div>
                         <CardContent className="p-5">
                           <div className="flex items-start gap-4">
                             <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
                               selectedListingDetails.type === 'Commercial' 
-                                ? 'bg-indigo-100 text-indigo-700' 
-                                : 'bg-amber-100 text-amber-700'
+                                ? 'bg-indigo-500 text-white' 
+                                : 'bg-amber-500 text-white'
                             }`}>
                               {selectedListingDetails.type === 'Commercial' ? (
                                 getListingCategoryIcon(selectedListingDetails.category)
@@ -369,10 +368,10 @@ export function TransactionForm() {
                                   <span>{selectedListingDetails.city}, {selectedListingDetails.country}</span>
                                 </div>
                                 <div className="flex gap-2">
-                                  <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                  <span className="text-xs px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 font-medium">
                                     {selectedListingDetails.type}
                                   </span>
-                                  <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 font-medium">
+                                  <span className="text-xs px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 font-medium">
                                     {selectedListingDetails.category}
                                   </span>
                                 </div>
@@ -380,14 +379,14 @@ export function TransactionForm() {
                               
                               {/* Tenant Information */}
                               {selectedListingDetails.tenant ? (
-                                <div className="mt-4 pt-4 border-t border-blue-100">
+                                <div className="mt-4 pt-4 border-t border-indigo-100">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <User className="h-3.5 w-3.5 text-gray-500" />
+                                    <User className="h-3.5 w-3.5 text-indigo-500" />
                                     <span className="text-sm font-medium text-gray-700">Tenant Information</span>
                                   </div>
                                   
                                   <div className="flex items-center gap-4">
-                                    <div className="h-9 w-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
+                                    <div className="h-9 w-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
                                       {selectedListingDetails.tenant.type === 'company' ? (
                                         <Building className="h-4 w-4" />
                                       ) : (
@@ -406,19 +405,19 @@ export function TransactionForm() {
                                   
                                   <div className="grid grid-cols-2 gap-3 mt-3">
                                     <div className="flex items-center gap-1.5 text-xs">
-                                      <Mail className="h-3 w-3 text-gray-400" />
+                                      <Mail className="h-3 w-3 text-indigo-400" />
                                       <span className="text-gray-600">{selectedListingDetails.tenant.email}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5 text-xs">
-                                      <Phone className="h-3 w-3 text-gray-400" />
+                                      <Phone className="h-3 w-3 text-indigo-400" />
                                       <span className="text-gray-600">{selectedListingDetails.tenant.phone}</span>
                                     </div>
                                   </div>
                                 </div>
                               ) : (
-                                <div className="mt-4 pt-4 border-t border-blue-100">
+                                <div className="mt-4 pt-4 border-t border-indigo-100">
                                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <User className="h-3.5 w-3.5" />
+                                    <User className="h-3.5 w-3.5 text-indigo-400" />
                                     <span>No tenant associated with this listing</span>
                                   </div>
                                 </div>
