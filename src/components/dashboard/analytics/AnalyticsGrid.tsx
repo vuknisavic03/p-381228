@@ -9,47 +9,55 @@ export function AnalyticsGrid() {
   
   return (
     <div className="flex flex-col gap-8 max-w-[1400px] mx-auto p-4 lg:p-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8">
-        <ChartCard
-          title="Revenue"
-          icon={BarChart}
-          color="bg-[#9b87f5]"
-          value={isLoading ? "Loading..." : `$${data?.totals.revenue.toLocaleString()}`}
-          change={isLoading ? { value: 0, positive: true } : data?.changes.revenue}
-          chartData={isLoading ? [] : data?.revenue}
-          chartType="area"
-          isLoading={isLoading}
-        />
-        <ChartCard
-          title="Profit"
-          icon={TrendingUp}
-          color="bg-[#F97316]"
-          value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
-          change={isLoading ? { value: 0, positive: true } : data?.changes.profit}
-          chartData={isLoading ? [] : data?.profit}
-          chartType="spline"
-          isLoading={isLoading}
-        />
-        <ChartCard
-          title="Income"
-          icon={CircleDollarSign}
-          color="bg-[#0EA5E9]"
-          value={isLoading ? "Loading..." : `${data?.totals.income}%`}
-          change={isLoading ? { value: 0, positive: true } : data?.changes.income}
-          chartData={isLoading ? [] : data?.income}
-          chartType="donut"
-          isLoading={isLoading}
-        />
-        <ChartCard
-          title="Peak Profit Achieved"
-          icon={LineChart}
-          color="bg-[#D946EF]"
-          value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
-          change={isLoading ? { value: 0, positive: false } : data?.changes.peakProfit}
-          chartData={isLoading ? [] : data?.peakProfit}
-          chartType="area"
-          isLoading={isLoading}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-8">
+        <div className="md:col-span-6">
+          <ChartCard
+            title="Revenue"
+            icon={BarChart}
+            color="bg-[#9b87f5]"
+            value={isLoading ? "Loading..." : `$${data?.totals.revenue.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes.revenue}
+            chartData={isLoading ? [] : data?.revenue}
+            chartType="area"
+            isLoading={isLoading}
+          />
+        </div>
+        <div className="md:col-span-6">
+          <ChartCard
+            title="Profit"
+            icon={TrendingUp}
+            color="bg-[#F97316]"
+            value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes.profit}
+            chartData={isLoading ? [] : data?.profit}
+            chartType="spline"
+            isLoading={isLoading}
+          />
+        </div>
+        <div className="md:col-span-4">
+          <ChartCard
+            title="Income"
+            icon={CircleDollarSign}
+            color="bg-[#0EA5E9]"
+            value={isLoading ? "Loading..." : `${data?.totals.income}%`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes.income}
+            chartData={isLoading ? [] : data?.income}
+            chartType="donut"
+            isLoading={isLoading}
+          />
+        </div>
+        <div className="md:col-span-8">
+          <ChartCard
+            title="Peak Profit Achieved"
+            icon={LineChart}
+            color="bg-[#D946EF]"
+            value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: false } : data?.changes.peakProfit}
+            chartData={isLoading ? [] : data?.peakProfit}
+            chartType="area"
+            isLoading={isLoading}
+          />
+        </div>
       </div>
       
       <Timeline 
