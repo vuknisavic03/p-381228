@@ -68,7 +68,7 @@ export function ChartCard({
 
   if (isLoading) {
     return (
-      <Card className="p-6 shadow-md border border-[#E7E8EC] min-h-[250px] transition-all hover:shadow-lg bg-white">
+      <Card className="p-6 shadow-md border border-[#E7E8EC] h-[300px] transition-all hover:shadow-lg bg-white">
         <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-medium">{title}</CardTitle>
           <div className={`${color} text-white p-2 rounded-md`}>
@@ -179,7 +179,7 @@ export function ChartCard({
   };
 
   return (
-    <Card className="p-6 shadow-md border border-[#E7E8EC] min-h-[250px] transition-all hover:shadow-lg bg-white">
+    <Card className="p-6 shadow-md border border-[#E7E8EC] h-[300px] transition-all hover:shadow-lg bg-white flex flex-col">
       <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-medium">{title}</CardTitle>
         <div className={`${color} text-white p-2 rounded-md`}>
@@ -202,3 +202,4 @@ export function ChartCard({
     </Card>
   );
 }
+

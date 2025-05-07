@@ -22,12 +22,12 @@ interface TimelineProps {
 export function Timeline({ data, isLoading = false }: TimelineProps) {
   if (isLoading) {
     return (
-      <Card className="shadow-md border border-[#E7E8EC] p-6 bg-white">
+      <Card className="shadow-md border border-[#E7E8EC] p-6 bg-white h-[300px]">
         <CardHeader className="p-0 pb-4">
           <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="h-[300px] animate-pulse bg-gray-100 rounded-lg flex items-center justify-center">
+        <CardContent className="p-0 h-full">
+          <div className="h-[220px] animate-pulse bg-gray-100 rounded-lg flex items-center justify-center">
             <p className="text-gray-400">Loading data...</p>
           </div>
         </CardContent>
@@ -56,12 +56,12 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   };
 
   return (
-    <Card className="shadow-md border border-[#E7E8EC] p-6 bg-white">
+    <Card className="shadow-md border border-[#E7E8EC] p-6 bg-white h-[300px]">
       <CardHeader className="p-0 pb-4">
         <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="h-[300px]">
+        <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
