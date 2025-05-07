@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,10 +31,89 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
+// Mock listing data similar to what we have in ListingList
+const mockListings = [
+  {
+    id: 1,
+    address: "Belgrade, Dunavska 12",
+    city: "Belgrade",
+    country: "Serbia",
+    type: "Commercial",
+    category: "Retail",
+    tenant: {
+      name: "Alexander Whitmore",
+      phone: "000-000-0000",
+      email: "alex@example.com",
+      type: "individual"
+    }
+  },
+  {
+    id: 2,
+    address: "New York, 5th Avenue",
+    city: "New York",
+    country: "USA",
+    type: "Residential",
+    category: "Apartment",
+    tenant: {
+      name: "Sarah Johnson",
+      phone: "111-222-3333",
+      email: "sarah@example.com",
+      type: "individual"
+    }
+  },
+  {
+    id: 3,
+    address: "London, Baker Street 221B",
+    city: "London",
+    country: "UK",
+    type: "Commercial",
+    category: "Office",
+    tenant: {
+      name: "Watson Enterprises",
+      phone: "444-555-6666",
+      email: "watson@example.com",
+      type: "company",
+      contactPerson: "John Watson"
+    }
+  },
+  {
+    id: 4,
+    address: "Paris, Champs-Élysées",
+    city: "Paris",
+    country: "France",
+    type: "Commercial",
+    category: "Retail",
+    tenant: {
+      name: "Dubois Retail Group",
+      phone: "777-888-9999",
+      email: "contact@duboisretail.com",
+      type: "company",
+      contactPerson: "Marie Dubois"
+    }
+  },
+  {
+    id: 5,
+    address: "Tokyo, Shibuya Crossing",
+    city: "Tokyo",
+    country: "Japan",
+    type: "Commercial",
+    category: "Restaurant",
+    tenant: null
+  }
+];
+
 export function TransactionForm() {
   const [activeTab, setActiveTab] = useState("details");
   const [createRule, setCreateRule] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [selectedListing, setSelectedListing] = useState<string>("");
+  const [payerType, setPayerType] = useState<'individual' | 'company'>('individual');
+  const [payerDetails, setPayerDetails] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+  });
   const { toast } = useToast();
   
   const form = useForm({
@@ -51,6 +129,31 @@ export function TransactionForm() {
       payment: ""
     }
   });
+
+  // Update payer details when listing is selected
+  useEffect(() => {
+    if (selectedListing) {
+      const listing = mockListings.find(l => l.id.toString() === selectedListing);
+      if (listing && listing.tenant) {
+        setPayerType(listing.tenant.type as 'individual' | 'company');
+        setPayerDetails({
+          name: listing.tenant.name || "",
+          email: listing.tenant.email || "",
+          phone: listing.tenant.phone || "",
+          company: listing.tenant.type === "company" ? listing.tenant.name : listing.tenant.name === listing.tenant.contactPerson ? "" : (listing.tenant.contactPerson || ""),
+        });
+      } else {
+        // Clear payer details if no tenant is associated
+        setPayerType('individual');
+        setPayerDetails({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+        });
+      }
+    }
+  }, [selectedListing]);
 
   const handleConfirm = () => {
     toast({
@@ -105,16 +208,16 @@ export function TransactionForm() {
                   <FileText className="h-4 w-4 text-gray-500" />
                   <h3>Listing</h3>
                 </div>
-                <Select>
+                <Select value={selectedListing} onValueChange={setSelectedListing}>
                   <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
                     <SelectValue placeholder="Select a listing" />
                   </SelectTrigger>
                   <SelectContent className="max-h-72">
-                    <SelectItem value="listing1">Apartment Rental</SelectItem>
-                    <SelectItem value="listing2">Office Space</SelectItem>
-                    <SelectItem value="listing3">Commercial Property</SelectItem>
-                    <SelectItem value="listing4">Retail Space</SelectItem>
-                    <SelectItem value="listing5">Industrial Unit</SelectItem>
+                    {mockListings.map((listing) => (
+                      <SelectItem key={listing.id} value={listing.id.toString()}>
+                        {listing.address} ({listing.type})
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -245,8 +348,17 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="flex items-center px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-medium">
-                  <User className="h-3.5 w-3.5 mr-1.5" />
-                  <span className="text-xs">Individual</span>
+                  {payerType === 'individual' ? (
+                    <>
+                      <User className="h-3.5 w-3.5 mr-1.5" />
+                      <span className="text-xs">Individual</span>
+                    </>
+                  ) : (
+                    <>
+                      <Building className="h-3.5 w-3.5 mr-1.5" />
+                      <span className="text-xs">Company</span>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -256,8 +368,10 @@ export function TransactionForm() {
                   <h3>Name</h3>
                 </div>
                 <Input 
-                  placeholder="Enter full name" 
-                  className="border-gray-200 bg-white hover:border-gray-300 transition-colors" 
+                  value={payerDetails.name}
+                  readOnly
+                  placeholder="Name will be populated from listing" 
+                  className="border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed" 
                 />
               </div>
               
@@ -268,8 +382,10 @@ export function TransactionForm() {
                 </div>
                 <Input 
                   type="email" 
-                  placeholder="Enter email address" 
-                  className="border-gray-200 bg-white hover:border-gray-300 transition-colors" 
+                  value={payerDetails.email}
+                  readOnly
+                  placeholder="Email will be populated from listing" 
+                  className="border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed" 
                 />
               </div>
               
@@ -280,21 +396,33 @@ export function TransactionForm() {
                 </div>
                 <Input 
                   type="tel" 
-                  placeholder="Enter phone number" 
-                  className="border-gray-200 bg-white hover:border-gray-300 transition-colors" 
+                  value={payerDetails.phone}
+                  readOnly
+                  placeholder="Phone will be populated from listing" 
+                  className="border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed" 
                 />
               </div>
 
-              <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
-                  <Building className="h-4 w-4 text-gray-500" />
-                  <h3>Company</h3>
+              {payerType === 'company' && (
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
+                    <Building className="h-4 w-4 text-gray-500" />
+                    <h3>Contact Person</h3>
+                  </div>
+                  <Input 
+                    value={payerDetails.company}
+                    readOnly
+                    placeholder="Contact person will be populated from listing" 
+                    className="border-gray-200 bg-gray-50 text-gray-600 cursor-not-allowed" 
+                  />
                 </div>
-                <Input 
-                  placeholder="Enter company name (optional)" 
-                  className="border-gray-200 bg-white hover:border-gray-300 transition-colors" 
-                />
-              </div>
+              )}
+
+              {!selectedListing && (
+                <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4 text-sm text-yellow-800">
+                  Please select a listing to auto-populate payer details. These fields cannot be edited directly.
+                </div>
+              )}
             </div>
           </Card>
           
