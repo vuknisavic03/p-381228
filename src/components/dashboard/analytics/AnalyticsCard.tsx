@@ -2,11 +2,7 @@
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useClientComponent } from "@/hooks/use-client-component";
-import React from "react";
-import dynamic from "next/dynamic";
-
-// Import ApexCharts dynamically to avoid SSR issues
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import React, { useEffect, useState } from "react";
 
 interface AnalyticsCardProps {
   title: string;
@@ -19,6 +15,22 @@ export function AnalyticsCard({
   icon: Icon,
   color
 }: AnalyticsCardProps) {
+  const [ApexCharts, setApexCharts] = useState<any>(null);
+
+  useEffect(() => {
+    // Dynamically import ApexCharts only on the client side
+    const importApexCharts = async () => {
+      try {
+        const module = await import('react-apexcharts');
+        setApexCharts(() => module.default);
+      } catch (error) {
+        console.error("Error loading ApexCharts:", error);
+      }
+    };
+    
+    importApexCharts();
+  }, []);
+
   // Configure chart options based on card type
   const getChartOptions = () => {
     const baseOptions = {
@@ -196,12 +208,14 @@ export function AnalyticsCard({
       </CardHeader>
       
       <div className="mt-4 flex-grow">
-        {React.createElement(ReactApexChart, {
-          options: getChartOptions(),
-          series: getChartOptions().series,
-          type: getChartType(),
-          height: getChartHeight()
-        })}
+        {ApexCharts && (
+          <ApexCharts
+            options={getChartOptions()}
+            series={getChartOptions().series}
+            type={getChartType()}
+            height={getChartHeight()}
+          />
+        )}
       </div>
     </Card>
   );
