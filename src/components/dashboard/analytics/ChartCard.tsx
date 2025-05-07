@@ -68,8 +68,8 @@ export function ChartCard({
 
   if (isLoading) {
     return (
-      <Card className="p-4 shadow-md border border-[#E7E8EC] h-[320px] transition-all hover:shadow-lg bg-white">
-        <CardHeader className="p-0 pb-2">
+      <Card className="p-4 shadow-md border border-[#E7E8EC] h-[380px] transition-all hover:shadow-lg bg-white">
+        <CardHeader className="p-0 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium">{title}</CardTitle>
             <div className={`${color} text-white p-2 rounded-md`}>
@@ -84,8 +84,8 @@ export function ChartCard({
           </div>
         </div>
         
-        <div className="mt-4 flex-grow">
-          <div className="h-[220px] bg-gray-100 animate-pulse rounded-lg"></div>
+        <div className="mt-6 flex-grow">
+          <div className="h-[260px] bg-gray-100 animate-pulse rounded-lg"></div>
         </div>
       </Card>
     );
@@ -95,15 +95,15 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center">
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart margin={{ top: 10, right: 20, bottom: 10, left: 20 }}>
               <Pie
                 data={chartData as DonutDataPoint[]}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={80}
-                innerRadius={60}
+                outerRadius={100}
+                innerRadius={70}
                 fill={colorValue}
                 dataKey="value"
                 startAngle={90}
@@ -119,7 +119,7 @@ export function ChartCard({
               <Tooltip content={<CustomTooltip />} />
             </PieChart>
           </ResponsiveContainer>
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-4 mt-3">
             {(chartData as DonutDataPoint[]).map((entry, index) => (
               <div key={index} className="flex items-center gap-1.5">
                 <div 
@@ -135,14 +135,14 @@ export function ChartCard({
     }
 
     return (
-      <ResponsiveContainer width="100%" height={220}>
+      <ResponsiveContainer width="100%" height={260}>
         <AreaChart
           data={chartData as ChartDataPoint[]}
           margin={{
-            top: 5,
-            right: 0,
-            left: 0,
-            bottom: 0,
+            top: 10,
+            right: 20,
+            bottom: 10,
+            left: 20,
           }}
         >
           <defs>
@@ -155,14 +155,14 @@ export function ChartCard({
             dataKey="month" 
             axisLine={false}
             tickLine={false}
-            tick={{ fill: '#6E6E76', fontSize: 9 }}
+            tick={{ fill: '#6E6E76', fontSize: 10 }}
             dy={5}
           />
           <YAxis 
             axisLine={false}
             tickLine={false}
-            tick={{ fill: '#6E6E76', fontSize: 9 }}
-            width={25}
+            tick={{ fill: '#6E6E76', fontSize: 10 }}
+            width={30}
           />
           <Tooltip content={<CustomTooltip />} />
           <Area
@@ -172,7 +172,7 @@ export function ChartCard({
             fillOpacity={1}
             fill={`url(#color${title.replace(/\s+/g, '')})`}
             strokeWidth={2}
-            activeDot={{ r: 4, stroke: colorValue, strokeWidth: 2, fill: '#fff' }}
+            activeDot={{ r: 5, stroke: colorValue, strokeWidth: 2, fill: '#fff' }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -180,12 +180,12 @@ export function ChartCard({
   };
 
   return (
-    <Card className="p-4 shadow-md border border-[#E7E8EC] h-[320px] transition-all hover:shadow-lg bg-white flex flex-col">
-      <CardHeader className="p-0 pb-2">
+    <Card className="p-5 shadow-md border border-[#E7E8EC] h-[380px] transition-all hover:shadow-lg bg-white flex flex-col">
+      <CardHeader className="p-0 pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium">{title}</CardTitle>
           <div className={`${color} text-white p-2 rounded-md`}>
-            <Icon size={16} />
+            <Icon size={18} />
           </div>
         </div>
       </CardHeader>
@@ -199,7 +199,7 @@ export function ChartCard({
         </div>
       </div>
       
-      <div className="mt-2 flex-grow">
+      <div className="mt-4 flex-grow">
         {renderChart()}
       </div>
     </Card>
