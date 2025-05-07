@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,9 @@ import {
   Check,
   ChevronRight,
   Building,
-  TrendingDown
+  TrendingDown,
+  Home,
+  MapPin
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -170,6 +173,14 @@ export function TransactionForm() {
     });
   };
 
+  // Helper function to get the selected listing object
+  const getSelectedListingDetails = () => {
+    if (!selectedListing) return null;
+    return mockListings.find(l => l.id.toString() === selectedListing);
+  };
+
+  const selectedListingDetails = getSelectedListingDetails();
+
   return (
     <div className="p-6 h-full overflow-auto">
       {/* Header Section */}
@@ -231,18 +242,83 @@ export function TransactionForm() {
                   <FileText className="h-4 w-4 text-gray-500" />
                   <h3>Listing</h3>
                 </div>
-                <Select value={selectedListing} onValueChange={setSelectedListing}>
-                  <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
-                    <SelectValue placeholder="Select a listing" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-72">
-                    {mockListings.map((listing) => (
-                      <SelectItem key={listing.id} value={listing.id.toString()}>
-                        {listing.address} ({listing.type})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                
+                <div className="space-y-2">
+                  <Select value={selectedListing} onValueChange={setSelectedListing}>
+                    <SelectTrigger 
+                      className={cn(
+                        "w-full border-gray-200 bg-white hover:border-gray-300 transition-colors",
+                        selectedListing && "border-blue-300 ring-1 ring-blue-100"
+                      )}
+                    >
+                      <SelectValue placeholder="Select a listing" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-72">
+                      {mockListings.map((listing) => (
+                        <SelectItem key={listing.id} value={listing.id.toString()} className="py-2.5">
+                          <div className="flex flex-col">
+                            <span className="font-medium">{listing.address}</span>
+                            <span className="text-xs text-gray-500 mt-0.5">
+                              {listing.type} | {listing.category}
+                            </span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  {selectedListingDetails && (
+                    <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-md animate-fade-in">
+                      <div className="flex items-start gap-3">
+                        <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
+                          selectedListingDetails.type === 'Commercial' 
+                            ? 'bg-indigo-100 text-indigo-700' 
+                            : 'bg-amber-100 text-amber-700'
+                        }`}>
+                          {selectedListingDetails.type === 'Commercial' ? (
+                            <Building className="h-4 w-4" />
+                          ) : (
+                            <Home className="h-4 w-4" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-medium text-gray-800 mb-0.5">
+                            {selectedListingDetails.address}
+                          </h4>
+                          <div className="flex items-center text-xs text-gray-500 gap-1">
+                            <MapPin className="h-3 w-3" />
+                            <span>{selectedListingDetails.city}, {selectedListingDetails.country}</span>
+                          </div>
+                          <div className="flex gap-2 mt-2">
+                            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
+                              {selectedListingDetails.type}
+                            </span>
+                            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
+                              {selectedListingDetails.category}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      {selectedListingDetails.tenant ? (
+                        <div className="mt-2 pt-2 border-t border-blue-100">
+                          <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                            <User className="h-3 w-3" />
+                            <span>
+                              Tenant: <span className="font-medium">{selectedListingDetails.tenant.name}</span>
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mt-2 pt-2 border-t border-blue-100">
+                          <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                            <User className="h-3 w-3" />
+                            <span>No tenant associated with this listing</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
               
               <div>
@@ -454,7 +530,15 @@ export function TransactionForm() {
 
               {!selectedListing && (
                 <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4 text-sm text-yellow-800">
-                  Please select a listing to auto-populate payer details. These fields cannot be edited directly.
+                  <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full bg-yellow-100 flex items-center justify-center">
+                      <FileText className="h-3.5 w-3.5 text-yellow-600" />
+                    </div>
+                    <span className="font-medium">Select a listing from the first tab</span>
+                  </div>
+                  <p className="mt-2 text-xs text-yellow-700 pl-8">
+                    Payer details will be auto-populated from your selected listing's tenant information.
+                  </p>
                 </div>
               )}
             </div>
