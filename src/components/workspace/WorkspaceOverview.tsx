@@ -13,16 +13,6 @@ export function WorkspaceOverview() {
           <p className="text-slate-500">
             Track your key performance metrics with real-time updates
           </p>
-          <div className="flex gap-4 mt-4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#9b87f5]"></div>
-              <span className="text-sm text-slate-600">Revenue</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#F97316]"></div>
-              <span className="text-sm text-slate-600">Profit</span>
-            </div>
-          </div>
         </div>
       </div>
       <div className="flex-1 py-2 pb-16 overflow-auto">
