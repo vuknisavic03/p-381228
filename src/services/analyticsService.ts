@@ -19,12 +19,10 @@ export interface TimelineDataPoint {
 }
 
 // Mock function that would be replaced with actual database calls
-const fetchAnalyticsData = async (fromDate?: Date, toDate?: Date) => {
+const fetchAnalyticsData = async () => {
   // This would be replaced with an actual API call to your database
-  // For example: const response = await fetch(`/api/analytics?from=${fromDate}&to=${toDate}`);
+  // For example: const response = await fetch('/api/analytics');
   // return await response.json();
-  
-  console.log("Fetching analytics data with date range:", fromDate, toDate);
   
   // For now, returning mock data that matches the shape of the expected data
   return {
@@ -83,10 +81,10 @@ const fetchAnalyticsData = async (fromDate?: Date, toDate?: Date) => {
 };
 
 // Hook for fetching analytics data using React Query
-export const useAnalyticsData = (fromDate?: Date, toDate?: Date) => {
+export const useAnalyticsData = () => {
   return useQuery({
-    queryKey: ['analytics', fromDate, toDate],
-    queryFn: () => fetchAnalyticsData(fromDate, toDate),
+    queryKey: ['analytics'],
+    queryFn: fetchAnalyticsData,
     refetchOnWindowFocus: false,
     // Will be used when we connect to a real database
     staleTime: 1000 * 60 * 5, // 5 minutes

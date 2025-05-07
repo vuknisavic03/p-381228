@@ -24,7 +24,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
     return (
       <Card className="shadow-md border border-[#E7E8EC] p-4 bg-white h-[300px]">
         <CardHeader className="p-0 pb-2">
-          <CardTitle className="text-lg font-medium">Analytics</CardTitle>
+          <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
         </CardHeader>
         <CardContent className="p-0 h-full">
           <div className="h-[230px] animate-pulse bg-gray-100 rounded-lg flex items-center justify-center">
@@ -58,7 +58,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   return (
     <Card className="shadow-md border border-[#E7E8EC] p-4 bg-white h-[300px]">
       <CardHeader className="p-0 pb-2">
-        <CardTitle className="text-lg font-medium">Analytics</CardTitle>
+        <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <div className="h-[230px]">
