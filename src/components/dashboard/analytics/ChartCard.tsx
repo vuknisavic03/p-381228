@@ -10,7 +10,9 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
-  TooltipProps
+  TooltipProps,
+  XAxis,
+  YAxis
 } from "recharts";
 import { ChartDataPoint, DonutDataPoint } from "@/services/analyticsService";
 
@@ -130,14 +132,14 @@ export function ChartCard({
       );
     }
 
-    // Default to area chart
+    // Enhanced area chart with axes for better visualization
     return (
       <ResponsiveContainer width="100%" height={180}>
         <AreaChart
           data={chartData as ChartDataPoint[]}
           margin={{
-            top: 0,
-            right: 0,
+            top: 5,
+            right: 10,
             left: 0,
             bottom: 0,
           }}
@@ -148,6 +150,19 @@ export function ChartCard({
               <stop offset="95%" stopColor={colorValue} stopOpacity={0.1} />
             </linearGradient>
           </defs>
+          <XAxis 
+            dataKey="month" 
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: '#6E6E76', fontSize: 10 }}
+            dy={5}
+          />
+          <YAxis 
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: '#6E6E76', fontSize: 10 }}
+            width={30}
+          />
           <Tooltip content={<CustomTooltip />} />
           <Area
             type={chartType === "spline" ? "monotone" : "linear"}
@@ -156,6 +171,7 @@ export function ChartCard({
             fillOpacity={1}
             fill={`url(#color${title.replace(/\s+/g, '')})`}
             strokeWidth={2}
+            activeDot={{ r: 6, stroke: colorValue, strokeWidth: 2, fill: '#fff' }}
           />
         </AreaChart>
       </ResponsiveContainer>
