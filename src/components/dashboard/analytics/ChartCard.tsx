@@ -10,8 +10,9 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
-  Legend
+  TooltipProps
 } from "recharts";
+import { ChartDataPoint, DonutDataPoint } from "@/services/analyticsService";
 
 interface ChartCardProps {
   title: string;
@@ -22,8 +23,9 @@ interface ChartCardProps {
     value: number;
     positive: boolean;
   };
-  chartData: any[];
-  chartType: "area" | "donut";
+  chartData: ChartDataPoint[] | DonutDataPoint[];
+  chartType: "area" | "donut" | "spline";
+  isLoading?: boolean;
 }
 
 export function ChartCard({
@@ -33,9 +35,57 @@ export function ChartCard({
   value,
   change,
   chartData,
-  chartType
+  chartType,
+  isLoading = false
 }: ChartCardProps) {
   const colorValue = color.replace("bg-[", "").replace("]", "");
+
+  // Custom tooltip component for better visualization
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      if (chartType === "donut") {
+        return (
+          <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-md">
+            <p className="font-medium text-gray-700">{payload[0].name}</p>
+            <p className="font-semibold text-gray-800">{`${payload[0].value}%`}</p>
+          </div>
+        );
+      }
+      
+      return (
+        <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-md">
+          <p className="font-medium text-gray-700">{label || 'Month'}</p>
+          <p className="font-semibold text-gray-800" style={{ color: colorValue }}>
+            {title === "Income" ? `${payload[0].value}%` : `${payload[0].value}`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  if (isLoading) {
+    return (
+      <Card className="p-6 shadow-md border border-[#E7E8EC] min-h-[250px] transition-all hover:shadow-lg bg-white">
+        <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
+          <CardTitle className="text-lg font-medium">{title}</CardTitle>
+          <div className={`${color} text-white p-2 rounded-md`}>
+            <Icon size={18} />
+          </div>
+        </CardHeader>
+        
+        <div className="mt-2">
+          <div className="flex items-baseline space-x-2">
+            <div className="h-8 w-20 bg-gray-200 animate-pulse rounded-md"></div>
+          </div>
+        </div>
+        
+        <div className="mt-4 flex-grow">
+          <div className="h-[180px] bg-gray-100 animate-pulse rounded-lg"></div>
+        </div>
+      </Card>
+    );
+  }
 
   const renderChart = () => {
     if (chartType === "donut") {
@@ -43,7 +93,7 @@ export function ChartCard({
         <ResponsiveContainer width="100%" height={180}>
           <PieChart>
             <Pie
-              data={chartData}
+              data={chartData as DonutDataPoint[]}
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -59,16 +109,7 @@ export function ChartCard({
                 />
               ))}
             </Pie>
-            <Tooltip 
-              formatter={(value, name) => [`${value}%`, name]}
-              contentStyle={{
-                backgroundColor: "#fff",
-                border: "1px solid #E7E8EC",
-                borderRadius: "4px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-              }}
-            />
-            <Legend />
+            <Tooltip content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
       );
@@ -78,7 +119,7 @@ export function ChartCard({
     return (
       <ResponsiveContainer width="100%" height={180}>
         <AreaChart
-          data={chartData}
+          data={chartData as ChartDataPoint[]}
           margin={{
             top: 0,
             right: 0,
@@ -92,17 +133,9 @@ export function ChartCard({
               <stop offset="95%" stopColor={colorValue} stopOpacity={0.1} />
             </linearGradient>
           </defs>
-          <Tooltip
-            formatter={(value) => [`${value}`, undefined]}
-            contentStyle={{
-              backgroundColor: "#fff",
-              border: "1px solid #E7E8EC",
-              borderRadius: "4px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-            }}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Area
-            type="monotone"
+            type={chartType === "spline" ? "monotone" : "linear"}
             dataKey="value"
             stroke={colorValue}
             fillOpacity={1}

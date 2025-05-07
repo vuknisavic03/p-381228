@@ -22,10 +22,6 @@ export function WorkspaceOverview() {
               <div className="w-3 h-3 rounded-full bg-[#F97316]"></div>
               <span className="text-sm text-slate-600">Profit</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#0EA5E9]"></div>
-              <span className="text-sm text-slate-600">Income Ratio</span>
-            </div>
           </div>
         </div>
       </div>

@@ -8,22 +8,53 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend
+  Legend,
+  TooltipProps
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { TimelineDataPoint } from "@/services/analyticsService";
 
-// Sample data for the timeline
-const timelineData = [
-  { month: "Jan", revenue: 31000, profit: 11000 },
-  { month: "Feb", revenue: 40000, profit: 32000 },
-  { month: "Mar", revenue: 28000, profit: 45000 },
-  { month: "Apr", revenue: 51000, profit: 32000 },
-  { month: "May", revenue: 42000, profit: 34000 },
-  { month: "Jun", revenue: 109000, profit: 52000 },
-  { month: "Jul", revenue: 100000, profit: 41000 },
-];
+interface TimelineProps {
+  data: TimelineDataPoint[];
+  isLoading?: boolean;
+}
 
-export function Timeline() {
+export function Timeline({ data, isLoading = false }: TimelineProps) {
+  if (isLoading) {
+    return (
+      <Card className="shadow-md border border-[#E7E8EC] p-6 bg-white">
+        <CardHeader className="p-0 pb-4">
+          <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="h-[300px] animate-pulse bg-gray-100 rounded-lg flex items-center justify-center">
+            <p className="text-gray-400">Loading data...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Custom tooltip formatter
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-4 border border-gray-200 shadow-lg rounded-md">
+          <p className="font-semibold text-gray-700">{label}</p>
+          <div className="mt-2">
+            {payload.map((entry, index) => (
+              <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-2">
+                <span className="font-semibold">{entry.name}: </span>
+                <span>${Number(entry.value).toLocaleString()}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Card className="shadow-md border border-[#E7E8EC] p-6 bg-white">
       <CardHeader className="p-0 pb-4">
@@ -33,11 +64,11 @@ export function Timeline() {
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={timelineData}
+              data={data}
               margin={{
                 top: 10,
                 right: 30,
-                left: 0,
+                left: 10,
                 bottom: 0,
               }}
             >
@@ -56,6 +87,7 @@ export function Timeline() {
                 dataKey="month" 
                 tick={{ fill: '#6E6E76', fontSize: 12 }} 
                 tickLine={false} 
+                axisLine={{ strokeWidth: 1, stroke: '#E7E8EC' }}
               />
               <YAxis 
                 tick={{ fill: '#6E6E76', fontSize: 12 }}
@@ -63,17 +95,13 @@ export function Timeline() {
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
               />
-              <Tooltip 
-                formatter={(value) => [`$${value.toLocaleString()}`, undefined]}
-                labelFormatter={(label) => `Month: ${label}`}
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #E7E8EC",
-                  borderRadius: "4px",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-                }}
+              <Tooltip content={<CustomTooltip />} />
+              <Legend 
+                verticalAlign="top"
+                height={36}
+                iconType="circle"
+                iconSize={10}
               />
-              <Legend />
               <Area
                 type="monotone"
                 dataKey="revenue"
