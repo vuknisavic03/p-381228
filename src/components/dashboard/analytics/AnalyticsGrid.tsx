@@ -8,8 +8,8 @@ export function AnalyticsGrid() {
   const { data, isLoading } = useAnalyticsData();
   
   return (
-    <div className="flex flex-col gap-8 max-w-[1400px] mx-auto p-4 lg:p-8">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-8">
+    <div className="flex flex-col gap-6 mx-auto px-4 lg:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
         <div className="md:col-span-6">
           <ChartCard
             title="Revenue"
