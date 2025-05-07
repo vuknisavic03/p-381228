@@ -90,28 +90,43 @@ export function ChartCard({
   const renderChart = () => {
     if (chartType === "donut") {
       return (
-        <ResponsiveContainer width="100%" height={180}>
-          <PieChart>
-            <Pie
-              data={chartData as DonutDataPoint[]}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              outerRadius={60}
-              innerRadius={40}
-              fill={colorValue}
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={index === 0 ? colorValue : "#F3F4F6"} 
+        <div className="flex flex-col items-center">
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie
+                data={chartData as DonutDataPoint[]}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius={80}
+                innerRadius={60}
+                fill={colorValue}
+                dataKey="value"
+                startAngle={90}
+                endAngle={-270}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={index === 0 ? colorValue : "#F3F4F6"} 
+                  />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="flex justify-center gap-6 mt-2">
+            {(chartData as DonutDataPoint[]).map((entry, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: index === 0 ? colorValue : "#F3F4F6" }} 
                 />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-          </PieChart>
-        </ResponsiveContainer>
+                <span className="text-sm text-gray-700">{entry.name}: {entry.value}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
       );
     }
 
