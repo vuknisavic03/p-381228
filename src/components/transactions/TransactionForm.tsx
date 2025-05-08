@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { 
@@ -123,6 +124,7 @@ export function TransactionForm() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const { toast } = useToast();
   const [isListingsOpen, setIsListingsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   
   const form = useForm({
     defaultValues: {
@@ -200,18 +202,12 @@ export function TransactionForm() {
     }
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'Commercial':
-        return 'from-violet-500 to-indigo-600';
-      case 'Residential':
-        return 'from-amber-400 to-amber-600';
-      case 'Industrial':
-        return 'from-cyan-500 to-blue-600';
-      default:
-        return 'from-gray-400 to-gray-600';
-    }
-  };
+  // Filter listings based on search term
+  const filteredListings = mockListings.filter(listing => 
+    listing.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    listing.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    listing.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="p-6 h-full overflow-auto">
@@ -223,8 +219,8 @@ export function TransactionForm() {
             onClick={toggleTransactionType}
             className={`flex items-center px-3 py-1.5 rounded-full font-medium transition-colors duration-200 ${
               transactionType === 'revenue' 
-                ? 'bg-emerald-50 text-emerald-700' 
-                : 'bg-red-50 text-red-700'
+                ? 'bg-gray-100 text-gray-700' 
+                : 'bg-gray-100 text-gray-700'
             }`}
           >
             {transactionType === 'revenue' ? (
@@ -276,172 +272,137 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
-                  {/* Entirely new listing selector */}
-                  <div className="relative">
-                    <div 
-                      onClick={() => setIsListingsOpen(!isListingsOpen)}
-                      className={cn(
-                        "flex items-center justify-between p-4 border rounded-lg transition-all duration-200 cursor-pointer",
-                        selectedListing 
-                          ? "bg-gradient-to-r from-gray-50 to-white shadow-sm border-gray-200" 
-                          : "bg-white border-dashed border-2 border-gray-300 hover:border-gray-400"
-                      )}
-                    >
-                      {selectedListing ? (
-                        <div className="flex items-center gap-3 w-full">
-                          <div className={cn(
-                            "w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br shadow-sm",
-                            getTypeColor(selectedListingDetails?.type || 'Commercial')
-                          )}>
-                            {getListingCategoryIcon(selectedListingDetails?.category || 'default')}
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-medium text-gray-900">{selectedListingDetails?.address}</h4>
-                            <div className="flex items-center text-xs text-gray-500 mt-0.5">
-                              <span className="flex items-center gap-1">
-                                <MapPin className="h-3 w-3" />
-                                {selectedListingDetails?.city}, {selectedListingDetails?.country}
-                              </span>
-                              <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
-                              <span className="text-xs">{selectedListingDetails?.category}</span>
+                  {/* Cleaner listing selector with Popover */}
+                  <Popover open={isListingsOpen} onOpenChange={setIsListingsOpen}>
+                    <PopoverTrigger asChild>
+                      <div 
+                        className={cn(
+                          "flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all duration-200",
+                          selectedListing 
+                            ? "bg-white shadow-sm border-gray-200" 
+                            : "bg-white border-dashed border-gray-200 hover:border-gray-300"
+                        )}
+                      >
+                        {selectedListing ? (
+                          <div className="flex items-center gap-3 w-full">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-700">
+                              {getListingCategoryIcon(selectedListingDetails?.category || 'default')}
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-medium text-gray-900">{selectedListingDetails?.address}</h4>
+                              <div className="flex items-center text-xs text-gray-500 mt-0.5">
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {selectedListingDetails?.city}, {selectedListingDetails?.country}
+                                </span>
+                                <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span className="text-xs">{selectedListingDetails?.category}</span>
+                              </div>
+                            </div>
+                            <div className="h-6 w-6 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center">
+                              <ChevronRight className="h-4 w-4" />
                             </div>
                           </div>
-                          <div className="h-6 w-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                            {isListingsOpen ? (
-                              <ChevronRight className="h-4 w-4 rotate-90" />
-                            ) : (
-                              <ChevronRight className="h-4 w-4 -rotate-90" />
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                              <FileText className="h-5 w-5 text-gray-400" />
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                                <FileText className="h-5 w-5 text-gray-400" />
+                              </div>
+                              <div>
+                                <span className="text-gray-800 font-medium">Select a listing</span>
+                                <p className="text-xs text-gray-500">Choose a property to associate with this transaction</p>
+                              </div>
                             </div>
-                            <div>
-                              <span className="text-gray-800 font-medium">Select a listing</span>
-                              <p className="text-xs text-gray-500">Choose a property to associate with this transaction</p>
-                            </div>
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-gray-400" />
-                        </>
-                      )}
-                    </div>
+                            <ChevronRight className="h-4 w-4 text-gray-400" />
+                          </>
+                        )}
+                      </div>
+                    </PopoverTrigger>
                     
-                    {/* Dropdown panel for listing selection */}
-                    {isListingsOpen && (
-                      <div className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg animate-fade-in overflow-hidden">
-                        <div className="sticky top-0 bg-white p-3 border-b border-gray-100">
+                    <PopoverContent className="p-0 w-full max-w-[500px] shadow-md border-gray-200">
+                      <Command className="rounded-lg overflow-hidden">
+                        <div className="p-3 border-b border-gray-100">
                           <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                            <Input 
+                            <CommandInput 
                               placeholder="Search listings..." 
-                              className="pl-9 h-10 text-sm bg-gray-50 border-gray-200 focus:bg-white" 
+                              className="pl-9 h-10 text-sm bg-white border border-gray-200 focus:border-gray-300"
+                              value={searchTerm}
+                              onValueChange={setSearchTerm}
                             />
                           </div>
                         </div>
                         
-                        <div className="max-h-80 overflow-y-auto p-2">
-                          {/* Group by type */}
-                          {["Commercial", "Residential"].map((type) => (
-                            <div key={type} className="mb-3">
-                              <div className="flex items-center gap-2 px-3 py-2">
-                                <div className={cn(
-                                  "w-6 h-6 rounded flex items-center justify-center text-white text-xs",
-                                  type === "Commercial" ? "bg-indigo-500" : "bg-amber-500"
-                                )}>
-                                  {type === "Commercial" ? <Building className="h-3 w-3" /> : <Home className="h-3 w-3" />}
-                                </div>
-                                <span className="text-sm font-medium text-gray-700">{type} Properties</span>
-                              </div>
-                              
-                              <div className="space-y-1">
-                                {mockListings
-                                  .filter(listing => listing.type === type)
-                                  .map(listing => (
-                                    <div
-                                      key={listing.id}
-                                      onClick={() => {
-                                        setSelectedListing(listing.id.toString());
-                                        setIsListingsOpen(false);
-                                      }}
-                                      className={cn(
-                                        "flex items-center p-3 rounded-lg cursor-pointer transition-all",
-                                        selectedListing === listing.id.toString()
-                                          ? "bg-indigo-50"
-                                          : "hover:bg-gray-50"
-                                      )}
-                                    >
-                                      <div className="flex items-center gap-3 w-full">
-                                        <div className={cn(
-                                          "w-10 h-10 rounded flex items-center justify-center text-white",
-                                          listing.type === "Commercial" 
-                                            ? selectedListing === listing.id.toString() ? "bg-indigo-600" : "bg-indigo-100 text-indigo-600"
-                                            : selectedListing === listing.id.toString() ? "bg-amber-600" : "bg-amber-100 text-amber-600"
-                                        )}>
-                                          {selectedListing === listing.id.toString() ? (
-                                            <Check className="h-5 w-5" />
-                                          ) : (
-                                            getListingCategoryIcon(listing.category)
-                                          )}
-                                        </div>
-                                        
-                                        <div className="flex-1">
-                                          <h4 className={cn(
-                                            "font-medium",
-                                            selectedListing === listing.id.toString() 
-                                              ? listing.type === "Commercial" ? "text-indigo-700" : "text-amber-700"  
-                                              : "text-gray-700"
-                                          )}>
-                                            {listing.address}
-                                          </h4>
-                                          <div className="flex items-center text-xs text-gray-500 mt-0.5">
-                                            <span>{listing.category}</span>
-                                            <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
-                                            <span>{listing.city}, {listing.country}</span>
-                                          </div>
-                                        </div>
-                                        
-                                        {selectedListing === listing.id.toString() && (
-                                          <div className="h-6 w-6 rounded-full flex items-center justify-center bg-indigo-100 text-indigo-600">
-                                            <Check className="h-3.5 w-3.5" />
-                                          </div>
+                        <CommandList className="max-h-[300px] overflow-y-auto py-2">
+                          <CommandEmpty className="py-6 text-center text-sm">
+                            No listings found.
+                          </CommandEmpty>
+                          
+                          {["Commercial", "Residential"].map((type) => {
+                            const typeListings = filteredListings.filter(listing => listing.type === type);
+                            if (typeListings.length === 0) return null;
+                            
+                            return (
+                              <CommandGroup key={type} heading={`${type} Properties`} className="px-2">
+                                {typeListings.map(listing => (
+                                  <CommandItem
+                                    key={listing.id}
+                                    onSelect={() => {
+                                      setSelectedListing(listing.id.toString());
+                                      setIsListingsOpen(false);
+                                    }}
+                                    className={cn(
+                                      "flex items-center p-2 rounded-md my-1 cursor-pointer",
+                                      selectedListing === listing.id.toString()
+                                        ? "bg-gray-100"
+                                        : "hover:bg-gray-50"
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-3 w-full">
+                                      <div className="w-8 h-8 rounded-md flex items-center justify-center bg-gray-100 text-gray-600">
+                                        {selectedListing === listing.id.toString() ? (
+                                          <Check className="h-4 w-4" />
+                                        ) : (
+                                          getListingCategoryIcon(listing.category)
                                         )}
                                       </div>
+                                      
+                                      <div className="flex-1">
+                                        <h4 className="font-medium text-gray-900 text-sm">
+                                          {listing.address}
+                                        </h4>
+                                        <div className="flex items-center text-xs text-gray-500">
+                                          <span>{listing.category}</span>
+                                          <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
+                                          <span>{listing.city}</span>
+                                        </div>
+                                      </div>
                                     </div>
-                                  ))
-                                }
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            );
+                          })}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   
-                  {/* Enhanced Selected Listing Card */}
+                  {/* Selected Listing Card with cleaner design */}
                   {selectedListing && !isListingsOpen && (
                     <div className="mt-5">
-                      <Card className="bg-gradient-to-br from-gray-50 via-white to-gray-50 border-none shadow-sm rounded-xl overflow-hidden">
+                      <Card className="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
                         <CardContent className="p-0">
                           <div className="relative">
-                            {/* Top colored banner based on type */}
-                            <div className={cn(
-                              "h-3 w-full bg-gradient-to-r",
-                              getTypeColor(selectedListingDetails?.type || 'Commercial')
-                            )} />
+                            <div className="h-2 w-full bg-gray-100" />
                             
                             <div className="p-4">
                               {selectedListingDetails?.tenant ? (
                                 <div className="flex flex-col">
                                   <div className="flex items-start mb-4">
                                     <div className="mr-4">
-                                      <div className={cn(
-                                        "w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br shadow-sm",
-                                        selectedListingDetails.type === 'Commercial' ? 'from-violet-500 to-indigo-600' : 'from-amber-400 to-amber-600'
-                                      )}>
+                                      <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gray-100 text-gray-700">
                                         {selectedListingDetails.tenant.type === 'company' ? (
                                           <Building className="h-6 w-6" />
                                         ) : (
@@ -452,12 +413,7 @@ export function TransactionForm() {
                                     <div className="flex-1">
                                       <div className="flex items-center">
                                         <h4 className="text-lg font-semibold text-gray-900">{selectedListingDetails.tenant.name}</h4>
-                                        <span className={cn(
-                                          "ml-2 text-xs px-2 py-0.5 rounded-full",
-                                          selectedListingDetails.tenant.type === 'company' 
-                                            ? "bg-blue-100 text-blue-700" 
-                                            : "bg-emerald-100 text-emerald-700"
-                                        )}>
+                                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
                                           {selectedListingDetails.tenant.type === 'company' ? 'Company' : 'Individual'}
                                         </span>
                                       </div>
@@ -489,12 +445,7 @@ export function TransactionForm() {
                                     </div>
                                     
                                     <div className="flex flex-col items-end">
-                                      <div className={cn(
-                                        "text-xs px-2 py-1 rounded flex items-center",
-                                        selectedListingDetails.type === 'Commercial' 
-                                          ? "bg-indigo-100 text-indigo-700" 
-                                          : "bg-amber-100 text-amber-700"
-                                      )}>
+                                      <div className="text-xs px-2 py-1 rounded flex items-center bg-gray-100 text-gray-700">
                                         {getListingCategoryIcon(selectedListingDetails.category)}
                                         <span className="ml-1">{selectedListingDetails.category}</span>
                                       </div>
@@ -504,10 +455,7 @@ export function TransactionForm() {
                               ) : (
                                 <div className="flex flex-col">
                                   <div className="flex items-center gap-3 mb-4">
-                                    <div className={cn(
-                                      "w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br shadow-sm",
-                                      selectedListingDetails?.type === 'Commercial' ? 'from-violet-500 to-indigo-600' : 'from-amber-400 to-amber-600'
-                                    )}>
+                                    <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gray-100 text-gray-700">
                                       {getListingCategoryIcon(selectedListingDetails?.category || 'default')}
                                     </div>
                                     <div>
@@ -518,9 +466,9 @@ export function TransactionForm() {
                                     </div>
                                   </div>
                                   
-                                  <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
-                                    <div className="flex items-center gap-2 text-sm text-amber-800">
-                                      <User className="h-4 w-4 text-amber-600" />
+                                  <div className="p-3 bg-gray-50 border border-gray-100 rounded-lg">
+                                    <div className="flex items-center gap-2 text-sm text-gray-700">
+                                      <User className="h-4 w-4 text-gray-500" />
                                       <span>No tenant associated with this listing</span>
                                     </div>
                                   </div>
@@ -676,7 +624,7 @@ export function TransactionForm() {
                   <h3>Payer Details</h3>
                 </div>
                 
-                <div className="flex items-center px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-medium">
+                <div className="flex items-center px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 font-medium">
                   {payerType === 'individual' ? (
                     <>
                       <User className="h-3.5 w-3.5 mr-1.5" />
@@ -748,14 +696,14 @@ export function TransactionForm() {
               )}
 
               {!selectedListing && (
-                <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4 text-sm text-yellow-800">
+                <div className="bg-gray-50 border border-gray-100 rounded-lg p-4 text-sm text-gray-700">
                   <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-yellow-100 flex items-center justify-center">
-                      <FileText className="h-3.5 w-3.5 text-yellow-600" />
+                    <div className="h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center">
+                      <FileText className="h-3.5 w-3.5 text-gray-600" />
                     </div>
                     <span className="font-medium">Select a listing from the first tab</span>
                   </div>
-                  <p className="mt-2 text-xs text-yellow-700 pl-8">
+                  <p className="mt-2 text-xs text-gray-600 pl-8">
                     Payer details will be auto-populated from your selected listing's tenant information.
                   </p>
                 </div>
@@ -822,7 +770,6 @@ export function TransactionForm() {
                     id="create-rule" 
                     checked={createRule} 
                     onCheckedChange={setCreateRule}
-                    className="data-[state=checked]:bg-emerald-500"
                   />
                 </div>
               </div>
@@ -858,7 +805,7 @@ export function TransactionForm() {
             
             <Button 
               onClick={handleConfirm}
-              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white h-10 px-5 rounded-md transition-colors"
+              className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white h-10 px-5 rounded-md transition-colors"
             >
               <Check className="h-4 w-4 mr-1" />
               Confirm Transaction

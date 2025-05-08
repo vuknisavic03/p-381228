@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,8 +24,8 @@ export function TransactionActivity() {
             onClick={toggleTransactionType}
             className={`flex items-center px-3 py-1.5 rounded-full font-medium transition-colors duration-200 ${
               transactionType === 'revenue' 
-                ? 'bg-emerald-50 text-emerald-700' 
-                : 'bg-red-50 text-red-700'
+                ? 'bg-gray-100 text-gray-700' 
+                : 'bg-gray-100 text-gray-700'
             }`}
           >
             {transactionType === 'revenue' ? (
@@ -105,12 +106,12 @@ export function TransactionActivity() {
       
       <div className="flex-1 flex flex-col items-center justify-center m-5 p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 min-h-[400px]">
         <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 ${
-          transactionType === 'revenue' ? 'bg-emerald-50' : 'bg-red-50'
+          transactionType === 'revenue' ? 'bg-gray-100' : 'bg-gray-100'
         }`}>
           {transactionType === 'revenue' ? (
-            <DollarSign className="h-8 w-8 text-emerald-400" />
+            <DollarSign className="h-8 w-8 text-gray-500" />
           ) : (
-            <TrendingDown className="h-8 w-8 text-red-400" />
+            <TrendingDown className="h-8 w-8 text-gray-500" />
           )}
         </div>
         <span className="text-gray-800 font-semibold text-lg mb-2">No {transactionType} yet</span>
