@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { 
   CreditCard, 
   Upload, 
@@ -32,6 +34,12 @@ import {
   Store
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 // Mock listing data similar to what we have in ListingList
 const mockListings = [
@@ -258,27 +266,50 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
-                  {/* Simplified listing selector */}
-                  <Select value={selectedListing} onValueChange={setSelectedListing}>
-                    <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
-                      <SelectValue placeholder="Select a listing" />
-                    </SelectTrigger>
-                    <SelectContent className="w-[var(--radix-select-trigger-width)]">
-                      {mockListings.map((listing) => (
-                        <SelectItem key={listing.id} value={listing.id.toString()} className="py-2.5">
-                          <div className="flex items-center gap-2">
+                  {/* Improved listing picker with dropdown menu for better UX */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-between border-gray-200 bg-white hover:bg-gray-50 text-left font-normal h-10"
+                      >
+                        {selectedListing ? (
+                          <span className="flex items-center gap-2">
                             <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gray-100 text-gray-700">
-                              {getListingCategoryIcon(listing.category)}
+                              {selectedListingDetails && getListingCategoryIcon(selectedListingDetails.category)}
                             </div>
-                            <div>
-                              <p className="text-sm font-medium">{listing.address}</p>
-                              <p className="text-xs text-gray-500">{listing.city}, {listing.country}</p>
-                            </div>
+                            <span className="truncate">{selectedListingDetails?.address}</span>
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">Select a listing</span>
+                        )}
+                        <ChevronRight className="h-4 w-4 ml-2 text-gray-500 shrink-0" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      align="start" 
+                      className="w-[var(--radix-dropdown-menu-trigger-width)] p-2 max-h-[320px] overflow-auto"
+                    >
+                      {mockListings.map((listing) => (
+                        <DropdownMenuItem 
+                          key={listing.id} 
+                          className="flex items-center gap-2 py-2.5 cursor-pointer"
+                          onClick={() => setSelectedListing(listing.id.toString())}
+                        >
+                          <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gray-100 text-gray-700 shrink-0">
+                            {getListingCategoryIcon(listing.category)}
                           </div>
-                        </SelectItem>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{listing.address}</p>
+                            <p className="text-xs text-gray-500 truncate">{listing.city}, {listing.country}</p>
+                          </div>
+                          {selectedListing === listing.id.toString() && (
+                            <Check className="h-4 w-4 text-green-500 shrink-0" />
+                          )}
+                        </DropdownMenuItem>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   
                   {/* Selected Listing Card */}
                   {selectedListing && (
@@ -466,7 +497,7 @@ export function TransactionForm() {
                       selected={date}
                       onSelect={setDate}
                       initialFocus
-                      className={cn("p-3 pointer-events-auto")}
+                      className="p-3"
                     />
                   </PopoverContent>
                 </Popover>
