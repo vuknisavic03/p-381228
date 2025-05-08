@@ -31,7 +31,8 @@ import {
   TrendingDown,
   Home,
   MapPin,
-  Store
+  Store,
+  Search
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -125,6 +126,7 @@ export function TransactionForm() {
     company: "",
   });
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
+  const [listingSearch, setListingSearch] = useState("");
   const { toast } = useToast();
   
   const form = useForm({
@@ -139,6 +141,20 @@ export function TransactionForm() {
       date: new Date(),
       payment: ""
     }
+  });
+
+  // Filter listings based on search term
+  const filteredListings = mockListings.filter(listing => {
+    const searchLower = listingSearch.toLowerCase();
+    return (
+      listing.address.toLowerCase().includes(searchLower) ||
+      listing.city.toLowerCase().includes(searchLower) ||
+      listing.country.toLowerCase().includes(searchLower) ||
+      listing.type.toLowerCase().includes(searchLower) ||
+      listing.category.toLowerCase().includes(searchLower) ||
+      listing.tenant?.name.toLowerCase().includes(searchLower) || 
+      false
+    );
   });
 
   // Update payer details when listing is selected
@@ -266,7 +282,7 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
-                  {/* Improved listing picker with dropdown menu for better UX */}
+                  {/* Improved listing picker with dropdown menu and search for better UX */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button 
@@ -290,24 +306,47 @@ export function TransactionForm() {
                       align="start" 
                       className="w-[var(--radix-dropdown-menu-trigger-width)] p-2 max-h-[320px] overflow-auto"
                     >
-                      {mockListings.map((listing) => (
-                        <DropdownMenuItem 
-                          key={listing.id} 
-                          className="flex items-center gap-2 py-2.5 cursor-pointer"
-                          onClick={() => setSelectedListing(listing.id.toString())}
-                        >
-                          <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gray-100 text-gray-700 shrink-0">
-                            {getListingCategoryIcon(listing.category)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{listing.address}</p>
-                            <p className="text-xs text-gray-500 truncate">{listing.city}, {listing.country}</p>
-                          </div>
-                          {selectedListing === listing.id.toString() && (
-                            <Check className="h-4 w-4 text-green-500 shrink-0" />
-                          )}
-                        </DropdownMenuItem>
-                      ))}
+                      {/* Search input for listings */}
+                      <div className="sticky top-0 bg-white z-10 pb-2 mb-1 border-b border-gray-100">
+                        <div className="relative">
+                          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                          <Input 
+                            placeholder="Search listings..." 
+                            className="pl-8 h-9 focus:ring-1 focus:ring-primary/20 border-gray-200"
+                            value={listingSearch}
+                            onChange={(e) => setListingSearch(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* Filtered listings */}
+                      {filteredListings.length > 0 ? (
+                        filteredListings.map((listing) => (
+                          <DropdownMenuItem 
+                            key={listing.id} 
+                            className="flex items-center gap-2 py-2.5 cursor-pointer"
+                            onClick={() => {
+                              setSelectedListing(listing.id.toString());
+                              setListingSearch(""); // Clear search after selection
+                            }}
+                          >
+                            <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gray-100 text-gray-700 shrink-0">
+                              {getListingCategoryIcon(listing.category)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate">{listing.address}</p>
+                              <p className="text-xs text-gray-500 truncate">{listing.city}, {listing.country}</p>
+                            </div>
+                            {selectedListing === listing.id.toString() && (
+                              <Check className="h-4 w-4 text-green-500 shrink-0" />
+                            )}
+                          </DropdownMenuItem>
+                        ))
+                      ) : (
+                        <div className="py-3 text-center text-gray-500 text-sm">
+                          No listings found
+                        </div>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                   
