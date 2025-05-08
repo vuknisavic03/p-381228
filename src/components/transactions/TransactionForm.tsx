@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -121,6 +122,7 @@ export function TransactionForm() {
   });
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const { toast } = useToast();
+  const [isListingsOpen, setIsListingsOpen] = useState(false);
   
   const form = useForm({
     defaultValues: {
@@ -198,6 +200,19 @@ export function TransactionForm() {
     }
   };
 
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'Commercial':
+        return 'from-violet-500 to-indigo-600';
+      case 'Residential':
+        return 'from-amber-400 to-amber-600';
+      case 'Industrial':
+        return 'from-cyan-500 to-blue-600';
+      default:
+        return 'from-gray-400 to-gray-600';
+    }
+  };
+
   return (
     <div className="p-6 h-full overflow-auto">
       {/* Header Section */}
@@ -261,210 +276,253 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
-                  {/* Improved Select Component without the blue outline */}
-                  <Select value={selectedListing} onValueChange={setSelectedListing}>
-                    <SelectTrigger 
+                  {/* Entirely new listing selector */}
+                  <div className="relative">
+                    <div 
+                      onClick={() => setIsListingsOpen(!isListingsOpen)}
                       className={cn(
-                        "w-full border-gray-200 bg-white hover:border-gray-300 transition-colors",
-                        selectedListing && "bg-gray-50 shadow-sm",
-                        !selectedListing && "border-dashed border-2 border-gray-300 hover:border-gray-400"
+                        "flex items-center justify-between p-4 border rounded-lg transition-all duration-200 cursor-pointer",
+                        selectedListing 
+                          ? "bg-gradient-to-r from-gray-50 to-white shadow-sm border-gray-200" 
+                          : "bg-white border-dashed border-2 border-gray-300 hover:border-gray-400"
                       )}
                     >
-                      <SelectValue placeholder="Select a listing" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-72">
-                      <div className="sticky top-0 z-10 bg-white p-2 border-b border-gray-100">
-                        <div className="relative">
-                          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                          <Input 
-                            placeholder="Search listings..." 
-                            className="pl-8 h-9 text-sm" 
-                          />
-                        </div>
-                      </div>
-                      <div className="p-2">
-                        <div className="flex flex-col gap-1 mb-3">
-                          <span className="text-xs font-medium text-gray-500 px-2">Commercial Properties</span>
-                          {mockListings.filter(l => l.type === 'Commercial').map((listing) => (
-                            <SelectItem key={listing.id} value={listing.id.toString()} className={cn(
-                              "py-3 rounded-md transition-colors",
-                              selectedListing === listing.id.toString() && "bg-gray-50"
-                            )}>
-                              <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
-                                  selectedListing === listing.id.toString() 
-                                    ? 'bg-indigo-600 text-white' 
-                                    : 'bg-indigo-100 text-indigo-700'
-                                }`}>
-                                  {selectedListing === listing.id.toString() ? (
-                                    <Check className="h-4 w-4" />
-                                  ) : (
-                                    getListingCategoryIcon(listing.category)
-                                  )}
-                                </div>
-                                <div className="flex flex-col flex-1">
-                                  <span className={cn(
-                                    "font-medium",
-                                    selectedListing === listing.id.toString() ? "text-indigo-700" : "text-gray-800"
-                                  )}>{listing.address}</span>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs text-gray-500">
-                                      {listing.category}
-                                    </span>
-                                    <span className="h-1 w-1 rounded-full bg-gray-300"></span>
-                                    <span className="text-xs text-gray-500">
-                                      {listing.city}, {listing.country}
-                                    </span>
-                                  </div>
-                                </div>
-                                {selectedListing === listing.id.toString() && (
-                                  <CheckCircle className="h-4 w-4 text-indigo-600 ml-auto" />
-                                )}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </div>
-                        
-                        <div className="flex flex-col gap-1 mb-2">
-                          <span className="text-xs font-medium text-gray-500 px-2">Residential Properties</span>
-                          {mockListings.filter(l => l.type === 'Residential').map((listing) => (
-                            <SelectItem key={listing.id} value={listing.id.toString()} className={cn(
-                              "py-3 rounded-md transition-colors",
-                              selectedListing === listing.id.toString() && "bg-gray-50"
-                            )}>
-                              <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
-                                  selectedListing === listing.id.toString() 
-                                    ? 'bg-amber-600 text-white' 
-                                    : 'bg-amber-100 text-amber-700'
-                                }`}>
-                                  {selectedListing === listing.id.toString() ? (
-                                    <Check className="h-4 w-4" />
-                                  ) : (
-                                    <Home className="h-4 w-4" />
-                                  )}
-                                </div>
-                                <div className="flex flex-col flex-1">
-                                  <span className={cn(
-                                    "font-medium",
-                                    selectedListing === listing.id.toString() ? "text-amber-700" : "text-gray-800"
-                                  )}>{listing.address}</span>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs text-gray-500">
-                                      {listing.category}
-                                    </span>
-                                    <span className="h-1 w-1 rounded-full bg-gray-300"></span>
-                                    <span className="text-xs text-gray-500">
-                                      {listing.city}, {listing.country}
-                                    </span>
-                                  </div>
-                                </div>
-                                {selectedListing === listing.id.toString() && (
-                                  <CheckCircle className="h-4 w-4 text-amber-600 ml-auto" />
-                                )}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </div>
-                      </div>
-                    </SelectContent>
-                  </Select>
-                  
-                  {/* Enhanced Selected Listing Card with better styling */}
-                  {selectedListingDetails && (
-                    <div className="mt-4 animate-fade-in">
-                      <Card className="bg-gradient-to-br from-gray-50 to-white shadow-sm rounded-xl overflow-hidden">
-                        <div className="absolute top-3 right-3">
-                          <div className="h-6 w-6 rounded-full bg-teal-500 text-white flex items-center justify-center shadow-sm">
-                            <CheckCircle className="h-3.5 w-3.5" />
+                      {selectedListing ? (
+                        <div className="flex items-center gap-3 w-full">
+                          <div className={cn(
+                            "w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br shadow-sm",
+                            getTypeColor(selectedListingDetails?.type || 'Commercial')
+                          )}>
+                            {getListingCategoryIcon(selectedListingDetails?.category || 'default')}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900">{selectedListingDetails?.address}</h4>
+                            <div className="flex items-center text-xs text-gray-500 mt-0.5">
+                              <span className="flex items-center gap-1">
+                                <MapPin className="h-3 w-3" />
+                                {selectedListingDetails?.city}, {selectedListingDetails?.country}
+                              </span>
+                              <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
+                              <span className="text-xs">{selectedListingDetails?.category}</span>
+                            </div>
+                          </div>
+                          <div className="h-6 w-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                            {isListingsOpen ? (
+                              <ChevronRight className="h-4 w-4 rotate-90" />
+                            ) : (
+                              <ChevronRight className="h-4 w-4 -rotate-90" />
+                            )}
                           </div>
                         </div>
-                        <CardContent className="p-5">
-                          <div className="flex items-start gap-4">
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-sm ${
-                              selectedListingDetails.type === 'Commercial' 
-                                ? 'bg-indigo-500 text-white' 
-                                : 'bg-amber-500 text-white'
-                            }`}>
-                              {selectedListingDetails.type === 'Commercial' ? (
-                                getListingCategoryIcon(selectedListingDetails.category)
-                              ) : (
-                                <Home className="h-6 w-6" />
-                              )}
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                              <FileText className="h-5 w-5 text-gray-400" />
                             </div>
-                            <div className="flex-1">
-                              <div className="flex flex-col">
-                                <h4 className="text-base font-medium text-gray-800 mb-1">
-                                  {selectedListingDetails.address}
-                                </h4>
-                                <div className="flex items-center text-xs text-gray-500 gap-1 mb-3">
-                                  <MapPin className="h-3 w-3" />
-                                  <span>{selectedListingDetails.city}, {selectedListingDetails.country}</span>
+                            <div>
+                              <span className="text-gray-800 font-medium">Select a listing</span>
+                              <p className="text-xs text-gray-500">Choose a property to associate with this transaction</p>
+                            </div>
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-gray-400" />
+                        </>
+                      )}
+                    </div>
+                    
+                    {/* Dropdown panel for listing selection */}
+                    {isListingsOpen && (
+                      <div className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg animate-fade-in overflow-hidden">
+                        <div className="sticky top-0 bg-white p-3 border-b border-gray-100">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <Input 
+                              placeholder="Search listings..." 
+                              className="pl-9 h-10 text-sm bg-gray-50 border-gray-200 focus:bg-white" 
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="max-h-80 overflow-y-auto p-2">
+                          {/* Group by type */}
+                          {["Commercial", "Residential"].map((type) => (
+                            <div key={type} className="mb-3">
+                              <div className="flex items-center gap-2 px-3 py-2">
+                                <div className={cn(
+                                  "w-6 h-6 rounded flex items-center justify-center text-white text-xs",
+                                  type === "Commercial" ? "bg-indigo-500" : "bg-amber-500"
+                                )}>
+                                  {type === "Commercial" ? <Building className="h-3 w-3" /> : <Home className="h-3 w-3" />}
                                 </div>
-                                <div className="flex gap-2">
-                                  <span className={`text-xs px-2.5 py-1 rounded-full ${
-                                    selectedListingDetails.type === 'Commercial' 
-                                      ? 'bg-indigo-100 text-indigo-700' 
-                                      : 'bg-amber-100 text-amber-700'
-                                  } font-medium`}>
-                                    {selectedListingDetails.type}
-                                  </span>
-                                  <span className={`text-xs px-2.5 py-1 rounded-full ${
-                                    selectedListingDetails.type === 'Commercial' 
-                                      ? 'bg-indigo-100 text-indigo-700' 
-                                      : 'bg-amber-100 text-amber-700'
-                                  } font-medium`}>
-                                    {selectedListingDetails.category}
-                                  </span>
-                                </div>
+                                <span className="text-sm font-medium text-gray-700">{type} Properties</span>
                               </div>
                               
-                              {/* Tenant Information */}
-                              {selectedListingDetails.tenant ? (
-                                <div className="mt-4 pt-4 border-t border-gray-200">
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <User className="h-3.5 w-3.5 text-gray-500" />
-                                    <span className="text-sm font-medium text-gray-700">Tenant Information</span>
-                                  </div>
-                                  
-                                  <div className="flex items-center gap-4">
-                                    <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white ${
-                                      selectedListingDetails.type === 'Commercial' 
-                                        ? 'bg-indigo-400' 
-                                        : 'bg-amber-400'
-                                    }`}>
-                                      {selectedListingDetails.tenant.type === 'company' ? (
-                                        <Building className="h-4 w-4" />
-                                      ) : (
-                                        <User className="h-4 w-4" />
+                              <div className="space-y-1">
+                                {mockListings
+                                  .filter(listing => listing.type === type)
+                                  .map(listing => (
+                                    <div
+                                      key={listing.id}
+                                      onClick={() => {
+                                        setSelectedListing(listing.id.toString());
+                                        setIsListingsOpen(false);
+                                      }}
+                                      className={cn(
+                                        "flex items-center p-3 rounded-lg cursor-pointer transition-all",
+                                        selectedListing === listing.id.toString()
+                                          ? "bg-indigo-50"
+                                          : "hover:bg-gray-50"
                                       )}
+                                    >
+                                      <div className="flex items-center gap-3 w-full">
+                                        <div className={cn(
+                                          "w-10 h-10 rounded flex items-center justify-center text-white",
+                                          listing.type === "Commercial" 
+                                            ? selectedListing === listing.id.toString() ? "bg-indigo-600" : "bg-indigo-100 text-indigo-600"
+                                            : selectedListing === listing.id.toString() ? "bg-amber-600" : "bg-amber-100 text-amber-600"
+                                        )}>
+                                          {selectedListing === listing.id.toString() ? (
+                                            <Check className="h-5 w-5" />
+                                          ) : (
+                                            getListingCategoryIcon(listing.category)
+                                          )}
+                                        </div>
+                                        
+                                        <div className="flex-1">
+                                          <h4 className={cn(
+                                            "font-medium",
+                                            selectedListing === listing.id.toString() 
+                                              ? listing.type === "Commercial" ? "text-indigo-700" : "text-amber-700"  
+                                              : "text-gray-700"
+                                          )}>
+                                            {listing.address}
+                                          </h4>
+                                          <div className="flex items-center text-xs text-gray-500 mt-0.5">
+                                            <span>{listing.category}</span>
+                                            <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
+                                            <span>{listing.city}, {listing.country}</span>
+                                          </div>
+                                        </div>
+                                        
+                                        {selectedListing === listing.id.toString() && (
+                                          <div className="h-6 w-6 rounded-full flex items-center justify-center bg-indigo-100 text-indigo-600">
+                                            <Check className="h-3.5 w-3.5" />
+                                          </div>
+                                        )}
+                                      </div>
                                     </div>
-                                    <div>
-                                      <p className="text-sm font-medium text-gray-800">
-                                        {selectedListingDetails.tenant.name}
-                                      </p>
-                                      <p className="text-xs text-gray-500 mt-0.5">
-                                        {selectedListingDetails.tenant.type === 'company' ? 'Company' : 'Individual'}
-                                      </p>
+                                  ))
+                                }
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Enhanced Selected Listing Card */}
+                  {selectedListing && !isListingsOpen && (
+                    <div className="mt-5">
+                      <Card className="bg-gradient-to-br from-gray-50 via-white to-gray-50 border-none shadow-sm rounded-xl overflow-hidden">
+                        <CardContent className="p-0">
+                          <div className="relative">
+                            {/* Top colored banner based on type */}
+                            <div className={cn(
+                              "h-3 w-full bg-gradient-to-r",
+                              getTypeColor(selectedListingDetails?.type || 'Commercial')
+                            )} />
+                            
+                            <div className="p-4">
+                              {selectedListingDetails?.tenant ? (
+                                <div className="flex flex-col">
+                                  <div className="flex items-start mb-4">
+                                    <div className="mr-4">
+                                      <div className={cn(
+                                        "w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br shadow-sm",
+                                        selectedListingDetails.type === 'Commercial' ? 'from-violet-500 to-indigo-600' : 'from-amber-400 to-amber-600'
+                                      )}>
+                                        {selectedListingDetails.tenant.type === 'company' ? (
+                                          <Building className="h-6 w-6" />
+                                        ) : (
+                                          <User className="h-6 w-6" />
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="flex items-center">
+                                        <h4 className="text-lg font-semibold text-gray-900">{selectedListingDetails.tenant.name}</h4>
+                                        <span className={cn(
+                                          "ml-2 text-xs px-2 py-0.5 rounded-full",
+                                          selectedListingDetails.tenant.type === 'company' 
+                                            ? "bg-blue-100 text-blue-700" 
+                                            : "bg-emerald-100 text-emerald-700"
+                                        )}>
+                                          {selectedListingDetails.tenant.type === 'company' ? 'Company' : 'Individual'}
+                                        </span>
+                                      </div>
+                                      
+                                      <div className="mt-1 flex flex-wrap gap-y-1 gap-x-3">
+                                        <div className="flex items-center text-sm text-gray-600">
+                                          <Mail className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                          <span>{selectedListingDetails.tenant.email}</span>
+                                        </div>
+                                        <div className="flex items-center text-sm text-gray-600">
+                                          <Phone className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                          <span>{selectedListingDetails.tenant.phone}</span>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                   
-                                  <div className="grid grid-cols-2 gap-3 mt-3">
-                                    <div className="flex items-center gap-1.5 text-xs">
-                                      <Mail className="h-3 w-3 text-gray-400" />
-                                      <span className="text-gray-600">{selectedListingDetails.tenant.email}</span>
+                                  <div className="flex items-center p-3 bg-gray-50 rounded-lg mt-1">
+                                    <div className="flex items-center gap-2 flex-1">
+                                      <MapPin className="h-4 w-4 text-gray-500" />
+                                      <div>
+                                        <span className="text-sm font-medium text-gray-800">
+                                          {selectedListingDetails.address}
+                                        </span>
+                                        <div className="text-xs text-gray-500">
+                                          {selectedListingDetails.city}, {selectedListingDetails.country}
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5 text-xs">
-                                      <Phone className="h-3 w-3 text-gray-400" />
-                                      <span className="text-gray-600">{selectedListingDetails.tenant.phone}</span>
+                                    
+                                    <div className="flex flex-col items-end">
+                                      <div className={cn(
+                                        "text-xs px-2 py-1 rounded flex items-center",
+                                        selectedListingDetails.type === 'Commercial' 
+                                          ? "bg-indigo-100 text-indigo-700" 
+                                          : "bg-amber-100 text-amber-700"
+                                      )}>
+                                        {getListingCategoryIcon(selectedListingDetails.category)}
+                                        <span className="ml-1">{selectedListingDetails.category}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               ) : (
-                                <div className="mt-4 pt-4 border-t border-gray-200">
-                                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <User className="h-3.5 w-3.5 text-gray-400" />
-                                    <span>No tenant associated with this listing</span>
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-3 mb-4">
+                                    <div className={cn(
+                                      "w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br shadow-sm",
+                                      selectedListingDetails?.type === 'Commercial' ? 'from-violet-500 to-indigo-600' : 'from-amber-400 to-amber-600'
+                                    )}>
+                                      {getListingCategoryIcon(selectedListingDetails?.category || 'default')}
+                                    </div>
+                                    <div>
+                                      <h4 className="text-lg font-semibold text-gray-900">{selectedListingDetails?.address}</h4>
+                                      <p className="text-sm text-gray-600">
+                                        {selectedListingDetails?.city}, {selectedListingDetails?.country}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
+                                    <div className="flex items-center gap-2 text-sm text-amber-800">
+                                      <User className="h-4 w-4 text-amber-600" />
+                                      <span>No tenant associated with this listing</span>
+                                    </div>
                                   </div>
                                 </div>
                               )}
@@ -472,21 +530,6 @@ export function TransactionForm() {
                           </div>
                         </CardContent>
                       </Card>
-                    </div>
-                  )}
-                  
-                  {/* Prompt to Select a Listing When None is Selected */}
-                  {!selectedListing && (
-                    <div className="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-lg text-center animate-fade-in">
-                      <div className="flex flex-col items-center">
-                        <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center mb-2">
-                          <Search className="h-4 w-4 text-gray-500" />
-                        </div>
-                        <p className="text-sm font-medium text-gray-700">Select a listing</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Choose a property to associate with this transaction
-                        </p>
-                      </div>
                     </div>
                   )}
                 </div>
