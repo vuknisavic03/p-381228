@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const mockListings = [
   {
@@ -100,6 +102,7 @@ export function ListingList() {
   const [filters, setFilters] = useState<FilterState>({
     types: []
   });
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const fetchListings = async () => {
     setIsLoading(true);
@@ -162,29 +165,38 @@ export function ListingList() {
             />
           </div>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
-              <ListFilter className="h-4 w-4 mr-1" />
-              Filter {filters.types.length > 0 && `(${filters.types.length})`}
+          <DropdownMenu open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2 h-9">
+                <ListFilter className="h-4 w-4" />
+                <span>Filter</span>
+                {filters.types.length > 0 && (
+                  <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
+                    {filters.types.length}
+                  </span>
+                )}
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-72">
               <div className="p-2">
                 <DropdownMenuLabel>Property Type</DropdownMenuLabel>
-                {propertyTypes.map((type) => (
-                  <DropdownMenuItem
-                    key={type.value}
-                    className="flex items-center justify-between"
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      handleFilterChange(type.value);
-                    }}
-                  >
-                    <span>{type.label}</span>
-                    {filters.types.includes(type.value) && (
-                      <div className="h-2 w-2 rounded-full bg-primary" />
-                    )}
-                  </DropdownMenuItem>
-                ))}
+                <div className="space-y-1 mt-1">
+                  {propertyTypes.map((type) => (
+                    <DropdownMenuItem
+                      key={type.value}
+                      className="flex items-center justify-between cursor-pointer"
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        handleFilterChange(type.value);
+                      }}
+                    >
+                      <span className="text-base py-1">{type.label}</span>
+                      {filters.types.includes(type.value) && (
+                        <div className="h-3 w-3 rounded-full bg-primary" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </div>
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
