@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
@@ -115,7 +114,6 @@ const mockListings = [
 
 export function TransactionForm() {
   const [activeTab, setActiveTab] = useState("details");
-  const [createRule, setCreateRule] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedListing, setSelectedListing] = useState<string>("");
   const [payerType, setPayerType] = useState<'individual' | 'company'>('individual');
@@ -536,7 +534,7 @@ export function TransactionForm() {
                       selected={date}
                       onSelect={setDate}
                       initialFocus
-                      className="p-3"
+                      className={cn("p-3 pointer-events-auto")}
                     />
                   </PopoverContent>
                 </Popover>
@@ -716,42 +714,6 @@ export function TransactionForm() {
                   className="min-h-[120px] border-gray-200 bg-white hover:border-gray-300 transition-colors"
                 />
               </div>
-              
-              <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-100">
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                  <Check className="h-4 w-4 text-gray-500" />
-                  <h3>Create a rule for next time?</h3>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 font-medium">
-                    {createRule ? 'Yes' : 'No'}
-                  </span>
-                  <Switch 
-                    id="create-rule" 
-                    checked={createRule} 
-                    onCheckedChange={setCreateRule}
-                  />
-                </div>
-              </div>
-              
-              {createRule && (
-                <div className="mt-4 p-5 bg-gray-50 border border-gray-100 rounded-lg shadow-sm animate-fade-in">
-                  <p className="text-sm text-gray-700 font-medium mb-3">Auto-categorize similar transactions</p>
-                  <div className="space-y-3">
-                    <Select>
-                      <SelectTrigger className="h-10 text-sm border-gray-200 bg-white">
-                        <SelectValue placeholder="Select an action" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="categorize">Auto-categorize</SelectItem>
-                        <SelectItem value="assign">Assign to listing</SelectItem>
-                        <SelectItem value="notify">Send notification</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              )}
             </div>
           </Card>
           

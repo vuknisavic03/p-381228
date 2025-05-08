@@ -3,16 +3,55 @@ import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Search, Calendar, ChevronDown, Filter, TrendingDown } from "lucide-react";
+import { DollarSign, Search, Calendar as CalendarIcon, ChevronDown, Filter, TrendingDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format, subDays } from "date-fns";
+import { cn } from "@/lib/utils";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+// Mock transaction categories and payment methods for filter options
+const transactionCategories = {
+  revenue: ["Rent", "Deposit", "Fee", "Other Income"],
+  expense: ["Maintenance", "Utilities", "Insurance", "Tax", "Other Expense"]
+};
+
+const paymentMethods = ["Credit Card", "Bank Transfer", "Cash", "Check", "Cryptocurrency"];
 
 export function TransactionActivity() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | undefined>();
+  const [dateRange, setDateRange] = useState<string>("last30");
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  
+  // Date range options
+  const dateRangeOptions = {
+    today: "Today",
+    yesterday: "Yesterday",
+    last7: "Last 7 days",
+    last30: "Last 30 days",
+    thisMonth: "This month",
+    lastMonth: "Last month", 
+    custom: "Custom"
+  };
 
   // Local toggle function that only affects the activity center
   const toggleTransactionType = () => {
     setTransactionType(prevType => prevType === 'revenue' ? 'expense' : 'revenue');
+    setSelectedCategory(undefined); // Reset category when type changes
+  };
+
+  // Format the displayed date range
+  const getDateRangeDisplay = () => {
+    switch(dateRange) {
+      case "custom":
+        return date ? format(date, "MMM d, yyyy") : "Select date";
+      default:
+        return dateRangeOptions[dateRange as keyof typeof dateRangeOptions];
+    }
   };
 
   return (
@@ -55,42 +94,104 @@ export function TransactionActivity() {
               <ChevronDown className={`h-3 w-3 ml-1 transition-transform duration-200 ${filterOpen ? 'rotate-180' : ''}`} />
             </Button>
             
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50 transition-colors"
-            >
-              <Calendar className="h-3 w-3" />
-              Last 30 days
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                >
+                  <CalendarIcon className="h-3 w-3" />
+                  {getDateRangeDisplay()}
+                  <ChevronDown className="h-3 w-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {Object.entries(dateRangeOptions).map(([key, label]) => (
+                  <DropdownMenuItem 
+                    key={key}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setDateRange(key);
+                      if (key === "custom") {
+                        // When custom is selected, don't close dropdown yet
+                      } else {
+                        // For other options, we can calculate the date here if needed
+                      }
+                    }}
+                  >
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {dateRange === "custom" && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                      "text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50 transition-colors",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="h-3 w-3 mr-1" />
+                    {date ? format(date, "MMM d, yyyy") : "Select date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         </div>
       </div>
       
       {filterOpen && (
         <div className="mx-5 mt-4 mb-2 p-5 border border-gray-100 rounded-lg bg-gray-50 space-y-4 animate-fade-in shadow-sm">
-          <Select>
+          <Select 
+            value={selectedCategory} 
+            onValueChange={setSelectedCategory}
+          >
             <SelectTrigger className="h-10 text-sm bg-white border-gray-200">
-              <SelectValue placeholder="Transaction Type" />
+              <SelectValue placeholder="Transaction Category" />
             </SelectTrigger>
             <SelectContent className="w-[var(--radix-select-trigger-width)]">
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="income">Income</SelectItem>
-              <SelectItem value="expense">Expense</SelectItem>
-              <SelectItem value="investment">Investment</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
+              {transactionType === 'revenue' 
+                ? transactionCategories.revenue.map(cat => (
+                    <SelectItem key={cat.toLowerCase()} value={cat.toLowerCase()}>{cat}</SelectItem>
+                  ))
+                : transactionCategories.expense.map(cat => (
+                    <SelectItem key={cat.toLowerCase()} value={cat.toLowerCase()}>{cat}</SelectItem>
+                  ))
+              }
             </SelectContent>
           </Select>
           
-          <Select>
+          <Select
+            value={selectedPaymentMethod}
+            onValueChange={setSelectedPaymentMethod}
+          >
             <SelectTrigger className="h-10 text-sm bg-white border-gray-200">
               <SelectValue placeholder="Payment Method" />
             </SelectTrigger>
             <SelectContent className="w-[var(--radix-select-trigger-width)]">
               <SelectItem value="all">All Methods</SelectItem>
-              <SelectItem value="card">Credit Card</SelectItem>
-              <SelectItem value="bank">Bank Transfer</SelectItem>
-              <SelectItem value="cash">Cash</SelectItem>
-              <SelectItem value="check">Check</SelectItem>
+              {paymentMethods.map(method => (
+                <SelectItem key={method.toLowerCase().replace(/\s/g, '-')} value={method.toLowerCase().replace(/\s/g, '-')}>
+                  {method}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
