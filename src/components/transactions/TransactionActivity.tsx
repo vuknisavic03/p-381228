@@ -43,14 +43,6 @@ export function TransactionActivity() {
         </div>
         
         <div className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Search transactions" 
-              className="pl-10 bg-white border-gray-200 hover:border-gray-300 transition-colors" 
-            />
-          </div>
-          
           <div className="flex items-center gap-2">
             <Button 
               variant="outline" 

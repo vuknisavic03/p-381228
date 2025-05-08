@@ -9,12 +9,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { 
   CreditCard, 
-  Search,
   Upload, 
   DollarSign, 
   FileText,
@@ -31,11 +29,9 @@ import {
   TrendingDown,
   Home,
   MapPin,
-  CheckCircle,
   Store
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
 
 // Mock listing data similar to what we have in ListingList
 const mockListings = [
@@ -122,8 +118,6 @@ export function TransactionForm() {
   });
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const { toast } = useToast();
-  const [isListingsOpen, setIsListingsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   
   const form = useForm({
     defaultValues: {
@@ -201,13 +195,6 @@ export function TransactionForm() {
     }
   };
 
-  // Filter listings based on search term
-  const filteredListings = mockListings.filter(listing => 
-    listing.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    listing.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    listing.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="p-6 h-full overflow-auto">
       {/* Header Section */}
@@ -271,125 +258,30 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
-                  {/* Cleaner listing selector with Popover */}
-                  <Popover open={isListingsOpen} onOpenChange={setIsListingsOpen}>
-                    <PopoverTrigger asChild>
-                      <div 
-                        className={cn(
-                          "flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all duration-200",
-                          selectedListing 
-                            ? "bg-white shadow-sm border-gray-200" 
-                            : "bg-white border-dashed border-gray-200 hover:border-gray-300"
-                        )}
-                      >
-                        {selectedListing ? (
-                          <div className="flex items-center gap-3 w-full">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-700">
-                              {getListingCategoryIcon(selectedListingDetails?.category || 'default')}
+                  {/* Simplified listing selector */}
+                  <Select value={selectedListing} onValueChange={setSelectedListing}>
+                    <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
+                      <SelectValue placeholder="Select a listing" />
+                    </SelectTrigger>
+                    <SelectContent className="w-[var(--radix-select-trigger-width)]">
+                      {mockListings.map((listing) => (
+                        <SelectItem key={listing.id} value={listing.id.toString()} className="py-2.5">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gray-100 text-gray-700">
+                              {getListingCategoryIcon(listing.category)}
                             </div>
-                            <div className="flex-1">
-                              <h4 className="font-medium text-gray-900">{selectedListingDetails?.address}</h4>
-                              <div className="flex items-center text-xs text-gray-500 mt-0.5">
-                                <span className="flex items-center gap-1">
-                                  <MapPin className="h-3 w-3" />
-                                  {selectedListingDetails?.city}, {selectedListingDetails?.country}
-                                </span>
-                                <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
-                                <span className="text-xs">{selectedListingDetails?.category}</span>
-                              </div>
-                            </div>
-                            <div className="h-6 w-6 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center">
-                              <ChevronRight className="h-4 w-4" />
+                            <div>
+                              <p className="text-sm font-medium">{listing.address}</p>
+                              <p className="text-xs text-gray-500">{listing.city}, {listing.country}</p>
                             </div>
                           </div>
-                        ) : (
-                          <>
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                                <FileText className="h-5 w-5 text-gray-400" />
-                              </div>
-                              <div>
-                                <span className="text-gray-800 font-medium">Select a listing</span>
-                                <p className="text-xs text-gray-500">Choose a property to associate with this transaction</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-gray-400" />
-                          </>
-                        )}
-                      </div>
-                    </PopoverTrigger>
-                    
-                    <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)] shadow-md border-gray-200">
-                      <Command className="rounded-lg overflow-hidden">
-                        <div className="p-3 border-b border-gray-100">
-                          <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                            <CommandInput 
-                              placeholder="Search listings..." 
-                              className="pl-9 h-10 text-sm bg-white border border-gray-200 focus:border-gray-300"
-                              value={searchTerm}
-                              onValueChange={setSearchTerm}
-                            />
-                          </div>
-                        </div>
-                        
-                        <CommandList className="max-h-[300px] overflow-y-auto py-2">
-                          <CommandEmpty className="py-6 text-center text-sm">
-                            No listings found.
-                          </CommandEmpty>
-                          
-                          {["Commercial", "Residential"].map((type) => {
-                            const typeListings = filteredListings.filter(listing => listing.type === type);
-                            if (typeListings.length === 0) return null;
-                            
-                            return (
-                              <CommandGroup key={type} heading={`${type} Properties`} className="px-2">
-                                {typeListings.map(listing => (
-                                  <CommandItem
-                                    key={listing.id}
-                                    onSelect={() => {
-                                      setSelectedListing(listing.id.toString());
-                                      setIsListingsOpen(false);
-                                    }}
-                                    className={cn(
-                                      "flex items-center p-2 rounded-md my-1 cursor-pointer",
-                                      selectedListing === listing.id.toString()
-                                        ? "bg-gray-100"
-                                        : "hover:bg-gray-50"
-                                    )}
-                                  >
-                                    <div className="flex items-center gap-3 w-full">
-                                      <div className="w-8 h-8 rounded-md flex items-center justify-center bg-gray-100 text-gray-600">
-                                        {selectedListing === listing.id.toString() ? (
-                                          <Check className="h-4 w-4" />
-                                        ) : (
-                                          getListingCategoryIcon(listing.category)
-                                        )}
-                                      </div>
-                                      
-                                      <div className="flex-1">
-                                        <h4 className="font-medium text-gray-900 text-sm">
-                                          {listing.address}
-                                        </h4>
-                                        <div className="flex items-center text-xs text-gray-500">
-                                          <span>{listing.category}</span>
-                                          <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-300"></span>
-                                          <span>{listing.city}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            );
-                          })}
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   
                   {/* Selected Listing Card */}
-                  {selectedListing && !isListingsOpen && (
+                  {selectedListing && (
                     <div className="mt-5">
                       <Card className="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
                         <CardContent className="p-0">
