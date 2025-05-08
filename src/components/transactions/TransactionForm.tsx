@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -320,7 +319,7 @@ export function TransactionForm() {
                       </div>
                     </PopoverTrigger>
                     
-                    <PopoverContent className="p-0 w-full max-w-[500px] shadow-md border-gray-200">
+                    <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)] shadow-md border-gray-200">
                       <Command className="rounded-lg overflow-hidden">
                         <div className="p-3 border-b border-gray-100">
                           <div className="relative">
@@ -389,7 +388,7 @@ export function TransactionForm() {
                     </PopoverContent>
                   </Popover>
                   
-                  {/* Selected Listing Card with cleaner design */}
+                  {/* Selected Listing Card */}
                   {selectedListing && !isListingsOpen && (
                     <div className="mt-5">
                       <Card className="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
@@ -493,7 +492,7 @@ export function TransactionForm() {
                   <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="w-[var(--radix-select-trigger-width)]">
                     {transactionType === 'revenue' ? (
                       <>
                         <SelectItem value="rent">Rent</SelectItem>
@@ -524,7 +523,7 @@ export function TransactionForm() {
                   <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
                     <SelectValue placeholder="Select a relationship" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="w-[var(--radix-select-trigger-width)]">
                     <SelectItem value="client">Client</SelectItem>
                     <SelectItem value="vendor">Vendor</SelectItem>
                     <SelectItem value="partner">Partner</SelectItem>
@@ -591,7 +590,7 @@ export function TransactionForm() {
                   <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="w-[var(--radix-select-trigger-width)]">
                     <SelectItem value="card">Credit Card</SelectItem>
                     <SelectItem value="bank">Bank Transfer</SelectItem>
                     <SelectItem value="cash">Cash</SelectItem>

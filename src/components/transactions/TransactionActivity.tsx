@@ -81,7 +81,7 @@ export function TransactionActivity() {
             <SelectTrigger className="h-10 text-sm bg-white border-gray-200">
               <SelectValue placeholder="Transaction Type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="w-[var(--radix-select-trigger-width)]">
               <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="income">Income</SelectItem>
               <SelectItem value="expense">Expense</SelectItem>
@@ -93,7 +93,7 @@ export function TransactionActivity() {
             <SelectTrigger className="h-10 text-sm bg-white border-gray-200">
               <SelectValue placeholder="Payment Method" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="w-[var(--radix-select-trigger-width)]">
               <SelectItem value="all">All Methods</SelectItem>
               <SelectItem value="card">Credit Card</SelectItem>
               <SelectItem value="bank">Bank Transfer</SelectItem>
