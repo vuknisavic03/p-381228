@@ -261,12 +261,12 @@ export function TransactionForm() {
                 </div>
                 
                 <div className="space-y-2">
-                  {/* Enhanced Select Component with Better Visual Differentiation */}
+                  {/* Improved Select Component without the blue outline */}
                   <Select value={selectedListing} onValueChange={setSelectedListing}>
                     <SelectTrigger 
                       className={cn(
                         "w-full border-gray-200 bg-white hover:border-gray-300 transition-colors",
-                        selectedListing && "border-indigo-400 ring-2 ring-indigo-100 shadow-sm",
+                        selectedListing && "bg-gray-50 shadow-sm",
                         !selectedListing && "border-dashed border-2 border-gray-300 hover:border-gray-400"
                       )}
                     >
@@ -286,13 +286,27 @@ export function TransactionForm() {
                         <div className="flex flex-col gap-1 mb-3">
                           <span className="text-xs font-medium text-gray-500 px-2">Commercial Properties</span>
                           {mockListings.filter(l => l.type === 'Commercial').map((listing) => (
-                            <SelectItem key={listing.id} value={listing.id.toString()} className="py-3">
+                            <SelectItem key={listing.id} value={listing.id.toString()} className={cn(
+                              "py-3 rounded-md transition-colors",
+                              selectedListing === listing.id.toString() && "bg-gray-50"
+                            )}>
                               <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-md flex items-center justify-center bg-indigo-100 text-indigo-700`}>
-                                  {getListingCategoryIcon(listing.category)}
+                                <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
+                                  selectedListing === listing.id.toString() 
+                                    ? 'bg-indigo-600 text-white' 
+                                    : 'bg-indigo-100 text-indigo-700'
+                                }`}>
+                                  {selectedListing === listing.id.toString() ? (
+                                    <Check className="h-4 w-4" />
+                                  ) : (
+                                    getListingCategoryIcon(listing.category)
+                                  )}
                                 </div>
-                                <div className="flex flex-col">
-                                  <span className="font-medium text-gray-800">{listing.address}</span>
+                                <div className="flex flex-col flex-1">
+                                  <span className={cn(
+                                    "font-medium",
+                                    selectedListing === listing.id.toString() ? "text-indigo-700" : "text-gray-800"
+                                  )}>{listing.address}</span>
                                   <div className="flex items-center gap-2">
                                     <span className="text-xs text-gray-500">
                                       {listing.category}
@@ -303,6 +317,9 @@ export function TransactionForm() {
                                     </span>
                                   </div>
                                 </div>
+                                {selectedListing === listing.id.toString() && (
+                                  <CheckCircle className="h-4 w-4 text-indigo-600 ml-auto" />
+                                )}
                               </div>
                             </SelectItem>
                           ))}
@@ -311,13 +328,27 @@ export function TransactionForm() {
                         <div className="flex flex-col gap-1 mb-2">
                           <span className="text-xs font-medium text-gray-500 px-2">Residential Properties</span>
                           {mockListings.filter(l => l.type === 'Residential').map((listing) => (
-                            <SelectItem key={listing.id} value={listing.id.toString()} className="py-3">
+                            <SelectItem key={listing.id} value={listing.id.toString()} className={cn(
+                              "py-3 rounded-md transition-colors",
+                              selectedListing === listing.id.toString() && "bg-gray-50"
+                            )}>
                               <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-md flex items-center justify-center bg-amber-100 text-amber-700`}>
-                                  <Home className="h-4 w-4" />
+                                <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
+                                  selectedListing === listing.id.toString() 
+                                    ? 'bg-amber-600 text-white' 
+                                    : 'bg-amber-100 text-amber-700'
+                                }`}>
+                                  {selectedListing === listing.id.toString() ? (
+                                    <Check className="h-4 w-4" />
+                                  ) : (
+                                    <Home className="h-4 w-4" />
+                                  )}
                                 </div>
-                                <div className="flex flex-col">
-                                  <span className="font-medium text-gray-800">{listing.address}</span>
+                                <div className="flex flex-col flex-1">
+                                  <span className={cn(
+                                    "font-medium",
+                                    selectedListing === listing.id.toString() ? "text-amber-700" : "text-gray-800"
+                                  )}>{listing.address}</span>
                                   <div className="flex items-center gap-2">
                                     <span className="text-xs text-gray-500">
                                       {listing.category}
@@ -328,6 +359,9 @@ export function TransactionForm() {
                                     </span>
                                   </div>
                                 </div>
+                                {selectedListing === listing.id.toString() && (
+                                  <CheckCircle className="h-4 w-4 text-amber-600 ml-auto" />
+                                )}
                               </div>
                             </SelectItem>
                           ))}
@@ -336,18 +370,18 @@ export function TransactionForm() {
                     </SelectContent>
                   </Select>
                   
-                  {/* Enhanced Selected Listing Card with better outline */}
+                  {/* Enhanced Selected Listing Card with better styling */}
                   {selectedListingDetails && (
                     <div className="mt-4 animate-fade-in">
-                      <Card className="border-indigo-200 bg-gradient-to-br from-indigo-50 to-white shadow-md rounded-xl overflow-hidden">
+                      <Card className="bg-gradient-to-br from-gray-50 to-white shadow-sm rounded-xl overflow-hidden">
                         <div className="absolute top-3 right-3">
-                          <div className="h-6 w-6 rounded-full bg-indigo-500 text-white flex items-center justify-center">
+                          <div className="h-6 w-6 rounded-full bg-teal-500 text-white flex items-center justify-center shadow-sm">
                             <CheckCircle className="h-3.5 w-3.5" />
                           </div>
                         </div>
                         <CardContent className="p-5">
                           <div className="flex items-start gap-4">
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-sm ${
                               selectedListingDetails.type === 'Commercial' 
                                 ? 'bg-indigo-500 text-white' 
                                 : 'bg-amber-500 text-white'
@@ -368,10 +402,18 @@ export function TransactionForm() {
                                   <span>{selectedListingDetails.city}, {selectedListingDetails.country}</span>
                                 </div>
                                 <div className="flex gap-2">
-                                  <span className="text-xs px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 font-medium">
+                                  <span className={`text-xs px-2.5 py-1 rounded-full ${
+                                    selectedListingDetails.type === 'Commercial' 
+                                      ? 'bg-indigo-100 text-indigo-700' 
+                                      : 'bg-amber-100 text-amber-700'
+                                  } font-medium`}>
                                     {selectedListingDetails.type}
                                   </span>
-                                  <span className="text-xs px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 font-medium">
+                                  <span className={`text-xs px-2.5 py-1 rounded-full ${
+                                    selectedListingDetails.type === 'Commercial' 
+                                      ? 'bg-indigo-100 text-indigo-700' 
+                                      : 'bg-amber-100 text-amber-700'
+                                  } font-medium`}>
                                     {selectedListingDetails.category}
                                   </span>
                                 </div>
@@ -379,14 +421,18 @@ export function TransactionForm() {
                               
                               {/* Tenant Information */}
                               {selectedListingDetails.tenant ? (
-                                <div className="mt-4 pt-4 border-t border-indigo-100">
+                                <div className="mt-4 pt-4 border-t border-gray-200">
                                   <div className="flex items-center gap-2 mb-2">
-                                    <User className="h-3.5 w-3.5 text-indigo-500" />
+                                    <User className="h-3.5 w-3.5 text-gray-500" />
                                     <span className="text-sm font-medium text-gray-700">Tenant Information</span>
                                   </div>
                                   
                                   <div className="flex items-center gap-4">
-                                    <div className="h-9 w-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white ${
+                                      selectedListingDetails.type === 'Commercial' 
+                                        ? 'bg-indigo-400' 
+                                        : 'bg-amber-400'
+                                    }`}>
                                       {selectedListingDetails.tenant.type === 'company' ? (
                                         <Building className="h-4 w-4" />
                                       ) : (
@@ -405,19 +451,19 @@ export function TransactionForm() {
                                   
                                   <div className="grid grid-cols-2 gap-3 mt-3">
                                     <div className="flex items-center gap-1.5 text-xs">
-                                      <Mail className="h-3 w-3 text-indigo-400" />
+                                      <Mail className="h-3 w-3 text-gray-400" />
                                       <span className="text-gray-600">{selectedListingDetails.tenant.email}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5 text-xs">
-                                      <Phone className="h-3 w-3 text-indigo-400" />
+                                      <Phone className="h-3 w-3 text-gray-400" />
                                       <span className="text-gray-600">{selectedListingDetails.tenant.phone}</span>
                                     </div>
                                   </div>
                                 </div>
                               ) : (
-                                <div className="mt-4 pt-4 border-t border-indigo-100">
+                                <div className="mt-4 pt-4 border-t border-gray-200">
                                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                                    <User className="h-3.5 w-3.5 text-indigo-400" />
+                                    <User className="h-3.5 w-3.5 text-gray-400" />
                                     <span>No tenant associated with this listing</span>
                                   </div>
                                 </div>
