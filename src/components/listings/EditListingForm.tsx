@@ -191,7 +191,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   return (
     <div className="flex flex-col p-6 w-full h-full">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Edit listing #{listing.id}</h2>
+        <h2 className="text-xl font-semibold">Edit listing</h2>
         <SheetClose asChild>
           <Button variant="outline" size="icon">
             <X className="h-4 w-4" />
