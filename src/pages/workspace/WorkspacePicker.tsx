@@ -161,28 +161,28 @@ export default function WorkspacePicker() {
   };
 
   return (
-    <div className="h-screen bg-white flex">
-      <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white">
-        <div className="p-4 border-b border-[#E4E5EA]">
+    <div className="h-screen bg-[#FAFAFA] flex">
+      <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white shadow-sm">
+        <div className="p-5 border-b border-[#E4E5EA]">
           <div className="flex items-center justify-between">
             <h2 className="text-[#1A1A1A] text-lg font-semibold">Choose Workspace</h2>
             <button 
               onClick={() => setIsDialogOpen(true)}
-              className="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-[#F6F6F7] hover:bg-[#EEEEF0] transition-colors"
             >
               <Plus className="w-4 h-4 text-[#1A1A1A]" />
             </button>
           </div>
         </div>
-        <div className="space-y-1 p-2">
+        <div className="space-y-1 p-3">
           {workspaces.map((workspace) => (
             <button
               key={workspace.name}
               onClick={() => navigate('/dashboard')}
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left"
+              className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-[#F6F6F7] transition-colors text-left"
             >
               <div className="flex items-center gap-3">
-                <div className="min-w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
+                <div className="min-w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                   {workspace.initials}
                 </div>
                 <div>
@@ -196,61 +196,63 @@ export default function WorkspacePicker() {
         </div>
       </div>
 
-      <div className="flex-1 p-8 overflow-auto">
-        <div className="max-w-5xl mx-auto">
+      <div className="flex-1 p-8 overflow-auto bg-[#FAFAFA]">
+        <div className="max-w-6xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-2xl font-semibold mb-2">Workspace Analytics</h1>
-            <p className="text-[#9EA3AD]">Select a workspace to view detailed analytics</p>
+            <h1 className="text-3xl font-semibold mb-2 text-[#1A1A1A]">Workspace Analytics</h1>
+            <p className="text-[#6E6E76] text-lg">Select a workspace to view detailed analytics</p>
             
-            <div className="flex gap-4 mt-4 mb-6">
+            <div className="flex gap-4 mt-6 mb-8">
               <button
                 onClick={() => setActiveChartType('revenue')}
-                className={`px-4 py-2 rounded-md transition-all ${
+                className={`px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 ${
                   activeChartType === 'revenue' 
-                  ? 'bg-[#9b87f5] text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#9b87f5] text-white shadow-md' 
+                  : 'bg-white text-[#1A1A1A] border border-[#E4E5EA] hover:bg-gray-50'
                 }`}
               >
+                <BarChart size={18} />
                 Property Revenue
               </button>
               <button
                 onClick={() => setActiveChartType('commission')}
-                className={`px-4 py-2 rounded-md transition-all ${
+                className={`px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 ${
                   activeChartType === 'commission' 
-                  ? 'bg-[#0EA5E9] text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[#0EA5E9] text-white shadow-md' 
+                  : 'bg-white text-[#1A1A1A] border border-[#E4E5EA] hover:bg-gray-50'
                 }`}
               >
+                <TrendingUp size={18} />
                 Manager Commission
               </button>
             </div>
           </div>
           
           {activeChartType === 'revenue' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="shadow-md border border-[#E7E8EC] hover:shadow-lg transition-all cursor-pointer"
+                  className="overflow-hidden border-none rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer bg-white"
                   onClick={() => navigate('/dashboard')}
                 >
                   <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
-                        <div className="min-w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
+                        <div className="min-w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
                           <div className="text-[#1A1A1A] font-semibold">{workspace.name}</div>
-                          <div className="text-sm text-[#9EA3AD]">{workspace.owner}</div>
+                          <div className="text-sm text-[#6E6E76]">{workspace.owner}</div>
                         </div>
                       </div>
-                      <div className="bg-[#9b87f5] text-white p-2 rounded-md">
+                      <div className="bg-[#9b87f5] text-white p-2 rounded-lg shadow-md">
                         <BarChart size={18} />
                       </div>
                     </div>
                     
-                    <div className="h-[160px] mt-2">
+                    <div className="h-[180px] mt-4">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -266,7 +268,7 @@ export default function WorkspacePicker() {
                             dataKey="month" 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6E6E76', fontSize: 10 }}
+                            tick={{ fill: '#6E6E76', fontSize: 12 }}
                           />
                           <Tooltip content={<CustomTooltip />} />
                           <Area
@@ -277,6 +279,7 @@ export default function WorkspacePicker() {
                             fill={`url(#colorRevenue${index})`}
                             strokeWidth={2}
                             name="revenue"
+                            activeDot={{ r: 6, strokeWidth: 0 }}
                           />
                         </AreaChart>
                       </ResponsiveContainer>
@@ -286,30 +289,30 @@ export default function WorkspacePicker() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="shadow-md border border-[#E7E8EC] hover:shadow-lg transition-all cursor-pointer"
+                  className="overflow-hidden border-none rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer bg-white"
                   onClick={() => navigate('/dashboard')}
                 >
                   <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
-                        <div className="min-w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
+                        <div className="min-w-10 h-10 rounded-xl bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
                           <div className="text-[#1A1A1A] font-semibold">{workspace.name}</div>
-                          <div className="text-sm text-[#9EA3AD]">{workspace.owner}</div>
+                          <div className="text-sm text-[#6E6E76]">{workspace.owner}</div>
                         </div>
                       </div>
-                      <div className="bg-[#0EA5E9] text-white p-2 rounded-md">
+                      <div className="bg-[#0EA5E9] text-white p-2 rounded-lg shadow-md">
                         <TrendingUp size={18} />
                       </div>
                     </div>
                     
-                    <div className="h-[200px] mt-2">
+                    <div className="h-[200px] mt-4">
                       <ResponsiveContainer width="100%" height="100%">
                         <RechartsBarChart
                           data={workspace.commissionData}
@@ -320,12 +323,12 @@ export default function WorkspacePicker() {
                             dataKey="month" 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6E6E76', fontSize: 10 }}
+                            tick={{ fill: '#6E6E76', fontSize: 12 }}
                           />
                           <YAxis 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6E6E76', fontSize: 10 }}
+                            tick={{ fill: '#6E6E76', fontSize: 12 }}
                             tickFormatter={(value) => `$${value}k`}
                           />
                           <Tooltip content={<CustomTooltip />} />
