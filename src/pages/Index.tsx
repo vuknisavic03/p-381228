@@ -1,6 +1,6 @@
 
-import { WorkspaceOverview } from "@/components/workspace/WorkspaceOverview";
+import { Overview } from "@/components/dashboard/Overview";
 
 export default function Index() {
-  return <WorkspaceOverview />;
+  return <Overview />;
 }
