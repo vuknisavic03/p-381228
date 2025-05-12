@@ -144,6 +144,10 @@ export default function WorkspacePicker() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeChartType, setActiveChartType] = useState<'revenue' | 'commission'>('revenue');
 
+  const handleWorkspaceSelect = () => {
+    navigate('/dashboard');
+  };
+
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -178,7 +182,7 @@ export default function WorkspacePicker() {
           {workspaces.map((workspace) => (
             <button
               key={workspace.name}
-              onClick={() => navigate('/dashboard')}
+              onClick={handleWorkspaceSelect}
               className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-[#F6F6F7] transition-colors text-left"
             >
               <div className="flex items-center gap-3">
@@ -234,7 +238,7 @@ export default function WorkspacePicker() {
                 <Card 
                   key={index}
                   className="overflow-hidden border-none rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer bg-white"
-                  onClick={() => navigate('/dashboard')}
+                  onClick={handleWorkspaceSelect}
                 >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-5">
@@ -294,7 +298,7 @@ export default function WorkspacePicker() {
                 <Card 
                   key={index}
                   className="overflow-hidden border-none rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer bg-white"
-                  onClick={() => navigate('/dashboard')}
+                  onClick={handleWorkspaceSelect}
                 >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-5">
