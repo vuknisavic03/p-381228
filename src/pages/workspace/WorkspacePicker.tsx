@@ -151,7 +151,7 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-2 border border-gray-200 shadow-lg rounded-md">
+        <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md">
           <p className="font-medium text-gray-700">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="font-semibold text-gray-800" style={{ color: entry.color }}>
@@ -166,13 +166,13 @@ export default function WorkspacePicker() {
 
   return (
     <div className="h-screen flex overflow-hidden bg-white">
-      <div className="w-[280px] border-r border-[#E4E5EA] bg-white shadow-sm flex-shrink-0">
-        <div className="p-4 border-b border-[#E4E5EA]">
+      <div className="w-[280px] border-r border-[#EAEAEC] bg-white shadow-sm flex-shrink-0">
+        <div className="p-4 border-b border-[#EAEAEC]">
           <div className="flex items-center justify-between">
             <h2 className="text-[#1A1A1A] text-lg font-semibold">Workspaces</h2>
             <button 
               onClick={() => setIsDialogOpen(true)}
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-[#F6F6F7] hover:bg-[#EEEEF0] transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-[#F9F9FA] hover:bg-[#F0F0F2] transition-colors"
             >
               <Plus className="w-4 h-4 text-[#1A1A1A]" />
             </button>
@@ -183,10 +183,10 @@ export default function WorkspacePicker() {
             <button
               key={workspace.name}
               onClick={handleWorkspaceSelect}
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left mx-1.5"
+              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F9F9FA] transition-colors text-left mx-1.5"
             >
               <div className="flex items-center gap-2.5">
-                <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                   {workspace.initials}
                 </div>
                 <div>
@@ -207,7 +207,7 @@ export default function WorkspacePicker() {
               <Button
                 onClick={() => setActiveChartType('revenue')}
                 variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
-                className={`gap-2 py-1.5 px-3 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                className={`gap-2 py-1.5 px-3 rounded-md border border-[#EAEAEC] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
                   activeChartType === 'revenue' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
                 }`}
                 size="sm"
@@ -220,7 +220,7 @@ export default function WorkspacePicker() {
               <Button
                 onClick={() => setActiveChartType('commission')}
                 variant={activeChartType === 'commission' ? 'outline' : 'outline'}
-                className={`gap-2 py-1.5 px-3 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                className={`gap-2 py-1.5 px-3 rounded-md border border-[#EAEAEC] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
                   activeChartType === 'commission' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
                 }`}
                 size="sm"
@@ -238,13 +238,13 @@ export default function WorkspacePicker() {
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="overflow-hidden border border-[#E4E5EA] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
+                  className="overflow-hidden border border-[#EAEAEC] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
                   <CardContent className="p-3.5">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2.5">
-                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
@@ -257,7 +257,7 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-28 mt-1 pt-2 border-t border-[#F1F1F1]">
+                    <div className="h-28 mt-1 pt-2 border-t border-[#F5F5F6]">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -265,8 +265,8 @@ export default function WorkspacePicker() {
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.6} />
-                              <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.1} />
+                              <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.7} />
+                              <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.05} />
                             </linearGradient>
                           </defs>
                           <XAxis 
@@ -284,7 +284,7 @@ export default function WorkspacePicker() {
                             fill={`url(#colorRevenue${index})`}
                             strokeWidth={1.5}
                             name="revenue"
-                            activeDot={{ r: 4, strokeWidth: 0 }}
+                            activeDot={{ r: 4, strokeWidth: 0, fill: '#9b87f5' }}
                           />
                         </AreaChart>
                       </ResponsiveContainer>
@@ -298,13 +298,13 @@ export default function WorkspacePicker() {
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="overflow-hidden border border-[#E4E5EA] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
+                  className="overflow-hidden border border-[#EAEAEC] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
                   <CardContent className="p-3.5">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2.5">
-                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
@@ -317,13 +317,13 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-28 mt-1 pt-2 border-t border-[#F1F1F1]">
+                    <div className="h-28 mt-1 pt-2 border-t border-[#F5F5F6]">
                       <ResponsiveContainer width="100%" height="100%">
                         <RechartsBarChart
                           data={workspace.commissionData}
                           margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
                         >
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.1} />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.05} />
                           <XAxis 
                             dataKey="month" 
                             axisLine={false}
@@ -335,13 +335,14 @@ export default function WorkspacePicker() {
                             tickLine={false}
                             tick={{ fill: '#9EA3AD', fontSize: 10 }}
                             tickFormatter={(value) => `$${value}k`}
+                            width={25}
                           />
                           <Tooltip content={<CustomTooltip />} />
                           <Bar 
                             dataKey="commission" 
                             fill="#0EA5E9"
-                            fillOpacity={0.7}
-                            radius={[3, 3, 0, 0]}
+                            fillOpacity={0.8}
+                            radius={[4, 4, 0, 0]}
                             name="commission"
                           />
                         </RechartsBarChart>

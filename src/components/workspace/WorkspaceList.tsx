@@ -17,8 +17,8 @@ const workspaces: Workspace[] = [
 
 export function WorkspaceList() {
   return (
-    <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white">
-      <div className="p-4 border-b border-[#E4E5EA]">
+    <div className="w-[280px] border-r border-[#EAEAEC] h-full bg-white">
+      <div className="p-4 border-b border-[#EAEAEC]">
         <div className="flex items-center justify-between">
           <h2 className="text-[#1A1A1A] text-lg font-semibold">Choose Workspace</h2>
           <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100">
@@ -30,7 +30,7 @@ export function WorkspaceList() {
         {workspaces.map((workspace) => (
           <button
             key={workspace.name}
-            className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left"
+            className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F9F9FA] transition-colors text-left"
           >
             <div>
               <div className="text-[#1A1A1A] font-medium text-base">{workspace.name}</div>

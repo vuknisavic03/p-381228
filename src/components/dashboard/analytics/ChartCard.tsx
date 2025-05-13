@@ -47,7 +47,7 @@ export function ChartCard({
     if (active && payload && payload.length) {
       if (chartType === "donut") {
         return (
-          <div className="bg-white p-2 border border-gray-200 shadow-lg rounded-md">
+          <div className="bg-white p-2 border border-[#EAEAEC] shadow-lg rounded-md">
             <p className="font-medium text-gray-700">{payload[0].name}</p>
             <p className="font-semibold text-gray-800">{`${payload[0].value}%`}</p>
           </div>
@@ -55,7 +55,7 @@ export function ChartCard({
       }
       
       return (
-        <div className="bg-white p-2 border border-gray-200 shadow-lg rounded-md">
+        <div className="bg-white p-2 border border-[#EAEAEC] shadow-lg rounded-md">
           <p className="font-medium text-gray-700">{label || 'Month'}</p>
           <p className="font-semibold text-gray-800" style={{ color: colorValue }}>
             {title === "Income" ? `${payload[0].value}%` : `${payload[0].value}`}
@@ -68,7 +68,7 @@ export function ChartCard({
 
   if (isLoading) {
     return (
-      <Card className="p-5 shadow-md border border-[#E7E8EC] h-[380px] transition-all hover:shadow-lg bg-white">
+      <Card className="p-5 shadow-md border border-[#EAEAEC] h-[380px] transition-all hover:shadow-lg bg-white">
         <CardHeader className="p-0 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium">{title}</CardTitle>
@@ -112,7 +112,9 @@ export function ChartCard({
                 {chartData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
-                    fill={index === 0 ? colorValue : "#F3F4F6"} 
+                    fill={index === 0 ? colorValue : "#F8F8F9"} 
+                    stroke={index === 0 ? colorValue : "#F0F0F2"}
+                    strokeWidth={1}
                   />
                 ))}
               </Pie>
@@ -124,7 +126,10 @@ export function ChartCard({
               <div key={index} className="flex items-center gap-1.5">
                 <div 
                   className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: index === 0 ? colorValue : "#F3F4F6" }} 
+                  style={{ 
+                    backgroundColor: index === 0 ? colorValue : "#F8F8F9", 
+                    border: `1px solid ${index === 0 ? colorValue : "#F0F0F2"}` 
+                  }} 
                 />
                 <span className="text-xs text-gray-700">{entry.name}: {entry.value}%</span>
               </div>
@@ -147,8 +152,8 @@ export function ChartCard({
         >
           <defs>
             <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colorValue} stopOpacity={0.8} />
-              <stop offset="95%" stopColor={colorValue} stopOpacity={0.1} />
+              <stop offset="5%" stopColor={colorValue} stopOpacity={0.7} />
+              <stop offset="95%" stopColor={colorValue} stopOpacity={0.05} />
             </linearGradient>
           </defs>
           <XAxis 
@@ -172,7 +177,7 @@ export function ChartCard({
             fillOpacity={1}
             fill={`url(#color${title.replace(/\s+/g, '')})`}
             strokeWidth={2}
-            activeDot={{ r: 5, stroke: colorValue, strokeWidth: 2, fill: '#fff' }}
+            activeDot={{ r: 5, stroke: colorValue, strokeWidth: 0, fill: '#fff' }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -180,7 +185,7 @@ export function ChartCard({
   };
 
   return (
-    <Card className="p-5 shadow-md border border-[#E7E8EC] h-[380px] transition-all hover:shadow-lg bg-white flex flex-col">
+    <Card className="p-5 shadow-md border border-[#EAEAEC] h-[380px] transition-all hover:shadow-lg bg-white flex flex-col">
       <CardHeader className="p-0 pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium">{title}</CardTitle>

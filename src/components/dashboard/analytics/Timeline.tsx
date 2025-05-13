@@ -22,7 +22,7 @@ interface TimelineProps {
 export function Timeline({ data, isLoading = false }: TimelineProps) {
   if (isLoading) {
     return (
-      <Card className="shadow-md border border-[#E7E8EC] p-4 bg-white h-[300px]">
+      <Card className="shadow-md border border-[#EAEAEC] p-4 bg-white h-[300px]">
         <CardHeader className="p-0 pb-2">
           <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
         </CardHeader>
@@ -39,7 +39,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-2 border border-gray-200 shadow-lg rounded-md">
+        <div className="bg-white p-2 border border-[#EAEAEC] shadow-lg rounded-md">
           <p className="font-semibold text-gray-700">{label}</p>
           <div className="mt-1">
             {payload.map((entry, index) => (
@@ -56,7 +56,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   };
 
   return (
-    <Card className="shadow-md border border-[#E7E8EC] p-4 bg-white h-[300px]">
+    <Card className="shadow-md border border-[#EAEAEC] p-4 bg-white h-[300px]">
       <CardHeader className="p-0 pb-2">
         <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
       </CardHeader>
@@ -75,19 +75,19 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#F97316" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#F97316" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#F97316" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+              <CartesianGrid strokeDasharray="3 3" opacity={0.05} />
               <XAxis 
                 dataKey="month" 
                 tick={{ fill: '#6E6E76', fontSize: 10 }} 
                 tickLine={false} 
-                axisLine={{ strokeWidth: 1, stroke: '#E7E8EC' }}
+                axisLine={{ strokeWidth: 1, stroke: '#EAEAEC' }}
               />
               <YAxis 
                 tick={{ fill: '#6E6E76', fontSize: 10 }}
@@ -111,7 +111,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 fillOpacity={1}
                 fill="url(#colorRevenue)"
                 strokeWidth={2}
-                activeDot={{ r: 4 }}
+                activeDot={{ r: 4, fill: "#9b87f5", strokeWidth: 0 }}
                 name="Revenue"
               />
               <Area
@@ -121,7 +121,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 fillOpacity={1}
                 fill="url(#colorProfit)"
                 strokeWidth={2}
-                activeDot={{ r: 4 }}
+                activeDot={{ r: 4, fill: "#F97316", strokeWidth: 0 }}
                 name="Profit"
               />
             </AreaChart>
