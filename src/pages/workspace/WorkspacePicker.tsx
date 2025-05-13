@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -165,11 +164,11 @@ export default function WorkspacePicker() {
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-[#FAFAFA]">
+    <div className="h-screen flex overflow-hidden bg-white">
       <div className="w-[280px] border-r border-[#E4E5EA] bg-white shadow-sm flex-shrink-0">
         <div className="p-4 border-b border-[#E4E5EA]">
           <div className="flex items-center justify-between">
-            <h2 className="text-[#1A1A1A] text-base font-semibold">Workspaces</h2>
+            <h2 className="text-[#1A1A1A] text-lg font-semibold">Workspaces</h2>
             <button 
               onClick={() => setIsDialogOpen(true)}
               className="w-7 h-7 flex items-center justify-center rounded-full bg-[#F6F6F7] hover:bg-[#EEEEF0] transition-colors"
@@ -183,18 +182,18 @@ export default function WorkspacePicker() {
             <button
               key={workspace.name}
               onClick={handleWorkspaceSelect}
-              className="w-full flex items-center justify-between p-2.5 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left mx-1.5"
+              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left mx-1.5"
             >
-              <div className="flex items-center gap-2">
-                <div className="min-w-7 h-7 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+              <div className="flex items-center gap-2.5">
+                <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                   {workspace.initials}
                 </div>
                 <div>
-                  <div className="text-[#1A1A1A] font-medium truncate max-w-28 text-sm">{workspace.name}</div>
-                  <div className="text-xs text-[#9EA3AD] truncate max-w-28">{workspace.owner}</div>
+                  <div className="text-[#1A1A1A] font-medium truncate max-w-36 text-base">{workspace.name}</div>
+                  <div className="text-sm text-[#9EA3AD] truncate max-w-36">{workspace.owner}</div>
                 </div>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-[#9EA3AD]" />
+              <ChevronRight className="w-4 h-4 text-[#9EA3AD]" />
             </button>
           ))}
         </div>
@@ -202,11 +201,8 @@ export default function WorkspacePicker() {
 
       <div className="flex-1 overflow-auto pb-6">
         <div className="w-full mx-auto p-2 md:px-4">
-          <div className="mb-4">
-            <h1 className="text-xl md:text-2xl font-semibold mb-1 text-[#1A1A1A]">Workspace Analytics</h1>
-            <p className="text-[#6E6E76] text-sm">Select a workspace to view detailed analytics</p>
-            
-            <div className="flex gap-3 mt-4 mb-5">
+          <div className="mb-5">            
+            <div className="flex gap-3 mt-4">
               <Button
                 onClick={() => setActiveChartType('revenue')}
                 variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
@@ -244,19 +240,19 @@ export default function WorkspacePicker() {
                   className="overflow-hidden border-none rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
-                  <CardContent className="p-3">
+                  <CardContent className="p-3.5">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="min-w-7 h-7 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                      <div className="flex items-center gap-2.5">
+                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
-                          <div className="text-[#1A1A1A] font-medium text-sm">{workspace.name}</div>
-                          <div className="text-xs text-[#6E6E76]">{workspace.owner}</div>
+                          <div className="text-[#1A1A1A] font-medium text-base">{workspace.name}</div>
+                          <div className="text-sm text-[#6E6E76]">{workspace.owner}</div>
                         </div>
                       </div>
                       <div className="text-[#9b87f5] p-1 rounded-lg">
-                        <BarChart size={16} />
+                        <BarChart size={18} />
                       </div>
                     </div>
                     
@@ -304,19 +300,19 @@ export default function WorkspacePicker() {
                   className="overflow-hidden border-none rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
-                  <CardContent className="p-3">
+                  <CardContent className="p-3.5">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="min-w-7 h-7 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                      <div className="flex items-center gap-2.5">
+                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
-                          <div className="text-[#1A1A1A] font-medium text-sm">{workspace.name}</div>
-                          <div className="text-xs text-[#6E6E76]">{workspace.owner}</div>
+                          <div className="text-[#1A1A1A] font-medium text-base">{workspace.name}</div>
+                          <div className="text-sm text-[#6E6E76]">{workspace.owner}</div>
                         </div>
                       </div>
                       <div className="text-[#0EA5E9] p-1 rounded-lg">
-                        <TrendingUp size={16} />
+                        <TrendingUp size={18} />
                       </div>
                     </div>
                     
