@@ -11,9 +11,6 @@ export function WorkspaceOverview() {
       </div>
       <div className="flex-1 overflow-auto px-8 pb-10">
         <div className="max-w-[1600px] mx-auto">
-          <div className="text-lg font-medium text-gray-800 mb-6 border-b border-[#F5F5F6] pb-4">
-            <h2>Workspace Overview</h2>
-          </div>
           <AnalyticsGrid />
         </div>
       </div>
