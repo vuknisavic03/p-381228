@@ -1,8 +1,6 @@
 
-import { useNavigate } from 'react-router-dom';
-import WorkspacePicker from "@/pages/workspace/WorkspacePicker";
+import { Overview } from "@/components/dashboard/Overview";
 
 export default function Index() {
-  const navigate = useNavigate();
-  return <WorkspacePicker />;
+  return <Overview />;
 }

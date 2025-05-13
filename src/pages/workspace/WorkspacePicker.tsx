@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -209,12 +208,10 @@ export default function WorkspacePicker() {
             <div className="flex gap-4 mt-6 mb-8">
               <Button
                 onClick={() => setActiveChartType('revenue')}
-                variant={activeChartType === 'revenue' ? 'default' : 'outline'}
-                className={`gap-2 rounded-md ${
-                  activeChartType === 'revenue' 
-                  ? 'bg-white text-[#1A1A1A] border border-[#E4E5EA]' 
-                  : 'bg-white text-[#1A1A1A] border border-[#E4E5EA]'
-                } hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0]`}
+                variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
+                className={`gap-2 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                  activeChartType === 'revenue' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
+                }`}
               >
                 <BarChart className={`w-4 h-4 ${activeChartType === 'revenue' ? 'text-[#9b87f5]' : 'text-[#6E6E76]'}`} />
                 <span className={`text-sm ${activeChartType === 'revenue' ? 'font-medium' : 'font-normal'}`}>
@@ -223,12 +220,10 @@ export default function WorkspacePicker() {
               </Button>
               <Button
                 onClick={() => setActiveChartType('commission')}
-                variant={activeChartType === 'commission' ? 'default' : 'outline'}
-                className={`gap-2 rounded-md ${
-                  activeChartType === 'commission' 
-                  ? 'bg-white text-[#1A1A1A] border border-[#E4E5EA]' 
-                  : 'bg-white text-[#1A1A1A] border border-[#E4E5EA]'
-                } hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0]`}
+                variant={activeChartType === 'commission' ? 'outline' : 'outline'}
+                className={`gap-2 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                  activeChartType === 'commission' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
+                }`}
               >
                 <TrendingUp className={`w-4 h-4 ${activeChartType === 'commission' ? 'text-[#0EA5E9]' : 'text-[#6E6E76]'}`} />
                 <span className={`text-sm ${activeChartType === 'commission' ? 'font-medium' : 'font-normal'}`}>
@@ -239,7 +234,7 @@ export default function WorkspacePicker() {
           </div>
           
           {activeChartType === 'revenue' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
@@ -299,7 +294,7 @@ export default function WorkspacePicker() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
