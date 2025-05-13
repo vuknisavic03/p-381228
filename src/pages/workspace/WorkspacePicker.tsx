@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -165,68 +166,70 @@ export default function WorkspacePicker() {
 
   return (
     <div className="h-screen flex overflow-hidden bg-[#FAFAFA]">
-      <div className="w-64 border-r border-[#E4E5EA] bg-white shadow-sm flex-shrink-0">
-        <div className="p-4 border-b border-[#E4E5EA]">
+      <div className="w-56 border-r border-[#E4E5EA] bg-white shadow-sm flex-shrink-0">
+        <div className="p-3 border-b border-[#E4E5EA]">
           <div className="flex items-center justify-between">
-            <h2 className="text-[#1A1A1A] text-lg font-semibold">Workspaces</h2>
+            <h2 className="text-[#1A1A1A] text-base font-semibold">Workspaces</h2>
             <button 
               onClick={() => setIsDialogOpen(true)}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-[#F6F6F7] hover:bg-[#EEEEF0] transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-[#F6F6F7] hover:bg-[#EEEEF0] transition-colors"
             >
               <Plus className="w-4 h-4 text-[#1A1A1A]" />
             </button>
           </div>
         </div>
-        <div className="overflow-auto h-[calc(100vh-64px)]">
+        <div className="overflow-auto h-[calc(100vh-57px)]">
           {workspaces.map((workspace) => (
             <button
               key={workspace.name}
               onClick={handleWorkspaceSelect}
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left mx-2"
+              className="w-full flex items-center justify-between p-2.5 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left mx-1.5"
             >
-              <div className="flex items-center gap-3">
-                <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+              <div className="flex items-center gap-2">
+                <div className="min-w-7 h-7 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                   {workspace.initials}
                 </div>
                 <div>
-                  <div className="text-[#1A1A1A] font-medium truncate max-w-36">{workspace.name}</div>
-                  <div className="text-xs text-[#9EA3AD] truncate max-w-36">{workspace.owner}</div>
+                  <div className="text-[#1A1A1A] font-medium truncate max-w-28 text-sm">{workspace.name}</div>
+                  <div className="text-xs text-[#9EA3AD] truncate max-w-28">{workspace.owner}</div>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#9EA3AD]" />
+              <ChevronRight className="w-3.5 h-3.5 text-[#9EA3AD]" />
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto pb-8">
-        <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
-          <div className="mb-6">
-            <h1 className="text-2xl md:text-3xl font-semibold mb-1 text-[#1A1A1A]">Workspace Analytics</h1>
-            <p className="text-[#6E6E76] text-sm md:text-base">Select a workspace to view detailed analytics</p>
+      <div className="flex-1 overflow-auto pb-6">
+        <div className="max-w-full mx-auto p-3 md:p-4">
+          <div className="mb-4">
+            <h1 className="text-xl md:text-2xl font-semibold mb-1 text-[#1A1A1A]">Workspace Analytics</h1>
+            <p className="text-[#6E6E76] text-sm">Select a workspace to view detailed analytics</p>
             
-            <div className="flex gap-4 mt-6 mb-8">
+            <div className="flex gap-3 mt-4 mb-5">
               <Button
                 onClick={() => setActiveChartType('revenue')}
                 variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
-                className={`gap-2 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                className={`gap-2 py-1.5 px-3 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
                   activeChartType === 'revenue' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
                 }`}
+                size="sm"
               >
                 <BarChart className={`w-4 h-4 ${activeChartType === 'revenue' ? 'text-[#9b87f5]' : 'text-[#6E6E76]'}`} />
-                <span className={`text-sm ${activeChartType === 'revenue' ? 'font-medium' : 'font-normal'}`}>
+                <span className={`text-xs ${activeChartType === 'revenue' ? 'font-medium' : 'font-normal'}`}>
                   Property Revenue
                 </span>
               </Button>
               <Button
                 onClick={() => setActiveChartType('commission')}
                 variant={activeChartType === 'commission' ? 'outline' : 'outline'}
-                className={`gap-2 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                className={`gap-2 py-1.5 px-3 rounded-md border border-[#E4E5EA] bg-white hover:bg-[#F6F6F7] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
                   activeChartType === 'commission' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
                 }`}
+                size="sm"
               >
                 <TrendingUp className={`w-4 h-4 ${activeChartType === 'commission' ? 'text-[#0EA5E9]' : 'text-[#6E6E76]'}`} />
-                <span className={`text-sm ${activeChartType === 'commission' ? 'font-medium' : 'font-normal'}`}>
+                <span className={`text-xs ${activeChartType === 'commission' ? 'font-medium' : 'font-normal'}`}>
                   Manager Commission
                 </span>
               </Button>
@@ -234,17 +237,17 @@ export default function WorkspacePicker() {
           </div>
           
           {activeChartType === 'revenue' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
                   className="overflow-hidden border-none rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-3">
+                  <CardContent className="p-3">
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                        <div className="min-w-7 h-7 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
@@ -252,12 +255,12 @@ export default function WorkspacePicker() {
                           <div className="text-xs text-[#6E6E76]">{workspace.owner}</div>
                         </div>
                       </div>
-                      <div className="text-[#9b87f5] p-1.5 rounded-lg">
+                      <div className="text-[#9b87f5] p-1 rounded-lg">
                         <BarChart size={16} />
                       </div>
                     </div>
                     
-                    <div className="h-36 mt-2">
+                    <div className="h-28 mt-1">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -294,17 +297,17 @@ export default function WorkspacePicker() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
                   className="overflow-hidden border-none rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-3">
+                  <CardContent className="p-3">
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                        <div className="min-w-7 h-7 rounded-lg bg-gradient-to-br from-[#F6F6F7] to-[#EEEEF0] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
                         </div>
                         <div>
@@ -312,12 +315,12 @@ export default function WorkspacePicker() {
                           <div className="text-xs text-[#6E6E76]">{workspace.owner}</div>
                         </div>
                       </div>
-                      <div className="text-[#0EA5E9] p-1.5 rounded-lg">
+                      <div className="text-[#0EA5E9] p-1 rounded-lg">
                         <TrendingUp size={16} />
                       </div>
                     </div>
                     
-                    <div className="h-36 mt-2">
+                    <div className="h-28 mt-1">
                       <ResponsiveContainer width="100%" height="100%">
                         <RechartsBarChart
                           data={workspace.commissionData}
