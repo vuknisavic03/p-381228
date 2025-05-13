@@ -166,8 +166,8 @@ export default function WorkspacePicker() {
 
   return (
     <div className="h-screen flex overflow-hidden bg-[#FAFAFA]">
-      <div className="w-56 border-r border-[#E4E5EA] bg-white shadow-sm flex-shrink-0">
-        <div className="p-3 border-b border-[#E4E5EA]">
+      <div className="w-[280px] border-r border-[#E4E5EA] bg-white shadow-sm flex-shrink-0">
+        <div className="p-4 border-b border-[#E4E5EA]">
           <div className="flex items-center justify-between">
             <h2 className="text-[#1A1A1A] text-base font-semibold">Workspaces</h2>
             <button 
