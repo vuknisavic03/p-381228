@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -237,7 +238,7 @@ export default function WorkspacePicker() {
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="overflow-hidden border-none rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
+                  className="overflow-hidden border border-[#E4E5EA] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
                   <CardContent className="p-3.5">
@@ -256,7 +257,7 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-28 mt-1">
+                    <div className="h-28 mt-1 pt-2 border-t border-[#F1F1F1]">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -297,7 +298,7 @@ export default function WorkspacePicker() {
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="overflow-hidden border-none rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
+                  className="overflow-hidden border border-[#E4E5EA] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
                   <CardContent className="p-3.5">
@@ -316,7 +317,7 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-28 mt-1">
+                    <div className="h-28 mt-1 pt-2 border-t border-[#F1F1F1]">
                       <ResponsiveContainer width="100%" height="100%">
                         <RechartsBarChart
                           data={workspace.commissionData}

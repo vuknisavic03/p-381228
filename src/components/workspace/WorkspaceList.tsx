@@ -33,7 +33,7 @@ export function WorkspaceList() {
             className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F6F6F7] transition-colors text-left"
           >
             <div>
-              <div className="text-[#1A1A1A] font-medium">{workspace.name}</div>
+              <div className="text-[#1A1A1A] font-medium text-base">{workspace.name}</div>
               <div className="text-sm text-[#9EA3AD]">{workspace.owner}</div>
             </div>
             <ChevronRight className="w-5 h-5 text-[#9EA3AD]" />
