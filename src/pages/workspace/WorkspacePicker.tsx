@@ -201,7 +201,7 @@ export default function WorkspacePicker() {
       </div>
 
       <div className="flex-1 overflow-auto pb-6">
-        <div className="max-w-full mx-auto p-3 md:p-4">
+        <div className="w-full mx-auto p-2 md:px-4">
           <div className="mb-4">
             <h1 className="text-xl md:text-2xl font-semibold mb-1 text-[#1A1A1A]">Workspace Analytics</h1>
             <p className="text-[#6E6E76] text-sm">Select a workspace to view detailed analytics</p>
@@ -237,7 +237,7 @@ export default function WorkspacePicker() {
           </div>
           
           {activeChartType === 'revenue' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-2 px-1">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
@@ -297,7 +297,7 @@ export default function WorkspacePicker() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-2 px-1">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
