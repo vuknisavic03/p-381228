@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Listings from "./pages/Listings";
 import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
+import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
 
