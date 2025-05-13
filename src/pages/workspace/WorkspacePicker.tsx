@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -149,6 +148,22 @@ const yearlyCommissionData = [
   { year: "2022", commission: 68.2 },
   { year: "2023", commission: 72.9 },
   { year: "2024", commission: 65.3 },
+];
+
+// New monthly commission data for the current year
+const monthlyCommissionData = [
+  { month: "Jan", commission: 4.8 },
+  { month: "Feb", commission: 5.3 },
+  { month: "Mar", commission: 4.2 },
+  { month: "Apr", commission: 6.2 },
+  { month: "May", commission: 6.8 },
+  { month: "Jun", commission: 7.2 },
+  { month: "Jul", commission: 6.5 },
+  { month: "Aug", commission: 5.9 },
+  { month: "Sep", commission: 6.8 },
+  { month: "Oct", commission: 7.1 },
+  { month: "Nov", commission: 5.8 },
+  { month: "Dec", commission: 6.3 },
 ];
 
 export default function WorkspacePicker() {
@@ -355,8 +370,8 @@ export default function WorkspacePicker() {
                 <CardContent className="p-5 h-full">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-medium text-[#1A1A1A]">Yearly Manager Commission</h3>
-                      <p className="text-sm text-[#6E6E76]">Annual commission earnings across all workspaces</p>
+                      <h3 className="text-xl font-medium text-[#1A1A1A]">Monthly Manager Commission</h3>
+                      <p className="text-sm text-[#6E6E76]">Commission earnings for current year (2025)</p>
                     </div>
                     <div className="text-[#0EA5E9] p-1 rounded-lg">
                       <TrendingUp size={22} />
@@ -372,12 +387,12 @@ export default function WorkspacePicker() {
                     </div>
                     <ResponsiveContainer width="100%" height="90%">
                       <RechartsBarChart
-                        data={yearlyCommissionData}
+                        data={monthlyCommissionData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} stroke="#F5F5F6" />
                         <XAxis 
-                          dataKey="year" 
+                          dataKey="month" 
                           axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
                           tickLine={false}
                           tick={{ fill: '#6E6E76', fontSize: 12 }}

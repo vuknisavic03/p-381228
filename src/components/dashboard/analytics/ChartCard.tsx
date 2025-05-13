@@ -76,7 +76,7 @@ export function ChartCard({
     return null;
   };
 
-  // Custom square legend box similar to the image
+  // Custom legend that better follows the image design
   const CustomLegend = () => {
     if (!legendLabel) return null;
     
@@ -119,11 +119,11 @@ export function ChartCard({
         <div className="flex flex-col items-center h-full">
           <CustomLegend />
           <ResponsiveContainer width="100%" height="88%">
-            <PieChart margin={{ top: 0, right: 0, bottom: 10, left: 0 }}>
+            <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
               <Pie
                 data={chartData as DonutDataPoint[]}
                 cx="50%"
-                cy="50%"
+                cy="45%"
                 labelLine={false}
                 outerRadius={140}
                 innerRadius={110}
