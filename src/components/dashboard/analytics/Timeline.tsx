@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
   TooltipProps
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -98,13 +97,6 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 width={40}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                verticalAlign="top"
-                height={25}
-                iconType="circle"
-                iconSize={8}
-                wrapperStyle={{ fontSize: '11px' }}
-              />
               <Area
                 type="monotone"
                 dataKey="revenue"

@@ -13,8 +13,7 @@ import {
   TooltipProps,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Legend
+  CartesianGrid
 } from "recharts";
 import { ChartDataPoint, DonutDataPoint } from "@/services/analyticsService";
 
@@ -76,18 +75,6 @@ export function ChartCard({
     return null;
   };
 
-  // Custom legend that better follows the image design
-  const CustomLegend = () => {
-    if (!legendLabel) return null;
-    
-    return (
-      <div className="flex items-center gap-2 mb-3 ml-2 mt-2">
-        <div className="w-5 h-5 rounded-sm" style={{ backgroundColor: colorValue }}></div>
-        <span className="text-sm text-gray-600">{legendLabel}</span>
-      </div>
-    );
-  };
-
   if (isLoading) {
     return (
       <Card className="p-5 shadow-md border border-slate-100 h-[520px] transition-all hover:shadow-lg bg-white">
@@ -117,8 +104,7 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center h-full">
-          <CustomLegend />
-          <ResponsiveContainer width="100%" height="88%">
+          <ResponsiveContainer width="100%" height="95%">
             <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
               <Pie
                 data={chartData as DonutDataPoint[]}
@@ -166,8 +152,7 @@ export function ChartCard({
     const gradientStartOpacity = chartType === "spline" ? 0.8 : 0.7;
 
     return (
-      <div className="h-full flex flex-col">
-        <CustomLegend />
+      <div className="h-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}

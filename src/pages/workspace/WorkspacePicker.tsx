@@ -13,8 +13,7 @@ import {
   BarChart as RechartsBarChart,
   Bar,
   YAxis,
-  CartesianGrid,
-  Legend
+  CartesianGrid
 } from "recharts";
 
 interface Workspace {
@@ -196,29 +195,6 @@ export default function WorkspacePicker() {
     return null;
   };
 
-  // New custom legend renderer following the image design
-  const CustomLegend = (props: any) => {
-    const { payload } = props;
-    
-    if (payload && payload.length) {
-      return (
-        <div className="flex items-center gap-3 mb-2 ml-2">
-          {payload.map((entry: any, index: number) => (
-            <div key={index} className="flex items-center gap-2">
-              <div 
-                className="w-5 h-5 rounded-sm" 
-                style={{ backgroundColor: entry.color }}
-              />
-              <span className="text-sm text-gray-600">{entry.value}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    
-    return null;
-  };
-
   return (
     <div className="h-screen flex overflow-hidden bg-white">
       <div className="w-[280px] border-r border-[#EAEAEC] bg-white shadow-sm flex-shrink-0">
@@ -313,12 +289,6 @@ export default function WorkspacePicker() {
                     </div>
                     
                     <div className="h-36 mt-2 pt-3 border-t border-[#F5F5F6]">
-                      <div className="ml-2">
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className="w-5 h-5 rounded-sm bg-[#9b87f5]"></div>
-                          <span className="text-sm text-gray-600">Revenue</span>
-                        </div>
-                      </div>
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -379,13 +349,7 @@ export default function WorkspacePicker() {
                   </div>
                   
                   <div className="h-[calc(100%-70px)] pt-3 border-t border-[#F5F5F6]">
-                    <div className="ml-2 mt-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-5 h-5 rounded-sm bg-[#0EA5E9]"></div>
-                        <span className="text-sm text-gray-600">Commission</span>
-                      </div>
-                    </div>
-                    <ResponsiveContainer width="100%" height="90%">
+                    <ResponsiveContainer width="100%" height="95%">
                       <RechartsBarChart
                         data={monthlyCommissionData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
