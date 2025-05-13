@@ -14,7 +14,8 @@ import {
   BarChart as RechartsBarChart,
   Bar,
   YAxis,
-  CartesianGrid
+  CartesianGrid,
+  Legend
 } from "recharts";
 
 interface Workspace {
@@ -151,11 +152,16 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-2 border border-gray-100 shadow-lg rounded-md">
-          <p className="font-medium text-gray-700">{label}</p>
+        <div className="bg-white p-3 border border-[#F5F5F6] shadow-lg rounded-md">
+          <p className="font-medium text-gray-700 mb-1">{label}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} className="font-semibold text-gray-800" style={{ color: entry.color }}>
-              {entry.name === 'commission' ? `$${entry.value}k` : `$${entry.value}k`}
+            <p key={index} className="font-semibold text-gray-800 flex items-center gap-1" style={{ color: entry.color }}>
+              {activeChartType === 'commission' ? (
+                <span className="text-sm font-medium">{entry.dataKey === 'commission' ? 'Commission: ' : ''}</span>
+              ) : (
+                <span className="text-sm font-medium">{entry.dataKey === 'value' ? 'Revenue: ' : ''}</span>
+              )}
+              <span>${entry.value}k</span>
             </p>
           ))}
         </div>
@@ -207,7 +213,7 @@ export default function WorkspacePicker() {
               <Button
                 onClick={() => setActiveChartType('revenue')}
                 variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
-                className={`gap-2 py-1.5 px-3 rounded-md border border-[#EAEAEC] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                className={`gap-2 py-1.5 px-3 rounded-md border border-[#F5F5F6] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
                   activeChartType === 'revenue' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
                 }`}
                 size="sm"
@@ -220,7 +226,7 @@ export default function WorkspacePicker() {
               <Button
                 onClick={() => setActiveChartType('commission')}
                 variant={activeChartType === 'commission' ? 'outline' : 'outline'}
-                className={`gap-2 py-1.5 px-3 rounded-md border border-[#EAEAEC] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
+                className={`gap-2 py-1.5 px-3 rounded-md border border-[#F5F5F6] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
                   activeChartType === 'commission' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
                 }`}
                 size="sm"
@@ -234,15 +240,15 @@ export default function WorkspacePicker() {
           </div>
           
           {activeChartType === 'revenue' ? (
-            <div className="grid grid-cols-2 gap-2 px-1">
+            <div className="grid grid-cols-2 gap-4 px-1">
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="overflow-hidden border border-[#EAEAEC] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
+                  className="overflow-hidden border border-[#F5F5F6] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={handleWorkspaceSelect}
                 >
-                  <CardContent className="p-3.5">
-                    <div className="flex items-center justify-between mb-2">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2.5">
                         <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
                           {workspace.initials}
@@ -257,7 +263,7 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-28 mt-1 pt-2 border-t border-[#F5F5F6]">
+                    <div className="h-36 mt-2 pt-3 border-t border-[#F5F5F6]">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -269,61 +275,7 @@ export default function WorkspacePicker() {
                               <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.05} />
                             </linearGradient>
                           </defs>
-                          <XAxis 
-                            dataKey="month" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: '#9EA3AD', fontSize: 10 }}
-                          />
-                          <Tooltip content={<CustomTooltip />} />
-                          <Area
-                            type="monotone"
-                            dataKey="value"
-                            stroke="#9b87f5"
-                            fillOpacity={1}
-                            fill={`url(#colorRevenue${index})`}
-                            strokeWidth={1.5}
-                            name="revenue"
-                            activeDot={{ r: 4, strokeWidth: 0, fill: '#9b87f5' }}
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2 px-1">
-              {workspaces.map((workspace, index) => (
-                <Card 
-                  key={index}
-                  className="overflow-hidden border border-[#EAEAEC] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
-                  onClick={handleWorkspaceSelect}
-                >
-                  <CardContent className="p-3.5">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
-                          {workspace.initials}
-                        </div>
-                        <div>
-                          <div className="text-[#1A1A1A] font-medium text-base">{workspace.name}</div>
-                          <div className="text-sm text-[#6E6E76]">{workspace.owner}</div>
-                        </div>
-                      </div>
-                      <div className="text-[#0EA5E9] p-1 rounded-lg">
-                        <TrendingUp size={18} />
-                      </div>
-                    </div>
-                    
-                    <div className="h-28 mt-1 pt-2 border-t border-[#F5F5F6]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <RechartsBarChart
-                          data={workspace.commissionData}
-                          margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.05} />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F5F5F6" opacity={0.7} />
                           <XAxis 
                             dataKey="month" 
                             axisLine={false}
@@ -334,23 +286,87 @@ export default function WorkspacePicker() {
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#9EA3AD', fontSize: 10 }}
-                            tickFormatter={(value) => `$${value}k`}
                             width={25}
+                            tickFormatter={(value) => `$${value}k`}
                           />
                           <Tooltip content={<CustomTooltip />} />
-                          <Bar 
-                            dataKey="commission" 
-                            fill="#0EA5E9"
-                            fillOpacity={0.8}
-                            radius={[4, 4, 0, 0]}
-                            name="commission"
+                          <Area
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#9b87f5"
+                            fillOpacity={1}
+                            fill={`url(#colorRevenue${index})`}
+                            strokeWidth={2}
+                            name="revenue"
+                            activeDot={{ r: 5, strokeWidth: 1, stroke: "#9b87f5", fill: '#ffffff' }}
                           />
-                        </RechartsBarChart>
+                        </AreaChart>
                       </ResponsiveContainer>
                     </div>
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          ) : (
+            <div className="px-1 h-[calc(100vh-120px)]">
+              <Card 
+                className="overflow-hidden border border-[#F5F5F6] rounded-lg shadow-sm hover:shadow-md transition-all bg-white h-full"
+              >
+                <CardContent className="p-5 h-full">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-xl font-medium text-[#1A1A1A]">Manager Commission Summary</h3>
+                      <p className="text-sm text-[#6E6E76]">Monthly commission earnings across all workspaces</p>
+                    </div>
+                    <div className="text-[#0EA5E9] p-1 rounded-lg">
+                      <TrendingUp size={22} />
+                    </div>
+                  </div>
+                  
+                  <div className="h-[calc(100%-70px)] pt-3 border-t border-[#F5F5F6]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RechartsBarChart
+                        data={workspaces.flatMap(workspace => 
+                          workspace.commissionData.map(item => ({
+                            ...item,
+                            workspace: workspace.name,
+                            initials: workspace.initials
+                          }))
+                        )}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} stroke="#F5F5F6" />
+                        <XAxis 
+                          dataKey="month" 
+                          axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
+                          tickLine={false}
+                          tick={{ fill: '#6E6E76', fontSize: 12 }}
+                        />
+                        <YAxis 
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fill: '#6E6E76', fontSize: 12 }}
+                          tickFormatter={(value) => `$${value}k`}
+                          width={40}
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Legend 
+                          verticalAlign="top"
+                          height={36}
+                          wrapperStyle={{paddingBottom: '10px'}}
+                        />
+                        <Bar 
+                          dataKey="commission" 
+                          fill="#0EA5E9"
+                          fillOpacity={0.85}
+                          radius={[4, 4, 0, 0]}
+                          name="Commission"
+                        />
+                      </RechartsBarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>

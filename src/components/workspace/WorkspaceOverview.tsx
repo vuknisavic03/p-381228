@@ -6,10 +6,10 @@ import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
 export function WorkspaceOverview() {
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-none px-8 pt-6 pb-2">
+      <div className="flex-none px-8 pt-8 pb-4">
         <Header />
       </div>
-      <div className="flex-1 overflow-auto px-6 pb-8">
+      <div className="flex-1 overflow-auto px-8 pb-8">
         <AnalyticsGrid />
       </div>
     </div>
