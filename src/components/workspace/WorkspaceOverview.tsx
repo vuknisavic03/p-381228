@@ -5,7 +5,7 @@ import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
 
 export function WorkspaceOverview() {
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-white">
       <div className="flex-none px-8 pt-8 pb-4">
         <Header />
       </div>

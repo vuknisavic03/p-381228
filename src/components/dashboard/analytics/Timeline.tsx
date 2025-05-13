@@ -22,13 +22,13 @@ interface TimelineProps {
 export function Timeline({ data, isLoading = false }: TimelineProps) {
   if (isLoading) {
     return (
-      <Card className="shadow-md border border-[#EAEAEC] p-4 bg-white h-[300px]">
-        <CardHeader className="p-0 pb-2">
+      <Card className="shadow-md border border-slate-100 p-5 bg-white h-[340px]">
+        <CardHeader className="p-0 pb-3">
           <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
         </CardHeader>
         <CardContent className="p-0 h-full">
-          <div className="h-[230px] animate-pulse bg-gray-100 rounded-lg flex items-center justify-center">
-            <p className="text-gray-400">Loading data...</p>
+          <div className="h-[270px] animate-pulse bg-slate-50 rounded-lg flex items-center justify-center">
+            <p className="text-slate-400">Loading data...</p>
           </div>
         </CardContent>
       </Card>
@@ -39,11 +39,12 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-2 border border-[#EAEAEC] shadow-lg rounded-md">
-          <p className="font-semibold text-gray-700">{label}</p>
-          <div className="mt-1">
+        <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-xl rounded-lg">
+          <p className="font-semibold text-slate-800">{label}</p>
+          <div className="mt-1.5">
             {payload.map((entry, index) => (
-              <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-1 text-sm">
+              <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-1.5 text-sm my-1">
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></span>
                 <span className="font-medium">{entry.name}: </span>
                 <span>${Number(entry.value).toLocaleString()}</span>
               </p>
@@ -56,12 +57,12 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   };
 
   return (
-    <Card className="shadow-md border border-[#EAEAEC] p-4 bg-white h-[300px]">
-      <CardHeader className="p-0 pb-2">
+    <Card className="shadow-sm border border-slate-100 p-5 bg-white h-[340px] hover:shadow-md hover:border-slate-200 transition-all">
+      <CardHeader className="p-0 pb-3">
         <CardTitle className="text-lg font-medium">Performance Timeline</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="h-[230px]">
+        <div className="h-[270px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
@@ -82,19 +83,19 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                   <stop offset="95%" stopColor="#F97316" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.05} />
+              <CartesianGrid strokeDasharray="5 5" opacity={0.1} stroke="#9EA3AD" />
               <XAxis 
                 dataKey="month" 
-                tick={{ fill: '#6E6E76', fontSize: 10 }} 
+                tick={{ fill: '#6E6E76', fontSize: 11 }} 
                 tickLine={false} 
-                axisLine={{ strokeWidth: 1, stroke: '#EAEAEC' }}
+                axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
               />
               <YAxis 
-                tick={{ fill: '#6E6E76', fontSize: 10 }}
+                tick={{ fill: '#6E6E76', fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={35}
+                width={40}
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend 
@@ -102,7 +103,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 height={25}
                 iconType="circle"
                 iconSize={8}
-                wrapperStyle={{ fontSize: '10px' }}
+                wrapperStyle={{ fontSize: '11px' }}
               />
               <Area
                 type="monotone"
@@ -110,8 +111,8 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 stroke="#9b87f5"
                 fillOpacity={1}
                 fill="url(#colorRevenue)"
-                strokeWidth={2}
-                activeDot={{ r: 4, fill: "#9b87f5", strokeWidth: 0 }}
+                strokeWidth={2.5}
+                activeDot={{ r: 5, fill: "#9b87f5", strokeWidth: 0 }}
                 name="Revenue"
               />
               <Area
@@ -120,8 +121,8 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 stroke="#F97316"
                 fillOpacity={1}
                 fill="url(#colorProfit)"
-                strokeWidth={2}
-                activeDot={{ r: 4, fill: "#F97316", strokeWidth: 0 }}
+                strokeWidth={2.5}
+                activeDot={{ r: 5, fill: "#F97316", strokeWidth: 0 }}
                 name="Profit"
               />
             </AreaChart>

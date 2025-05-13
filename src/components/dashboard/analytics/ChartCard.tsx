@@ -49,9 +49,9 @@ export function ChartCard({
     if (active && payload && payload.length) {
       if (chartType === "donut") {
         return (
-          <div className="bg-white p-3 border border-[#F5F5F6] shadow-lg rounded-md">
-            <p className="font-medium text-gray-700 mb-1">{payload[0].name}</p>
-            <p className="font-semibold text-gray-800 flex items-center gap-1">
+          <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-xl rounded-lg">
+            <p className="font-medium text-slate-800 mb-1">{payload[0].name}</p>
+            <p className="font-semibold text-slate-900 flex items-center gap-1">
               <span className="text-sm font-medium">Value: </span>
               <span style={{ color: colorValue }}>{`${payload[0].value}%`}</span>
             </p>
@@ -60,9 +60,9 @@ export function ChartCard({
       }
       
       return (
-        <div className="bg-white p-3 border border-[#F5F5F6] shadow-lg rounded-md">
-          <p className="font-medium text-gray-700 mb-1">{label || 'Month'}</p>
-          <p className="font-semibold text-gray-800 flex items-center gap-1">
+        <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-xl rounded-lg">
+          <p className="font-medium text-slate-800 mb-1">{label || 'Month'}</p>
+          <p className="font-semibold text-slate-900 flex items-center gap-1">
             <span className="text-sm font-medium">{title}: </span>
             <span style={{ color: colorValue }}>
               {title === "Income" ? `${payload[0].value}%` : `$${payload[0].value.toLocaleString()}`}
@@ -76,7 +76,7 @@ export function ChartCard({
 
   if (isLoading) {
     return (
-      <Card className="p-5 shadow-md border border-[#F5F5F6] h-[480px] transition-all hover:shadow-lg bg-white">
+      <Card className="p-5 shadow-md border border-slate-100 h-[520px] transition-all hover:shadow-lg bg-white">
         <CardHeader className="p-0 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium">{title}</CardTitle>
@@ -93,7 +93,7 @@ export function ChartCard({
         </div>
         
         <div className="mt-4 flex-grow">
-          <div className="h-[370px] bg-gray-100 animate-pulse rounded-lg"></div>
+          <div className="h-[420px] bg-gray-100 animate-pulse rounded-lg"></div>
         </div>
       </Card>
     );
@@ -110,18 +110,19 @@ export function ChartCard({
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={130}
-                innerRadius={100}
+                outerRadius={140}
+                innerRadius={110}
                 fill={colorValue}
                 dataKey="value"
                 startAngle={90}
                 endAngle={-270}
+                stroke="none"
               >
                 {chartData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
-                    fill={index === 0 ? colorValue : "#F8F8F9"} 
-                    stroke={index === 0 ? colorValue : "#F5F5F6"}
+                    fill={index === 0 ? colorValue : "#F8F9FE"} 
+                    stroke={index === 0 ? colorValue : "#F0F2FA"}
                     strokeWidth={1.5}
                   />
                 ))}
@@ -146,8 +147,8 @@ export function ChartCard({
                 <div 
                   className="w-3 h-3 rounded-full"
                   style={{ 
-                    backgroundColor: index === 0 ? colorValue : "#F8F8F9", 
-                    border: `1.5px solid ${index === 0 ? colorValue : "#F5F5F6"}` 
+                    backgroundColor: index === 0 ? colorValue : "#F8F9FE", 
+                    border: `1.5px solid ${index === 0 ? colorValue : "#F0F2FA"}` 
                   }} 
                 />
                 <span className="text-sm text-gray-700">{entry.name}: <span className="font-medium">{entry.value}%</span></span>
@@ -158,24 +159,26 @@ export function ChartCard({
       );
     }
 
+    const gradientStartOpacity = chartType === "spline" ? 0.8 : 0.7;
+
     return (
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={chartData as ChartDataPoint[]}
           margin={{
             top: 20,
-            right: 5,
+            right: 10,
             bottom: 20,
-            left: -10,
+            left: 0,
           }}
         >
           <defs>
             <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colorValue} stopOpacity={0.85} />
+              <stop offset="5%" stopColor={colorValue} stopOpacity={gradientStartOpacity} />
               <stop offset="95%" stopColor={colorValue} stopOpacity={0.05} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F5F5F6" opacity={0.7} />
+          <CartesianGrid strokeDasharray="5 5" vertical={false} stroke="#F0F2FA" opacity={0.5} />
           <XAxis 
             dataKey="month" 
             axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
@@ -187,7 +190,7 @@ export function ChartCard({
             axisLine={false}
             tickLine={false}
             tick={{ fill: '#6E6E76', fontSize: 12 }}
-            width={35}
+            width={40}
             tickFormatter={(value) => `$${value}k`}
           />
           <Tooltip content={<CustomTooltip />} />
@@ -203,13 +206,14 @@ export function ChartCard({
             stroke={colorValue}
             fillOpacity={1}
             fill={`url(#color${title.replace(/\s+/g, '')})`}
-            strokeWidth={2.5}
+            strokeWidth={3}
             name={title}
             activeDot={{ 
-              r: 6, 
+              r: 7, 
               stroke: colorValue, 
-              strokeWidth: 1.5, 
-              fill: '#fff'
+              strokeWidth: 2, 
+              fill: '#fff',
+              strokeOpacity: 0.8
             }}
           />
         </AreaChart>
@@ -218,17 +222,17 @@ export function ChartCard({
   };
 
   return (
-    <Card className="p-6 shadow-md border border-[#F5F5F6] h-[480px] transition-all hover:shadow-lg bg-white flex flex-col">
-      <CardHeader className="p-0 pb-4">
+    <Card className="p-6 shadow-sm border border-slate-100 h-[520px] transition-all hover:shadow-md hover:border-slate-200 bg-white flex flex-col">
+      <CardHeader className="p-0 pb-5">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium">{title}</CardTitle>
-          <div className={`${color} text-white p-2 rounded-md`}>
+          <div className={`${color} text-white p-2.5 rounded-md`}>
             <Icon size={20} />
           </div>
         </div>
       </CardHeader>
       
-      <div className="mt-3">
+      <div className="mt-2">
         <div className="flex items-baseline space-x-2">
           <span className="text-2xl font-bold">{value}</span>
           <span className={`text-sm ${change.positive ? 'text-green-500' : 'text-red-500'} flex items-center`}>
@@ -237,7 +241,7 @@ export function ChartCard({
         </div>
       </div>
       
-      <div className="mt-4 flex-grow h-[370px]">
+      <div className="mt-6 flex-grow h-[420px]">
         {renderChart()}
       </div>
     </Card>
