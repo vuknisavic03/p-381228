@@ -140,6 +140,17 @@ const workspaces: Workspace[] = [
   },
 ];
 
+// New yearly commission data for the main chart
+const yearlyCommissionData = [
+  { year: "2018", commission: 48.2 },
+  { year: "2019", commission: 53.7 },
+  { year: "2020", commission: 42.1 },
+  { year: "2021", commission: 61.5 },
+  { year: "2022", commission: 68.2 },
+  { year: "2023", commission: 72.9 },
+  { year: "2024", commission: 65.3 },
+];
+
 export default function WorkspacePicker() {
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -167,6 +178,29 @@ export default function WorkspacePicker() {
         </div>
       );
     }
+    return null;
+  };
+
+  // New custom legend renderer following the image design
+  const CustomLegend = (props: any) => {
+    const { payload } = props;
+    
+    if (payload && payload.length) {
+      return (
+        <div className="flex items-center gap-3 mb-2 ml-2">
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center gap-2">
+              <div 
+                className="w-5 h-5 rounded-sm" 
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="text-sm text-gray-600">{entry.value}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    
     return null;
   };
 
@@ -264,6 +298,12 @@ export default function WorkspacePicker() {
                     </div>
                     
                     <div className="h-36 mt-2 pt-3 border-t border-[#F5F5F6]">
+                      <div className="ml-2">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-5 h-5 rounded-sm bg-[#9b87f5]"></div>
+                          <span className="text-sm text-gray-600">Revenue</span>
+                        </div>
+                      </div>
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -315,8 +355,8 @@ export default function WorkspacePicker() {
                 <CardContent className="p-5 h-full">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-medium text-[#1A1A1A]">Manager Commission Summary</h3>
-                      <p className="text-sm text-[#6E6E76]">Monthly commission earnings across all workspaces</p>
+                      <h3 className="text-xl font-medium text-[#1A1A1A]">Yearly Manager Commission</h3>
+                      <p className="text-sm text-[#6E6E76]">Annual commission earnings across all workspaces</p>
                     </div>
                     <div className="text-[#0EA5E9] p-1 rounded-lg">
                       <TrendingUp size={22} />
@@ -324,20 +364,20 @@ export default function WorkspacePicker() {
                   </div>
                   
                   <div className="h-[calc(100%-70px)] pt-3 border-t border-[#F5F5F6]">
-                    <ResponsiveContainer width="100%" height="100%">
+                    <div className="ml-2 mt-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-5 h-5 rounded-sm bg-[#0EA5E9]"></div>
+                        <span className="text-sm text-gray-600">Commission</span>
+                      </div>
+                    </div>
+                    <ResponsiveContainer width="100%" height="90%">
                       <RechartsBarChart
-                        data={workspaces.flatMap(workspace => 
-                          workspace.commissionData.map(item => ({
-                            ...item,
-                            workspace: workspace.name,
-                            initials: workspace.initials
-                          }))
-                        )}
+                        data={yearlyCommissionData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} stroke="#F5F5F6" />
                         <XAxis 
-                          dataKey="month" 
+                          dataKey="year" 
                           axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
                           tickLine={false}
                           tick={{ fill: '#6E6E76', fontSize: 12 }}
@@ -350,11 +390,6 @@ export default function WorkspacePicker() {
                           width={40}
                         />
                         <Tooltip content={<CustomTooltip />} />
-                        <Legend 
-                          verticalAlign="top"
-                          height={36}
-                          wrapperStyle={{paddingBottom: '10px'}}
-                        />
                         <Bar 
                           dataKey="commission" 
                           fill="#0EA5E9"

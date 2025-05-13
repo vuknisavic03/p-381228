@@ -30,6 +30,7 @@ interface ChartCardProps {
   chartData: ChartDataPoint[] | DonutDataPoint[];
   chartType: "area" | "donut" | "spline";
   isLoading?: boolean;
+  legendLabel?: string;
 }
 
 export function ChartCard({
@@ -40,7 +41,8 @@ export function ChartCard({
   change,
   chartData,
   chartType,
-  isLoading = false
+  isLoading = false,
+  legendLabel
 }: ChartCardProps) {
   const colorValue = color.replace("bg-[", "").replace("]", "");
 
@@ -74,6 +76,18 @@ export function ChartCard({
     return null;
   };
 
+  // Custom square legend box similar to the image
+  const CustomLegend = () => {
+    if (!legendLabel) return null;
+    
+    return (
+      <div className="flex items-center gap-2 mb-3 ml-2 mt-2">
+        <div className="w-5 h-5 rounded-sm" style={{ backgroundColor: colorValue }}></div>
+        <span className="text-sm text-gray-600">{legendLabel}</span>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <Card className="p-5 shadow-md border border-slate-100 h-[520px] transition-all hover:shadow-lg bg-white">
@@ -103,6 +117,7 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center h-full">
+          <CustomLegend />
           <ResponsiveContainer width="100%" height="88%">
             <PieChart margin={{ top: 0, right: 0, bottom: 10, left: 0 }}>
               <Pie
@@ -128,17 +143,6 @@ export function ChartCard({
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                verticalAlign="bottom" 
-                height={40} 
-                iconType="circle"
-                iconSize={8}
-                formatter={(value, entry) => (
-                  <span style={{ color: '#6E6E76', fontSize: '12px', marginLeft: '6px' }}>
-                    {value}
-                  </span>
-                )}
-              />
             </PieChart>
           </ResponsiveContainer>
           <div className="flex justify-center gap-6 mt-1">
@@ -162,62 +166,59 @@ export function ChartCard({
     const gradientStartOpacity = chartType === "spline" ? 0.8 : 0.7;
 
     return (
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={chartData as ChartDataPoint[]}
-          margin={{
-            top: 20,
-            right: 10,
-            bottom: 20,
-            left: 0,
-          }}
-        >
-          <defs>
-            <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colorValue} stopOpacity={gradientStartOpacity} />
-              <stop offset="95%" stopColor={colorValue} stopOpacity={0.05} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="5 5" vertical={false} stroke="#F0F2FA" opacity={0.5} />
-          <XAxis 
-            dataKey="month" 
-            axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
-            tickLine={false}
-            tick={{ fill: '#6E6E76', fontSize: 12 }}
-            dy={10}
-          />
-          <YAxis 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: '#6E6E76', fontSize: 12 }}
-            width={40}
-            tickFormatter={(value) => `$${value}k`}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend 
-            verticalAlign="top"
-            height={30}
-            iconType="circle"
-            iconSize={8}
-          />
-          <Area
-            type={chartType === "spline" ? "monotone" : "linear"}
-            dataKey="value"
-            stroke={colorValue}
-            fillOpacity={1}
-            fill={`url(#color${title.replace(/\s+/g, '')})`}
-            strokeWidth={3}
-            name={title}
-            activeDot={{ 
-              r: 7, 
-              stroke: colorValue, 
-              strokeWidth: 2, 
-              fill: '#fff',
-              strokeOpacity: 0.8
+      <div className="h-full flex flex-col">
+        <CustomLegend />
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={chartData as ChartDataPoint[]}
+            margin={{
+              top: 20,
+              right: 10,
+              bottom: 20,
+              left: 0,
             }}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+          >
+            <defs>
+              <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={colorValue} stopOpacity={gradientStartOpacity} />
+                <stop offset="95%" stopColor={colorValue} stopOpacity={0.05} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="5 5" vertical={false} stroke="#F0F2FA" opacity={0.5} />
+            <XAxis 
+              dataKey="month" 
+              axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
+              tickLine={false}
+              tick={{ fill: '#6E6E76', fontSize: 12 }}
+              dy={10}
+            />
+            <YAxis 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: '#6E6E76', fontSize: 12 }}
+              width={40}
+              tickFormatter={(value) => `$${value}k`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Area
+              type={chartType === "spline" ? "monotone" : "linear"}
+              dataKey="value"
+              stroke={colorValue}
+              fillOpacity={1}
+              fill={`url(#color${title.replace(/\s+/g, '')})`}
+              strokeWidth={3}
+              name={title}
+              activeDot={{ 
+                r: 7, 
+                stroke: colorValue, 
+                strokeWidth: 2, 
+                fill: '#fff',
+                strokeOpacity: 0.8
+              }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     );
   };
 
@@ -241,7 +242,7 @@ export function ChartCard({
         </div>
       </div>
       
-      <div className="mt-6 flex-grow h-[420px]">
+      <div className="mt-6 flex-grow h-[420px] border-t border-[#F5F5F6] pt-4">
         {renderChart()}
       </div>
     </Card>

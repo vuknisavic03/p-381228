@@ -19,6 +19,7 @@ export function AnalyticsGrid() {
             chartData={isLoading ? [] : data?.revenue}
             chartType="area"
             isLoading={isLoading}
+            legendLabel="Revenue"
           />
         </div>
         <div className="col-span-1">
@@ -31,6 +32,7 @@ export function AnalyticsGrid() {
             chartData={isLoading ? [] : data?.profit}
             chartType="spline"
             isLoading={isLoading}
+            legendLabel="Profit"
           />
         </div>
         <div className="col-span-1">
@@ -43,6 +45,7 @@ export function AnalyticsGrid() {
             chartData={isLoading ? [] : data?.income}
             chartType="donut"
             isLoading={isLoading}
+            legendLabel="Income"
           />
         </div>
         <div className="col-span-1">
@@ -55,6 +58,7 @@ export function AnalyticsGrid() {
             chartData={isLoading ? [] : data?.peakProfit}
             chartType="area"
             isLoading={isLoading}
+            legendLabel="Peak Profit"
           />
         </div>
       </div>
