@@ -4,7 +4,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, List, BarChart } from 'lucide-react';
 
-export function WorkspaceNav() {
+interface WorkspaceNavProps {
+  workspaceName?: string;
+  userInitials?: string;
+}
+
+export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "K" }: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -18,9 +23,9 @@ export function WorkspaceNav() {
           className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
         >
           <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
-            U
+            {userInitials}
           </div>
-          <span className="text-[#1A1A1A] font-medium">User's Space</span>
+          <span className="text-[#1A1A1A] font-medium">{workspaceName}</span>
         </button>
       </div>
       <div className="p-4">

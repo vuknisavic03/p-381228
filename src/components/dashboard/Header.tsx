@@ -8,17 +8,35 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 
-export function Header() {
+interface HeaderProps {
+  userName?: string;
+  workspaceName?: string;
+}
+
+export function Header({ userName = "Kevin", workspaceName = "Kevin's Workspace" }: HeaderProps) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
   });
 
+  // Get the current hour to determine the greeting
+  const currentHour = new Date().getHours();
+  let greeting = "Good morning";
+  
+  if (currentHour >= 12 && currentHour < 17) {
+    greeting = "Good afternoon";
+  } else if (currentHour >= 17) {
+    greeting = "Good evening";
+  }
+
+  // Extract user's first name from workspace name if no userName provided
+  const userFirstName = userName || workspaceName?.split("'")[0] || "User";
+
   return (
     <div className="flex justify-between items-start">
       <div>
         <h1 className="text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
-          Good morning, Kevin
+          {greeting}, {userFirstName}
         </h1>
         <p className="text-[28px] text-[#9EA3AD] font-medium leading-none">
           Today, {format(new Date(), "MMM dd")}
