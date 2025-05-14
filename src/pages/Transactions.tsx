@@ -24,11 +24,11 @@ export default function Transactions() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-full flex flex-col md:flex-row bg-white">
+      <div className="h-full flex flex-col md:flex-row">
         {isMobile ? (
           <Sheet>
             <div className="flex-1 bg-white overflow-y-auto">
-              <div className="sticky top-0 z-10 bg-white border-b border-gray-100 p-4 flex justify-between items-center shadow-sm">
+              <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4 flex justify-between items-center shadow-sm">
                 <h2 className="text-xl font-semibold text-gray-900">Transaction Details</h2>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="sm" className="flex items-center gap-2 border-gray-200 text-gray-700 hover:bg-gray-50">
@@ -41,9 +41,9 @@ export default function Transactions() {
                 <TransactionForm />
               </div>
             </div>
-            <SheetContent side="right" className="w-full sm:max-w-md p-0 bg-white">
-              <div className="h-full bg-white flex flex-col">
-                <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+            <SheetContent side="right" className="w-full sm:max-w-md p-0">
+              <div className="h-full bg-white border-l border-gray-200 flex flex-col">
+                <div className="p-4 border-b border-gray-200 flex items-center gap-2">
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="text-gray-700 hover:bg-gray-50">
                       <ChevronLeft className="h-4 w-4" />
@@ -62,7 +62,7 @@ export default function Transactions() {
             <div className="w-1/2 bg-white overflow-y-auto h-full shadow-sm">
               <TransactionForm />
             </div>
-            <div className="w-1/2 bg-white overflow-y-auto h-full">
+            <div className="w-1/2 bg-white overflow-y-auto h-full border-l border-gray-200">
               <TransactionActivity />
             </div>
           </div>
