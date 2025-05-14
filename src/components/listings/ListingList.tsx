@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Loader2, ListFilter, LayoutList, Map } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
+import { MapView } from "./MapView";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -103,6 +104,7 @@ export function ListingList() {
     types: []
   });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   const fetchListings = async () => {
     setIsLoading(true);
@@ -151,6 +153,10 @@ export function ListingList() {
     return matchesSearch && matchesType;
   });
 
+  const toggleViewMode = () => {
+    setViewMode(prev => prev === 'list' ? 'map' : 'list');
+  };
+
   return (
     <div className="h-full">
       <div className="p-4 border-b">
@@ -164,6 +170,20 @@ export function ListingList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-9 px-3"
+            onClick={toggleViewMode}
+          >
+            {viewMode === 'list' ? (
+              <Map className="h-4 w-4 mr-2" />
+            ) : (
+              <LayoutList className="h-4 w-4 mr-2" />
+            )}
+            {viewMode === 'list' ? 'Map View' : 'List View'}
+          </Button>
           
           <DropdownMenu open={isFilterOpen} onOpenChange={setIsFilterOpen}>
             <DropdownMenuTrigger asChild>
@@ -203,14 +223,14 @@ export function ListingList() {
         </div>
       </div>
 
-      <div className="flex-1 p-4 overflow-auto">
+      <div className="flex-1 overflow-auto">
         {isLoading ? (
           <div className="flex items-center justify-center h-full text-muted-foreground">
             <Loader2 className="h-6 w-6 animate-spin mr-2" />
             <span>Loading listings...</span>
           </div>
-        ) : (
-          <div className="space-y-2">
+        ) : viewMode === 'list' ? (
+          <div className="p-4 space-y-2">
             {filteredListings.length > 0 ? (
               filteredListings.map((listing) => (
                 <Card 
@@ -267,6 +287,11 @@ export function ListingList() {
               </div>
             )}
           </div>
+        ) : (
+          <MapView 
+            listings={filteredListings} 
+            onListingSelect={handleListingClick} 
+          />
         )}
       </div>
 
