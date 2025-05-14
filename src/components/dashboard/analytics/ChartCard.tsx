@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -190,7 +189,7 @@ export function ChartCard({
                 stroke: "#F5F5F6", 
                 strokeWidth: 1, 
                 strokeDasharray: "5 5",
-                fill: "rgba(240, 240, 245, 0.8)"  // Slightly darker fill that's still elegant
+                fill: "rgba(240, 240, 245, 0.8)"  
               }} 
             />
             <Area

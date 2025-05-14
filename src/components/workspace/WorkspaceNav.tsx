@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart, UserPlus } from 'lucide-react';
+import { LayoutDashboard, List, BarChart } from 'lucide-react';
 
 interface WorkspaceNavProps {
   workspaceName?: string;
@@ -69,19 +69,6 @@ export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "
               "text-[#1A1A1A]",
               isActive('/transactions') ? "font-semibold" : "font-medium"
             )}>Transactions</span>
-          </div>
-          <div
-            className={cn(
-              "flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer",
-              isActive('/property-manager-profile') && "bg-[#F6F6F7]"
-            )}
-            onClick={() => navigate('/property-manager-profile')}
-          >
-            <UserPlus className="w-5 h-5" />
-            <span className={cn(
-              "text-[#1A1A1A]",
-              isActive('/property-manager-profile') ? "font-semibold" : "font-medium"
-            )}>Property Manager</span>
           </div>
         </div>
       </div>

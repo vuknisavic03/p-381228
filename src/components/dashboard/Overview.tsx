@@ -8,7 +8,6 @@ interface WorkspaceState {
   name: string;
   owner: string;
   initials: string;
-  managerName?: string;
 }
 
 export function Overview() {
@@ -16,8 +15,7 @@ export function Overview() {
   const workspaceData = location.state?.workspace as WorkspaceState || {
     name: "Kevin's Workspace", 
     owner: "Kevin Anderson", 
-    initials: "KA",
-    managerName: "Kevin"
+    initials: "KA"
   };
   
   // Extract first name from owner string
@@ -29,9 +27,8 @@ export function Overview() {
       userInitials={workspaceData.initials}
     >
       <WorkspaceOverview 
-        userName={firstName}
+        userName={firstName} 
         workspaceName={workspaceData.name}
-        managerName={workspaceData.managerName || firstName}
       />
     </DashboardLayout>
   );
