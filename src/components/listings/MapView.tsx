@@ -1,7 +1,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { MapPin } from 'lucide-react';
+import { MapPin, Compass } from 'lucide-react';
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 
 interface MapViewProps {
   listings: any[];
@@ -12,6 +14,7 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   // This is a simple mock map implementation
   // In a real application, you would use a proper map library like Mapbox, Google Maps, or Leaflet
@@ -21,31 +24,60 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
     // Simulate map loading
     const timer = setTimeout(() => {
       setMapLoaded(true);
-    }, 500);
+      // Notify user that this is a mock map
+      toast({
+        title: "Map View",
+        description: "This is a simulated map. In a production app, this would be integrated with a real map service like Mapbox or Google Maps.",
+      });
+    }, 800);
     
     return () => clearTimeout(timer);
   }, []);
 
   const handleMarkerClick = (id: number) => {
-    setSelectedMarker(id);
+    setSelectedMarker(id === selectedMarker ? null : id);
     const listing = listings.find(l => l.id === id);
     if (listing) {
       onListingSelect(listing);
     }
   };
 
+  const handleRecenter = () => {
+    // In a real map implementation, this would recenter the map
+    // For our mock, we'll just show a toast
+    toast({
+      description: "Map recentered",
+    });
+  };
+
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 bg-white border-b">
+      <div className="p-4 bg-white border-b flex justify-between items-center">
         <div className="text-sm text-muted-foreground">
           Showing {listings.length} properties on the map
         </div>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleRecenter}
+          className="flex items-center gap-2"
+        >
+          <Compass className="h-4 w-4" />
+          Recenter
+        </Button>
       </div>
       
       <div className="relative flex-1 bg-slate-100" ref={mapRef}>
         {!mapLoaded ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="animate-pulse text-muted-foreground">Loading map...</div>
+          </div>
+        ) : mapError ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-destructive text-center px-4">
+              <p className="font-medium mb-2">Error loading map</p>
+              <p className="text-sm text-muted-foreground">{mapError}</p>
+            </div>
           </div>
         ) : (
           <>
@@ -56,6 +88,14 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
                 {Array.from({ length: 100 }).map((_, i) => (
                   <div key={i} className="border border-[#d0d8e0] border-opacity-20" />
                 ))}
+              </div>
+              
+              {/* Simulated map features */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-[10%] left-[20%] w-[30%] h-[5%] bg-blue-500 rounded-full blur-md"></div>
+                <div className="absolute top-[30%] left-[40%] w-[20%] h-[10%] bg-green-500 rounded-lg blur-sm"></div>
+                <div className="absolute top-[60%] left-[15%] w-[40%] h-[8%] bg-blue-300 rounded-full blur-md"></div>
+                <div className="absolute top-[75%] left-[60%] w-[25%] h-[10%] bg-green-400 rounded-lg blur-sm"></div>
               </div>
             </div>
             
@@ -92,6 +132,7 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
                         {listing.tenant && (
                           <div className="mt-2 pt-2 border-t text-xs">
                             <div className="font-medium">{listing.tenant.name}</div>
+                            <div className="text-muted-foreground">{listing.tenant.email}</div>
                           </div>
                         )}
                       </Card>
