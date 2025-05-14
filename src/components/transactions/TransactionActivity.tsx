@@ -143,54 +143,88 @@ export function TransactionActivity() {
       <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Transaction Activity</h2>
         
-        {/* Unique visual selector for transaction types */}
-        <div className="mb-4">
-          <div className="relative flex p-1 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 shadow-inner">
-            {/* Visual highlight for selected type */}
-            <div 
-              className={`absolute transition-all duration-300 ease-in-out rounded-lg bg-white shadow-sm ${
-                transactionType === 'all' ? 'w-1/3 left-0' : 
-                transactionType === 'revenue' ? 'w-1/3 left-1/3' : 'w-1/3 left-2/3'
-              }`}
-              style={{
-                top: '4px',
-                bottom: '4px',
-                transform: transactionType === 'all' ? 'translateX(4px)' : 
-                          transactionType === 'revenue' ? 'translateX(0)' : 'translateX(-4px)'
-              }}
-            />
-            
-            {/* All Transactions Button */}
+        {/* Completely redesigned transaction type selector */}
+        <div className="mb-6">
+          <div className="grid grid-cols-3 gap-3">
+            {/* All Transactions Card */}
             <button
               onClick={() => setTransactionType('all')}
-              className={`relative flex-1 flex items-center justify-center py-2 rounded-lg font-medium text-sm z-10 ${
-                transactionType === 'all' ? 'text-gray-800' : 'text-gray-500'
+              className={`relative overflow-hidden h-20 rounded-xl transition-all duration-300 ${
+                transactionType === 'all' 
+                  ? 'ring-2 ring-blue-500 shadow-md bg-gradient-to-br from-blue-50 to-blue-100' 
+                  : 'bg-gray-50 hover:bg-gray-100'
               }`}
             >
-              <Wallet className={`h-4 w-4 mr-2 ${transactionType === 'all' ? 'text-blue-500' : 'text-gray-400'}`} />
-              All Transactions
+              <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                <Wallet className={`h-24 w-24 ${
+                  transactionType === 'all' ? 'text-blue-300' : 'text-gray-300'
+                }`} />
+              </div>
+              <div className="relative h-full flex flex-col items-center justify-center">
+                <Wallet className={`h-5 w-5 mb-1 ${
+                  transactionType === 'all' ? 'text-blue-600' : 'text-gray-500'
+                }`} />
+                <span className={`text-sm font-medium ${
+                  transactionType === 'all' ? 'text-blue-900' : 'text-gray-700'
+                }`}>All</span>
+                {transactionType === 'all' && (
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-blue-500" />
+                )}
+              </div>
             </button>
             
-            {/* Revenue Button */}
+            {/* Revenue Card */}
             <button
               onClick={() => setTransactionType('revenue')}
-              className={`relative flex-1 flex items-center justify-center py-2 rounded-lg font-medium text-sm z-10 ${
-                transactionType === 'revenue' ? 'text-gray-800' : 'text-gray-500'
+              className={`relative overflow-hidden h-20 rounded-xl transition-all duration-300 ${
+                transactionType === 'revenue' 
+                  ? 'ring-2 ring-emerald-500 shadow-md bg-gradient-to-br from-emerald-50 to-emerald-100' 
+                  : 'bg-gray-50 hover:bg-gray-100'
               }`}
             >
-              <DollarSign className={`h-4 w-4 mr-2 ${transactionType === 'revenue' ? 'text-emerald-500' : 'text-gray-400'}`} />
-              Revenue
+              <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                <DollarSign className={`h-24 w-24 ${
+                  transactionType === 'revenue' ? 'text-emerald-300' : 'text-gray-300'
+                }`} />
+              </div>
+              <div className="relative h-full flex flex-col items-center justify-center">
+                <DollarSign className={`h-5 w-5 mb-1 ${
+                  transactionType === 'revenue' ? 'text-emerald-600' : 'text-gray-500'
+                }`} />
+                <span className={`text-sm font-medium ${
+                  transactionType === 'revenue' ? 'text-emerald-900' : 'text-gray-700'
+                }`}>Revenue</span>
+                {transactionType === 'revenue' && (
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-emerald-500" />
+                )}
+              </div>
             </button>
             
-            {/* Expenses Button */}
+            {/* Expenses Card */}
             <button
               onClick={() => setTransactionType('expense')}
-              className={`relative flex-1 flex items-center justify-center py-2 rounded-lg font-medium text-sm z-10 ${
-                transactionType === 'expense' ? 'text-gray-800' : 'text-gray-500'
+              className={`relative overflow-hidden h-20 rounded-xl transition-all duration-300 ${
+                transactionType === 'expense' 
+                  ? 'ring-2 ring-rose-500 shadow-md bg-gradient-to-br from-rose-50 to-rose-100' 
+                  : 'bg-gray-50 hover:bg-gray-100'
               }`}
             >
-              <TrendingDown className={`h-4 w-4 mr-2 ${transactionType === 'expense' ? 'text-rose-500' : 'text-gray-400'}`} />
-              Expenses
+              <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                <TrendingDown className={`h-24 w-24 ${
+                  transactionType === 'expense' ? 'text-rose-300' : 'text-gray-300'
+                }`} />
+              </div>
+              <div className="relative h-full flex flex-col items-center justify-center">
+                <TrendingDown className={`h-5 w-5 mb-1 ${
+                  transactionType === 'expense' ? 'text-rose-600' : 'text-gray-500'
+                }`} />
+                <span className={`text-sm font-medium ${
+                  transactionType === 'expense' ? 'text-rose-900' : 'text-gray-700'
+                }`}>Expenses</span>
+                {transactionType === 'expense' && (
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-rose-500" />
+                )}
+              </div>
             </button>
           </div>
         </div>
