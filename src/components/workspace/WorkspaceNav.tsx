@@ -7,13 +7,34 @@ import { LayoutDashboard, List, BarChart } from 'lucide-react';
 interface WorkspaceNavProps {
   workspaceName?: string;
   userInitials?: string;
+  owner?: string;
 }
 
-export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "K" }: WorkspaceNavProps) {
+export function WorkspaceNav({ 
+  workspaceName = "Kevin's Space", 
+  userInitials = "K",
+  owner = "Kevin Anderson" 
+}: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
   
   const isActive = (path: string) => location.pathname === path;
+
+  // Get workspace data from current location state or use default
+  const workspaceData = location.state?.workspace || {
+    name: workspaceName,
+    owner: owner,
+    initials: userInitials
+  };
+
+  // Function to navigate with workspace data preserved
+  const navigateWithWorkspace = (path: string) => {
+    navigate(path, { 
+      state: { 
+        workspace: workspaceData
+      }
+    });
+  };
 
   return (
     <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white">
@@ -23,9 +44,9 @@ export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "
           className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
         >
           <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
-            {userInitials}
+            {workspaceData.initials}
           </div>
-          <span className="text-[#1A1A1A] font-medium">{workspaceName}</span>
+          <span className="text-[#1A1A1A] font-medium">{workspaceData.name}</span>
         </button>
       </div>
       <div className="p-4">
@@ -36,7 +57,7 @@ export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "
               "flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer",
               isActive('/dashboard') && "bg-[#F6F6F7]"
             )}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigateWithWorkspace('/dashboard')}
           >
             <LayoutDashboard className="w-5 h-5" />
             <span className={cn(
@@ -49,7 +70,7 @@ export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "
               "flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer",
               isActive('/listings') && "bg-[#F6F6F7]"
             )}
-            onClick={() => navigate('/listings')}
+            onClick={() => navigateWithWorkspace('/listings')}
           >
             <List className="w-5 h-5" />
             <span className={cn(
@@ -62,7 +83,7 @@ export function WorkspaceNav({ workspaceName = "Kevin's Space", userInitials = "
               "flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer",
               isActive('/transactions') && "bg-[#F6F6F7]"
             )}
-            onClick={() => navigate('/transactions')}
+            onClick={() => navigateWithWorkspace('/transactions')}
           >
             <BarChart className="w-5 h-5" />
             <span className={cn(

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionActivity } from "@/components/transactions/TransactionActivity";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
@@ -10,9 +11,19 @@ import { ChevronLeft, LayoutList } from "lucide-react";
 
 export default function Transactions() {
   const isMobile = useIsMobile();
+  const location = useLocation();
+  const workspaceData = location.state?.workspace || {
+    name: "Kevin's Workspace", 
+    owner: "Kevin Anderson", 
+    initials: "KA"
+  };
   
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      workspaceName={workspaceData.name}
+      userInitials={workspaceData.initials}
+      owner={workspaceData.owner}
+    >
       <div className="h-full flex flex-col md:flex-row">
         {isMobile ? (
           <Sheet>
