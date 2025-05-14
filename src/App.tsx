@@ -1,38 +1,38 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Index from "./pages/Index";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import WorkspacePicker from "./pages/workspace/WorkspacePicker";
+import { Overview } from "./components/dashboard/Overview";
+import Profile from "./pages/Profile";
 import Listings from "./pages/Listings";
 import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
-import UserSpace from "./pages/UserSpace";
-import WorkspacePicker from "./pages/workspace/WorkspacePicker";
-import Profile from "./pages/Profile";
-import WorkspaceManager from "./pages/WorkspaceManager";
-import { Toaster } from "./components/ui/toaster";
+import Index from "./pages/Index";
 
-// Create a client
 const queryClient = new QueryClient();
 
-function App() {
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Index />} />
-          <Route path="/listings" element={<Listings />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/user-space" element={<UserSpace />} />
-          <Route path="/workspace" element={<WorkspacePicker />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/workspace-manager" element={<WorkspaceManager />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<WorkspacePicker />} />
+            <Route path="/dashboard" element={<Overview />} />
+            <Route path="/listings" element={<Listings />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;
