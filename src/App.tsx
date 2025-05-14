@@ -9,6 +9,7 @@ import { Overview } from "./components/dashboard/Overview";
 import Profile from "./pages/Profile";
 import Listings from "./pages/Listings";
 import Transactions from "./pages/Transactions";
+import PropertyManagerProfilePage from "./pages/PropertyManagerProfile";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
 
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/listings" element={<Listings />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/property-manager-profile" element={<PropertyManagerProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </TooltipProvider>

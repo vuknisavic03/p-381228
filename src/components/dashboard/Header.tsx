@@ -11,9 +11,14 @@ import { DateRange } from "react-day-picker";
 interface HeaderProps {
   userName?: string;
   workspaceName?: string;
+  managerName?: string;
 }
 
-export function Header({ userName = "Kevin", workspaceName = "Kevin's Workspace" }: HeaderProps) {
+export function Header({ 
+  userName = "Kevin", 
+  workspaceName = "Kevin's Workspace",
+  managerName
+}: HeaderProps) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(),
@@ -29,14 +34,14 @@ export function Header({ userName = "Kevin", workspaceName = "Kevin's Workspace"
     greeting = "Good evening";
   }
 
-  // Extract user's first name from workspace name if no userName provided
-  const userFirstName = userName || workspaceName?.split("'")[0] || "User";
+  // Use property manager name if provided, otherwise fallback to user name or workspace name
+  const displayName = managerName || userName || workspaceName?.split("'")[0] || "User";
 
   return (
     <div className="flex justify-between items-start">
       <div>
         <h1 className="text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
-          {greeting}, {userFirstName}
+          {greeting}, {displayName}
         </h1>
         <p className="text-[28px] text-[#9EA3AD] font-medium leading-none">
           Today, {format(new Date(), "MMM dd")}
