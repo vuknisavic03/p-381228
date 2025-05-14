@@ -2,7 +2,15 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart } from 'lucide-react';
+import { LayoutDashboard, List, BarChart, UserCog, User } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
+import { ClientDetailsDialog } from "@/components/workspace/ClientDetailsDialog";
 
 interface WorkspaceNavProps {
   workspaceName?: string;
@@ -17,6 +25,7 @@ export function WorkspaceNav({
 }: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isClientDetailsOpen, setIsClientDetailsOpen] = React.useState(false);
   
   const isActive = (path: string) => location.pathname === path;
 
@@ -36,18 +45,45 @@ export function WorkspaceNav({
     });
   };
 
+  // Handle opening workspace manager
+  const handleOpenWorkspaceManager = () => {
+    navigate('/workspace-manager', { 
+      state: { 
+        workspace: workspaceData
+      }
+    });
+  };
+
+  // Handle viewing client details
+  const handleViewClientDetails = () => {
+    setIsClientDetailsOpen(true);
+  };
+
   return (
     <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white">
       <div className="p-4 border-b border-[#E4E5EA]">
-        <button 
-          onClick={() => navigate('/')}
-          className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
-        >
-          <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
-            {workspaceData.initials}
-          </div>
-          <span className="text-[#1A1A1A] font-medium">{workspaceData.name}</span>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button 
+              className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
+            >
+              <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
+                {workspaceData.initials}
+              </div>
+              <span className="text-[#1A1A1A] font-medium">{workspaceData.name}</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-[220px]">
+            <DropdownMenuItem onClick={handleOpenWorkspaceManager} className="cursor-pointer">
+              <UserCog className="mr-2 h-4 w-4" />
+              <span>Workspace Manager</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleViewClientDetails} className="cursor-pointer">
+              <User className="mr-2 h-4 w-4" />
+              <span>Client Details</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="p-4">
         <div className="text-sm text-[#9EA3AD] font-semibold mb-4">WORKSPACE</div>
@@ -93,6 +129,13 @@ export function WorkspaceNav({
           </div>
         </div>
       </div>
+
+      {/* Client Details Dialog */}
+      <Dialog open={isClientDetailsOpen} onOpenChange={setIsClientDetailsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <ClientDetailsDialog client={workspaceData} onClose={() => setIsClientDetailsOpen(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
