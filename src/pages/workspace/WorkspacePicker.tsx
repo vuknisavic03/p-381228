@@ -177,8 +177,8 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 border border-[#F5F5F6] shadow-lg rounded-md">
-          <p className="font-medium text-gray-700 mb-1">{label}</p>
+        <div className="bg-white p-3 border border-white/20 shadow-lg rounded-md backdrop-blur-md bg-white/95">
+          <p className="font-medium text-gray-800 mb-1">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="font-semibold text-gray-800 flex items-center gap-1" style={{ color: entry.color }}>
               {activeChartType === 'commission' ? (
