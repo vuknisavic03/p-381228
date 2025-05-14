@@ -10,7 +10,6 @@ import WorkspacePicker from "./pages/workspace/WorkspacePicker";
 import Profile from "./pages/Profile";
 import WorkspaceManager from "./pages/WorkspaceManager";
 import { Toaster } from "./components/ui/toaster";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -32,7 +31,6 @@ function App() {
         </Routes>
         <Toaster />
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
