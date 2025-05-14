@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -171,8 +170,17 @@ export default function WorkspacePicker() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeChartType, setActiveChartType] = useState<'revenue' | 'commission'>('revenue');
 
-  const handleWorkspaceSelect = () => {
-    navigate('/dashboard');
+  const handleWorkspaceSelect = (workspace: Workspace) => {
+    // Pass the workspace data to the dashboard via state
+    navigate('/dashboard', { 
+      state: { 
+        workspace: {
+          name: workspace.name,
+          owner: workspace.owner,
+          initials: workspace.initials
+        } 
+      } 
+    });
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -214,7 +222,7 @@ export default function WorkspacePicker() {
           {workspaces.map((workspace) => (
             <button
               key={workspace.name}
-              onClick={handleWorkspaceSelect}
+              onClick={() => handleWorkspaceSelect(workspace)}
               className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F9F9FA] transition-colors text-left mx-1.5"
             >
               <div className="flex items-center gap-2.5">
