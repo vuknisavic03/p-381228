@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -315,7 +314,15 @@ export default function WorkspacePicker() {
                             width={25}
                             tickFormatter={(value) => `$${value}k`}
                           />
-                          <Tooltip content={<CustomTooltip />} />
+                          <Tooltip 
+                            content={<CustomTooltip />} 
+                            cursor={{ 
+                              stroke: "#F5F5F6", 
+                              strokeWidth: 1, 
+                              strokeDasharray: "3 3",
+                              fill: "rgba(255, 255, 255, 0.6)"  // Very light, almost transparent white
+                            }}
+                          />
                           <Area
                             type="monotone"
                             dataKey="value"
@@ -369,7 +376,15 @@ export default function WorkspacePicker() {
                           tickFormatter={(value) => `$${value}k`}
                           width={40}
                         />
-                        <Tooltip content={<CustomTooltip />} />
+                        <Tooltip 
+                          content={<CustomTooltip />}
+                          cursor={{ 
+                            fill: "rgba(255, 255, 255, 0.7)",  // Very light, almost transparent white
+                            stroke: "#F5F5F6",
+                            strokeWidth: 1,
+                            opacity: 0.7
+                          }} 
+                        />
                         <Bar 
                           dataKey="commission" 
                           fill="#0EA5E9"

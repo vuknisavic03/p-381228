@@ -184,7 +184,15 @@ export function ChartCard({
               width={40}
               tickFormatter={(value) => `$${value}k`}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: "#F5F5F6", strokeWidth: 1, strokeDasharray: "5 5" }} />
+            <Tooltip 
+              content={<CustomTooltip />} 
+              cursor={{ 
+                stroke: "#F5F5F6", 
+                strokeWidth: 1, 
+                strokeDasharray: "5 5",
+                fill: "rgba(255, 255, 255, 0.4)"  // Very light, almost transparent fill
+              }} 
+            />
             <Area
               type={chartType === "spline" ? "monotone" : "linear"}
               dataKey="value"
