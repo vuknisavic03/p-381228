@@ -184,7 +184,7 @@ export function ChartCard({
               width={40}
               tickFormatter={(value) => `$${value}k`}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: "#F5F5F6", strokeWidth: 1, strokeDasharray: "5 5" }} />
             <Area
               type={chartType === "spline" ? "monotone" : "linear"}
               dataKey="value"

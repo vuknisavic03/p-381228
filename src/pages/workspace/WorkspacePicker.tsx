@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -177,10 +178,10 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 border border-white/20 shadow-lg rounded-md backdrop-blur-md bg-white/95">
-          <p className="font-medium text-gray-800 mb-1">{label}</p>
+        <div className="bg-white/90 p-3 border border-slate-200/50 shadow-lg rounded-md backdrop-blur-md">
+          <p className="font-medium text-slate-800 mb-1">{label}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} className="font-semibold text-gray-800 flex items-center gap-1" style={{ color: entry.color }}>
+            <p key={index} className="font-semibold text-slate-900 flex items-center gap-1" style={{ color: entry.color }}>
               {activeChartType === 'commission' ? (
                 <span className="text-sm font-medium">{entry.dataKey === 'commission' ? 'Commission: ' : ''}</span>
               ) : (
