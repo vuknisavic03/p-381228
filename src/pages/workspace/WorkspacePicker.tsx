@@ -279,7 +279,7 @@ export default function WorkspacePicker() {
                 <Card 
                   key={index}
                   className="overflow-hidden border border-[#F5F5F6] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
-                  onClick={handleWorkspaceSelect}
+                  onClick={() => handleWorkspaceSelect(workspace)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
@@ -329,7 +329,7 @@ export default function WorkspacePicker() {
                               stroke: "#F5F5F6", 
                               strokeWidth: 1, 
                               strokeDasharray: "3 3",
-                              fill: "rgba(240, 240, 245, 0.8)"  // Slightly darker fill for better visibility
+                              fill: "rgba(240, 240, 245, 0.8)"
                             }}
                           />
                           <Area
@@ -388,7 +388,7 @@ export default function WorkspacePicker() {
                         <Tooltip 
                           content={<CustomTooltip />}
                           cursor={{ 
-                            fill: "rgba(240, 240, 245, 0.8)",  // Slightly darker fill for better visibility
+                            fill: "rgba(240, 240, 245, 0.8)", 
                             stroke: "#F5F5F6",
                             strokeWidth: 1,
                             opacity: 0.9
