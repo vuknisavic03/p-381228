@@ -190,7 +190,7 @@ export function ChartCard({
                 stroke: "#F5F5F6", 
                 strokeWidth: 1, 
                 strokeDasharray: "5 5",
-                fill: "rgba(255, 255, 255, 0.4)"  // Very light, almost transparent fill
+                fill: "rgba(240, 240, 245, 0.8)"  // Slightly darker fill that's still elegant
               }} 
             />
             <Area

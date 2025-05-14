@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -320,7 +321,7 @@ export default function WorkspacePicker() {
                               stroke: "#F5F5F6", 
                               strokeWidth: 1, 
                               strokeDasharray: "3 3",
-                              fill: "rgba(255, 255, 255, 0.6)"  // Very light, almost transparent white
+                              fill: "rgba(240, 240, 245, 0.8)"  // Slightly darker fill for better visibility
                             }}
                           />
                           <Area
@@ -379,10 +380,10 @@ export default function WorkspacePicker() {
                         <Tooltip 
                           content={<CustomTooltip />}
                           cursor={{ 
-                            fill: "rgba(255, 255, 255, 0.7)",  // Very light, almost transparent white
+                            fill: "rgba(240, 240, 245, 0.8)",  // Slightly darker fill for better visibility
                             stroke: "#F5F5F6",
                             strokeWidth: 1,
-                            opacity: 0.7
+                            opacity: 0.9
                           }} 
                         />
                         <Bar 
