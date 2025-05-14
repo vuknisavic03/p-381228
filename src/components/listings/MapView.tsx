@@ -1,9 +1,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { MapPin, Compass } from 'lucide-react';
+import { Compass, AlertCircle, Loader2 } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { getMapboxToken } from "@/config/mapbox";
+import { MapboxSetup } from "./MapboxSetup";
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface MapViewProps {
   listings: any[];
@@ -12,30 +16,176 @@ interface MapViewProps {
 
 export function MapView({ listings, onListingSelect }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstance = useRef<mapboxgl.Map | null>(null);
+  const markersRef = useRef<{ [key: number]: mapboxgl.Marker }>({});
+  const popupsRef = useRef<{ [key: number]: mapboxgl.Popup }>({});
+  
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+  const [hasToken, setHasToken] = useState<boolean>(!!getMapboxToken());
 
-  // This is a simple mock map implementation
-  // In a real application, you would use a proper map library like Mapbox, Google Maps, or Leaflet
-  useEffect(() => {
+  // Function to initialize the map
+  const initializeMap = () => {
     if (!mapRef.current) return;
-    
-    // Simulate map loading
-    const timer = setTimeout(() => {
-      setMapLoaded(true);
-      // Notify user that this is a mock map
-      toast({
-        title: "Map View",
-        description: "This is a simulated map. In a production app, this would be integrated with a real map service like Mapbox or Google Maps.",
+
+    const token = getMapboxToken();
+    if (!token) {
+      setMapError("No Mapbox token found");
+      return;
+    }
+
+    try {
+      // Configure Mapbox
+      mapboxgl.accessToken = token;
+      
+      // Create map instance
+      mapInstance.current = new mapboxgl.Map({
+        container: mapRef.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [0, 20], // Default center
+        zoom: 1.5,
       });
-    }, 800);
+
+      // Add navigation controls
+      mapInstance.current.addControl(
+        new mapboxgl.NavigationControl(),
+        'top-right'
+      );
+
+      // Handle map load
+      mapInstance.current.on('load', () => {
+        setMapLoaded(true);
+        toast({
+          description: "Map loaded successfully",
+        });
+        
+        // Add markers after map loads
+        addMapMarkers();
+      });
+
+      // Handle map errors
+      mapInstance.current.on('error', (e) => {
+        console.error('Mapbox error:', e);
+        setMapError(`Error loading map: ${e.error?.message || 'Unknown error'}`);
+      });
+    } catch (err) {
+      console.error('Error initializing map:', err);
+      setMapError(`Error initializing map: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  };
+
+  // Function to add markers to the map
+  const addMapMarkers = () => {
+    if (!mapInstance.current || !listings.length) return;
+
+    // Get bounds object to fit markers
+    const bounds = new mapboxgl.LngLatBounds();
+    let hasValidCoordinates = false;
+
+    // Clear existing markers
+    Object.values(markersRef.current).forEach(marker => marker.remove());
+    markersRef.current = {};
     
-    return () => clearTimeout(timer);
-  }, []);
+    // Clear existing popups
+    Object.values(popupsRef.current).forEach(popup => popup.remove());
+    popupsRef.current = {};
+
+    // Add markers for each listing
+    listings.forEach(listing => {
+      // Generate coordinates based on listing id for demo
+      // In a real app, you would use actual geocoded coordinates
+      const lng = -180 + (listing.id * 30) % 360;
+      const lat = -80 + (listing.id * 20) % 160;
+      
+      // Create popup for this marker
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        offset: 25,
+        className: 'custom-popup',
+      }).setHTML(`
+        <div class="text-sm font-medium">${listing.address}</div>
+        <div class="text-xs text-gray-500">${listing.type} • ${listing.category}</div>
+      `);
+      
+      // Create and add the marker
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>`;
+      el.style.cursor = 'pointer';
+      
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([lng, lat])
+        .setPopup(popup)
+        .addTo(mapInstance.current);
+      
+      // Store marker reference
+      markersRef.current[listing.id] = marker;
+      popupsRef.current[listing.id] = popup;
+      
+      // Setup event handlers
+      el.addEventListener('click', () => {
+        handleMarkerClick(listing.id);
+      });
+      
+      // Add coordinates to bounds
+      bounds.extend([lng, lat]);
+      hasValidCoordinates = true;
+    });
+
+    // Fit map to bounds if we have markers
+    if (hasValidCoordinates) {
+      mapInstance.current.fitBounds(bounds, {
+        padding: 50,
+        maxZoom: 12,
+        duration: 1000
+      });
+    }
+  };
+
+  // Initialize map on component mount
+  useEffect(() => {
+    if (hasToken) {
+      initializeMap();
+    }
+
+    return () => {
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+    };
+  }, [hasToken]);
+
+  // Update markers when listings change
+  useEffect(() => {
+    if (mapLoaded && mapInstance.current) {
+      addMapMarkers();
+    }
+  }, [listings, mapLoaded]);
 
   const handleMarkerClick = (id: number) => {
-    setSelectedMarker(id === selectedMarker ? null : id);
+    // Toggle selected state
+    const newSelectedId = id === selectedMarker ? null : id;
+    setSelectedMarker(newSelectedId);
+    
+    // Close all popups
+    Object.entries(popupsRef.current).forEach(([markerId, popup]) => {
+      const marker = markersRef.current[Number(markerId)];
+      
+      if (Number(markerId) === newSelectedId) {
+        // Show popup for selected marker
+        marker.getElement().classList.add('marker-active');
+        popup.addTo(mapInstance.current!);
+      } else {
+        // Hide popups for other markers
+        marker.getElement().classList.remove('marker-active');
+        popup.remove();
+      }
+    });
+    
+    // Notify parent component
     const listing = listings.find(l => l.id === id);
     if (listing) {
       onListingSelect(listing);
@@ -43,12 +193,34 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
   };
 
   const handleRecenter = () => {
-    // In a real map implementation, this would recenter the map
-    // For our mock, we'll just show a toast
-    toast({
-      description: "Map recentered",
+    if (!mapInstance.current) return;
+    
+    // Get all markers and fit them to bounds
+    const bounds = new mapboxgl.LngLatBounds();
+    let hasValidCoordinates = false;
+    
+    Object.values(markersRef.current).forEach(marker => {
+      bounds.extend(marker.getLngLat());
+      hasValidCoordinates = true;
     });
+    
+    if (hasValidCoordinates) {
+      mapInstance.current.fitBounds(bounds, {
+        padding: 50,
+        maxZoom: 12,
+        duration: 1000
+      });
+      
+      toast({
+        description: "Map recentered to show all properties",
+      });
+    }
   };
+
+  // If no token is available, show the setup component
+  if (!hasToken) {
+    return <MapboxSetup onTokenSet={() => setHasToken(true)} />;
+  }
 
   return (
     <div className="h-full flex flex-col">
@@ -61,6 +233,7 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
           size="sm" 
           onClick={handleRecenter}
           className="flex items-center gap-2"
+          disabled={!mapLoaded}
         >
           <Compass className="h-4 w-4" />
           Recenter
@@ -68,82 +241,64 @@ export function MapView({ listings, onListingSelect }: MapViewProps) {
       </div>
       
       <div className="relative flex-1 bg-slate-100" ref={mapRef}>
-        {!mapLoaded ? (
+        {!mapLoaded && !mapError ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="animate-pulse text-muted-foreground">Loading map...</div>
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              <span className="text-muted-foreground">Loading map...</span>
+            </div>
           </div>
         ) : mapError ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-destructive text-center px-4">
+            <div className="text-destructive text-center px-4 max-w-md">
+              <div className="flex justify-center mb-4">
+                <AlertCircle className="h-12 w-12 text-destructive/80" />
+              </div>
               <p className="font-medium mb-2">Error loading map</p>
               <p className="text-sm text-muted-foreground">{mapError}</p>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => {
+                  setMapError(null);
+                  setHasToken(false);
+                }}
+              >
+                Configure Mapbox
+              </Button>
             </div>
           </div>
-        ) : (
-          <>
-            {/* Map background */}
-            <div className="absolute inset-0 bg-[#e8ecf0] bg-opacity-50">
-              {/* Simulated map grid */}
-              <div className="h-full w-full grid grid-cols-10 grid-rows-10">
-                {Array.from({ length: 100 }).map((_, i) => (
-                  <div key={i} className="border border-[#d0d8e0] border-opacity-20" />
-                ))}
-              </div>
-              
-              {/* Simulated map features */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-[10%] left-[20%] w-[30%] h-[5%] bg-blue-500 rounded-full blur-md"></div>
-                <div className="absolute top-[30%] left-[40%] w-[20%] h-[10%] bg-green-500 rounded-lg blur-sm"></div>
-                <div className="absolute top-[60%] left-[15%] w-[40%] h-[8%] bg-blue-300 rounded-full blur-md"></div>
-                <div className="absolute top-[75%] left-[60%] w-[25%] h-[10%] bg-green-400 rounded-lg blur-sm"></div>
-              </div>
-            </div>
-            
-            {/* Map markers */}
-            {listings.map((listing) => {
-              // Generate pseudo-random positions for demo purposes
-              const top = `${20 + (listing.id * 13) % 60}%`;
-              const left = `${15 + (listing.id * 17) % 70}%`;
-              
-              return (
-                <div 
-                  key={listing.id}
-                  className={`absolute transition-all duration-200 z-10 ${
-                    selectedMarker === listing.id ? 'z-20 scale-110' : ''
-                  }`}
-                  style={{ top, left }}
-                >
-                  <div 
-                    className={`flex flex-col items-center cursor-pointer group`}
-                    onClick={() => handleMarkerClick(listing.id)}
-                  >
-                    <MapPin 
-                      className={`h-8 w-8 ${
-                        selectedMarker === listing.id 
-                          ? 'text-primary fill-primary' 
-                          : 'text-primary/80 group-hover:text-primary'
-                      } drop-shadow-md transition-all duration-200`} 
-                    />
-                    
-                    {selectedMarker === listing.id && (
-                      <Card className="absolute top-full mt-2 w-64 p-3 z-30 shadow-lg animate-in fade-in zoom-in-95 duration-200">
-                        <div className="text-sm font-medium">{listing.address}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{listing.type} • {listing.category}</div>
-                        {listing.tenant && (
-                          <div className="mt-2 pt-2 border-t text-xs">
-                            <div className="font-medium">{listing.tenant.name}</div>
-                            <div className="text-muted-foreground">{listing.tenant.email}</div>
-                          </div>
-                        )}
-                      </Card>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </>
-        )}
+        ) : null}
+        
+        {/* The map will be rendered here by Mapbox */}
       </div>
+
+      <style jsx global>{`
+        .marker {
+          transition: all 0.2s ease;
+          color: hsl(var(--primary));
+        }
+        
+        .marker:hover, .marker-active {
+          transform: scale(1.2);
+          color: hsl(var(--primary));
+          filter: drop-shadow(0 0 0.5rem rgba(0,0,0,0.2));
+        }
+        
+        .custom-popup {
+          z-index: 10;
+        }
+        
+        .custom-popup .mapboxgl-popup-content {
+          padding: 12px;
+          border-radius: 6px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+          border-top-color: #fff;
+        }
+      `}</style>
     </div>
   );
 }
