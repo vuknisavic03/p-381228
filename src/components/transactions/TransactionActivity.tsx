@@ -18,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 
 // Mock transaction data
@@ -144,25 +143,57 @@ export function TransactionActivity() {
       <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Transaction Activity</h2>
         
-        <Tabs 
-          value={transactionType} 
-          onValueChange={(value) => setTransactionType(value as 'all' | 'revenue' | 'expense')}
-          className="mb-4"
-        >
-          <TabsList className="grid grid-cols-3 w-full bg-gray-50 p-1">
-            <TabsTrigger value="all" className="text-xs py-1.5">
+        {/* Unique visual selector for transaction types */}
+        <div className="mb-4">
+          <div className="relative flex p-1 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 shadow-inner">
+            {/* Visual highlight for selected type */}
+            <div 
+              className={`absolute transition-all duration-300 ease-in-out rounded-lg bg-white shadow-sm ${
+                transactionType === 'all' ? 'w-1/3 left-0' : 
+                transactionType === 'revenue' ? 'w-1/3 left-1/3' : 'w-1/3 left-2/3'
+              }`}
+              style={{
+                top: '4px',
+                bottom: '4px',
+                transform: transactionType === 'all' ? 'translateX(4px)' : 
+                          transactionType === 'revenue' ? 'translateX(0)' : 'translateX(-4px)'
+              }}
+            />
+            
+            {/* All Transactions Button */}
+            <button
+              onClick={() => setTransactionType('all')}
+              className={`relative flex-1 flex items-center justify-center py-2 rounded-lg font-medium text-sm z-10 ${
+                transactionType === 'all' ? 'text-gray-800' : 'text-gray-500'
+              }`}
+            >
+              <Wallet className={`h-4 w-4 mr-2 ${transactionType === 'all' ? 'text-blue-500' : 'text-gray-400'}`} />
               All Transactions
-            </TabsTrigger>
-            <TabsTrigger value="revenue" className="text-xs py-1.5">
-              <DollarSign className="h-3.5 w-3.5 mr-1" />
+            </button>
+            
+            {/* Revenue Button */}
+            <button
+              onClick={() => setTransactionType('revenue')}
+              className={`relative flex-1 flex items-center justify-center py-2 rounded-lg font-medium text-sm z-10 ${
+                transactionType === 'revenue' ? 'text-gray-800' : 'text-gray-500'
+              }`}
+            >
+              <DollarSign className={`h-4 w-4 mr-2 ${transactionType === 'revenue' ? 'text-emerald-500' : 'text-gray-400'}`} />
               Revenue
-            </TabsTrigger>
-            <TabsTrigger value="expense" className="text-xs py-1.5">
-              <TrendingDown className="h-3.5 w-3.5 mr-1" />
+            </button>
+            
+            {/* Expenses Button */}
+            <button
+              onClick={() => setTransactionType('expense')}
+              className={`relative flex-1 flex items-center justify-center py-2 rounded-lg font-medium text-sm z-10 ${
+                transactionType === 'expense' ? 'text-gray-800' : 'text-gray-500'
+              }`}
+            >
+              <TrendingDown className={`h-4 w-4 mr-2 ${transactionType === 'expense' ? 'text-rose-500' : 'text-gray-400'}`} />
               Expenses
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+            </button>
+          </div>
+        </div>
         
         <div className="flex items-center gap-2 flex-wrap">
           {/* Calendar Popover */}
