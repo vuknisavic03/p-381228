@@ -19,10 +19,15 @@ import {
   Warehouse,
   Hotel,
   Briefcase,
+  X,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-export function ListingForm() {
+interface ListingFormProps {
+  onClose?: () => void;
+}
+
+export function ListingForm({ onClose }: ListingFormProps) {
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
@@ -158,6 +163,10 @@ export function ListingForm() {
       
       window.dispatchEvent(new CustomEvent('refresh-listings'));
       
+      if (onClose) {
+        onClose();
+      }
+      
     } catch (err) {
       console.error("Error saving:", err);
       
@@ -169,6 +178,10 @@ export function ListingForm() {
       resetForm();
       
       window.dispatchEvent(new CustomEvent('refresh-listings'));
+      
+      if (onClose) {
+        onClose();
+      }
     }
   };
   
@@ -188,7 +201,12 @@ export function ListingForm() {
   return (
     <div className="p-6 h-full overflow-auto">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Listing details</h2>
+        <h2 className="text-lg font-semibold">Add New Listing</h2>
+        {onClose && (
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       <div className="space-y-4">
@@ -300,9 +318,16 @@ export function ListingForm() {
           />
         </div>
         
-        <Button className="w-full" onClick={handleSave}>
-          Add listing
-        </Button>
+        <div className="flex gap-3 pt-2">
+          <Button className="flex-1" onClick={handleSave}>
+            Add listing
+          </Button>
+          {onClose && (
+            <Button variant="outline" onClick={onClose} className="flex-1">
+              Cancel
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
