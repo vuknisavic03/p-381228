@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -138,35 +137,38 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                     <ShoppingCart className="h-4 w-4 text-gray-500" />
                     Transaction Type
                   </span>
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant={transactionType === "revenue" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        "rounded-full px-4 py-1 text-base font-medium h-8",
-                        transactionType === "revenue"
-                          ? "bg-green-600 text-white"
-                          : "bg-white text-gray-800 border-gray-200"
-                      )}
-                      onClick={() => setTransactionType("revenue")}
-                    >
-                      Revenue
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={transactionType === "expense" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        "rounded-full px-4 py-1 text-base font-medium h-8",
-                        transactionType === "expense"
-                          ? "bg-red-500 text-white"
-                          : "bg-white text-gray-800 border-gray-200"
-                      )}
-                      onClick={() => setTransactionType("expense")}
-                    >
-                      Expense
-                    </Button>
+                  <div className="flex-1 flex justify-end">
+                    <div className="flex bg-white border border-gray-200 rounded-full overflow-hidden shadow-sm">
+                      <button
+                        type="button"
+                        className={`px-6 py-2 text-base font-semibold focus:outline-none transition 
+                          ${transactionType === "revenue"
+                            ? "bg-white text-gray-900 shadow-sm"
+                            : "bg-transparent text-gray-500 hover:bg-gray-50"
+                          }`}
+                        style={{
+                          borderRadius: "9999px 0 0 9999px",
+                          borderRight: "1px solid #E5E7EB"
+                        }}
+                        onClick={() => setTransactionType("revenue")}
+                      >
+                        Revenue
+                      </button>
+                      <button
+                        type="button"
+                        className={`px-6 py-2 text-base font-semibold focus:outline-none transition
+                          ${transactionType === "expense"
+                            ? "bg-white text-gray-900 shadow-sm"
+                            : "bg-transparent text-gray-500 hover:bg-gray-50"
+                          }`}
+                        style={{
+                          borderRadius: "0 9999px 9999px 0"
+                        }}
+                        onClick={() => setTransactionType("expense")}
+                      >
+                        Expense
+                      </button>
+                    </div>
                   </div>
                 </div>
                 {/* Category Select */}
