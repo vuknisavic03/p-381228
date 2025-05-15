@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Calendar as CalendarIcon, TrendingDown, ChevronRight, FileText, Check, X } from "lucide-react";
+import { DollarSign, Calendar as CalendarIcon, TrendingDown, ChevronRight, FileText, Check, X, RefreshCcw } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { EditTransactionForm } from "./EditTransactionForm";
+import { useToast } from "@/components/ui/use-toast";
 import { 
   Table,
   TableBody,
@@ -80,12 +81,24 @@ const mockTransactions = [
 
 export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [editingTransaction, setEditingTransaction] = useState<any>(null);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const { toast } = useToast();
   
   // Local toggle function that only affects the activity center
   const toggleTransactionType = () => {
     setTransactionType(prevType => prevType === 'revenue' ? 'expense' : 'revenue');
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setDate(undefined);
+    toast({
+      title: "Filters cleared",
+      description: "All filters have been reset",
+      duration: 3000,
+    });
   };
 
   // Filter transactions based on selected type and date
@@ -111,6 +124,12 @@ export function TransactionActivity() {
     // In a real app, this would update the state or call an API
     console.log("Transaction updated:", updatedTransaction);
     setEditingTransaction(null);
+    
+    toast({
+      title: "Transaction updated",
+      description: "Your changes have been saved successfully",
+      duration: 3000,
+    });
   };
 
   return (
@@ -118,53 +137,111 @@ export function TransactionActivity() {
       <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-xl font-semibold text-gray-800">Activity</h2>
-          <button 
-            onClick={toggleTransactionType}
-            className={`flex items-center px-3 py-1.5 rounded-full font-medium transition-colors duration-200 ${
-              transactionType === 'revenue' 
-                ? 'bg-gray-100 text-gray-700' 
-                : 'bg-gray-100 text-gray-700'
-            }`}
-          >
-            {transactionType === 'revenue' ? (
-              <>
-                <DollarSign className="h-3.5 w-3.5 mr-1.5" />
-                <span className="text-xs">Revenue</span>
-              </>
-            ) : (
-              <>
-                <TrendingDown className="h-3.5 w-3.5 mr-1.5" />
-                <span className="text-xs">Expenses</span>
-              </>
-            )}
-          </button>
+          
+          {/* Improved transaction type toggle with better visual feedback */}
+          <div className="flex p-1 bg-gray-100 rounded-full">
+            <button 
+              onClick={() => setTransactionType('revenue')}
+              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium text-sm transition-all duration-200 ${
+                transactionType === 'revenue' 
+                  ? 'bg-white text-gray-800 shadow-sm' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              aria-pressed={transactionType === 'revenue'}
+            >
+              <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-green-500' : 'text-gray-500'}`} />
+              <span>Revenue</span>
+            </button>
+            <button 
+              onClick={() => setTransactionType('expense')}
+              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium text-sm transition-all duration-200 ${
+                transactionType === 'expense' 
+                  ? 'bg-white text-gray-800 shadow-sm' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              aria-pressed={transactionType === 'expense'}
+            >
+              <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-red-500' : 'text-gray-500'}`} />
+              <span>Expenses</span>
+            </button>
+          </div>
         </div>
         
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            {/* Calendar Popover */}
-            <Popover>
+            {/* Calendar Popover with improved states */}
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button 
-                  variant="outline" 
+                  variant={date ? "default" : "outline"}
                   size="sm" 
-                  className="text-xs flex items-center gap-1 border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                  className={cn(
+                    "text-sm flex items-center gap-1.5",
+                    date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                  )}
                 >
-                  <CalendarIcon className="h-3 w-3" />
-                  {date ? format(date, "MMM d, yyyy") : "Select date"}
+                  <CalendarIcon className="h-3.5 w-3.5" />
+                  {date ? format(date, "MMM d, yyyy") : "Filter by date"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="start" className="w-auto p-0">
+                <div className="p-2 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-gray-700">Select a date</p>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 px-2 text-gray-500" 
+                      onClick={() => {
+                        setDate(undefined);
+                        setCalendarOpen(false);
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
                 <Calendar
                   mode="single"
                   selected={date}
-                  onSelect={setDate}
+                  onSelect={(selectedDate) => {
+                    setDate(selectedDate);
+                    setCalendarOpen(false);
+                  }}
                   initialFocus
                   className={cn("p-3 pointer-events-auto")}
                 />
               </PopoverContent>
             </Popover>
+            
+            {/* Clear filters button - only shown when filters are active */}
+            {date && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={clearFilters}
+                className="h-9 text-xs gap-1.5 text-gray-600 hover:text-gray-900"
+              >
+                <RefreshCcw className="h-3 w-3" />
+                Clear filters
+              </Button>
+            )}
           </div>
+          
+          {/* Active filters indicators */}
+          {date && (
+            <div className="flex flex-wrap gap-2">
+              <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
+                <span>Date: {format(date, "MMM d, yyyy")}</span>
+                <button 
+                  onClick={() => setDate(undefined)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       
@@ -173,7 +250,7 @@ export function TransactionActivity() {
           <Table>
             <TableHeader>
               <TableRow className="border-b border-gray-100 hover:bg-transparent">
-                <TableHead className="w-[100px] pl-0">Amount</TableHead>
+                <TableHead className="w-[120px] pl-0">Amount</TableHead>
                 <TableHead>Details</TableHead>
                 <TableHead className="text-right pr-0">Actions</TableHead>
               </TableRow>
@@ -182,7 +259,7 @@ export function TransactionActivity() {
               {filteredTransactions.map((transaction) => (
                 <TableRow 
                   key={transaction.id} 
-                  className="border-b border-gray-100 hover:bg-gray-50"
+                  className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors"
                 >
                   <TableCell className="py-4 pl-0">
                     <div className="flex items-start">
@@ -212,7 +289,7 @@ export function TransactionActivity() {
                       <div className="text-sm text-gray-600">
                         {transaction.from}
                       </div>
-                      <div className="mt-1">
+                      <div className="mt-1.5">
                         <Badge variant="outline" className="text-xs font-normal text-gray-600 bg-gray-50">
                           {transaction.paymentMethod}
                         </Badge>
@@ -226,12 +303,13 @@ export function TransactionActivity() {
                           size="sm"
                           variant="ghost"
                           onClick={() => setEditingTransaction(transaction)}
-                          className="h-8 w-8 p-0"
+                          className="h-8 w-8 p-0 rounded-full"
+                          aria-label="Edit transaction"
                         >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       </SheetTrigger>
-                      <SheetContent side="right" className="sm:max-w-md">
+                      <SheetContent side="right" className="sm:max-w-md p-0">
                         {editingTransaction && (
                           <EditTransactionForm 
                             transaction={editingTransaction}
@@ -258,12 +336,35 @@ export function TransactionActivity() {
               <TrendingDown className="h-8 w-8 text-gray-500" />
             )}
           </div>
-          <span className="text-gray-800 font-semibold text-lg mb-2">No {transactionType} yet</span>
-          <p className="text-sm text-center text-gray-500 max-w-[280px]">
-            {transactionType === 'revenue' 
-              ? "Revenue transactions will appear here once they're created or imported from your connected accounts."
-              : "Expense transactions will appear here once they're created or imported from your connected accounts."}
+          
+          <span className="text-gray-800 font-semibold text-lg mb-2">
+            {date 
+              ? `No ${transactionType} on ${format(date, "MMMM d, yyyy")}` 
+              : `No ${transactionType} yet`
+            }
+          </span>
+          
+          <p className="text-sm text-center text-gray-500 max-w-[300px] mb-6">
+            {date 
+              ? `There are no ${transactionType} transactions recorded for this date. Try selecting a different date or clearing filters.`
+              : `${transactionType === 'revenue' 
+                  ? "Revenue transactions will appear here once they're created or imported from your connected accounts."
+                  : "Expense transactions will appear here once they're created or imported from your connected accounts."
+                }`
+            }
           </p>
+          
+          {date && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={clearFilters}
+              className="gap-2"
+            >
+              <RefreshCcw className="h-3.5 w-3.5" />
+              Clear date filter
+            </Button>
+          )}
         </div>
       )}
     </div>
