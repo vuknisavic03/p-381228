@@ -26,14 +26,15 @@ export default function Transactions() {
     >
       <div className="h-screen flex flex-col">
         <div className="p-4 border-b flex justify-between items-center bg-white shadow-sm">
-          <h1 className="text-2xl font-semibold text-gray-800">Transactions</h1>
-          <Button 
-            onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors"
-          >
-            <PlusCircle className="h-4 w-4" />
-            Add Transaction
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={() => setIsAddFormOpen(true)}
+              className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors"
+            >
+              <PlusCircle className="h-4 w-4" />
+              Add Transaction
+            </Button>
+          </div>
         </div>
         
         <div className="flex-1 overflow-y-auto bg-[#F9FAFB]">

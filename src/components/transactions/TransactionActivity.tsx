@@ -132,9 +132,9 @@ export function TransactionActivity() {
   return (
     <div className="h-full flex flex-col">
       <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-medium text-gray-800">Activity</h2>
+        <h2 className="text-xl font-medium text-gray-800 mb-6">Activity</h2>
           
+        <div className="flex items-center justify-between mb-5">
           {/* Improved transaction type toggle with subtle design */}
           <div className="flex p-1 bg-gray-100 rounded-full">
             <button 
