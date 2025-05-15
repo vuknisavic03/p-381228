@@ -16,10 +16,9 @@ type Toast = ToastProps & {
 
 const TOAST_LIMIT = 5;
 
+// Initialize the ref properly with an empty array as the initial value
 const toasts = React.createRef<Toast[]>();
-if (!toasts.current) {
-  toasts.current = [];
-}
+toasts.current = toasts.current || []; // Only set if it's null/undefined
 
 export const toast = ({ title, description, action, variant, duration = 5000 }: ToastProps) => {
   // Use sonner toast for visual display
