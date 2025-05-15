@@ -14,13 +14,11 @@ import {
   Calendar as CalendarIcon,
   DollarSign,
   FileText,
-  ShoppingCart,
   ChevronRight,
   Check,
   User,
   Mail,
   Phone,
-  House,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -81,10 +79,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           <TabsTrigger value="additional" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Additional Info</TabsTrigger>
         </TabsList>
 
-        {/* Details Tab: Key redesign here */}
+        {/* Details Tab: Listing picker (keep stylish card), then SIMPLE fields below */}
         <TabsContent value="details">
+          {/* Listing Card Design */}
           <Card className="border border-gray-100 shadow-sm rounded-xl p-6 mb-6">
-            {/* LISTING PICKER always shown */}
             <div className="mb-5">
               <div className="flex items-center mb-2 gap-2">
                 <FileText className="h-4 w-4 text-gray-500" />
@@ -96,48 +94,80 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </SelectTrigger>
                 <SelectContent>
                   {mockListings.map(listing => (
-                    <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
+                    <SelectItem key={listing.id} value={listing.id}>
+                      {listing.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              {/* Quick Address Preview */}
+              {selectedListing && (
+                <div className="flex items-center gap-2 mt-3 p-3 rounded border border-gray-100 bg-gray-50">
+                  <span className="text-sm text-gray-700 font-medium">{selectedListing.address}</span>
+                  <span className="text-xs text-gray-400">({selectedListing.type})</span>
+                </div>
+              )}
             </div>
             {/* Show rest only after listing is selected */}
             {selectedListing && (
               <>
-                {/* Transaction Type & Category */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <ShoppingCart className="h-4 w-4 text-gray-500" />
-                      Transaction Type
-                    </span>
-                    {/* Custom pill toggle, like screenshot */}
-                    <div className="inline-flex rounded-full bg-gray-100 p-1 gap-1">
-                      <button
-                        type="button"
-                        className={`px-4 py-1 rounded-full text-sm font-semibold transition 
-                          ${transactionType === "revenue"
-                            ? "bg-white shadow text-gray-900"
-                            : "text-gray-500 hover:bg-gray-200"}`
-                        }
-                        onClick={() => setTransactionType("revenue")}
-                      >
-                        Revenue
-                      </button>
-                      <button
-                        type="button"
-                        className={`px-4 py-1 rounded-full text-sm font-semibold transition 
-                          ${transactionType === "expense"
-                            ? "bg-white shadow text-gray-900"
-                            : "text-gray-500 hover:bg-gray-200"}`
-                        }
-                        onClick={() => setTransactionType("expense")}
-                      >
-                        Expense
-                      </button>
+                {/* Payer Card (Read only, pretty card style) */}
+                <Card className="bg-gray-50 border border-gray-100 rounded-lg p-4 mb-4">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <User className="h-4 w-4 text-gray-500" />
+                        <div className="text-sm font-semibold text-gray-700">{payer.name}</div>
+                      </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Mail className="h-4 w-4 text-gray-500" />
+                        <div className="text-sm text-gray-600">{payer.email}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-gray-500" />
+                        <div className="text-sm text-gray-600">{payer.phone}</div>
+                      </div>
                     </div>
                   </div>
-                  {/* Category Select */}
+                </Card>
+                
+                {/* Revenue/Expense (simple inline, as screenshot) */}
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-semibold text-gray-700">
+                    Transaction Type
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setTransactionType("revenue")}
+                      className={cn(
+                        "px-4 py-1 rounded-full border text-sm font-semibold transition",
+                        transactionType === "revenue"
+                          ? "bg-gray-800 text-white border-gray-800 shadow"
+                          : "bg-gray-100 text-gray-700 border-transparent hover:bg-gray-200"
+                      )}
+                    >
+                      Revenue
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTransactionType("expense")}
+                      className={cn(
+                        "px-4 py-1 rounded-full border text-sm font-semibold transition",
+                        transactionType === "expense"
+                          ? "bg-gray-800 text-white border-gray-800 shadow"
+                          : "bg-gray-100 text-gray-700 border-transparent hover:bg-gray-200"
+                      )}
+                    >
+                      Expense
+                    </button>
+                  </div>
+                </div>
+                {/* Category */}
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-semibold text-gray-700">
+                    Category
+                  </label>
                   <Select value={category} onValueChange={setCategory}>
                     <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
                       <SelectValue placeholder={`Select ${transactionType === "revenue" ? "revenue" : "expense"} category`} />
@@ -164,10 +194,9 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </div>
                 {/* Amount */}
                 <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Amount</span>
-                  </div>
+                  <label className="block mb-1 text-sm font-semibold text-gray-700">
+                    Amount
+                  </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
                     <Input
@@ -181,10 +210,9 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </div>
                 {/* Date */}
                 <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Date</span>
-                  </div>
+                  <label className="block mb-1 text-sm font-semibold text-gray-700">
+                    Date
+                  </label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -213,10 +241,9 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </div>
                 {/* Payment Method */}
                 <div>
-                  <div className="flex items-center mb-2">
-                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Payment Method</span>
-                  </div>
+                  <label className="block mb-1 text-sm font-semibold text-gray-700">
+                    Payment Method
+                  </label>
                   <Select value={payment} onValueChange={setPayment}>
                     <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
                       <SelectValue placeholder="Select payment method" />
