@@ -221,45 +221,9 @@ export function TransactionForm() {
 
   return (
     <div className="p-6 h-full overflow-auto">
-      {/* Header Section with Improved Transaction Type Selector */}
+      {/* Header Section - We'll remove the transaction type selector from here */}
       <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
         <h2 className="text-xl font-semibold text-gray-800">Transaction details</h2>
-        
-        <RadioGroup
-          value={transactionType}
-          onValueChange={(value) => setTransactionType(value as 'revenue' | 'expense')}
-          className="flex items-center gap-1 p-1 rounded-lg bg-gray-100"
-        >
-          <div className={`relative flex items-center px-4 py-2 rounded-md transition-colors cursor-pointer ${
-            transactionType === 'revenue' 
-              ? 'text-green-700 font-medium' 
-              : 'text-gray-500 hover:text-gray-700'
-          }`}>
-            {transactionType === 'revenue' && (
-              <div className="absolute inset-0 bg-green-100 rounded-md" />
-            )}
-            <ArrowUp className={`h-4 w-4 mr-2 z-10 ${
-              transactionType === 'revenue' ? 'text-green-600' : 'text-gray-500'
-            }`} />
-            <span className="z-10 text-sm">Revenue</span>
-            <RadioGroupItem value="revenue" id="revenue" className="sr-only" />
-          </div>
-
-          <div className={`relative flex items-center px-4 py-2 rounded-md transition-colors cursor-pointer ${
-            transactionType === 'expense' 
-              ? 'text-red-700 font-medium' 
-              : 'text-gray-500 hover:text-gray-700'
-          }`}>
-            {transactionType === 'expense' && (
-              <div className="absolute inset-0 bg-red-100 rounded-md" />
-            )}
-            <ArrowDown className={`h-4 w-4 mr-2 z-10 ${
-              transactionType === 'expense' ? 'text-red-600' : 'text-gray-500'
-            }`} />
-            <span className="z-10 text-sm">Expense</span>
-            <RadioGroupItem value="expense" id="expense" className="sr-only" />
-          </div>
-        </RadioGroup>
       </div>
 
       {/* Main Navigation */}
@@ -458,19 +422,48 @@ export function TransactionForm() {
                 </div>
               </div>
               
-              {/* Category with improved UX based on transaction type */}
+              {/* Category with integrated transaction type selector */}
               <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-4">
                   <ShoppingCart className="h-4 w-4 text-gray-500" />
-                  <h3>Category</h3>
-                  <div className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
-                    transactionType === 'revenue' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {transactionType === 'revenue' ? 'Income' : 'Expense'}
+                  <h3>Type & Category</h3>
+                </div>
+
+                {/* Transaction Type Selector - Integrated into Category section */}
+                <div className="mb-4">
+                  <div className="grid grid-cols-2 gap-2 w-full">
+                    <Button
+                      type="button"
+                      variant={transactionType === 'revenue' ? 'default' : 'outline'}
+                      className={cn(
+                        "flex justify-center items-center gap-2 py-2.5 rounded-md transition-colors",
+                        transactionType === 'revenue'
+                          ? "bg-green-100 text-green-800 hover:bg-green-200 border border-green-200"
+                          : "border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-500"
+                      )}
+                      onClick={() => setTransactionType('revenue')}
+                    >
+                      <ArrowUp className={`h-4 w-4 ${transactionType === 'revenue' ? 'text-green-600' : 'text-gray-500'}`} />
+                      <span className="font-medium">Revenue</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={transactionType === 'expense' ? 'default' : 'outline'}
+                      className={cn(
+                        "flex justify-center items-center gap-2 py-2.5 rounded-md transition-colors",
+                        transactionType === 'expense'
+                          ? "bg-red-100 text-red-800 hover:bg-red-200 border border-red-200"
+                          : "border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-500"
+                      )}
+                      onClick={() => setTransactionType('expense')}
+                    >
+                      <ArrowDown className={`h-4 w-4 ${transactionType === 'expense' ? 'text-red-600' : 'text-gray-500'}`} />
+                      <span className="font-medium">Expense</span>
+                    </Button>
                   </div>
                 </div>
+
+                {/* Category Dropdown */}
                 <Select>
                   <SelectTrigger className={`w-full border-gray-200 bg-white hover:border-gray-300 transition-colors ${
                     transactionType === 'revenue'
