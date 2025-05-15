@@ -33,7 +33,8 @@ import {
   Store,
   Search,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  TrendingUp
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -221,7 +222,7 @@ export function TransactionForm() {
 
   return (
     <div className="p-6 h-full overflow-auto">
-      {/* Header Section - We'll remove the transaction type selector from here */}
+      {/* Header Section */}
       <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
         <h2 className="text-xl font-semibold text-gray-800">Transaction details</h2>
       </div>
@@ -422,193 +423,196 @@ export function TransactionForm() {
                 </div>
               </div>
               
-              {/* Category with integrated transaction type selector */}
+              {/* Category with integrated transaction type selector - IMPROVED */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-4">
                   <ShoppingCart className="h-4 w-4 text-gray-500" />
-                  <h3>Type & Category</h3>
+                  <h3>Transaction Category</h3>
                 </div>
 
-                {/* Transaction Type Selector - Integrated into Category section */}
-                <div className="mb-4">
-                  <div className="grid grid-cols-2 gap-2 w-full">
+                {/* Transaction Type Selector - Elegant Design */}
+                <div className="mb-5 relative">
+                  <div className="grid grid-cols-2 p-0.5 bg-gray-50 rounded-lg border border-gray-200 mb-4">
                     <Button
                       type="button"
-                      variant={transactionType === 'revenue' ? 'default' : 'outline'}
+                      variant="ghost"
                       className={cn(
-                        "flex justify-center items-center gap-2 py-2.5 rounded-md transition-colors",
+                        "flex justify-center items-center gap-2 py-2.5 border-0 rounded-md transition-all duration-200",
                         transactionType === 'revenue'
-                          ? "bg-green-100 text-green-800 hover:bg-green-200 border border-green-200"
-                          : "border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-500"
+                          ? "bg-white text-green-600 shadow-sm font-medium"
+                          : "bg-transparent text-gray-500 hover:text-gray-700"
                       )}
                       onClick={() => setTransactionType('revenue')}
                     >
-                      <ArrowUp className={`h-4 w-4 ${transactionType === 'revenue' ? 'text-green-600' : 'text-gray-500'}`} />
-                      <span className="font-medium">Revenue</span>
+                      <TrendingUp className={`h-4 w-4 ${transactionType === 'revenue' ? 'text-green-500' : 'text-gray-400'}`} />
+                      <span>Revenue</span>
                     </Button>
                     <Button
                       type="button"
-                      variant={transactionType === 'expense' ? 'default' : 'outline'}
+                      variant="ghost"
                       className={cn(
-                        "flex justify-center items-center gap-2 py-2.5 rounded-md transition-colors",
+                        "flex justify-center items-center gap-2 py-2.5 border-0 rounded-md transition-all duration-200",
                         transactionType === 'expense'
-                          ? "bg-red-100 text-red-800 hover:bg-red-200 border border-red-200"
-                          : "border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-500"
+                          ? "bg-white text-red-600 shadow-sm font-medium"
+                          : "bg-transparent text-gray-500 hover:text-gray-700"
                       )}
                       onClick={() => setTransactionType('expense')}
                     >
-                      <ArrowDown className={`h-4 w-4 ${transactionType === 'expense' ? 'text-red-600' : 'text-gray-500'}`} />
-                      <span className="font-medium">Expense</span>
+                      <TrendingDown className={`h-4 w-4 ${transactionType === 'expense' ? 'text-red-500' : 'text-gray-400'}`} />
+                      <span>Expense</span>
                     </Button>
                   </div>
-                </div>
 
-                {/* Category Dropdown */}
-                <Select>
-                  <SelectTrigger className={`w-full border-gray-200 bg-white hover:border-gray-300 transition-colors ${
-                    transactionType === 'revenue'
-                      ? 'focus:ring-green-100 focus:border-green-200'
-                      : 'focus:ring-red-100 focus:border-red-200'
-                  }`}>
-                    <SelectValue placeholder={`Select ${transactionType} category`} />
-                  </SelectTrigger>
-                  <SelectContent className="w-[var(--radix-select-trigger-width)]">
-                    {transactionType === 'revenue' ? (
-                      <>
-                        <SelectItem value="rent" className="flex items-center">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Rent
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="deposit">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Deposit
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="fee">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Fee
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="other-income">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Other Income
-                          </div>
-                        </SelectItem>
-                      </>
-                    ) : (
-                      <>
-                        <SelectItem value="maintenance">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Maintenance
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="utilities">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Utilities
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="insurance">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Insurance
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="tax">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Tax
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="other-expense">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Other Expense
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              {/* Amount with improved UX based on transaction type */}
-              <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
-                  <Wallet className="h-4 w-4 text-gray-500" />
-                  <h3>Amount</h3>
-                </div>
-                <div className="relative">
-                  <span className={`absolute left-3 top-1/2 -translate-y-1/2 font-medium ${
-                    transactionType === 'revenue' ? 'text-green-600' : 'text-red-600'
-                  }`}>$</span>
-                  <Input 
-                    type="number" 
-                    placeholder="0.00" 
-                    className={`pl-7 border-gray-200 bg-white hover:border-gray-300 transition-colors ${
-                      transactionType === 'revenue'
-                        ? 'focus:ring-green-100 focus:border-green-200'
-                        : 'focus:ring-red-100 focus:border-red-200'
-                    }`}
-                  />
-                </div>
-              </div>
-              
-              {/* Date */}
-              <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
-                  <CalendarIcon className="h-4 w-4 text-gray-500" />
-                  <h3>Date</h3>
-                </div>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
+                  {/* Category Dropdown - Styled based on transaction type */}
+                  <Select>
+                    <SelectTrigger 
                       className={cn(
-                        "w-full justify-start text-left border-gray-200 bg-white hover:bg-gray-50 transition-colors",
-                        !date && "text-muted-foreground"
+                        "w-full border transition-colors",
+                        transactionType === 'revenue' 
+                          ? "border-green-200 ring-green-100 text-green-700 focus:ring-green-100 focus:border-green-300" 
+                          : "border-red-200 ring-red-100 text-red-700 focus:ring-red-100 focus:border-red-300"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Select date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 z-50" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              
-              {/* Payment Method */}
-              <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
-                  <CreditCard className="h-4 w-4 text-gray-500" />
-                  <h3>Payment Method</h3>
+                      <SelectValue placeholder={`Select ${transactionType} category`} />
+                    </SelectTrigger>
+                    <SelectContent className="w-[var(--radix-select-trigger-width)]">
+                      {transactionType === 'revenue' ? (
+                        <>
+                          <SelectItem value="rent">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                              Rent
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="deposit">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                              Deposit
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="fee">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                              Fee
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="other-income">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                              Other Income
+                            </div>
+                          </SelectItem>
+                        </>
+                      ) : (
+                        <>
+                          <SelectItem value="maintenance">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                              Maintenance
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="utilities">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                              Utilities
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="insurance">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                              Insurance
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="tax">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                              Tax
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="other-expense">
+                            <div className="flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                              Other Expense
+                            </div>
+                          </SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Select>
-                  <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
-                    <SelectValue placeholder="Select payment method" />
-                  </SelectTrigger>
-                  <SelectContent className="w-[var(--radix-select-trigger-width)]">
-                    <SelectItem value="card">Credit Card</SelectItem>
-                    <SelectItem value="bank">Bank Transfer</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="check">Check</SelectItem>
-                    <SelectItem value="crypto">Cryptocurrency</SelectItem>
-                  </SelectContent>
-                </Select>
+              
+                {/* Amount with improved UX based on transaction type */}
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
+                    <Wallet className="h-4 w-4 text-gray-500" />
+                    <h3>Amount</h3>
+                  </div>
+                  <div className="relative">
+                    <span className={`absolute left-3 top-1/2 -translate-y-1/2 font-medium ${
+                      transactionType === 'revenue' ? 'text-green-600' : 'text-red-600'
+                    }`}>$</span>
+                    <Input 
+                      type="number" 
+                      placeholder="0.00" 
+                      className={`pl-7 border-gray-200 bg-white hover:border-gray-300 transition-colors ${
+                        transactionType === 'revenue'
+                          ? 'focus:ring-green-100 focus:border-green-200'
+                          : 'focus:ring-red-100 focus:border-red-200'
+                      }`}
+                    />
+                  </div>
+                </div>
+              
+                {/* Date */}
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
+                    <CalendarIcon className="h-4 w-4 text-gray-500" />
+                    <h3>Date</h3>
+                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left border-gray-200 bg-white hover:bg-gray-50 transition-colors",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Select date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 z-50" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              
+                {/* Payment Method */}
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
+                    <CreditCard className="h-4 w-4 text-gray-500" />
+                    <h3>Payment Method</h3>
+                  </div>
+                  <Select>
+                    <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
+                      <SelectValue placeholder="Select payment method" />
+                    </SelectTrigger>
+                    <SelectContent className="w-[var(--radix-select-trigger-width)]">
+                      <SelectItem value="card">Credit Card</SelectItem>
+                      <SelectItem value="bank">Bank Transfer</SelectItem>
+                      <SelectItem value="cash">Cash</SelectItem>
+                      <SelectItem value="check">Check</SelectItem>
+                      <SelectItem value="crypto">Cryptocurrency</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </Card>
