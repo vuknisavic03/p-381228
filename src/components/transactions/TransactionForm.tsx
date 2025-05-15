@@ -21,6 +21,7 @@ import {
   User,
   Mail,
   Phone,
+  House,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -28,30 +29,25 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-// Mock listings data for the dropdown and payer autofill
 const mockListings = [
   {
     id: "1",
-    name: "Maple Apartments 104",
+    name: "Belgrade, Dunavska 12",
+    type: "Retail",
+    address: "Belgrade, Dunavska 12",
+    city: "Belgrade",
+    country: "Serbia",
     tenant: {
-      name: "John Doe",
-      email: "john.doe@email.com",
-      phone: "+123456789",
-    },
+      name: "Alexander Whitmore",
+      type: "Individual",
+      email: "alex@example.com",
+      phone: "000-000-0000"
+    }
   },
-  {
-    id: "2",
-    name: "Pine Residences 12A",
-    tenant: {
-      name: "Alice Smith",
-      email: "alice.smith@email.com",
-      phone: "+987654321",
-    },
-  },
+  // ... add more mock listings as needed
 ];
 
 export function TransactionForm({ onClose }: { onClose?: () => void }) {
-  // Step 1: State variables and mock data
   const [activeTab, setActiveTab] = useState("details");
   const [selectedListingId, setSelectedListingId] = useState<string>("");
   const [transactionType, setTransactionType] = useState<"revenue" | "expense">("revenue");
@@ -62,13 +58,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   const [notes, setNotes] = useState("");
   const { toast } = useToast();
 
-  // Get tenant info from selected listing
+  // Selected listing, tenant info
   const selectedListing = mockListings.find(l => l.id === selectedListingId);
-  const payerName = selectedListing?.tenant.name || "";
-  const payerEmail = selectedListing?.tenant.email || "";
-  const payerPhone = selectedListing?.tenant.phone || "";
+  const payer = selectedListing?.tenant;
 
-  // Step 2: Handle submission
   function handleConfirm() {
     toast({
       title: "Transaction created",
@@ -76,10 +69,6 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
     });
     if (onClose) onClose();
   }
-
-  // Restore old details design:
-  // - Listing is selected first, all other fields appear after a listing is chosen.
-  // - Horizontal (simple) row for Revenue/Expense toggle aligned with Category title.
 
   return (
     <div className="p-6 h-full overflow-auto min-w-[340px]">
@@ -93,18 +82,18 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           <TabsTrigger value="additional" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Additional Info</TabsTrigger>
         </TabsList>
 
-        {/* Details Tab */}
+        {/* Details Tab: Key redesign here */}
         <TabsContent value="details">
-          <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
-            {/* Listing */}
+          <Card className="border border-gray-100 shadow-sm rounded-xl p-6 mb-6">
+            {/* LISTING PICKER always shown */}
             <div className="mb-5">
-              <div className="flex items-center mb-2">
-                <FileText className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Listing</span>
+              <div className="flex items-center mb-2 gap-2">
+                <FileText className="h-4 w-4 text-gray-500" />
+                <span className="text-sm font-semibold text-gray-700">Listing</span>
               </div>
               <Select value={selectedListingId} onValueChange={setSelectedListingId}>
                 <SelectTrigger className="w-full border-gray-200 bg-white placeholder:text-gray-400">
-                  <SelectValue placeholder="Select a listing" />
+                  <SelectValue placeholder="Select listing" />
                 </SelectTrigger>
                 <SelectContent>
                   {mockListings.map(listing => (
@@ -113,45 +102,71 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </SelectContent>
               </Select>
             </div>
-            {/* Show other fields only if listing is selected */}
-            {selectedListingId && (
+            {/* Show rest only after listing is selected */}
+            {selectedListing && (
               <>
-                {/* Category Title + Revenue/Expense Switch */}
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FileText className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-700 mr-3">Category</span>
-                    {/* Revenue/Expense Toggle */}
-                    <div className="flex gap-1">
-                      <Button
-                        type="button"
-                        variant={transactionType === "revenue" ? "default" : "outline"}
-                        size="sm"
-                        className={cn(
-                          "rounded-full px-4 py-1 text-base font-medium",
-                          transactionType === "revenue"
-                            ? "bg-green-600 text-white"
-                            : "bg-white text-gray-800 border-gray-200"
-                        )}
-                        onClick={() => setTransactionType("revenue")}
-                      >
-                        Revenue
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={transactionType === "expense" ? "default" : "outline"}
-                        size="sm"
-                        className={cn(
-                          "rounded-full px-4 py-1 text-base font-medium ml-1",
-                          transactionType === "expense"
-                            ? "bg-red-500 text-white"
-                            : "bg-white text-gray-800 border-gray-200"
-                        )}
-                        onClick={() => setTransactionType("expense")}
-                      >
-                        Expense
-                      </Button>
+                {/* PAYER/TENANT CARD */}
+                <div className="rounded-xl border border-gray-100 bg-white mb-6 p-5 flex flex-col gap-3 shadow-xs">
+                  <div className="flex gap-3 items-center">
+                    <div className="flex items-center justify-center rounded-lg bg-gray-50 h-12 w-12">
+                      <User className="h-7 w-7 text-gray-400" />
                     </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg font-semibold text-gray-900">{payer.name}</span>
+                        <span className="ml-2 bg-gray-100 text-xs font-semibold text-gray-600 rounded px-2 py-0.5">{payer.type}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Mail className="h-4 w-4 text-gray-400" /><span className="text-sm text-gray-700">{payer.email}</span>
+                        <Phone className="h-4 w-4 text-gray-400 ml-4" /><span className="text-sm text-gray-700">{payer.phone}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mt-1">
+                    <House className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <div className="font-semibold text-gray-900">{selectedListing.name}</div>
+                      <div className="text-sm text-gray-500">{selectedListing.city}, {selectedListing.country}</div>
+                    </div>
+                    <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-0.5 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />{selectedListing.type}</span>
+                  </div>
+                </div>
+
+                {/* Transaction Type & Category (horizontal layout for toggle) */}
+                <div className="mb-4 flex items-center gap-4">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                    <ShoppingCart className="h-4 w-4 text-gray-500" />
+                    Transaction Type
+                  </span>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant={transactionType === "revenue" ? "default" : "outline"}
+                      size="sm"
+                      className={cn(
+                        "rounded-full px-4 py-1 text-base font-medium h-8",
+                        transactionType === "revenue"
+                          ? "bg-green-600 text-white"
+                          : "bg-white text-gray-800 border-gray-200"
+                      )}
+                      onClick={() => setTransactionType("revenue")}
+                    >
+                      Revenue
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={transactionType === "expense" ? "default" : "outline"}
+                      size="sm"
+                      className={cn(
+                        "rounded-full px-4 py-1 text-base font-medium h-8",
+                        transactionType === "expense"
+                          ? "bg-red-500 text-white"
+                          : "bg-white text-gray-800 border-gray-200"
+                      )}
+                      onClick={() => setTransactionType("expense")}
+                    >
+                      Expense
+                    </Button>
                   </div>
                 </div>
                 {/* Category Select */}
@@ -184,7 +199,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-700">Amount</span>
+                    <span className="text-sm font-semibold text-gray-700">Amount</span>
                   </div>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
@@ -201,7 +216,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
                     <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-700">Date</span>
+                    <span className="text-sm font-semibold text-gray-700">Date</span>
                   </div>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -233,7 +248,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 <div>
                   <div className="flex items-center mb-2">
                     <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-700">Payment Method</span>
+                    <span className="text-sm font-semibold text-gray-700">Payment Method</span>
                   </div>
                   <Select value={payment} onValueChange={setPayment}>
                     <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
@@ -266,47 +281,48 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
         {/* Payer Tab */}
         <TabsContent value="payer">
           <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
-            <div>
-              <div className="mb-4">
-                <div className="flex items-center mb-2">
-                  <User className="h-4 w-4 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Payer Name</span>
-                </div>
-                <Input
-                  type="text"
-                  placeholder="Enter payer's name"
-                  value={payerName}
-                  readOnly
-                  className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
-                />
-              </div>
-              <div className="mb-4">
-                <div className="flex items-center mb-2">
-                  <Mail className="h-4 w-4 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Payer Email</span>
-                </div>
-                <Input
-                  type="email"
-                  placeholder="Enter payer's email"
-                  value={payerEmail}
-                  readOnly
-                  className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
-                />
-              </div>
+            {selectedListing ? (
               <div>
-                <div className="flex items-center mb-2">
-                  <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Payer Phone</span>
+                <div className="mb-4">
+                  <div className="flex items-center mb-2">
+                    <User className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-semibold text-gray-700">Payer Name</span>
+                  </div>
+                  <Input
+                    type="text"
+                    value={payer.name}
+                    readOnly
+                    className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                  />
                 </div>
-                <Input
-                  type="tel"
-                  placeholder="Enter payer's phone"
-                  value={payerPhone}
-                  readOnly
-                  className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
-                />
+                <div className="mb-4">
+                  <div className="flex items-center mb-2">
+                    <Mail className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-semibold text-gray-700">Payer Email</span>
+                  </div>
+                  <Input
+                    type="email"
+                    value={payer.email}
+                    readOnly
+                    className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center mb-2">
+                    <Phone className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-semibold text-gray-700">Payer Phone</span>
+                  </div>
+                  <Input
+                    type="tel"
+                    value={payer.phone}
+                    readOnly
+                    className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-gray-400 text-sm">Select a listing first...</div>
+            )}
           </Card>
           <div className="flex justify-between">
             <Button
@@ -332,7 +348,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
             <div>
               <div className="flex items-center mb-2">
                 <FileText className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Additional Notes</span>
+                <span className="text-sm font-semibold text-gray-700">Additional Notes</span>
               </div>
               <Textarea
                 placeholder="Add additional details or notes"
@@ -359,7 +375,6 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
             </Button>
           </div>
         </TabsContent>
-
       </Tabs>
     </div>
   );
