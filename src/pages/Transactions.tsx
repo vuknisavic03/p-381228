@@ -25,9 +25,9 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col">
-        {/* Top bar with title and add button */}
+        {/* Top bar with Activity and Add Transaction button */}
         <div className="p-4 border-b flex justify-between items-center bg-white">
-          <h1 className="text-xl font-semibold">Transactions</h1>
+          <h2 className="text-xl font-semibold">Activity</h2>
           <Button
             onClick={() => setIsAddFormOpen(true)}
             className="flex items-center gap-2"
@@ -37,7 +37,7 @@ export default function Transactions() {
           </Button>
         </div>
 
-        {/* Activity table on left side */}
+        {/* Activity table */}
         <div className="flex-1 overflow-y-auto bg-[#FAFBFC]">
           <TransactionActivity />
         </div>

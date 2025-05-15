@@ -1,9 +1,6 @@
-
 import React, { useState } from 'react';
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Calendar as CalendarIcon, TrendingDown, ChevronRight, FileText, Check, X, RefreshCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -19,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DollarSign, TrendingDown, ChevronRight, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
 
 // Mock transaction data
 const mockTransactions = [
@@ -84,16 +82,34 @@ export function TransactionActivity() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [editingTransaction, setEditingTransaction] = useState<any>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [filterPopoverOpen, setFilterPopoverOpen] = useState(false);
   const { toast } = useToast();
-  
-  // Local toggle function that only affects the activity center
-  const toggleTransactionType = () => {
-    setTransactionType(prevType => prevType === 'revenue' ? 'expense' : 'revenue');
-  };
+
+  // Collect available categories, payment methods, and statuses from data
+  const categories = Array.from(new Set(mockTransactions.map(t => t.category)));
+  const paymentMethods = Array.from(new Set(mockTransactions.map(t => t.paymentMethod)));
+  const statuses = Array.from(new Set(mockTransactions.map(t => t.status)));
+
+  // Filter state
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+
+  // Handlers for filter popover checkboxes
+  function toggleFilter(selected: string[], value: string, onChange: (v: string[]) => void) {
+    if (selected.includes(value)) {
+      onChange(selected.filter(v => v !== value));
+    } else {
+      onChange([...selected, value]);
+    }
+  }
 
   // Clear all filters
   const clearFilters = () => {
     setDate(undefined);
+    setSelectedCategories([]);
+    setSelectedPaymentMethods([]);
+    setSelectedStatuses([]);
     toast({
       title: "Filters cleared",
       description: "All filters have been reset",
@@ -101,21 +117,26 @@ export function TransactionActivity() {
     });
   };
 
-  // Filter transactions based on selected type and date
+  // Filter transactions based on controls
   const filteredTransactions = mockTransactions.filter(transaction => {
-    // Filter by transaction type
     if (transaction.type !== transactionType) return false;
-    
+
     // Filter by date if selected
     if (date) {
       const transactionDate = new Date(transaction.date);
-      return (
-        transactionDate.getFullYear() === date.getFullYear() &&
-        transactionDate.getMonth() === date.getMonth() &&
-        transactionDate.getDate() === date.getDate()
-      );
+      if (
+        transactionDate.getFullYear() !== date.getFullYear() ||
+        transactionDate.getMonth() !== date.getMonth() ||
+        transactionDate.getDate() !== date.getDate()
+      ) return false;
     }
-    
+    // Filter by categories
+    if (selectedCategories.length && !selectedCategories.includes(transaction.category)) return false;
+    // Filter by payment methods
+    if (selectedPaymentMethods.length && !selectedPaymentMethods.includes(transaction.paymentMethod)) return false;
+    // Filter by status
+    if (selectedStatuses.length && !selectedStatuses.includes(transaction.status)) return false;
+
     return true;
   });
 
@@ -124,7 +145,6 @@ export function TransactionActivity() {
     // In a real app, this would update the state or call an API
     console.log("Transaction updated:", updatedTransaction);
     setEditingTransaction(null);
-    
     toast({
       title: "Transaction updated",
       description: "Your changes have been saved successfully",
@@ -134,11 +154,133 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-semibold text-gray-800">Activity</h2>
-          
-          {/* Improved transaction type toggle with better visual feedback */}
+      {/* Filters and toggles bar */}
+      <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm flex flex-col gap-4">
+        <div className="flex flex-wrap items-center w-full gap-2">
+          {/* Date Picker */}
+          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant={date ? "default" : "outline"}
+                size="sm"
+                className={cn(
+                  "text-sm flex items-center gap-1.5",
+                  date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                )}
+              >
+                <CalendarIcon className="h-3.5 w-3.5" />
+                {date ? format(date, "MMM d, yyyy") : "Date"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-auto p-0">
+              <div className="p-2 border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-gray-700">Select a date</p>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 px-2 text-gray-500" 
+                    onClick={() => {
+                      setDate(undefined);
+                      setCalendarOpen(false);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={(selectedDate) => {
+                  setDate(selectedDate);
+                  setCalendarOpen(false);
+                }}
+                initialFocus
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
+          {/* Filter Button */}
+          <Popover open={filterPopoverOpen} onOpenChange={setFilterPopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant={selectedCategories.length || selectedPaymentMethods.length || selectedStatuses.length ? "default" : "outline"}
+                size="sm"
+                className="text-sm flex items-center gap-1.5"
+              >
+                <FilterIcon className="h-4 w-4" />
+                Filter
+                {(selectedCategories.length + selectedPaymentMethods.length + selectedStatuses.length) > 0 && (
+                  <span className="inline-flex items-center bg-gray-700 text-white text-xs px-1 rounded-full ml-2">
+                    {selectedCategories.length + selectedPaymentMethods.length + selectedStatuses.length}
+                  </span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-72 p-0">
+              <div className="p-4">
+                <div className="font-bold text-sm mb-1">Category</div>
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {categories.map(cat => (
+                    <label key={cat} className="flex items-center gap-1 text-sm">
+                      <input
+                        type="checkbox"
+                        className="accent-purple-500"
+                        checked={selectedCategories.includes(cat)}
+                        onChange={() => toggleFilter(selectedCategories, cat, setSelectedCategories)}
+                      />
+                      {cat}
+                    </label>
+                  ))}
+                </div>
+                <div className="font-bold text-sm mb-1">Payment Method</div>
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {paymentMethods.map(pm => (
+                    <label key={pm} className="flex items-center gap-1 text-sm">
+                      <input
+                        type="checkbox"
+                        className="accent-purple-500"
+                        checked={selectedPaymentMethods.includes(pm)}
+                        onChange={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)}
+                      />
+                      {pm}
+                    </label>
+                  ))}
+                </div>
+                <div className="font-bold text-sm mb-1">Status</div>
+                <div className="flex gap-2 mb-4">
+                  {statuses.map(status => (
+                    <label key={status} className="flex items-center gap-1 text-sm">
+                      <input
+                        type="checkbox"
+                        className="accent-purple-500"
+                        checked={selectedStatuses.includes(status)}
+                        onChange={() => toggleFilter(selectedStatuses, status, setSelectedStatuses)}
+                      />
+                      {status}
+                    </label>
+                  ))}
+                </div>
+                <div className="flex justify-between mt-4 gap-2">
+                  <Button variant="outline" size="sm" onClick={() => {
+                    setSelectedCategories([]); setSelectedPaymentMethods([]); setSelectedStatuses([]);
+                  }}>
+                    Reset
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setFilterPopoverOpen(false)}
+                  >
+                    Apply
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          {/* Right-aligned transactionType toggle */}
+          <div className="flex-1" />
           <div className="flex p-1 bg-gray-100 rounded-full">
             <button 
               onClick={() => setTransactionType('revenue')}
@@ -166,85 +308,56 @@ export function TransactionActivity() {
             </button>
           </div>
         </div>
-        
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            {/* Calendar Popover with improved states */}
-            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant={date ? "default" : "outline"}
-                  size="sm" 
-                  className={cn(
-                    "text-sm flex items-center gap-1.5",
-                    date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
-                  )}
-                >
-                  <CalendarIcon className="h-3.5 w-3.5" />
-                  {date ? format(date, "MMM d, yyyy") : "Filter by date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="start" className="w-auto p-0">
-                <div className="p-2 border-b border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-700">Select a date</p>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-8 px-2 text-gray-500" 
-                      onClick={() => {
-                        setDate(undefined);
-                        setCalendarOpen(false);
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(selectedDate) => {
-                    setDate(selectedDate);
-                    setCalendarOpen(false);
-                  }}
-                  initialFocus
-                  className={cn("p-3 pointer-events-auto")}
-                />
-              </PopoverContent>
-            </Popover>
-            
-            {/* Clear filters button - only shown when filters are active */}
+        {/* Show active date/filter chips */}
+        {(date || selectedCategories.length > 0 || selectedPaymentMethods.length > 0 || selectedStatuses.length > 0) && (
+          <div className="flex flex-wrap gap-2 mt-2">
             {date && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={clearFilters}
-                className="h-9 text-xs gap-1.5 text-gray-600 hover:text-gray-900"
-              >
-                <RefreshCcw className="h-3 w-3" />
-                Clear filters
-              </Button>
-            )}
-          </div>
-          
-          {/* Active filters indicators */}
-          {date && (
-            <div className="flex flex-wrap gap-2">
               <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
                 <span>Date: {format(date, "MMM d, yyyy")}</span>
-                <button 
-                  onClick={() => setDate(undefined)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                <button onClick={() => setDate(undefined)} className="text-gray-500 hover:text-gray-700">
                   <X className="h-3 w-3" />
                 </button>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+            {selectedCategories.map(cat => (
+              <div key={cat} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-purple-100 text-purple-700 rounded-md">
+                <span>Category: {cat}</span>
+                <button onClick={() => toggleFilter(selectedCategories, cat, setSelectedCategories)} className="text-purple-500 hover:text-purple-700">
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+            {selectedPaymentMethods.map(pm => (
+              <div key={pm} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-blue-100 text-blue-700 rounded-md">
+                <span>Payment: {pm}</span>
+                <button onClick={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)} className="text-blue-500 hover:text-blue-700">
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+            {selectedStatuses.map(status => (
+              <div key={status} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-200 text-gray-600 rounded-md">
+                <span>Status: {status}</span>
+                <button onClick={() => toggleFilter(selectedStatuses, status, setSelectedStatuses)} className="text-gray-500 hover:text-gray-700">
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+            {/* Clear filters */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={clearFilters}
+              className="h-8 text-xs gap-1.5 text-gray-600 hover:text-gray-900"
+            >
+              <RefreshCcw className="h-3 w-3" />
+              Clear filters
+            </Button>
+          </div>
+        )}
       </div>
-      
+
+      {/* Results Table or Empty State */}
       {filteredTransactions.length > 0 ? (
         <div className="flex-1 overflow-auto p-5">
           <Table>
@@ -354,7 +467,7 @@ export function TransactionActivity() {
             }
           </p>
           
-          {date && (
+          {(date || selectedCategories.length || selectedPaymentMethods.length || selectedStatuses.length) && (
             <Button 
               variant="outline" 
               size="sm" 
@@ -362,7 +475,7 @@ export function TransactionActivity() {
               className="gap-2"
             >
               <RefreshCcw className="h-3.5 w-3.5" />
-              Clear date filter
+              Clear filters
             </Button>
           )}
         </div>
@@ -370,3 +483,5 @@ export function TransactionActivity() {
     </div>
   );
 }
+
+// NOTE: This file (`TransactionActivity.tsx`) is now very long. To keep your codebase maintainable, I recommend you ask me to refactor it into focused components soon!
