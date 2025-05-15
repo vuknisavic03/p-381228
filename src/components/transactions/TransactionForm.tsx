@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,7 +92,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
               </div>
               <Select value={selectedListingId} onValueChange={setSelectedListingId}>
                 <SelectTrigger className="w-full border-gray-200 bg-white placeholder:text-gray-400">
-                  <SelectValue placeholder="Select listing" />
+                  <SelectValue placeholder="Select a listing" />
                 </SelectTrigger>
                 <SelectContent>
                   {mockListings.map(listing => (
@@ -105,72 +104,40 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
             {/* Show rest only after listing is selected */}
             {selectedListing && (
               <>
-                {/* PAYER/TENANT CARD */}
-                <div className="rounded-xl border border-gray-100 bg-white mb-6 p-5 flex flex-col gap-3 shadow-xs">
-                  <div className="flex gap-3 items-center">
-                    <div className="flex items-center justify-center rounded-lg bg-gray-50 h-12 w-12">
-                      <User className="h-7 w-7 text-gray-400" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-semibold text-gray-900">{payer.name}</span>
-                        <span className="ml-2 bg-gray-100 text-xs font-semibold text-gray-600 rounded px-2 py-0.5">{payer.type}</span>
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Mail className="h-4 w-4 text-gray-400" /><span className="text-sm text-gray-700">{payer.email}</span>
-                        <Phone className="h-4 w-4 text-gray-400 ml-4" /><span className="text-sm text-gray-700">{payer.phone}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mt-1">
-                    <House className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <div className="font-semibold text-gray-900">{selectedListing.name}</div>
-                      <div className="text-sm text-gray-500">{selectedListing.city}, {selectedListing.country}</div>
-                    </div>
-                    <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-0.5 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />{selectedListing.type}</span>
-                  </div>
-                </div>
-
-                {/* Transaction Type & Category (horizontal layout for toggle) */}
-                <div className="mb-4 flex items-center gap-4">
-                  <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                    <ShoppingCart className="h-4 w-4 text-gray-500" />
-                    Transaction Type
-                  </span>
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant={transactionType === "revenue" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        "rounded-full px-4 py-1 text-base font-medium h-8",
-                        transactionType === "revenue"
-                          ? "bg-green-600 text-white"
-                          : "bg-white text-gray-800 border-gray-200"
-                      )}
-                      onClick={() => setTransactionType("revenue")}
-                    >
-                      Revenue
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={transactionType === "expense" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        "rounded-full px-4 py-1 text-base font-medium h-8",
-                        transactionType === "expense"
-                          ? "bg-red-500 text-white"
-                          : "bg-white text-gray-800 border-gray-200"
-                      )}
-                      onClick={() => setTransactionType("expense")}
-                    >
-                      Expense
-                    </Button>
-                  </div>
-                </div>
-                {/* Category Select */}
+                {/* Transaction Type & Category */}
                 <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <ShoppingCart className="h-4 w-4 text-gray-500" />
+                      Transaction Type
+                    </span>
+                    {/* Custom pill toggle, like screenshot */}
+                    <div className="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+                      <button
+                        type="button"
+                        className={`px-4 py-1 rounded-full text-sm font-semibold transition 
+                          ${transactionType === "revenue"
+                            ? "bg-white shadow text-gray-900"
+                            : "text-gray-500 hover:bg-gray-200"}`
+                        }
+                        onClick={() => setTransactionType("revenue")}
+                      >
+                        Revenue
+                      </button>
+                      <button
+                        type="button"
+                        className={`px-4 py-1 rounded-full text-sm font-semibold transition 
+                          ${transactionType === "expense"
+                            ? "bg-white shadow text-gray-900"
+                            : "text-gray-500 hover:bg-gray-200"}`
+                        }
+                        onClick={() => setTransactionType("expense")}
+                      >
+                        Expense
+                      </button>
+                    </div>
+                  </div>
+                  {/* Category Select */}
                   <Select value={category} onValueChange={setCategory}>
                     <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
                       <SelectValue placeholder={`Select ${transactionType === "revenue" ? "revenue" : "expense"} category`} />
