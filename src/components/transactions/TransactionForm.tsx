@@ -138,33 +138,34 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                     Transaction Type
                   </span>
                   <div className="flex-1 flex justify-end">
-                    <div className="flex bg-white border border-gray-200 rounded-full overflow-hidden shadow-sm">
+                    <div className="flex rounded-full border border-gray-200 bg-gray-50 p-1 shadow-sm">
                       <button
                         type="button"
-                        className={`px-6 py-2 text-base font-semibold focus:outline-none transition 
+                        className={`px-4 py-1.5 text-sm font-semibold rounded-full transition-all duration-150
                           ${transactionType === "revenue"
-                            ? "bg-white text-gray-900 shadow-sm"
-                            : "bg-transparent text-gray-500 hover:bg-gray-50"
-                          }`}
-                        style={{
-                          borderRadius: "9999px 0 0 9999px",
-                          borderRight: "1px solid #E5E7EB"
-                        }}
+                            ? "bg-green-500 text-white shadow"
+                            : "bg-transparent text-gray-600 hover:bg-green-100"}
+                        `}
                         onClick={() => setTransactionType("revenue")}
+                        style={{
+                          minWidth: 88,
+                          boxShadow: transactionType === "revenue" ? "0 2px 8px 0 rgba(16,185,129,0.10)" : undefined
+                        }}
                       >
                         Revenue
                       </button>
                       <button
                         type="button"
-                        className={`px-6 py-2 text-base font-semibold focus:outline-none transition
+                        className={`ml-2 px-4 py-1.5 text-sm font-semibold rounded-full transition-all duration-150
                           ${transactionType === "expense"
-                            ? "bg-white text-gray-900 shadow-sm"
-                            : "bg-transparent text-gray-500 hover:bg-gray-50"
-                          }`}
-                        style={{
-                          borderRadius: "0 9999px 9999px 0"
-                        }}
+                            ? "bg-red-500 text-white shadow"
+                            : "bg-transparent text-gray-600 hover:bg-red-100"}
+                        `}
                         onClick={() => setTransactionType("expense")}
+                        style={{
+                          minWidth: 88,
+                          boxShadow: transactionType === "expense" ? "0 2px 8px 0 rgba(239,68,68,0.10)" : undefined
+                        }}
                       >
                         Expense
                       </button>
