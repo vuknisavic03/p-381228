@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,11 +15,13 @@ import {
   Calendar as CalendarIcon,
   DollarSign,
   FileText,
+  ShoppingCart,
   ChevronRight,
   Check,
   User,
   Mail,
   Phone,
+  House,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -79,10 +82,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           <TabsTrigger value="additional" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Additional Info</TabsTrigger>
         </TabsList>
 
-        {/* Details Tab: Listing picker (keep stylish card), then SIMPLE fields below */}
+        {/* Details Tab: Key redesign here */}
         <TabsContent value="details">
-          {/* Listing Card Design */}
           <Card className="border border-gray-100 shadow-sm rounded-xl p-6 mb-6">
+            {/* LISTING PICKER always shown */}
             <div className="mb-5">
               <div className="flex items-center mb-2 gap-2">
                 <FileText className="h-4 w-4 text-gray-500" />
@@ -90,84 +93,84 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
               </div>
               <Select value={selectedListingId} onValueChange={setSelectedListingId}>
                 <SelectTrigger className="w-full border-gray-200 bg-white placeholder:text-gray-400">
-                  <SelectValue placeholder="Select a listing" />
+                  <SelectValue placeholder="Select listing" />
                 </SelectTrigger>
                 <SelectContent>
                   {mockListings.map(listing => (
-                    <SelectItem key={listing.id} value={listing.id}>
-                      {listing.name}
-                    </SelectItem>
+                    <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {/* Quick Address Preview */}
-              {selectedListing && (
-                <div className="flex items-center gap-2 mt-3 p-3 rounded border border-gray-100 bg-gray-50">
-                  <span className="text-sm text-gray-700 font-medium">{selectedListing.address}</span>
-                  <span className="text-xs text-gray-400">({selectedListing.type})</span>
-                </div>
-              )}
             </div>
             {/* Show rest only after listing is selected */}
             {selectedListing && (
               <>
-                {/* Payer Card (Read only, pretty card style) */}
-                <Card className="bg-gray-50 border border-gray-100 rounded-lg p-4 mb-4">
-                  <div className="flex flex-col sm:flex-row gap-3">
+                {/* PAYER/TENANT CARD */}
+                <div className="rounded-xl border border-gray-100 bg-white mb-6 p-5 flex flex-col gap-3 shadow-xs">
+                  <div className="flex gap-3 items-center">
+                    <div className="flex items-center justify-center rounded-lg bg-gray-50 h-12 w-12">
+                      <User className="h-7 w-7 text-gray-400" />
+                    </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <User className="h-4 w-4 text-gray-500" />
-                        <div className="text-sm font-semibold text-gray-700">{payer.name}</div>
-                      </div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <Mail className="h-4 w-4 text-gray-500" />
-                        <div className="text-sm text-gray-600">{payer.email}</div>
-                      </div>
                       <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-gray-500" />
-                        <div className="text-sm text-gray-600">{payer.phone}</div>
+                        <span className="text-lg font-semibold text-gray-900">{payer.name}</span>
+                        <span className="ml-2 bg-gray-100 text-xs font-semibold text-gray-600 rounded px-2 py-0.5">{payer.type}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Mail className="h-4 w-4 text-gray-400" /><span className="text-sm text-gray-700">{payer.email}</span>
+                        <Phone className="h-4 w-4 text-gray-400 ml-4" /><span className="text-sm text-gray-700">{payer.phone}</span>
                       </div>
                     </div>
                   </div>
-                </Card>
-                
-                {/* Revenue/Expense (simple inline, as screenshot) */}
-                <div className="mb-4">
-                  <label className="block mb-1 text-sm font-semibold text-gray-700">
-                    Transaction Type
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setTransactionType("revenue")}
-                      className={cn(
-                        "px-4 py-1 rounded-full border text-sm font-semibold transition",
-                        transactionType === "revenue"
-                          ? "bg-gray-800 text-white border-gray-800 shadow"
-                          : "bg-gray-100 text-gray-700 border-transparent hover:bg-gray-200"
-                      )}
-                    >
-                      Revenue
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTransactionType("expense")}
-                      className={cn(
-                        "px-4 py-1 rounded-full border text-sm font-semibold transition",
-                        transactionType === "expense"
-                          ? "bg-gray-800 text-white border-gray-800 shadow"
-                          : "bg-gray-100 text-gray-700 border-transparent hover:bg-gray-200"
-                      )}
-                    >
-                      Expense
-                    </button>
+                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mt-1">
+                    <House className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <div className="font-semibold text-gray-900">{selectedListing.name}</div>
+                      <div className="text-sm text-gray-500">{selectedListing.city}, {selectedListing.country}</div>
+                    </div>
+                    <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-0.5 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />{selectedListing.type}</span>
                   </div>
                 </div>
-                {/* Category */}
+
+                {/* Transaction Type & Category (horizontal layout for toggle) */}
+                <div className="mb-4 flex items-center gap-4">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                    <ShoppingCart className="h-4 w-4 text-gray-500" />
+                    Transaction Type
+                  </span>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant={transactionType === "revenue" ? "default" : "outline"}
+                      size="sm"
+                      className={cn(
+                        "rounded-full px-4 py-1 text-base font-medium h-8",
+                        transactionType === "revenue"
+                          ? "bg-green-600 text-white"
+                          : "bg-white text-gray-800 border-gray-200"
+                      )}
+                      onClick={() => setTransactionType("revenue")}
+                    >
+                      Revenue
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={transactionType === "expense" ? "default" : "outline"}
+                      size="sm"
+                      className={cn(
+                        "rounded-full px-4 py-1 text-base font-medium h-8",
+                        transactionType === "expense"
+                          ? "bg-red-500 text-white"
+                          : "bg-white text-gray-800 border-gray-200"
+                      )}
+                      onClick={() => setTransactionType("expense")}
+                    >
+                      Expense
+                    </Button>
+                  </div>
+                </div>
+                {/* Category Select */}
                 <div className="mb-4">
-                  <label className="block mb-1 text-sm font-semibold text-gray-700">
-                    Category
-                  </label>
                   <Select value={category} onValueChange={setCategory}>
                     <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
                       <SelectValue placeholder={`Select ${transactionType === "revenue" ? "revenue" : "expense"} category`} />
@@ -194,9 +197,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </div>
                 {/* Amount */}
                 <div className="mb-4">
-                  <label className="block mb-1 text-sm font-semibold text-gray-700">
-                    Amount
-                  </label>
+                  <div className="flex items-center mb-2">
+                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-semibold text-gray-700">Amount</span>
+                  </div>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
                     <Input
@@ -210,9 +214,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </div>
                 {/* Date */}
                 <div className="mb-4">
-                  <label className="block mb-1 text-sm font-semibold text-gray-700">
-                    Date
-                  </label>
+                  <div className="flex items-center mb-2">
+                    <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-semibold text-gray-700">Date</span>
+                  </div>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -241,9 +246,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </div>
                 {/* Payment Method */}
                 <div>
-                  <label className="block mb-1 text-sm font-semibold text-gray-700">
-                    Payment Method
-                  </label>
+                  <div className="flex items-center mb-2">
+                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-semibold text-gray-700">Payment Method</span>
+                  </div>
                   <Select value={payment} onValueChange={setPayment}>
                     <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
                       <SelectValue placeholder="Select payment method" />
