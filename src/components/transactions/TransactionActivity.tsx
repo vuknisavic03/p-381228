@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,8 +19,21 @@ import {
 import { DollarSign, TrendingDown, ChevronRight, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
 import { TransactionTable } from "./TransactionTable"; // <-- ADDED IMPORT
 
+// Define type based on TransactionTable
+type Transaction = {
+  id: number;
+  type: "revenue" | "expense";
+  amount: number;
+  date: Date;
+  category: string;
+  paymentMethod: string;
+  from: string;
+  notes?: string;
+  status: string;
+};
+
 // Mock transaction data
-const mockTransactions = [
+const mockTransactions: Transaction[] = [
   {
     id: 1,
     type: 'revenue',
@@ -82,7 +94,7 @@ const mockTransactions = [
 export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [editingTransaction, setEditingTransaction] = useState<any>(null);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [filterPopoverOpen, setFilterPopoverOpen] = useState(false);
   const { toast } = useToast();
@@ -140,8 +152,20 @@ export function TransactionActivity() {
   });
 
   // Handle transaction edit — opens sheet with edit form
-  const handleEditTransaction = (tx: any) => {
+  const handleEditTransaction = (tx: Transaction) => {
     setEditingTransaction(tx);
+  };
+
+  // Implement an onUpdate callback for EditTransactionForm
+  const handleUpdateTransaction = (updatedTransaction: Transaction) => {
+    // In the real app: update the transaction in local state or backend
+    // Here: Simply close the sheet for demo, or update if next step
+    setEditingTransaction(null);
+    toast({
+      title: "Transaction Updated",
+      description: "Transaction was updated in demo mode.",
+      duration: 3000
+    });
   };
 
   return (
@@ -350,7 +374,7 @@ export function TransactionActivity() {
       </div>
 
       {/* Modern Table */}
-      <div className="flex-1 p-6 bg-[#FAFBFC]">
+      <div className="flex-1 p-6 bg-white">
         <div className="max-w-full mx-auto">
           <div className="mb-6">
             {/* Results Table or Empty State */}
@@ -362,14 +386,14 @@ export function TransactionActivity() {
         </div>
       </div>
 
-      {/* Edit sheet (unchanged) */}
+      {/* Edit sheet */}
       {editingTransaction && (
         <Sheet open={!!editingTransaction} onOpenChange={() => setEditingTransaction(null)}>
           <SheetContent side="right" className="sm:max-w-md p-0">
             <EditTransactionForm
               transaction={editingTransaction}
               onClose={() => setEditingTransaction(null)}
-              // Removed onUpdate={handleUpdateTransaction}
+              onUpdate={handleUpdateTransaction}
             />
           </SheetContent>
         </Sheet>
@@ -379,4 +403,3 @@ export function TransactionActivity() {
 }
 
 // NOTE: This file is much shorter/cleaner. Consider splitting the filter bar, etc., into components for even better maintainability!
-
