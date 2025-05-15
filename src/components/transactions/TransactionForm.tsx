@@ -8,7 +8,7 @@ import { X, DollarSign, Calendar, CreditCard, FileText, Check } from "lucide-rea
 import { format } from "date-fns";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -87,20 +87,15 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
     setNotes("");
     
     // Show success message
-    handleConfirm();
+    toast({
+      title: `${transactionType === 'revenue' ? 'Revenue' : 'Expense'} transaction created`,
+      description: `Your ${transactionType} transaction has been created successfully.`,
+    });
     
     // Close the form if onClose is provided
     if (onClose) {
       onClose();
     }
-  };
-
-  const handleConfirm = () => {
-    // Updated to use only one toast notification
-    toast({
-      title: `${transactionType === 'revenue' ? 'Revenue' : 'Expense'} transaction created`,
-      description: `Your ${transactionType} transaction has been created successfully.`,
-    });
   };
 
   // Category options based on transaction type
@@ -122,7 +117,7 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold">Add Transaction</h2>
         <SheetClose asChild>
-          <Button variant="outline" size="icon" onClick={onClose}>
+          <Button variant="outline" size="icon" onClick={onClose} className="h-9 w-9">
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </Button>
@@ -164,9 +159,9 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
           
           <Select 
             value={category} 
-            onValueChange={handleCategoryChange}
+            onValueChange={(value) => setCategory(value)}
           >
-            <SelectTrigger className="w-full border-gray-200 bg-white">
+            <SelectTrigger className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
@@ -189,7 +184,7 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
               type="text" 
               value={amount}
               onChange={handleAmountChange}
-              className="pl-7 border-gray-200" 
+              className="pl-7 border-gray-200 hover:border-gray-300 transition-colors" 
               placeholder="0.00" 
             />
           </div>
@@ -206,7 +201,7 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-full justify-start text-left border-gray-200",
+                  "w-full justify-start text-left border-gray-200 hover:border-gray-300 transition-colors bg-white",
                   !date && "text-muted-foreground"
                 )}
               >
@@ -214,12 +209,13 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
                 {date ? format(date, "PPP") : <span>Select date</span>}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0 border-gray-200" align="start">
               <CalendarComponent
                 mode="single"
                 selected={date}
                 onSelect={(newDate) => newDate && setDate(newDate)}
                 initialFocus
+                className="rounded-md"
               />
             </PopoverContent>
           </Popover>
@@ -233,9 +229,9 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
           </div>
           <Select 
             value={paymentMethod} 
-            onValueChange={handlePaymentMethodChange}
+            onValueChange={(value) => setPaymentMethod(value)}
           >
-            <SelectTrigger className="w-full border-gray-200">
+            <SelectTrigger className="w-full border-gray-200 hover:border-gray-300 transition-colors bg-white">
               <SelectValue placeholder="Select payment method" />
             </SelectTrigger>
             <SelectContent>
@@ -253,9 +249,9 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
             <h3>{transactionType === 'revenue' ? 'From' : 'To'}</h3>
           </div>
           <Input
-            className="border-gray-200"
+            className="border-gray-200 hover:border-gray-300 transition-colors bg-white"
             value={from}
-            onChange={handleFromChange}
+            onChange={(e) => setFrom(e.target.value)}
             placeholder={transactionType === 'revenue' ? 'Who paid you?' : 'Who did you pay?'}
           />
         </div>
@@ -269,13 +265,20 @@ export function TransactionForm({ onClose }: TransactionFormProps) {
           <Textarea
             placeholder="Additional notes..."
             value={notes}
-            onChange={handleNotesChange}
-            className="border-gray-200 min-h-[120px]"
+            onChange={(e) => setNotes(e.target.value)}
+            className="border-gray-200 hover:border-gray-300 transition-colors bg-white min-h-[120px]"
           />
         </div>
         
         <div className="flex justify-end gap-3 mt-6">
-          <Button type="submit" className="w-full sm:w-auto flex items-center gap-2">
+          <Button 
+            type="submit" 
+            className={`w-full sm:w-auto flex items-center gap-2 ${
+              transactionType === 'revenue' 
+                ? 'bg-gray-800 hover:bg-gray-700' 
+                : 'bg-gray-800 hover:bg-gray-700'
+            }`}
+          >
             <Check className="h-4 w-4" />
             Add {transactionType}
           </Button>
