@@ -189,10 +189,10 @@ export function TransactionForm() {
   };
 
   const handleConfirm = () => {
+    // Updated to use only one toast notification
     toast({
       title: `${transactionType === 'revenue' ? 'Revenue' : 'Expense'} transaction created`,
       description: `Your ${transactionType} transaction has been created successfully.`,
-      duration: 5000,
     });
   };
 

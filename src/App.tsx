@@ -1,10 +1,9 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";  // Use only one toaster implementation
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastProvider } from "@/hooks/use-toast";  // Import is correct, no change needed
+import { ToastProvider } from "@/hooks/use-toast";
 import WorkspacePicker from "./pages/workspace/WorkspacePicker";
 import { Overview } from "./components/dashboard/Overview";
 import Profile from "./pages/Profile";
@@ -22,7 +21,6 @@ const App = () => {
         <TooltipProvider>
           <ToastProvider>
             <Toaster />
-            <Sonner />
             <Routes>
               <Route path="/" element={<WorkspacePicker />} />
               <Route path="/dashboard" element={<Overview />} />
