@@ -5,19 +5,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditTransactionForm } from "./EditTransactionForm";
 import { useToast } from "@/components/ui/use-toast";
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { DollarSign, TrendingDown, ChevronRight, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
-import { TransactionTable } from "./TransactionTable"; // <-- ADDED IMPORT
+import { TransactionTable } from "./TransactionTable";
+import { Input } from "@/components/ui/input";
+import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -98,8 +91,9 @@ export function TransactionActivity() {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [filterPopoverOpen, setFilterPopoverOpen] = useState(false);
   const { toast } = useToast();
+  const [search, setSearch] = useState('');
 
-  // Collect available categories, payment methods, and statuses from data
+  // Collect available categories, payment methods, statuses from data
   const categories = Array.from(new Set(mockTransactions.map(t => t.category)));
   const paymentMethods = Array.from(new Set(mockTransactions.map(t => t.paymentMethod)));
   const statuses = Array.from(new Set(mockTransactions.map(t => t.status)));
@@ -134,7 +128,6 @@ export function TransactionActivity() {
   // Filter transactions as before
   const filteredTransactions = mockTransactions.filter(transaction => {
     if (transaction.type !== transactionType) return false;
-
     if (date) {
       const transactionDate = new Date(transaction.date);
       if (
@@ -147,6 +140,12 @@ export function TransactionActivity() {
     if (selectedCategories.length && !selectedCategories.includes(transaction.category)) return false;
     if (selectedPaymentMethods.length && !selectedPaymentMethods.includes(transaction.paymentMethod)) return false;
     if (selectedStatuses.length && !selectedStatuses.includes(transaction.status)) return false;
+    if (search && !(
+      transaction.from.toLowerCase().includes(search.toLowerCase()) ||
+      transaction.category.toLowerCase().includes(search.toLowerCase()) ||
+      (transaction.notes ?? '').toLowerCase().includes(search.toLowerCase()) ||
+      transaction.paymentMethod.toLowerCase().includes(search.toLowerCase())
+    )) return false;
 
     return true;
   });
@@ -173,6 +172,16 @@ export function TransactionActivity() {
       {/* Filters and toggles bar */}
       <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm flex flex-col gap-4">
         <div className="flex flex-wrap items-center w-full gap-2">
+          {/* Search bar */}
+          <div className="w-[210px]">
+            <Input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search"
+              className="text-sm bg-[#F6F6F7] border-gray-200 rounded-lg pl-3 focus:bg-white focus:ring-1 focus:ring-gray-300 placeholder:text-gray-400"
+            />
+          </div>
           {/* Date Picker */}
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
@@ -180,7 +189,7 @@ export function TransactionActivity() {
                 variant={date ? "default" : "outline"}
                 size="sm"
                 className={cn(
-                  "text-sm flex items-center gap-1.5",
+                  "text-sm flex items-center gap-1.5 ml-1",
                   date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
                 )}
               >
@@ -242,7 +251,7 @@ export function TransactionActivity() {
                     <label key={cat} className="flex items-center gap-1 text-sm">
                       <input
                         type="checkbox"
-                        className="accent-purple-500"
+                        className="accent-gray-700"
                         checked={selectedCategories.includes(cat)}
                         onChange={() => toggleFilter(selectedCategories, cat, setSelectedCategories)}
                       />
@@ -256,7 +265,7 @@ export function TransactionActivity() {
                     <label key={pm} className="flex items-center gap-1 text-sm">
                       <input
                         type="checkbox"
-                        className="accent-purple-500"
+                        className="accent-gray-700"
                         checked={selectedPaymentMethods.includes(pm)}
                         onChange={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)}
                       />
@@ -270,7 +279,7 @@ export function TransactionActivity() {
                     <label key={status} className="flex items-center gap-1 text-sm">
                       <input
                         type="checkbox"
-                        className="accent-purple-500"
+                        className="accent-gray-700"
                         checked={selectedStatuses.includes(status)}
                         onChange={() => toggleFilter(selectedStatuses, status, setSelectedStatuses)}
                       />
@@ -302,24 +311,24 @@ export function TransactionActivity() {
               onClick={() => setTransactionType('revenue')}
               className={`relative flex items-center px-4 py-1.5 rounded-full font-medium text-sm transition-all duration-200 ${
                 transactionType === 'revenue' 
-                  ? 'bg-white text-gray-800 shadow-sm' 
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-black shadow-sm' 
+                  : 'text-gray-500 hover:text-black'
               }`}
               aria-pressed={transactionType === 'revenue'}
             >
-              <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-green-500' : 'text-gray-500'}`} />
+              <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-black' : 'text-gray-400'}`} />
               <span>Revenue</span>
             </button>
             <button 
               onClick={() => setTransactionType('expense')}
               className={`relative flex items-center px-4 py-1.5 rounded-full font-medium text-sm transition-all duration-200 ${
                 transactionType === 'expense' 
-                  ? 'bg-white text-gray-800 shadow-sm' 
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-black shadow-sm' 
+                  : 'text-gray-500 hover:text-black'
               }`}
               aria-pressed={transactionType === 'expense'}
             >
-              <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-red-500' : 'text-gray-500'}`} />
+              <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-black' : 'text-gray-400'}`} />
               <span>Expenses</span>
             </button>
           </div>
@@ -336,23 +345,23 @@ export function TransactionActivity() {
               </div>
             )}
             {selectedCategories.map(cat => (
-              <div key={cat} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-purple-100 text-purple-700 rounded-md">
+              <div key={cat} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
                 <span>Category: {cat}</span>
-                <button onClick={() => toggleFilter(selectedCategories, cat, setSelectedCategories)} className="text-purple-500 hover:text-purple-700">
+                <button onClick={() => toggleFilter(selectedCategories, cat, setSelectedCategories)} className="text-gray-500 hover:text-gray-700">
                   <X className="h-3 w-3" />
                 </button>
               </div>
             ))}
             {selectedPaymentMethods.map(pm => (
-              <div key={pm} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-blue-100 text-blue-700 rounded-md">
+              <div key={pm} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
                 <span>Payment: {pm}</span>
-                <button onClick={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)} className="text-blue-500 hover:text-blue-700">
+                <button onClick={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)} className="text-gray-500 hover:text-gray-700">
                   <X className="h-3 w-3" />
                 </button>
               </div>
             ))}
             {selectedStatuses.map(status => (
-              <div key={status} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-200 text-gray-600 rounded-md">
+              <div key={status} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
                 <span>Status: {status}</span>
                 <button onClick={() => toggleFilter(selectedStatuses, status, setSelectedStatuses)} className="text-gray-500 hover:text-gray-700">
                   <X className="h-3 w-3" />
@@ -364,7 +373,7 @@ export function TransactionActivity() {
               variant="ghost" 
               size="sm" 
               onClick={clearFilters}
-              className="h-8 text-xs gap-1.5 text-gray-600 hover:text-gray-900"
+              className="h-8 text-xs gap-1.5 text-gray-600 hover:text-black"
             >
               <RefreshCcw className="h-3 w-3" />
               Clear filters
@@ -402,4 +411,4 @@ export function TransactionActivity() {
   );
 }
 
-// NOTE: This file is much shorter/cleaner. Consider splitting the filter bar, etc., into components for even better maintainability!
+// NOTE: This file is getting large! Consider asking me to refactor/split filter bar and large sections into their own components for maintainability!
