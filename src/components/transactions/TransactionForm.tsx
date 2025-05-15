@@ -77,7 +77,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
     if (onClose) onClose();
   }
 
-  // Step 3: Tab navigation and UI
+  // Restore old details design:
+  // - Listing is selected first, all other fields appear after a listing is chosen.
+  // - Horizontal (simple) row for Revenue/Expense toggle aligned with Category title.
+
   return (
     <div className="p-6 h-full overflow-auto min-w-[340px]">
       <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
@@ -94,7 +97,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
         <TabsContent value="details">
           <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
             {/* Listing */}
-            <div className="mb-4">
+            <div className="mb-5">
               <div className="flex items-center mb-2">
                 <FileText className="h-4 w-4 text-gray-500 mr-2" />
                 <span className="text-sm font-medium text-gray-700">Listing</span>
@@ -110,135 +113,143 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                 </SelectContent>
               </Select>
             </div>
-            {/* Transaction Type */}
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <ShoppingCart className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Transaction Type</span>
-              </div>
-              <div className="flex gap-2 mt-1">
-                <Button
-                  variant={transactionType === "revenue" ? "default" : "outline"}
-                  size="sm"
-                  className={cn(
-                    "rounded-full px-5 text-base font-medium transition-colors",
-                    transactionType === "revenue" ? "bg-gray-900 text-white" : "bg-white"
-                  )}
-                  onClick={() => setTransactionType("revenue")}
-                >
-                  Revenue
-                </Button>
-                <Button
-                  variant={transactionType === "expense" ? "default" : "outline"}
-                  size="sm"
-                  className={cn(
-                    "rounded-full px-5 text-base font-medium transition-colors",
-                    transactionType === "expense" ? "bg-red-500 text-white" : "bg-white"
-                  )}
-                  onClick={() => setTransactionType("expense")}
-                >
-                  Expense
-                </Button>
-              </div>
-            </div>
-            {/* Category */}
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <FileText className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Category</span>
-              </div>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
-                  <SelectValue placeholder={`Select ${transactionType === "revenue" ? "revenue" : "expense"} category`} />
-                </SelectTrigger>
-                <SelectContent>
-                  {transactionType === "revenue" ? (
-                    <>
-                      <SelectItem value="rent">Rent</SelectItem>
-                      <SelectItem value="deposit">Deposit</SelectItem>
-                      <SelectItem value="fee">Fee</SelectItem>
-                      <SelectItem value="other-income">Other Income</SelectItem>
-                    </>
-                  ) : (
-                    <>
-                      <SelectItem value="maintenance">Maintenance</SelectItem>
-                      <SelectItem value="utilities">Utilities</SelectItem>
-                      <SelectItem value="insurance">Insurance</SelectItem>
-                      <SelectItem value="tax">Tax</SelectItem>
-                      <SelectItem value="other-expense">Other Expense</SelectItem>
-                    </>
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-            {/* Amount */}
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Amount</span>
-              </div>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
-                <Input
-                  type="number"
-                  placeholder="0.00"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="pl-7 border-gray-200 bg-white placeholder:text-gray-400"
-                />
-              </div>
-            </div>
-            {/* Date */}
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Date</span>
-              </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full flex justify-between items-center border-gray-200 bg-white text-gray-900 font-normal",
-                      !date && "text-gray-400"
-                    )}
-                  >
-                    <span className="flex items-center">
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Select date</span>}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 z-50" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-            {/* Payment Method */}
-            <div>
-              <div className="flex items-center mb-2">
-                <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm font-medium text-gray-700">Payment Method</span>
-              </div>
-              <Select value={payment} onValueChange={setPayment}>
-                <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
-                  <SelectValue placeholder="Select payment method" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="card">Credit Card</SelectItem>
-                  <SelectItem value="bank">Bank Transfer</SelectItem>
-                  <SelectItem value="cash">Cash</SelectItem>
-                  <SelectItem value="check">Check</SelectItem>
-                  <SelectItem value="crypto">Cryptocurrency</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Show other fields only if listing is selected */}
+            {selectedListingId && (
+              <>
+                {/* Category Title + Revenue/Expense Switch */}
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-medium text-gray-700 mr-3">Category</span>
+                    {/* Revenue/Expense Toggle */}
+                    <div className="flex gap-1">
+                      <Button
+                        type="button"
+                        variant={transactionType === "revenue" ? "default" : "outline"}
+                        size="sm"
+                        className={cn(
+                          "rounded-full px-4 py-1 text-base font-medium",
+                          transactionType === "revenue"
+                            ? "bg-green-600 text-white"
+                            : "bg-white text-gray-800 border-gray-200"
+                        )}
+                        onClick={() => setTransactionType("revenue")}
+                      >
+                        Revenue
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={transactionType === "expense" ? "default" : "outline"}
+                        size="sm"
+                        className={cn(
+                          "rounded-full px-4 py-1 text-base font-medium ml-1",
+                          transactionType === "expense"
+                            ? "bg-red-500 text-white"
+                            : "bg-white text-gray-800 border-gray-200"
+                        )}
+                        onClick={() => setTransactionType("expense")}
+                      >
+                        Expense
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                {/* Category Select */}
+                <div className="mb-4">
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
+                      <SelectValue placeholder={`Select ${transactionType === "revenue" ? "revenue" : "expense"} category`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {transactionType === "revenue" ? (
+                        <>
+                          <SelectItem value="rent">Rent</SelectItem>
+                          <SelectItem value="deposit">Deposit</SelectItem>
+                          <SelectItem value="fee">Fee</SelectItem>
+                          <SelectItem value="other-income">Other Income</SelectItem>
+                        </>
+                      ) : (
+                        <>
+                          <SelectItem value="maintenance">Maintenance</SelectItem>
+                          <SelectItem value="utilities">Utilities</SelectItem>
+                          <SelectItem value="insurance">Insurance</SelectItem>
+                          <SelectItem value="tax">Tax</SelectItem>
+                          <SelectItem value="other-expense">Other Expense</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {/* Amount */}
+                <div className="mb-4">
+                  <div className="flex items-center mb-2">
+                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-medium text-gray-700">Amount</span>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="pl-7 border-gray-200 bg-white placeholder:text-gray-400"
+                    />
+                  </div>
+                </div>
+                {/* Date */}
+                <div className="mb-4">
+                  <div className="flex items-center mb-2">
+                    <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-medium text-gray-700">Date</span>
+                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full flex justify-between items-center border-gray-200 bg-white text-gray-900 font-normal",
+                          !date && "text-gray-400"
+                        )}
+                      >
+                        <span className="flex items-center">
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {date ? format(date, "PPP") : <span>Select date</span>}
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 z-50" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                {/* Payment Method */}
+                <div>
+                  <div className="flex items-center mb-2">
+                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
+                    <span className="text-sm font-medium text-gray-700">Payment Method</span>
+                  </div>
+                  <Select value={payment} onValueChange={setPayment}>
+                    <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
+                      <SelectValue placeholder="Select payment method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="card">Credit Card</SelectItem>
+                      <SelectItem value="bank">Bank Transfer</SelectItem>
+                      <SelectItem value="cash">Cash</SelectItem>
+                      <SelectItem value="check">Check</SelectItem>
+                      <SelectItem value="crypto">Cryptocurrency</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
           </Card>
           <div className="flex justify-end">
             <Button
@@ -353,4 +364,3 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
     </div>
   );
 }
-
