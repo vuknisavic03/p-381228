@@ -34,75 +34,67 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto transition-all">
-      <Table>
+      <Table className="text-sm">
         <TableHeader className="sticky top-0 bg-white/90 backdrop-blur z-20 border-b border-gray-100">
           <TableRow>
-            <TableHead className="pl-6 py-3 text-left font-medium text-gray-700 text-[15px]">Amount</TableHead>
-            <TableHead className="min-w-[120px] font-normal text-gray-700 text-[15px]">Type</TableHead>
-            <TableHead className="min-w-[140px] font-normal text-gray-700 text-[15px]">Date</TableHead>
-            <TableHead className="min-w-[120px] font-normal text-gray-700 text-[15px]">Category</TableHead>
-            <TableHead className="min-w-[140px] font-normal text-gray-700 text-[15px]">From/To</TableHead>
-            <TableHead className="min-w-[120px] font-normal text-gray-700 text-[15px]">Payment</TableHead>
-            <TableHead className="min-w-[120px] font-normal text-gray-700 text-[15px]">Status</TableHead>
-            <TableHead className="min-w-[140px] font-normal text-gray-700 text-[15px]">Notes</TableHead>
+            <TableHead className="pl-6 py-3 font-semibold text-gray-700">Amount</TableHead>
+            <TableHead className="min-w-[120px] font-normal text-gray-600">Type</TableHead>
+            <TableHead className="min-w-[140px] font-normal text-gray-600">Date</TableHead>
+            <TableHead className="min-w-[120px] font-normal text-gray-600">Category</TableHead>
+            <TableHead className="min-w-[140px] font-normal text-gray-600">From/To</TableHead>
+            <TableHead className="min-w-[120px] font-normal text-gray-600">Payment</TableHead>
+            <TableHead className="min-w-[120px] font-normal text-gray-600">Status</TableHead>
+            <TableHead className="min-w-[140px] font-normal text-gray-600">Notes</TableHead>
             <TableHead className="w-12 text-right pr-4" />
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transactions.map((tx) => (
+          {transactions.map((tx, idx) => (
             <TableRow
               key={tx.id}
-              className="border-b border-gray-100 hover:bg-gray-50 transition-all"
+              className={`
+                border-b border-gray-100 
+                ${idx % 2 === 1 ? "bg-[#F6F6F8]" : "bg-white"}
+                hover:bg-[#F0F2F7] transition-all
+              `}
             >
-              <TableCell className="pl-6">
-                <span
-                  className={`font-medium text-[15px] ${
-                    tx.type === "revenue" ? "text-black" : "text-black"
-                  }`}
-                >
-                  {tx.type === "revenue" ? "+" : "-"}${tx.amount.toLocaleString()}
-                </span>
+              <TableCell className="pl-6 font-medium text-gray-900">
+                {tx.type === "revenue" ? "+" : "-"}${tx.amount.toLocaleString()}
               </TableCell>
               <TableCell>
-                <span
-                  className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium border bg-gray-50 text-gray-700`}
-                >
-                  {tx.type === "revenue" ? "Revenue" : "Expense"}
-                </span>
+                <span className="block font-normal text-gray-800">{tx.type === "revenue" ? "Revenue" : "Expense"}</span>
               </TableCell>
               <TableCell>
-                <div className="text-[15px] text-gray-700">
+                <span className="text-gray-700">
                   {tx.date.toLocaleDateString(undefined, {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
                   })}
-                </div>
+                </span>
               </TableCell>
               <TableCell>
-                <span className="rounded px-2.5 py-1 text-xs bg-gray-50 text-gray-700 border border-gray-100">
+                <span className="px-2 py-1 rounded bg-[#F3F3F6] text-gray-700">
                   {tx.category}
                 </span>
               </TableCell>
               <TableCell>
-                <div className="text-[15px] text-gray-700">{tx.from}</div>
+                <span className="text-gray-800">{tx.from}</span>
               </TableCell>
               <TableCell>
-                <span className="rounded px-2 py-1 text-xs border border-gray-100 bg-gray-50 text-gray-700">
+                <span className="px-2 py-1 rounded bg-[#F3F3F6] text-gray-700">
                   {tx.paymentMethod}
                 </span>
               </TableCell>
               <TableCell>
                 <span
-                  className={`rounded px-2 py-1 text-xs border border-gray-200 bg-gray-100 text-gray-700`}
+                  className={`px-2 py-1 rounded text-xs bg-[#EFF3F8] text-gray-700 border border-gray-200`}
                 >
                   {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
                 </span>
               </TableCell>
               <TableCell>
-                <div className="text-xs text-gray-400 max-w-[150px] whitespace-nowrap overflow-hidden text-ellipsis">
-                  {tx.notes || "-"}
-                </div>
+                <span className="text-gray-400 truncate block max-w-[150px]">{tx.notes || "-"}</span>
               </TableCell>
               <TableCell className="pr-4 text-right">
                 <Button
@@ -127,4 +119,3 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     </div>
   );
 };
-
