@@ -2,7 +2,7 @@
 import * as React from "react";
 import { toast as sonnerToast } from "sonner";
 
-type ToastProps = {
+export type ToastProps = {
   title?: string;
   description?: string;
   action?: React.ReactNode;
@@ -10,32 +10,35 @@ type ToastProps = {
   duration?: number;
 };
 
-type Toast = ToastProps & {
+export type Toast = ToastProps & {
   id: string;
 };
 
 const TOAST_LIMIT = 5;
 
-// Initialize the ref with useState to avoid directly modifying the read-only current property
+// Create a ref to store toasts
 const toastsRef = React.createRef<Toast[]>();
+
 // Initialize the ref value if needed
 if (toastsRef.current === null) {
   // Using Object.defineProperty to set initial value without directly assigning to .current
   Object.defineProperty(toastsRef, 'current', {
     value: [],
-    writable: false
+    writable: true
   });
 }
 
 export const toast = ({ title, description, action, variant, duration = 5000 }: ToastProps) => {
   // Use sonner toast for visual display
-  sonnerToast(title, {
+  sonnerToast(title || "", {
     description,
     action,
     duration,
+    // Map our variant to sonner's variant
+    className: variant === 'destructive' ? 'bg-destructive text-destructive-foreground' : undefined,
   });
   
-  // Create a unique ID for this toast
+  // Generate a unique ID
   const id = Math.random().toString(36).substring(2, 9);
   
   // Add to our internal toast tracking
@@ -59,10 +62,7 @@ export const toast = ({ title, description, action, variant, duration = 5000 }: 
     });
     
     // Replace the entire ref.current value with the new array
-    Object.defineProperty(toastsRef, 'current', {
-      value: newToasts,
-      writable: false
-    });
+    toastsRef.current = newToasts;
   }
   
   return id;
@@ -81,6 +81,6 @@ export function useToast() {
   
   return {
     toast,
-    toasts: localToasts,
+    toasts: localToasts
   };
 }
