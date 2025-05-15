@@ -170,16 +170,17 @@ export function TransactionActivity() {
   return (
     <div className="h-full flex flex-col">
       {/* Filters and toggles bar */}
-      <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm flex flex-col gap-4">
+      <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-100 flex flex-col gap-3">
         <div className="flex flex-wrap items-center w-full gap-2">
           {/* Search bar */}
-          <div className="w-[210px]">
+          <div className="w-[220px]">
             <Input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search"
               className="text-sm bg-[#F6F6F7] border-gray-200 rounded-lg pl-3 focus:bg-white focus:ring-1 focus:ring-gray-300 placeholder:text-gray-400"
+              style={{ fontSize: '0.94rem' }}
             />
           </div>
           {/* Date Picker */}
@@ -304,7 +305,7 @@ export function TransactionActivity() {
               </div>
             </PopoverContent>
           </Popover>
-          {/* Right-aligned transactionType toggle */}
+          {/* Right-aligned transactionType toggle - unify font/height */}
           <div className="flex-1" />
           <div className="flex p-1 bg-gray-100 rounded-full">
             <button 
@@ -314,6 +315,7 @@ export function TransactionActivity() {
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
+              style={{ fontSize: '0.97rem' }}
               aria-pressed={transactionType === 'revenue'}
             >
               <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-black' : 'text-gray-400'}`} />
@@ -326,6 +328,7 @@ export function TransactionActivity() {
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
+              style={{ fontSize: '0.97rem' }}
               aria-pressed={transactionType === 'expense'}
             >
               <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-black' : 'text-gray-400'}`} />
@@ -383,9 +386,9 @@ export function TransactionActivity() {
       </div>
 
       {/* Modern Table */}
-      <div className="flex-1 p-6 bg-white">
+      <div className="flex-1 p-5 bg-[#FAFBFC]">
         <div className="max-w-full mx-auto">
-          <div className="mb-6">
+          <div className="mb-4">
             {/* Results Table or Empty State */}
             <TransactionTable
               transactions={filteredTransactions}
