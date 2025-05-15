@@ -134,10 +134,10 @@ export function TransactionActivity() {
     <div className="h-full flex flex-col">
       {/* Improved filter controls positioning */}
       <div className="p-5 bg-white">
-        {/* Transaction type toggle with improved positioning */}
-        <div className="flex flex-col gap-5">
-          {/* Combined filters row */}
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        {/* Combined filters row */}
+        <div className="flex items-center justify-between">
+          {/* Combined horizontal filters */}
+          <div className="flex items-center gap-4">
             {/* Transaction type toggle */}
             <div className="flex p-1 bg-gray-100 rounded-full">
               <button 
@@ -226,22 +226,22 @@ export function TransactionActivity() {
               )}
             </div>
           </div>
-          
-          {/* Active filters indicators */}
-          {date && (
-            <div className="flex flex-wrap gap-2">
-              <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2.5 bg-gray-100 text-gray-700 rounded-md">
-                <span>Date: {format(date, "MMM d, yyyy")}</span>
-                <button 
-                  onClick={() => setDate(undefined)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            </div>
-          )}
         </div>
+          
+        {/* Active filters indicators */}
+        {date && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2.5 bg-gray-100 text-gray-700 rounded-md">
+              <span>Date: {format(date, "MMM d, yyyy")}</span>
+              <button 
+                onClick={() => setDate(undefined)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       
       {filteredTransactions.length > 0 ? (
