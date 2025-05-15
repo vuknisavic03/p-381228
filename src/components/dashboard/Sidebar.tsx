@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -24,16 +25,16 @@ export function Sidebar({ workspaceName, userInitials, owner, className }: Sideb
         </div>
       </div>
       <nav className="flex flex-col gap-1 py-3">
-        <a href="/dashboard" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+        <a href="/dashboard" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
           Dashboard
         </a>
-        <a href="/transactions" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+        <a href="/transactions" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
           Transactions
         </a>
-        <a href="/listings" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+        <a href="/listings" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
           Listings
         </a>
-        <a href="/profile" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+        <a href="/profile" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
           Profile
         </a>
       </nav>

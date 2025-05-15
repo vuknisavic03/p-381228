@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
 import { X, Check, ChevronRight, User, Mail, Phone, FileText } from "lucide-react";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
+// Should match the listings from TransactionForm for editing!
 const mockListings = [
   {
     id: "1",
@@ -24,7 +25,7 @@ const mockListings = [
       phone: "000-000-0000"
     }
   },
-  // ... add more mock listings as needed
+  // ... add more mock listings if needed
 ];
 
 interface EditTransactionFormProps {
@@ -34,7 +35,7 @@ interface EditTransactionFormProps {
 }
 
 export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTransactionFormProps) {
-  // Pre-fill fields  
+  // Prefill with transaction data, allow editing of all fields
   const [activeTab, setActiveTab] = useState("details");
   const [fields, setFields] = useState<TransactionFieldsData>({
     selectedListingId: transaction.selectedListingId ?? "",
@@ -47,9 +48,18 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
   });
   const { toast } = useToast();
 
-  // Selected listing, tenant info
-  const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
-  const payer = selectedListing?.tenant;
+  // Keep fields in sync with prop if transaction changes
+  useEffect(() => {
+    setFields({
+      selectedListingId: transaction.selectedListingId ?? "",
+      transactionType: transaction.type ?? "revenue",
+      category: transaction.category ?? "",
+      amount: transaction.amount?.toString() ?? "",
+      date: transaction.date ? new Date(transaction.date) : new Date(),
+      payment: transaction.paymentMethod ?? "",
+      notes: transaction.notes ?? "",
+    });
+  }, [transaction]);
 
   function handleUpdate() {
     const updatedTransaction = {
@@ -69,15 +79,16 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     onUpdate(updatedTransaction);
   }
 
+  // Selected listing and its tenant
+  const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
+  const payer = selectedListing?.tenant;
+
   return (
     <div className="flex flex-col p-6 w-full h-full">
       <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
         <h2 className="text-xl font-semibold">Edit Transaction</h2>
         <SheetClose asChild>
-          <Button variant="outline" size="icon" onClick={onClose}>
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </Button>
+          <Button variant="outline" size="icon" onClick={onClose}><X className="h-4 w-4" /><span className="sr-only">Close</span></Button>
         </SheetClose>
       </div>
       <div className="flex-1 overflow-auto">
@@ -153,17 +164,8 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
               )}
             </Card>
             <div className="flex justify-between">
-              <Button
-                variant="outline"
-                onClick={() => setActiveTab("details")}
-                className="border-gray-200"
-              >
-                Back
-              </Button>
-              <Button
-                onClick={() => setActiveTab("additional")}
-                className="flex items-center gap-2 bg-gray-900 text-white"
-              >
+              <Button variant="outline" onClick={() => setActiveTab("details")} className="border-gray-200">Back</Button>
+              <Button onClick={() => setActiveTab("additional")} className="flex items-center gap-2 bg-gray-900 text-white">
                 Next
                 <ChevronRight className="h-4 w-4" />
               </Button>
@@ -207,3 +209,4 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     </div>
   );
 }
+// NOTE: This file is getting long! Consider asking me to refactor EditTransactionForm into smaller files for easier maintenance.
