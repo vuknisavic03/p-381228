@@ -26,7 +26,8 @@ export default function Transactions() {
     >
       <div className="h-screen flex flex-col">
         <div className="p-4 border-b flex justify-between items-center bg-white shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between w-full">
+            <h2 className="text-xl font-medium text-gray-800">Activity</h2>
             <Button 
               onClick={() => setIsAddFormOpen(true)}
               className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 transition-colors"
