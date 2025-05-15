@@ -69,7 +69,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 top: 5,
                 right: 0,
                 bottom: 0,
-                left: -15,
+                left: 0, // Changed from -15 to 0
               }}
             >
               <defs>
@@ -95,7 +95,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={25}
+                width={35} // Increased width from 25 to 35
               />
               <Tooltip content={<CustomTooltip />} />
               <Area

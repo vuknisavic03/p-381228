@@ -162,7 +162,7 @@ export function ChartCard({
               top: 5,
               right: 0,
               bottom: 5,
-              left: -15,
+              left: 0, // Changed from -15 to 0
             }}
           >
             <defs>
@@ -183,7 +183,7 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6E6E76', fontSize: 9 }}
-              width={25}
+              width={30} // Increased width from 25 to 30
               tickFormatter={(value) => `$${value}k`}
             />
             <Tooltip 
