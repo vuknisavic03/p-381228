@@ -2,13 +2,14 @@
 import { BarChart, TrendingUp, LineChart, CircleDollarSign } from "lucide-react";
 import { ChartCard } from "./ChartCard";
 import { useAnalyticsData } from "@/services/analyticsService";
+import { Timeline } from "./Timeline";
 
 export function AnalyticsGrid() {
   const { data, isLoading } = useAnalyticsData();
   
   return (
     <div className="flex flex-col max-w-[1600px] mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
         <div className="col-span-1">
           <ChartCard
             title="Revenue"
@@ -50,7 +51,7 @@ export function AnalyticsGrid() {
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Peak Profit Achieved"
+            title="Peak Profit"
             icon={LineChart}
             color="bg-[#D946EF]"
             value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
@@ -62,6 +63,12 @@ export function AnalyticsGrid() {
           />
         </div>
       </div>
+
+      {!isLoading && data?.timeline && (
+        <div className="mt-6">
+          <Timeline data={data.timeline} />
+        </div>
+      )}
     </div>
   );
 }

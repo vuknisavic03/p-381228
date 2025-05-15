@@ -1,3 +1,4 @@
+
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -76,7 +77,7 @@ export function ChartCard({
 
   if (isLoading) {
     return (
-      <Card className="p-5 shadow-md border border-slate-100 h-[520px] transition-all hover:shadow-lg bg-white">
+      <Card className="p-5 shadow-md border border-slate-100 h-auto min-h-[300px] md:h-[520px] transition-all hover:shadow-lg bg-white">
         <CardHeader className="p-0 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium">{title}</CardTitle>
@@ -93,7 +94,7 @@ export function ChartCard({
         </div>
         
         <div className="mt-4 flex-grow">
-          <div className="h-[420px] bg-gray-100 animate-pulse rounded-lg"></div>
+          <div className="h-[200px] md:h-[300px] lg:h-[400px] bg-gray-100 animate-pulse rounded-lg"></div>
         </div>
       </Card>
     );
@@ -103,15 +104,15 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center h-full">
-          <ResponsiveContainer width="100%" height="95%">
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
               <Pie
                 data={chartData as DonutDataPoint[]}
                 cx="50%"
-                cy="45%"
+                cy="50%"
                 labelLine={false}
-                outerRadius={140}
-                innerRadius={110}
+                outerRadius={90}
+                innerRadius={70}
                 fill={colorValue}
                 dataKey="value"
                 startAngle={90}
@@ -130,7 +131,7 @@ export function ChartCard({
               <Tooltip content={<CustomTooltip />} />
             </PieChart>
           </ResponsiveContainer>
-          <div className="flex justify-center gap-6 mt-1">
+          <div className="flex flex-wrap justify-center gap-4 mt-1 px-2">
             {(chartData as DonutDataPoint[]).map((entry, index) => (
               <div key={index} className="flex items-center gap-2">
                 <div 
@@ -140,7 +141,7 @@ export function ChartCard({
                     border: `1.5px solid ${index === 0 ? colorValue : "#F0F2FA"}` 
                   }} 
                 />
-                <span className="text-sm text-gray-700">{entry.name}: <span className="font-medium">{entry.value}%</span></span>
+                <span className="text-xs md:text-sm text-gray-700">{entry.name}: <span className="font-medium">{entry.value}%</span></span>
               </div>
             ))}
           </div>
@@ -151,13 +152,13 @@ export function ChartCard({
     const gradientStartOpacity = chartType === "spline" ? 0.8 : 0.7;
 
     return (
-      <div className="h-full">
+      <div className="h-[200px] md:h-[300px] lg:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}
             margin={{
-              top: 20,
-              right: 10,
+              top: 10,
+              right: 5,
               bottom: 20,
               left: 0,
             }}
@@ -173,14 +174,14 @@ export function ChartCard({
               dataKey="month" 
               axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
               tickLine={false}
-              tick={{ fill: '#6E6E76', fontSize: 12 }}
+              tick={{ fill: '#6E6E76', fontSize: 10 }}
               dy={10}
             />
             <YAxis 
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#6E6E76', fontSize: 12 }}
-              width={40}
+              tick={{ fill: '#6E6E76', fontSize: 10 }}
+              width={30}
               tickFormatter={(value) => `$${value}k`}
             />
             <Tooltip 
@@ -198,10 +199,10 @@ export function ChartCard({
               stroke={colorValue}
               fillOpacity={1}
               fill={`url(#color${title.replace(/\s+/g, '')})`}
-              strokeWidth={3}
+              strokeWidth={2}
               name={title}
               activeDot={{ 
-                r: 7, 
+                r: 5, 
                 stroke: colorValue, 
                 strokeWidth: 2, 
                 fill: '#fff',
@@ -215,26 +216,26 @@ export function ChartCard({
   };
 
   return (
-    <Card className="p-6 shadow-sm border border-slate-100 h-[520px] transition-all hover:shadow-md hover:border-slate-200 bg-white flex flex-col">
-      <CardHeader className="p-0 pb-5">
+    <Card className="p-4 md:p-6 shadow-sm border border-slate-100 h-auto min-h-[300px] md:h-[520px] transition-all hover:shadow-md hover:border-slate-200 bg-white flex flex-col">
+      <CardHeader className="p-0 pb-3 md:pb-5">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-medium">{title}</CardTitle>
-          <div className={`${color} text-white p-2.5 rounded-md`}>
-            <Icon size={20} />
+          <CardTitle className="text-base md:text-lg font-medium">{title}</CardTitle>
+          <div className={`${color} text-white p-2 md:p-2.5 rounded-md`}>
+            <Icon size={16} className="md:w-5 md:h-5" />
           </div>
         </div>
       </CardHeader>
       
       <div className="mt-2">
         <div className="flex items-baseline space-x-2">
-          <span className="text-2xl font-bold">{value}</span>
-          <span className={`text-sm ${change.positive ? 'text-green-500' : 'text-red-500'} flex items-center`}>
+          <span className="text-xl md:text-2xl font-bold">{value}</span>
+          <span className={`text-xs md:text-sm ${change.positive ? 'text-green-500' : 'text-red-500'} flex items-center`}>
             {change.positive ? '+' : '-'}{Math.abs(change.value)}%
           </span>
         </div>
       </div>
       
-      <div className="mt-6 flex-grow h-[420px] border-t border-[#F5F5F6] pt-4">
+      <div className="mt-4 md:mt-6 flex-grow border-t border-[#F5F5F6] pt-3 md:pt-4">
         {renderChart()}
       </div>
     </Card>
