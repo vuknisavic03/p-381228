@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -132,114 +131,112 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="sticky top-0 z-10 bg-white p-5 border-b border-gray-100 shadow-sm">
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between mb-5 mt-4">
-            {/* Improved transaction type toggle with subtle design */}
-            <div className="flex p-1 bg-gray-100 rounded-full">
-              <button 
-                onClick={() => setTransactionType('revenue')}
-                className={`relative flex items-center px-4 py-2 rounded-full font-medium text-sm transition-all duration-200 ${
-                  transactionType === 'revenue' 
-                    ? 'bg-white text-gray-800 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-                aria-pressed={transactionType === 'revenue'}
-              >
-                <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-emerald-500' : 'text-gray-500'}`} />
-                <span>Revenue</span>
-              </button>
-              <button 
-                onClick={() => setTransactionType('expense')}
-                className={`relative flex items-center px-4 py-2 rounded-full font-medium text-sm transition-all duration-200 ${
-                  transactionType === 'expense' 
-                    ? 'bg-white text-gray-800 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-                aria-pressed={transactionType === 'expense'}
-              >
-                <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-rose-500' : 'text-gray-500'}`} />
-                <span>Expenses</span>
-              </button>
-            </div>
-          </div>
-        
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              {/* Calendar Popover with improved states */}
-              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                <PopoverTrigger asChild>
-                  <Button 
-                    variant={date ? "default" : "outline"}
-                    size="sm" 
-                    className={cn(
-                      "text-sm flex items-center gap-1.5",
-                      date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
-                    )}
-                  >
-                    <CalendarIcon className="h-3.5 w-3.5" />
-                    {date ? format(date, "MMM d, yyyy") : "Filter by date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0 border-gray-200 shadow-lg">
-                  <div className="p-2 border-b border-gray-100">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-gray-700">Select a date</p>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 px-2 text-gray-500" 
-                        onClick={() => {
-                          setDate(undefined);
-                          setCalendarOpen(false);
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(selectedDate) => {
-                      setDate(selectedDate);
-                      setCalendarOpen(false);
-                    }}
-                    initialFocus
-                    className={cn("rounded-md shadow-none")}
-                  />
-                </PopoverContent>
-              </Popover>
-              
-              {/* Clear filters button - only shown when filters are active */}
-              {date && (
+      {/* Improved filter controls positioning */}
+      <div className="p-5 bg-white">
+        {/* Transaction type toggle with improved positioning */}
+        <div className="flex flex-col gap-5">
+          {/* Date filter row */}
+          <div className="flex items-center gap-2">
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <PopoverTrigger asChild>
                 <Button 
-                  variant="ghost" 
+                  variant={date ? "default" : "outline"}
                   size="sm" 
-                  onClick={clearFilters}
-                  className="h-9 text-xs gap-1.5 text-gray-600 hover:text-gray-900"
+                  className={cn(
+                    "text-sm flex items-center gap-1.5",
+                    date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                  )}
                 >
-                  <RefreshCcw className="h-3 w-3" />
-                  Clear filters
+                  <CalendarIcon className="h-3.5 w-3.5" />
+                  {date ? format(date, "MMM d, yyyy") : "Filter by date"}
                 </Button>
-              )}
-            </div>
-            
-            {/* Active filters indicators */}
-            {date && (
-              <div className="flex flex-wrap gap-2">
-                <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2.5 bg-gray-100 text-gray-700 rounded-md">
-                  <span>Date: {format(date, "MMM d, yyyy")}</span>
-                  <button 
-                    onClick={() => setDate(undefined)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-auto p-0 border-gray-200 shadow-lg">
+                <div className="p-2 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-gray-700">Select a date</p>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 px-2 text-gray-500" 
+                      onClick={() => {
+                        setDate(undefined);
+                        setCalendarOpen(false);
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(selectedDate) => {
+                    setDate(selectedDate);
+                    setCalendarOpen(false);
+                  }}
+                  initialFocus
+                  className={cn("rounded-md shadow-none pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
+            
+            {/* Clear filters button - only shown when filters are active */}
+            {date && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={clearFilters}
+                className="h-9 text-xs gap-1.5 text-gray-600 hover:text-gray-900"
+              >
+                <RefreshCcw className="h-3 w-3" />
+                Clear filters
+              </Button>
             )}
           </div>
+          
+          {/* Transaction type toggle */}
+          <div className="flex p-1 bg-gray-100 rounded-full self-start">
+            <button 
+              onClick={() => setTransactionType('revenue')}
+              className={`relative flex items-center px-4 py-2 rounded-full font-medium text-sm transition-all duration-200 ${
+                transactionType === 'revenue' 
+                  ? 'bg-white text-gray-800 shadow-sm' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              aria-pressed={transactionType === 'revenue'}
+            >
+              <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-emerald-500' : 'text-gray-500'}`} />
+              <span>Revenue</span>
+            </button>
+            <button 
+              onClick={() => setTransactionType('expense')}
+              className={`relative flex items-center px-4 py-2 rounded-full font-medium text-sm transition-all duration-200 ${
+                transactionType === 'expense' 
+                  ? 'bg-white text-gray-800 shadow-sm' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              aria-pressed={transactionType === 'expense'}
+            >
+              <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-rose-500' : 'text-gray-500'}`} />
+              <span>Expenses</span>
+            </button>
+          </div>
+          
+          {/* Active filters indicators */}
+          {date && (
+            <div className="flex flex-wrap gap-2">
+              <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2.5 bg-gray-100 text-gray-700 rounded-md">
+                <span>Date: {format(date, "MMM d, yyyy")}</span>
+                <button 
+                  onClick={() => setDate(undefined)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       
