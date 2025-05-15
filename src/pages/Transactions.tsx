@@ -4,55 +4,53 @@ import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionActivity } from "@/components/transactions/TransactionActivity";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { LayoutList, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 export default function Transactions() {
-  const isMobile = useIsMobile();
   const location = useLocation();
   const workspaceData = location.state?.workspace || {
     name: "Kevin's Workspace", 
     owner: "Kevin Anderson", 
     initials: "KA"
   };
-  const [open, setOpen] = useState(false);
-  
+
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+
   return (
     <DashboardLayout
       workspaceName={workspaceData.name}
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-full flex flex-col md:flex-row">
-        <div className="w-full flex justify-end items-center px-4 py-2 border-b bg-white z-10">
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button onClick={() => setOpen(true)} variant="default" className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add Transaction
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="p-0 w-full max-w-md">
-              <TransactionForm onClose={() => setOpen(false)} />
-            </SheetContent>
-          </Sheet>
+      <div className="h-screen flex flex-col">
+        {/* Top bar with title and add button */}
+        <div className="p-4 border-b flex justify-between items-center bg-white">
+          <h1 className="text-xl font-semibold">Transactions</h1>
+          <Button
+            onClick={() => setIsAddFormOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Add Transaction
+          </Button>
         </div>
-        <div className="flex flex-1 h-full w-full">
-          {isMobile ? (
-            <div className="w-full bg-white flex flex-col">
-              <TransactionActivity />
-            </div>
-          ) : (
-            <div className="flex w-full h-full animate-fade-in">
-              <div className="flex-1 bg-white overflow-y-auto h-full border-l border-gray-200 transition-all duration-300">
-                <TransactionActivity />
-              </div>
-            </div>
-          )}
+
+        {/* Activity table on left side */}
+        <div className="flex-1 overflow-y-auto bg-[#FAFBFC]">
+          <TransactionActivity />
         </div>
+
+        {/* Add Transaction Sheet */}
+        <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
+          <SheetContent
+            side="right"
+            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl"
+          >
+            <TransactionForm onClose={() => setIsAddFormOpen(false)} />
+          </SheetContent>
+        </Sheet>
       </div>
     </DashboardLayout>
   );
