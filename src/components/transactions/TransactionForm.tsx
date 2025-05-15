@@ -433,19 +433,8 @@ export function TransactionForm() {
                       <h3>Transaction Type</h3>
                     </div>
                     
-                    {/* Minimal Transaction Type Selector */}
+                    {/* Minimal Transaction Type Selector - UPDATED ORDER HERE */}
                     <div className="flex items-center gap-2 bg-gray-50 rounded-full py-1 px-2 border border-gray-200">
-                      <span 
-                        className={cn(
-                          "text-xs px-3 py-1 rounded-full cursor-pointer",
-                          transactionType === 'expense' 
-                            ? 'bg-white shadow-sm text-gray-800' 
-                            : 'text-gray-500'
-                        )}
-                        onClick={() => setTransactionType('expense')}
-                      >
-                        Expense
-                      </span>
                       <span 
                         className={cn(
                           "text-xs px-3 py-1 rounded-full cursor-pointer",
@@ -456,6 +445,17 @@ export function TransactionForm() {
                         onClick={() => setTransactionType('revenue')}
                       >
                         Revenue
+                      </span>
+                      <span 
+                        className={cn(
+                          "text-xs px-3 py-1 rounded-full cursor-pointer",
+                          transactionType === 'expense' 
+                            ? 'bg-white shadow-sm text-gray-800' 
+                            : 'text-gray-500'
+                        )}
+                        onClick={() => setTransactionType('expense')}
+                      >
+                        Expense
                       </span>
                     </div>
                   </div>
