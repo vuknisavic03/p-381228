@@ -8,8 +8,8 @@ export function AnalyticsGrid() {
   const { data, isLoading } = useAnalyticsData();
   
   return (
-    <div className="flex flex-col max-w-[1600px] mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+    <div className="flex flex-col w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
         <div className="col-span-1">
           <ChartCard
             title="Revenue"
@@ -65,7 +65,7 @@ export function AnalyticsGrid() {
       </div>
 
       {!isLoading && data?.timeline && (
-        <div className="mt-6">
+        <div className="mt-3 sm:mt-4 md:mt-5">
           <Timeline data={data.timeline} />
         </div>
       )}
