@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -186,7 +187,7 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white/90 p-3 border border-slate-200/50 shadow-lg rounded-md backdrop-blur-md">
+        <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-lg rounded-md">
           <p className="font-medium text-slate-800 mb-1">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="font-semibold text-slate-900 flex items-center gap-1" style={{ color: entry.color }}>
@@ -301,7 +302,7 @@ export default function WorkspacePicker() {
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
-                          margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
+                          margin={{ top: 5, right: 5, left: 10, bottom: 5 }}
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
@@ -315,13 +316,16 @@ export default function WorkspacePicker() {
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#9EA3AD', fontSize: 10 }}
+                            padding={{ left: 10, right: 10 }}
                           />
                           <YAxis 
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#9EA3AD', fontSize: 10 }}
-                            width={25}
+                            width={35}
                             tickFormatter={(value) => `$${value}k`}
+                            padding={{ top: 5 }}
+                            domain={['auto', 'auto']}
                           />
                           <Tooltip 
                             content={<CustomTooltip />} 
@@ -377,13 +381,16 @@ export default function WorkspacePicker() {
                           axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
                           tickLine={false}
                           tick={{ fill: '#6E6E76', fontSize: 12 }}
+                          padding={{ left: 10, right: 10 }}
                         />
                         <YAxis 
                           axisLine={false}
                           tickLine={false}
                           tick={{ fill: '#6E6E76', fontSize: 12 }}
                           tickFormatter={(value) => `$${value}k`}
-                          width={40}
+                          width={45}
+                          padding={{ top: 10 }}
+                          domain={['auto', 'auto']}
                         />
                         <Tooltip 
                           content={<CustomTooltip />}
