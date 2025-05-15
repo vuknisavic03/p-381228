@@ -27,6 +27,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { TransactionTypeToggle } from "./TransactionTypeToggle";
 
 const mockListings = [
   {
@@ -131,45 +132,17 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
                   </div>
                 </div>
 
-                {/* Transaction Type & Category (horizontal layout for toggle) */}
+                {/* Transaction Type & Category */}
                 <div className="mb-4 flex items-center gap-4">
                   <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                     <ShoppingCart className="h-4 w-4 text-gray-500" />
                     Transaction Type
                   </span>
                   <div className="flex-1 flex justify-end">
-                    <div className="flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs">
-                      <button
-                        type="button"
-                        className={`px-3 py-1 text-xs font-medium rounded-full transition
-                          ${transactionType === "revenue"
-                            ? "bg-gray-100 text-gray-800"
-                            : "bg-white text-gray-500 hover:bg-gray-50"
-                          }`}
-                        style={{
-                          minWidth: 68,
-                        }}
-                        aria-pressed={transactionType === "revenue"}
-                        onClick={() => setTransactionType("revenue")}
-                      >
-                        Revenue
-                      </button>
-                      <button
-                        type="button"
-                        className={`ml-1 px-3 py-1 text-xs font-medium rounded-full transition
-                          ${transactionType === "expense"
-                            ? "bg-gray-100 text-gray-800"
-                            : "bg-white text-gray-500 hover:bg-gray-50"
-                          }`}
-                        style={{
-                          minWidth: 68,
-                        }}
-                        aria-pressed={transactionType === "expense"}
-                        onClick={() => setTransactionType("expense")}
-                      >
-                        Expense
-                      </button>
-                    </div>
+                    <TransactionTypeToggle
+                      value={transactionType}
+                      onChange={setTransactionType}
+                    />
                   </div>
                 </div>
                 {/* Category Select */}
