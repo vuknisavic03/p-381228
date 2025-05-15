@@ -16,9 +16,16 @@ type Toast = ToastProps & {
 
 const TOAST_LIMIT = 5;
 
-// Initialize the ref properly with an empty array as the initial value
-const toasts = React.createRef<Toast[]>();
-toasts.current = toasts.current || []; // Only set if it's null/undefined
+// Initialize the ref with useState to avoid directly modifying the read-only current property
+const toastsRef = React.createRef<Toast[]>();
+// Initialize the ref value if needed
+if (toastsRef.current === null) {
+  // Using Object.defineProperty to set initial value without directly assigning to .current
+  Object.defineProperty(toastsRef, 'current', {
+    value: [],
+    writable: false
+  });
+}
 
 export const toast = ({ title, description, action, variant, duration = 5000 }: ToastProps) => {
   // Use sonner toast for visual display
@@ -32,14 +39,17 @@ export const toast = ({ title, description, action, variant, duration = 5000 }: 
   const id = Math.random().toString(36).substring(2, 9);
   
   // Add to our internal toast tracking
-  if (toasts.current) {
+  if (toastsRef.current) {
+    // Create a new array instead of modifying the current one
+    const newToasts = [...toastsRef.current];
+    
     // Remove oldest toasts if we exceed the limit
-    if (toasts.current.length >= TOAST_LIMIT) {
-      toasts.current.shift();
+    if (newToasts.length >= TOAST_LIMIT) {
+      newToasts.shift();
     }
     
     // Add the new toast
-    toasts.current.push({ 
+    newToasts.push({ 
       id, 
       title, 
       description, 
@@ -47,21 +57,27 @@ export const toast = ({ title, description, action, variant, duration = 5000 }: 
       variant, 
       duration 
     });
+    
+    // Replace the entire ref.current value with the new array
+    Object.defineProperty(toastsRef, 'current', {
+      value: newToasts,
+      writable: false
+    });
   }
   
   return id;
 };
 
 export function useToast() {
-  const [localToasts, setLocalToasts] = React.useState<Toast[]>(toasts.current || []);
+  const [localToasts, setLocalToasts] = React.useState<Toast[]>(toastsRef.current || []);
   
   React.useEffect(() => {
     // Update local state when toasts ref changes
-    setLocalToasts([...(toasts.current || [])]);
+    setLocalToasts([...(toastsRef.current || [])]);
     
     // We could add some cleanup logic here if needed
     return () => {};
-  }, [toasts.current?.length]);
+  }, [toastsRef.current?.length]);
   
   return {
     toast,
