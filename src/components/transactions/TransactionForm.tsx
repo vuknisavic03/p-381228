@@ -35,7 +35,6 @@ import {
   Search,
   ArrowUp,
   ArrowDown,
-  TrendingUp
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -224,13 +223,13 @@ export function TransactionForm() {
   return (
     <div className="p-6 h-full overflow-auto">
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+      <div className="flex items-center justify-between mb-6 pb-3 border-b border-gray-100">
         <h2 className="text-xl font-semibold text-gray-800">Transaction details</h2>
       </div>
 
       {/* Main Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3 w-full p-1 rounded-lg mb-8 bg-gray-50">
+        <TabsList className="grid grid-cols-3 w-full p-1 rounded-lg mb-6 bg-gray-50">
           <TabsTrigger 
             value="details" 
             className="rounded-md text-xs py-2.5 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm data-[state=active]:font-medium"
@@ -252,9 +251,9 @@ export function TransactionForm() {
         </TabsList>
 
         {/* Transaction Details Tab */}
-        <TabsContent value="details" className="space-y-6 animate-fade-in">
+        <TabsContent value="details" className="space-y-5 animate-fade-in">
           <Card className="border border-gray-100 shadow-sm rounded-xl overflow-hidden">
-            <div className="p-5 space-y-6">
+            <div className="p-5 space-y-5">
               {/* Listing Section */}
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
@@ -424,128 +423,83 @@ export function TransactionForm() {
                 </div>
               </div>
               
-              {/* Category with elegant transaction type selector */}
-              <div>
-                <div className="flex items-center justify-between text-sm font-medium text-gray-700 mb-2.5">
-                  <div className="flex items-center gap-2">
-                    <ShoppingCart className="h-4 w-4 text-gray-500" />
-                    <h3>Transaction Category</h3>
+              {/* Transaction Type & Category */}
+              <div className="grid gap-4">
+                {/* Transaction Type as simple pill selector */}
+                <div className="pb-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                      <ShoppingCart className="h-4 w-4 text-gray-500" />
+                      <h3>Transaction Type</h3>
+                    </div>
+                    
+                    {/* Minimal Transaction Type Selector */}
+                    <div className="flex items-center gap-2 bg-gray-50 rounded-full py-1 px-2 border border-gray-200">
+                      <span 
+                        className={cn(
+                          "text-xs px-3 py-1 rounded-full cursor-pointer",
+                          transactionType === 'expense' 
+                            ? 'bg-white shadow-sm text-gray-800' 
+                            : 'text-gray-500'
+                        )}
+                        onClick={() => setTransactionType('expense')}
+                      >
+                        Expense
+                      </span>
+                      <span 
+                        className={cn(
+                          "text-xs px-3 py-1 rounded-full cursor-pointer",
+                          transactionType === 'revenue' 
+                            ? 'bg-white shadow-sm text-gray-800' 
+                            : 'text-gray-500'
+                        )}
+                        onClick={() => setTransactionType('revenue')}
+                      >
+                        Revenue
+                      </span>
+                    </div>
                   </div>
-                  
-                  {/* Compact Transaction Type Selector */}
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs font-medium ${transactionType === 'expense' ? 'text-red-500' : 'text-gray-400'}`}>
-                      Expense
-                    </span>
-                    <Switch 
-                      checked={transactionType === 'revenue'} 
-                      onCheckedChange={() => toggleTransactionType()}
-                      className={cn(
-                        "data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500",
-                        "h-5 w-9"
-                      )}
-                    />
-                    <span className={`text-xs font-medium ${transactionType === 'revenue' ? 'text-green-500' : 'text-gray-400'}`}>
-                      Revenue
-                    </span>
-                  </div>
-                </div>
 
-                {/* Category Dropdown - Styled based on transaction type */}
-                <Select>
-                  <SelectTrigger 
-                    className={cn(
-                      "w-full border transition-colors",
-                      transactionType === 'revenue' 
-                        ? "border-green-200 ring-green-100 text-green-700 focus:ring-green-100 focus:border-green-300" 
-                        : "border-red-200 ring-red-100 text-red-700 focus:ring-red-100 focus:border-red-300"
-                    )}
-                  >
-                    <SelectValue placeholder={`Select ${transactionType} category`} />
-                  </SelectTrigger>
-                  <SelectContent className="w-[var(--radix-select-trigger-width)]">
-                    {transactionType === 'revenue' ? (
-                      <>
-                        <SelectItem value="rent">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Rent
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="deposit">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Deposit
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="fee">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Fee
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="other-income">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                            Other Income
-                          </div>
-                        </SelectItem>
-                      </>
-                    ) : (
-                      <>
-                        <SelectItem value="maintenance">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Maintenance
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="utilities">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Utilities
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="insurance">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Insurance
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="tax">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Tax
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="other-expense">
-                          <div className="flex items-center">
-                            <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                            Other Expense
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                  </SelectContent>
-                </Select>
+                  {/* Category Selector */}
+                  <Select>
+                    <SelectTrigger 
+                      className="w-full border-gray-200 bg-white hover:border-gray-300 transition-colors"
+                    >
+                      <SelectValue placeholder={`Select ${transactionType} category`} />
+                    </SelectTrigger>
+                    <SelectContent className="w-[var(--radix-select-trigger-width)]">
+                      {transactionType === 'revenue' ? (
+                        <>
+                          <SelectItem value="rent">Rent</SelectItem>
+                          <SelectItem value="deposit">Deposit</SelectItem>
+                          <SelectItem value="fee">Fee</SelectItem>
+                          <SelectItem value="other-income">Other Income</SelectItem>
+                        </>
+                      ) : (
+                        <>
+                          <SelectItem value="maintenance">Maintenance</SelectItem>
+                          <SelectItem value="utilities">Utilities</SelectItem>
+                          <SelectItem value="insurance">Insurance</SelectItem>
+                          <SelectItem value="tax">Tax</SelectItem>
+                          <SelectItem value="other-expense">Other Expense</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
               
-                {/* Amount with improved UX based on transaction type */}
+                {/* Amount - simplified */}
                 <div>
                   <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2.5">
-                    <Wallet className="h-4 w-4 text-gray-500" />
+                    <DollarSign className="h-4 w-4 text-gray-500" />
                     <h3>Amount</h3>
                   </div>
                   <div className="relative">
-                    <span className={`absolute left-3 top-1/2 -translate-y-1/2 font-medium ${
-                      transactionType === 'revenue' ? 'text-green-600' : 'text-red-600'
-                    }`}>$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600">$</span>
                     <Input 
                       type="number" 
                       placeholder="0.00" 
-                      className={`pl-7 border-gray-200 bg-white hover:border-gray-300 transition-colors ${
-                        transactionType === 'revenue'
-                          ? 'focus:ring-green-100 focus:border-green-200'
-                          : 'focus:ring-red-100 focus:border-red-200'
-                      }`}
+                      className="pl-7 border-gray-200 bg-white hover:border-gray-300 transition-colors"
                     />
                   </div>
                 </div>
@@ -575,7 +529,6 @@ export function TransactionForm() {
                         selected={date}
                         onSelect={setDate}
                         initialFocus
-                        className={cn("p-3 pointer-events-auto")}
                       />
                     </PopoverContent>
                   </Popover>
@@ -604,10 +557,10 @@ export function TransactionForm() {
             </div>
           </Card>
 
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-end mt-5">
             <Button 
               onClick={() => setActiveTab("payer")}
-              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white h-10 px-5 rounded-md transition-all duration-200"
+              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-5 rounded-md transition-all duration-200"
             >
               Next
               <ChevronRight className="h-4 w-4" />
@@ -616,9 +569,9 @@ export function TransactionForm() {
         </TabsContent>
         
         {/* Payer Details Tab */}
-        <TabsContent value="payer" className="space-y-6 animate-fade-in">
+        <TabsContent value="payer" className="space-y-5 animate-fade-in">
           <Card className="border border-gray-100 shadow-sm rounded-xl overflow-hidden">
-            <div className="p-5 space-y-6">
+            <div className="p-5 space-y-5">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <User className="h-4 w-4 text-gray-500" />
@@ -712,7 +665,7 @@ export function TransactionForm() {
             </div>
           </Card>
           
-          <div className="flex justify-between mt-6">
+          <div className="flex justify-between mt-5">
             <Button 
               variant="outline"
               onClick={() => setActiveTab("details")}
@@ -732,9 +685,9 @@ export function TransactionForm() {
         </TabsContent>
         
         {/* Additional Info Tab */}
-        <TabsContent value="additional" className="space-y-6 animate-fade-in">
+        <TabsContent value="additional" className="space-y-5 animate-fade-in">
           <Card className="border border-gray-100 shadow-sm rounded-xl overflow-hidden">
-            <div className="p-5 space-y-6">
+            <div className="p-5 space-y-5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <FileText className="h-4 w-4 text-gray-500" />
@@ -759,7 +712,7 @@ export function TransactionForm() {
             </div>
           </Card>
           
-          <div className="flex justify-between mt-6">
+          <div className="flex justify-between mt-5">
             <Button 
               variant="outline"
               onClick={() => setActiveTab("payer")}
