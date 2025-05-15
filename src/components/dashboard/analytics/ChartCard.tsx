@@ -160,9 +160,9 @@ export function ChartCard({
             data={chartData as ChartDataPoint[]}
             margin={{
               top: 5,
-              right: 0,
+              right: 5,
               bottom: 5,
-              left: 0, // Changed from -15 to 0
+              left: 10, // Increased from 0 to 10 to give more space for y-axis labels
             }}
           >
             <defs>
@@ -176,15 +176,19 @@ export function ChartCard({
               dataKey="month" 
               axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
               tickLine={false}
-              tick={{ fill: '#6E6E76', fontSize: 9 }}
+              tick={{ fill: '#6E6E76', fontSize: 10 }}
               dy={8}
+              padding={{ left: 10, right: 10 }}
             />
             <YAxis 
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#6E6E76', fontSize: 9 }}
-              width={30} // Increased width from 25 to 30
+              tick={{ fill: '#6E6E76', fontSize: 10 }}
+              width={45} // Increased width from 30 to 45 for better visibility
               tickFormatter={(value) => `$${value}k`}
+              padding={{ top: 10 }}
+              allowDecimals={false}
+              domain={['auto', 'auto']}
             />
             <Tooltip 
               content={<CustomTooltip />} 

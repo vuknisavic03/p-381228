@@ -67,9 +67,9 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
               data={data}
               margin={{
                 top: 5,
-                right: 0,
-                bottom: 0,
-                left: 0, // Changed from -15 to 0
+                right: 5,
+                bottom: 5,
+                left: 12, // Increased from 0 to 12 to give more space for y-axis labels
               }}
             >
               <defs>
@@ -85,17 +85,21 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
               <CartesianGrid strokeDasharray="5 5" opacity={0.1} stroke="#9EA3AD" />
               <XAxis 
                 dataKey="month" 
-                tick={{ fill: '#6E6E76', fontSize: 9 }} 
+                tick={{ fill: '#6E6E76', fontSize: 10 }} 
                 tickLine={false} 
                 axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
                 dy={5}
+                padding={{ left: 10, right: 10 }}
               />
               <YAxis 
-                tick={{ fill: '#6E6E76', fontSize: 9 }}
+                tick={{ fill: '#6E6E76', fontSize: 10 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={35} // Increased width from 25 to 35
+                width={50} // Increased width from 35 to 50 to ensure "$" is fully visible
+                padding={{ top: 10 }}
+                allowDecimals={false}
+                domain={['auto', 'auto']}
               />
               <Tooltip content={<CustomTooltip />} />
               <Area
