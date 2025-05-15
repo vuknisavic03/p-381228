@@ -112,8 +112,8 @@ export function ChartCard({
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  outerRadius={({ height }) => Math.min(height * 0.35, 80)}
-                  innerRadius={({ height }) => Math.min(height * 0.25, 60)}
+                  outerRadius="80%"
+                  innerRadius="60%"
                   fill={colorValue}
                   dataKey="value"
                   startAngle={90}
