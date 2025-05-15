@@ -1,36 +1,42 @@
-
 import React from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
-export function Sidebar() {
+interface SidebarProps {
+  workspaceName: string;
+  userInitials: string;
+  owner: string;
+  className?: string;
+}
+
+export function Sidebar({ workspaceName, userInitials, owner, className }: SidebarProps) {
   return (
-    <div className="p-8">
-      <div className="text-sm text-[#9EA3AD] font-semibold mb-4">WORKSPACE</div>
-      <div className="space-y-2">
-        <div className="flex items-center gap-3 bg-[#F6F6F7] px-3 py-2 rounded-md">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/4d45b3f00f54d0b9b021c6c0492b60eeeac9b73d"
-            className="w-5 h-5"
-            alt="Overview icon"
-          />
-          <span className="text-[#1A1A1A] font-semibold">Overview</span>
-        </div>
-        <div className="flex items-center gap-3 px-3 py-2">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/33648ba2911e7b4a132f0393b030f068f0e68c68"
-            className="w-5 h-5"
-            alt="Listings icon"
-          />
-          <span className="text-[#1A1A1A] font-medium">Listings</span>
-        </div>
-        <div className="flex items-center gap-3 px-3 py-2">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/050fc8f9f07a4911bdb5a576ed825054/aed2de8395d4d607024afd11386607b1be368ac0"
-            className="w-5 h-5"
-            alt="Transactions icon"
-          />
-          <span className="text-[#1A1A1A] font-medium">Transactions</span>
+    <div className={cn("flex flex-col h-full border-r bg-white", className)}>
+      <div className="p-4 border-b">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-8 w-8 bg-gray-800 text-white">
+            <AvatarFallback>{userInitials}</AvatarFallback>
+          </Avatar>
+          <div>
+            <div className="font-semibold text-sm">{workspaceName}</div>
+            <div className="text-xs text-gray-500">{owner}</div>
+          </div>
         </div>
       </div>
+      <nav className="flex flex-col gap-1 py-3">
+        <a href="/dashboard" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+          Dashboard
+        </a>
+        <a href="/transactions" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+          Transactions
+        </a>
+        <a href="/listings" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+          Listings
+        </a>
+        <a href="/profile" className="px-4 py-2 rounded-lg text-[1.08rem] font-semibold hover:bg-gray-100 transition">
+          Profile
+        </a>
+      </nav>
     </div>
   );
 }

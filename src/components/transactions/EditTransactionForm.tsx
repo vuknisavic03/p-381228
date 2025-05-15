@@ -80,128 +80,129 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
           </Button>
         </SheetClose>
       </div>
-      <div className="flex-1">
-        <div>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-3 w-full mb-6 bg-gray-50">
-              <TabsTrigger value="details" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Transaction Details</TabsTrigger>
-              <TabsTrigger value="payer" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Payer Details</TabsTrigger>
-              <TabsTrigger value="additional" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Additional Info</TabsTrigger>
-            </TabsList>
-            <TabsContent value="details">
-              <TransactionFormFields
-                mockListings={mockListings}
-                initialValues={fields}
-                onChange={setFields}
-                editMode
-              />
-              <div className="flex justify-end">
-                <Button
-                  disabled={!fields.selectedListingId}
-                  onClick={() => setActiveTab("payer")}
-                  className="flex items-center gap-2 bg-gray-900 text-white"
-                >
-                  Next
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </TabsContent>
-            <TabsContent value="payer">
-              <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
-                {selectedListing ? (
-                  <div>
-                    <div className="mb-4">
-                      <div className="flex items-center mb-2">
-                        <User className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm font-semibold text-gray-700">Payer Name</span>
-                      </div>
-                      <Input
-                        type="text"
-                        value={payer.name}
-                        readOnly
-                        className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <div className="flex items-center mb-2">
-                        <Mail className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm font-semibold text-gray-700">Payer Email</span>
-                      </div>
-                      <Input
-                        type="email"
-                        value={payer.email}
-                        readOnly
-                        className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex items-center mb-2">
-                        <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm font-semibold text-gray-700">Payer Phone</span>
-                      </div>
-                      <Input
-                        type="tel"
-                        value={payer.phone}
-                        readOnly
-                        className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-gray-400 text-sm">Select a listing first...</div>
-                )}
-              </Card>
-              <div className="flex justify-between">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab("details")}
-                  className="border-gray-200"
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={() => setActiveTab("additional")}
-                  className="flex items-center gap-2 bg-gray-900 text-white"
-                >
-                  Next
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </TabsContent>
-            <TabsContent value="additional">
-              <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
+      <div className="flex-1 overflow-auto">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-3 w-full mb-6 bg-gray-50">
+            <TabsTrigger value="details" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Transaction Details</TabsTrigger>
+            <TabsTrigger value="payer" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Payer Details</TabsTrigger>
+            <TabsTrigger value="additional" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Additional Info</TabsTrigger>
+          </TabsList>
+          {/* Tab 1: Details */}
+          <TabsContent value="details">
+            <TransactionFormFields
+              mockListings={mockListings}
+              initialValues={fields}
+              onChange={setFields}
+              editMode={true}
+            />
+            <div className="flex justify-end">
+              <Button
+                disabled={!fields.selectedListingId}
+                onClick={() => setActiveTab("payer")}
+                className="flex items-center gap-2 bg-gray-900 text-white"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </TabsContent>
+          {/* Tab 2: Payer */}
+          <TabsContent value="payer">
+            <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
+              {selectedListing ? (
                 <div>
-                  <div className="flex items-center mb-2">
-                    <FileText className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Additional Notes</span>
+                  <div className="mb-4">
+                    <div className="flex items-center mb-2">
+                      <User className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm font-semibold text-gray-700">Payer Name</span>
+                    </div>
+                    <Input
+                      type="text"
+                      value={payer.name}
+                      readOnly
+                      className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                    />
                   </div>
-                  <Textarea
-                    placeholder="Add additional details or notes"
-                    value={fields.notes}
-                    onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                    className="border-gray-200 min-h-[90px]"
-                  />
+                  <div className="mb-4">
+                    <div className="flex items-center mb-2">
+                      <Mail className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm font-semibold text-gray-700">Payer Email</span>
+                    </div>
+                    <Input
+                      type="email"
+                      value={payer.email}
+                      readOnly
+                      className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <Phone className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm font-semibold text-gray-700">Payer Phone</span>
+                    </div>
+                    <Input
+                      type="tel"
+                      value={payer.phone}
+                      readOnly
+                      className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                    />
+                  </div>
                 </div>
-              </Card>
-              <div className="flex justify-between">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab("payer")}
-                  className="border-gray-200"
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleUpdate}
-                  className="flex items-center gap-2 bg-gray-800 text-white"
-                >
-                  <Check className="h-4 w-4" />
-                  Save changes
-                </Button>
+              ) : (
+                <div className="text-gray-400 text-sm">Select a listing first...</div>
+              )}
+            </Card>
+            <div className="flex justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setActiveTab("details")}
+                className="border-gray-200"
+              >
+                Back
+              </Button>
+              <Button
+                onClick={() => setActiveTab("additional")}
+                className="flex items-center gap-2 bg-gray-900 text-white"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </TabsContent>
+          {/* Tab 3: Additional */}
+          <TabsContent value="additional">
+            <Card className="border border-gray-100 shadow-sm rounded-xl p-5 mb-6">
+              <div>
+                <div className="flex items-center mb-2">
+                  <FileText className="h-4 w-4 text-gray-500 mr-2" />
+                  <span className="text-sm font-semibold text-gray-700">Additional Notes</span>
+                </div>
+                <Textarea
+                  placeholder="Add additional details or notes"
+                  value={fields.notes}
+                  onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
+                  className="border-gray-200 min-h-[90px]"
+                />
               </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+            </Card>
+            <div className="flex justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setActiveTab("payer")}
+                className="border-gray-200"
+              >
+                Back
+              </Button>
+              <Button
+                onClick={handleUpdate}
+                className="flex items-center gap-2 bg-gray-800 text-white"
+              >
+                <Check className="h-4 w-4" />
+                Save changes
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

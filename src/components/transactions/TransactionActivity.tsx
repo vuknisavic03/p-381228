@@ -310,12 +310,12 @@ export function TransactionActivity() {
           <div className="flex p-1 bg-gray-100 rounded-full">
             <button 
               onClick={() => setTransactionType('revenue')}
-              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium text-sm transition-all duration-200 ${
+              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium transition-all duration-200 ${
                 transactionType === 'revenue' 
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
-              style={{ fontSize: '0.95rem', height: '36px' }} // Match Date/Filter font size
+              style={{ fontSize: '0.94rem', height: '36px' }} // Matches Date/Filter font size
               aria-pressed={transactionType === 'revenue'}
             >
               <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-black' : 'text-gray-400'}`} />
@@ -323,12 +323,12 @@ export function TransactionActivity() {
             </button>
             <button 
               onClick={() => setTransactionType('expense')}
-              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium text-sm transition-all duration-200 ${
+              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium transition-all duration-200 ${
                 transactionType === 'expense' 
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
-              style={{ fontSize: '0.95rem', height: '36px' }} // Match Date/Filter font size
+              style={{ fontSize: '0.94rem', height: '36px' }} // Matches Date/Filter font size
               aria-pressed={transactionType === 'expense'}
             >
               <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-black' : 'text-gray-400'}`} />
