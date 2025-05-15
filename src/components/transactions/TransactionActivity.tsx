@@ -117,39 +117,29 @@ export function TransactionActivity() {
     });
   };
 
-  // Filter transactions based on controls
+  // Filter transactions as before
   const filteredTransactions = mockTransactions.filter(transaction => {
     if (transaction.type !== transactionType) return false;
 
-    // Filter by date if selected
     if (date) {
       const transactionDate = new Date(transaction.date);
       if (
         transactionDate.getFullYear() !== date.getFullYear() ||
         transactionDate.getMonth() !== date.getMonth() ||
         transactionDate.getDate() !== date.getDate()
-      ) return false;
+      )
+        return false;
     }
-    // Filter by categories
     if (selectedCategories.length && !selectedCategories.includes(transaction.category)) return false;
-    // Filter by payment methods
     if (selectedPaymentMethods.length && !selectedPaymentMethods.includes(transaction.paymentMethod)) return false;
-    // Filter by status
     if (selectedStatuses.length && !selectedStatuses.includes(transaction.status)) return false;
 
     return true;
   });
 
-  // Handle transaction update
-  const handleUpdateTransaction = (updatedTransaction: any) => {
-    // In a real app, this would update the state or call an API
-    console.log("Transaction updated:", updatedTransaction);
-    setEditingTransaction(null);
-    toast({
-      title: "Transaction updated",
-      description: "Your changes have been saved successfully",
-      duration: 3000,
-    });
+  // Handle transaction edit — opens sheet with edit form
+  const handleEditTransaction = (tx: any) => {
+    setEditingTransaction(tx);
   };
 
   return (
@@ -357,131 +347,33 @@ export function TransactionActivity() {
         )}
       </div>
 
-      {/* Results Table or Empty State */}
-      {filteredTransactions.length > 0 ? (
-        <div className="flex-1 overflow-auto p-5">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-b border-gray-100 hover:bg-transparent">
-                <TableHead className="w-[120px] pl-0">Amount</TableHead>
-                <TableHead>Details</TableHead>
-                <TableHead className="text-right pr-0">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredTransactions.map((transaction) => (
-                <TableRow 
-                  key={transaction.id} 
-                  className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors"
-                >
-                  <TableCell className="py-4 pl-0">
-                    <div className="flex items-start">
-                      <div className={`mt-1 w-8 h-8 rounded-full flex items-center justify-center ${
-                        transaction.type === 'revenue' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
-                      }`}>
-                        {transaction.type === 'revenue' ? 
-                          <DollarSign className="h-4 w-4" /> : 
-                          <TrendingDown className="h-4 w-4" />
-                        }
-                      </div>
-                      <div className="ml-3">
-                        <p className="font-semibold text-gray-900">
-                          ${transaction.amount.toLocaleString()}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {format(new Date(transaction.date), "MMM d, yyyy")}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium text-gray-800">
-                        {transaction.category}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {transaction.from}
-                      </div>
-                      <div className="mt-1.5">
-                        <Badge variant="outline" className="text-xs font-normal text-gray-600 bg-gray-50">
-                          {transaction.paymentMethod}
-                        </Badge>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right pr-0">
-                    <Sheet>
-                      <SheetTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => setEditingTransaction(transaction)}
-                          className="h-8 w-8 p-0 rounded-full"
-                          aria-label="Edit transaction"
-                        >
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </SheetTrigger>
-                      <SheetContent side="right" className="sm:max-w-md p-0">
-                        {editingTransaction && (
-                          <EditTransactionForm 
-                            transaction={editingTransaction}
-                            onClose={() => setEditingTransaction(null)}
-                            onUpdate={handleUpdateTransaction}
-                          />
-                        )}
-                      </SheetContent>
-                    </Sheet>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : (
-        <div className="flex-1 flex flex-col items-center justify-center m-5 p-8 bg-gray-50 rounded-lg border border-dashed border-gray-200 min-h-[400px]">
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 ${
-            transactionType === 'revenue' ? 'bg-gray-100' : 'bg-gray-100'
-          }`}>
-            {transactionType === 'revenue' ? (
-              <DollarSign className="h-8 w-8 text-gray-500" />
-            ) : (
-              <TrendingDown className="h-8 w-8 text-gray-500" />
-            )}
+      {/* Modern Table */}
+      <div className="flex-1 p-6 bg-[#FAFBFC]">
+        <div className="max-w-full mx-auto">
+          <div className="mb-6">
+            {/* Results Table or Empty State */}
+            <TransactionTable
+              transactions={filteredTransactions}
+              onEdit={handleEditTransaction}
+            />
           </div>
-          
-          <span className="text-gray-800 font-semibold text-lg mb-2">
-            {date 
-              ? `No ${transactionType} on ${format(date, "MMMM d, yyyy")}` 
-              : `No ${transactionType} yet`
-            }
-          </span>
-          
-          <p className="text-sm text-center text-gray-500 max-w-[300px] mb-6">
-            {date 
-              ? `There are no ${transactionType} transactions recorded for this date. Try selecting a different date or clearing filters.`
-              : `${transactionType === 'revenue' 
-                  ? "Revenue transactions will appear here once they're created or imported from your connected accounts."
-                  : "Expense transactions will appear here once they're created or imported from your connected accounts."
-                }`
-            }
-          </p>
-          
-          {(date || selectedCategories.length || selectedPaymentMethods.length || selectedStatuses.length) && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={clearFilters}
-              className="gap-2"
-            >
-              <RefreshCcw className="h-3.5 w-3.5" />
-              Clear filters
-            </Button>
-          )}
         </div>
+      </div>
+
+      {/* Edit sheet (unchanged) */}
+      {editingTransaction && (
+        <Sheet open={!!editingTransaction} onOpenChange={() => setEditingTransaction(null)}>
+          <SheetContent side="right" className="sm:max-w-md p-0">
+            <EditTransactionForm
+              transaction={editingTransaction}
+              onClose={() => setEditingTransaction(null)}
+              onUpdate={handleUpdateTransaction}
+            />
+          </SheetContent>
+        </Sheet>
       )}
     </div>
   );
 }
 
-// NOTE: This file (`TransactionActivity.tsx`) is now very long. To keep your codebase maintainable, I recommend you ask me to refactor it into focused components soon!
+// NOTE: This file is much shorter/cleaner. Consider splitting the filter bar, etc., into components for even better maintainability!
