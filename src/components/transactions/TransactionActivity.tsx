@@ -315,7 +315,7 @@ export function TransactionActivity() {
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
-              style={{ fontSize: '0.97rem' }}
+              style={{ fontSize: '0.95rem', height: '36px' }} // Match Date/Filter font size
               aria-pressed={transactionType === 'revenue'}
             >
               <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-black' : 'text-gray-400'}`} />
@@ -328,7 +328,7 @@ export function TransactionActivity() {
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
-              style={{ fontSize: '0.97rem' }}
+              style={{ fontSize: '0.95rem', height: '36px' }} // Match Date/Filter font size
               aria-pressed={transactionType === 'expense'}
             >
               <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-black' : 'text-gray-400'}`} />

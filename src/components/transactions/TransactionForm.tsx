@@ -28,6 +28,7 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
+import { TransactionFormFields, TransactionFieldsData } from "./TransactionFormFields";
 
 const mockListings = [
   {
@@ -49,17 +50,19 @@ const mockListings = [
 
 export function TransactionForm({ onClose }: { onClose?: () => void }) {
   const [activeTab, setActiveTab] = useState("details");
-  const [selectedListingId, setSelectedListingId] = useState<string>("");
-  const [transactionType, setTransactionType] = useState<"revenue" | "expense">("revenue");
-  const [category, setCategory] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [payment, setPayment] = useState("");
-  const [notes, setNotes] = useState("");
+  const [fields, setFields] = useState<TransactionFieldsData>({
+    selectedListingId: "",
+    transactionType: "revenue",
+    category: "",
+    amount: "",
+    date: new Date(),
+    payment: "",
+    notes: "",
+  });
   const { toast } = useToast();
 
   // Selected listing, tenant info
-  const selectedListing = mockListings.find(l => l.id === selectedListingId);
+  const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
   const payer = selectedListing?.tenant;
 
   function handleConfirm() {
@@ -82,169 +85,16 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           <TabsTrigger value="additional" className="rounded-none data-[state=active]:bg-white data-[state=active]:text-gray-900">Additional Info</TabsTrigger>
         </TabsList>
 
-        {/* Details Tab: Key redesign here */}
+        {/* Details Tab: uses shared fields */}
         <TabsContent value="details">
-          <Card className="border border-gray-100 shadow-sm rounded-xl p-6 mb-6">
-            {/* LISTING PICKER always shown */}
-            <div className="mb-5">
-              <div className="flex items-center mb-2 gap-2">
-                <FileText className="h-4 w-4 text-gray-500" />
-                <span className="text-sm font-semibold text-gray-700">Listing</span>
-              </div>
-              <Select value={selectedListingId} onValueChange={setSelectedListingId}>
-                <SelectTrigger className="w-full border-gray-200 bg-white placeholder:text-gray-400">
-                  <SelectValue placeholder="Select listing" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockListings.map(listing => (
-                    <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {/* Show rest only after listing is selected */}
-            {selectedListing && (
-              <>
-                {/* PAYER/TENANT CARD */}
-                <div className="rounded-xl border border-gray-100 bg-white mb-6 p-5 flex flex-col gap-3 shadow-xs">
-                  <div className="flex gap-3 items-center">
-                    <div className="flex items-center justify-center rounded-lg bg-gray-50 h-12 w-12">
-                      <User className="h-7 w-7 text-gray-400" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-semibold text-gray-900">{payer.name}</span>
-                        <span className="ml-2 bg-gray-100 text-xs font-semibold text-gray-600 rounded px-2 py-0.5">{payer.type}</span>
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Mail className="h-4 w-4 text-gray-400" /><span className="text-sm text-gray-700">{payer.email}</span>
-                        <Phone className="h-4 w-4 text-gray-400 ml-4" /><span className="text-sm text-gray-700">{payer.phone}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mt-1">
-                    <House className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <div className="font-semibold text-gray-900">{selectedListing.name}</div>
-                      <div className="text-sm text-gray-500">{selectedListing.city}, {selectedListing.country}</div>
-                    </div>
-                    <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-0.5 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />{selectedListing.type}</span>
-                  </div>
-                </div>
-
-                {/* Transaction Type & Category */}
-                <div className="mb-4 flex items-center gap-4">
-                  <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                    <ShoppingCart className="h-4 w-4 text-gray-500" />
-                    Transaction Type
-                  </span>
-                  <div className="flex-1 flex justify-end">
-                    <TransactionTypeToggle
-                      value={transactionType}
-                      onChange={setTransactionType}
-                    />
-                  </div>
-                </div>
-                {/* Category Select */}
-                <div className="mb-4">
-                  <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
-                      <SelectValue placeholder={`Select ${transactionType === "revenue" ? "revenue" : "expense"} category`} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {transactionType === "revenue" ? (
-                        <>
-                          <SelectItem value="rent">Rent</SelectItem>
-                          <SelectItem value="deposit">Deposit</SelectItem>
-                          <SelectItem value="fee">Fee</SelectItem>
-                          <SelectItem value="other-income">Other Income</SelectItem>
-                        </>
-                      ) : (
-                        <>
-                          <SelectItem value="maintenance">Maintenance</SelectItem>
-                          <SelectItem value="utilities">Utilities</SelectItem>
-                          <SelectItem value="insurance">Insurance</SelectItem>
-                          <SelectItem value="tax">Tax</SelectItem>
-                          <SelectItem value="other-expense">Other Expense</SelectItem>
-                        </>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {/* Amount */}
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Amount</span>
-                  </div>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      className="pl-7 border-gray-200 bg-white placeholder:text-gray-400"
-                    />
-                  </div>
-                </div>
-                {/* Date */}
-                <div className="mb-4">
-                  <div className="flex items-center mb-2">
-                    <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Date</span>
-                  </div>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full flex justify-between items-center border-gray-200 bg-white text-gray-900 font-normal",
-                          !date && "text-gray-400"
-                        )}
-                      >
-                        <span className="flex items-center">
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {date ? format(date, "PPP") : <span>Select date</span>}
-                        </span>
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-50" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                        className={cn("p-3 pointer-events-auto")}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                {/* Payment Method */}
-                <div>
-                  <div className="flex items-center mb-2">
-                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm font-semibold text-gray-700">Payment Method</span>
-                  </div>
-                  <Select value={payment} onValueChange={setPayment}>
-                    <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
-                      <SelectValue placeholder="Select payment method" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="card">Credit Card</SelectItem>
-                      <SelectItem value="bank">Bank Transfer</SelectItem>
-                      <SelectItem value="cash">Cash</SelectItem>
-                      <SelectItem value="check">Check</SelectItem>
-                      <SelectItem value="crypto">Cryptocurrency</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </>
-            )}
-          </Card>
+          <TransactionFormFields
+            mockListings={mockListings}
+            initialValues={fields}
+            onChange={setFields}
+          />
           <div className="flex justify-end">
             <Button
-              disabled={!selectedListingId}
+              disabled={!fields.selectedListingId}
               onClick={() => setActiveTab("payer")}
               className="flex items-center gap-2 bg-gray-900 text-white"
             >
@@ -328,8 +178,8 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
               </div>
               <Textarea
                 placeholder="Add additional details or notes"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                value={fields.notes}
+                onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
                 className="border-gray-200 min-h-[90px]"
               />
             </div>

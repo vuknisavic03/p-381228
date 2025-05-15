@@ -1,4 +1,3 @@
-
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ interface NavItemProps {
 
 function NavItem({ icon, label, path, isActive }: NavItemProps) {
   const navigate = useNavigate();
-  
   return (
     <div
       className={cn(
@@ -32,7 +30,7 @@ function NavItem({ icon, label, path, isActive }: NavItemProps) {
         alt={`${label} icon`}
       />
       <span className={cn(
-        "text-base text-[#1A1A1A]",
+        "text-[1.08rem] text-[#1A1A1A]",
         isActive ? "font-bold" : "font-normal"
       )}>
         {label}
