@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DollarSign, TrendingDown, ChevronRight, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
+import { TransactionTable } from "./TransactionTable"; // <-- ADDED IMPORT
 
 // Mock transaction data
 const mockTransactions = [
@@ -367,7 +369,7 @@ export function TransactionActivity() {
             <EditTransactionForm
               transaction={editingTransaction}
               onClose={() => setEditingTransaction(null)}
-              onUpdate={handleUpdateTransaction}
+              // Removed onUpdate={handleUpdateTransaction}
             />
           </SheetContent>
         </Sheet>
@@ -377,3 +379,4 @@ export function TransactionActivity() {
 }
 
 // NOTE: This file is much shorter/cleaner. Consider splitting the filter bar, etc., into components for even better maintainability!
+
