@@ -328,8 +328,8 @@ export function TransactionActivity() {
         <FilterTags tags={filterTags} onClearAll={clearFilters} />
       </div>
 
-      {/* Modern Table with added top margin */}
-      <div className="flex-1 overflow-auto mt-6">
+      {/* Modern Table - adjusted margin to match Listings page (from mt-6 to mt-4) */}
+      <div className="flex-1 overflow-auto mt-4">
         <div className="max-w-full mx-auto">
           <div className="mb-4">
             {/* Results Table or Empty State */}
