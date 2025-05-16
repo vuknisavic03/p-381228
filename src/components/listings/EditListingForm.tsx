@@ -189,163 +189,238 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   const CategoryIcon = selectedCategoryOption?.Icon;
 
   return (
-    <div className="flex flex-col p-6 w-full h-full">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Edit listing</h2>
+    <div className="h-full overflow-auto bg-white">
+      {/* Header with close button */}
+      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <h2 className="text-xl font-medium text-gray-900">Edit Listing</h2>
         <SheetClose asChild>
-          <Button variant="outline" size="icon">
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </Button>
         </SheetClose>
       </div>
 
-      <div className="grid gap-5">
-        <Input
-          className="h-12 border-gray-200"
-          placeholder="City"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-        />
-        <Input
-          className="h-12 border-gray-200"
-          placeholder="Address"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-        />
-        <Input
-          className="h-12 border-gray-200"
-          placeholder="Country"
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-        />
-        <Input
-          className="h-12 border-gray-200"
-          placeholder="Postal Code"
-          name="postalCode"
-          value={formData.postalCode}
-          onChange={handleChange}
-        />
-
-        <div className="grid gap-5">
-          <Select
-            value={formData.type}
-            onValueChange={(value) => {
-              setFormData(prev => ({
-                ...prev,
-                type: value,
-                category: ""
-              }));
-            }}
-          >
-            <SelectTrigger className="h-12 border-gray-200">
-              <SelectValue placeholder="Select property type">
-                {formData.type && TypeIcon && (
-                  <div className="flex items-center gap-2">
-                    <TypeIcon className="h-4 w-4" />
-                    <span>{selectedTypeOption?.label}</span>
-                  </div>
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {typeCategories.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  <div className="flex items-center gap-2">
-                    <type.Icon className="h-4 w-4" />
-                    <span>{type.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={formData.category}
-            onValueChange={(value) => {
-              setFormData(prev => ({
-                ...prev,
-                category: value
-              }));
-            }}
-            disabled={!formData.type}
-          >
-            <SelectTrigger className="h-12 border-gray-200">
-              <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
-                {formData.category && CategoryIcon && (
-                  <div className="flex items-center gap-2">
-                    <CategoryIcon className="h-4 w-4" />
-                    <span>{selectedCategoryOption?.label}</span>
-                  </div>
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {getAvailableCategories().map((cat) => (
-                <SelectItem key={cat.value} value={cat.value}>
-                  <div className="flex items-center gap-2">
-                    <cat.Icon className="h-4 w-4" />
-                    <span>{cat.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      {/* Form content */}
+      <div className="px-6 py-4 space-y-8">
+        {/* Property Information Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City</label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Country</label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Address</label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                name="postalCode"
+                value={formData.postalCode}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
 
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-base">Tenant details</h3>
-            <Button variant="outline" size="sm" onClick={toggleTenantType}>
-              {formData.tenantType === "individual" ? "Individual" : "Company"}
+        {/* Property Type Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Type</label>
+              <Select
+                value={formData.type}
+                onValueChange={(value) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    type: value,
+                    category: ""
+                  }));
+                }}
+              >
+                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                  <SelectValue placeholder="Select property type">
+                    {formData.type && TypeIcon && (
+                      <div className="flex items-center gap-2">
+                        <TypeIcon className="h-4 w-4" />
+                        <span>{selectedTypeOption?.label}</span>
+                      </div>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {typeCategories.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <div className="flex items-center gap-2">
+                        <type.Icon className="h-4 w-4" />
+                        <span>{type.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
+              <Select
+                value={formData.category}
+                onValueChange={(value) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    category: value
+                  }));
+                }}
+                disabled={!formData.type}
+              >
+                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                  <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
+                    {formData.category && CategoryIcon && (
+                      <div className="flex items-center gap-2">
+                        <CategoryIcon className="h-4 w-4" />
+                        <span>{selectedCategoryOption?.label}</span>
+                      </div>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {getAvailableCategories().map((cat) => (
+                    <SelectItem key={cat.value} value={cat.value}>
+                      <div className="flex items-center gap-2">
+                        <cat.Icon className="h-4 w-4" />
+                        <span>{cat.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+
+        {/* Tenant Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleTenantType} 
+              className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+            >
+              {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
             </Button>
           </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <Input
-              className="h-12 border-gray-200"
-              placeholder={formData.tenantType === "individual" ? "Name" : "Company Name"}
-              name="tenantName"
-              value={formData.tenantName}
-              onChange={handleChange}
-            />
-            <Input
-              className="h-12 border-gray-200"
-              placeholder="Phone"
-              name="tenantPhone"
-              value={formData.tenantPhone}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mt-4">
-            <Input
-              className="h-12 border-gray-200"
-              placeholder="Email"
-              name="tenantEmail"
-              value={formData.tenantEmail}
-              onChange={handleChange}
-            />
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
+              </label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                name="tenantName"
+                value={formData.tenantName}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  name="tenantPhone"
+                  value={formData.tenantPhone}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  name="tenantEmail"
+                  value={formData.tenantEmail}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <h3 className="font-medium text-base mb-3">Additional details</h3>
-          <Textarea
-            placeholder="Notes"
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            className="border-gray-200 min-h-[120px]"
-          />
+        {/* Additional Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Details</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <Textarea
+              placeholder="Add notes or additional details about this property..."
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              className="min-h-[120px] w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 resize-none text-sm rounded-md"
+            />
+          </div>
         </div>
-      </div>
         
-      <div className="flex justify-end gap-3 mt-6">
-        <Button onClick={handleSubmit} className="w-full sm:w-auto">
-          Save changes
-        </Button>
+        {/* Action Buttons */}
+        <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
+          <Button 
+            onClick={handleSubmit} 
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+          >
+            Save changes
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className="flex-1 bg-white border-gray-200 hover:bg-gray-50"
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
