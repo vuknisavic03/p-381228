@@ -25,8 +25,8 @@ export default function Transactions() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col bg-white">
-        {/* Top bar with Activity and Add Transaction button - consistent height with Listings */}
+      <div className="h-screen flex flex-col">
+        {/* Top bar with Activity and Add Transaction button - consistent with Listings */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center">
             <h1 className="text-xl font-semibold">Activity</h1>
@@ -43,8 +43,8 @@ export default function Transactions() {
         {/* Horizontal separator line */}
         <Separator className="w-full border-[#E4E5EA]" />
 
-        {/* Activity table with improved layout */}
-        <div className="flex-1 overflow-y-auto bg-white">
+        {/* Activity table with improved layout - consistent with Listings */}
+        <div className="flex-1 overflow-y-auto bg-white p-4">
           <TransactionActivity />
         </div>
 

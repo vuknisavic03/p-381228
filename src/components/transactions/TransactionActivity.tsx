@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -229,10 +230,10 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full">
-      {/* Filters and toggles bar - Updated to match Listings page */}
-      <div className="p-4 border-b">
-        <div className="flex flex-wrap items-center w-full gap-2">
-          {/* Search bar - updated to match Listings style */}
+      {/* Filters and toggles bar - Updated to match Listings page style */}
+      <div className="border-b">
+        <div className="flex flex-wrap items-center w-full gap-2 p-4">
+          {/* Search bar - matching Listings style */}
           <div className="relative flex-1 max-w-[300px]">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             <Input 
@@ -328,7 +329,7 @@ export function TransactionActivity() {
       </div>
 
       {/* Modern Table */}
-      <div className="flex-1 p-4 overflow-auto">
+      <div className="flex-1 overflow-auto">
         <div className="max-w-full mx-auto">
           <div className="mb-4">
             {/* Results Table or Empty State */}

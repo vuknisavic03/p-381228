@@ -1,3 +1,4 @@
+
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,7 @@ export function Sidebar() {
         <div className="bg-[#F3F3F6] text-[#9EA3AD] font-semibold w-8 h-8 flex items-center justify-center rounded-md">
           U
         </div>
-        <span className="text-[#1A1A1A] font-medium text-base">User's Space</span>
+        <span className="text-[#1A1A1A] font-medium text-lg">User's Space</span>
       </Button>
       
       <div className="text-sm text-[#9EA3AD] font-bold mb-4 px-2">WORKSPACE</div>

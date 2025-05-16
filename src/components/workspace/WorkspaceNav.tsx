@@ -53,7 +53,9 @@ export function WorkspaceNav({
           <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
             {workspaceData.initials}
           </div>
-          <span className="text-[#1A1A1A] font-medium">{workspaceData.name}</span>
+          <span className="text-[#1A1A1A] font-medium text-base">
+            {workspaceData.name}
+          </span>
         </button>
       </div>
 
@@ -102,7 +104,7 @@ export function WorkspaceNav({
         </div>
       </div>
 
-      {/* Settings button at the bottom - Updated hover style to be square around icon */}
+      {/* Settings button at the bottom - Square hover effect */}
       <div className="p-4 border-t border-[#E4E5EA]">
         <Sheet>
           <SheetTrigger asChild>
