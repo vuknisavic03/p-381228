@@ -75,8 +75,6 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     onUpdate(updatedTransaction);
   }
 
-  const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
-
   return (
     <div className="h-full overflow-auto bg-white">
       {/* Header with close button */}

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -29,15 +30,13 @@ export function TransactionFields({
 
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
 
-  // Fix the issue here - ensuring we're passing a boolean to the disabled prop
-  // The issue is that editMode is a boolean, but fields.selectedListingId is a string
-  // We need to convert the string check to a boolean expression
-  const isEditModeWithSelectedListing = editMode && !!fields.selectedListingId;
-
+  // In edit mode, we should completely hide the listing selection section if a listing is already selected
+  const shouldShowListingSelection = !editMode || !fields.selectedListingId;
+  
   return (
     <div className="space-y-6">
       {/* Listing Selection Section - Only shown if not in edit mode or if no listing is selected */}
-      {(!editMode || !fields.selectedListingId) && (
+      {shouldShowListingSelection && (
         <div className="space-y-4 group">
           <div className="flex items-center">
             <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Listing Selection</h3>
@@ -49,7 +48,7 @@ export function TransactionFields({
             <Select 
               value={fields.selectedListingId} 
               onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
-              disabled={isEditModeWithSelectedListing}
+              disabled={editMode && !!fields.selectedListingId}
             >
               <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
                 <SelectValue placeholder="Select property" />
