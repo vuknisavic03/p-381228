@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface TransactionTypeToggleProps {
   value: "revenue" | "expense";
   onChange: (value: "revenue" | "expense") => void;
-  className?: string; // Added optional className prop
+  className?: string;
 }
 
 export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
@@ -15,18 +15,18 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs w-fit",
+      "flex rounded-full border border-gray-100 bg-[#F6F6F7] p-0.5 shadow-xs w-fit",
       className
     )}>
       <button
         type="button"
-        className={`px-3 py-1 text-xs font-medium rounded-full transition
+        className={`px-3 py-1 text-xs font-medium rounded-full transition-all duration-200
           ${value === "revenue"
-            ? "bg-gray-100 text-gray-800"
-            : "bg-white text-gray-500 hover:bg-gray-50"
+            ? "bg-white text-gray-800 shadow-sm"
+            : "bg-transparent text-gray-500 hover:text-gray-700"
           }`}
         style={{
-          minWidth: 68,
+          minWidth: 62,
         }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
@@ -35,13 +35,13 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
       </button>
       <button
         type="button"
-        className={`ml-1 px-3 py-1 text-xs font-medium rounded-full transition
+        className={`ml-1 px-3 py-1 text-xs font-medium rounded-full transition-all duration-200
           ${value === "expense"
-            ? "bg-gray-100 text-gray-800"
-            : "bg-white text-gray-500 hover:bg-gray-50"
+            ? "bg-white text-gray-800 shadow-sm"
+            : "bg-transparent text-gray-500 hover:text-gray-700"
           }`}
         style={{
-          minWidth: 68,
+          minWidth: 62,
         }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}

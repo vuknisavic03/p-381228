@@ -39,7 +39,7 @@ export default function Listings() {
         </div>
         
         {/* Horizontal separator line */}
-        <Separator className="w-full" />
+        <Separator className="w-full border-[#E4E5EA]" />
         
         <div className="flex-1 overflow-y-auto bg-white p-4">
           <ListingList />

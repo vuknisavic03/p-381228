@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
 import { FilterPopover } from "@/components/ui/filter-popover";
 import { FilterTags } from "@/components/ui/filter-tags";
+import { TransactionTypeToggle } from "./TransactionTypeToggle";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -312,36 +313,13 @@ export function TransactionActivity() {
             }
           />
           
-          {/* Right-aligned transactionType toggle - with matched font size */}
+          {/* Right-aligned transactionType toggle - with improved design */}
           <div className="flex-1" />
-          <div className="flex p-1 bg-gray-100 rounded-full">
-            <button 
-              onClick={() => setTransactionType('revenue')}
-              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium transition-all duration-200 ${
-                transactionType === 'revenue' 
-                  ? 'bg-white text-black shadow-sm' 
-                  : 'text-gray-500 hover:text-black'
-              }`}
-              style={{ fontSize: '0.875rem', height: '36px' }}
-              aria-pressed={transactionType === 'revenue'}
-            >
-              <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-black' : 'text-gray-400'}`} />
-              <span>Revenue</span>
-            </button>
-            <button 
-              onClick={() => setTransactionType('expense')}
-              className={`relative flex items-center px-4 py-1.5 rounded-full font-medium transition-all duration-200 ${
-                transactionType === 'expense' 
-                  ? 'bg-white text-black shadow-sm' 
-                  : 'text-gray-500 hover:text-black'
-              }`}
-              style={{ fontSize: '0.875rem', height: '36px' }}
-              aria-pressed={transactionType === 'expense'}
-            >
-              <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-black' : 'text-gray-400'}`} />
-              <span>Expenses</span>
-            </button>
-          </div>
+          <TransactionTypeToggle 
+            value={transactionType} 
+            onChange={setTransactionType} 
+            className="border-gray-200"
+          />
         </div>
         
         {/* Show active filter tags */}
@@ -349,7 +327,7 @@ export function TransactionActivity() {
       </div>
 
       {/* Modern Table */}
-      <div className="flex-1 p-5 bg-[#FAFBFC]">
+      <div className="flex-1 p-5 bg-white">
         <div className="max-w-full mx-auto">
           <div className="mb-4">
             {/* Results Table or Empty State */}

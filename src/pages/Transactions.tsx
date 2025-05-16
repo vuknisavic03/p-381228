@@ -28,7 +28,7 @@ export default function Transactions() {
       <div className="h-screen flex flex-col">
         {/* Top bar with Activity and Add Transaction button */}
         <div className="p-4 flex justify-between items-center bg-white">
-          <h2 className="text-xl font-semibold">Activity</h2>
+          <h1 className="text-xl font-semibold">Activity</h1>
           <Button
             onClick={() => setIsAddFormOpen(true)}
             className="flex items-center gap-2"
@@ -39,7 +39,7 @@ export default function Transactions() {
         </div>
 
         {/* Horizontal separator line */}
-        <Separator className="w-full" />
+        <Separator className="w-full border-[#E4E5EA]" />
 
         {/* Activity table with improved layout */}
         <div className="flex-1 overflow-y-auto bg-white p-4">

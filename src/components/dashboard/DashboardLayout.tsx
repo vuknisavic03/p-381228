@@ -23,7 +23,7 @@ export function DashboardLayout({
         userInitials={userInitials}
         owner={owner}
       />
-      <Separator orientation="vertical" className="h-full" />
+      <Separator orientation="vertical" className="h-full border-[#E4E5EA]" />
       <main className="flex-1 relative overflow-auto bg-white">
         {children}
       </main>

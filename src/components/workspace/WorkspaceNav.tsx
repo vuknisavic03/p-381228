@@ -59,7 +59,6 @@ export function WorkspaceNav({
 
       {/* Navigation section */}
       <div className="p-4 flex-1">
-        <div className="text-sm text-[#9EA3AD] font-semibold mb-4">WORKSPACE</div>
         <div className="space-y-2">
           <div
             className={cn(
