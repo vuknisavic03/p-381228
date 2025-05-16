@@ -16,7 +16,7 @@ export function DashboardLayout({
   owner = "Kevin Anderson" 
 }: DashboardLayoutProps) {
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex h-screen w-full overflow-hidden bg-[#FAFBFC]">
       <WorkspaceNav 
         workspaceName={workspaceName}
         userInitials={userInitials}

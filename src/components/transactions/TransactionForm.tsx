@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,28 +9,20 @@ import {
   TabsContent,
 } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  Calendar as CalendarIcon,
-  DollarSign,
-  FileText,
-  ShoppingCart,
   ChevronRight,
   Check,
   User,
   Mail,
   Phone,
-  House,
+  FileText,
 } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
-import { TransactionTypeToggle } from "./TransactionTypeToggle";
-import { TransactionFormFields, TransactionFieldsData } from "./TransactionFormFields";
+import { Input } from "@/components/ui/input";
+import { TransactionFields } from "./TransactionFields";
+import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 
-const mockListings = [
+const mockListings: Listing[] = [
   {
     id: "1",
     name: "Belgrade, Dunavska 12",
@@ -87,7 +79,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
         {/* Details Tab: uses shared fields */}
         <TabsContent value="details">
-          <TransactionFormFields
+          <TransactionFields
             mockListings={mockListings}
             initialValues={fields}
             onChange={setFields}

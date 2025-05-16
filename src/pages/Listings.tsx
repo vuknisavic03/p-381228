@@ -25,7 +25,8 @@ export default function Listings() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col">
-        <div className="p-4 border-b flex justify-between items-center bg-white">
+        {/* Fixed horizontal line for header */}
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-white">
           <h1 className="text-xl font-semibold">Listings</h1>
           <Button 
             onClick={() => setIsAddFormOpen(true)}
@@ -36,7 +37,7 @@ export default function Listings() {
           </Button>
         </div>
         
-        <div className="flex-1 overflow-y-auto bg-[#FAFBFC]">
+        <div className="flex-1 overflow-y-auto bg-[#FAFBFC] p-4">
           <ListingList />
         </div>
         

@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 
 interface FilterGroup {
   title: string;
@@ -21,6 +22,7 @@ interface FilterPopoverProps {
   onReset: () => void;
   onApply?: () => void;
   trigger?: ReactNode;
+  title?: string;
 }
 
 export function FilterPopover({
@@ -29,6 +31,7 @@ export function FilterPopover({
   onReset,
   onApply,
   trigger,
+  title = "Filter"
 }: FilterPopoverProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -38,58 +41,89 @@ export function FilterPopover({
         {trigger ? (
           trigger
         ) : (
-          <Button variant="outline" className="flex items-center gap-2 h-9">
-            <ListFilter className="h-4 w-4" />
-            <span>Filter</span>
+          <Button variant="outline" className="flex items-center gap-2 h-9 text-xs font-medium">
+            <ListFilter className="h-3.5 w-3.5" />
+            <span>{title}</span>
             {selectedCount > 0 && (
-              <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
+              <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs min-w-5 h-5 px-1">
                 {selectedCount}
               </span>
             )}
           </Button>
         )}
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-72 p-0">
-        <div className="p-4 space-y-4">
-          {groups.map((group, index) => (
-            <div key={index} className="space-y-2">
-              <h4 className="font-bold text-sm mb-1">{group.title}</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {group.options.map((option) => (
-                  <label
-                    key={option}
-                    className="flex items-center gap-1.5 text-sm cursor-pointer hover:text-primary transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      className="accent-gray-700 rounded"
-                      checked={group.selectedValues.includes(option)}
-                      onChange={() => group.onToggle(option)}
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            </div>
-          ))}
+      <PopoverContent align="end" className="w-[320px] p-0 shadow-lg">
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-semibold text-lg">Filters</h4>
+            {selectedCount > 0 && (
+              <Button variant="ghost" size="sm" onClick={onReset} className="h-8 text-xs">
+                Reset all
+              </Button>
+            )}
+          </div>
           
-          <div className="flex justify-between mt-2 pt-2 border-t border-gray-100">
-            <Button variant="outline" size="sm" onClick={onReset}>
-              Reset
+          <div className="space-y-4">
+            {groups.map((group, index) => (
+              <div key={index} className="space-y-2">
+                <h4 className="font-semibold text-sm">{group.title}</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {group.options.map((option) => {
+                    const isSelected = group.selectedValues.includes(option);
+                    return (
+                      <label
+                        key={option}
+                        className={cn(
+                          "flex items-center gap-1.5 text-xs cursor-pointer p-2 rounded-md border",
+                          isSelected 
+                            ? "bg-gray-100 border-gray-300" 
+                            : "border-gray-200 hover:bg-gray-50"
+                        )}
+                      >
+                        <input
+                          type="checkbox"
+                          className="accent-gray-800 rounded"
+                          checked={isSelected}
+                          onChange={() => group.onToggle(option)}
+                        />
+                        <span>{option}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <Separator className="my-4" />
+          
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOpen(false)}
+              className="text-xs"
+            >
+              Cancel
             </Button>
             <Button
-              variant="secondary"
+              variant="default"
               size="sm"
               onClick={() => {
                 if (onApply) onApply();
                 setOpen(false);
               }}
+              className="text-xs"
             >
-              Apply
+              Apply Filters
             </Button>
           </div>
         </div>
       </PopoverContent>
     </Popover>
   );
+}
+
+function cn(...classes: any[]) {
+  return classes.filter(Boolean).join(" ");
 }
