@@ -7,6 +7,7 @@ import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 
 export default function Transactions() {
   const location = useLocation();
@@ -25,8 +26,8 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col">
-        {/* Top bar with Activity and Add Transaction button - fixed horizontal line */}
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-white">
+        {/* Top bar with Activity and Add Transaction button */}
+        <div className="p-4 flex justify-between items-center bg-white">
           <h2 className="text-xl font-semibold">Activity</h2>
           <Button
             onClick={() => setIsAddFormOpen(true)}
@@ -37,8 +38,11 @@ export default function Transactions() {
           </Button>
         </div>
 
+        {/* Horizontal separator line */}
+        <Separator className="w-full" />
+
         {/* Activity table with improved layout */}
-        <div className="flex-1 overflow-y-auto bg-[#FAFBFC] p-4">
+        <div className="flex-1 overflow-y-auto bg-white p-4">
           <TransactionActivity />
         </div>
 
@@ -46,7 +50,7 @@ export default function Transactions() {
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent
             side="right"
-            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl"
+            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl bg-white"
           >
             <TransactionForm onClose={() => setIsAddFormOpen(false)} />
           </SheetContent>

@@ -1,6 +1,7 @@
 
 import React from "react";
 import { WorkspaceNav } from "../workspace/WorkspaceNav";
+import { Separator } from "@/components/ui/separator";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -16,13 +17,14 @@ export function DashboardLayout({
   owner = "Kevin Anderson" 
 }: DashboardLayoutProps) {
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#FAFBFC]">
+    <div className="flex h-screen w-full overflow-hidden bg-white">
       <WorkspaceNav 
         workspaceName={workspaceName}
         userInitials={userInitials}
         owner={owner}
       />
-      <main className="flex-1 relative overflow-auto">
+      <Separator orientation="vertical" className="h-full" />
+      <main className="flex-1 relative overflow-auto bg-white">
         {children}
       </main>
     </div>
