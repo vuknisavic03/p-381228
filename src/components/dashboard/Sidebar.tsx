@@ -25,16 +25,16 @@ export function Sidebar({ workspaceName, userInitials, owner, className }: Sideb
         </div>
       </div>
       <nav className="flex flex-col gap-1 py-3">
-        <a href="/dashboard" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
+        <a href="/dashboard" className="px-4 py-2 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
           Dashboard
         </a>
-        <a href="/transactions" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
+        <a href="/transactions" className="px-4 py-2 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
           Transactions
         </a>
-        <a href="/listings" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
+        <a href="/listings" className="px-4 py-2 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
           Listings
         </a>
-        <a href="/profile" className="px-4 py-2 rounded-lg text-base font-semibold hover:bg-gray-100 transition" style={{ fontSize: "1.08rem" }}>
+        <a href="/profile" className="px-4 py-2 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
           Profile
         </a>
       </nav>

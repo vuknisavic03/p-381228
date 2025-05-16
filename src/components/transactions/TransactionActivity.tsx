@@ -11,6 +11,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { TransactionTable } from "./TransactionTable";
 import { Input } from "@/components/ui/input";
 import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
+import { FilterPopover } from "@/components/ui/filter-popover";
+import { FilterTags } from "@/components/ui/filter-tags";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -89,21 +91,22 @@ export function TransactionActivity() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [filterPopoverOpen, setFilterPopoverOpen] = useState(false);
   const { toast } = useToast();
   const [search, setSearch] = useState('');
+
+  // Enhanced filter state
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [amountRange, setAmountRange] = useState<{ min?: number; max?: number }>({});
+  const [dateRange, setDateRange] = useState<{ start?: Date; end?: Date }>({});
 
   // Collect available categories, payment methods, statuses from data
   const categories = Array.from(new Set(mockTransactions.map(t => t.category)));
   const paymentMethods = Array.from(new Set(mockTransactions.map(t => t.paymentMethod)));
   const statuses = Array.from(new Set(mockTransactions.map(t => t.status)));
 
-  // Filter state
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([]);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-
-  // Handlers for filter popover checkboxes
+  // Function to toggle a value in a filter array
   function toggleFilter(selected: string[], value: string, onChange: (v: string[]) => void) {
     if (selected.includes(value)) {
       onChange(selected.filter(v => v !== value));
@@ -118,6 +121,8 @@ export function TransactionActivity() {
     setSelectedCategories([]);
     setSelectedPaymentMethods([]);
     setSelectedStatuses([]);
+    setAmountRange({});
+    setDateRange({});
     toast({
       title: "Filters cleared",
       description: "All filters have been reset",
@@ -125,9 +130,63 @@ export function TransactionActivity() {
     });
   };
 
+  // Build filter groups for the FilterPopover component
+  const filterGroups = [
+    {
+      title: "Category",
+      options: categories,
+      selectedValues: selectedCategories,
+      onToggle: (value: string) => toggleFilter(selectedCategories, value, setSelectedCategories),
+    },
+    {
+      title: "Payment Method",
+      options: paymentMethods,
+      selectedValues: selectedPaymentMethods,
+      onToggle: (value: string) => toggleFilter(selectedPaymentMethods, value, setSelectedPaymentMethods),
+    },
+    {
+      title: "Status",
+      options: statuses,
+      selectedValues: selectedStatuses,
+      onToggle: (value: string) => toggleFilter(selectedStatuses, value, setSelectedStatuses),
+    },
+  ];
+
+  // Get total count of active filters
+  const activeFilterCount = 
+    selectedCategories.length + 
+    selectedPaymentMethods.length + 
+    selectedStatuses.length + 
+    (date ? 1 : 0);
+
+  // Prepare filter tags for the FilterTags component
+  const filterTags = [
+    ...(date ? [{ 
+      category: "Date", 
+      value: format(date, "MMM d, yyyy"), 
+      onRemove: () => setDate(undefined) 
+    }] : []),
+    ...selectedCategories.map(category => ({
+      category: "Category",
+      value: category,
+      onRemove: () => toggleFilter(selectedCategories, category, setSelectedCategories)
+    })),
+    ...selectedPaymentMethods.map(method => ({
+      category: "Payment",
+      value: method,
+      onRemove: () => toggleFilter(selectedPaymentMethods, method, setSelectedPaymentMethods)
+    })),
+    ...selectedStatuses.map(status => ({
+      category: "Status",
+      value: status,
+      onRemove: () => toggleFilter(selectedStatuses, status, setSelectedStatuses)
+    })),
+  ];
+
   // Filter transactions as before
   const filteredTransactions = mockTransactions.filter(transaction => {
     if (transaction.type !== transactionType) return false;
+    
     if (date) {
       const transactionDate = new Date(transaction.date);
       if (
@@ -137,9 +196,11 @@ export function TransactionActivity() {
       )
         return false;
     }
+    
     if (selectedCategories.length && !selectedCategories.includes(transaction.category)) return false;
     if (selectedPaymentMethods.length && !selectedPaymentMethods.includes(transaction.paymentMethod)) return false;
     if (selectedStatuses.length && !selectedStatuses.includes(transaction.status)) return false;
+    
     if (search && !(
       transaction.from.toLowerCase().includes(search.toLowerCase()) ||
       transaction.category.toLowerCase().includes(search.toLowerCase()) ||
@@ -183,6 +244,7 @@ export function TransactionActivity() {
               style={{ fontSize: '0.94rem' }}
             />
           </div>
+          
           {/* Date Picker */}
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
@@ -227,85 +289,30 @@ export function TransactionActivity() {
               />
             </PopoverContent>
           </Popover>
-          {/* Filter Button */}
-          <Popover open={filterPopoverOpen} onOpenChange={setFilterPopoverOpen}>
-            <PopoverTrigger asChild>
+          
+          {/* Enhanced Filter Button */}
+          <FilterPopover
+            groups={filterGroups}
+            selectedCount={activeFilterCount}
+            onReset={clearFilters}
+            trigger={
               <Button
-                variant={selectedCategories.length || selectedPaymentMethods.length || selectedStatuses.length ? "default" : "outline"}
+                variant={activeFilterCount > 0 ? "default" : "outline"}
                 size="sm"
                 className="text-sm flex items-center gap-1.5"
               >
                 <FilterIcon className="h-4 w-4" />
                 Filter
-                {(selectedCategories.length + selectedPaymentMethods.length + selectedStatuses.length) > 0 && (
+                {activeFilterCount > 0 && (
                   <span className="inline-flex items-center bg-gray-700 text-white text-xs px-1 rounded-full ml-2">
-                    {selectedCategories.length + selectedPaymentMethods.length + selectedStatuses.length}
+                    {activeFilterCount}
                   </span>
                 )}
               </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-72 p-0">
-              <div className="p-4">
-                <div className="font-bold text-sm mb-1">Category</div>
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  {categories.map(cat => (
-                    <label key={cat} className="flex items-center gap-1 text-sm">
-                      <input
-                        type="checkbox"
-                        className="accent-gray-700"
-                        checked={selectedCategories.includes(cat)}
-                        onChange={() => toggleFilter(selectedCategories, cat, setSelectedCategories)}
-                      />
-                      {cat}
-                    </label>
-                  ))}
-                </div>
-                <div className="font-bold text-sm mb-1">Payment Method</div>
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  {paymentMethods.map(pm => (
-                    <label key={pm} className="flex items-center gap-1 text-sm">
-                      <input
-                        type="checkbox"
-                        className="accent-gray-700"
-                        checked={selectedPaymentMethods.includes(pm)}
-                        onChange={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)}
-                      />
-                      {pm}
-                    </label>
-                  ))}
-                </div>
-                <div className="font-bold text-sm mb-1">Status</div>
-                <div className="flex gap-2 mb-4">
-                  {statuses.map(status => (
-                    <label key={status} className="flex items-center gap-1 text-sm">
-                      <input
-                        type="checkbox"
-                        className="accent-gray-700"
-                        checked={selectedStatuses.includes(status)}
-                        onChange={() => toggleFilter(selectedStatuses, status, setSelectedStatuses)}
-                      />
-                      {status}
-                    </label>
-                  ))}
-                </div>
-                <div className="flex justify-between mt-4 gap-2">
-                  <Button variant="outline" size="sm" onClick={() => {
-                    setSelectedCategories([]); setSelectedPaymentMethods([]); setSelectedStatuses([]);
-                  }}>
-                    Reset
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => setFilterPopoverOpen(false)}
-                  >
-                    Apply
-                  </Button>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          {/* Right-aligned transactionType toggle - unify font/height */}
+            }
+          />
+          
+          {/* Right-aligned transactionType toggle - with matched font size */}
           <div className="flex-1" />
           <div className="flex p-1 bg-gray-100 rounded-full">
             <button 
@@ -315,7 +322,7 @@ export function TransactionActivity() {
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
-              style={{ fontSize: '0.94rem', height: '36px' }}
+              style={{ fontSize: '0.875rem', height: '36px' }}
               aria-pressed={transactionType === 'revenue'}
             >
               <DollarSign className={`h-4 w-4 mr-1.5 ${transactionType === 'revenue' ? 'text-black' : 'text-gray-400'}`} />
@@ -328,7 +335,7 @@ export function TransactionActivity() {
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-500 hover:text-black'
               }`}
-              style={{ fontSize: '0.94rem', height: '36px' }}
+              style={{ fontSize: '0.875rem', height: '36px' }}
               aria-pressed={transactionType === 'expense'}
             >
               <TrendingDown className={`h-4 w-4 mr-1.5 ${transactionType === 'expense' ? 'text-black' : 'text-gray-400'}`} />
@@ -336,53 +343,9 @@ export function TransactionActivity() {
             </button>
           </div>
         </div>
-        {/* Show active date/filter chips */}
-        {(date || selectedCategories.length > 0 || selectedPaymentMethods.length > 0 || selectedStatuses.length > 0) && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {date && (
-              <div className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
-                <span>Date: {format(date, "MMM d, yyyy")}</span>
-                <button onClick={() => setDate(undefined)} className="text-gray-500 hover:text-gray-700">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            )}
-            {selectedCategories.map(cat => (
-              <div key={cat} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
-                <span>Category: {cat}</span>
-                <button onClick={() => toggleFilter(selectedCategories, cat, setSelectedCategories)} className="text-gray-500 hover:text-gray-700">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            ))}
-            {selectedPaymentMethods.map(pm => (
-              <div key={pm} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
-                <span>Payment: {pm}</span>
-                <button onClick={() => toggleFilter(selectedPaymentMethods, pm, setSelectedPaymentMethods)} className="text-gray-500 hover:text-gray-700">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            ))}
-            {selectedStatuses.map(status => (
-              <div key={status} className="inline-flex items-center gap-1.5 text-xs py-1 px-2 bg-gray-100 text-gray-700 rounded-md">
-                <span>Status: {status}</span>
-                <button onClick={() => toggleFilter(selectedStatuses, status, setSelectedStatuses)} className="text-gray-500 hover:text-gray-700">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            ))}
-            {/* Clear filters */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={clearFilters}
-              className="h-8 text-xs gap-1.5 text-gray-600 hover:text-black"
-            >
-              <RefreshCcw className="h-3 w-3" />
-              Clear filters
-            </Button>
-          </div>
-        )}
+        
+        {/* Show active filter tags */}
+        <FilterTags tags={filterTags} onClearAll={clearFilters} />
       </div>
 
       {/* Modern Table */}

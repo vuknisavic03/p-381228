@@ -5,15 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { FilterPopover } from "@/components/ui/filter-popover";
+import { FilterTags } from "@/components/ui/filter-tags";
+import { useToast } from "@/hooks/use-toast";
 
+// Mock listings data
 const mockListings = [
   {
     id: 1,
@@ -80,18 +77,10 @@ const mockListings = [
 
 interface FilterState {
   types: string[];
+  categories: string[];
+  occupancy: string[];
+  countries: string[];
 }
-
-const propertyTypes = [
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-  { value: "industrial", label: "Industrial" },
-  { value: "retail", label: "Retail" },
-  { value: "office", label: "Office" },
-  { value: "warehouse", label: "Warehouse" },
-  { value: "hotel", label: "Hotel" },
-  { value: "mixed", label: "Mixed Use" },
-];
 
 export function ListingList() {
   const [listings, setListings] = useState<any[]>(mockListings);
@@ -99,10 +88,23 @@ export function ListingList() {
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+  
+  // Enhanced filter state
   const [filters, setFilters] = useState<FilterState>({
-    types: []
+    types: [],
+    categories: [],
+    occupancy: [],
+    countries: []
   });
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // Collect available property attributes from data
+  const propertyTypes = Array.from(new Set(mockListings.map(l => l.type)));
+  const categories = Array.from(new Set(mockListings.map(l => l.category)));
+  const countries = Array.from(new Set(mockListings.map(l => l.country)));
+  
+  // Define occupancy statuses based on tenant presence
+  const occupancyStatuses = ["Occupied", "Vacant"];
 
   const fetchListings = async () => {
     setIsLoading(true);
@@ -129,26 +131,119 @@ export function ListingList() {
     setIsEditSheetOpen(true);
   };
 
-  const handleFilterChange = (value: string) => {
+  // Function to toggle a value in a filter array
+  const toggleFilter = (category: keyof FilterState, value: string) => {
     setFilters(prev => {
       const updated = { ...prev };
-      if (updated.types.includes(value)) {
-        updated.types = updated.types.filter(t => t !== value);
+      if (updated[category].includes(value)) {
+        updated[category] = updated[category].filter(v => v !== value);
       } else {
-        updated.types = [...updated.types, value];
+        updated[category] = [...updated[category], value];
       }
       return updated;
     });
   };
 
+  // Clear all filters
+  const clearFilters = () => {
+    setFilters({
+      types: [],
+      categories: [],
+      occupancy: [],
+      countries: []
+    });
+    toast({
+      title: "Filters cleared",
+      description: "All filters have been reset",
+      duration: 3000,
+    });
+  };
+
+  // Build filter groups for FilterPopover component
+  const filterGroups = [
+    {
+      title: "Property Type",
+      options: propertyTypes,
+      selectedValues: filters.types,
+      onToggle: (value: string) => toggleFilter("types", value),
+    },
+    {
+      title: "Category",
+      options: categories,
+      selectedValues: filters.categories,
+      onToggle: (value: string) => toggleFilter("categories", value),
+    },
+    {
+      title: "Occupancy Status",
+      options: occupancyStatuses,
+      selectedValues: filters.occupancy,
+      onToggle: (value: string) => toggleFilter("occupancy", value),
+    },
+    {
+      title: "Country",
+      options: countries,
+      selectedValues: filters.countries,
+      onToggle: (value: string) => toggleFilter("countries", value),
+    },
+  ];
+
+  // Get total active filter count
+  const activeFilterCount = 
+    filters.types.length + 
+    filters.categories.length + 
+    filters.occupancy.length + 
+    filters.countries.length;
+
+  // Prepare filter tags
+  const filterTags = [
+    ...filters.types.map(type => ({
+      category: "Type",
+      value: type,
+      onRemove: () => toggleFilter("types", type)
+    })),
+    ...filters.categories.map(category => ({
+      category: "Category",
+      value: category,
+      onRemove: () => toggleFilter("categories", category)
+    })),
+    ...filters.occupancy.map(status => ({
+      category: "Occupancy",
+      value: status,
+      onRemove: () => toggleFilter("occupancy", status)
+    })),
+    ...filters.countries.map(country => ({
+      category: "Country",
+      value: country,
+      onRemove: () => toggleFilter("countries", country)
+    })),
+  ];
+
+  // Filter listings based on search and filters
   const filteredListings = listings.filter(listing => {
+    // Text search
     const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       String(listing.id).includes(searchTerm);
+    
+    // Filter by property type
+    const matchesType = filters.types.length === 0 || 
+      filters.types.includes(listing.type);
+    
+    // Filter by category  
+    const matchesCategory = filters.categories.length === 0 || 
+      filters.categories.includes(listing.category);
+    
+    // Filter by country
+    const matchesCountry = filters.countries.length === 0 || 
+      filters.countries.includes(listing.country);
+    
+    // Filter by occupancy status
+    const matchesOccupancy = filters.occupancy.length === 0 || (
+      (filters.occupancy.includes("Occupied") && listing.tenant) ||
+      (filters.occupancy.includes("Vacant") && !listing.tenant)
+    );
 
-    const matchesType = filters.types.length === 0 || filters.types.includes(listing.type.toLowerCase());
-
-    return matchesSearch && matchesType;
+    return matchesSearch && matchesType && matchesCategory && matchesCountry && matchesOccupancy;
   });
 
   return (
@@ -165,42 +260,26 @@ export function ListingList() {
             />
           </div>
           
-          <DropdownMenu open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-            <DropdownMenuTrigger asChild>
+          <FilterPopover 
+            groups={filterGroups}
+            selectedCount={activeFilterCount}
+            onReset={clearFilters}
+            trigger={
               <Button variant="outline" className="flex items-center gap-2 h-9">
                 <ListFilter className="h-4 w-4" />
                 <span>Filter</span>
-                {filters.types.length > 0 && (
+                {activeFilterCount > 0 && (
                   <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
-                    {filters.types.length}
+                    {activeFilterCount}
                   </span>
                 )}
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-72">
-              <div className="p-2">
-                <DropdownMenuLabel>Property Type</DropdownMenuLabel>
-                <div className="space-y-1 mt-1">
-                  {propertyTypes.map((type) => (
-                    <DropdownMenuItem
-                      key={type.value}
-                      className="flex items-center justify-between cursor-pointer"
-                      onSelect={(e) => {
-                        e.preventDefault();
-                        handleFilterChange(type.value);
-                      }}
-                    >
-                      <span className="text-base py-1">{type.label}</span>
-                      {filters.types.includes(type.value) && (
-                        <div className="h-3 w-3 rounded-full bg-primary" />
-                      )}
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            }
+          />
         </div>
+        
+        {/* Show active filter tags */}
+        <FilterTags tags={filterTags} onClearAll={clearFilters} />
       </div>
 
       <div className="flex-1 p-4 overflow-auto">
@@ -261,7 +340,7 @@ export function ListingList() {
               ))
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                {searchTerm || filters.types.length > 0 
+                {searchTerm || activeFilterCount > 0 
                   ? 'No listings found matching your filters' 
                   : 'No listings available'}
               </div>
