@@ -1,17 +1,23 @@
 
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface TransactionTypeToggleProps {
   value: "revenue" | "expense";
   onChange: (value: "revenue" | "expense") => void;
+  className?: string; // Added optional className prop
 }
 
 export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
   value,
   onChange,
+  className,
 }) => {
   return (
-    <div className="flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs w-fit">
+    <div className={cn(
+      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs w-fit",
+      className
+    )}>
       <button
         type="button"
         className={`px-3 py-1 text-xs font-medium rounded-full transition
