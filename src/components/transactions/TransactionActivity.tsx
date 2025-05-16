@@ -10,7 +10,7 @@ import { EditTransactionForm } from "./EditTransactionForm";
 import { useToast } from "@/components/ui/use-toast";
 import { TransactionTable } from "./TransactionTable";
 import { Input } from "@/components/ui/input";
-import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
+import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon, Search } from "lucide-react";
 import { FilterPopover } from "@/components/ui/filter-popover";
 import { FilterTags } from "@/components/ui/filter-tags";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
@@ -219,8 +219,6 @@ export function TransactionActivity() {
 
   // Implement an onUpdate callback for EditTransactionForm
   const handleUpdateTransaction = (updatedTransaction: Transaction) => {
-    // In the real app: update the transaction in local state or backend
-    // Here: Simply close the sheet for demo, or update if next step
     setEditingTransaction(null);
     toast({
       title: "Transaction Updated",
@@ -234,15 +232,15 @@ export function TransactionActivity() {
       {/* Filters and toggles bar */}
       <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-100 flex flex-col gap-3">
         <div className="flex flex-wrap items-center w-full gap-2">
-          {/* Search bar */}
-          <div className="w-[220px]">
-            <Input
+          {/* Search bar - updated to match Listings style */}
+          <div className="relative flex-1 max-w-[300px]">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+            <Input 
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search"
-              className="text-sm bg-[#F6F6F7] border-gray-200 rounded-lg pl-3 focus:bg-white focus:ring-1 focus:ring-gray-300 placeholder:text-gray-400"
-              style={{ fontSize: '0.94rem' }}
+              placeholder="Search by name, category or notes..." 
+              className="pl-8 h-9 transition-all duration-200 border-gray-200 bg-white focus:ring-2 focus:ring-primary/20" 
             />
           </div>
           
@@ -250,11 +248,11 @@ export function TransactionActivity() {
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
               <Button 
-                variant={date ? "default" : "outline"}
+                variant="outline" 
                 size="sm"
                 className={cn(
-                  "text-sm flex items-center gap-1.5 ml-1",
-                  date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                  "text-sm flex items-center gap-1.5 ml-1 border-gray-200",
+                  date ? "bg-primary/10 text-primary border-primary/20" : "bg-white"
                 )}
               >
                 <CalendarIcon className="h-3.5 w-3.5" />
@@ -298,14 +296,17 @@ export function TransactionActivity() {
             onReset={clearFilters}
             trigger={
               <Button
-                variant={activeFilterCount > 0 ? "default" : "outline"}
+                variant="outline"
                 size="sm"
-                className="text-sm flex items-center gap-1.5"
+                className={cn(
+                  "text-sm flex items-center gap-1.5 border-gray-200",
+                  activeFilterCount > 0 ? "bg-primary/10 text-primary border-primary/20" : "bg-white"
+                )}
               >
                 <FilterIcon className="h-4 w-4" />
                 Filter
                 {activeFilterCount > 0 && (
-                  <span className="inline-flex items-center bg-gray-700 text-white text-xs px-1 rounded-full ml-2">
+                  <span className="inline-flex items-center justify-center bg-primary text-white text-xs w-4 h-4 rounded-full ml-1">
                     {activeFilterCount}
                   </span>
                 )}
