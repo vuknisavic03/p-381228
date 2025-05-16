@@ -28,10 +28,10 @@ export default function Transactions() {
       <div className="h-screen flex flex-col bg-white">
         {/* Top bar with Activity and Add Transaction button */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
-          <h1 className="text-xl font-semibold">Activity</h1>
+          <h1 className="text-xl font-semibold text-[#1A1A1A]">Activity</h1>
           <Button
             onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700"
+            className="flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#333] text-white px-4"
           >
             <Plus className="h-4 w-4" />
             Add Transaction
