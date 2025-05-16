@@ -44,7 +44,7 @@ export default function Transactions() {
         <Separator className="w-full border-[#E4E5EA]" />
 
         {/* Activity table with improved layout - consistent with Listings */}
-        <div className="flex-1 overflow-y-auto bg-white pt-6 px-4">
+        <div className="flex-1 overflow-y-auto bg-white p-4">
           <TransactionActivity />
         </div>
 
