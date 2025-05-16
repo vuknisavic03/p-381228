@@ -32,31 +32,33 @@ export function TransactionFields({
 
   return (
     <div className="space-y-6">
-      {/* Listing Selection Section */}
-      <div className="space-y-4 group">
-        <div className="flex items-center">
-          <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Listing Selection</h3>
-          <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+      {/* Listing Selection Section - Only shown if not in edit mode or if no listing is selected */}
+      {(!editMode || !fields.selectedListingId) && (
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Listing Selection</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
+            <Select 
+              value={fields.selectedListingId} 
+              onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
+              disabled={editMode && fields.selectedListingId}
+            >
+              <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
+                <SelectValue placeholder="Select property" />
+              </SelectTrigger>
+              <SelectContent>
+                {mockListings.map(listing => (
+                  <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        
-        <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
-          <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
-          <Select 
-            value={fields.selectedListingId} 
-            onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
-            disabled={editMode}
-          >
-            <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
-              <SelectValue placeholder="Select property" />
-            </SelectTrigger>
-            <SelectContent>
-              {mockListings.map(listing => (
-                <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      )}
       
       {selectedListing && (
         <>
