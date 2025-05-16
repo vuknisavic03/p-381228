@@ -19,20 +19,28 @@ export function TransactionFields({
   editMode = false 
 }: TransactionFormFieldsProps) {
   const [fields, setFields] = useState<TransactionFieldsData>(initialValues);
+  
+  // Log initial values for debugging
+  console.log("TransactionFields initialValues:", initialValues);
+  console.log("TransactionFields editMode:", editMode);
 
+  // Update fields when initialValues change (important for edit mode)
   useEffect(() => {
+    console.log("Setting fields from initialValues:", initialValues);
     setFields(initialValues);
   }, [initialValues]);
 
+  // Propagate changes back to parent
   useEffect(() => {
     onChange(fields);
   }, [fields, onChange]);
 
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
+  console.log("Selected listing:", selectedListing);
   
   return (
     <div className="space-y-6">
-      {/* Listing Selection Section - Always visible but prefilled in edit mode */}
+      {/* Listing Selection Section */}
       <div className="space-y-4 group">
         <div className="flex items-center">
           <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Listing Selection</h3>
