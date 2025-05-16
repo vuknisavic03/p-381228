@@ -32,11 +32,11 @@ export function TransactionFields({
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
 
   return (
-    <Card className="border border-gray-100 shadow-sm rounded-xl p-6 mb-6 bg-white">
+    <Card className="border border-gray-100 shadow-sm rounded-xl p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
       <div className="mb-5">
         <div className="flex items-center mb-2 gap-2">
           <FileText className="h-4 w-4 text-gray-500" />
-          <span className="text-sm font-semibold text-gray-700">Listing</span>
+          <span className="text-sm font-medium text-gray-700">Listing</span>
         </div>
         <Select 
           value={fields.selectedListingId} 
@@ -56,12 +56,12 @@ export function TransactionFields({
 
       {selectedListing && (
         <>
-          {/* Payer/Tenant card */}
+          {/* Using our new ListingInfoCard component */}
           <ListingInfoCard listing={selectedListing} />
           
           {/* Transaction Type & Category */}
-          <div className="mb-4 flex items-center gap-4">
-            <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+          <div className="mb-5 flex items-center gap-4">
+            <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <ShoppingCart className="h-4 w-4 text-gray-500" />
               Transaction Type
             </span>
@@ -75,7 +75,7 @@ export function TransactionFields({
           </div>
 
           {/* Category Select */}
-          <div className="mb-4">
+          <div className="mb-5">
             <Select value={fields.category} onValueChange={cat => setFields(f => ({ ...f, category: cat }))}>
               <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">
                 <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
@@ -102,10 +102,10 @@ export function TransactionFields({
           </div>
 
           {/* Amount */}
-          <div className="mb-4">
+          <div className="mb-5">
             <div className="flex items-center mb-2">
               <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-              <span className="text-sm font-semibold text-gray-700">Amount</span>
+              <span className="text-sm font-medium text-gray-700">Amount</span>
             </div>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
@@ -120,10 +120,10 @@ export function TransactionFields({
           </div>
 
           {/* Date */}
-          <div className="mb-4">
+          <div className="mb-5">
             <div className="flex items-center mb-2">
               <CalendarIcon className="h-4 w-4 text-gray-500 mr-2" />
-              <span className="text-sm font-semibold text-gray-700">Date</span>
+              <span className="text-sm font-medium text-gray-700">Date</span>
             </div>
             <Popover>
               <PopoverTrigger asChild>
@@ -156,7 +156,7 @@ export function TransactionFields({
           <div>
             <div className="flex items-center mb-2">
               <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-              <span className="text-sm font-semibold text-gray-700">Payment Method</span>
+              <span className="text-sm font-medium text-gray-700">Payment Method</span>
             </div>
             <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
               <SelectTrigger className="w-full border-gray-200 bg-white text-gray-900 placeholder:text-gray-400">

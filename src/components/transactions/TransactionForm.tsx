@@ -83,22 +83,22 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       {/* Content area with tabs */}
       <div className="flex-1 overflow-auto p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-3 mb-6 bg-gray-50 p-1 rounded-md">
+          <TabsList className="grid grid-cols-3 mb-6 bg-gray-50 rounded-md overflow-hidden">
             <TabsTrigger 
               value="details" 
-              className="text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 rounded-md"
+              className="py-2.5 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 rounded-none"
             >
               Transaction Details
             </TabsTrigger>
             <TabsTrigger 
               value="payer" 
-              className="text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 rounded-md"
+              className="py-2.5 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 rounded-none"
             >
               Payer Details
             </TabsTrigger>
             <TabsTrigger 
               value="additional" 
-              className="text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 rounded-md"
+              className="py-2.5 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-900 rounded-none"
             >
               Additional Info
             </TabsTrigger>
@@ -111,11 +111,11 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
               initialValues={fields}
               onChange={setFields}
             />
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-6">
               <Button
                 disabled={!fields.selectedListingId}
                 onClick={() => setActiveTab("payer")}
-                className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white"
+                className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2"
               >
                 Next
                 <ChevronRight className="h-4 w-4" />
@@ -125,51 +125,56 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
           {/* Payer Tab */}
           <TabsContent value="payer">
-            <Card className="border border-gray-100 shadow-sm rounded-lg p-5 mb-6">
+            <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
               {selectedListing ? (
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
                     <div className="flex items-center mb-2">
                       <User className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm font-semibold text-gray-700">Payer Name</span>
+                      <span className="text-sm font-medium text-gray-700">Payer Name</span>
                     </div>
                     <Input
                       type="text"
                       value={payer.name}
                       readOnly
-                      className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                      className="border-gray-200 bg-gray-50/50 cursor-not-allowed text-gray-600"
                     />
                   </div>
                   <div>
                     <div className="flex items-center mb-2">
                       <Mail className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm font-semibold text-gray-700">Payer Email</span>
+                      <span className="text-sm font-medium text-gray-700">Payer Email</span>
                     </div>
                     <Input
                       type="email"
                       value={payer.email}
                       readOnly
-                      className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                      className="border-gray-200 bg-gray-50/50 cursor-not-allowed text-gray-600"
                     />
                   </div>
                   <div>
                     <div className="flex items-center mb-2">
                       <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm font-semibold text-gray-700">Payer Phone</span>
+                      <span className="text-sm font-medium text-gray-700">Payer Phone</span>
                     </div>
                     <Input
                       type="tel"
                       value={payer.phone}
                       readOnly
-                      className="border-gray-200 bg-gray-50 cursor-not-allowed text-gray-500"
+                      className="border-gray-200 bg-gray-50/50 cursor-not-allowed text-gray-600"
                     />
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-400 text-sm py-4 text-center">Select a listing first to view payer details</div>
+                <div className="text-gray-400 text-sm py-8 text-center">
+                  <div className="flex flex-col items-center">
+                    <User className="h-12 w-12 text-gray-300 mb-3" />
+                    <p>Select a listing first to view payer details</p>
+                  </div>
+                </div>
               )}
             </Card>
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-6">
               <Button
                 variant="outline"
                 onClick={() => setActiveTab("details")}
@@ -189,21 +194,21 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
           {/* Additional Info Tab */}
           <TabsContent value="additional">
-            <Card className="border border-gray-100 shadow-sm rounded-lg p-5 mb-6">
+            <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
               <div>
-                <div className="flex items-center mb-2">
+                <div className="flex items-center mb-3">
                   <FileText className="h-4 w-4 text-gray-500 mr-2" />
-                  <span className="text-sm font-semibold text-gray-700">Additional Notes</span>
+                  <span className="text-sm font-medium text-gray-700">Additional Notes</span>
                 </div>
                 <Textarea
                   placeholder="Add additional details or notes about this transaction"
                   value={fields.notes}
                   onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                  className="border-gray-200 min-h-[120px] resize-none"
+                  className="border-gray-200 min-h-[140px] resize-none"
                 />
               </div>
             </Card>
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-6">
               <Button
                 variant="outline"
                 onClick={() => setActiveTab("payer")}
