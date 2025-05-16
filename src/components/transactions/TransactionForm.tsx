@@ -49,51 +49,71 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="h-full overflow-auto bg-white">
+      {/* Header with close button */}
+      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <h2 className="text-xl font-medium text-gray-900">Add Transaction</h2>
+        {onClose && (
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+            <X className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+
       {/* Form content */}
-      <div className="flex-1 overflow-auto p-6">
-        <TransactionFields 
-          mockListings={mockListings}
-          initialValues={fields}
-          onChange={setFields}
-        />
+      <div className="px-6 py-4 space-y-8">
+        {/* Transaction Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Details</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <TransactionFields 
+            mockListings={mockListings}
+            initialValues={fields}
+            onChange={setFields}
+          />
+        </div>
         
         {selectedListing && (
-          <div className="mt-8">
-            <div className="flex items-center mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Additional Information</h3>
-              <div className="ml-3 flex-grow h-px bg-gray-200"></div>
+          <div className="space-y-4 group">
+            <div className="flex items-center">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Information</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
             </div>
             
-            <div className="rounded-lg bg-[#F1F1F1] p-6">
-              <div className="mb-2 font-medium text-gray-700">Notes</div>
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+              <div className="mb-2 text-xs font-medium text-gray-500 ml-0.5">Notes</div>
               <Textarea
                 placeholder="Add any additional details about this transaction"
                 value={fields.notes}
                 onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                className="min-h-[120px] bg-white border border-gray-200"
+                className="min-h-[120px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
               />
             </div>
           </div>
         )}
-      </div>
 
-      {/* Footer with action buttons */}
-      <div className="border-t border-gray-100 p-6 flex justify-end gap-2">
-        <Button
-          variant="outline" 
-          onClick={onClose}
-          className="border-gray-200 hover:bg-gray-50 h-10"
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleConfirm}
-          disabled={!fields.selectedListingId || !fields.category || !fields.amount}
-          className="bg-gray-900 hover:bg-gray-800 text-white h-10"
-        >
-          Add transaction
-        </Button>
+        {/* Action Buttons */}
+        <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
+          <Button 
+            onClick={handleConfirm}
+            disabled={!fields.selectedListingId || !fields.category || !fields.amount}
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+          >
+            Add transaction
+          </Button>
+          {onClose && (
+            <Button 
+              variant="outline" 
+              onClick={onClose} 
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
