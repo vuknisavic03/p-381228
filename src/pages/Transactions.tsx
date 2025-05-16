@@ -25,13 +25,13 @@ export default function Transactions() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col">
+      <div className="h-screen flex flex-col bg-white">
         {/* Top bar with Activity and Add Transaction button */}
-        <div className="p-4 flex justify-between items-center bg-white">
+        <div className="px-6 py-4 flex justify-between items-center bg-white">
           <h1 className="text-xl font-semibold">Activity</h1>
           <Button
             onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700"
           >
             <Plus className="h-4 w-4" />
             Add Transaction
@@ -42,7 +42,7 @@ export default function Transactions() {
         <Separator className="w-full border-[#E4E5EA]" />
 
         {/* Activity table with improved layout */}
-        <div className="flex-1 overflow-y-auto bg-white p-4">
+        <div className="flex-1 overflow-y-auto bg-white p-6">
           <TransactionActivity />
         </div>
 
@@ -50,7 +50,7 @@ export default function Transactions() {
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent
             side="right"
-            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl bg-white"
+            className="w-[480px] sm:w-[540px] p-0 border-l shadow-xl bg-white"
           >
             <TransactionForm onClose={() => setIsAddFormOpen(false)} />
           </SheetContent>
