@@ -31,7 +31,7 @@ export function TransactionFields({
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Listing Selection Section */}
       <div className="space-y-4 group">
         <div className="flex items-center">
@@ -40,13 +40,13 @@ export function TransactionFields({
         </div>
         
         <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
-          <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Property</div>
+          <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
           <Select 
             value={fields.selectedListingId} 
             onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
             disabled={editMode}
           >
-            <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
+            <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
               <SelectValue placeholder="Select property" />
             </SelectTrigger>
             <SelectContent>
@@ -77,42 +77,41 @@ export function TransactionFields({
             </div>
             
             <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-6">
-              {/* Transaction Type and Category in one row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Transaction Type</div>
-                  <TransactionTypeToggle
-                    value={fields.transactionType}
-                    onChange={type => setFields(f => ({ ...f, transactionType: type }))}
-                  />
-                </div>
+              {/* Transaction Type */}
+              <div>
+                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Transaction Type</div>
+                <TransactionTypeToggle
+                  value={fields.transactionType}
+                  onChange={type => setFields(f => ({ ...f, transactionType: type }))}
+                />
+              </div>
 
-                <div>
-                  <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Category</div>
-                  <Select value={fields.category} onValueChange={cat => setFields(f => ({ ...f, category: cat }))}>
-                    <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
-                      <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {fields.transactionType === "revenue" ? (
-                        <>
-                          <SelectItem value="rent">Rent</SelectItem>
-                          <SelectItem value="deposit">Deposit</SelectItem>
-                          <SelectItem value="fee">Fee</SelectItem>
-                          <SelectItem value="other-income">Other Income</SelectItem>
-                        </>
-                      ) : (
-                        <>
-                          <SelectItem value="maintenance">Maintenance</SelectItem>
-                          <SelectItem value="utilities">Utilities</SelectItem>
-                          <SelectItem value="insurance">Insurance</SelectItem>
-                          <SelectItem value="tax">Tax</SelectItem>
-                          <SelectItem value="other-expense">Other Expense</SelectItem>
-                        </>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
+              {/* Category */}
+              <div>
+                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</div>
+                <Select value={fields.category} onValueChange={cat => setFields(f => ({ ...f, category: cat }))}>
+                  <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
+                    <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fields.transactionType === "revenue" ? (
+                      <>
+                        <SelectItem value="rent">Rent</SelectItem>
+                        <SelectItem value="deposit">Deposit</SelectItem>
+                        <SelectItem value="fee">Fee</SelectItem>
+                        <SelectItem value="other-income">Other Income</SelectItem>
+                      </>
+                    ) : (
+                      <>
+                        <SelectItem value="maintenance">Maintenance</SelectItem>
+                        <SelectItem value="utilities">Utilities</SelectItem>
+                        <SelectItem value="insurance">Insurance</SelectItem>
+                        <SelectItem value="tax">Tax</SelectItem>
+                        <SelectItem value="other-expense">Other Expense</SelectItem>
+                      </>
+                    )}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
@@ -125,57 +124,54 @@ export function TransactionFields({
             </div>
             
             <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-6">
-              {/* Amount & Date in one row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Amount */}
-                <div>
-                  <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Amount</div>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={fields.amount}
-                      onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
-                      className="pl-7 h-10 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md"
-                    />
-                  </div>
+              {/* Amount */}
+              <div>
+                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Amount</div>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                  <Input
+                    type="number"
+                    placeholder="0.00"
+                    value={fields.amount}
+                    onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
+                    className="pl-7 h-9 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md"
+                  />
                 </div>
+              </div>
 
-                {/* Date */}
-                <div>
-                  <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Date</div>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left h-10 font-normal border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-md",
-                          !fields.date && "text-gray-400"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
-                        {fields.date ? format(fields.date, "PPP") : "Select date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-50" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={fields.date}
-                        onSelect={d => setFields(f => ({ ...f, date: d }))}
-                        initialFocus
-                        className="rounded-md"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+              {/* Date */}
+              <div>
+                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Date</div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left h-9 font-normal border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-md",
+                        !fields.date && "text-gray-400"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
+                      {fields.date ? format(fields.date, "PPP") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 z-50" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={fields.date}
+                      onSelect={d => setFields(f => ({ ...f, date: d }))}
+                      initialFocus
+                      className="rounded-md"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
 
               {/* Payment Method */}
               <div>
-                <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Payment Method</div>
+                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Payment Method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
-                  <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
+                  <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
                   <SelectContent>
