@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -199,9 +198,9 @@ export function ListingForm({ onClose }: ListingFormProps) {
   };
 
   return (
-    <div className="p-6 h-full overflow-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Add New Listing</h2>
+    <div className="p-6 h-full overflow-auto bg-white">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-xl font-semibold text-gray-900">Add New Listing</h2>
         {onClose && (
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
             <X className="h-4 w-4" />
@@ -209,121 +208,154 @@ export function ListingForm({ onClose }: ListingFormProps) {
         )}
       </div>
 
-      <div className="space-y-4">
-        <Input
-          className="h-10 w-full border-gray-200"
-          placeholder="City"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <Input
-          className="h-10 w-full border-gray-200"
-          placeholder="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <Input
-          className="h-10 w-full border-gray-200"
-          placeholder="Country"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-        />
-        <Input
-          className="h-10 w-full border-gray-200"
-          placeholder="Postal Code"
-          value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
-        />
-
+      <div className="space-y-6">
+        {/* Property Information Section */}
         <div className="space-y-4">
-          <Select
-            value={typeField}
-            onValueChange={(value) => {
-              setTypeField(value);
-              setCategory(""); // Reset category when type changes
-            }}
-          >
-            <SelectTrigger className="border-gray-200">
-              <SelectValue placeholder="Select property type" />
-            </SelectTrigger>
-            <SelectContent>
-              {typeCategories.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  <div className="flex items-center gap-2">
-                    <type.Icon className="h-4 w-4" />
-                    <span>{type.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={category}
-            onValueChange={setCategory}
-            disabled={!typeField}
-          >
-            <SelectTrigger className="border-gray-200">
-              <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
-            </SelectTrigger>
-            <SelectContent>
-              {getAvailableCategories().map((cat) => (
-                <SelectItem key={cat.value} value={cat.value}>
-                  <div className="flex items-center gap-2">
-                    <cat.Icon className="h-4 w-4" />
-                    <span>{cat.label}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <h3 className="text-sm font-medium text-gray-700 mb-2">Property Information</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <Input
+              className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+              placeholder="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            />
+          </div>
+          
+          <Input
+            className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          
+          <Input
+            className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+            placeholder="Postal Code"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+          />
         </div>
 
-        <div className="space-y-2">
+        {/* Property Type Section */}
+        <div className="space-y-4 pt-2">
+          <h3 className="text-sm font-medium text-gray-700 mb-2">Property Type</h3>
+          <div className="grid grid-cols-1 gap-4">
+            <Select
+              value={typeField}
+              onValueChange={(value) => {
+                setTypeField(value);
+                setCategory(""); // Reset category when type changes
+              }}
+            >
+              <SelectTrigger className="border-gray-200 bg-white h-10 focus:ring-0 focus:border-gray-300">
+                <SelectValue placeholder="Select property type" />
+              </SelectTrigger>
+              <SelectContent>
+                {typeCategories.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    <div className="flex items-center gap-2">
+                      <type.Icon className="h-4 w-4 text-gray-500" />
+                      <span>{type.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={category}
+              onValueChange={setCategory}
+              disabled={!typeField}
+            >
+              <SelectTrigger className="border-gray-200 bg-white h-10 focus:ring-0 focus:border-gray-300">
+                <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
+              </SelectTrigger>
+              <SelectContent>
+                {getAvailableCategories().map((cat) => (
+                  <SelectItem key={cat.value} value={cat.value}>
+                    <div className="flex items-center gap-2">
+                      <cat.Icon className="h-4 w-4 text-gray-500" />
+                      <span>{cat.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Tenant Details Section with Card-like Design */}
+        <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium text-sm">Tenant details</h3>
-            <Button variant="outline" size="sm" onClick={toggleTenantType}>
-              {tenantType === "individual" ? "Individual" : "Company"}
+            <h3 className="text-sm font-medium text-gray-700">Tenant Details</h3>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleTenantType} 
+              className="h-8 text-xs bg-white hover:bg-gray-50"
+            >
+              {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Input
-              className="h-10 w-full border-gray-200"
-              placeholder={tenantType === "individual" ? "Name" : "Company Name"}
-              value={tenantName}
-              onChange={(e) => setTenantName(e.target.value)}
-            />
-            <Input
-              className="h-10 w-full border-gray-200"
-              placeholder="Phone"
-              value={tenantPhone}
-              onChange={(e) => setTenantPhone(e.target.value)}
-            />
-            <Input
-              className="h-10 w-full col-span-2 border-gray-200"
-              placeholder="Email"
-              value={tenantEmail}
-              onChange={(e) => setTenantEmail(e.target.value)}
-            />
+          
+          <div className="bg-gray-50 rounded-lg p-5 border border-gray-100">
+            <div className="grid gap-4">
+              <Input
+                className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+                placeholder={tenantType === "individual" ? "Full Name" : "Company Name"}
+                value={tenantName}
+                onChange={(e) => setTenantName(e.target.value)}
+              />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+                  placeholder="Phone"
+                  value={tenantPhone}
+                  onChange={(e) => setTenantPhone(e.target.value)}
+                />
+                <Input
+                  className="h-10 w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300"
+                  placeholder="Email"
+                  value={tenantEmail}
+                  onChange={(e) => setTenantEmail(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-sm">Additional details</h3>
+        {/* Additional Details Section */}
+        <div className="space-y-4 pt-2">
+          <h3 className="text-sm font-medium text-gray-700">Additional Details</h3>
           <Textarea
-            className="min-h-[100px] w-full border-gray-200"
-            placeholder="Notes"
+            className="min-h-[120px] w-full border-gray-200 bg-white focus:ring-0 focus:border-gray-300 resize-none"
+            placeholder="Add notes or additional details about this property..."
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
         </div>
         
-        <div className="flex gap-3 pt-2">
-          <Button className="flex-1" onClick={handleSave}>
+        {/* Action Buttons */}
+        <div className="pt-4 flex gap-3">
+          <Button 
+            onClick={handleSave} 
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+          >
             Add listing
           </Button>
           {onClose && (
-            <Button variant="outline" onClick={onClose} className="flex-1">
+            <Button 
+              variant="outline" 
+              onClick={onClose} 
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50"
+            >
               Cancel
             </Button>
           )}
