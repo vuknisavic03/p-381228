@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +20,7 @@ type Transaction = {
   from: string;
   notes?: string;
   status: string;
+  selectedListingId: string; // Added this field
 };
 
 interface TransactionTableProps {

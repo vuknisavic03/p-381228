@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditTransactionForm } from "./EditTransactionForm";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { TransactionTable } from "./TransactionTable";
 import { Input } from "@/components/ui/input";
 import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon, Search } from "lucide-react";
@@ -27,6 +27,7 @@ type Transaction = {
   from: string;
   notes?: string;
   status: string;
+  selectedListingId: string; // Added this field
 };
 
 // Mock transaction data
@@ -40,7 +41,8 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'Alexander Whitmore',
     notes: 'Monthly rent payment',
-    status: 'completed'
+    status: 'completed',
+    selectedListingId: '1' // Belgrade, Dunavska 12
   },
   {
     id: 2,
@@ -51,7 +53,8 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     from: 'Sarah Johnson',
     notes: 'Security deposit for apartment',
-    status: 'completed'
+    status: 'completed',
+    selectedListingId: '1'
   },
   {
     id: 3,
@@ -62,7 +65,8 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     from: 'City Plumbing Services',
     notes: 'Plumbing repair in unit 4B',
-    status: 'completed'
+    status: 'completed',
+    selectedListingId: '1'
   },
   {
     id: 4,
@@ -73,7 +77,8 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Cash',
     from: 'Watson Enterprises',
     notes: 'Late rent payment for April',
-    status: 'completed'
+    status: 'completed',
+    selectedListingId: '1'
   },
   {
     id: 5,
@@ -84,7 +89,8 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'City Power & Light',
     notes: 'Electricity bill for common areas',
-    status: 'completed'
+    status: 'completed',
+    selectedListingId: '1'
   }
 ];
 

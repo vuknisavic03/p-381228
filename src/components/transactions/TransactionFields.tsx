@@ -52,6 +52,7 @@ export function TransactionFields({
           <Select 
             value={fields.selectedListingId} 
             onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
+            defaultValue={fields.selectedListingId}
           >
             <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
               <SelectValue placeholder="Select property" />

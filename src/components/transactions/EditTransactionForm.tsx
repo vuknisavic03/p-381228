@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
@@ -33,39 +34,40 @@ interface EditTransactionFormProps {
 }
 
 export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTransactionFormProps) {
+  // Make sure we have a default value for selectedListingId
   const [fields, setFields] = useState<TransactionFieldsData>({
-    selectedListingId: transaction.selectedListingId ?? "",
-    transactionType: transaction.type ?? "revenue",
-    category: transaction.category ?? "",
-    amount: transaction.amount?.toString() ?? "",
+    selectedListingId: transaction.selectedListingId || "",
+    transactionType: transaction.type || "revenue",
+    category: transaction.category || "",
+    amount: transaction.amount?.toString() || "",
     date: transaction.date ? new Date(transaction.date) : new Date(),
-    payment: transaction.paymentMethod ?? "",
-    notes: transaction.notes ?? "",
+    payment: transaction.paymentMethod || "",
+    notes: transaction.notes || "",
   });
   const { toast } = useToast();
 
   // Keep fields in sync with prop if transaction changes
   useEffect(() => {
     setFields({
-      selectedListingId: transaction.selectedListingId ?? "",
-      transactionType: transaction.type ?? "revenue",
-      category: transaction.category ?? "",
-      amount: transaction.amount?.toString() ?? "",
+      selectedListingId: transaction.selectedListingId || "",
+      transactionType: transaction.type || "revenue",
+      category: transaction.category || "",
+      amount: transaction.amount?.toString() || "",
       date: transaction.date ? new Date(transaction.date) : new Date(),
-      payment: transaction.paymentMethod ?? "",
-      notes: transaction.notes ?? "",
+      payment: transaction.paymentMethod || "",
+      notes: transaction.notes || "",
     });
     
     // Log for debugging
     console.log("Transaction data in EditForm:", transaction);
     console.log("Fields set in EditForm:", {
-      selectedListingId: transaction.selectedListingId ?? "",
-      transactionType: transaction.type ?? "revenue",
-      category: transaction.category ?? "",
-      amount: transaction.amount?.toString() ?? "",
+      selectedListingId: transaction.selectedListingId || "",
+      transactionType: transaction.type || "revenue",
+      category: transaction.category || "",
+      amount: transaction.amount?.toString() || "",
       date: transaction.date ? new Date(transaction.date) : new Date(),
-      payment: transaction.paymentMethod ?? "",
-      notes: transaction.notes ?? "",
+      payment: transaction.paymentMethod || "",
+      notes: transaction.notes || "",
     });
   }, [transaction]);
 
