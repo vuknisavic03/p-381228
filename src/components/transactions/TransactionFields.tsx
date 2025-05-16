@@ -32,17 +32,20 @@ export function TransactionFields({
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
 
   return (
-    <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white">
+    <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white">
       <div className="space-y-6">
         {/* Listing Selection */}
         <div>
-          <div className="font-medium text-gray-700 mb-2">Listing</div>
+          <div className="flex items-center mb-2 gap-2">
+            <FileText className="h-4 w-4 text-gray-400" />
+            <span className="text-sm font-medium text-gray-700">Listing</span>
+          </div>
           <Select 
             value={fields.selectedListingId} 
             onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
             disabled={editMode}
           >
-            <SelectTrigger className="w-full border-gray-200 bg-white h-10">
+            <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-gray-900">
               <SelectValue placeholder="Select listing" />
             </SelectTrigger>
             <SelectContent>
@@ -61,7 +64,10 @@ export function TransactionFields({
             {/* Transaction Type */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <div className="font-medium text-gray-700">Transaction Type</div>
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-700">Transaction Type</span>
+                </div>
                 <TransactionTypeToggle
                   value={fields.transactionType}
                   onChange={type => setFields(f => ({ ...f, transactionType: type }))}
@@ -71,9 +77,12 @@ export function TransactionFields({
 
             {/* Category */}
             <div>
-              <div className="font-medium text-gray-700 mb-2">Category</div>
+              <div className="flex items-center mb-2 gap-2">
+                <FileText className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium text-gray-700">Category</span>
+              </div>
               <Select value={fields.category} onValueChange={cat => setFields(f => ({ ...f, category: cat }))}>
-                <SelectTrigger className="w-full border-gray-200 bg-white h-10">
+                <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-gray-900">
                   <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -99,7 +108,10 @@ export function TransactionFields({
 
             {/* Amount */}
             <div>
-              <div className="font-medium text-gray-700 mb-2">Amount</div>
+              <div className="flex items-center mb-2 gap-2">
+                <DollarSign className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium text-gray-700">Amount</span>
+              </div>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                 <Input
@@ -107,24 +119,27 @@ export function TransactionFields({
                   placeholder="0.00"
                   value={fields.amount}
                   onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
-                  className="pl-7 h-10"
+                  className="pl-7 h-10 border-gray-200 text-gray-900"
                 />
               </div>
             </div>
 
             {/* Date */}
             <div>
-              <div className="font-medium text-gray-700 mb-2">Date</div>
+              <div className="flex items-center mb-2 gap-2">
+                <CalendarIcon className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium text-gray-700">Date</span>
+              </div>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left h-10 font-normal",
+                      "w-full justify-start text-left h-10 font-normal border-gray-200",
                       !fields.date && "text-gray-400"
                     )}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4 text-gray-500" />
+                    <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
                     {fields.date ? format(fields.date, "PPP") : "Select date"}
                   </Button>
                 </PopoverTrigger>
@@ -142,9 +157,12 @@ export function TransactionFields({
 
             {/* Payment Method */}
             <div>
-              <div className="font-medium text-gray-700 mb-2">Payment Method</div>
+              <div className="flex items-center mb-2 gap-2">
+                <DollarSign className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium text-gray-700">Payment Method</span>
+              </div>
               <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
-                <SelectTrigger className="w-full border-gray-200 bg-white h-10">
+                <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-gray-900">
                   <SelectValue placeholder="Select payment method" />
                 </SelectTrigger>
                 <SelectContent>
