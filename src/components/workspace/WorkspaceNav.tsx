@@ -102,11 +102,11 @@ export function WorkspaceNav({
         </div>
       </div>
 
-      {/* Settings button at the bottom (replaced More with Settings icon) */}
+      {/* Settings button at the bottom - Updated hover style to be square around icon */}
       <div className="p-4 border-t border-[#E4E5EA]">
         <Sheet>
           <SheetTrigger asChild>
-            <button className="w-full flex items-center gap-2 px-3 py-2.5 rounded-md hover:bg-[#F6F6F7] transition-colors">
+            <button className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-[#F6F6F7] transition-colors">
               <Settings className="w-5 h-5" />
             </button>
           </SheetTrigger>

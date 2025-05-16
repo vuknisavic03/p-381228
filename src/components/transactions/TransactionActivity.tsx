@@ -228,9 +228,9 @@ export function TransactionActivity() {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Filters and toggles bar */}
-      <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-100 flex flex-col gap-3">
+    <div className="h-full">
+      {/* Filters and toggles bar - Updated to match Listings page */}
+      <div className="p-4 border-b">
         <div className="flex flex-wrap items-center w-full gap-2">
           {/* Search bar - updated to match Listings style */}
           <div className="relative flex-1 max-w-[300px]">
@@ -240,7 +240,7 @@ export function TransactionActivity() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, category or notes..." 
-              className="pl-8 h-9 transition-all duration-200 border-gray-200 bg-white focus:ring-2 focus:ring-primary/20" 
+              className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20" 
             />
           </div>
           
@@ -251,8 +251,8 @@ export function TransactionActivity() {
                 variant="outline" 
                 size="sm"
                 className={cn(
-                  "text-sm flex items-center gap-1.5 ml-1 border-gray-200",
-                  date ? "bg-primary/10 text-primary border-primary/20" : "bg-white"
+                  "text-sm flex items-center gap-1.5 ml-1 h-9",
+                  date ? "bg-primary/10 text-primary border-primary/20" : ""
                 )}
               >
                 <CalendarIcon className="h-3.5 w-3.5" />
@@ -284,7 +284,7 @@ export function TransactionActivity() {
                   setCalendarOpen(false);
                 }}
                 initialFocus
-                className={cn("p-3 pointer-events-auto")}
+                className="p-3 pointer-events-auto"
               />
             </PopoverContent>
           </Popover>
@@ -299,14 +299,14 @@ export function TransactionActivity() {
                 variant="outline"
                 size="sm"
                 className={cn(
-                  "text-sm flex items-center gap-1.5 border-gray-200",
-                  activeFilterCount > 0 ? "bg-primary/10 text-primary border-primary/20" : "bg-white"
+                  "text-sm flex items-center gap-1.5 h-9",
+                  activeFilterCount > 0 ? "bg-primary/10 text-primary border-primary/20" : ""
                 )}
               >
                 <FilterIcon className="h-4 w-4" />
                 Filter
                 {activeFilterCount > 0 && (
-                  <span className="inline-flex items-center justify-center bg-primary text-white text-xs w-4 h-4 rounded-full ml-1">
+                  <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
                     {activeFilterCount}
                   </span>
                 )}
@@ -319,7 +319,7 @@ export function TransactionActivity() {
           <TransactionTypeToggle 
             value={transactionType} 
             onChange={setTransactionType} 
-            className="border-gray-200"
+            className="h-9"
           />
         </div>
         
@@ -328,7 +328,7 @@ export function TransactionActivity() {
       </div>
 
       {/* Modern Table */}
-      <div className="flex-1 p-5 bg-white">
+      <div className="flex-1 p-4 overflow-auto">
         <div className="max-w-full mx-auto">
           <div className="mb-4">
             {/* Results Table or Empty State */}
@@ -343,7 +343,7 @@ export function TransactionActivity() {
       {/* Edit sheet */}
       {editingTransaction && (
         <Sheet open={!!editingTransaction} onOpenChange={() => setEditingTransaction(null)}>
-          <SheetContent side="right" className="sm:max-w-md p-0">
+          <SheetContent side="right" className="w-[480px] sm:w-[540px] p-0 border-l shadow-xl bg-white">
             <EditTransactionForm
               transaction={editingTransaction}
               onClose={() => setEditingTransaction(null)}

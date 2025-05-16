@@ -26,14 +26,14 @@ export default function Listings() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col">
-        {/* Fixed header section - removed settings button */}
+        {/* Fixed header section - consistent with other pages */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center">
             <h1 className="text-xl font-semibold">Listings</h1>
           </div>
           <Button 
             onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700"
+            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9"
           >
             <PlusCircle className="h-4 w-4" />
             Add Listing
