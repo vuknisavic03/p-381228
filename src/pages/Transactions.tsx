@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionActivity } from "@/components/transactions/TransactionActivity";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
@@ -54,7 +54,15 @@ export default function Transactions() {
             side="right"
             className="w-[480px] sm:w-[540px] p-0 border-l shadow-xl bg-white"
           >
-            <TransactionForm onClose={() => setIsAddFormOpen(false)} />
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h2 className="text-2xl font-semibold text-gray-900">Add Transaction</h2>
+                <Button variant="ghost" size="icon" onClick={() => setIsAddFormOpen(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <TransactionForm onClose={() => setIsAddFormOpen(false)} />
+            </div>
           </SheetContent>
         </Sheet>
       </div>

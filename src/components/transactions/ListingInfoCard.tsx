@@ -11,10 +11,10 @@ export function ListingInfoCard({ listing }: ListingInfoCardProps) {
   const payer = listing.tenant;
   
   return (
-    <div className="rounded-lg border border-gray-100 bg-white p-5 space-y-4 shadow-sm">
+    <div className="rounded-lg bg-[#F1F1F1] p-6 space-y-4">
       {/* Tenant Information */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center rounded-full bg-gray-50 h-10 w-10 flex-shrink-0">
+        <div className="flex items-center justify-center rounded-full bg-white h-10 w-10 flex-shrink-0">
           <User className="h-5 w-5 text-gray-400" />
         </div>
         <div>
@@ -25,21 +25,21 @@ export function ListingInfoCard({ listing }: ListingInfoCardProps) {
             <Phone className="h-3.5 w-3.5" /> {payer.phone}
           </div>
         </div>
-        <span className="ml-auto text-xs font-medium px-2 py-1 rounded-full bg-gray-50 text-gray-600">
+        <span className="ml-auto text-xs font-medium px-2 py-1 rounded-full bg-white text-gray-600">
           {payer.type}
         </span>
       </div>
       
       {/* Property Information */}
-      <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md">
-        <div className="flex items-center justify-center rounded-full bg-white h-8 w-8 flex-shrink-0">
+      <div className="flex items-center gap-3 p-3 bg-white rounded-md">
+        <div className="flex items-center justify-center rounded-full bg-[#F1F1F1] h-8 w-8 flex-shrink-0">
           <House className="h-4 w-4 text-gray-400" />
         </div>
         <div>
           <div className="font-medium text-gray-900">{listing.name}</div>
           <div className="text-sm text-gray-500">{listing.city}, {listing.country}</div>
         </div>
-        <span className="ml-auto text-xs font-medium flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+        <span className="ml-auto text-xs font-medium flex items-center gap-1 px-2 py-1 rounded-full bg-[#F1F1F1] text-gray-600">
           <ShoppingCart className="h-3 w-3" /> {listing.type}
         </span>
       </div>
