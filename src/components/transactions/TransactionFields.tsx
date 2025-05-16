@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Listing, TransactionFieldsData, TransactionFormFieldsProps } from "./TransactionFormTypes";
 import { ListingInfoCard } from "./ListingInfoCard";
+import { ListingSelector } from "./ListingSelector";
 
 export function TransactionFields({ 
   mockListings, 
@@ -23,6 +23,7 @@ export function TransactionFields({
   // Log initial values for debugging
   console.log("TransactionFields initialValues:", initialValues);
   console.log("TransactionFields editMode:", editMode);
+  console.log("TransactionFields selectedListingId:", initialValues.selectedListingId);
 
   // Update fields when initialValues change (important for edit mode)
   useEffect(() => {
@@ -49,20 +50,11 @@ export function TransactionFields({
         
         <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
           <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
-          <Select 
-            value={fields.selectedListingId} 
-            onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}
-            defaultValue={fields.selectedListingId}
-          >
-            <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
-              <SelectValue placeholder="Select property" />
-            </SelectTrigger>
-            <SelectContent>
-              {mockListings.map(listing => (
-                <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <ListingSelector
+            listings={mockListings}
+            selectedValue={fields.selectedListingId}
+            onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val }))}
+          />
         </div>
       </div>
       

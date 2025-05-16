@@ -34,6 +34,8 @@ interface EditTransactionFormProps {
 }
 
 export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTransactionFormProps) {
+  console.log("EditTransactionForm received transaction:", transaction);
+  
   // Make sure we have a default value for selectedListingId
   const [fields, setFields] = useState<TransactionFieldsData>({
     selectedListingId: transaction.selectedListingId || "",
@@ -48,6 +50,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
   // Keep fields in sync with prop if transaction changes
   useEffect(() => {
+    console.log("Transaction data changed in EditForm:", transaction);
     setFields({
       selectedListingId: transaction.selectedListingId || "",
       transactionType: transaction.type || "revenue",
@@ -58,8 +61,6 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       notes: transaction.notes || "",
     });
     
-    // Log for debugging
-    console.log("Transaction data in EditForm:", transaction);
     console.log("Fields set in EditForm:", {
       selectedListingId: transaction.selectedListingId || "",
       transactionType: transaction.type || "revenue",

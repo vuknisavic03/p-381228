@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Card } from "@/components/ui/card";
+import { ListingSelector } from "./ListingSelector";
 
 interface Listing {
   id: string;
@@ -64,16 +65,11 @@ export function TransactionFormFields({ mockListings, initialValues, onChange, e
           <FileText className="h-4 w-4 text-gray-500" />
           <span className="text-sm font-semibold text-gray-700">Listing</span>
         </div>
-        <Select value={fields.selectedListingId} onValueChange={val => setFields(f => ({ ...f, selectedListingId: val }))}>
-          <SelectTrigger className="w-full border-gray-200 bg-white placeholder:text-gray-400">
-            <SelectValue placeholder="Select listing" />
-          </SelectTrigger>
-          <SelectContent>
-            {mockListings.map(listing => (
-              <SelectItem key={listing.id} value={listing.id}>{listing.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ListingSelector
+          listings={mockListings}
+          selectedValue={fields.selectedListingId}
+          onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val }))}
+        />
       </div>
       {selectedListing && (
         <>
