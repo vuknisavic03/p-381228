@@ -61,7 +61,7 @@ export function ListingSelector({
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 max-h-[350px]">
+      <PopoverContent className="p-0 max-h-[350px] w-[var(--radix-popover-trigger-width)]">
         <Command>
           <CommandInput placeholder="Search properties..." className="h-10" />
           <CommandEmpty>No property found.</CommandEmpty>
