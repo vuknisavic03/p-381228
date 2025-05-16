@@ -2,9 +2,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { LayoutDashboard, List, BarChart } from 'lucide-react';
 
 interface WorkspaceNavProps {
   workspaceName?: string;
@@ -39,9 +37,9 @@ export function WorkspaceNav({
   };
 
   return (
-    <div className="w-[280px] h-full bg-white flex flex-col">
+    <div className="w-[280px] border-r border-[#E4E5EA] h-full bg-white flex flex-col">
       {/* Header section with workspace info */}
-      <div className="p-4 w-full">
+      <div className="p-4 border-b border-[#E4E5EA] w-full">
         <button 
           onClick={() => navigate('/')}
           className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
@@ -52,9 +50,6 @@ export function WorkspaceNav({
           <span className="text-[#1A1A1A] font-medium">{workspaceData.name}</span>
         </button>
       </div>
-
-      {/* Horizontal separator that spans the full width */}
-      <Separator className="w-full" />
 
       {/* Navigation section */}
       <div className="p-4 flex-1">
@@ -102,25 +97,16 @@ export function WorkspaceNav({
         </div>
       </div>
 
-      {/* User section with settings button */}
-      <Separator className="w-full" />
-      <div className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              {userInitials}
-            </div>
-            <div className="text-sm font-medium text-gray-800">{owner}</div>
+      {/* User section (can be expanded with profile info) */}
+      <div className="p-4 border-t border-[#E4E5EA]">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+            {userInitials}
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => navigate('/profile')}
-            className="h-8 w-8"
-          >
-            <Settings className="h-4 w-4" />
-            <span className="sr-only">Settings</span>
-          </Button>
+          <div className="text-sm">
+            <div className="font-medium text-gray-800">{owner}</div>
+            <div className="text-xs text-gray-500">Account Settings</div>
+          </div>
         </div>
       </div>
     </div>
