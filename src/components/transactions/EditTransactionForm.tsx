@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
@@ -92,20 +91,12 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       
       {/* Content area */}
       <div className="px-6 py-4 space-y-8">
-        {/* Transaction Details Section */}
-        <div className="space-y-4 group">
-          <div className="flex items-center">
-            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Details</h3>
-            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-          </div>
-          
-          <TransactionFields
-            mockListings={mockListings}
-            initialValues={fields}
-            onChange={setFields}
-            editMode={true}
-          />
-        </div>
+        <TransactionFields 
+          mockListings={mockListings}
+          initialValues={fields}
+          onChange={setFields}
+          editMode={true}
+        />
         
         {selectedListing && (
           <div className="space-y-4 group">

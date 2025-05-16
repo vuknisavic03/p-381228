@@ -62,19 +62,11 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
       {/* Form content */}
       <div className="px-6 py-4 space-y-8">
-        {/* Transaction Details Section */}
-        <div className="space-y-4 group">
-          <div className="flex items-center">
-            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Details</h3>
-            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-          </div>
-          
-          <TransactionFields 
-            mockListings={mockListings}
-            initialValues={fields}
-            onChange={setFields}
-          />
-        </div>
+        <TransactionFields 
+          mockListings={mockListings}
+          initialValues={fields}
+          onChange={setFields}
+        />
         
         {selectedListing && (
           <div className="space-y-4 group">
