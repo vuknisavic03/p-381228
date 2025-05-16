@@ -32,7 +32,7 @@ export function TransactionFields({
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
 
   return (
-    <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
+    <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white">
       <div className="mb-5">
         <div className="flex items-center mb-2 gap-2">
           <FileText className="h-4 w-4 text-gray-500" />

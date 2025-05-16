@@ -11,7 +11,7 @@ export function ListingInfoCard({ listing }: ListingInfoCardProps) {
   const payer = listing.tenant;
   
   return (
-    <div className="rounded-lg border border-gray-200 bg-white/50 mb-5 p-5 flex flex-col gap-3 shadow-sm hover:bg-white/80 transition-colors">
+    <div className="rounded-lg border border-gray-200 bg-white mb-5 p-5 flex flex-col gap-3 shadow-sm">
       <div className="flex gap-3 items-center">
         <div className="flex items-center justify-center rounded-lg bg-gray-50 h-12 w-12">
           <User className="h-7 w-7 text-gray-400" />
