@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { EditTransactionForm } from "./EditTransactionForm";
 import { useToast } from "@/components/ui/use-toast";
 import { TransactionTable } from "./TransactionTable";
 import { Input } from "@/components/ui/input";
-import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon, Search } from "lucide-react";
+import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
 import { FilterPopover } from "@/components/ui/filter-popover";
 import { FilterTags } from "@/components/ui/filter-tags";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
@@ -235,15 +234,14 @@ export function TransactionActivity() {
       {/* Filters and toggles bar */}
       <div className="sticky top-0 z-10 bg-white p-4 border-b border-gray-100 flex flex-col gap-3">
         <div className="flex flex-wrap items-center w-full gap-2">
-          {/* Updated Search bar to match listings style */}
-          <div className="relative w-[220px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+          {/* Search bar */}
+          <div className="w-[220px]">
             <Input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search"
-              className="text-sm bg-[#F6F6F7] border-gray-200 rounded-lg pl-10 h-9 focus:bg-white focus:ring-1 focus:ring-gray-300 placeholder:text-gray-400"
+              className="text-sm bg-[#F6F6F7] border-gray-200 rounded-lg pl-3 focus:bg-white focus:ring-1 focus:ring-gray-300 placeholder:text-gray-400"
               style={{ fontSize: '0.94rem' }}
             />
           </div>
@@ -255,7 +253,7 @@ export function TransactionActivity() {
                 variant={date ? "default" : "outline"}
                 size="sm"
                 className={cn(
-                  "text-sm flex items-center gap-1.5 ml-1 h-9",
+                  "text-sm flex items-center gap-1.5 ml-1",
                   date ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50 transition-colors"
                 )}
               >
@@ -302,12 +300,9 @@ export function TransactionActivity() {
               <Button
                 variant={activeFilterCount > 0 ? "default" : "outline"}
                 size="sm"
-                className={cn(
-                  "text-sm flex items-center gap-1.5 h-9",
-                  activeFilterCount > 0 ? "bg-gray-800 text-white hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50"
-                )}
+                className="text-sm flex items-center gap-1.5"
               >
-                <FilterIcon className="h-3.5 w-3.5" />
+                <FilterIcon className="h-4 w-4" />
                 Filter
                 {activeFilterCount > 0 && (
                   <span className="inline-flex items-center bg-gray-700 text-white text-xs px-1 rounded-full ml-2">
@@ -323,7 +318,7 @@ export function TransactionActivity() {
           <TransactionTypeToggle 
             value={transactionType} 
             onChange={setTransactionType} 
-            className="border-gray-200 scale-90 origin-right"
+            className="border-gray-200"
           />
         </div>
         
@@ -359,3 +354,5 @@ export function TransactionActivity() {
     </div>
   );
 }
+
+// NOTE: This file is getting large! Consider asking me to refactor/split filter bar and large sections into their own components for maintainability!
