@@ -16,13 +16,13 @@ export function DashboardLayout({
   owner = "Kevin Anderson" 
 }: DashboardLayoutProps) {
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#FAFBFC]">
+    <div className="flex h-screen w-full overflow-hidden bg-white">
       <WorkspaceNav 
         workspaceName={workspaceName}
         userInitials={userInitials}
         owner={owner}
       />
-      <main className="flex-1 relative overflow-auto">
+      <main className="flex-1 flex flex-col">
         {children}
       </main>
     </div>
