@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart, MoreHorizontal } from 'lucide-react';
+import { LayoutDashboard, List, BarChart, Settings } from 'lucide-react';
 import { 
   Sheet, 
   SheetContent, 
@@ -102,13 +102,12 @@ export function WorkspaceNav({
         </div>
       </div>
 
-      {/* More button at the bottom */}
+      {/* Settings button at the bottom (replaced More with Settings icon) */}
       <div className="p-4 border-t border-[#E4E5EA]">
         <Sheet>
           <SheetTrigger asChild>
             <button className="w-full flex items-center gap-2 px-3 py-2.5 rounded-md hover:bg-[#F6F6F7] transition-colors">
-              <MoreHorizontal className="w-5 h-5" />
-              <span className="text-[16px] text-[#1A1A1A] font-medium">More</span>
+              <Settings className="w-5 h-5" />
             </button>
           </SheetTrigger>
           <SheetContent className="w-[400px] bg-white p-6">
