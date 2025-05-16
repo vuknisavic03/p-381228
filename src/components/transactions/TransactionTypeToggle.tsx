@@ -26,7 +26,7 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
             : "bg-transparent text-gray-500 hover:text-gray-700"
           }`}
         style={{
-          minWidth: 46,
+          minWidth: 40,
         }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
@@ -41,7 +41,7 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
             : "bg-transparent text-gray-500 hover:text-gray-700"
           }`}
         style={{
-          minWidth: 46,
+          minWidth: 40,
         }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
