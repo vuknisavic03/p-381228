@@ -125,41 +125,41 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
           {/* Payer Tab */}
           <TabsContent value="payer">
-            <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
+            <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
               {selectedListing ? (
                 <div className="space-y-5">
                   <div>
-                    <div className="flex items-center mb-2">
-                      <User className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center mb-2 gap-2">
+                      <User className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium text-gray-700">Payer Name</span>
                     </div>
                     <Input
                       type="text"
-                      value={payer.name}
+                      value={payer?.name}
                       readOnly
                       className="border-gray-200 bg-gray-50/50 cursor-not-allowed text-gray-600"
                     />
                   </div>
                   <div>
-                    <div className="flex items-center mb-2">
-                      <Mail className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center mb-2 gap-2">
+                      <Mail className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium text-gray-700">Payer Email</span>
                     </div>
                     <Input
                       type="email"
-                      value={payer.email}
+                      value={payer?.email}
                       readOnly
                       className="border-gray-200 bg-gray-50/50 cursor-not-allowed text-gray-600"
                     />
                   </div>
                   <div>
-                    <div className="flex items-center mb-2">
-                      <Phone className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center mb-2 gap-2">
+                      <Phone className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium text-gray-700">Payer Phone</span>
                     </div>
                     <Input
                       type="tel"
-                      value={payer.phone}
+                      value={payer?.phone}
                       readOnly
                       className="border-gray-200 bg-gray-50/50 cursor-not-allowed text-gray-600"
                     />
@@ -194,10 +194,10 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
           {/* Additional Info Tab */}
           <TabsContent value="additional">
-            <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
+            <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
               <div>
-                <div className="flex items-center mb-3">
-                  <FileText className="h-4 w-4 text-gray-500 mr-2" />
+                <div className="flex items-center mb-3 gap-2">
+                  <FileText className="h-4 w-4 text-gray-500" />
                   <span className="text-sm font-medium text-gray-700">Additional Notes</span>
                 </div>
                 <Textarea

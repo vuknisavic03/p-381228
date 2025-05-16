@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
 import { X, Check, ChevronRight, User, Mail, Phone, FileText } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { TransactionFormFields } from "./TransactionFormFields";
+import { TransactionFields } from "./TransactionFields";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -122,7 +122,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
           {/* Tab 1: Details */}
           <TabsContent value="details">
-            <TransactionFormFields
+            <TransactionFields
               mockListings={mockListings}
               initialValues={fields}
               onChange={setFields}
@@ -142,12 +142,12 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
           {/* Tab 2: Payer */}
           <TabsContent value="payer">
-            <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
+            <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
               {selectedListing ? (
                 <div className="space-y-5">
                   <div>
-                    <div className="flex items-center mb-2">
-                      <User className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center mb-2 gap-2">
+                      <User className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium text-gray-700">Payer Name</span>
                     </div>
                     <Input
@@ -158,8 +158,8 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
                     />
                   </div>
                   <div>
-                    <div className="flex items-center mb-2">
-                      <Mail className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center mb-2 gap-2">
+                      <Mail className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium text-gray-700">Payer Email</span>
                     </div>
                     <Input
@@ -170,8 +170,8 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
                     />
                   </div>
                   <div>
-                    <div className="flex items-center mb-2">
-                      <Phone className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center mb-2 gap-2">
+                      <Phone className="h-4 w-4 text-gray-500" />
                       <span className="text-sm font-medium text-gray-700">Payer Phone</span>
                     </div>
                     <Input
@@ -211,10 +211,10 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
           {/* Tab 3: Additional */}
           <TabsContent value="additional">
-            <Card className="border border-gray-100 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
+            <Card className="border border-gray-200 shadow-sm rounded-lg p-6 mb-6 bg-white/50 hover:bg-white/80 transition-colors">
               <div>
-                <div className="flex items-center mb-3">
-                  <FileText className="h-4 w-4 text-gray-500 mr-2" />
+                <div className="flex items-center mb-3 gap-2">
+                  <FileText className="h-4 w-4 text-gray-500" />
                   <span className="text-sm font-medium text-gray-700">Additional Notes</span>
                 </div>
                 <Textarea
