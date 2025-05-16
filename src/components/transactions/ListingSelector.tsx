@@ -61,7 +61,7 @@ export function ListingSelector({
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 max-h-[350px] min-w-[320px]">
+      <PopoverContent className="w-full p-0 max-h-[350px]">
         <Command>
           <CommandInput placeholder="Search properties..." className="h-10" />
           <CommandEmpty>No property found.</CommandEmpty>
@@ -84,7 +84,7 @@ export function ListingSelector({
                     <div className="flex flex-col overflow-hidden">
                       <span className="font-medium truncate">{listing.name}</span>
                       <span className="text-xs text-gray-500 truncate">
-                        {listing.city}, {listing.country} • {listing.type}
+                        {listing.tenant?.name} • {listing.type}
                       </span>
                     </div>
                     <Check
