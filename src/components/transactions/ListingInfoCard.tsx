@@ -9,6 +9,10 @@ interface ListingInfoCardProps {
 
 export function ListingInfoCard({ listing }: ListingInfoCardProps) {
   const payer = listing.tenant;
+  // Display phone if available, otherwise fall back to email
+  const contactMethod = payer.phone ? 
+    { icon: <Phone className="h-3.5 w-3.5" />, value: payer.phone } : 
+    { icon: <Mail className="h-3.5 w-3.5" />, value: payer.email };
   
   return (
     <div className="space-y-4 rounded-lg bg-white p-4 border border-gray-100 shadow-sm">
@@ -20,9 +24,7 @@ export function ListingInfoCard({ listing }: ListingInfoCardProps) {
         <div>
           <div className="font-medium text-gray-900">{payer.name}</div>
           <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
-            <Mail className="h-3.5 w-3.5" /> {payer.email} 
-            <span className="mx-1">•</span>
-            <Phone className="h-3.5 w-3.5" /> {payer.phone}
+            {contactMethod.icon} {contactMethod.value}
           </div>
         </div>
         <span className="ml-auto text-xs px-2 py-1 rounded-full bg-gray-50 text-gray-600 font-medium">

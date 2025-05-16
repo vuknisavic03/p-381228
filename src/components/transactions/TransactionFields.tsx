@@ -71,21 +71,17 @@ export function TransactionFields({
           
           {/* Transaction Details Section */}
           <div className="space-y-4 group">
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Details</h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              <TransactionTypeToggle
+                value={fields.transactionType}
+                onChange={type => setFields(f => ({ ...f, transactionType: type }))}
+                className="ml-auto"
+              />
+              <div className="h-px bg-gray-100 flex-1 ml-2"></div>
             </div>
             
             <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-6">
-              {/* Transaction Type */}
-              <div>
-                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Transaction Type</div>
-                <TransactionTypeToggle
-                  value={fields.transactionType}
-                  onChange={type => setFields(f => ({ ...f, transactionType: type }))}
-                />
-              </div>
-
               {/* Category */}
               <div>
                 <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</div>

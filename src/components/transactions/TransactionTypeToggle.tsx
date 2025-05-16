@@ -16,7 +16,7 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs w-fit",
+      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs",
       className
     )}>
       <button
@@ -27,7 +27,7 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
             : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
           }`}
         style={{
-          minWidth: 70,
+          minWidth: 80,
         }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
@@ -43,7 +43,7 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
             : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
           }`}
         style={{
-          minWidth: 70,
+          minWidth: 80,
         }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
