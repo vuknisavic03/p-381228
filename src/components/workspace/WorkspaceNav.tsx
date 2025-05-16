@@ -2,13 +2,14 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart, Settings } from 'lucide-react';
+import { LayoutDashboard, List, BarChart, Settings, Key, LifeBuoy, LogOut } from 'lucide-react';
 import { 
   Sheet, 
   SheetContent, 
   SheetTrigger 
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 interface WorkspaceNavProps {
   workspaceName?: string;
@@ -40,6 +41,22 @@ export function WorkspaceNav({
         workspace: workspaceData
       }
     });
+  };
+
+  // Placeholder functions for the settings buttons
+  const handleResetPassword = () => {
+    console.log("Reset Password clicked");
+    // Will be implemented with backend integration
+  };
+
+  const handleSupport = () => {
+    console.log("Support clicked");
+    // Will be implemented with backend integration
+  };
+
+  const handleLogout = () => {
+    console.log("Logout clicked");
+    // Will be implemented with backend integration
   };
 
   return (
@@ -114,18 +131,47 @@ export function WorkspaceNav({
           </SheetTrigger>
           <SheetContent className="w-[400px] bg-white p-6">
             <div className="text-xl font-semibold mb-6">Settings</div>
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {/* Reset Password Section */}
               <div className="bg-[#F6F6F7] p-4 rounded-md">
-                <div className="font-medium mb-1">Workspace Settings</div>
-                <div className="text-sm text-[#9EA3AD]">Manage workspace details and preferences</div>
+                <div className="font-medium mb-1">Reset Password</div>
+                <div className="text-sm text-[#9EA3AD] mb-3">Change your account password</div>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex justify-between items-center" 
+                  onClick={handleResetPassword}
+                >
+                  <span>Reset Password</span>
+                  <Key className="w-4 h-4" />
+                </Button>
               </div>
+              
+              {/* Support Section */}
               <div className="bg-[#F6F6F7] p-4 rounded-md">
-                <div className="font-medium mb-1">Account</div>
-                <div className="text-sm text-[#9EA3AD]">Update your personal information</div>
+                <div className="font-medium mb-1">Support</div>
+                <div className="text-sm text-[#9EA3AD] mb-3">Get help with your account</div>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex justify-between items-center" 
+                  onClick={handleSupport}
+                >
+                  <span>Contact Support</span>
+                  <LifeBuoy className="w-4 h-4" />
+                </Button>
               </div>
+              
+              {/* Logout Section */}
               <div className="bg-[#F6F6F7] p-4 rounded-md">
-                <div className="font-medium mb-1">Display</div>
-                <div className="text-sm text-[#9EA3AD]">Change appearance settings</div>
+                <div className="font-medium mb-1">Log Out</div>
+                <div className="text-sm text-[#9EA3AD] mb-3">Sign out from your account</div>
+                <Button 
+                  variant="outline"
+                  className="w-full flex justify-between items-center text-red-500 hover:text-red-600 hover:border-red-200" 
+                  onClick={handleLogout}
+                >
+                  <span>Log Out</span>
+                  <LogOut className="w-4 h-4" />
+                </Button>
               </div>
             </div>
           </SheetContent>
