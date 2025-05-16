@@ -11,32 +11,36 @@ export function ListingInfoCard({ listing }: ListingInfoCardProps) {
   const payer = listing.tenant;
   
   return (
-    <div className="rounded-lg border border-gray-200 bg-white mb-5 p-5 flex flex-col gap-3 shadow-sm">
-      <div className="flex gap-3 items-center">
-        <div className="flex items-center justify-center rounded-lg bg-gray-50 h-12 w-12">
-          <User className="h-7 w-7 text-gray-400" />
+    <div className="rounded-lg border border-gray-200 bg-white p-5 space-y-4">
+      {/* Tenant Information */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center rounded-full bg-gray-100 h-10 w-10 flex-shrink-0">
+          <User className="h-5 w-5 text-gray-500" />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-gray-900">{payer.name}</span>
-            <span className="ml-2 bg-gray-50 text-xs font-medium text-gray-600 rounded px-2 py-0.5">{payer.type}</span>
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <Mail className="h-4 w-4 text-gray-400" />
-            <span className="text-sm text-gray-600">{payer.email}</span>
-            <Phone className="h-4 w-4 text-gray-400 ml-4" />
-            <span className="text-sm text-gray-600">{payer.phone}</span>
+        <div>
+          <div className="font-medium text-gray-900">{payer.name}</div>
+          <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+            <Mail className="h-3.5 w-3.5" /> {payer.email} 
+            <span className="mx-1">•</span>
+            <Phone className="h-3.5 w-3.5" /> {payer.phone}
           </div>
         </div>
+        <span className="ml-auto text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+          {payer.type}
+        </span>
       </div>
-      <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mt-1">
-        <House className="h-5 w-5 text-gray-400" />
+      
+      {/* Property Information */}
+      <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md">
+        <div className="flex items-center justify-center rounded-full bg-gray-100 h-8 w-8 flex-shrink-0">
+          <House className="h-4 w-4 text-gray-500" />
+        </div>
         <div>
           <div className="font-medium text-gray-900">{listing.name}</div>
           <div className="text-sm text-gray-500">{listing.city}, {listing.country}</div>
         </div>
-        <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-0.5 flex items-center gap-1">
-          <ShoppingCart className="h-3 w-3" />{listing.type}
+        <span className="ml-auto text-xs font-medium flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+          <ShoppingCart className="h-3 w-3" /> {listing.type}
         </span>
       </div>
     </div>

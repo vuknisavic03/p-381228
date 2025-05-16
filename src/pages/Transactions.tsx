@@ -26,14 +26,14 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col">
-        {/* Top bar with Activity and Add Transaction button - consistent with Listings */}
+        {/* Top bar with Activity and Add Transaction button */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center">
-            <h1 className="text-xl font-semibold">Activity</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Activity</h1>
           </div>
           <Button
             onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9"
+            className="bg-gray-900 hover:bg-gray-800 text-white h-9 px-4 gap-1.5"
           >
             <Plus className="h-4 w-4" />
             Add Transaction
@@ -41,9 +41,9 @@ export default function Transactions() {
         </div>
 
         {/* Horizontal separator line */}
-        <Separator className="w-full border-[#E4E5EA]" />
+        <Separator className="w-full border-gray-200" />
 
-        {/* Activity table with improved layout - consistent with Listings */}
+        {/* Activity table */}
         <div className="flex-1 overflow-y-auto bg-white p-4">
           <TransactionActivity />
         </div>
