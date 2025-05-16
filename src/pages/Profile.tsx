@@ -8,14 +8,14 @@ export default function Profile() {
     <DashboardLayout>
       <div className="h-screen flex flex-col">
         {/* Header section */}
-        <div className="p-4 flex justify-between items-center bg-white">
+        <div className="px-6 py-4 flex justify-between items-center bg-white">
           <h1 className="text-xl font-semibold">Profile</h1>
         </div>
         
         {/* Horizontal separator line */}
-        <Separator className="w-full" />
+        <Separator className="w-full border-[#E4E5EA]" />
         
-        <div className="flex-1 overflow-y-auto bg-white p-4">
+        <div className="flex-1 overflow-y-auto bg-white p-6">
           <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg">
             <h2 className="text-lg font-medium mb-4">Profile Information</h2>
             <div className="space-y-4">
