@@ -10,7 +10,7 @@ interface AnalyticsGridProps {
 }
 
 export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
-  const { data, isLoading } = useAnalyticsData(dateRange);
+  const { data, isLoading, error } = useAnalyticsData(dateRange);
   
   return (
     <div className="flex flex-col w-full space-y-6 animate-fade-in">
@@ -21,8 +21,8 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
             icon={BarChart}
             color="bg-[#9b87f5]"
             value={isLoading ? "Loading..." : `$${data?.totals.revenue.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes.revenue}
-            chartData={isLoading ? [] : data?.revenue}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.revenue}
+            chartData={isLoading ? [] : data?.revenue || []}
             chartType="area"
             isLoading={isLoading}
             legendLabel="Revenue"
@@ -34,8 +34,8 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
             icon={TrendingUp}
             color="bg-[#F97316]"
             value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes.profit}
-            chartData={isLoading ? [] : data?.profit}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.profit}
+            chartData={isLoading ? [] : data?.profit || []}
             chartType="spline"
             isLoading={isLoading}
             legendLabel="Profit"
@@ -47,8 +47,8 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
             icon={CircleDollarSign}
             color="bg-[#0EA5E9]"
             value={isLoading ? "Loading..." : `${data?.totals.income}%`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes.income}
-            chartData={isLoading ? [] : data?.income}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.income}
+            chartData={isLoading ? [] : data?.income || []}
             chartType="donut"
             isLoading={isLoading}
             legendLabel="Income"
@@ -60,8 +60,8 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
             icon={LineChart}
             color="bg-[#D946EF]"
             value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: false } : data?.changes.peakProfit}
-            chartData={isLoading ? [] : data?.peakProfit}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.peakProfit}
+            chartData={isLoading ? [] : data?.peakProfit || []}
             chartType="area"
             isLoading={isLoading}
             legendLabel="Peak Profit"
@@ -72,7 +72,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
       {!isLoading && data?.timeline && (
         <div className="animate-fade-in" style={{ animationDelay: "200ms" }}>
           <Timeline 
-            data={data.timeline} 
+            data={data.timeline || []} 
             periodLabel={data.periodLabel} 
           />
         </div>

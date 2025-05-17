@@ -35,8 +35,11 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     );
   }
 
-  // Determine if we have hourly data by checking the first data point
-  const isHourlyData = data.length > 0 && data[0].month.includes(':');
+  // Safely determine if we have hourly data by checking the first data point
+  // Check if data exists, has at least one element, and if month is a string that includes a colon
+  const isHourlyData = data.length > 0 && 
+                      typeof data[0].month === 'string' && 
+                      data[0].month.includes(':');
 
   // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
