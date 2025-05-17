@@ -50,7 +50,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: filteredHours,
-      formatter: (date: Date) => format(date, "HH:mm"), // Only show hours and minutes, no timezone
+      formatter: (date: Date) => format(date, "HH:mm"),
       groupKey: "hour"
     };
   }
@@ -60,7 +60,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
-      formatter: (date: Date) => format(date, "dd"), // Only show day of month
+      formatter: (date: Date) => format(date, "MMM dd"),
       groupKey: "day"
     };
   }
@@ -74,7 +74,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: weeks,
-      formatter: (date: Date) => `W${Math.ceil(parseInt(format(date, "d")) / 7)}`, // Show as week number
+      formatter: (date: Date) => `${format(date, "MMM dd")}`,
       groupKey: "week"
     };
   }
@@ -86,7 +86,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   
   return {
     timePoints: months,
-    formatter: (date: Date) => format(date, "MMM"), // Only month name, no year
+    formatter: (date: Date) => format(date, "MMM yyyy"),
     groupKey: "month"
   };
 };

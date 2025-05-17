@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,7 +60,9 @@ export function ChartCard({
       }
       
       // Ensure label is a string before rendering it
-      const safeLabel = typeof label === 'string' ? label : String(label);
+      const safeLabel = typeof label === 'string' ? label : 
+                         label instanceof Date ? label.toString() : 
+                         'Unknown';
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
@@ -190,16 +191,12 @@ export function ChartCard({
               tick={{ fill: '#6E6E76', fontSize: 10 }}
               dy={8}
               padding={{ left: 10, right: 10 }}
-              // Simple formatter to remove timezone information
+              // Ensure dates are converted to strings
               tickFormatter={(value) => {
-                if (typeof value === 'string') {
-                  // For time strings (HH:MM format)
-                  if (value.includes(':')) {
-                    return value.split(' ')[0]; // Return only the time part
-                  }
-                  return value;
+                if (value instanceof Date) {
+                  return value.toLocaleDateString();
                 }
-                return String(value);
+                return value;
               }}
             />
             <YAxis 
