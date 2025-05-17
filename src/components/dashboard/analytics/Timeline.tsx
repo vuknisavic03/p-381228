@@ -16,9 +16,10 @@ import { TimelineDataPoint } from "@/services/analyticsService";
 interface TimelineProps {
   data: TimelineDataPoint[];
   isLoading?: boolean;
+  periodLabel?: string;
 }
 
-export function Timeline({ data, isLoading = false }: TimelineProps) {
+export function Timeline({ data, isLoading = false, periodLabel = "Performance Timeline" }: TimelineProps) {
   if (isLoading) {
     return (
       <Card className="shadow-sm border border-slate-100 p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] animate-fade-in">
@@ -58,11 +59,14 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
     return null;
   };
 
+  // Determine title based on data type
+  const chartTitle = isHourlyData ? "Today's Performance" : periodLabel || "Performance Timeline";
+
   return (
     <Card className="shadow-sm border border-slate-100 p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-slate-200 transition-all animate-fade-in">
       <CardHeader className="p-0 pb-3">
         <CardTitle className="text-sm sm:text-base md:text-lg font-medium">
-          {isHourlyData ? "Today's Performance" : "Performance Timeline"}
+          {chartTitle}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">

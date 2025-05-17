@@ -1,8 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from "@/components/dashboard/Header";
 import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
 import { DateRange } from "react-day-picker";
+import { startOfMonth, endOfMonth } from 'date-fns';
 
 interface WorkspaceOverviewProps {
   userName?: string;
@@ -10,9 +11,10 @@ interface WorkspaceOverviewProps {
 }
 
 export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's Workspace" }: WorkspaceOverviewProps) {
+  // Initialize with current month as default
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: new Date(),
+    from: startOfMonth(new Date()),
+    to: endOfMonth(new Date()),
   });
 
   const handleDateRangeChange = (newDateRange: DateRange | undefined) => {

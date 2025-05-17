@@ -1,7 +1,18 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
-import { subDays, eachDayOfInterval, eachHourOfInterval, format, differenceInDays, isEqual, startOfDay, endOfDay } from "date-fns";
+import { 
+  subDays, 
+  eachDayOfInterval, 
+  eachHourOfInterval, 
+  format, 
+  differenceInDays, 
+  isEqual, 
+  startOfDay, 
+  endOfDay,
+  startOfMonth,
+  endOfMonth
+} from "date-fns";
 
 // Types for our analytics data
 export interface ChartDataPoint {
@@ -22,9 +33,9 @@ export interface TimelineDataPoint {
 
 // Generate data points for a specific date range
 const generateDataForRange = (range: DateRange | undefined): any => {
-  // Default to last 7 days if no range specified
-  const defaultEnd = new Date();
-  const defaultStart = subDays(defaultEnd, 6);
+  // Default to current month if no range specified
+  const defaultEnd = endOfMonth(new Date());
+  const defaultStart = startOfMonth(new Date());
   
   const start = range?.from ? startOfDay(range.from) : defaultStart;
   const end = range?.to ? endOfDay(range.to) : defaultEnd;
@@ -44,12 +55,39 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     };
   }
   
-  // Multiple days - daily data
+  // For short ranges (less than 14 days), show daily data
+  if (diffInDays < 14) {
+    const days = eachDayOfInterval({ start, end });
+    return {
+      timePoints: days,
+      formatter: (date: Date) => format(date, "MMM dd"),
+      groupKey: "day"
+    };
+  }
+  
+  // For longer ranges, aggregate data by week or month depending on length
+  if (diffInDays < 90) {
+    // Weekly data for medium ranges
+    const days = eachDayOfInterval({ start, end });
+    // Get every 7th day to represent weeks
+    const weeks = days.filter((_, index) => index % 7 === 0);
+    
+    return {
+      timePoints: weeks,
+      formatter: (date: Date) => `${format(date, "MMM dd")}`,
+      groupKey: "week"
+    };
+  }
+  
+  // Monthly data for long ranges
   const days = eachDayOfInterval({ start, end });
+  // Get roughly every 30th day to represent months
+  const months = days.filter((_, index) => index % 30 === 0);
+  
   return {
-    timePoints: days,
-    formatter: (date: Date) => format(date, "MMM dd"),
-    groupKey: "day"
+    timePoints: months,
+    formatter: (date: Date) => format(date, "MMM yyyy"),
+    groupKey: "month"
   };
 };
 
@@ -107,6 +145,19 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   // Generate income percentage
   const incomeValue = getRandomValue(55, 75);
   
+  // Generate time period label for display
+  const periodLabel = (() => {
+    if (!dateRange?.from) return "This Month";
+    
+    if (diffInDays === 0) return "Today";
+    
+    if (diffInDays < 14) return "Daily View";
+    
+    if (diffInDays < 90) return "Weekly View";
+    
+    return "Monthly View";
+  })();
+  
   return {
     revenue,
     profit,
@@ -116,6 +167,7 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
     ],
     peakProfit,
     timeline,
+    periodLabel,
     totals: {
       revenue: revenueTotal,
       profit: profitTotal,

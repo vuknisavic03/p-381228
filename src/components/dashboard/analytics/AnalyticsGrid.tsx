@@ -71,7 +71,10 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
 
       {!isLoading && data?.timeline && (
         <div className="animate-fade-in" style={{ animationDelay: "200ms" }}>
-          <Timeline data={data.timeline} />
+          <Timeline 
+            data={data.timeline} 
+            periodLabel={data.periodLabel} 
+          />
         </div>
       )}
     </div>
