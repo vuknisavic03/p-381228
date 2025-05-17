@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   AreaChart,
@@ -46,8 +45,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     if (active && payload && payload.length) {
       // Ensure label is a string
       const safeLabel = typeof label === 'string' ? label : 
-                         label instanceof Date ? label.toLocaleDateString() : 
-                         'Unknown';
+                         String(label);
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
@@ -73,9 +71,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   // Make sure data is formatted correctly
   const safeData = data.map(point => ({
     ...point,
-    month: typeof point.month === 'string' ? point.month : 
-           point.month instanceof Date ? point.month.toLocaleDateString() : 
-           String(point.month)
+    month: typeof point.month === 'string' ? point.month : String(point.month)
   }));
 
   return (
