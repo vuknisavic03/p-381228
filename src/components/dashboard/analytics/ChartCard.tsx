@@ -60,9 +60,7 @@ export function ChartCard({
       }
       
       // Ensure label is a string before rendering it
-      const safeLabel = typeof label === 'string' ? label : 
-                         label instanceof Date ? label.toString() : 
-                         'Unknown';
+      const safeLabel = typeof label === 'string' ? label : String(label);
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
