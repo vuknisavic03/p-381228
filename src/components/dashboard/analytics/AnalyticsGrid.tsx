@@ -3,12 +3,17 @@ import { BarChart, TrendingUp, LineChart, CircleDollarSign } from "lucide-react"
 import { ChartCard } from "./ChartCard";
 import { useAnalyticsData } from "@/services/analyticsService";
 import { Timeline } from "./Timeline";
+import { DateRange } from "react-day-picker";
 
-export function AnalyticsGrid() {
-  const { data, isLoading } = useAnalyticsData();
+interface AnalyticsGridProps {
+  dateRange?: DateRange;
+}
+
+export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
+  const { data, isLoading } = useAnalyticsData(dateRange);
   
   return (
-    <div className="flex flex-col w-full space-y-6"> {/* Added space-y-6 for consistent spacing */}
+    <div className="flex flex-col w-full space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 sm:gap-6">
         <div className="col-span-1">
           <ChartCard

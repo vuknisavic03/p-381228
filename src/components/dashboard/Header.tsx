@@ -11,10 +11,17 @@ import { DateRange } from "react-day-picker";
 interface HeaderProps {
   userName?: string;
   workspaceName?: string;
+  onDateRangeChange?: (dateRange: DateRange | undefined) => void;
+  dateRange?: DateRange;
 }
 
-export function Header({ userName = "Kevin", workspaceName = "Kevin's Workspace" }: HeaderProps) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
+export function Header({ 
+  userName = "Kevin", 
+  workspaceName = "Kevin's Workspace",
+  onDateRangeChange,
+  dateRange
+}: HeaderProps) {
+  const [date, setDate] = React.useState<DateRange | undefined>(dateRange || {
     from: new Date(),
     to: new Date(),
   });
@@ -31,6 +38,14 @@ export function Header({ userName = "Kevin", workspaceName = "Kevin's Workspace"
 
   // Extract user's first name from workspace name if no userName provided
   const userFirstName = userName || workspaceName?.split("'")[0] || "User";
+
+  // Handle date changes and notify parent component
+  const handleDateChange = (newDateRange: DateRange | undefined) => {
+    setDate(newDateRange);
+    if (onDateRangeChange) {
+      onDateRangeChange(newDateRange);
+    }
+  };
 
   return (
     <div className="flex justify-between items-start">
@@ -71,7 +86,7 @@ export function Header({ userName = "Kevin", workspaceName = "Kevin's Workspace"
               mode="range"
               defaultMonth={date?.from}
               selected={date}
-              onSelect={setDate}
+              onSelect={handleDateChange}
               numberOfMonths={2}
               className={cn("p-3 pointer-events-auto")}
             />

@@ -34,6 +34,9 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
     );
   }
 
+  // Determine if we have hourly data by checking the first data point
+  const isHourlyData = data.length > 0 && data[0].month.includes(':');
+
   // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
@@ -58,7 +61,9 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
   return (
     <Card className="shadow-sm border border-slate-100 p-3 sm:p-4 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-slate-200 transition-all">
       <CardHeader className="p-0 pb-2">
-        <CardTitle className="text-sm sm:text-base md:text-lg font-medium">Performance Timeline</CardTitle>
+        <CardTitle className="text-sm sm:text-base md:text-lg font-medium">
+          {isHourlyData ? "Today's Performance" : "Performance Timeline"}
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <div className="h-[160px] sm:h-[180px] md:h-[220px]">
@@ -69,7 +74,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 top: 5,
                 right: 5,
                 bottom: 5,
-                left: 12, // Increased from 0 to 12 to give more space for y-axis labels
+                left: 12,
               }}
             >
               <defs>
@@ -96,7 +101,7 @@ export function Timeline({ data, isLoading = false }: TimelineProps) {
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={50} // Increased width from 35 to 50 to ensure "$" is fully visible
+                width={50}
                 padding={{ top: 10 }}
                 allowDecimals={false}
                 domain={['auto', 'auto']}
