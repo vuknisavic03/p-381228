@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,9 +59,14 @@ export function ChartCard({
         );
       }
       
+      // Ensure label is a string before rendering it
+      const safeLabel = typeof label === 'string' ? label : 
+                         label instanceof Date ? label.toString() : 
+                         'Unknown';
+      
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
-          <p className="font-medium text-slate-800 mb-1 text-xs sm:text-sm">{label || 'Month'}</p>
+          <p className="font-medium text-slate-800 mb-1 text-xs sm:text-sm">{safeLabel || 'Month'}</p>
           <p className="font-semibold text-slate-900 flex items-center gap-1 text-xs sm:text-sm">
             <span className="text-xs font-medium">{title}: </span>
             <span style={{ color: colorValue }}>
@@ -187,6 +191,13 @@ export function ChartCard({
               tick={{ fill: '#6E6E76', fontSize: 10 }}
               dy={8}
               padding={{ left: 10, right: 10 }}
+              // Ensure dates are converted to strings
+              tickFormatter={(value) => {
+                if (value instanceof Date) {
+                  return value.toLocaleDateString();
+                }
+                return value;
+              }}
             />
             <YAxis 
               axisLine={false}

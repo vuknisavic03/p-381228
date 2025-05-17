@@ -44,9 +44,14 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
+      // Ensure label is a string
+      const safeLabel = typeof label === 'string' ? label : 
+                         label instanceof Date ? label.toLocaleDateString() : 
+                         'Unknown';
+      
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
-          <p className="font-medium text-slate-800 mb-1.5 text-xs sm:text-sm">{label}</p>
+          <p className="font-medium text-slate-800 mb-1.5 text-xs sm:text-sm">{safeLabel}</p>
           <div className="mt-1.5">
             {payload.map((entry, index) => (
               <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-1.5 text-xs sm:text-sm my-1">
@@ -65,6 +70,14 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   // Determine title based on data type
   const chartTitle = isHourlyData ? "Today's Performance" : periodLabel || "Performance Timeline";
 
+  // Make sure data is formatted correctly
+  const safeData = data.map(point => ({
+    ...point,
+    month: typeof point.month === 'string' ? point.month : 
+           point.month instanceof Date ? point.month.toLocaleDateString() : 
+           String(point.month)
+  }));
+
   return (
     <Card className="shadow-sm border border-slate-100 p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-slate-200 transition-all animate-fade-in">
       <CardHeader className="p-0 pb-3">
@@ -76,7 +89,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
         <div className="h-[160px] sm:h-[180px] md:h-[220px]">
           <ResponsiveContainer width="100%" height="100%" className="animate-fade-in">
             <AreaChart
-              data={data}
+              data={safeData}
               margin={{
                 top: 20,
                 right: 5,

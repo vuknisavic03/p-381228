@@ -105,30 +105,30 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   // Generate time-based data points for the selected date range
   const { timePoints, formatter, groupKey } = generateDataForRange(dateRange);
   
-  // Generate revenue data
+  // Generate revenue data - ensure month is a string
   const revenue = timePoints.map((point: Date) => ({
     month: formatter(point),
     value: getRandomValue(20, 110),
     [groupKey]: point
   }));
   
-  // Generate profit data
+  // Generate profit data - ensure month is a string
   const profit = timePoints.map((point: Date) => ({
     month: formatter(point),
     value: getRandomValue(10, 55),
     [groupKey]: point
   }));
   
-  // Generate peak profit data
+  // Generate peak profit data - ensure month is a string
   const peakProfit = timePoints.map((point: Date) => ({
     month: formatter(point),
     value: getRandomValue(15, 100),
     [groupKey]: point
   }));
   
-  // Generate timeline data
+  // Generate timeline data - ensure month is a string
   const timeline = timePoints.map((point: Date) => ({
-    month: formatter(point),
+    month: formatter(point), // Convert date to string format
     revenue: getRandomValue(20000, 110000),
     profit: getRandomValue(10000, 55000),
     [groupKey]: point
