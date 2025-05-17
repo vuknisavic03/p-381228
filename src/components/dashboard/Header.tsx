@@ -220,35 +220,35 @@ export function Header({
               <ChevronDown className="w-4 h-4 text-[#9EA3AD] ml-1" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[300px] p-0" align="end">
-            <div className="p-3 border-b border-gray-100">
-              <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
-                <SelectTrigger className="w-full mb-2">
-                  <SelectValue placeholder="Select period" />
-                </SelectTrigger>
-                <SelectContent>
-                  <div className="text-sm font-semibold px-2 py-1.5 text-gray-500">Period</div>
-                  {periodOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <PopoverContent className="w-auto p-0" align="end">
+            <div className="flex p-3 border-b border-gray-100">
+              <div className="pr-3 border-r border-gray-100">
+                <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
+                  <SelectTrigger className="w-[180px] mb-2">
+                    <SelectValue placeholder="Select period" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <div className="text-sm font-semibold px-2 py-1.5 text-gray-500">Period</div>
+                    {periodOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               
-              {selectedPeriod === "custom" && (
-                <div className="mt-2">
-                  <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={date?.from}
-                    selected={date}
-                    onSelect={handleDateChange}
-                    numberOfMonths={1}
-                    className={cn("p-0 pointer-events-auto")}
-                  />
-                </div>
-              )}
+              <div className="pl-3">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  defaultMonth={date?.from}
+                  selected={date}
+                  onSelect={handleDateChange}
+                  numberOfMonths={1}
+                  className={cn("p-0 pointer-events-auto")}
+                />
+              </div>
             </div>
           </PopoverContent>
         </Popover>
