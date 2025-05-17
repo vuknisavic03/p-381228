@@ -41,10 +41,10 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   const end = range?.to ? endOfDay(range.to) : defaultEnd;
   
   // Calculate the difference in days to determine data granularity
-  const diffInDays = differenceInDays(end, start);
+  const diffDays = differenceInDays(end, start);
   
   // Single day selected - show hourly data (3-hour intervals)
-  if (diffInDays === 0 || (range?.from && range?.to && isEqual(startOfDay(range.from), startOfDay(range.to)))) {
+  if (diffDays === 0 || (range?.from && range?.to && isEqual(startOfDay(range.from), startOfDay(range.to)))) {
     const hours = eachHourOfInterval({ start, end });
     const filteredHours = hours.filter((_, index) => index % 3 === 0); // Every 3 hours
     
@@ -56,7 +56,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   }
   
   // For short ranges (less than 14 days), show daily data
-  if (diffInDays < 14) {
+  if (diffDays < 14) {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
@@ -66,7 +66,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   }
   
   // For longer ranges, aggregate data by week or month depending on length
-  if (diffInDays < 90) {
+  if (diffDays < 90) {
     // Weekly data for medium ranges
     const days = eachDayOfInterval({ start, end });
     // Get every 7th day to represent weeks
@@ -149,11 +149,16 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   const periodLabel = (() => {
     if (!dateRange?.from) return "This Month";
     
-    if (diffInDays === 0) return "Today";
+    const diffDays = differenceInDays(
+      dateRange?.to ? endOfDay(dateRange.to) : endOfDay(new Date()),
+      startOfDay(dateRange.from)
+    );
     
-    if (diffInDays < 14) return "Daily View";
+    if (diffDays === 0) return "Today";
     
-    if (diffInDays < 90) return "Weekly View";
+    if (diffDays < 14) return "Daily View";
+    
+    if (diffDays < 90) return "Weekly View";
     
     return "Monthly View";
   })();
