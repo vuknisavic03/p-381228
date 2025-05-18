@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -186,9 +185,12 @@ export default function WorkspacePicker() {
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      // Remove any timezone info from label if present
+      const cleanLabel = typeof label === 'string' ? label.split(' GMT')[0].split(' (')[0] : label;
+      
       return (
         <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-lg rounded-md">
-          <p className="font-medium text-slate-800 mb-1">{label}</p>
+          <p className="font-medium text-slate-800 mb-1">{cleanLabel}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="font-semibold text-slate-900 flex items-center gap-1" style={{ color: entry.color }}>
               {activeChartType === 'commission' ? (
@@ -317,6 +319,13 @@ export default function WorkspacePicker() {
                             tickLine={false}
                             tick={{ fill: '#9EA3AD', fontSize: 10 }}
                             padding={{ left: 10, right: 10 }}
+                            // Ensure no timezone appears
+                            tickFormatter={(value) => {
+                              if (typeof value === 'string') {
+                                return value.split(' GMT')[0].split(' (')[0];
+                              }
+                              return value;
+                            }}
                           />
                           <YAxis 
                             axisLine={false}
@@ -382,6 +391,13 @@ export default function WorkspacePicker() {
                           tickLine={false}
                           tick={{ fill: '#6E6E76', fontSize: 12 }}
                           padding={{ left: 10, right: 10 }}
+                          // Ensure no timezone appears
+                          tickFormatter={(value) => {
+                            if (typeof value === 'string') {
+                              return value.split(' GMT')[0].split(' (')[0];
+                            }
+                            return value;
+                          }}
                         />
                         <YAxis 
                           axisLine={false}

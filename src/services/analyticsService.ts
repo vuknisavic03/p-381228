@@ -50,7 +50,8 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: filteredHours,
-      formatter: (date: Date) => format(date, "HH:mm"), // Hour format without timezone
+      // Use custom formatter to ensure no timezone info
+      formatter: (date: Date) => format(date, "HH:mm"),
       groupKey: "hour"
     };
   }
@@ -60,7 +61,8 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
-      formatter: (date: Date) => format(date, "MMM dd"), // Day format without timezone
+      // Use custom formatter to ensure no timezone info
+      formatter: (date: Date) => format(date, "MMM dd"),
       groupKey: "day"
     };
   }
@@ -74,7 +76,8 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: weeks,
-      formatter: (date: Date) => format(date, "MMM dd"), // Week format without timezone
+      // Use custom formatter to ensure no timezone info
+      formatter: (date: Date) => format(date, "MMM dd"),
       groupKey: "week"
     };
   }
@@ -86,7 +89,8 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   
   return {
     timePoints: months,
-    formatter: (date: Date) => format(date, "MMM yyyy"), // Month format without timezone
+    // Use custom formatter to ensure no timezone info
+    formatter: (date: Date) => format(date, "MMM yyyy"),
     groupKey: "month"
   };
 };
