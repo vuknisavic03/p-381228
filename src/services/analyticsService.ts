@@ -50,7 +50,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: filteredHours,
-      formatter: (date: Date) => format(date, "HH:mm"), // Removed timezone
+      formatter: (date: Date) => format(date, "HH:mm"), // Hour format without timezone
       groupKey: "hour"
     };
   }
@@ -60,7 +60,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
-      formatter: (date: Date) => format(date, "MMM dd"), // Removed timezone
+      formatter: (date: Date) => format(date, "MMM dd"), // Day format without timezone
       groupKey: "day"
     };
   }
@@ -74,7 +74,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: weeks,
-      formatter: (date: Date) => `${format(date, "MMM dd")}`, // Removed timezone
+      formatter: (date: Date) => format(date, "MMM dd"), // Week format without timezone
       groupKey: "week"
     };
   }
@@ -86,7 +86,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   
   return {
     timePoints: months,
-    formatter: (date: Date) => format(date, "MMM yyyy"), // Removed timezone
+    formatter: (date: Date) => format(date, "MMM yyyy"), // Month format without timezone
     groupKey: "month"
   };
 };
@@ -128,7 +128,7 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   
   // Generate timeline data - ensure month is a string
   const timeline = timePoints.map((point: Date) => ({
-    month: formatter(point), // Convert date to string format without timezone
+    month: formatter(point),
     revenue: getRandomValue(20000, 110000),
     profit: getRandomValue(10000, 55000),
     [groupKey]: point
