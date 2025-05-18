@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,7 +60,7 @@ export function ChartCard({
       }
       
       // Ensure label is a string before rendering it
-      const safeLabel = typeof label === 'string' ? label : String(label);
+      const safeLabel = typeof label === 'string' ? label.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '') : String(label);
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
@@ -190,10 +189,10 @@ export function ChartCard({
               tick={{ fill: '#6E6E76', fontSize: 10 }}
               dy={8}
               padding={{ left: 10, right: 10 }}
-              // Ensure dates are formatted correctly without timezone
+              // Ensure dates are formatted correctly without time
               tickFormatter={(value) => {
-                if (value instanceof Date) {
-                  return value.toLocaleDateString().split(',')[0]; // Remove timezone part
+                if (typeof value === 'string') {
+                  return value.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '');
                 }
                 return value;
               }}

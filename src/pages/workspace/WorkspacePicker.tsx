@@ -186,7 +186,7 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       // Remove any timezone info from label if present
-      const cleanLabel = typeof label === 'string' ? label.split(' GMT')[0].split(' (')[0] : label;
+      const cleanLabel = typeof label === 'string' ? label.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '') : label;
       
       return (
         <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-lg rounded-md">
@@ -319,10 +319,10 @@ export default function WorkspacePicker() {
                             tickLine={false}
                             tick={{ fill: '#9EA3AD', fontSize: 10 }}
                             padding={{ left: 10, right: 10 }}
-                            // Ensure no timezone appears
+                            // Format ticks to remove time portion
                             tickFormatter={(value) => {
                               if (typeof value === 'string') {
-                                return value.split(' GMT')[0].split(' (')[0];
+                                return value.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '');
                               }
                               return value;
                             }}
@@ -391,10 +391,10 @@ export default function WorkspacePicker() {
                           tickLine={false}
                           tick={{ fill: '#6E6E76', fontSize: 12 }}
                           padding={{ left: 10, right: 10 }}
-                          // Ensure no timezone appears
+                          // Format ticks to remove time portion
                           tickFormatter={(value) => {
                             if (typeof value === 'string') {
-                              return value.split(' GMT')[0].split(' (')[0];
+                              return value.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '');
                             }
                             return value;
                           }}

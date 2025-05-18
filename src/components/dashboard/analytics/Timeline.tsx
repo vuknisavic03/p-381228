@@ -71,7 +71,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   const safeData = data.map(point => ({
     ...point,
     month: typeof point.month === 'string' 
-      ? point.month.split(' GMT')[0].split(' (')[0] // Remove timezone information
+      ? point.month.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '') // Remove time portion completely
       : String(point.month)
   }));
 
@@ -112,11 +112,10 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
                 dy={8}
                 padding={{ left: 10, right: 10 }}
-                // Explicitly format the tick value to remove timezone
+                // Format ticks to remove time portion
                 tickFormatter={(value) => {
                   if (typeof value === 'string') {
-                    // Remove GMT and timezone information
-                    return value.split(' GMT')[0].split(' (')[0];
+                    return value.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '');
                   }
                   return value;
                 }}
