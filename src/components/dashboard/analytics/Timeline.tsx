@@ -36,6 +36,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   }
 
   // Safely determine if we have hourly data by checking the first data point
+  // Check if data exists, has at least one element, and if month is a string that includes a colon
   const isHourlyData = data.length > 0 && 
                       typeof data[0].month === 'string' && 
                       data[0].month.includes(':');
@@ -44,7 +45,8 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       // Ensure label is a string
-      const safeLabel = typeof label === 'string' ? label : String(label);
+      const safeLabel = typeof label === 'string' ? label : 
+                         String(label);
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
@@ -67,12 +69,10 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   // Determine title based on data type
   const chartTitle = isHourlyData ? "Today's Performance" : periodLabel || "Performance Timeline";
 
-  // Make sure data is formatted correctly and remove any timezone info
+  // Make sure data is formatted correctly
   const safeData = data.map(point => ({
     ...point,
-    month: typeof point.month === 'string' 
-      ? point.month.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '') // Remove time portion completely
-      : String(point.month)
+    month: typeof point.month === 'string' ? point.month : String(point.month)
   }));
 
   return (
@@ -112,13 +112,6 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
                 dy={8}
                 padding={{ left: 10, right: 10 }}
-                // Format ticks to remove time portion
-                tickFormatter={(value) => {
-                  if (typeof value === 'string') {
-                    return value.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '');
-                  }
-                  return value;
-                }}
               />
               <YAxis 
                 tick={{ fill: '#6E6E76', fontSize: 10 }}

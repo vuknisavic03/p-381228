@@ -60,7 +60,7 @@ export function ChartCard({
       }
       
       // Ensure label is a string before rendering it
-      const safeLabel = typeof label === 'string' ? label.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '') : String(label);
+      const safeLabel = typeof label === 'string' ? label : String(label);
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
@@ -189,10 +189,10 @@ export function ChartCard({
               tick={{ fill: '#6E6E76', fontSize: 10 }}
               dy={8}
               padding={{ left: 10, right: 10 }}
-              // Ensure dates are formatted correctly without time
+              // Ensure dates are converted to strings
               tickFormatter={(value) => {
-                if (typeof value === 'string') {
-                  return value.replace(/\s\d{2}:\d{2}:\d{2}.*$/, '');
+                if (value instanceof Date) {
+                  return value.toLocaleDateString();
                 }
                 return value;
               }}
