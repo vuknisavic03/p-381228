@@ -36,7 +36,6 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   }
 
   // Safely determine if we have hourly data by checking the first data point
-  // Check if data exists, has at least one element, and if month is a string that includes a colon
   const isHourlyData = data.length > 0 && 
                       typeof data[0].month === 'string' && 
                       data[0].month.includes(':');
@@ -45,8 +44,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       // Ensure label is a string
-      const safeLabel = typeof label === 'string' ? label : 
-                         String(label);
+      const safeLabel = typeof label === 'string' ? label : String(label);
       
       return (
         <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
