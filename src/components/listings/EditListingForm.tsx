@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -334,13 +333,11 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
 
-        {/* Tenant Details Section */}
+        {/* Tenant Details Section - Updated with horizontal line style */}
         <div className="space-y-4 group">
           <div className="flex items-center justify-between">
-            <div className="flex items-center flex-1">
-              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-            </div>
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
+            <div className="h-px bg-gray-100 flex-1 mx-4"></div>
             <Button 
               variant="outline" 
               size="sm" 
