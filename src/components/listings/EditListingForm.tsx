@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -333,7 +334,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
 
-        {/* Tenant Details Section - Updated with horizontal line style */}
+        {/* Tenant Details Section - Updated with more space between title and button */}
         <div className="space-y-4 group">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
@@ -342,7 +343,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               variant="outline" 
               size="sm" 
               onClick={toggleTenantType} 
-              className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+              className="h-8 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-4"
             >
               {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
             </Button>
