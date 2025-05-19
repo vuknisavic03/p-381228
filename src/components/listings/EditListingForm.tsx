@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -334,19 +333,21 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
 
-        {/* Tenant Details Section - Updated with more space between title and button */}
+        {/* Tenant Details Section - Updated with proper spacing */}
         <div className="space-y-4 group">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
             <div className="h-px bg-gray-100 flex-1 mx-4"></div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={toggleTenantType} 
-              className="h-8 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-4"
-            >
-              {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-            </Button>
+            <div className="ml-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={toggleTenantType} 
+                className="h-8 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-4"
+              >
+                {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
+              </Button>
+            </div>
           </div>
           
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
