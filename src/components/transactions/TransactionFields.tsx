@@ -60,14 +60,14 @@ export function TransactionFields({
   
   return (
     <div className="space-y-6">
-      {/* Listing Selection Section */}
+      {/* Transaction Type Section */}
       <div className="space-y-4 group">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Listing Selection</h3>
+          <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Type</h3>
+          <div className="h-px bg-gray-100 flex-1 mx-4"></div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
             onChange={type => setFields(f => ({ ...f, listingType: type }))}
-            className="ml-auto"
           />
         </div>
         
@@ -106,14 +106,11 @@ export function TransactionFields({
           {/* Transaction Details Section */}
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Details</h3>
-                <div className="ml-2 h-px bg-gray-100 flex-1 w-24"></div>
-              </div>
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Transaction Details</h3>
+              <div className="h-px bg-gray-100 flex-1 mx-4"></div>
               <TransactionTypeToggle
                 value={fields.transactionType}
                 onChange={type => setFields(f => ({ ...f, transactionType: type }))}
-                className="ml-auto"
               />
             </div>
             
