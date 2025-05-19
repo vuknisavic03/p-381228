@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,6 +12,7 @@ import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Listing, TransactionFieldsData, TransactionFormFieldsProps } from "./TransactionFormTypes";
 import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingSelector } from "./ListingSelector";
+import { ListingTypeToggle } from "./ListingTypeToggle";
 
 export function TransactionFields({ 
   mockListings, 
@@ -38,36 +40,68 @@ export function TransactionFields({
 
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
   console.log("Selected listing:", selectedListing);
+
+  // Define general expense/revenue categories
+  const generalRevenueCategories = [
+    { value: "investment", label: "Investment Return" },
+    { value: "interest", label: "Interest" },
+    { value: "tax-refund", label: "Tax Refund" },
+    { value: "other-general-income", label: "Other Income" }
+  ];
+  
+  const generalExpenseCategories = [
+    { value: "software", label: "Software & Tools" },
+    { value: "admin", label: "Administrative" },
+    { value: "legal", label: "Legal Services" },
+    { value: "accounting", label: "Accounting Services" },
+    { value: "marketing", label: "Marketing" },
+    { value: "other-general-expense", label: "Other Expense" }
+  ];
   
   return (
     <div className="space-y-6">
       {/* Listing Selection Section */}
       <div className="space-y-4 group">
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Listing Selection</h3>
-          <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-        </div>
-        
-        <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
-          <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
-          <ListingSelector
-            listings={mockListings}
-            selectedValue={fields.selectedListingId}
-            onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val }))}
+          <ListingTypeToggle
+            value={fields.listingType || "listing"}
+            onChange={type => setFields(f => ({ ...f, listingType: type }))}
+            className="ml-auto"
           />
         </div>
+        
+        {fields.listingType === "listing" ? (
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
+            <ListingSelector
+              listings={mockListings}
+              selectedValue={fields.selectedListingId}
+              onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val }))}
+            />
+          </div>
+        ) : (
+          <div className="bg-purple-50/30 border border-purple-100 rounded-lg p-5">
+            <div className="text-sm text-purple-700 font-medium mb-2">General Transaction</div>
+            <p className="text-xs text-gray-600 mb-3">
+              This transaction will apply to your entire portfolio, not a specific property.
+            </p>
+          </div>
+        )}
       </div>
       
-      {selectedListing && (
+      {(selectedListing || fields.listingType === "general") && (
         <>
-          {/* Listing Info Card Section */}
-          <div className="space-y-4 group">
-            <div className="flex items-center">
-              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Selected Property</h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          {/* Listing Info Card Section - only shown for listing type */}
+          {fields.listingType === "listing" && selectedListing && (
+            <div className="space-y-4 group">
+              <div className="flex items-center">
+                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Selected Property</h3>
+                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              </div>
+              <ListingInfoCard listing={selectedListing} />
             </div>
-            <ListingInfoCard listing={selectedListing} />
-          </div>
+          )}
           
           {/* Transaction Details Section */}
           <div className="space-y-4 group">
@@ -92,21 +126,39 @@ export function TransactionFields({
                     <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                   </SelectTrigger>
                   <SelectContent>
-                    {fields.transactionType === "revenue" ? (
-                      <>
-                        <SelectItem value="rent">Rent</SelectItem>
-                        <SelectItem value="deposit">Deposit</SelectItem>
-                        <SelectItem value="fee">Fee</SelectItem>
-                        <SelectItem value="other-income">Other Income</SelectItem>
-                      </>
+                    {fields.listingType === "listing" ? (
+                      // Listing specific categories
+                      fields.transactionType === "revenue" ? (
+                        <>
+                          <SelectItem value="rent">Rent</SelectItem>
+                          <SelectItem value="deposit">Deposit</SelectItem>
+                          <SelectItem value="fee">Fee</SelectItem>
+                          <SelectItem value="other-income">Other Income</SelectItem>
+                        </>
+                      ) : (
+                        <>
+                          <SelectItem value="maintenance">Maintenance</SelectItem>
+                          <SelectItem value="utilities">Utilities</SelectItem>
+                          <SelectItem value="insurance">Insurance</SelectItem>
+                          <SelectItem value="tax">Tax</SelectItem>
+                          <SelectItem value="other-expense">Other Expense</SelectItem>
+                        </>
+                      )
                     ) : (
-                      <>
-                        <SelectItem value="maintenance">Maintenance</SelectItem>
-                        <SelectItem value="utilities">Utilities</SelectItem>
-                        <SelectItem value="insurance">Insurance</SelectItem>
-                        <SelectItem value="tax">Tax</SelectItem>
-                        <SelectItem value="other-expense">Other Expense</SelectItem>
-                      </>
+                      // General categories
+                      fields.transactionType === "revenue" ? (
+                        generalRevenueCategories.map(cat => (
+                          <SelectItem key={cat.value} value={cat.value}>
+                            {cat.label}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        generalExpenseCategories.map(cat => (
+                          <SelectItem key={cat.value} value={cat.value}>
+                            {cat.label}
+                          </SelectItem>
+                        ))
+                      )
                     )}
                   </SelectContent>
                 </Select>

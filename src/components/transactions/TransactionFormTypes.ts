@@ -24,6 +24,7 @@ export interface TransactionFieldsData {
   date: Date | undefined;
   payment: string;
   notes: string;
+  listingType: "listing" | "general";
 }
 
 export interface TransactionFormFieldsProps {

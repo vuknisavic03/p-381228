@@ -35,6 +35,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
     date: new Date(),
     payment: "",
     notes: "",
+    listingType: "listing", // Default to listing type
   });
   const { toast } = useToast();
 
@@ -47,6 +48,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   }
 
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
+  const showNotesSection = selectedListing || fields.listingType === "general";
 
   return (
     <div className="h-full overflow-auto bg-white">
@@ -68,7 +70,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           onChange={setFields}
         />
         
-        {selectedListing && (
+        {showNotesSection && (
           <div className="space-y-4 group">
             <div className="flex items-center">
               <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Information</h3>
@@ -91,7 +93,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
         <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleConfirm}
-            disabled={!fields.selectedListingId || !fields.category || !fields.amount}
+            disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
             className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
           >
             Add transaction
