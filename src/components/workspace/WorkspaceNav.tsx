@@ -60,17 +60,23 @@ export function WorkspaceNav({
     // Will be implemented with backend integration
   };
 
+  // Add function to handle clicking on the workspace button
+  const handleWorkspaceClick = () => {
+    navigate('/workspace');
+  };
+
   return (
     <div className="w-[280px] h-full bg-white flex flex-col">
       {/* Header section with workspace info */}
       <div className="p-4 w-full">
         <button 
+          onClick={handleWorkspaceClick}
           className="w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-[#F6F6F7] transition-colors"
         >
           <div className="w-8 h-8 rounded-lg bg-[#F6F6F7] flex items-center justify-center text-sm font-medium text-[#9EA3AD]">
             {workspaceData.initials}
           </div>
-          <span className="text-[#1A1A1A] font-medium text-base">
+          <span className="text-xl font-medium text-[#1A1A1A]">
             {workspaceData.name}
           </span>
         </button>
