@@ -8,15 +8,13 @@ interface DashboardLayoutProps {
   workspaceName?: string;
   userInitials?: string;
   owner?: string;
-  userType?: 'personal' | 'property-manager';
 }
 
 export function DashboardLayout({ 
   children, 
   workspaceName = "Kevin's Workspace", 
   userInitials = "KA",
-  owner = "Kevin Anderson",
-  userType = 'property-manager'
+  owner = "Kevin Anderson" 
 }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-white">
@@ -24,7 +22,6 @@ export function DashboardLayout({
         workspaceName={workspaceName}
         userInitials={userInitials}
         owner={owner}
-        userType={userType}
       />
       <Separator orientation="vertical" className="h-full border-[#E4E5EA]" />
       <main className="flex-1 relative overflow-auto bg-white">
