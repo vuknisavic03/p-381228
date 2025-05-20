@@ -15,12 +15,14 @@ interface WorkspaceNavProps {
   workspaceName?: string;
   userInitials?: string;
   owner?: string;
+  userType?: 'personal' | 'property-manager';
 }
 
 export function WorkspaceNav({ 
   workspaceName = "Kevin's Space", 
   userInitials = "K",
-  owner = "Kevin Anderson" 
+  owner = "Kevin Anderson",
+  userType = 'property-manager'
 }: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,7 +33,8 @@ export function WorkspaceNav({
   const workspaceData = location.state?.workspace || {
     name: workspaceName,
     owner: owner,
-    initials: userInitials
+    initials: userInitials,
+    userType: userType
   };
 
   // Function to navigate with workspace data preserved
@@ -62,7 +65,13 @@ export function WorkspaceNav({
 
   // Add function to handle clicking on the workspace button
   const handleWorkspaceClick = () => {
-    navigate('/workspace');
+    // Only navigate to workspace picker if user is a property manager
+    if (workspaceData.userType === 'property-manager') {
+      navigate('/workspace');
+    } else {
+      // For personal users, just refresh the dashboard
+      navigate('/personal-dashboard');
+    }
   };
 
   return (
@@ -90,7 +99,7 @@ export function WorkspaceNav({
               "flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer",
               isActive('/dashboard') && "bg-[#F6F6F7]"
             )}
-            onClick={() => navigateWithWorkspace('/dashboard')}
+            onClick={() => navigateWithWorkspace(userType === 'personal' ? '/personal-dashboard' : '/dashboard')}
           >
             <LayoutDashboard className="w-5 h-5" />
             <span className={cn(
