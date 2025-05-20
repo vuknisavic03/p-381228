@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,6 +26,7 @@ export default function Index() {
               </Link>
             </div>
             
+            {/* Updated Navigation Menu - Removed Pricing and moved items */}
             <NavigationMenu className="hidden md:block">
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -96,17 +96,12 @@ export default function Index() {
                     Vision
                   </Link>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="#">
-                    Pricing
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
               <Link to="/dashboard">
-                <Button variant="outline" className="hidden sm:flex">
+                <Button variant="ghost" className="hidden sm:flex">
                   Sign In
                 </Button>
               </Link>
@@ -189,7 +184,7 @@ export default function Index() {
               </CardFooter>
             </Card>
             
-            {/* Property Manager */}
+            {/* Property Manager - Updated Link to /workspace */}
             <Card className="shadow-md hover:shadow-lg transition-shadow duration-200">
               <CardHeader>
                 <div className="bg-gray-50 p-4 w-16 h-16 flex items-center justify-center rounded-full mb-4">
@@ -221,7 +216,7 @@ export default function Index() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Link to="/" className="w-full">
+                <Link to="/workspace" className="w-full">
                   <Button className="w-full">
                     Start as Property Manager
                     <Building2 className="ml-2 h-4 w-4" />
