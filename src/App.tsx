@@ -11,6 +11,7 @@ import Listings from "./pages/Listings";
 import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
+import Vision from "./pages/Vision";
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,9 @@ const App = () => {
           <ToastProvider>
             <Toaster />
             <Routes>
-              <Route path="/" element={<WorkspacePicker />} />
+              <Route path="/" element={<Index />} />
+              <Route path="/vision" element={<Vision />} />
+              <Route path="/workspace" element={<WorkspacePicker />} />
               <Route path="/dashboard" element={<Overview />} />
               <Route path="/listings" element={<Listings />} />
               <Route path="/transactions" element={<Transactions />} />
