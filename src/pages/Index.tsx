@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -100,16 +101,12 @@ export default function Index() {
             </NavigationMenu>
 
             <div className="flex items-center gap-4">
-              <Link to="/dashboard">
-                <Button variant="ghost" className="hidden sm:flex">
-                  Sign In
-                </Button>
-              </Link>
-              <Link to="/dashboard">
-                <Button>
-                  Get Started
-                </Button>
-              </Link>
+              <Button variant="ghost" className="hidden sm:flex">
+                Sign In
+              </Button>
+              <Button>
+                Get Started
+              </Button>
             </div>
           </div>
         </div>
@@ -125,11 +122,9 @@ export default function Index() {
             Whether you're an individual owner or a property manager, PropertyHub provides tools to streamline your real estate operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/dashboard">
-              <Button size="lg" className="w-full sm:w-auto">
-                Get Started Now
-              </Button>
-            </Link>
+            <Button size="lg" className="w-full sm:w-auto">
+              Get Started Now
+            </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
               Book a Demo
             </Button>
@@ -273,11 +268,9 @@ export default function Index() {
         <div className="container mx-auto max-w-4xl bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-8 sm:p-10 text-center">
           <h2 className="text-3xl font-semibold mb-4">Ready to simplify your property management?</h2>
           <p className="text-lg text-gray-600 mb-6">Join thousands of property owners and managers who are already using PropertyHub.</p>
-          <Link to="/dashboard">
-            <Button size="lg">
-              Get Started for Free
-            </Button>
-          </Link>
+          <Button size="lg">
+            Get Started for Free
+          </Button>
         </div>
       </section>
 
