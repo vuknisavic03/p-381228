@@ -62,7 +62,7 @@ export function WorkspaceNav({
 
   // Add function to handle clicking on the workspace button
   const handleWorkspaceClick = () => {
-    navigate('/workspace');
+    navigate('/');
   };
 
   return (
