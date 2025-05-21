@@ -19,9 +19,11 @@ export const formatPropertyType = (propertyType: PropertyType): string => {
     case "industrial":
       return "Industrial";
     default:
-      return propertyType.split('_').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ');
+      // Fix the TypeScript error by ensuring propertyType is treated as a string
+      return String(propertyType)
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
   }
 };
 
