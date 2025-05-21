@@ -97,7 +97,8 @@ export function TransactionFields({
                 <div className="text-xs text-gray-600 flex items-center justify-between">
                   <span>Property Type: <span className="font-medium text-gray-800">{selectedPropertyCategory.label}</span></span>
                   <span className="bg-gray-100 text-xs px-2 py-1 rounded-md">
-                    {selectedPropertyCategory.subtypes.find(s => s.value === selectedListing.type)?.label || 
+                    {/* Fix: Don't directly compare PropertySubType with PropertyType */}
+                    {selectedPropertyCategory.subtypes.find(s => s.value.toString().includes(selectedListing.type))?.label || 
                      selectedPropertyCategory.label}
                   </span>
                 </div>
@@ -239,4 +240,3 @@ export function TransactionFields({
     </div>
   );
 }
-
