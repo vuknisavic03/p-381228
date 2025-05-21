@@ -8,12 +8,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
 
-// Should match the listings from TransactionForm for editing!
+// Use the same mock listings from TransactionForm
 const mockListings = [
   {
     id: "1",
     name: "Belgrade, Dunavska 12",
-    type: "Retail",
+    type: "residential_rental",
     address: "Belgrade, Dunavska 12",
     city: "Belgrade",
     country: "Serbia",
@@ -24,7 +24,76 @@ const mockListings = [
       phone: "000-000-0000"
     }
   },
-  // ... add more mock listings if needed
+  {
+    id: "2",
+    name: "Berlin Office Space",
+    type: "commercial_rental", 
+    address: "Alexanderplatz 5",
+    city: "Berlin",
+    country: "Germany",
+    tenant: {
+      name: "Tech Innovators GmbH",
+      type: "Company",
+      email: "contact@techinnovators.de",
+      phone: "030-555-7890"
+    }
+  },
+  {
+    id: "3",
+    name: "Paris Vacation Apartment",
+    type: "vacation_rental",
+    address: "Rue de Rivoli 75",
+    city: "Paris",
+    country: "France",
+    tenant: {
+      name: "Vacation Rental Management",
+      type: "Company",
+      email: "bookings@vrm.com",
+      phone: "33-145-678-900"
+    }
+  },
+  {
+    id: "4",
+    name: "Zagreb Mixed-Use Building",
+    type: "mixed_use",
+    address: "Ilica 15",
+    city: "Zagreb",
+    country: "Croatia",
+    tenant: {
+      name: "Multiple Tenants",
+      type: "Various",
+      email: "management@zgproperties.hr",
+      phone: "385-1-234-5678"
+    }
+  },
+  {
+    id: "5",
+    name: "Vienna Boutique Hotel",
+    type: "hospitality",
+    address: "Stephansplatz 10",
+    city: "Vienna",
+    country: "Austria",
+    tenant: {
+      name: "Vienna Stays Ltd",
+      type: "Company",
+      email: "reception@viennastays.at",
+      phone: "43-1-987-6543"
+    }
+  },
+  {
+    id: "6",
+    name: "Warehouse Facility",
+    type: "industrial",
+    address: "Industrial Zone 3, Building 7",
+    city: "Budapest",
+    country: "Hungary",
+    tenant: {
+      name: "Logistics Solutions Inc.",
+      type: "Company",
+      email: "operations@logisticssolutions.com",
+      phone: "36-1-555-1234"
+    }
+  }
 ];
 
 interface EditTransactionFormProps {

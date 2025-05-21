@@ -2,14 +2,20 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, DollarSign } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
-import { Listing, TransactionFieldsData, TransactionFormFieldsProps } from "./TransactionFormTypes";
+import { 
+  Listing, 
+  TransactionFieldsData, 
+  TransactionFormFieldsProps, 
+  PROPERTY_CATEGORIES, 
+  GENERAL_CATEGORIES 
+} from "./TransactionFormTypes";
 import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingSelector } from "./ListingSelector";
 import { ListingTypeToggle } from "./ListingTypeToggle";
@@ -40,23 +46,29 @@ export function TransactionFields({
 
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
   console.log("Selected listing:", selectedListing);
-
-  // Define general expense/revenue categories
-  const generalRevenueCategories = [
-    { value: "investment", label: "Investment Return" },
-    { value: "interest", label: "Interest" },
-    { value: "tax-refund", label: "Tax Refund" },
-    { value: "other-general-income", label: "Other Income" }
-  ];
   
-  const generalExpenseCategories = [
-    { value: "software", label: "Software & Tools" },
-    { value: "admin", label: "Administrative" },
-    { value: "legal", label: "Legal Services" },
-    { value: "accounting", label: "Accounting Services" },
-    { value: "marketing", label: "Marketing" },
-    { value: "other-general-expense", label: "Other Expense" }
-  ];
+  // Get the property category based on the selected listing type
+  const selectedPropertyCategory = selectedListing 
+    ? PROPERTY_CATEGORIES.find(cat => cat.type === selectedListing.type) 
+    : undefined;
+
+  // Get appropriate categories based on transaction type and listing type
+  const getCategoriesForSelection = () => {
+    if (fields.listingType === "general") {
+      // Return general categories
+      return fields.transactionType === "revenue" 
+        ? GENERAL_CATEGORIES.revenue 
+        : GENERAL_CATEGORIES.expense;
+    } else if (selectedPropertyCategory) {
+      // Return property-specific categories
+      return fields.transactionType === "revenue"
+        ? selectedPropertyCategory.revenueCategories
+        : selectedPropertyCategory.expenseCategories;
+    }
+    return []; // Fallback empty array
+  };
+  
+  const transactionCategories = getCategoriesForSelection();
   
   return (
     <div className="space-y-6">
@@ -77,8 +89,20 @@ export function TransactionFields({
             <ListingSelector
               listings={mockListings}
               selectedValue={fields.selectedListingId}
-              onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val }))}
+              onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))} // Reset category when listing changes
             />
+            
+            {selectedListing && selectedPropertyCategory && (
+              <div className="mt-3">
+                <div className="text-xs text-gray-600 flex items-center justify-between">
+                  <span>Property Type: <span className="font-medium text-gray-800">{selectedPropertyCategory.label}</span></span>
+                  <span className="bg-gray-100 text-xs px-2 py-1 rounded-md">
+                    {selectedPropertyCategory.subtypes.find(s => s.value === selectedListing.type)?.label || 
+                     selectedPropertyCategory.subtypes[0]?.label}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="bg-purple-50/30 border border-purple-100 rounded-lg p-5">
@@ -110,7 +134,7 @@ export function TransactionFields({
               <div className="h-px bg-gray-100 flex-1 mx-4"></div>
               <TransactionTypeToggle
                 value={fields.transactionType}
-                onChange={type => setFields(f => ({ ...f, transactionType: type }))}
+                onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))} // Reset category when transaction type changes
               />
             </div>
             
@@ -118,44 +142,22 @@ export function TransactionFields({
               {/* Category */}
               <div>
                 <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</div>
-                <Select value={fields.category} onValueChange={cat => setFields(f => ({ ...f, category: cat }))}>
+                <Select 
+                  value={fields.category} 
+                  onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
+                >
                   <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
                     <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                   </SelectTrigger>
                   <SelectContent>
-                    {fields.listingType === "listing" ? (
-                      // Listing specific categories
-                      fields.transactionType === "revenue" ? (
-                        <>
-                          <SelectItem value="rent">Rent</SelectItem>
-                          <SelectItem value="deposit">Deposit</SelectItem>
-                          <SelectItem value="fee">Fee</SelectItem>
-                          <SelectItem value="other-income">Other Income</SelectItem>
-                        </>
-                      ) : (
-                        <>
-                          <SelectItem value="maintenance">Maintenance</SelectItem>
-                          <SelectItem value="utilities">Utilities</SelectItem>
-                          <SelectItem value="insurance">Insurance</SelectItem>
-                          <SelectItem value="tax">Tax</SelectItem>
-                          <SelectItem value="other-expense">Other Expense</SelectItem>
-                        </>
-                      )
+                    {transactionCategories.length > 0 ? (
+                      transactionCategories.map(cat => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))
                     ) : (
-                      // General categories
-                      fields.transactionType === "revenue" ? (
-                        generalRevenueCategories.map(cat => (
-                          <SelectItem key={cat.value} value={cat.value}>
-                            {cat.label}
-                          </SelectItem>
-                        ))
-                      ) : (
-                        generalExpenseCategories.map(cat => (
-                          <SelectItem key={cat.value} value={cat.value}>
-                            {cat.label}
-                          </SelectItem>
-                        ))
-                      )
+                      <SelectItem value="none" disabled>No categories available</SelectItem>
                     )}
                   </SelectContent>
                 </Select>
