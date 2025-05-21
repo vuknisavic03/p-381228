@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,11 +12,13 @@ import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Card } from "@/components/ui/card";
 import { ListingSelector } from "./ListingSelector";
+import { PropertyType } from "./TransactionFormTypes"; // Import PropertyType
 
+// Update Listing interface to match the one in TransactionFormTypes.ts
 interface Listing {
   id: string;
   name: string;
-  type: string;
+  type: PropertyType; // Now using PropertyType instead of string
   address: string;
   city: string;
   country: string;

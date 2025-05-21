@@ -4,15 +4,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { SheetClose } from "@/components/ui/sheet";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
 
+// Updated mockListings with proper PropertyType values
 const mockListings: Listing[] = [
   {
     id: "1",
     name: "Belgrade, Dunavska 12",
-    type: "residential_rental",
+    type: "residential_rental", // This is now a valid PropertyType
     address: "Belgrade, Dunavska 12",
     city: "Belgrade",
     country: "Serbia",
@@ -26,7 +26,7 @@ const mockListings: Listing[] = [
   {
     id: "2",
     name: "Berlin Office Space",
-    type: "commercial_rental", 
+    type: "commercial_rental",
     address: "Alexanderplatz 5",
     city: "Berlin",
     country: "Germany",

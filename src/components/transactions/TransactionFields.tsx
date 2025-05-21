@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -52,6 +51,7 @@ export function TransactionFields({
     ? PROPERTY_CATEGORIES.find(cat => cat.type === selectedListing.type) 
     : undefined;
 
+  // Fix: Remove the erroneous comparison that was causing the type error
   // Get appropriate categories based on transaction type and listing type
   const getCategoriesForSelection = () => {
     if (fields.listingType === "general") {

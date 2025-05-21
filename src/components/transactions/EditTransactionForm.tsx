@@ -5,15 +5,15 @@ import { SheetClose } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
+import { Listing, TransactionFieldsData, PropertyType } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
 
-// Use the same mock listings from TransactionForm
-const mockListings = [
+// Use the same mock listings from TransactionForm with proper PropertyType values
+const mockListings: Listing[] = [
   {
     id: "1",
     name: "Belgrade, Dunavska 12",
-    type: "residential_rental",
+    type: "residential_rental" as PropertyType,
     address: "Belgrade, Dunavska 12",
     city: "Belgrade",
     country: "Serbia",
@@ -27,7 +27,7 @@ const mockListings = [
   {
     id: "2",
     name: "Berlin Office Space",
-    type: "commercial_rental", 
+    type: "commercial_rental" as PropertyType,
     address: "Alexanderplatz 5",
     city: "Berlin",
     country: "Germany",
@@ -41,7 +41,7 @@ const mockListings = [
   {
     id: "3",
     name: "Paris Vacation Apartment",
-    type: "vacation_rental",
+    type: "vacation_rental" as PropertyType,
     address: "Rue de Rivoli 75",
     city: "Paris",
     country: "France",
@@ -55,7 +55,7 @@ const mockListings = [
   {
     id: "4",
     name: "Zagreb Mixed-Use Building",
-    type: "mixed_use",
+    type: "mixed_use" as PropertyType,
     address: "Ilica 15",
     city: "Zagreb",
     country: "Croatia",
@@ -69,7 +69,7 @@ const mockListings = [
   {
     id: "5",
     name: "Vienna Boutique Hotel",
-    type: "hospitality",
+    type: "hospitality" as PropertyType,
     address: "Stephansplatz 10",
     city: "Vienna",
     country: "Austria",
@@ -83,7 +83,7 @@ const mockListings = [
   {
     id: "6",
     name: "Warehouse Facility",
-    type: "industrial",
+    type: "industrial" as PropertyType,
     address: "Industrial Zone 3, Building 7",
     city: "Budapest",
     country: "Hungary",
