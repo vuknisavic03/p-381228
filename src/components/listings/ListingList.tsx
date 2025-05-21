@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { FilterPopover } from "@/components/ui/filter-popover";
 import { FilterTags } from "@/components/ui/filter-tags";
 import { useToast } from "@/hooks/use-toast";
+import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
+import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
 // Mock listings data
 const mockListings = [
@@ -306,9 +307,10 @@ export function ListingList() {
                           <span className="font-medium">{listing.address}</span>
                         </div>
                       </div>
-                      <span className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium">
-                        {listing.type}
-                      </span>
+                      <PropertyTypeDisplay 
+                        type={listing.type as PropertyType} 
+                        className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium"
+                      />
                     </div>
                     
                     <div className="h-px bg-[#E4E5EA] mx-4" />

@@ -22,6 +22,8 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 
 interface ListingFormProps {
   onClose?: () => void;
@@ -32,7 +34,7 @@ export function ListingForm({ onClose }: ListingFormProps) {
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [typeField, setTypeField] = useState("");
+  const [typeField, setTypeField] = useState<string>("");
   const [category, setCategory] = useState("");
   const [tenantName, setTenantName] = useState("");
   const [tenantPhone, setTenantPhone] = useState("");
@@ -40,24 +42,24 @@ export function ListingForm({ onClose }: ListingFormProps) {
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
 
-  const typeCategories = [
-    { value: "residential", label: "Residential", Icon: Home },
-    { value: "commercial", label: "Commercial", Icon: Building },
-    { value: "industrial", label: "Industrial", Icon: Factory },
-    { value: "retail", label: "Retail", Icon: Store },
-    { value: "office", label: "Office Space", Icon: Building2 },
-    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-    { value: "hotel", label: "Hotel", Icon: Hotel },
-    { value: "mixed", label: "Mixed Use", Icon: Briefcase },
+  // Property types with corresponding icon components
+  const propertyTypes: { value: PropertyType; label: string }[] = [
+    { value: "residential_rental", label: "Residential Rental" },
+    { value: "commercial_rental", label: "Commercial Rental" },
+    { value: "industrial", label: "Industrial" },
+    { value: "hospitality", label: "Hospitality" },
+    { value: "vacation_rental", label: "Vacation Rental" },
+    { value: "mixed_use", label: "Mixed Use" },
   ];
 
+  // Updated category maps to use property types
   const typeToCategoryMap = {
-    residential: [
+    residential_rental: [
       { value: "apartment", label: "Apartment", Icon: Building2 },
       { value: "house", label: "House", Icon: Home },
       { value: "condo", label: "Condominium", Icon: Building },
     ],
-    commercial: [
+    commercial_rental: [
       { value: "office", label: "Office", Icon: Building2 },
       { value: "retail", label: "Retail Space", Icon: Store },
     ],
@@ -65,27 +67,17 @@ export function ListingForm({ onClose }: ListingFormProps) {
       { value: "warehouse", label: "Warehouse", Icon: Warehouse },
       { value: "factory", label: "Factory", Icon: Factory },
     ],
-    retail: [
-      { value: "store", label: "Store", Icon: Store },
-      { value: "shop", label: "Shop", Icon: Store },
-      { value: "mall", label: "Mall", Icon: Building },
-    ],
-    office: [
-      { value: "private", label: "Private Office", Icon: Building2 },
-      { value: "coworking", label: "Coworking", Icon: Building2 },
-      { value: "business", label: "Business Center", Icon: Building2 },
-    ],
-    warehouse: [
-      { value: "storage", label: "Storage", Icon: Warehouse },
-      { value: "distribution", label: "Distribution", Icon: Warehouse },
-      { value: "logistics", label: "Logistics", Icon: Warehouse },
-    ],
-    hotel: [
+    hospitality: [
       { value: "hotel", label: "Hotel", Icon: Hotel },
       { value: "motel", label: "Motel", Icon: Hotel },
       { value: "resort", label: "Resort", Icon: Hotel },
     ],
-    mixed: [
+    vacation_rental: [
+      { value: "villa", label: "Villa", Icon: Home },
+      { value: "apartment", label: "Apartment", Icon: Building2 },
+      { value: "cottage", label: "Cottage", Icon: Home },
+    ],
+    mixed_use: [
       { value: "residential-commercial", label: "Residential-Commercial", Icon: Building },
       { value: "live-work", label: "Live-Work", Icon: Home },
       { value: "multi-purpose", label: "Multi-Purpose", Icon: Building },
@@ -280,10 +272,10 @@ export function ListingForm({ onClose }: ListingFormProps) {
                   <SelectValue placeholder="Select property type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {typeCategories.map((type) => (
+                  {propertyTypes.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       <div className="flex items-center gap-2">
-                        <type.Icon className="h-4 w-4 text-gray-500" />
+                        {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
                         <span>{type.label}</span>
                       </div>
                     </SelectItem>
