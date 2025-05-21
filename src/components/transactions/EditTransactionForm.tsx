@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData, PropertyType } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
+import { formatPropertyType } from "@/utils/propertyTypeUtils";
 
 // Use the same mock listings from TransactionForm with proper PropertyType values
 const mockListings: Listing[] = [

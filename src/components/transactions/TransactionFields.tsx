@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -19,6 +18,7 @@ import {
 import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingSelector } from "./ListingSelector";
 import { ListingTypeToggle } from "./ListingTypeToggle";
+import { formatPropertyType } from "@/utils/propertyTypeUtils";
 
 export function TransactionFields({ 
   mockListings, 
@@ -96,10 +96,9 @@ export function TransactionFields({
               <div className="mt-3">
                 <div className="text-xs text-gray-600 flex items-center justify-between">
                   <span>Property Type: <span className="font-medium text-gray-800">{selectedPropertyCategory.label}</span></span>
-                  <span className="bg-gray-100 text-xs px-2 py-1 rounded-md">
-                    {/* Fix: Don't directly compare PropertySubType with PropertyType */}
+                  <span className="bg-gray-100 text-xs px-2 py-1 rounded-md flex items-center gap-1">
                     {selectedPropertyCategory.subtypes.find(s => s.value.toString().includes(selectedListing.type))?.label || 
-                     selectedPropertyCategory.label}
+                     formatPropertyType(selectedListing.type)}
                   </span>
                 </div>
               </div>

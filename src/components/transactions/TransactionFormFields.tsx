@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, DollarSign, FileText, House, Check, User, Mail, Phone, ShoppingCart } from "lucide-react";
+import { Calendar as CalendarIcon, DollarSign, FileText, User, Mail, Phone, ShoppingCart } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -12,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Card } from "@/components/ui/card";
 import { ListingSelector } from "./ListingSelector";
-import { PropertyType } from "./TransactionFormTypes"; // Import PropertyType
+import { PropertyType } from "./TransactionFormTypes"; 
+import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 
 // Update Listing interface to match the one in TransactionFormTypes.ts
 interface Listing {
@@ -94,12 +94,15 @@ export function TransactionFormFields({ mockListings, initialValues, onChange, e
               </div>
             </div>
             <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 mt-1">
-              <House className="h-5 w-5 text-gray-400" />
+              {selectedListing.type && getPropertyTypeIcon(selectedListing.type)}
               <div>
                 <div className="font-semibold text-gray-900">{selectedListing.name}</div>
                 <div className="text-sm text-gray-500">{selectedListing.city}, {selectedListing.country}</div>
               </div>
-              <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-0.5 flex items-center gap-1"><ShoppingCart className="h-3 w-3" />{selectedListing.type}</span>
+              <span className="ml-auto bg-gray-100 text-xs font-medium text-gray-600 rounded px-2 py-1 flex items-center gap-1">
+                {getPropertyTypeIcon(selectedListing.type)}
+                {formatPropertyType(selectedListing.type)}
+              </span>
             </div>
           </div>
           {/* Transaction Type & Category */}
