@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -51,7 +52,6 @@ export function TransactionFields({
     ? PROPERTY_CATEGORIES.find(cat => cat.type === selectedListing.type) 
     : undefined;
 
-  // Fix: Remove the erroneous comparison that was causing the type error
   // Get appropriate categories based on transaction type and listing type
   const getCategoriesForSelection = () => {
     if (fields.listingType === "general") {
@@ -98,7 +98,7 @@ export function TransactionFields({
                   <span>Property Type: <span className="font-medium text-gray-800">{selectedPropertyCategory.label}</span></span>
                   <span className="bg-gray-100 text-xs px-2 py-1 rounded-md">
                     {selectedPropertyCategory.subtypes.find(s => s.value === selectedListing.type)?.label || 
-                     selectedPropertyCategory.subtypes[0]?.label}
+                     selectedPropertyCategory.label}
                   </span>
                 </div>
               </div>
@@ -239,3 +239,4 @@ export function TransactionFields({
     </div>
   );
 }
+
