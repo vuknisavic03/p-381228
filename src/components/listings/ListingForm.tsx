@@ -20,6 +20,10 @@ import {
   Hotel,
   Briefcase,
   X,
+  Bed,
+  Building as BuildingIcon,
+  Store as StoreIcon,
+  Hotel as HotelIcon,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
@@ -42,7 +46,7 @@ export function ListingForm({ onClose }: ListingFormProps) {
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
 
-  // Property types with corresponding icon components
+  // Updated property types with corresponding icon components
   const propertyTypes: { value: PropertyType; label: string }[] = [
     { value: "residential_rental", label: "Residential Rental" },
     { value: "commercial_rental", label: "Commercial Rental" },
@@ -52,35 +56,37 @@ export function ListingForm({ onClose }: ListingFormProps) {
     { value: "mixed_use", label: "Mixed Use" },
   ];
 
-  // Updated category maps to use property types
+  // Updated category maps based on the new structure
   const typeToCategoryMap = {
     residential_rental: [
-      { value: "apartment", label: "Apartment", Icon: Building2 },
-      { value: "house", label: "House", Icon: Home },
-      { value: "condo", label: "Condominium", Icon: Building },
+      { value: "single_family", label: "Single-family Home", Icon: Home },
+      { value: "multi_family", label: "Multi-family (Duplex, Triplex)", Icon: Building },
+      { value: "apartment_condo", label: "Apartment / Condo", Icon: Building2 },
     ],
     commercial_rental: [
-      { value: "office", label: "Office", Icon: Building2 },
-      { value: "retail", label: "Retail Space", Icon: Store },
+      { value: "office", label: "Office", Icon: BuildingIcon },
+      { value: "retail", label: "Retail", Icon: StoreIcon },
+      { value: "medical", label: "Medical / Professional Unit", Icon: Building2 },
     ],
     industrial: [
       { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-      { value: "factory", label: "Factory", Icon: Factory },
+      { value: "distribution", label: "Distribution Facility", Icon: Factory },
+      { value: "manufacturing", label: "Manufacturing Facility", Icon: Factory },
     ],
     hospitality: [
-      { value: "hotel", label: "Hotel", Icon: Hotel },
+      { value: "hotel", label: "Hotel", Icon: HotelIcon },
       { value: "motel", label: "Motel", Icon: Hotel },
-      { value: "resort", label: "Resort", Icon: Hotel },
+      { value: "bed_breakfast", label: "Bed & Breakfast", Icon: Bed },
     ],
     vacation_rental: [
-      { value: "villa", label: "Villa", Icon: Home },
-      { value: "apartment", label: "Apartment", Icon: Building2 },
-      { value: "cottage", label: "Cottage", Icon: Home },
+      { value: "short_term", label: "Short-term Rental (Airbnb-style)", Icon: Home },
+      { value: "serviced_apartment", label: "Serviced Apartment", Icon: Building2 },
+      { value: "holiday_home", label: "Holiday Home / Villa", Icon: Home },
     ],
     mixed_use: [
-      { value: "residential-commercial", label: "Residential-Commercial", Icon: Building },
-      { value: "live-work", label: "Live-Work", Icon: Home },
-      { value: "multi-purpose", label: "Multi-Purpose", Icon: Building },
+      { value: "residential_commercial", label: "Residential-Commercial", Icon: Building },
+      { value: "live_work", label: "Live-Work", Icon: Home },
+      { value: "multi_purpose", label: "Multi-Purpose", Icon: Building },
     ],
   };
 

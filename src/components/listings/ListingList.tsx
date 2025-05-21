@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -18,8 +19,8 @@ const mockListings = [
     address: "Belgrade, Dunavska 12",
     city: "Belgrade",
     country: "Serbia",
-    type: "Commercial",
-    category: "Retail",
+    type: "commercial_rental",
+    category: "retail",
     tenant: {
       name: "Alexander Whitmore",
       phone: "000-000-0000",
@@ -31,8 +32,8 @@ const mockListings = [
     address: "New York, 5th Avenue",
     city: "New York",
     country: "USA",
-    type: "Residential",
-    category: "Apartment",
+    type: "residential_rental",
+    category: "apartment_condo",
     tenant: {
       name: "Sarah Johnson",
       phone: "111-222-3333",
@@ -44,8 +45,8 @@ const mockListings = [
     address: "London, Baker Street 221B",
     city: "London",
     country: "UK",
-    type: "Commercial",
-    category: "Office",
+    type: "commercial_rental",
+    category: "office",
     tenant: {
       name: "John Watson",
       phone: "444-555-6666",
@@ -57,8 +58,8 @@ const mockListings = [
     address: "Paris, Champs-Élysées",
     city: "Paris",
     country: "France",
-    type: "Commercial",
-    category: "Retail",
+    type: "commercial_rental",
+    category: "retail",
     tenant: {
       name: "Marie Dubois",
       phone: "777-888-9999",
@@ -70,8 +71,8 @@ const mockListings = [
     address: "Tokyo, Shibuya Crossing",
     city: "Tokyo",
     country: "Japan",
-    type: "Commercial",
-    category: "Restaurant",
+    type: "hospitality",
+    category: "hotel",
     tenant: null
   }
 ];
@@ -164,7 +165,10 @@ export function ListingList() {
   const filterGroups = [
     {
       title: "Property Type",
-      options: propertyTypes,
+      options: propertyTypes.map(type => ({
+        value: type,
+        label: formatPropertyType(type as PropertyType)
+      })),
       selectedValues: filters.types,
       onToggle: (value: string) => toggleFilter("types", value),
     },
@@ -199,7 +203,7 @@ export function ListingList() {
   const filterTags = [
     ...filters.types.map(type => ({
       category: "Type",
-      value: type,
+      value: formatPropertyType(type as PropertyType),
       onRemove: () => toggleFilter("types", type)
     })),
     ...filters.categories.map(category => ({
@@ -334,7 +338,7 @@ export function ListingList() {
                         </div>
                       </div>
                       <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
-                        {listing.category}
+                        {listing.category?.replace(/_/g, ' ')}
                       </span>
                     </div>
                   </div>

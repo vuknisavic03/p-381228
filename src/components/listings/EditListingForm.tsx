@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,8 @@ import {
   Warehouse,
   Hotel,
   Briefcase,
-  X
+  X,
+  Bed
 } from "lucide-react";
 import {
   Select,
@@ -22,6 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SheetClose } from "../ui/sheet";
+import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 
 interface EditListingFormProps {
   listing: any;
@@ -35,8 +39,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     address: listing.address || "",
     country: listing.country || "",
     postalCode: listing.postalCode || "",
-    type: listing.type?.toLowerCase() || "",
-    category: listing.category?.toLowerCase() || "",
+    type: listing.type || "",
+    category: listing.category || "",
     tenantName: listing.tenant?.name || "",
     tenantPhone: listing.tenant?.phone || "",
     tenantEmail: listing.tenant?.email || "",
@@ -48,60 +52,52 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   useEffect(() => {
     setFormData(prev => ({
       ...prev,
-      type: listing.type?.toLowerCase() || "",
-      category: listing.category?.toLowerCase() || ""
+      type: listing.type || "",
+      category: listing.category || ""
     }));
   }, [listing]);
 
-  const typeCategories = [
-    { value: "residential", label: "Residential", Icon: Home },
-    { value: "commercial", label: "Commercial", Icon: Building },
-    { value: "industrial", label: "Industrial", Icon: Factory },
-    { value: "retail", label: "Retail", Icon: Store },
-    { value: "office", label: "Office Space", Icon: Building2 },
-    { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-    { value: "hotel", label: "Hotel", Icon: Hotel },
-    { value: "mixed", label: "Mixed Use", Icon: Briefcase },
+  // Updated property types with corresponding icon components
+  const propertyTypes: { value: PropertyType; label: string }[] = [
+    { value: "residential_rental", label: "Residential Rental" },
+    { value: "commercial_rental", label: "Commercial Rental" },
+    { value: "industrial", label: "Industrial" },
+    { value: "hospitality", label: "Hospitality" },
+    { value: "vacation_rental", label: "Vacation Rental" },
+    { value: "mixed_use", label: "Mixed Use" },
   ];
 
+  // Updated category maps based on the new structure
   const typeToCategoryMap = {
-    residential: [
-      { value: "apartment", label: "Apartment", Icon: Building2 },
-      { value: "house", label: "House", Icon: Home },
-      { value: "condo", label: "Condominium", Icon: Building },
+    residential_rental: [
+      { value: "single_family", label: "Single-family Home", Icon: Home },
+      { value: "multi_family", label: "Multi-family (Duplex, Triplex)", Icon: Building },
+      { value: "apartment_condo", label: "Apartment / Condo", Icon: Building2 },
     ],
-    commercial: [
-      { value: "office", label: "Office", Icon: Building2 },
-      { value: "retail", label: "Retail Space", Icon: Store },
+    commercial_rental: [
+      { value: "office", label: "Office", Icon: Building },
+      { value: "retail", label: "Retail", Icon: Store },
+      { value: "medical", label: "Medical / Professional Unit", Icon: Building2 },
     ],
     industrial: [
       { value: "warehouse", label: "Warehouse", Icon: Warehouse },
-      { value: "factory", label: "Factory", Icon: Factory },
+      { value: "distribution", label: "Distribution Facility", Icon: Factory },
+      { value: "manufacturing", label: "Manufacturing Facility", Icon: Factory },
     ],
-    retail: [
-      { value: "store", label: "Store", Icon: Store },
-      { value: "shop", label: "Shop", Icon: Store },
-      { value: "mall", label: "Mall", Icon: Building },
-    ],
-    office: [
-      { value: "private", label: "Private Office", Icon: Building2 },
-      { value: "coworking", label: "Coworking", Icon: Building2 },
-      { value: "business", label: "Business Center", Icon: Building2 },
-    ],
-    warehouse: [
-      { value: "storage", label: "Storage", Icon: Warehouse },
-      { value: "distribution", label: "Distribution", Icon: Warehouse },
-      { value: "logistics", label: "Logistics", Icon: Warehouse },
-    ],
-    hotel: [
+    hospitality: [
       { value: "hotel", label: "Hotel", Icon: Hotel },
       { value: "motel", label: "Motel", Icon: Hotel },
-      { value: "resort", label: "Resort", Icon: Hotel },
+      { value: "bed_breakfast", label: "Bed & Breakfast", Icon: Bed },
     ],
-    mixed: [
-      { value: "residential-commercial", label: "Residential-Commercial", Icon: Building },
-      { value: "live-work", label: "Live-Work", Icon: Home },
-      { value: "multi-purpose", label: "Multi-Purpose", Icon: Building },
+    vacation_rental: [
+      { value: "short_term", label: "Short-term Rental (Airbnb-style)", Icon: Home },
+      { value: "serviced_apartment", label: "Serviced Apartment", Icon: Building2 },
+      { value: "holiday_home", label: "Holiday Home / Villa", Icon: Home },
+    ],
+    mixed_use: [
+      { value: "residential_commercial", label: "Residential-Commercial", Icon: Building },
+      { value: "live_work", label: "Live-Work", Icon: Home },
+      { value: "multi_purpose", label: "Multi-Purpose", Icon: Building },
     ],
   };
 
@@ -179,8 +175,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   };
 
   // Find the currently selected type option
-  const selectedTypeOption = typeCategories.find(type => type.value === formData.type);
-  const TypeIcon = selectedTypeOption?.Icon;
+  const selectedTypeOption = propertyTypes.find(type => type.value === formData.type);
 
   // Find the currently selected category option
   const selectedCategoryOptions = getAvailableCategories();
@@ -275,19 +270,19 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               >
                 <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
                   <SelectValue placeholder="Select property type">
-                    {formData.type && TypeIcon && (
+                    {formData.type && (
                       <div className="flex items-center gap-2">
-                        <TypeIcon className="h-4 w-4" />
-                        <span>{selectedTypeOption?.label}</span>
+                        {getPropertyTypeIcon(formData.type as PropertyType)}
+                        <span>{selectedTypeOption?.label || formatPropertyType(formData.type as PropertyType)}</span>
                       </div>
                     )}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {typeCategories.map((type) => (
+                  {propertyTypes.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       <div className="flex items-center gap-2">
-                        <type.Icon className="h-4 w-4" />
+                        {getPropertyTypeIcon(type.value)}
                         <span>{type.label}</span>
                       </div>
                     </SelectItem>
