@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
@@ -25,17 +25,17 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col">
-        {/* Fixed header section - consistent with other pages */}
+      <div className="h-screen flex flex-col bg-white">
+        {/* Fixed header section - consistent with Transactions page */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center">
-            <h1 className="text-xl font-semibold">Listings</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Listings</h1>
           </div>
           <Button 
             onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9"
+            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9 transition-colors"
           >
-            <PlusCircle className="h-4 w-4" />
+            <Plus className="h-4 w-4" />
             Add Listing
           </Button>
         </div>
@@ -43,7 +43,8 @@ export default function Listings() {
         {/* Horizontal separator line */}
         <Separator className="w-full border-[#E4E5EA]" />
         
-        <div className="flex-1 overflow-y-auto bg-white p-4">
+        {/* Main content container with white background */}
+        <div className="flex-1 bg-white">
           <ListingList />
         </div>
         

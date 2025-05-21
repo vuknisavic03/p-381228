@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Search, Calendar as CalendarIcon, Filter as FilterIcon } from "lucide-react";
+import { Search, Calendar as CalendarIcon, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -37,17 +37,17 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
   const [calendarOpen, setCalendarOpen] = React.useState(false);
 
   return (
-    <div className="border-b">
-      <div className="flex flex-wrap items-center w-full gap-2 p-4">
-        {/* Search bar with improved styling */}
-        <div className="relative flex-1 max-w-[300px]">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+    <div className="border-b border-[#E4E5EA] bg-white">
+      <div className="flex flex-wrap items-center w-full gap-3 p-4">
+        {/* Search bar with Notion-inspired styling */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
           <Input 
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search by name, category or notes..." 
-            className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20 border-gray-200" 
+            className="pl-10 h-9 bg-white border-gray-200 rounded-md" 
           />
         </div>
         
@@ -58,11 +58,11 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
               variant="outline" 
               size="sm"
               className={cn(
-                "text-sm flex items-center gap-1.5 ml-1 h-9 border-gray-200 bg-white hover:bg-gray-50",
-                date ? "bg-primary/10 text-gray-800 border-gray-300" : ""
+                "text-sm flex items-center gap-2 h-9 border-gray-200 bg-white",
+                date ? "bg-gray-100 text-gray-800 border-gray-300" : ""
               )}
             >
-              <CalendarIcon className="h-3.5 w-3.5" />
+              <CalendarIcon className="h-4 w-4" />
               {date ? format(date, "MMM d, yyyy") : "Date"}
             </Button>
           </PopoverTrigger>
@@ -91,12 +91,12 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
                 setCalendarOpen(false);
               }}
               initialFocus
-              className="p-3 pointer-events-auto"
+              className="p-3"
             />
           </PopoverContent>
         </Popover>
         
-        {/* Enhanced Filter Button */}
+        {/* Filter Button */}
         <FilterPopover
           groups={filterGroups}
           selectedCount={activeFilterCount}
@@ -106,14 +106,14 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
               variant="outline"
               size="sm"
               className={cn(
-                "text-sm flex items-center gap-1.5 h-9 border-gray-200 bg-white hover:bg-gray-50",
-                activeFilterCount > 0 ? "bg-primary/10 text-gray-800 border-gray-300" : ""
+                "text-sm flex items-center gap-2 h-9 border-gray-200 bg-white",
+                activeFilterCount > 0 ? "bg-gray-100 text-gray-800 border-gray-300" : ""
               )}
             >
-              <FilterIcon className="h-4 w-4" />
+              <Filter className="h-4 w-4" />
               Filter
               {activeFilterCount > 0 && (
-                <span className="flex items-center justify-center rounded-full bg-gray-800 text-white text-xs w-5 h-5 ml-1">
+                <span className="flex items-center justify-center rounded-full bg-gray-800 text-white text-xs w-5 h-5">
                   {activeFilterCount}
                 </span>
               )}
@@ -121,7 +121,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
           }
         />
         
-        {/* Right-aligned transactionType toggle */}
+        {/* Right-aligned transaction type toggle */}
         <div className="flex-1" />
         <TransactionTypeToggle 
           value={transactionType} 
