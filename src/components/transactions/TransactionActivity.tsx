@@ -1,20 +1,12 @@
-
 import React, { useState } from 'react';
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { EditTransactionForm } from "./EditTransactionForm";
 import { useToast } from "@/hooks/use-toast";
 import { TransactionTable } from "./TransactionTable";
-import { Input } from "@/components/ui/input";
-import { DollarSign, TrendingDown, X, RefreshCcw, Calendar as CalendarIcon, Filter as FilterIcon, Search } from "lucide-react";
-import { FilterPopover } from "@/components/ui/filter-popover";
 import { FilterTags } from "@/components/ui/filter-tags";
-import { TransactionTypeToggle } from "./TransactionTypeToggle";
+import { EditTransactionForm } from "./EditTransactionForm";
+import { TransactionFilterBar } from "./TransactionFilterBar";
+import { format } from "date-fns";
+import { FilterGroup } from "@/components/ui/filter-popover";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -27,7 +19,7 @@ type Transaction = {
   from: string;
   notes?: string;
   status: string;
-  selectedListingId: string; // Added this field
+  selectedListingId: string;
 };
 
 // Mock transaction data
@@ -98,9 +90,8 @@ export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
-  const [calendarOpen, setCalendarOpen] = useState(false);
-  const { toast } = useToast();
   const [search, setSearch] = useState('');
+  const { toast } = useToast();
 
   // Enhanced filter state
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -139,22 +130,31 @@ export function TransactionActivity() {
   };
 
   // Build filter groups for the FilterPopover component
-  const filterGroups = [
+  const filterGroups: FilterGroup[] = [
     {
       title: "Category",
-      options: categories,
+      options: categories.map(category => ({
+        value: category,
+        label: category
+      })),
       selectedValues: selectedCategories,
       onToggle: (value: string) => toggleFilter(selectedCategories, value, setSelectedCategories),
     },
     {
       title: "Payment Method",
-      options: paymentMethods,
+      options: paymentMethods.map(method => ({
+        value: method,
+        label: method
+      })),
       selectedValues: selectedPaymentMethods,
       onToggle: (value: string) => toggleFilter(selectedPaymentMethods, value, setSelectedPaymentMethods),
     },
     {
       title: "Status",
-      options: statuses,
+      options: statuses.map(status => ({
+        value: status,
+        label: status.charAt(0).toUpperCase() + status.slice(1)
+      })),
       selectedValues: selectedStatuses,
       onToggle: (value: string) => toggleFilter(selectedStatuses, value, setSelectedStatuses),
     },
@@ -191,7 +191,7 @@ export function TransactionActivity() {
     })),
   ];
 
-  // Filter transactions as before
+  // Filter transactions
   const filteredTransactions = mockTransactions.filter(transaction => {
     if (transaction.type !== transactionType) return false;
     
@@ -219,7 +219,7 @@ export function TransactionActivity() {
     return true;
   });
 
-  // Handle transaction edit — opens sheet with edit form
+  // Handle transaction edit
   const handleEditTransaction = (tx: Transaction) => {
     setEditingTransaction(tx);
   };
@@ -229,116 +229,33 @@ export function TransactionActivity() {
     setEditingTransaction(null);
     toast({
       title: "Transaction Updated",
-      description: "Transaction was updated in demo mode.",
+      description: "Transaction was updated successfully.",
       duration: 3000
     });
   };
 
   return (
     <div className="h-full">
-      {/* Filters and toggles bar - Updated to match Listings page style */}
-      <div className="border-b">
-        <div className="flex flex-wrap items-center w-full gap-2 p-4">
-          {/* Search bar - matching Listings style */}
-          <div className="relative flex-1 max-w-[300px]">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-            <Input 
-              type="text"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search by name, category or notes..." 
-              className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20" 
-            />
-          </div>
-          
-          {/* Date Picker */}
-          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className={cn(
-                  "text-sm flex items-center gap-1.5 ml-1 h-9",
-                  date ? "bg-primary/10 text-primary border-primary/20" : ""
-                )}
-              >
-                <CalendarIcon className="h-3.5 w-3.5" />
-                {date ? format(date, "MMM d, yyyy") : "Date"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-auto p-0">
-              <div className="p-2 border-b border-gray-100">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-gray-700">Select a date</p>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-8 px-2 text-gray-500" 
-                    onClick={() => {
-                      setDate(undefined);
-                      setCalendarOpen(false);
-                    }}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={(selectedDate) => {
-                  setDate(selectedDate);
-                  setCalendarOpen(false);
-                }}
-                initialFocus
-                className="p-3 pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
-          
-          {/* Enhanced Filter Button */}
-          <FilterPopover
-            groups={filterGroups}
-            selectedCount={activeFilterCount}
-            onReset={clearFilters}
-            trigger={
-              <Button
-                variant="outline"
-                size="sm"
-                className={cn(
-                  "text-sm flex items-center gap-1.5 h-9",
-                  activeFilterCount > 0 ? "bg-primary/10 text-primary border-primary/20" : ""
-                )}
-              >
-                <FilterIcon className="h-4 w-4" />
-                Filter
-                {activeFilterCount > 0 && (
-                  <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
-            }
-          />
-          
-          {/* Right-aligned transactionType toggle - with improved design */}
-          <div className="flex-1" />
-          <TransactionTypeToggle 
-            value={transactionType} 
-            onChange={setTransactionType} 
-            className="h-9"
-          />
-        </div>
-        
-        {/* Show active filter tags */}
-        <FilterTags tags={filterTags} onClearAll={clearFilters} />
-      </div>
+      {/* Filter bar component */}
+      <TransactionFilterBar 
+        search={search}
+        setSearch={setSearch}
+        date={date}
+        setDate={setDate}
+        filterGroups={filterGroups}
+        activeFilterCount={activeFilterCount}
+        clearFilters={clearFilters}
+        transactionType={transactionType}
+        setTransactionType={setTransactionType}
+      />
+      
+      {/* Show active filter tags */}
+      <FilterTags tags={filterTags} onClearAll={clearFilters} />
 
-      {/* Modern Table - adjusted margin to match Listings page (from mt-6 to mt-4) */}
-      <div className="flex-1 overflow-auto mt-4">
+      {/* Modern Table with Notion-inspired styling */}
+      <div className="flex-1 overflow-auto p-4">
         <div className="max-w-full mx-auto">
-          <div className="mb-4">
-            {/* Results Table or Empty State */}
+          <div className="animate-fade-in">
             <TransactionTable
               transactions={filteredTransactions}
               onEdit={handleEditTransaction}
@@ -362,5 +279,3 @@ export function TransactionActivity() {
     </div>
   );
 }
-
-// NOTE: This file is getting large! Consider asking me to refactor/split filter bar and large sections into their own components for maintainability!

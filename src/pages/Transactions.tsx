@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Transactions() {
   const location = useLocation();
@@ -26,14 +27,14 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col">
-        {/* Fixed header section - consistent with listings page */}
+        {/* Fixed header section with Notion-inspired design */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center">
             <h1 className="text-xl font-semibold text-gray-900">Activity</h1>
           </div>
           <Button
             onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9"
+            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9 transition-colors"
           >
             <Plus className="h-4 w-4" />
             Add Transaction
@@ -43,9 +44,13 @@ export default function Transactions() {
         {/* Horizontal separator line */}
         <Separator className="w-full border-[#E4E5EA]" />
 
-        {/* Activity table */}
-        <div className="flex-1 overflow-y-auto bg-white p-4">
-          <TransactionActivity />
+        {/* Activity table in Card for Notion-like appearance */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 p-4 animate-fade-in">
+          <Card className="shadow-sm border-gray-200">
+            <CardContent className="p-0">
+              <TransactionActivity />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Add Transaction Sheet */}
