@@ -9,9 +9,13 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-interface FilterGroup {
+// Define the option type that can be either a string or an object with value and label
+export type FilterOption = string | { value: string; label: string };
+
+// Updated interface to handle both types of options
+export interface FilterGroup {
   title: string;
-  options: string[];
+  options: FilterOption[];
   selectedValues: string[];
   onToggle: (value: string) => void;
 }
@@ -34,6 +38,16 @@ export function FilterPopover({
   title = "Filter"
 }: FilterPopoverProps) {
   const [open, setOpen] = React.useState(false);
+
+  // Helper function to get option value
+  const getOptionValue = (option: FilterOption): string => {
+    return typeof option === 'string' ? option : option.value;
+  }
+
+  // Helper function to get option display label
+  const getOptionLabel = (option: FilterOption): string => {
+    return typeof option === 'string' ? option : option.label;
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -69,10 +83,13 @@ export function FilterPopover({
                 <h4 className="font-semibold text-sm">{group.title}</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {group.options.map((option) => {
-                    const isSelected = group.selectedValues.includes(option);
+                    const value = getOptionValue(option);
+                    const label = getOptionLabel(option);
+                    const isSelected = group.selectedValues.includes(value);
+                    
                     return (
                       <label
-                        key={option}
+                        key={value}
                         className={cn(
                           "flex items-center gap-1.5 text-xs cursor-pointer p-2 rounded-md border",
                           isSelected 
@@ -84,9 +101,9 @@ export function FilterPopover({
                           type="checkbox"
                           className="accent-gray-800 rounded"
                           checked={isSelected}
-                          onChange={() => group.onToggle(option)}
+                          onChange={() => group.onToggle(value)}
                         />
-                        <span>{option}</span>
+                        <span>{label}</span>
                       </label>
                     );
                   })}
