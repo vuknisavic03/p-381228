@@ -98,11 +98,20 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
+  const [apiKey, setApiKey] = useState<string | null>(null);
   
-  // Google Maps API loader with your API key
-  const { isLoaded } = useJsApiLoader({
+  // Load API key from localStorage
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem("googleMapsApiKey");
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
+  }, []);
+  
+  // Google Maps API loader with your API key from localStorage
+  const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ"
+    googleMapsApiKey: apiKey || ''
   });
 
   // Set map reference when loaded
@@ -133,7 +142,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     const latVariation = (listing.id * 0.01) + (index * 0.005);
     const lngVariation = (listing.id * 0.01) - (index * 0.007);
     
-    // Return generated coordinates
+    // Return generated coordinates based on city
     if (listing.city === "New York") {
       return { lat: 40.7128 + latVariation, lng: -74.0060 + lngVariation };
     } else if (listing.city === "London") {
@@ -186,6 +195,20 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   };
 
   // Show loading state if map isn't loaded yet
+  if (loadError) {
+    return (
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
+        <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
+          <h3 className="text-red-600 font-medium mb-2">Google Maps Error</h3>
+          <p className="text-gray-700 text-sm mb-3">
+            Unable to load Google Maps. The API key may be invalid or there might be network issues.
+          </p>
+          <p className="text-xs text-gray-500">Error details: {loadError.message}</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!isLoaded) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">

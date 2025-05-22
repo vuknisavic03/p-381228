@@ -7,11 +7,11 @@ import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
 import { GoogleMapsApiInput } from "@/components/listings/GoogleMapsApiInput";
 import { Button } from "@/components/ui/button";
-import { Plus, List as ListIcon, MapPin, LayoutGrid } from "lucide-react";
+import { Plus, List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
+import { EditListingForm } from "@/components/listings/EditListingForm";
 
 export default function Listings() {
   const location = useLocation();
@@ -149,16 +149,25 @@ export default function Listings() {
           </SheetContent>
         </Sheet>
         
-        {/* Edit Listing Sheet - reused from ListingList */}
+        {/* Edit Listing Sheet */}
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 
             side="right" 
             className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
           >
             {selectedListing && (
-              <div>
-                {/* Listing edit form will be rendered by the EditListingForm component */}
-              </div>
+              <EditListingForm
+                listing={selectedListing}
+                onClose={() => setIsEditSheetOpen(false)}
+                onUpdate={(updatedListing) => {
+                  // Update the listing in the shared data
+                  const updatedListings = sharedListingData.map(l => 
+                    l.id === updatedListing.id ? updatedListing : l
+                  );
+                  setSharedListingData(updatedListings);
+                  setIsEditSheetOpen(false);
+                }}
+              />
             )}
           </SheetContent>
         </Sheet>
