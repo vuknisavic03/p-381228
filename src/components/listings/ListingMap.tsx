@@ -1,8 +1,10 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2 } from 'lucide-react';
+import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 
@@ -43,14 +45,64 @@ interface ListingMapProps {
   onListingClick: (listing: Listing) => void;
 }
 
+// Custom map styles
+const mapStyles = [
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [{"color": "#e9e9e9"}, {"lightness": 17}]
+  },
+  {
+    "featureType": "landscape",
+    "elementType": "geometry",
+    "stylers": [{"color": "#f5f5f5"}, {"lightness": 20}]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.fill",
+    "stylers": [{"color": "#ffffff"}, {"lightness": 17}]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [{"color": "#ffffff"}, {"lightness": 29}, {"weight": 0.2}]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [{"color": "#ffffff"}, {"lightness": 18}]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry",
+    "stylers": [{"color": "#ffffff"}, {"lightness": 16}]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [{"color": "#f5f5f5"}, {"lightness": 21}]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [{"color": "#dedede"}, {"lightness": 21}]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels",
+    "stylers": [{"visibility": "off"}]
+  }
+];
+
 export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
+  const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
   
-  // Google Maps API loader
+  // Google Maps API loader with your API key
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "" // Set your Google Maps API key - we'll prompt for this in the UI
+    googleMapsApiKey: "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ"
   });
 
   // Set map reference when loaded
@@ -65,7 +117,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
           bounds.extend(listing.location);
         }
       });
-      map.fitBounds(bounds);
+      map.fitBounds(bounds, 50); // Add some padding
     }
   }, [listings]);
 
@@ -101,9 +153,23 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     }
   };
 
-  // Handle marker click
+  // Handle marker click with animation
   const handleMarkerClick = (listing: Listing) => {
     setSelectedListing(listing);
+    
+    // Set animation for this marker
+    setMarkerAnimations(prev => ({
+      ...prev,
+      [listing.id]: true
+    }));
+    
+    // Reset animation after 700ms
+    setTimeout(() => {
+      setMarkerAnimations(prev => ({
+        ...prev,
+        [listing.id]: false
+      }));
+    }, 700);
   };
 
   // Handle info window close
@@ -122,15 +188,31 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   // Show loading state if map isn't loaded yet
   if (!isLoaded) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-gray-50">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-        <span className="ml-2 text-gray-500">Loading map...</span>
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+        <span className="text-gray-500 font-medium">Loading map...</span>
       </div>
     );
   }
 
+  // Get marker colors based on property type
+  const getMarkerColor = (type: PropertyType) => {
+    switch (type) {
+      case "residential_rental":
+        return "#4f46e5"; // Indigo
+      case "commercial_rental":
+        return "#0891b2"; // Cyan
+      case "residential_sale":
+        return "#059669"; // Emerald
+      case "commercial_sale":
+        return "#d97706"; // Amber
+      default:
+        return "#6b7280"; // Gray
+    }
+  };
+
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full relative">
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={defaultCenter}
@@ -142,34 +224,30 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
           streetViewControl: false,
           fullscreenControl: true,
           zoomControl: true,
-          styles: [
-            {
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            }
-          ]
+          styles: mapStyles,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
         }}
       >
         {/* Render markers for all listings */}
         {listings.map((listing, index) => {
           const position = getListingCoordinates(listing, index);
+          const markerColor = getMarkerColor(listing.type as PropertyType);
           
           return (
             <Marker
               key={listing.id}
               position={position}
               onClick={() => handleMarkerClick(listing)}
+              animation={markerAnimations[listing.id] ? google.maps.Animation.BOUNCE : undefined}
               icon={{
                 path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
-                fillColor: listing.tenant ? "#1e40af" : "#6b7280", // Blue for occupied, gray for vacant
+                fillColor: markerColor,
                 fillOpacity: 1,
-                strokeWeight: 1,
+                strokeWeight: 1.5,
                 strokeColor: "#ffffff",
                 scale: 1.5,
                 anchor: new google.maps.Point(12, 24)
               }}
-              animation={google.maps.Animation.DROP}
             />
           );
         })}
@@ -179,41 +257,83 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
           <InfoWindow
             position={getListingCoordinates(selectedListing, listings.findIndex(l => l.id === selectedListing.id))}
             onCloseClick={handleInfoClose}
-            options={{ pixelOffset: new google.maps.Size(0, -30) }}
+            options={{ 
+              pixelOffset: new google.maps.Size(0, -30),
+              maxWidth: 320
+            }}
           >
-            <Card className="min-w-[250px] max-w-[300px] border-0 shadow-none">
-              <CardContent className="p-3">
-                <div className="space-y-2">
+            <Card className="w-full border-0 shadow-none">
+              <CardContent className="p-4">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-gray-900">#{selectedListing.id}</h4>
-                    <span className="text-xs font-medium rounded-full px-2 py-1 bg-primary/5 text-primary/80">
+                    <Badge variant="outline" className="text-xs font-medium py-1 border-primary/30">
+                      #{selectedListing.id}
+                    </Badge>
+                    <Badge className="bg-primary/10 text-primary border-0 text-xs font-medium py-1">
                       {formatPropertyType(selectedListing.type)}
-                    </span>
+                    </Badge>
                   </div>
                   
-                  <div className="flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
-                    <span className="text-sm">{selectedListing.address}</span>
-                  </div>
-                  
-                  {selectedListing.tenant && (
-                    <div className="text-sm">
-                      <span className="text-gray-700 font-medium">Tenant:</span> {selectedListing.tenant.name}
+                  <div>
+                    <h4 className="font-medium text-gray-900">{selectedListing.address}</h4>
+                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+                      <MapPin className="h-3 w-3" />
+                      <span>{selectedListing.city}, {selectedListing.country}</span>
                     </div>
-                  )}
+                  </div>
                   
-                  <button 
-                    className="w-full mt-2 bg-gray-900 hover:bg-gray-800 text-white text-xs py-1.5 px-3 rounded-md transition-colors"
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex items-center gap-1.5 text-xs">
+                      <Building2 className="h-3 w-3 text-gray-500" />
+                      <span className="capitalize text-gray-700">{selectedListing.category.replace(/_/g, ' ')}</span>
+                    </div>
+                    
+                    {selectedListing.tenant && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <User className="h-3 w-3 text-gray-500" />
+                        <span className="text-gray-700">{selectedListing.tenant.name}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <Button 
+                    className="w-full mt-1 bg-primary hover:bg-primary/90 text-xs py-1.5 px-3"
                     onClick={handleViewListing}
                   >
                     View Details
-                  </button>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           </InfoWindow>
         )}
       </GoogleMap>
+      
+      {/* Map overlay with legend */}
+      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-md border border-gray-100">
+        <h4 className="text-xs font-medium mb-2 text-gray-700 flex items-center gap-1.5">
+          <Map className="h-3 w-3" />
+          Property Types
+        </h4>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="h-3 w-3 rounded-full bg-[#4f46e5]"></span>
+            <span className="text-gray-600">Residential Rental</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="h-3 w-3 rounded-full bg-[#0891b2]"></span>
+            <span className="text-gray-600">Commercial Rental</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="h-3 w-3 rounded-full bg-[#059669]"></span>
+            <span className="text-gray-600">Residential Sale</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="h-3 w-3 rounded-full bg-[#d97706]"></span>
+            <span className="text-gray-600">Commercial Sale</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
