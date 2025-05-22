@@ -31,9 +31,10 @@ import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUti
 
 interface ListingFormProps {
   onClose?: () => void;
+  onListingAdded?: () => void; // Added this prop definition
 }
 
-export function ListingForm({ onClose }: ListingFormProps) {
+export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
@@ -165,6 +166,11 @@ export function ListingForm({ onClose }: ListingFormProps) {
         onClose();
       }
       
+      // Call the onListingAdded callback if provided
+      if (onListingAdded) {
+        onListingAdded();
+      }
+      
     } catch (err) {
       console.error("Error saving:", err);
       
@@ -179,6 +185,11 @@ export function ListingForm({ onClose }: ListingFormProps) {
       
       if (onClose) {
         onClose();
+      }
+      
+      // Call the onListingAdded callback if provided
+      if (onListingAdded) {
+        onListingAdded();
       }
     }
   };
