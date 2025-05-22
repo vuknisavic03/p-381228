@@ -22,13 +22,13 @@ interface TimelineProps {
 export function Timeline({ data, isLoading = false, periodLabel = "Performance Timeline" }: TimelineProps) {
   if (isLoading) {
     return (
-      <Card className="shadow-sm border border-slate-100 p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] animate-fade-in">
+      <Card className="shadow-sm border border-[#F0F2FA] p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] animate-fade-in rounded-xl">
         <CardHeader className="p-0 pb-3">
           <CardTitle className="text-sm sm:text-base md:text-lg font-medium">Performance Timeline</CardTitle>
         </CardHeader>
         <CardContent className="p-0 h-full">
-          <div className="h-[160px] sm:h-[180px] md:h-[220px] animate-pulse bg-slate-50 rounded-lg flex items-center justify-center">
-            <p className="text-slate-400 text-sm">Loading data...</p>
+          <div className="h-[160px] sm:h-[180px] md:h-[220px] animate-pulse bg-[#F8F9FE] rounded-lg flex items-center justify-center">
+            <p className="text-[#9EA3AD] text-sm">Loading data...</p>
           </div>
         </CardContent>
       </Card>
@@ -49,8 +49,8 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                          String(label);
       
       return (
-        <div className="backdrop-blur-md bg-white/95 p-2.5 sm:p-3.5 border border-slate-100 shadow-lg rounded-lg">
-          <p className="font-medium text-slate-800 mb-1.5 text-xs sm:text-sm">{safeLabel}</p>
+        <div className="backdrop-blur-md bg-white/95 p-3 sm:p-3.5 border border-[#F0F2FA] shadow-lg rounded-xl">
+          <p className="font-medium text-[#1A1F2C] mb-1.5 text-xs sm:text-sm">{safeLabel}</p>
           <div className="mt-1.5">
             {payload.map((entry, index) => (
               <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-1.5 text-xs sm:text-sm my-1">
@@ -76,9 +76,9 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   }));
 
   return (
-    <Card className="shadow-sm border border-slate-100 p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-slate-200 transition-all animate-fade-in">
+    <Card className="shadow-sm border border-[#F0F2FA] p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-[#E4E5EA] transition-all animate-fade-in rounded-xl">
       <CardHeader className="p-0 pb-3">
-        <CardTitle className="text-sm sm:text-base md:text-lg font-medium">
+        <CardTitle className="text-sm sm:text-base md:text-lg font-medium text-[#1A1F2C]">
           {chartTitle}
         </CardTitle>
       </CardHeader>
@@ -104,7 +104,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                   <stop offset="95%" stopColor="#F97316" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="5 5" vertical={false} opacity={0.2} stroke="#9EA3AD" />
+              <CartesianGrid strokeDasharray="5 5" vertical={false} opacity={0.15} stroke="#9EA3AD" />
               <XAxis 
                 dataKey="month" 
                 tick={{ fill: '#6E6E76', fontSize: 10 }} 
