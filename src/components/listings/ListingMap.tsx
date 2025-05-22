@@ -1,5 +1,4 @@
-
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 // Default map settings
 const containerStyle = {
@@ -94,20 +94,33 @@ const mapStyles = [
   }
 ];
 
-// Get the API key directly in a stable way that won't change during component lifecycle
-const getGoogleMapsApiKey = (): string => {
-  return localStorage.getItem("googleMapsApiKey") || "";
-};
+// Create a stable reference to API key loader options
+function useStableApiKey() {
+  const apiKeyRef = useRef<string | null>(null);
+  const [apiKey, setApiKey] = useState<string>("");
+  
+  useEffect(() => {
+    // Only set the API key once on mount to avoid re-renders with different keys
+    if (apiKeyRef.current === null) {
+      const savedApiKey = localStorage.getItem("googleMapsApiKey") || "";
+      apiKeyRef.current = savedApiKey;
+      setApiKey(savedApiKey);
+    }
+  }, []);
+  
+  return apiKey;
+}
 
 export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
+  const apiKey = useStableApiKey();
   
   // Google Maps API loader with stable API key
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: getGoogleMapsApiKey()
+    googleMapsApiKey: apiKey
   });
 
   // Set map reference when loaded
@@ -190,6 +203,20 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     }
   };
 
+  // If API key is not provided, show a message
+  if (!apiKey) {
+    return (
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertTitle>API Key Required</AlertTitle>
+          <AlertDescription>
+            Please provide a valid Google Maps API key to view the map.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   // Show loading state if map isn't loaded yet
   if (loadError) {
     return (
@@ -254,7 +281,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
         {/* Render markers for all listings */}
         {listings.map((listing, index) => {
           const position = getListingCoordinates(listing, index);
-          const markerColor = getMarkerColor(listing.type as PropertyType);
+          const markerColor = getMarkerColor(listing.type);
           
           return (
             <Marker

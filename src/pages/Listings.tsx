@@ -49,7 +49,13 @@ export default function Listings() {
 
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
+    // Update state with new API key
     setGoogleMapsApiKey(apiKey);
+    
+    // If API key was reset to empty, switch back to list view
+    if (!apiKey) {
+      setViewMode("list");
+    }
   };
 
   return (

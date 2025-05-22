@@ -11,7 +11,7 @@ interface GoogleMapsApiInputProps {
 }
 
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
-  const [apiKey, setApiKey] = useState<string>("AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ");
+  const [apiKey, setApiKey] = useState<string>("");
   const [storedKey, setStoredKey] = useState<string | null>(null);
   const { toast } = useToast();
   
@@ -20,6 +20,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     const savedApiKey = localStorage.getItem("googleMapsApiKey");
     if (savedApiKey) {
       setStoredKey(savedApiKey);
+      setApiKey(savedApiKey);
       onApiKeySubmit(savedApiKey);
     }
   }, [onApiKeySubmit]);
@@ -30,8 +31,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     if (!apiKey.trim()) {
       toast({
         title: "API Key Required",
-        description: "Please enter a Google Maps API key.",
-        variant: "destructive",
+        description: "Please enter a Google Maps API key."
       });
       return;
     }
@@ -50,7 +50,8 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
   const handleReset = () => {
     localStorage.removeItem("googleMapsApiKey");
     setStoredKey(null);
-    setApiKey("AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ");
+    setApiKey("");
+    onApiKeySubmit("");
     
     toast({
       title: "API Key Removed",
@@ -96,7 +97,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
               </div>
               <h3 className="font-medium text-lg">Google Maps API Key</h3>
               <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
-                To view listings on the map, please confirm the Google Maps API key below.
+                To view listings on the map, please enter your Google Maps API key below.
               </p>
             </div>
             
