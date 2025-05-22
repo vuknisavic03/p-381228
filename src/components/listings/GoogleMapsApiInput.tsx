@@ -26,15 +26,13 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
   
   // Check if API key is already stored in local storage
   useEffect(() => {
-    const savedApiKey = getGoogleMapsApiKey();
+    const savedApiKey = localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE);
     if (savedApiKey) {
       setStoredKey(savedApiKey);
       setApiKey(savedApiKey);
       
-      // Use a timeout to ensure this happens after initial render
-      setTimeout(() => {
-        onApiKeySubmit(savedApiKey);
-      }, 0);
+      // Notify parent component about the API key but without triggering page reload
+      onApiKeySubmit(savedApiKey);
     }
   }, [onApiKeySubmit]);
   
@@ -53,7 +51,6 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey);
     setStoredKey(apiKey);
     
-    // Trigger page reload to ensure clean initialization of Google Maps
     toast({
       title: "API Key Saved",
       description: "Your Google Maps API key has been saved. The page will refresh to apply changes."

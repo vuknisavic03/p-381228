@@ -28,16 +28,11 @@ export default function Listings() {
   const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string>("");
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
 
-  // Check if API key exists in localStorage on component mount
+  // Load the API key from localStorage on component mount
   useEffect(() => {
     const savedApiKey = getGoogleMapsApiKey();
     setGoogleMapsApiKey(savedApiKey);
-    
-    // If no API key is available, force list view
-    if (!savedApiKey && viewMode === "map") {
-      setViewMode("list");
-    }
-  }, [viewMode]);
+  }, []);
 
   // Handle listing selection from map view
   const handleListingClick = (listing: any) => {
@@ -52,13 +47,7 @@ export default function Listings() {
 
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
-    // Update state with new API key
     setGoogleMapsApiKey(apiKey);
-    
-    // If API key was reset to empty, switch back to list view
-    if (!apiKey) {
-      setViewMode("list");
-    }
   };
 
   return (

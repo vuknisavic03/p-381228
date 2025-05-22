@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
@@ -95,23 +96,22 @@ const mapStyles = [
   }
 ];
 
-// Create a stable loader configuration that won't change between renders
-const googleMapsApiKey = getGoogleMapsApiKey();
-const loaderOptions = {
-  id: 'google-map-script',
-  googleMapsApiKey,
-  libraries: ["maps"] as ["maps"],
-  language: "en",
-  region: "US",
-};
-
 export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
   
-  // Google Maps API loader with stable options
-  const { isLoaded, loadError } = useJsApiLoader(loaderOptions);
+  // Get the API key once on component mount
+  const apiKey = getGoogleMapsApiKey();
+
+  // Configure the loader with the API key
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: apiKey,
+    libraries: ["maps"] as ["maps"],
+    language: "en",
+    region: "US",
+  });
 
   // Set map reference when loaded
   const onLoad = useCallback((map: google.maps.Map) => {
@@ -194,7 +194,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   };
 
   // If API key is not provided, show a message
-  if (!googleMapsApiKey) {
+  if (!apiKey) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <Alert variant="destructive" className="max-w-md">
