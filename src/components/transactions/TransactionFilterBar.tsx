@@ -69,7 +69,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
           <PopoverContent align="start" className="w-auto p-0 border border-gray-200">
             <div className="p-2 border-b border-gray-100">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-700">Select a date</p>
+                <p className="text-sm font-medium text-gray-700">Select a Date</p>
                 <Button 
                   variant="ghost" 
                   size="sm" 

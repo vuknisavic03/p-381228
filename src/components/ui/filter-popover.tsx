@@ -72,7 +72,7 @@ export function FilterPopover({
             <h4 className="font-semibold text-lg">Filters</h4>
             {selectedCount > 0 && (
               <Button variant="ghost" size="sm" onClick={onReset} className="h-8 text-xs text-gray-500 hover:text-gray-700">
-                Reset all
+                Reset All
               </Button>
             )}
           </div>

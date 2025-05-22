@@ -44,7 +44,7 @@ export function FilterTags({ tags, onClearAll }: FilterTagsProps) {
           onClick={onClearAll}
           className="text-xs h-6 py-0 px-2 hover:bg-gray-100"
         >
-          Clear all filters
+          Clear All Filters
         </Button>
       )}
     </div>

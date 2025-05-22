@@ -21,7 +21,7 @@ export default function Profile() {
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <div className="bg-[#F6F6F7] p-4 rounded-md">
-                  <p className="text-sm text-[#9EA3AD]">This is a placeholder for profile content</p>
+                  <p className="text-sm text-[#9EA3AD]">This is a placeholder for Profile content</p>
                 </div>
               </div>
             </div>
