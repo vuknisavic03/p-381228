@@ -6,8 +6,17 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Map, Key, CheckCircle2 } from 'lucide-react';
 
+// Create a global variable to store the current API key
+// This helps prevent multiple initializations with different keys
+const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
+
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
+}
+
+// Function to get API key that can be used across the app
+export function getGoogleMapsApiKey(): string {
+  return localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE) || "";
 }
 
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
@@ -17,11 +26,15 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
   
   // Check if API key is already stored in local storage
   useEffect(() => {
-    const savedApiKey = localStorage.getItem("googleMapsApiKey");
+    const savedApiKey = getGoogleMapsApiKey();
     if (savedApiKey) {
       setStoredKey(savedApiKey);
       setApiKey(savedApiKey);
-      onApiKeySubmit(savedApiKey);
+      
+      // Use a timeout to ensure this happens after initial render
+      setTimeout(() => {
+        onApiKeySubmit(savedApiKey);
+      }, 0);
     }
   }, [onApiKeySubmit]);
   
@@ -37,26 +50,37 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     }
     
     // Store API key in local storage
-    localStorage.setItem("googleMapsApiKey", apiKey);
+    localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey);
     setStoredKey(apiKey);
-    onApiKeySubmit(apiKey);
     
+    // Trigger page reload to ensure clean initialization of Google Maps
     toast({
       title: "API Key Saved",
-      description: "Your Google Maps API key has been saved successfully."
+      description: "Your Google Maps API key has been saved. The page will refresh to apply changes."
     });
+    
+    // Use a short timeout to allow the toast to be seen
+    setTimeout(() => {
+      onApiKeySubmit(apiKey);
+      window.location.reload();
+    }, 1500);
   };
   
   const handleReset = () => {
-    localStorage.removeItem("googleMapsApiKey");
+    localStorage.removeItem(GOOGLE_MAPS_KEY_STORAGE);
     setStoredKey(null);
     setApiKey("");
-    onApiKeySubmit("");
     
     toast({
       title: "API Key Removed",
-      description: "Your Google Maps API key has been removed."
+      description: "Your Google Maps API key has been removed. The page will refresh to apply changes."
     });
+    
+    // Use a short timeout to allow the toast to be seen
+    setTimeout(() => {
+      onApiKeySubmit("");
+      window.location.reload();
+    }, 1500);
   };
   
   if (storedKey) {

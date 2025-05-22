@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
-import { GoogleMapsApiInput } from "@/components/listings/GoogleMapsApiInput";
+import { GoogleMapsApiInput, getGoogleMapsApiKey } from "@/components/listings/GoogleMapsApiInput";
 import { Button } from "@/components/ui/button";
 import { Plus, List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -25,16 +25,19 @@ export default function Listings() {
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
-  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string | null>(null);
+  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string>("");
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
 
   // Check if API key exists in localStorage on component mount
   useEffect(() => {
-    const savedApiKey = localStorage.getItem("googleMapsApiKey");
-    if (savedApiKey) {
-      setGoogleMapsApiKey(savedApiKey);
+    const savedApiKey = getGoogleMapsApiKey();
+    setGoogleMapsApiKey(savedApiKey);
+    
+    // If no API key is available, force list view
+    if (!savedApiKey && viewMode === "map") {
+      setViewMode("list");
     }
-  }, []);
+  }, [viewMode]);
 
   // Handle listing selection from map view
   const handleListingClick = (listing: any) => {
@@ -77,7 +80,13 @@ export default function Listings() {
           <div className="flex items-center gap-3">
             <Tabs 
               value={viewMode} 
-              onValueChange={(value) => setViewMode(value as "list" | "map")} 
+              onValueChange={(value) => {
+                // Only allow map view if API key is set
+                if (value === "map" && !googleMapsApiKey) {
+                  return;
+                }
+                setViewMode(value as "list" | "map");
+              }} 
               className="mr-2"
             >
               <TabsList className="bg-gray-100 p-0.5">
@@ -91,6 +100,7 @@ export default function Listings() {
                 <TabsTrigger 
                   value="map" 
                   className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs px-3 py-1.5"
+                  disabled={!googleMapsApiKey}
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   Map

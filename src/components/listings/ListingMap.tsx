@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { getGoogleMapsApiKey } from './GoogleMapsApiInput';
 
 // Default map settings
 const containerStyle = {
@@ -94,34 +95,23 @@ const mapStyles = [
   }
 ];
 
-// Create a stable reference to API key loader options
-function useStableApiKey() {
-  const apiKeyRef = useRef<string | null>(null);
-  const [apiKey, setApiKey] = useState<string>("");
-  
-  useEffect(() => {
-    // Only set the API key once on mount to avoid re-renders with different keys
-    if (apiKeyRef.current === null) {
-      const savedApiKey = localStorage.getItem("googleMapsApiKey") || "";
-      apiKeyRef.current = savedApiKey;
-      setApiKey(savedApiKey);
-    }
-  }, []);
-  
-  return apiKey;
-}
+// Create a stable loader configuration that won't change between renders
+const googleMapsApiKey = getGoogleMapsApiKey();
+const loaderOptions = {
+  id: 'google-map-script',
+  googleMapsApiKey,
+  libraries: ["maps"] as ["maps"],
+  language: "en",
+  region: "US",
+};
 
 export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-  const apiKey = useStableApiKey();
   
-  // Google Maps API loader with stable API key
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: apiKey
-  });
+  // Google Maps API loader with stable options
+  const { isLoaded, loadError } = useJsApiLoader(loaderOptions);
 
   // Set map reference when loaded
   const onLoad = useCallback((map: google.maps.Map) => {
@@ -204,7 +194,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   };
 
   // If API key is not provided, show a message
-  if (!apiKey) {
+  if (!googleMapsApiKey) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <Alert variant="destructive" className="max-w-md">
