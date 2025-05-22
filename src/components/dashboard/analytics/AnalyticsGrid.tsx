@@ -10,11 +10,11 @@ interface AnalyticsGridProps {
 }
 
 export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
-  const { data, isLoading, error } = useAnalyticsData(dateRange);
+  const { data, isLoading } = useAnalyticsData(dateRange);
   
   return (
-    <div className="flex flex-col w-full space-y-8 animate-fade-in">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8">
+    <div className="flex flex-col w-full space-y-6 animate-fade-in">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="col-span-1">
           <ChartCard
             title="Revenue"
@@ -70,7 +70,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
       </div>
 
       {!isLoading && data?.timeline && (
-        <div className="animate-fade-in" style={{ animationDelay: "200ms" }}>
+        <div className="animate-fade-in" style={{ animationDelay: "150ms" }}>
           <Timeline 
             data={data.timeline || []} 
             periodLabel={data.periodLabel} 
