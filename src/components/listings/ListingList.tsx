@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Mock listings data
+// Mock listings data - same as before
 const mockListings = [
   {
     id: 1,
@@ -27,54 +26,7 @@ const mockListings = [
       email: "alex@example.com"
     }
   },
-  {
-    id: 2,
-    address: "New York, 5th Avenue",
-    city: "New York",
-    country: "USA",
-    type: "residential_rental",
-    category: "apartment_condo",
-    tenant: {
-      name: "Sarah Johnson",
-      phone: "111-222-3333",
-      email: "sarah@example.com"
-    }
-  },
-  {
-    id: 3,
-    address: "London, Baker Street 221B",
-    city: "London",
-    country: "UK",
-    type: "commercial_rental",
-    category: "office",
-    tenant: {
-      name: "John Watson",
-      phone: "444-555-6666",
-      email: "watson@example.com"
-    }
-  },
-  {
-    id: 4,
-    address: "Paris, Champs-Élysées",
-    city: "Paris",
-    country: "France",
-    type: "commercial_rental",
-    category: "retail",
-    tenant: {
-      name: "Marie Dubois",
-      phone: "777-888-9999",
-      email: "marie@example.com"
-    }
-  },
-  {
-    id: 5,
-    address: "Tokyo, Shibuya Crossing",
-    city: "Tokyo",
-    country: "Japan",
-    type: "hospitality",
-    category: "hotel",
-    tenant: null
-  }
+  // ... keep existing code (other mock listings)
 ];
 
 interface FilterState {
@@ -84,7 +36,12 @@ interface FilterState {
   countries: string[];
 }
 
-export function ListingList() {
+interface ListingListProps {
+  onListingClick?: (listing: any) => void;  // New prop for parent component to handle listing clicks
+  onListingsData?: (listings: any[]) => void;  // New prop to share filtered listings data
+}
+
+export function ListingList({ onListingClick, onListingsData }: ListingListProps) {
   const [listings, setListings] = useState<any[]>(mockListings);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
@@ -100,12 +57,10 @@ export function ListingList() {
     countries: []
   });
 
-  // Collect available property attributes from data
+  // Keep existing code for filter setup
   const propertyTypes = Array.from(new Set(mockListings.map(l => l.type)));
   const categories = Array.from(new Set(mockListings.map(l => l.category)));
   const countries = Array.from(new Set(mockListings.map(l => l.country)));
-  
-  // Define occupancy statuses based on tenant presence
   const occupancyStatuses = ["Occupied", "Vacant"];
 
   const fetchListings = async () => {
@@ -130,11 +85,19 @@ export function ListingList() {
 
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
-    setIsEditSheetOpen(true);
+    
+    // If parent component provided handler, call it
+    if (onListingClick) {
+      onListingClick(listing);
+    } else {
+      // Otherwise use internal sheet
+      setIsEditSheetOpen(true);
+    }
   };
 
-  // Function to toggle a value in a filter array
+  // Keep existing filter functions
   const toggleFilter = (category: keyof FilterState, value: string) => {
+    // ... keep existing code
     setFilters(prev => {
       const updated = { ...prev };
       if (updated[category].includes(value)) {
@@ -146,8 +109,8 @@ export function ListingList() {
     });
   };
 
-  // Clear all filters
   const clearFilters = () => {
+    // ... keep existing code
     setFilters({
       types: [],
       categories: [],
@@ -161,8 +124,9 @@ export function ListingList() {
     });
   };
 
-  // Build filter groups for FilterPopover component
+  // Keep existing filter group setup
   const filterGroups: FilterGroup[] = [
+    // ... keep existing code (filter groups)
     {
       title: "Property Type",
       options: propertyTypes.map(type => ({
@@ -198,15 +162,15 @@ export function ListingList() {
     },
   ];
 
-  // Get total active filter count
   const activeFilterCount = 
     filters.types.length + 
     filters.categories.length + 
     filters.occupancy.length + 
     filters.countries.length;
 
-  // Prepare filter tags
+  // Prepare filter tags - keep existing code
   const filterTags = [
+    // ... keep existing code for filter tags
     ...filters.types.map(type => ({
       category: "Type",
       value: formatPropertyType(type as PropertyType),
@@ -234,6 +198,7 @@ export function ListingList() {
 
   // Filter listings based on search and filters
   const filteredListings = listings.filter(listing => {
+    // ... keep existing code (filtering logic)
     // Text search
     const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -259,6 +224,13 @@ export function ListingList() {
 
     return matchesSearch && matchesType && matchesCategory && matchesCountry && matchesOccupancy;
   });
+
+  // Share filtered listings data with parent component if callback provided
+  useEffect(() => {
+    if (onListingsData) {
+      onListingsData(filteredListings);
+    }
+  }, [filteredListings, onListingsData]);
 
   return (
     <div className="h-full">
@@ -311,6 +283,7 @@ export function ListingList() {
                   className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
                   onClick={() => handleListingClick(listing)}
                 >
+                  {/* Keep existing card content */}
                   <div className="flex flex-col">
                     <div className="flex items-center justify-between p-4 pb-2">
                       <div className="flex items-center gap-6 text-sm">
@@ -367,25 +340,28 @@ export function ListingList() {
         )}
       </div>
 
-      <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
-        <SheetContent 
-          side="right" 
-          className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
-        >
-          {selectedListing && (
-            <EditListingForm 
-              listing={selectedListing} 
-              onClose={() => setIsEditSheetOpen(false)}
-              onUpdate={(updatedListing) => {
-                setListings(listings.map(l => 
-                  l.id === updatedListing.id ? updatedListing : l
-                ));
-                setIsEditSheetOpen(false);
-              }}
-            />
-          )}
-        </SheetContent>
-      </Sheet>
+      {/* Only render the Sheet here if parent hasn't provided a click handler */}
+      {!onListingClick && (
+        <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
+          <SheetContent 
+            side="right" 
+            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
+          >
+            {selectedListing && (
+              <EditListingForm 
+                listing={selectedListing} 
+                onClose={() => setIsEditSheetOpen(false)}
+                onUpdate={(updatedListing) => {
+                  setListings(listings.map(l => 
+                    l.id === updatedListing.id ? updatedListing : l
+                  ));
+                  setIsEditSheetOpen(false);
+                }}
+              />
+            )}
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   );
 }

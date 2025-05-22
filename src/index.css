@@ -133,3 +133,56 @@
   animation: scaleIn 0.5s ease-out;
 }
 
+/* Google Maps InfoWindow customization */
+.gm-style-iw {
+  padding: 0 !important;
+}
+
+.gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.gm-style-iw-c {
+  border-radius: 12px !important;
+  padding: 0 !important;
+}
+
+.gm-ui-hover-effect {
+  top: 0 !important;
+  right: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Map marker bounce animation */
+@keyframes markerBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.marker-bounce {
+  animation: markerBounce 0.5s ease-in-out;
+}
+
+/* Map view transitions */
+.map-fade-enter {
+  opacity: 0;
+}
+
+.map-fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.map-fade-exit {
+  opacity: 1;
+}
+
+.map-fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
