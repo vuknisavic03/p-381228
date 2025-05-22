@@ -202,10 +202,14 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
         return "#4f46e5"; // Indigo
       case "commercial_rental":
         return "#0891b2"; // Cyan
-      case "residential_sale":
+      case "hospitality":
         return "#059669"; // Emerald
-      case "commercial_sale":
+      case "vacation_rental":
         return "#d97706"; // Amber
+      case "mixed_use":
+        return "#9333ea"; // Purple
+      case "industrial":
+        return "#dc2626"; // Red
       default:
         return "#6b7280"; // Gray
     }
@@ -326,11 +330,11 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
           </div>
           <div className="flex items-center gap-1.5 text-xs">
             <span className="h-3 w-3 rounded-full bg-[#059669]"></span>
-            <span className="text-gray-600">Residential Sale</span>
+            <span className="text-gray-600">Hospitality</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs">
             <span className="h-3 w-3 rounded-full bg-[#d97706]"></span>
-            <span className="text-gray-600">Commercial Sale</span>
+            <span className="text-gray-600">Vacation Rental</span>
           </div>
         </div>
       </div>

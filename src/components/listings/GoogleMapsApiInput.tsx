@@ -43,8 +43,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     toast({
       title: "API Key Saved",
-      description: "Your Google Maps API key has been saved successfully.",
-      icon: <CheckCircle2 className="h-5 w-5 text-green-500" />
+      description: "Your Google Maps API key has been saved successfully."
     });
   };
   
