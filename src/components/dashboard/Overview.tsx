@@ -25,7 +25,6 @@ export function Overview() {
     <DashboardLayout 
       workspaceName={workspaceData.name}
       userInitials={workspaceData.initials}
-      owner={workspaceData.owner}
     >
       <WorkspaceOverview 
         userName={firstName} 
