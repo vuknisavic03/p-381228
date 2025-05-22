@@ -50,7 +50,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: filteredHours,
-      formatter: (date: Date) => format(date, "h a"), // Simple hour format like "3 PM"
+      formatter: (date: Date) => format(date, "HH:mm"), // Removed timezone
       groupKey: "hour"
     };
   }
@@ -60,7 +60,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
-      formatter: (date: Date) => format(date, "MMM d"), // "Jan 15" format
+      formatter: (date: Date) => format(date, "MMM dd"), // Removed timezone
       groupKey: "day"
     };
   }
@@ -74,7 +74,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: weeks,
-      formatter: (date: Date) => format(date, "MMM d"), // "Jan 15" format
+      formatter: (date: Date) => `${format(date, "MMM dd")}`, // Removed timezone
       groupKey: "week"
     };
   }
@@ -86,7 +86,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
   
   return {
     timePoints: months,
-    formatter: (date: Date) => format(date, "MMM"), // Just month name like "Jan"
+    formatter: (date: Date) => format(date, "MMM yyyy"), // Removed timezone
     groupKey: "month"
   };
 };
@@ -99,6 +99,8 @@ const getRandomValue = (min: number, max: number) => {
 // Mock function that would be replaced with actual database calls
 const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   // This would be replaced with an actual API call to your database
+  // For example: const response = await fetch('/api/analytics?from=${dateRange?.from}&to=${dateRange?.to}');
+  // return await response.json();
   
   // Generate time-based data points for the selected date range
   const { timePoints, formatter, groupKey } = generateDataForRange(dateRange);
