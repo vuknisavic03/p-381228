@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   AreaChart,
@@ -68,7 +67,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   // Determine title based on data type
   const chartTitle = isHourlyData ? "Today's Performance" : periodLabel || "Performance Timeline";
 
-  // Make sure data is formatted correctly
+  // Make sure data is formatted correctly - dates are already strings from analyticsService
   const safeData = data.map(point => ({
     ...point,
     month: typeof point.month === 'string' ? point.month : String(point.month)
@@ -111,6 +110,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
                 dy={8}
                 padding={{ left: 10, right: 10 }}
+                // Using strings directly from the analyticsService
               />
               <YAxis 
                 tick={{ fill: '#6E6E76', fontSize: 11 }}

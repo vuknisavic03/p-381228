@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -190,13 +189,6 @@ export function ChartCard({
               tick={{ fill: '#6E6E76', fontSize: 11 }}
               dy={8}
               padding={{ left: 10, right: 10 }}
-              // Ensure dates are converted to strings
-              tickFormatter={(value) => {
-                if (value instanceof Date) {
-                  return value.toLocaleDateString();
-                }
-                return value;
-              }}
             />
             <YAxis 
               axisLine={false}
