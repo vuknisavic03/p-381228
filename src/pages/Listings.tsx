@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
@@ -27,6 +27,14 @@ export default function Listings() {
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string | null>(null);
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
+
+  // Check if API key exists in localStorage on component mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem("googleMapsApiKey");
+    if (savedApiKey) {
+      setGoogleMapsApiKey(savedApiKey);
+    }
+  }, []);
 
   // Handle listing selection from map view
   const handleListingClick = (listing: any) => {

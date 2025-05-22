@@ -94,24 +94,20 @@ const mapStyles = [
   }
 ];
 
+// Get the API key directly in a stable way that won't change during component lifecycle
+const getGoogleMapsApiKey = (): string => {
+  return localStorage.getItem("googleMapsApiKey") || "";
+};
+
 export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-  const [apiKey, setApiKey] = useState<string | null>(null);
   
-  // Load API key from localStorage
-  useEffect(() => {
-    const savedApiKey = localStorage.getItem("googleMapsApiKey");
-    if (savedApiKey) {
-      setApiKey(savedApiKey);
-    }
-  }, []);
-  
-  // Google Maps API loader with your API key from localStorage
+  // Google Maps API loader with stable API key
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: apiKey || ''
+    googleMapsApiKey: getGoogleMapsApiKey()
   });
 
   // Set map reference when loaded

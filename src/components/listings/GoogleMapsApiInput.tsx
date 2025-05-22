@@ -54,7 +54,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     toast({
       title: "API Key Removed",
-      description: "Your Google Maps API key has been removed.",
+      description: "Your Google Maps API key has been removed."
     });
   };
   
