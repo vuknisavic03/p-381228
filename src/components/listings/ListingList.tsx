@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -154,7 +155,7 @@ export function ListingList() {
       countries: []
     });
     toast({
-      title: "Filters cleared",
+      title: "Filters Cleared",
       description: "All filters have been reset",
       duration: 3000,
     });
@@ -176,6 +177,9 @@ export function ListingList() {
       options: categories.map(category => ({
         value: category,
         label: category.replace(/_/g, ' ')
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
       })),
       selectedValues: filters.categories,
       onToggle: (value: string) => toggleFilter("categories", value),
@@ -210,7 +214,10 @@ export function ListingList() {
     })),
     ...filters.categories.map(category => ({
       category: "Category",
-      value: category,
+      value: category.replace(/_/g, ' ')
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' '),
       onRemove: () => toggleFilter("categories", category)
     })),
     ...filters.occupancy.map(status => ({
@@ -260,7 +267,7 @@ export function ListingList() {
           <div className="relative flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             <Input 
-              placeholder="Search by address, tenant or ID..." 
+              placeholder="Search by Address, Tenant or ID..." 
               className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20" 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -293,7 +300,7 @@ export function ListingList() {
         {isLoading ? (
           <div className="flex items-center justify-center h-full text-muted-foreground">
             <Loader2 className="h-6 w-6 animate-spin mr-2" />
-            <span>Loading listings...</span>
+            <span>Loading Listings...</span>
           </div>
         ) : (
           <div className="space-y-2">
@@ -323,7 +330,7 @@ export function ListingList() {
                     
                     <div className="flex items-center justify-between p-4 pt-2">
                       <div className="flex items-center gap-8 text-sm">
-                        <span className="text-[#9EA3AD] font-medium">{listing.tenant?.name || 'No tenant'}</span>
+                        <span className="text-[#9EA3AD] font-medium">{listing.tenant?.name || 'No Tenant'}</span>
                         <div className="flex items-center gap-8">
                           {listing.tenant?.phone && (
                             <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
@@ -340,7 +347,10 @@ export function ListingList() {
                         </div>
                       </div>
                       <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
-                        {listing.category?.replace(/_/g, ' ')}
+                        {listing.category?.replace(/_/g, ' ')
+                          .split(' ')
+                          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(' ')}
                       </span>
                     </div>
                   </div>
@@ -349,8 +359,8 @@ export function ListingList() {
             ) : (
               <div className="text-center py-8 text-muted-foreground">
                 {searchTerm || activeFilterCount > 0 
-                  ? 'No listings found matching your filters' 
-                  : 'No listings available'}
+                  ? 'No Listings Found Matching Your Filters' 
+                  : 'No Listings Available'}
               </div>
             )}
           </div>
