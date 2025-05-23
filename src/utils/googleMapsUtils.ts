@@ -97,9 +97,17 @@ export function handleMapsApiLoadError(error: Error | null): string {
     return "The provided API key is invalid or expired. Please check your key.";
   } else if (errorMessage.includes('MissingKeyMapError')) {
     return "No API key provided. Please enter a valid Google Maps API key.";
+  } else if (errorMessage.includes('Loader must not be called again with different options')) {
+    return "Error with Google Maps configuration. Please refresh the page and try again.";
   } else {
     return `Error loading Google Maps: ${errorMessage}`;
   }
+}
+
+// Check if Google Maps is already loaded
+export function isGoogleMapsLoaded(): boolean {
+  // @ts-ignore
+  return Boolean(window.google && window.google.maps);
 }
 
 // Manual script loading function
@@ -108,15 +116,34 @@ export function loadGoogleMapsScript(apiKey: string): Promise<void> {
     console.log("Starting to load Google Maps script");
     
     // First check if Google Maps is already loaded
-    // @ts-ignore
-    if (window.google && window.google.maps) {
+    if (isGoogleMapsLoaded()) {
       console.log("Google Maps is already loaded, resolving immediately");
       resolve();
       return;
     }
     
-    // Clean up any existing scripts to prevent conflicts
-    removeExistingGoogleMapsScript();
+    // Check if there's already a script in progress (to prevent duplicate loading)
+    const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID);
+    if (existingScript) {
+      // If the script is already loading with the same API key, don't reload
+      console.log("Google Maps script is already loading, waiting for it to complete");
+      
+      // Create a timeout to prevent infinite waiting
+      const timeout = setTimeout(() => {
+        reject(new Error("Timeout waiting for Google Maps to load"));
+      }, 10000); // 10 seconds timeout
+      
+      // Check periodically if Google Maps has loaded
+      const interval = setInterval(() => {
+        if (isGoogleMapsLoaded()) {
+          clearTimeout(timeout);
+          clearInterval(interval);
+          resolve();
+        }
+      }, 200);
+      
+      return;
+    }
     
     // Create a callback name that won't conflict
     const callbackName = `initGoogleMaps_${Date.now()}`;

@@ -9,13 +9,14 @@ import {
   removeExistingGoogleMapsScript,
   cleanupGoogleMapsObjects,
   handleMapsApiLoadError,
-  loadGoogleMapsScript
+  loadGoogleMapsScript,
+  isGoogleMapsLoaded
 } from '@/utils/googleMapsUtils';
 
 export function useGoogleMapsApi() {
   const [apiKey, setApiKey] = useState<string>(getGoogleMapsApiKey);
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(isValidGoogleMapsApiKey(getGoogleMapsApiKey()));
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(isGoogleMapsLoaded());
   const [loadError, setLoadError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
@@ -45,9 +46,9 @@ export function useGoogleMapsApi() {
     }
 
     // Skip loading if already loaded with this API key
-    // @ts-ignore
-    if (isLoaded && window.google && window.google.maps) {
+    if (isGoogleMapsLoaded()) {
       console.log("Google Maps already loaded, skipping");
+      setIsLoaded(true);
       return;
     }
 
