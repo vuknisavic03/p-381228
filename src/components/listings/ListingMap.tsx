@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
@@ -18,7 +19,7 @@ const containerStyle = {
 
 const defaultCenter = {
   lat: 40.7128,
-  lng: -74.0060 // Default to New York City
+  lng: -74.0060
 };
 
 // Type definitions for listings
@@ -48,69 +49,20 @@ interface ListingMapProps {
   onApiKeySubmit?: (apiKey: string) => void;
 }
 
-// Custom map styles
-const mapStyles = [
-  {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [{"color": "#e9e9e9"}, {"lightness": 17}]
-  },
-  {
-    "featureType": "landscape",
-    "elementType": "geometry",
-    "stylers": [{"color": "#f5f5f5"}, {"lightness": 20}]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry.fill",
-    "stylers": [{"color": "#ffffff"}, {"lightness": 17}]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry.stroke",
-    "stylers": [{"color": "#ffffff"}, {"lightness": 29}, {"weight": 0.2}]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "geometry",
-    "stylers": [{"color": "#ffffff"}, {"lightness": 18}]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "geometry",
-    "stylers": [{"color": "#ffffff"}, {"lightness": 16}]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [{"color": "#f5f5f5"}, {"lightness": 21}]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry",
-    "stylers": [{"color": "#dedede"}, {"lightness": 21}]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels",
-    "stylers": [{"visibility": "off"}]
-  }
-];
-
 export function ListingMap({ listings, onListingClick, onApiKeySubmit }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
-  const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
   
   // Use our custom Maps API hook
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   
+  console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "loadError:", loadError);
+  
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
-    console.log("API key received in ListingMap");
+    console.log("API key received in ListingMap:", newApiKey ? "***provided***" : "none");
     setApiKey(newApiKey);
     
-    // Also propagate to parent if available
     if (onApiKeySubmit) {
       onApiKeySubmit(newApiKey);
     }
@@ -120,11 +72,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
     if (listing.location) return listing.location;
     
-    // Generate some variation based on listing id and index to spread markers
     const latVariation = (listing.id * 0.01) + (index * 0.005);
     const lngVariation = (listing.id * 0.01) - (index * 0.007);
     
-    // Return generated coordinates based on city
     if (listing.city === "New York") {
       return { lat: 40.7128 + latVariation, lng: -74.0060 + lngVariation };
     } else if (listing.city === "London") {
@@ -136,7 +86,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     } else if (listing.city === "Belgrade") {
       return { lat: 44.7866 + latVariation, lng: 20.4489 + lngVariation };
     } else {
-      // Default to center and offset by index
       return { 
         lat: defaultCenter.lat + ((index % 5) * 0.02), 
         lng: defaultCenter.lng + ((index % 3) * 0.03) 
@@ -149,14 +98,13 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     console.log("Map loaded successfully");
     setMapRef(map);
     
-    // If we have listings with locations, fit the map to show them all
     if (listings.length > 0) {
       const bounds = new google.maps.LatLngBounds();
       listings.forEach((listing, index) => {
         const position = getListingCoordinates(listing, index);
         bounds.extend(position);
       });
-      map.fitBounds(bounds, 50); // Add some padding
+      map.fitBounds(bounds, 50);
     }
   }, [listings, getListingCoordinates]);
 
@@ -165,23 +113,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     setMapRef(null);
   }, []);
 
-  // Handle marker click with animation
+  // Handle marker click
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
-    
-    // Set animation for this marker
-    setMarkerAnimations(prev => ({
-      ...prev,
-      [listing.id]: true
-    }));
-    
-    // Reset animation after 700ms
-    setTimeout(() => {
-      setMarkerAnimations(prev => ({
-        ...prev,
-        [listing.id]: false
-      }));
-    }, 700);
   }, []);
 
   // Handle info window close
@@ -199,6 +133,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show API key input if we need it
   if (!isApiKeyValid) {
+    console.log("Showing API key input - API key not valid");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
@@ -208,6 +143,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show error state if map failed to load
   if (loadError) {
+    console.log("Showing error state - load error:", loadError);
     const errorMessage = handleMapsApiLoadError(loadError);
     
     return (
@@ -232,6 +168,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show loading state if map isn't loaded yet
   if (!isLoaded) {
+    console.log("Showing loading state - map not loaded");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
         <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
@@ -239,6 +176,8 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
       </div>
     );
   }
+
+  console.log("Rendering Google Map with", listings.length, "listings");
 
   return (
     <div className="h-full w-full relative">
@@ -253,7 +192,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           streetViewControl: false,
           fullscreenControl: true,
           zoomControl: true,
-          styles: mapStyles,
         }}
       >
         {/* Render markers for all listings */}
@@ -266,7 +204,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               key={listing.id}
               position={position}
               onClick={() => handleMarkerClick(listing)}
-              animation={markerAnimations[listing.id] ? google.maps.Animation.BOUNCE : undefined}
               icon={{
                 path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
                 fillColor: markerColor,
@@ -370,18 +307,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 function getMarkerColor(type: PropertyType): string {
   switch (type) {
     case "residential_rental":
-      return "#4f46e5"; // Indigo
+      return "#4f46e5";
     case "commercial_rental":
-      return "#0891b2"; // Cyan
+      return "#0891b2";
     case "hospitality":
-      return "#059669"; // Emerald
+      return "#059669";
     case "vacation_rental":
-      return "#d97706"; // Amber
+      return "#d97706";
     case "mixed_use":
-      return "#9333ea"; // Purple
+      return "#9333ea";
     case "industrial":
-      return "#dc2626"; // Red
+      return "#dc2626";
     default:
-      return "#6b7280"; // Gray
+      return "#6b7280";
   }
 }

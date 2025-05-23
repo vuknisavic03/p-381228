@@ -5,32 +5,46 @@ export const GOOGLE_MAPS_LIBRARIES: ["places", "geometry"] = ["places", "geometr
 // Storage key constant for consistency
 export const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
 
-// Script ID for Google Maps
-export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
+// Default demo API key
+const DEFAULT_DEMO_KEY = "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg";
 
 // Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
-  // Try to get from localStorage
-  const storedKey = localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE);
-  if (storedKey) {
-    return storedKey;
+  try {
+    // Try to get from localStorage
+    const storedKey = localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE);
+    if (storedKey && storedKey.trim()) {
+      console.log("Retrieved API key from localStorage");
+      return storedKey.trim();
+    }
+  } catch (error) {
+    console.warn("Could not access localStorage:", error);
   }
   
-  // Fallback to environment variable or demo key
-  return "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg"; // Default to a restricted demo key
+  console.log("Using default demo API key");
+  return DEFAULT_DEMO_KEY;
 }
 
 // Function to save API key
 export function saveGoogleMapsApiKey(apiKey: string): void {
-  if (apiKey && apiKey.trim()) {
-    localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey.trim());
-    console.log("API key saved to localStorage");
+  try {
+    if (apiKey && apiKey.trim()) {
+      localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey.trim());
+      console.log("API key saved to localStorage");
+    }
+  } catch (error) {
+    console.error("Could not save API key to localStorage:", error);
   }
 }
 
 // Function to remove API key
 export function removeGoogleMapsApiKey(): void {
-  localStorage.removeItem(GOOGLE_MAPS_KEY_STORAGE);
+  try {
+    localStorage.removeItem(GOOGLE_MAPS_KEY_STORAGE);
+    console.log("API key removed from localStorage");
+  } catch (error) {
+    console.error("Could not remove API key from localStorage:", error);
+  }
 }
 
 // Check if the API key is valid (simple client-side validation)
@@ -43,6 +57,7 @@ export function handleMapsApiLoadError(error: Error | null): string {
   if (!error) return "Unknown error loading Google Maps";
   
   const errorMessage = error.message || "Unknown error";
+  console.error("Google Maps error details:", errorMessage);
   
   if (errorMessage.includes('ApiNotActivatedMapError')) {
     return "The Google Maps JavaScript API is not activated for this API key. Please enable it in the Google Cloud Console.";
@@ -52,17 +67,11 @@ export function handleMapsApiLoadError(error: Error | null): string {
     return "The provided API key is invalid or expired. Please check your key.";
   } else if (errorMessage.includes('MissingKeyMapError')) {
     return "No API key provided. Please enter a valid Google Maps API key.";
-  } else if (errorMessage.includes('Loader must not be called again with different options')) {
-    return "Error with Google Maps configuration. Please refresh the page and try again.";
+  } else if (errorMessage.includes('Loader must not be called again')) {
+    return "Google Maps is already loading. Please refresh the page if the issue persists.";
   } else {
     return `Error loading Google Maps: ${errorMessage}`;
   }
-}
-
-// Check if Google Maps is already loaded
-export function isGoogleMapsLoaded(): boolean {
-  // @ts-ignore
-  return typeof window !== 'undefined' && Boolean(window.google && window.google.maps);
 }
 
 // Reload the page (used after API key changes)

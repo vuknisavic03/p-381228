@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,37 +7,27 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Map, CheckCircle2, AlertTriangle, Key, Info } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { getGoogleMapsApiKey, isValidGoogleMapsApiKey, saveGoogleMapsApiKey } from "@/utils/googleMapsUtils";
+import { getGoogleMapsApiKey, isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
-// Define our props interface
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
 }
 
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
-  const [apiKey, setApiKey] = useState<string>(getGoogleMapsApiKey());
+  const [apiKey, setApiKey] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showCustomKeyInput, setShowCustomKeyInput] = useState<boolean>(false);
   const { toast } = useToast();
-  
-  // On initial render, submit the API key if it's valid
-  useEffect(() => {
-    const savedApiKey = getGoogleMapsApiKey();
-    if (isValidGoogleMapsApiKey(savedApiKey) && !showCustomKeyInput) {
-      handleActivateMap();
-    }
-  }, []);
   
   const handleActivateMap = () => {
     setIsLoading(true);
     
     try {
-      // If using demo key, make sure we use that instead of empty input
       const keyToUse = showCustomKeyInput ? apiKey : getGoogleMapsApiKey();
       
+      console.log("Activating map with key:", keyToUse ? "***provided***" : "none");
+      
       if (isValidGoogleMapsApiKey(keyToUse)) {
-        // Save and submit the API key
-        saveGoogleMapsApiKey(keyToUse);
         onApiKeySubmit(keyToUse);
         
         toast({
@@ -52,6 +42,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
         });
       }
     } catch (error) {
+      console.error("Error activating map:", error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
@@ -68,6 +59,9 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
 
   const toggleCustomKeyInput = () => {
     setShowCustomKeyInput(!showCustomKeyInput);
+    if (!showCustomKeyInput) {
+      setApiKey("");
+    }
   };
 
   return (
