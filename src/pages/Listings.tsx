@@ -31,13 +31,11 @@ export default function Listings() {
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
   
   // Use our custom hook for Google Maps API integration
-  const { isLoaded, isApiKeyValid, setApiKey } = useGoogleMapsApi();
+  const { isLoaded, isApiKeyValid, setApiKey, isLoading } = useGoogleMapsApi();
 
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
     console.log("API key submitted:", apiKey ? "Key provided" : "No key");
-    
-    // Update our API key in the hook
     setApiKey(apiKey);
   };
 
@@ -54,19 +52,34 @@ export default function Listings() {
 
   // Auto-switch to map view when API is loaded
   useEffect(() => {
-    if (isLoaded && isApiKeyValid) {
+    if (isLoaded && isApiKeyValid && viewMode === "list") {
       // Once the map is loaded and API key is valid, we can safely switch to map view
-      console.log("Map loaded and API key valid, can switch to map view now");
-    }
-  }, [isLoaded, isApiKeyValid]);
-
-  // Handle tab change with validation and better error feedback
-  const handleViewModeChange = (value: string) => {
-    if (value === "map" && !isApiKeyValid) {
+      console.log("Map loaded and API key valid, switching to map view now");
+      setViewMode("map");
+      
       toast({
-        title: "Activating Map View",
-        description: "Please wait while we initialize the map..."
+        title: "Map View Activated",
+        description: "Google Maps has loaded successfully."
       });
+    }
+  }, [isLoaded, isApiKeyValid, toast]);
+
+  // Handle tab change
+  const handleViewModeChange = (value: string) => {
+    if (value === "map" && !isLoaded) {
+      if (isApiKeyValid) {
+        toast({
+          title: "Activating Map View",
+          description: "Please wait while we initialize the map..."
+        });
+      } else {
+        toast({
+          title: "API Key Required",
+          description: "Please click 'Activate Map' button to load the map view.",
+          variant: "destructive"
+        });
+        return; // Don't switch to map view yet
+      }
     }
     
     setViewMode(value as "list" | "map");
@@ -147,11 +160,19 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
-                {/* Always show the map, the component will handle loading states */}
-                <ListingMap 
-                  listings={sharedListingData}
-                  onListingClick={handleListingClick}
-                />
+                {!isLoaded && !isApiKeyValid ? (
+                  <div className="flex items-center justify-center h-full">
+                    <GoogleMapsApiInput 
+                      onApiKeySubmit={handleApiKeySubmit} 
+                      isLoading={isLoading}
+                    />
+                  </div>
+                ) : (
+                  <ListingMap 
+                    listings={sharedListingData}
+                    onListingClick={handleListingClick}
+                  />
+                )}
               </motion.div>
             )}
           </AnimatePresence>

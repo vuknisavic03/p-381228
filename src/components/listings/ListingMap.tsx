@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
@@ -101,17 +100,9 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-  const [mapLoadAttempted, setMapLoadAttempted] = useState(false);
   
   // Use our custom hook for Google Maps integration
-  const { isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
-
-  // Track when we've attempted to load the map
-  useEffect(() => {
-    if (isLoaded || loadError) {
-      setMapLoadAttempted(true);
-    }
-  }, [isLoaded, loadError]);
+  const { isLoaded, loadError, isApiKeyValid, isLoading } = useGoogleMapsApi();
 
   // Calculate dynamic locations for listings without explicit coordinates
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
@@ -228,10 +219,18 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     );
   }
 
-  // Show error state if map failed to load and we've attempted loading
-  if (loadError && mapLoadAttempted) {
-    const errorMessage = handleMapsApiLoadError(loadError);
-    
+  // Show loading state during API loading
+  if (isLoading || (!isLoaded && !loadError)) {
+    return (
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+        <span className="text-gray-500 font-medium">Loading map...</span>
+      </div>
+    );
+  }
+
+  // Show error state if map failed to load
+  if (loadError) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
@@ -239,7 +238,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
             <AlertTriangle className="h-5 w-5 text-red-600" />
             <h3 className="text-red-600 font-medium">Google Maps Error</h3>
           </div>
-          <p className="text-gray-700 text-sm mb-3">{errorMessage}</p>
+          <p className="text-gray-700 text-sm mb-3">{loadError.message}</p>
           <div className="bg-white p-3 rounded border border-gray-200 text-xs text-gray-500">
             <p className="font-medium mb-1">Common Solutions:</p>
             <ul className="list-disc list-inside space-y-1">
@@ -249,16 +248,6 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
             </ul>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  // Show loading state if map isn't loaded yet
-  if (!isLoaded) {
-    return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
-        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-        <span className="text-gray-500 font-medium">Loading map...</span>
       </div>
     );
   }
