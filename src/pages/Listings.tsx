@@ -5,18 +5,16 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
+import { GoogleMapsApiInput } from "@/components/listings/GoogleMapsApiInput";
 import { Button } from "@/components/ui/button";
 import { Plus, List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
-import { useToast } from "@/hooks/use-toast";
-import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
 
 export default function Listings() {
   const location = useLocation();
-  const { toast } = useToast();
   const workspaceData = location.state?.workspace || {
     name: "Kevin's Workspace", 
     owner: "Kevin Anderson", 
@@ -27,20 +25,18 @@ export default function Listings() {
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
+  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string | null>(null);
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
-  
-  // Use our custom hook for Google Maps API integration
-  const { isApiKeyValid, isLoaded, setApiKey } = useGoogleMapsApi();
 
-  // Handle API key submission from components
-  const handleApiKeySubmit = (apiKey: string) => {
-    if (apiKey) {
-      console.log("API key received in Listings component");
-      setApiKey(apiKey);
+  // Check if API key exists in localStorage on component mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem("googleMapsApiKey");
+    if (savedApiKey) {
+      setGoogleMapsApiKey(savedApiKey);
     }
-  };
+  }, []);
 
-  // Handle listing selection from map view or list view
+  // Handle listing selection from map view
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
     setIsEditSheetOpen(true);
@@ -51,17 +47,15 @@ export default function Listings() {
     setSharedListingData(listings);
   };
 
-  // Handle tab change with validation
-  const handleViewModeChange = (value: string) => {
-    if (value === "map" && !isApiKeyValid) {
-      toast({
-        title: "Map View",
-        description: "Please activate the map to view your listings on the map."
-      });
-      return;
-    }
+  // Handle API key submission from GoogleMapsApiInput
+  const handleApiKeySubmit = (apiKey: string) => {
+    // Update state with new API key
+    setGoogleMapsApiKey(apiKey);
     
-    setViewMode(value as "list" | "map");
+    // If API key was reset to empty, switch back to list view
+    if (!apiKey) {
+      setViewMode("list");
+    }
   };
 
   return (
@@ -83,7 +77,7 @@ export default function Listings() {
           <div className="flex items-center gap-3">
             <Tabs 
               value={viewMode} 
-              onValueChange={handleViewModeChange}
+              onValueChange={(value) => setViewMode(value as "list" | "map")} 
               className="mr-2"
             >
               <TabsList className="bg-gray-100 p-0.5">
@@ -139,12 +133,16 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
-                {/* Map view */}
-                <ListingMap 
-                  listings={sharedListingData}
-                  onListingClick={handleListingClick}
-                  onApiKeySubmit={handleApiKeySubmit}
-                />
+                {googleMapsApiKey ? (
+                  <ListingMap 
+                    listings={sharedListingData}
+                    onListingClick={handleListingClick}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full p-6 bg-gray-50/80">
+                    <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
