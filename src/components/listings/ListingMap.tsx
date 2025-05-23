@@ -56,11 +56,11 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   // Use our custom Maps API hook
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   
-  console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "loadError:", loadError);
+  console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "hasError:", !!loadError);
   
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
-    console.log("API key received in ListingMap:", newApiKey ? "***provided***" : "none");
+    console.log("API key received in ListingMap");
     setApiKey(newApiKey);
     
     if (onApiKeySubmit) {
@@ -156,10 +156,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           <p className="text-gray-700 text-sm mb-3">{errorMessage}</p>
           <Button 
             variant="outline" 
-            onClick={() => handleApiKeySubmit("")}
+            onClick={() => window.location.reload()}
             className="w-full text-sm"
           >
-            Try Again
+            Reload Page
           </Button>
         </div>
       </div>

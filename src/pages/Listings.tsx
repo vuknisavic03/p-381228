@@ -12,7 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
-import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
 
 export default function Listings() {
   const location = useLocation();
@@ -28,17 +27,6 @@ export default function Listings() {
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
-  
-  // Use our custom hook for Google Maps API integration
-  const { isApiKeyValid, isLoaded, setApiKey } = useGoogleMapsApi();
-
-  // Handle API key submission from components
-  const handleApiKeySubmit = (apiKey: string) => {
-    if (apiKey) {
-      console.log("API key received in Listings component");
-      setApiKey(apiKey);
-    }
-  };
 
   // Handle listing selection from map view or list view
   const handleListingClick = (listing: any) => {
@@ -51,16 +39,8 @@ export default function Listings() {
     setSharedListingData(listings);
   };
 
-  // Handle tab change with validation
+  // Handle tab change
   const handleViewModeChange = (value: string) => {
-    if (value === "map" && !isApiKeyValid) {
-      toast({
-        title: "Map View",
-        description: "Please activate the map to view your listings on the map."
-      });
-      return;
-    }
-    
     setViewMode(value as "list" | "map");
   };
 
@@ -139,11 +119,9 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
-                {/* Map view */}
                 <ListingMap 
                   listings={sharedListingData}
                   onListingClick={handleListingClick}
-                  onApiKeySubmit={handleApiKeySubmit}
                 />
               </motion.div>
             )}
