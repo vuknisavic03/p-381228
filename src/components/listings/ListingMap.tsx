@@ -47,6 +47,7 @@ interface Listing {
 interface ListingMapProps {
   listings: Listing[];
   onListingClick: (listing: Listing) => void;
+  onApiKeySubmit?: (apiKey: string) => void;
 }
 
 // Custom map styles
@@ -98,22 +99,24 @@ const mapStyles = [
   }
 ];
 
-export function ListingMap({ listings, onListingClick }: ListingMapProps) {
+export function ListingMap({ listings, onListingClick, onApiKeySubmit }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-  const [mapLoadAttempted, setMapLoadAttempted] = useState(false);
-  const [manualApiKeyMode, setManualApiKeyMode] = useState(false);
   
   // Use our custom hook for Google Maps integration
-  const { isLoaded, loadError, isApiKeyValid, setApiKey, isLoading } = useGoogleMapsApi();
+  const { isLoaded, loadError, isApiKeyValid, apiKey, setApiKey, isLoading } = useGoogleMapsApi();
 
-  // Track when we've attempted to load the map
-  useEffect(() => {
-    if (isLoaded || loadError) {
-      setMapLoadAttempted(true);
+  // Handle API key submission from GoogleMapsApiInput
+  const handleApiKeySubmit = useCallback((apiKey: string) => {
+    console.log("API key received in ListingMap");
+    setApiKey(apiKey);
+    
+    // Also propagate to parent if available
+    if (onApiKeySubmit) {
+      onApiKeySubmit(apiKey);
     }
-  }, [isLoaded, loadError]);
+  }, [setApiKey, onApiKeySubmit]);
 
   // Calculate dynamic locations for listings without explicit coordinates
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
@@ -196,35 +199,8 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     }
   }, [selectedListing, onListingClick]);
 
-  // Handle API key submission from GoogleMapsApiInput
-  const handleApiKeySubmit = useCallback((apiKey: string) => {
-    console.log("API key received in ListingMap");
-    setApiKey(apiKey);
-    setManualApiKeyMode(false);
-  }, [setApiKey]);
-
-  // Get marker colors based on property type - memoized to prevent recreating on each render
-  const getMarkerColor = useMemo(() => (type: PropertyType) => {
-    switch (type) {
-      case "residential_rental":
-        return "#4f46e5"; // Indigo
-      case "commercial_rental":
-        return "#0891b2"; // Cyan
-      case "hospitality":
-        return "#059669"; // Emerald
-      case "vacation_rental":
-        return "#d97706"; // Amber
-      case "mixed_use":
-        return "#9333ea"; // Purple
-      case "industrial":
-        return "#dc2626"; // Red
-      default:
-        return "#6b7280"; // Gray
-    }
-  }, []);
-
-  // Show manual API key input if we need it
-  if (!isApiKeyValid || manualApiKeyMode) {
+  // Show API key input if we need it
+  if (!isApiKeyValid) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
@@ -232,8 +208,8 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     );
   }
 
-  // Show error state if map failed to load and we've attempted loading
-  if (loadError && mapLoadAttempted) {
+  // Show error state if map failed to load
+  if (loadError) {
     const errorMessage = handleMapsApiLoadError(loadError);
     
     return (
@@ -246,10 +222,10 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
           <p className="text-gray-700 text-sm mb-3">{errorMessage}</p>
           <Button 
             variant="outline" 
-            onClick={() => setManualApiKeyMode(true)}
+            onClick={() => handleApiKeySubmit("")}
             className="w-full text-sm"
           >
-            Retry with API Key
+            Try Again
           </Button>
         </div>
       </div>
@@ -268,7 +244,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
 
   return (
     <div className="h-full w-full relative">
-      {/* We need to check if window.google exists before rendering the map */}
+      {/* Check if window.google exists before rendering the map */}
       {window.google && (
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -393,4 +369,24 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
       </div>
     </div>
   );
+}
+
+// Get marker colors based on property type
+function getMarkerColor(type: PropertyType): string {
+  switch (type) {
+    case "residential_rental":
+      return "#4f46e5"; // Indigo
+    case "commercial_rental":
+      return "#0891b2"; // Cyan
+    case "hospitality":
+      return "#059669"; // Emerald
+    case "vacation_rental":
+      return "#d97706"; // Amber
+    case "mixed_use":
+      return "#9333ea"; // Purple
+    case "industrial":
+      return "#dc2626"; // Red
+    default:
+      return "#6b7280"; // Gray
+  }
 }

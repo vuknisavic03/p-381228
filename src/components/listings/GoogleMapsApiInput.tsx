@@ -1,10 +1,13 @@
 
-import React from 'react';
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Map, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { getGoogleMapsApiKey, isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
+import { Map, CheckCircle2, AlertTriangle, Key, Info } from 'lucide-react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { getGoogleMapsApiKey, isValidGoogleMapsApiKey, saveGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
 // Define our props interface
 interface GoogleMapsApiInputProps {
@@ -12,25 +15,30 @@ interface GoogleMapsApiInputProps {
 }
 
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [apiKey, setApiKey] = useState<string>(getGoogleMapsApiKey());
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showCustomKeyInput, setShowCustomKeyInput] = useState<boolean>(false);
   const { toast } = useToast();
   
   // On initial render, submit the API key if it's valid
-  React.useEffect(() => {
-    const apiKey = getGoogleMapsApiKey();
-    if (isValidGoogleMapsApiKey(apiKey)) {
-      onApiKeySubmit(apiKey);
+  useEffect(() => {
+    const savedApiKey = getGoogleMapsApiKey();
+    if (isValidGoogleMapsApiKey(savedApiKey) && !showCustomKeyInput) {
+      handleActivateMap();
     }
-  }, [onApiKeySubmit]);
+  }, []);
   
   const handleActivateMap = () => {
     setIsLoading(true);
     
     try {
-      const apiKey = getGoogleMapsApiKey();
-      if (isValidGoogleMapsApiKey(apiKey)) {
-        // Submit the API key to the parent component
-        onApiKeySubmit(apiKey);
+      // If using demo key, make sure we use that instead of empty input
+      const keyToUse = showCustomKeyInput ? apiKey : getGoogleMapsApiKey();
+      
+      if (isValidGoogleMapsApiKey(keyToUse)) {
+        // Save and submit the API key
+        saveGoogleMapsApiKey(keyToUse);
+        onApiKeySubmit(keyToUse);
         
         toast({
           title: "Map Activated",
@@ -39,7 +47,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       } else {
         toast({
           title: "API Key Error",
-          description: "Unable to activate Google Maps. Please check your API key.",
+          description: "Please enter a valid Google Maps API key.",
           variant: "destructive"
         });
       }
@@ -54,23 +62,83 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     }
   };
 
+  const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setApiKey(e.target.value);
+  };
+
+  const toggleCustomKeyInput = () => {
+    setShowCustomKeyInput(!showCustomKeyInput);
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg border border-gray-100">
-      <CardContent className="pt-6">
-        <div className="text-center space-y-3">
-          <div className="bg-primary/10 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+      <CardHeader>
+        <div className="flex justify-center mb-2">
+          <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center">
             <Map className="h-8 w-8 text-primary" />
           </div>
-          <h3 className="font-medium text-lg">Google Maps Integration</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Click the button below to activate the map and view your property listings.
-          </p>
         </div>
+        <CardTitle className="text-center">Google Maps Integration</CardTitle>
+      </CardHeader>
+      
+      <CardContent className="space-y-4">
+        {!showCustomKeyInput ? (
+          <>
+            <p className="text-sm text-gray-500 text-center">
+              Click the button below to activate the map with our demo API key or use your own key.
+            </p>
+            
+            <Alert className="bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-500" />
+              <AlertDescription className="text-sm text-blue-600">
+                We'll use a demo Google Maps API key with restrictions, or you can use your own.
+              </AlertDescription>
+            </Alert>
+            
+            <div className="flex justify-center">
+              <Button 
+                variant="link" 
+                onClick={toggleCustomKeyInput} 
+                className="text-sm text-gray-600"
+              >
+                <Key className="h-3.5 w-3.5 mr-1" />
+                Use my own API key
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="api-key">Google Maps API Key</Label>
+              <Input
+                id="api-key"
+                placeholder="Enter your Google Maps API key"
+                value={apiKey}
+                onChange={handleKeyChange}
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500">
+                This key must have the Maps JavaScript API and Places API enabled.
+              </p>
+            </div>
+            
+            <div className="flex justify-center">
+              <Button 
+                variant="link" 
+                onClick={toggleCustomKeyInput} 
+                className="text-sm text-gray-600"
+              >
+                Use demo API key instead
+              </Button>
+            </div>
+          </>
+        )}
       </CardContent>
+      
       <CardFooter className="flex justify-center pb-6">
         <Button 
           onClick={handleActivateMap} 
-          disabled={isLoading}
+          disabled={isLoading || (showCustomKeyInput && !isValidGoogleMapsApiKey(apiKey))}
           className="gap-2"
         >
           {isLoading ? (

@@ -30,11 +30,12 @@ export default function Listings() {
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
   
   // Use our custom hook for Google Maps API integration
-  const { isApiKeyValid, setApiKey } = useGoogleMapsApi();
+  const { isApiKeyValid, isLoaded, setApiKey } = useGoogleMapsApi();
 
   // Handle API key submission from components
   const handleApiKeySubmit = (apiKey: string) => {
     if (apiKey) {
+      console.log("API key received in Listings component");
       setApiKey(apiKey);
     }
   };
@@ -57,6 +58,7 @@ export default function Listings() {
         title: "Map View",
         description: "Please activate the map to view your listings on the map."
       });
+      return;
     }
     
     setViewMode(value as "list" | "map");
@@ -141,6 +143,7 @@ export default function Listings() {
                 <ListingMap 
                   listings={sharedListingData}
                   onListingClick={handleListingClick}
+                  onApiKeySubmit={handleApiKeySubmit}
                 />
               </motion.div>
             )}

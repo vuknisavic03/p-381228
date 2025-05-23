@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
   getGoogleMapsApiKey,
+  saveGoogleMapsApiKey,
   isValidGoogleMapsApiKey,
   GOOGLE_MAPS_LIBRARIES,
   removeExistingGoogleMapsScript,
@@ -22,6 +23,18 @@ export function useGoogleMapsApi() {
   // Use memoized libraries array to prevent unnecessary re-renders
   const libraries = useMemo(() => GOOGLE_MAPS_LIBRARIES, []);
 
+  // Update validity state when API key changes
+  useEffect(() => {
+    const isValid = isValidGoogleMapsApiKey(apiKey);
+    setIsApiKeyValid(isValid);
+    console.log("API key changed:", isValid ? "Valid key provided" : "No valid key");
+    
+    // Save valid API keys to localStorage
+    if (isValid) {
+      saveGoogleMapsApiKey(apiKey);
+    }
+  }, [apiKey]);
+
   // Effect to handle API key changes and script loading
   useEffect(() => {
     // Skip if no valid API key
@@ -31,11 +44,10 @@ export function useGoogleMapsApi() {
       return;
     }
 
-    // Skip loading if already loaded
+    // Skip loading if already loaded with this API key
     // @ts-ignore
-    if (window.google && window.google.maps) {
+    if (isLoaded && window.google && window.google.maps) {
       console.log("Google Maps already loaded, skipping");
-      setIsLoaded(true);
       return;
     }
 
@@ -49,7 +61,7 @@ export function useGoogleMapsApi() {
     setIsLoading(true);
     setLoadError(null);
     
-    // Use our manual loader instead of useLoadScript
+    // Use our manual loader
     loadGoogleMapsScript(apiKey)
       .then(() => {
         console.log("Google Maps loaded successfully");
@@ -70,32 +82,26 @@ export function useGoogleMapsApi() {
           variant: "destructive"
         });
       });
-
-    // Cleanup function
-    return () => {
-      // Don't remove scripts on unmount, as they might be used by other components
-      // Just clean internal state
-      setIsLoading(false);
-    };
   }, [apiKey, isApiKeyValid, toast]);
-
-  // Update validity state when API key changes
-  useEffect(() => {
-    const isValid = isValidGoogleMapsApiKey(apiKey);
-    setIsApiKeyValid(isValid);
-    console.log("API key changed:", isValid ? "Valid key provided" : "No valid key");
-  }, [apiKey]);
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      // Don't clean up Google objects on unmount as they might be needed elsewhere
+      // Don't remove scripts on unmount to prevent issues with components that might still need them
     };
   }, []);
 
+  // Custom setter that also saves to localStorage
+  const setApiKeyAndSave = (newKey: string) => {
+    if (isValidGoogleMapsApiKey(newKey)) {
+      saveGoogleMapsApiKey(newKey);
+    }
+    setApiKey(newKey);
+  };
+
   return {
     apiKey,
-    setApiKey,
+    setApiKey: setApiKeyAndSave,
     isLoaded,
     loadError,
     isLoading,

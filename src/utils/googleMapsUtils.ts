@@ -10,13 +10,22 @@ export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
 
 // Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
-  // For demo purposes, we're using a hardcoded key that works with the application
-  return "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ";
+  // First try to get from localStorage
+  const storedKey = localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE);
+  if (storedKey) {
+    return storedKey;
+  }
+  
+  // Fallback to a demo API key - this is a restricted demo key that should work for basic usage
+  return "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg";
 }
 
 // Function to save API key
 export function saveGoogleMapsApiKey(apiKey: string): void {
-  localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey);
+  if (apiKey && apiKey.trim()) {
+    localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey.trim());
+    console.log("API key saved to localStorage");
+  }
 }
 
 // Function to remove API key
@@ -31,12 +40,12 @@ export function isValidGoogleMapsApiKey(apiKey: string): boolean {
 
 // Remove existing Google Maps script tags
 export function removeExistingGoogleMapsScript(): void {
-  // Remove the script tag with our specific ID
   const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID);
   if (existingScript) {
+    console.log("Removing existing Google Maps script");
     existingScript.remove();
   }
-
+  
   // Also remove any other Google Maps scripts that might be present
   const allScripts = document.getElementsByTagName('script');
   for (let i = 0; i < allScripts.length; i++) {
@@ -46,25 +55,18 @@ export function removeExistingGoogleMapsScript(): void {
       i--; // Adjust index after removal
     }
   }
-  
-  // Clean up any Google Maps global objects
-  cleanupGoogleMapsObjects();
 }
 
 // Clean up Google global objects
 export function cleanupGoogleMapsObjects(): void {
+  // @ts-ignore
   if (window.google) {
     // Safely try to clean up Maps API objects
     try {
       // @ts-ignore
-      if (window.google.maps && window.google.maps.event) {
-        // @ts-ignore
-        window.google.maps.event.clearInstanceListeners(window);
-      }
-      // Don't delete window.google as it may break other components
-      // Instead, just clear maps-related properties
-      // @ts-ignore
       if (window.google.maps) {
+        // Don't delete window.google as it may break other components
+        // Just clear maps-related properties
         // @ts-ignore
         window.google.maps = undefined;
       }
@@ -74,6 +76,7 @@ export function cleanupGoogleMapsObjects(): void {
   }
   
   // Clean up any callback handlers
+  // @ts-ignore
   if (window.initMap) {
     // @ts-ignore
     window.initMap = undefined;
@@ -81,42 +84,47 @@ export function cleanupGoogleMapsObjects(): void {
 }
 
 // Function to handle API loading errors
-export function handleMapsApiLoadError(error: Error): string {
+export function handleMapsApiLoadError(error: Error | null): string {
   if (!error) return "Unknown error loading Google Maps";
   
-  if (error.message && error.message.includes('ApiNotActivatedMapError')) {
+  const errorMessage = error.message || "Unknown error";
+  
+  if (errorMessage.includes('ApiNotActivatedMapError')) {
     return "The Google Maps JavaScript API is not activated for this API key. Please enable it in the Google Cloud Console.";
-  } else if (error.message && error.message.includes('RefererNotAllowedMapError')) {
+  } else if (errorMessage.includes('RefererNotAllowedMapError')) {
     return "The current URL is not allowed to use this API key. Please add it to the allowed referrers.";
-  } else if (error.message && error.message.includes('InvalidKeyMapError')) {
+  } else if (errorMessage.includes('InvalidKeyMapError')) {
     return "The provided API key is invalid or expired. Please check your key.";
-  } else if (error.message && error.message.includes('MissingKeyMapError')) {
+  } else if (errorMessage.includes('MissingKeyMapError')) {
     return "No API key provided. Please enter a valid Google Maps API key.";
   } else {
-    return `Error loading Google Maps: ${error.message || "Unknown error"}`;
+    return `Error loading Google Maps: ${errorMessage}`;
   }
 }
 
-// Manual script loading function that doesn't conflict with useLoadScript
+// Manual script loading function
 export function loadGoogleMapsScript(apiKey: string): Promise<void> {
   return new Promise((resolve, reject) => {
+    console.log("Starting to load Google Maps script");
+    
     // First check if Google Maps is already loaded
     // @ts-ignore
     if (window.google && window.google.maps) {
+      console.log("Google Maps is already loaded, resolving immediately");
       resolve();
       return;
     }
     
-    // Clean up any existing scripts
+    // Clean up any existing scripts to prevent conflicts
     removeExistingGoogleMapsScript();
     
     // Create a callback name that won't conflict
-    const callbackName = `googleMapsInitCallback_${Date.now()}`;
+    const callbackName = `initGoogleMaps_${Date.now()}`;
     
     // Add the callback to window
     // @ts-ignore
     window[callbackName] = function() {
-      console.log("Google Maps loaded via manual script");
+      console.log("Google Maps loaded via callback");
       resolve();
       // Cleanup the callback
       // @ts-ignore
@@ -130,13 +138,17 @@ export function loadGoogleMapsScript(apiKey: string): Promise<void> {
     script.async = true;
     script.defer = true;
     
-    script.onerror = () => {
-      reject(new Error('Google Maps script failed to load'));
+    // Add error handling
+    script.onerror = (event) => {
+      console.error("Google Maps script failed to load", event);
       // Cleanup the callback
       // @ts-ignore
       delete window[callbackName];
+      reject(new Error('Google Maps script failed to load'));
     };
     
+    // Add to document
     document.head.appendChild(script);
+    console.log("Google Maps script added to document.head");
   });
 }
