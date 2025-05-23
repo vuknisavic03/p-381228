@@ -10,9 +10,8 @@ export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
 
 // Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
-  // For now, let's hardcode the API key that was working
-  const hardcodedKey = "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ";
-  return hardcodedKey || localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE) || "";
+  // For demo purposes, we're using a hardcoded key that works with the application
+  return "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ";
 }
 
 // Function to save API key
@@ -62,7 +61,13 @@ export function cleanupGoogleMapsObjects(): void {
         // @ts-ignore
         window.google.maps.event.clearInstanceListeners(window);
       }
-      delete window.google;
+      // Don't delete window.google as it may break other components
+      // Instead, just clear maps-related properties
+      // @ts-ignore
+      if (window.google.maps) {
+        // @ts-ignore
+        window.google.maps = undefined;
+      }
     } catch (e) {
       console.error('Error cleaning up Google Maps objects:', e);
     }
@@ -70,57 +75,68 @@ export function cleanupGoogleMapsObjects(): void {
   
   // Clean up any callback handlers
   if (window.initMap) {
-    delete window.initMap;
+    // @ts-ignore
+    window.initMap = undefined;
   }
 }
 
 // Function to handle API loading errors
 export function handleMapsApiLoadError(error: Error): string {
-  if (error.message.includes('ApiNotActivatedMapError')) {
+  if (!error) return "Unknown error loading Google Maps";
+  
+  if (error.message && error.message.includes('ApiNotActivatedMapError')) {
     return "The Google Maps JavaScript API is not activated for this API key. Please enable it in the Google Cloud Console.";
-  } else if (error.message.includes('RefererNotAllowedMapError')) {
+  } else if (error.message && error.message.includes('RefererNotAllowedMapError')) {
     return "The current URL is not allowed to use this API key. Please add it to the allowed referrers.";
-  } else if (error.message.includes('InvalidKeyMapError')) {
+  } else if (error.message && error.message.includes('InvalidKeyMapError')) {
     return "The provided API key is invalid or expired. Please check your key.";
-  } else if (error.message.includes('MissingKeyMapError')) {
+  } else if (error.message && error.message.includes('MissingKeyMapError')) {
     return "No API key provided. Please enter a valid Google Maps API key.";
   } else {
-    return `Error loading Google Maps: ${error.message}`;
+    return `Error loading Google Maps: ${error.message || "Unknown error"}`;
   }
 }
 
-// Function to ensure we only have one instance of the script loading
-let scriptPromise: Promise<void> | null = null;
+// Manual script loading function that doesn't conflict with useLoadScript
 export function loadGoogleMapsScript(apiKey: string): Promise<void> {
-  if (scriptPromise) return scriptPromise;
-  
-  scriptPromise = new Promise((resolve, reject) => {
-    // First ensure any existing scripts are cleaned up
+  return new Promise((resolve, reject) => {
+    // First check if Google Maps is already loaded
+    // @ts-ignore
+    if (window.google && window.google.maps) {
+      resolve();
+      return;
+    }
+    
+    // Clean up any existing scripts
     removeExistingGoogleMapsScript();
     
-    // Create a new script element
+    // Create a callback name that won't conflict
+    const callbackName = `googleMapsInitCallback_${Date.now()}`;
+    
+    // Add the callback to window
+    // @ts-ignore
+    window[callbackName] = function() {
+      console.log("Google Maps loaded via manual script");
+      resolve();
+      // Cleanup the callback
+      // @ts-ignore
+      delete window[callbackName];
+    };
+    
+    // Create and add the script
     const script = document.createElement('script');
     script.id = GOOGLE_MAPS_SCRIPT_ID;
-    script.type = 'text/javascript';
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=${callbackName}`;
     script.async = true;
     script.defer = true;
     
-    // Define the callback that will be called when the script loads
-    window.initMap = function() {
-      resolve();
-      // Don't delete initMap here as it might be needed by other components
-    };
-    
-    // Define error handler
     script.onerror = () => {
-      reject(new Error('Google Maps script failed to load.'));
-      scriptPromise = null;
+      reject(new Error('Google Maps script failed to load'));
+      // Cleanup the callback
+      // @ts-ignore
+      delete window[callbackName];
     };
     
-    // Append the script to the document
     document.head.appendChild(script);
   });
-  
-  return scriptPromise;
 }

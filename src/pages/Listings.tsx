@@ -5,7 +5,6 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
-import { GoogleMapsApiInput } from "@/components/listings/GoogleMapsApiInput";
 import { Button } from "@/components/ui/button";
 import { Plus, List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -31,14 +30,13 @@ export default function Listings() {
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
   
   // Use our custom hook for Google Maps API integration
-  const { isLoaded, isApiKeyValid, setApiKey } = useGoogleMapsApi();
+  const { isApiKeyValid, setApiKey } = useGoogleMapsApi();
 
-  // Handle API key submission from GoogleMapsApiInput
+  // Handle API key submission from components
   const handleApiKeySubmit = (apiKey: string) => {
-    console.log("API key submitted:", apiKey ? "Key provided" : "No key");
-    
-    // Update our API key in the hook
-    setApiKey(apiKey);
+    if (apiKey) {
+      setApiKey(apiKey);
+    }
   };
 
   // Handle listing selection from map view or list view
@@ -52,20 +50,12 @@ export default function Listings() {
     setSharedListingData(listings);
   };
 
-  // Auto-switch to map view when API is loaded
-  useEffect(() => {
-    if (isLoaded && isApiKeyValid) {
-      // Once the map is loaded and API key is valid, we can safely switch to map view
-      console.log("Map loaded and API key valid, can switch to map view now");
-    }
-  }, [isLoaded, isApiKeyValid]);
-
-  // Handle tab change with validation and better error feedback
+  // Handle tab change with validation
   const handleViewModeChange = (value: string) => {
     if (value === "map" && !isApiKeyValid) {
       toast({
-        title: "Activating Map View",
-        description: "Please wait while we initialize the map..."
+        title: "Map View",
+        description: "Please activate the map to view your listings on the map."
       });
     }
     
@@ -147,7 +137,7 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
-                {/* Always show the map, the component will handle loading states */}
+                {/* Map view */}
                 <ListingMap 
                   listings={sharedListingData}
                   onListingClick={handleListingClick}

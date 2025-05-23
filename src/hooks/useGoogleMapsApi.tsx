@@ -1,71 +1,95 @@
 
 import { useState, useEffect, useMemo } from 'react';
-import { useLoadScript } from '@react-google-maps/api';
+import { useToast } from '@/hooks/use-toast';
 import {
   getGoogleMapsApiKey,
   isValidGoogleMapsApiKey,
   GOOGLE_MAPS_LIBRARIES,
-  GOOGLE_MAPS_SCRIPT_ID,
   removeExistingGoogleMapsScript,
   cleanupGoogleMapsObjects,
-  handleMapsApiLoadError
+  handleMapsApiLoadError,
+  loadGoogleMapsScript
 } from '@/utils/googleMapsUtils';
-import { useToast } from '@/hooks/use-toast';
 
 export function useGoogleMapsApi() {
-  const [apiKey, setApiKey] = useState<string>(() => getGoogleMapsApiKey());
-  const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(() => isValidGoogleMapsApiKey(getGoogleMapsApiKey()));
+  const [apiKey, setApiKey] = useState<string>(getGoogleMapsApiKey);
+  const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(isValidGoogleMapsApiKey(getGoogleMapsApiKey()));
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [loadError, setLoadError] = useState<Error | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
 
   // Use memoized libraries array to prevent unnecessary re-renders
   const libraries = useMemo(() => GOOGLE_MAPS_LIBRARIES, []);
 
-  // Effect to handle API key changes
+  // Effect to handle API key changes and script loading
   useEffect(() => {
-    // Clean up existing script when API key changes
-    removeExistingGoogleMapsScript();
+    // Skip if no valid API key
+    if (!isApiKeyValid) {
+      console.log("No valid API key provided");
+      setIsLoaded(false);
+      return;
+    }
+
+    // Skip loading if already loaded
+    // @ts-ignore
+    if (window.google && window.google.maps) {
+      console.log("Google Maps already loaded, skipping");
+      setIsLoaded(true);
+      return;
+    }
+
+    // Prevent concurrent loads
+    if (isLoading) {
+      console.log("Already loading Google Maps, skipping");
+      return;
+    }
+
+    console.log("Loading Google Maps with key:", apiKey ? "Valid key" : "No key");
+    setIsLoading(true);
+    setLoadError(null);
     
-    // Update validity state
+    // Use our manual loader instead of useLoadScript
+    loadGoogleMapsScript(apiKey)
+      .then(() => {
+        console.log("Google Maps loaded successfully");
+        setIsLoaded(true);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Google Maps load error:", error);
+        setLoadError(error);
+        setIsLoaded(false);
+        setIsLoading(false);
+        
+        // Show toast with user-friendly error message
+        const errorMessage = handleMapsApiLoadError(error);
+        toast({
+          title: "Google Maps Error",
+          description: errorMessage,
+          variant: "destructive"
+        });
+      });
+
+    // Cleanup function
+    return () => {
+      // Don't remove scripts on unmount, as they might be used by other components
+      // Just clean internal state
+      setIsLoading(false);
+    };
+  }, [apiKey, isApiKeyValid, toast]);
+
+  // Update validity state when API key changes
+  useEffect(() => {
     const isValid = isValidGoogleMapsApiKey(apiKey);
     setIsApiKeyValid(isValid);
-    
     console.log("API key changed:", isValid ? "Valid key provided" : "No valid key");
   }, [apiKey]);
-
-  // Load the script conditionally when we have a valid key
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: isApiKeyValid ? apiKey : '',
-    libraries,
-    id: GOOGLE_MAPS_SCRIPT_ID,
-    preventGoogleFontsLoading: false
-  });
-
-  // Handle load errors and provide user feedback
-  useEffect(() => {
-    if (loadError) {
-      console.error("Google Maps load error:", loadError);
-      
-      // Show toast with user-friendly error message
-      const errorMessage = handleMapsApiLoadError(loadError);
-      toast({
-        title: "Google Maps Error",
-        description: errorMessage,
-        variant: "destructive"
-      });
-    }
-  }, [loadError, toast]);
-
-  // Debug logging
-  useEffect(() => {
-    if (isLoaded) {
-      console.log("Google Maps script loaded successfully");
-    }
-  }, [isLoaded]);
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      cleanupGoogleMapsObjects();
+      // Don't clean up Google objects on unmount as they might be needed elsewhere
     };
   }, []);
 
@@ -74,6 +98,7 @@ export function useGoogleMapsApi() {
     setApiKey,
     isLoaded,
     loadError,
+    isLoading,
     isApiKeyValid
   };
 }

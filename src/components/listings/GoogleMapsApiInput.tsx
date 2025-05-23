@@ -1,33 +1,23 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Map, Key, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { 
-  getGoogleMapsApiKey, 
-  saveGoogleMapsApiKey, 
-  removeGoogleMapsApiKey,
-  isValidGoogleMapsApiKey
-} from "@/utils/googleMapsUtils";
+import { Map, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { getGoogleMapsApiKey, isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
 // Define our props interface
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
-  initialApiKey?: string;
 }
 
-export function GoogleMapsApiInput({ onApiKeySubmit, initialApiKey }: GoogleMapsApiInputProps) {
-  // Since we're hardcoding the API key, this component will be much simpler
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { toast } = useToast();
   
-  useEffect(() => {
-    // Always use the API key from our utility function
+  // On initial render, submit the API key if it's valid
+  React.useEffect(() => {
     const apiKey = getGoogleMapsApiKey();
-    
-    // We're assuming the key is valid since it's hardcoded
     if (isValidGoogleMapsApiKey(apiKey)) {
       onApiKeySubmit(apiKey);
     }
@@ -49,7 +39,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit, initialApiKey }: GoogleMaps
       } else {
         toast({
           title: "API Key Error",
-          description: "Unable to activate Google Maps. Please contact support.",
+          description: "Unable to activate Google Maps. Please check your API key.",
           variant: "destructive"
         });
       }
