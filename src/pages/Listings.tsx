@@ -13,7 +13,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
-import { getGoogleMapsApiKey, isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
+import { 
+  getGoogleMapsApiKey, 
+  isValidGoogleMapsApiKey,
+  saveGoogleMapsApiKey
+} from "@/utils/googleMapsUtils";
+import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
 
 export default function Listings() {
   const location = useLocation();
@@ -28,27 +33,32 @@ export default function Listings() {
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
-  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string>("");
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
-  const [isApiKeyValid, setIsApiKeyValid] = useState(false);
+  
+  // Use our custom hook for Google Maps API
+  const { isApiKeyValid, setApiKey } = useGoogleMapsApi();
 
-  // Load the API key from localStorage on component mount
-  useEffect(() => {
-    const savedApiKey = getGoogleMapsApiKey();
-    const valid = isValidGoogleMapsApiKey(savedApiKey);
-    setGoogleMapsApiKey(savedApiKey);
-    setIsApiKeyValid(valid);
+  // Handle API key submission from GoogleMapsApiInput
+  const handleApiKeySubmit = (apiKey: string) => {
+    console.log("API key submitted:", apiKey ? "Key provided" : "No key");
     
-    // If no valid API key is available, ensure we stay in list view
-    if (!valid && viewMode === "map") {
-      console.log("No valid API key found, switching to list view");
+    // Use our utility function to save the key
+    if (apiKey) {
+      saveGoogleMapsApiKey(apiKey);
+    }
+    
+    // Update our API key in the hook
+    setApiKey(apiKey);
+    
+    // If API key was removed or is invalid, switch to list view
+    if (!isValidGoogleMapsApiKey(apiKey) && viewMode === "map") {
       setViewMode("list");
       toast({
         title: "Map view unavailable",
         description: "Please set a Google Maps API key to use the map view."
       });
     }
-  }, []);
+  };
 
   // Handle listing selection from map view
   const handleListingClick = (listing: any) => {
@@ -59,19 +69,6 @@ export default function Listings() {
   // Handle receiving listing data from ListingList component
   const handleListingsData = (listings: any[]) => {
     setSharedListingData(listings);
-  };
-
-  // Handle API key submission from GoogleMapsApiInput
-  const handleApiKeySubmit = (apiKey: string) => {
-    console.log("API key submitted:", apiKey ? "Key provided" : "No key");
-    const valid = isValidGoogleMapsApiKey(apiKey);
-    setGoogleMapsApiKey(apiKey);
-    setIsApiKeyValid(valid);
-    
-    // If API key was removed or is invalid, switch to list view
-    if (!valid && viewMode === "map") {
-      setViewMode("list");
-    }
   };
 
   // Handle tab change with validation
@@ -167,7 +164,6 @@ export default function Listings() {
                   <ListingMap 
                     listings={sharedListingData}
                     onListingClick={handleListingClick}
-                    apiKey={googleMapsApiKey}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full p-6 bg-gray-50/80">

@@ -1,5 +1,6 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { GoogleMap, useLoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { GOOGLE_MAPS_LIBRARIES, GOOGLE_MAPS_SCRIPT_ID, isValidGoogleMapsApiKey } from '@/utils/googleMapsUtils';
+import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 
 // Default map settings
 const containerStyle = {
@@ -96,32 +97,12 @@ const mapStyles = [
   }
 ];
 
-export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps) {
+export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-
-  // Use React.useMemo for libraries to prevent rerendering
-  const libraries = useMemo(() => GOOGLE_MAPS_LIBRARIES, []);
   
-  // Only load the script if we have a valid API key
-  const validApiKey = isValidGoogleMapsApiKey(apiKey || '');
-  
-  // Load the Google Maps script
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: validApiKey ? (apiKey || '') : '',
-    libraries,
-    id: GOOGLE_MAPS_SCRIPT_ID, // Important: Use a consistent script ID
-    language: "en",
-    region: "US"
-  });
-  
-  // Log any errors for debugging
-  useEffect(() => {
-    if (loadError) {
-      console.error("Google Maps load error:", loadError);
-    }
-  }, [loadError]);
+  const { isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
 
   // Set map reference when loaded
   const onLoad = useCallback((map: google.maps.Map) => {
@@ -134,6 +115,10 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
       listings.forEach(listing => {
         if (listing.location) {
           bounds.extend(listing.location);
+        } else {
+          // Add dummy location if none exists
+          const dummyLocation = getListingCoordinates(listing, listings.indexOf(listing));
+          bounds.extend(dummyLocation);
         }
       });
       map.fitBounds(bounds, 50); // Add some padding
@@ -205,8 +190,8 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
     }
   };
 
-  // If API key is not provided or empty, show a message
-  if (!validApiKey) {
+  // If API key is not valid, show a message
+  if (!isApiKeyValid) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <Alert variant="destructive" className="max-w-md">
@@ -262,8 +247,6 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
         return "#6b7280"; // Gray
     }
   };
-
-  console.log("Rendering Google Map with API key", apiKey ? apiKey.substring(0, 5) + "..." : "missing");
 
   return (
     <div className="h-full w-full relative">
