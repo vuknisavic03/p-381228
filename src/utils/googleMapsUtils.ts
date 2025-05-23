@@ -8,16 +8,11 @@ export const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
 // Script ID for Google Maps
 export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
 
-/**
- * Default API key - this is a working key used for development
- * Note: In production, you would want to use environmental variables or user-provided keys
- */
-const DEFAULT_API_KEY = "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg"; // This is a functional demo key
-
-// Function to get API key from storage or default
+// Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
-  const storedKey = localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE);
-  return storedKey || DEFAULT_API_KEY;
+  // For now, let's hardcode the API key that was working
+  const hardcodedKey = "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ";
+  return hardcodedKey || localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE) || "";
 }
 
 // Function to save API key
@@ -82,11 +77,11 @@ export function cleanupGoogleMapsObjects(): void {
 // Function to handle API loading errors
 export function handleMapsApiLoadError(error: Error): string {
   if (error.message.includes('ApiNotActivatedMapError')) {
-    return "The Google Maps API is not activated for this key. Please check the Google Cloud Console.";
+    return "The Google Maps JavaScript API is not activated for this API key. Please enable it in the Google Cloud Console.";
   } else if (error.message.includes('RefererNotAllowedMapError')) {
-    return "This website is not allowed to use this API key.";
+    return "The current URL is not allowed to use this API key. Please add it to the allowed referrers.";
   } else if (error.message.includes('InvalidKeyMapError')) {
-    return "The provided API key is invalid or expired.";
+    return "The provided API key is invalid or expired. Please check your key.";
   } else if (error.message.includes('MissingKeyMapError')) {
     return "No API key provided. Please enter a valid Google Maps API key.";
   } else {
@@ -94,35 +89,38 @@ export function handleMapsApiLoadError(error: Error): string {
   }
 }
 
-// Manual script loading function - useful for more control
+// Function to ensure we only have one instance of the script loading
+let scriptPromise: Promise<void> | null = null;
 export function loadGoogleMapsScript(apiKey: string): Promise<void> {
-  console.log("Manually loading Google Maps with API key:", apiKey ? "Key provided" : "No key");
+  if (scriptPromise) return scriptPromise;
   
-  // First ensure any existing scripts are cleaned up
-  removeExistingGoogleMapsScript();
-  
-  return new Promise((resolve, reject) => {
+  scriptPromise = new Promise((resolve, reject) => {
+    // First ensure any existing scripts are cleaned up
+    removeExistingGoogleMapsScript();
+    
     // Create a new script element
     const script = document.createElement('script');
     script.id = GOOGLE_MAPS_SCRIPT_ID;
     script.type = 'text/javascript';
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&v=weekly`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=initMap`;
     script.async = true;
     script.defer = true;
     
-    // Define success handler
-    script.onload = () => {
-      console.log("Google Maps script loaded successfully via manual loader");
+    // Define the callback that will be called when the script loads
+    window.initMap = function() {
       resolve();
+      // Don't delete initMap here as it might be needed by other components
     };
     
     // Define error handler
-    script.onerror = (error) => {
-      console.error("Error loading Google Maps script:", error);
+    script.onerror = () => {
       reject(new Error('Google Maps script failed to load.'));
+      scriptPromise = null;
     };
     
     // Append the script to the document
     document.head.appendChild(script);
   });
+  
+  return scriptPromise;
 }
