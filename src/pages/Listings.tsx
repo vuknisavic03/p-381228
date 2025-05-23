@@ -12,9 +12,11 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Listings() {
   const location = useLocation();
+  const { toast } = useToast();
   const workspaceData = location.state?.workspace || {
     name: "Kevin's Workspace", 
     owner: "Kevin Anderson", 
@@ -32,6 +34,15 @@ export default function Listings() {
   useEffect(() => {
     const savedApiKey = getGoogleMapsApiKey();
     setGoogleMapsApiKey(savedApiKey);
+    
+    // If no API key is available, ensure we stay in list view
+    if (!savedApiKey && viewMode === "map") {
+      setViewMode("list");
+      toast({
+        title: "Map view unavailable",
+        description: "Please set a Google Maps API key to use the map view."
+      });
+    }
   }, []);
 
   // Handle listing selection from map view
@@ -48,6 +59,24 @@ export default function Listings() {
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
     setGoogleMapsApiKey(apiKey);
+    
+    // If API key was removed, switch to list view
+    if (!apiKey && viewMode === "map") {
+      setViewMode("list");
+    }
+  };
+
+  // Handle tab change with validation
+  const handleViewModeChange = (value: string) => {
+    if (value === "map" && !googleMapsApiKey) {
+      toast({
+        title: "API Key Required",
+        description: "Please set a Google Maps API key to use the map view."
+      });
+      return;
+    }
+    
+    setViewMode(value as "list" | "map");
   };
 
   return (
@@ -69,13 +98,7 @@ export default function Listings() {
           <div className="flex items-center gap-3">
             <Tabs 
               value={viewMode} 
-              onValueChange={(value) => {
-                // Only allow map view if API key is set
-                if (value === "map" && !googleMapsApiKey) {
-                  return;
-                }
-                setViewMode(value as "list" | "map");
-              }} 
+              onValueChange={handleViewModeChange}
               className="mr-2"
             >
               <TabsList className="bg-gray-100 p-0.5">
@@ -136,6 +159,7 @@ export default function Listings() {
                   <ListingMap 
                     listings={sharedListingData}
                     onListingClick={handleListingClick}
+                    apiKey={googleMapsApiKey}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full p-6 bg-gray-50/80">

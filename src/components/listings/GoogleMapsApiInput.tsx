@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Map, Key, CheckCircle2 } from 'lucide-react';
 
-// Create a global variable to store the current API key
-// This helps prevent multiple initializations with different keys
+// Create a storage key constant for consistency
 const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
 
+// Define our props interface
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
 }
@@ -31,7 +31,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       setStoredKey(savedApiKey);
       setApiKey(savedApiKey);
       
-      // Notify parent component about the API key but without triggering page reload
+      // Notify parent component about the API key
       onApiKeySubmit(savedApiKey);
     }
   }, [onApiKeySubmit]);
@@ -53,14 +53,14 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     toast({
       title: "API Key Saved",
-      description: "Your Google Maps API key has been saved. The page will refresh to apply changes."
+      description: "Your Google Maps API key has been saved."
     });
     
-    // Use a short timeout to allow the toast to be seen
-    setTimeout(() => {
-      onApiKeySubmit(apiKey);
-      window.location.reload();
-    }, 1500);
+    // Notify parent component
+    onApiKeySubmit(apiKey);
+    
+    // Refresh the page to ensure clean initialization
+    window.location.reload();
   };
   
   const handleReset = () => {
@@ -70,14 +70,14 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     toast({
       title: "API Key Removed",
-      description: "Your Google Maps API key has been removed. The page will refresh to apply changes."
+      description: "Your Google Maps API key has been removed."
     });
     
-    // Use a short timeout to allow the toast to be seen
-    setTimeout(() => {
-      onApiKeySubmit("");
-      window.location.reload();
-    }, 1500);
+    // Notify parent component
+    onApiKeySubmit("");
+    
+    // Refresh the page to ensure clean initialization
+    window.location.reload();
   };
   
   if (storedKey) {
