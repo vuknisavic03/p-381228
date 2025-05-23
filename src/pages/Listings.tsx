@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
-import { getGoogleMapsApiKey } from "@/utils/googleMapsUtils";
+import { getGoogleMapsApiKey, isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
 export default function Listings() {
   const location = useLocation();
@@ -30,14 +30,18 @@ export default function Listings() {
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string>("");
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
+  const [isApiKeyValid, setIsApiKeyValid] = useState(false);
 
   // Load the API key from localStorage on component mount
   useEffect(() => {
     const savedApiKey = getGoogleMapsApiKey();
+    const valid = isValidGoogleMapsApiKey(savedApiKey);
     setGoogleMapsApiKey(savedApiKey);
+    setIsApiKeyValid(valid);
     
-    // If no API key is available, ensure we stay in list view
-    if (!savedApiKey && viewMode === "map") {
+    // If no valid API key is available, ensure we stay in list view
+    if (!valid && viewMode === "map") {
+      console.log("No valid API key found, switching to list view");
       setViewMode("list");
       toast({
         title: "Map view unavailable",
@@ -59,20 +63,23 @@ export default function Listings() {
 
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
+    console.log("API key submitted:", apiKey ? "Key provided" : "No key");
+    const valid = isValidGoogleMapsApiKey(apiKey);
     setGoogleMapsApiKey(apiKey);
+    setIsApiKeyValid(valid);
     
-    // If API key was removed, switch to list view
-    if (!apiKey && viewMode === "map") {
+    // If API key was removed or is invalid, switch to list view
+    if (!valid && viewMode === "map") {
       setViewMode("list");
     }
   };
 
   // Handle tab change with validation
   const handleViewModeChange = (value: string) => {
-    if (value === "map" && !googleMapsApiKey) {
+    if (value === "map" && !isApiKeyValid) {
       toast({
         title: "API Key Required",
-        description: "Please set a Google Maps API key to use the map view."
+        description: "Please set a valid Google Maps API key to use the map view."
       });
       return;
     }
@@ -113,7 +120,7 @@ export default function Listings() {
                 <TabsTrigger 
                   value="map" 
                   className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs px-3 py-1.5"
-                  disabled={!googleMapsApiKey}
+                  disabled={!isApiKeyValid}
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   Map
@@ -156,7 +163,7 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
-                {googleMapsApiKey ? (
+                {isApiKeyValid ? (
                   <ListingMap 
                     listings={sharedListingData}
                     onListingClick={handleListingClick}

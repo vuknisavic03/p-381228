@@ -19,3 +19,11 @@ export function saveGoogleMapsApiKey(apiKey: string): void {
 export function removeGoogleMapsApiKey(): void {
   localStorage.removeItem(GOOGLE_MAPS_KEY_STORAGE);
 }
+
+// Check if the API key is valid
+export function isValidGoogleMapsApiKey(apiKey: string): boolean {
+  return apiKey !== undefined && apiKey !== null && apiKey.trim().length > 0;
+}
+
+// Create a script ID to prevent duplicate loading
+export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';

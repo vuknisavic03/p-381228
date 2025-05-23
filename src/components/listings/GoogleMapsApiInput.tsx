@@ -4,12 +4,12 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Map, Key, CheckCircle2 } from 'lucide-react';
+import { Map, Key, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { 
-  GOOGLE_MAPS_KEY_STORAGE, 
   getGoogleMapsApiKey, 
   saveGoogleMapsApiKey, 
-  removeGoogleMapsApiKey 
+  removeGoogleMapsApiKey,
+  isValidGoogleMapsApiKey
 } from "@/utils/googleMapsUtils";
 
 // Define our props interface
@@ -20,27 +20,31 @@ interface GoogleMapsApiInputProps {
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
   const [apiKey, setApiKey] = useState<string>("");
   const [storedKey, setStoredKey] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const { toast } = useToast();
   
   // Check if API key is already stored in local storage
   useEffect(() => {
     const savedApiKey = getGoogleMapsApiKey();
-    if (savedApiKey) {
+    if (isValidGoogleMapsApiKey(savedApiKey)) {
       setStoredKey(savedApiKey);
       setApiKey(savedApiKey);
       
       // Notify parent component about the API key
       onApiKeySubmit(savedApiKey);
+      console.log("Using stored Google Maps API key");
     }
   }, [onApiKeySubmit]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
     
-    if (!apiKey.trim()) {
+    if (!isValidGoogleMapsApiKey(apiKey)) {
+      setErrorMessage("Please enter a valid Google Maps API key");
       toast({
         title: "API Key Required",
-        description: "Please enter a Google Maps API key."
+        description: "Please enter a valid Google Maps API key."
       });
       return;
     }
@@ -51,7 +55,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     toast({
       title: "API Key Saved",
-      description: "Your Google Maps API key has been saved."
+      description: "Your Google Maps API key has been saved and activated."
     });
     
     // Notify parent component
@@ -62,6 +66,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     removeGoogleMapsApiKey();
     setStoredKey(null);
     setApiKey("");
+    setErrorMessage("");
     
     toast({
       title: "API Key Removed",
@@ -118,8 +123,15 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
               placeholder="Enter your Google Maps API key"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="w-full border-gray-300"
+              className={`w-full border-gray-300 ${errorMessage ? 'border-red-300' : ''}`}
             />
+            
+            {errorMessage && (
+              <div className="text-xs text-red-500 flex items-center gap-1.5">
+                <AlertTriangle className="h-3 w-3" />
+                {errorMessage}
+              </div>
+            )}
             
             <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded-md">
               <p className="mb-1.5 font-medium text-gray-700">Important Information:</p>
@@ -127,6 +139,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
                 <li>This key will be stored in your browser's local storage.</li>
                 <li>You can get a Google Maps API key from the <a href="https://console.cloud.google.com/google/maps-apis/overview" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Google Cloud Console</a>.</li>
                 <li>Make sure to enable the Maps JavaScript API and Geocoding API.</li>
+                <li>For testing, you can create a key with no restrictions.</li>
               </ul>
             </div>
           </div>

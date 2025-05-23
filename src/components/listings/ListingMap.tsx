@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { GOOGLE_MAPS_LIBRARIES } from '@/utils/googleMapsUtils';
+import { GOOGLE_MAPS_LIBRARIES, GOOGLE_MAPS_SCRIPT_ID, isValidGoogleMapsApiKey } from '@/utils/googleMapsUtils';
 
 // Default map settings
 const containerStyle = {
@@ -104,16 +104,28 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
   // Use React.useMemo for libraries to prevent rerendering
   const libraries = useMemo(() => GOOGLE_MAPS_LIBRARIES, []);
   
+  // Only load the script if we have a valid API key
+  const validApiKey = isValidGoogleMapsApiKey(apiKey || '');
+  
   // Load the Google Maps script
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: apiKey || '',
+    googleMapsApiKey: validApiKey ? (apiKey || '') : '',
     libraries,
+    id: GOOGLE_MAPS_SCRIPT_ID, // Important: Use a consistent script ID
     language: "en",
     region: "US"
   });
+  
+  // Log any errors for debugging
+  useEffect(() => {
+    if (loadError) {
+      console.error("Google Maps load error:", loadError);
+    }
+  }, [loadError]);
 
   // Set map reference when loaded
   const onLoad = useCallback((map: google.maps.Map) => {
+    console.log("Map loaded successfully");
     setMapRef(map);
     
     // If we have listings with locations, fit the map to show them all
@@ -129,6 +141,7 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
   }, [listings]);
 
   const onUnmount = useCallback(() => {
+    console.log("Map unmounted");
     setMapRef(null);
   }, []);
 
@@ -193,7 +206,7 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
   };
 
   // If API key is not provided or empty, show a message
-  if (!apiKey) {
+  if (!validApiKey) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <Alert variant="destructive" className="max-w-md">
@@ -208,7 +221,6 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
 
   // Show loading state if map isn't loaded yet
   if (loadError) {
-    console.error("Error loading Google Maps:", loadError);
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
@@ -251,6 +263,8 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
     }
   };
 
+  console.log("Rendering Google Map with API key", apiKey ? apiKey.substring(0, 5) + "..." : "missing");
+
   return (
     <div className="h-full w-full relative">
       <GoogleMap
@@ -265,7 +279,6 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
           fullscreenControl: true,
           zoomControl: true,
           styles: mapStyles,
-          mapTypeId: window.google?.maps?.MapTypeId?.ROADMAP
         }}
       >
         {/* Render markers for all listings */}
@@ -278,7 +291,7 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
               key={listing.id}
               position={position}
               onClick={() => handleMarkerClick(listing)}
-              animation={markerAnimations[listing.id] ? window.google?.maps?.Animation.BOUNCE : undefined}
+              animation={markerAnimations[listing.id] ? google.maps.Animation.BOUNCE : undefined}
               icon={{
                 path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
                 fillColor: markerColor,
@@ -298,7 +311,7 @@ export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps
             position={getListingCoordinates(selectedListing, listings.findIndex(l => l.id === selectedListing.id))}
             onCloseClick={handleInfoClose}
             options={{ 
-              pixelOffset: new window.google.maps.Size(0, -30),
+              pixelOffset: new google.maps.Size(0, -30),
               maxWidth: 320
             }}
           >
