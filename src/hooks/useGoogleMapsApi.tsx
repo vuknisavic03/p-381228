@@ -6,10 +6,8 @@ import {
   saveGoogleMapsApiKey,
   isValidGoogleMapsApiKey,
   GOOGLE_MAPS_LIBRARIES,
-  removeExistingGoogleMapsScript,
-  cleanupGoogleMapsObjects,
-  handleMapsApiLoadError,
-  loadGoogleMapsScript
+  loadGoogleMapsScript,
+  handleMapsApiLoadError
 } from '@/utils/googleMapsUtils';
 
 export function useGoogleMapsApi() {
@@ -83,13 +81,6 @@ export function useGoogleMapsApi() {
         });
       });
   }, [apiKey, isApiKeyValid, toast]);
-
-  // Clean up on unmount
-  useEffect(() => {
-    return () => {
-      // Don't remove scripts on unmount to prevent issues with components that might still need them
-    };
-  }, []);
 
   // Custom setter that also saves to localStorage
   const setApiKeyAndSave = (newKey: string) => {

@@ -1,15 +1,14 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
-import { Card, CardContent } from "@/components/ui/card";
+import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Search } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
-import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
-import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
+import { useToast } from '@/hooks/use-toast';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';
 
 // Default map settings
@@ -99,27 +98,255 @@ const mapStyles = [
   }
 ];
 
-export function ListingMap({ listings, onListingClick, onApiKeySubmit }: ListingMapProps) {
+export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
-  const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
+  const [geocoder, setGeocoder] = useState<google.maps.Geocoder | null>(null);
+  const [searchAddress, setSearchAddress] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [markersMap, setMarkersMap] = useState<Map<number, google.maps.Marker>>(new Map());
+  const [isLoading, setIsLoading] = useState(true);
+  const [mapError, setMapError] = useState<string | null>(null);
   
-  // Use our custom hook for Google Maps integration
-  const { isLoaded, loadError, isApiKeyValid, apiKey, setApiKey, isLoading } = useGoogleMapsApi();
-
-  // Handle API key submission from GoogleMapsApiInput
-  const handleApiKeySubmit = useCallback((apiKey: string) => {
-    console.log("API key received in ListingMap");
-    setApiKey(apiKey);
-    
-    // Also propagate to parent if available
-    if (onApiKeySubmit) {
-      onApiKeySubmit(apiKey);
+  const { toast } = useToast();
+  
+  // Initialize Google Maps
+  useEffect(() => {
+    // Check if Google Maps API is already loaded
+    if (!window.google || !window.google.maps) {
+      loadGoogleMapsAPI();
+    } else {
+      initMap();
     }
-  }, [setApiKey, onApiKeySubmit]);
-
-  // Calculate dynamic locations for listings without explicit coordinates
-  const getListingCoordinates = useCallback((listing: Listing, index: number) => {
+    
+    return () => {
+      // Clean up markers
+      clearAllMarkers();
+    };
+  }, []);
+  
+  // Load the Google Maps API
+  const loadGoogleMapsAPI = () => {
+    setIsLoading(true);
+    setMapError(null);
+    
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places,geometry`;
+    script.async = true;
+    script.defer = true;
+    
+    script.onload = () => {
+      console.log('Google Maps API loaded successfully');
+      initMap();
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load Google Maps API');
+      setMapError('Failed to load Google Maps API. Please try again later.');
+      setIsLoading(false);
+    };
+    
+    document.head.appendChild(script);
+  };
+  
+  // Initialize the map
+  const initMap = () => {
+    if (!window.google || !window.google.maps) {
+      setMapError('Google Maps API not loaded');
+      setIsLoading(false);
+      return;
+    }
+    
+    try {
+      const mapElement = document.getElementById('google-map');
+      if (!mapElement) {
+        console.error('Map container not found');
+        return;
+      }
+      
+      const map = new window.google.maps.Map(mapElement, {
+        center: defaultCenter,
+        zoom: 3,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true,
+        zoomControl: true,
+        styles: mapStyles,
+      });
+      
+      setMapRef(map);
+      setGeocoder(new window.google.maps.Geocoder());
+      
+      // Add markers for all listings
+      addListingMarkers(map);
+      
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      setMapError('Error initializing the map. Please refresh the page.');
+      setIsLoading(false);
+    }
+  };
+  
+  // Add markers for all listings
+  const addListingMarkers = (map: google.maps.Map) => {
+    // Clear existing markers first
+    clearAllMarkers();
+    
+    const bounds = new google.maps.LatLngBounds();
+    const newMarkersMap = new Map<number, google.maps.Marker>();
+    
+    listings.forEach((listing, index) => {
+      const position = getListingCoordinates(listing, index);
+      bounds.extend(position);
+      
+      const marker = new google.maps.Marker({
+        position,
+        map,
+        title: listing.address,
+        animation: google.maps.Animation.DROP,
+        icon: {
+          path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
+          fillColor: getMarkerColor(listing.type),
+          fillOpacity: 1,
+          strokeWeight: 1.5,
+          strokeColor: "#ffffff",
+          scale: 1.5,
+          anchor: new google.maps.Point(12, 24)
+        }
+      });
+      
+      marker.addListener('click', () => {
+        handleMarkerClick(listing);
+      });
+      
+      newMarkersMap.set(listing.id, marker);
+    });
+    
+    setMarkersMap(newMarkersMap);
+    
+    if (listings.length > 0) {
+      map.fitBounds(bounds, 50);
+    }
+  };
+  
+  // Clear all markers from the map
+  const clearAllMarkers = () => {
+    markersMap.forEach(marker => {
+      marker.setMap(null);
+    });
+    setMarkersMap(new Map());
+  };
+  
+  // Handle marker click
+  const handleMarkerClick = (listing: Listing) => {
+    setSelectedListing(listing);
+    
+    // Create info window
+    if (mapRef) {
+      const position = getListingCoordinates(listing, listings.findIndex(l => l.id === listing.id));
+      
+      // Center map on marker
+      mapRef.setCenter(position);
+      mapRef.setZoom(14);
+      
+      // Create info window content
+      const contentString = `
+        <div style="padding: 10px; max-width: 200px;">
+          <h4 style="margin: 0 0 5px 0; font-weight: 500;">${listing.address}</h4>
+          <div style="font-size: 12px; color: #666;">
+            ${listing.city}, ${listing.country}
+          </div>
+          <div style="margin-top: 8px; font-size: 12px;">
+            <strong>${formatPropertyType(listing.type)}</strong>
+          </div>
+        </div>
+      `;
+      
+      // Create and open the info window
+      const infoWindow = new google.maps.InfoWindow({
+        content: contentString,
+        pixelOffset: new google.maps.Size(0, -30)
+      });
+      
+      infoWindow.open({
+        map: mapRef,
+        anchor: markersMap.get(listing.id),
+        shouldFocus: true,
+      });
+      
+      // Close info window when clicking elsewhere on map
+      google.maps.event.addListenerOnce(mapRef, 'click', () => {
+        infoWindow.close();
+        setSelectedListing(null);
+      });
+    }
+  };
+  
+  // Search for an address
+  const handleSearchAddress = () => {
+    if (!geocoder || !mapRef || !searchAddress.trim()) {
+      return;
+    }
+    
+    setIsSearching(true);
+    
+    geocoder.geocode({ address: searchAddress }, (results, status) => {
+      if (status === 'OK' && results && results.length > 0) {
+        const location = results[0].geometry.location;
+        mapRef.setCenter(location);
+        mapRef.setZoom(14);
+        
+        // Create a temporary marker for the search result
+        const searchMarker = new google.maps.Marker({
+          position: location,
+          map: mapRef,
+          animation: google.maps.Animation.DROP,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#4f46e5',
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: '#ffffff',
+            scale: 10,
+          },
+          title: results[0].formatted_address
+        });
+        
+        // Add info window
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<div style="padding: 8px;"><strong>Search Result:</strong><br>${results[0].formatted_address}</div>`,
+        });
+        
+        infoWindow.open({
+          map: mapRef,
+          anchor: searchMarker,
+        });
+        
+        // Remove marker after 8 seconds
+        setTimeout(() => {
+          searchMarker.setMap(null);
+          infoWindow.close();
+        }, 8000);
+        
+        toast({
+          title: "Location Found",
+          description: results[0].formatted_address,
+        });
+      } else {
+        toast({
+          title: "Search Failed",
+          description: "Could not find this address. Please try a different one.",
+          variant: "destructive"
+        });
+      }
+      
+      setIsSearching(false);
+    });
+  };
+  
+  // Calculate coordinates for listings without explicit location data
+  const getListingCoordinates = (listing: Listing, index: number) => {
     if (listing.location) return listing.location;
     
     // Generate some variation based on listing id and index to spread markers
@@ -144,74 +371,20 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         lng: defaultCenter.lng + ((index % 3) * 0.03) 
       };
     }
-  }, []);
-
-  // Set map reference when loaded
-  const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("Map loaded successfully");
-    setMapRef(map);
-    
-    // If we have listings with locations, fit the map to show them all
-    if (listings.length > 0) {
-      const bounds = new google.maps.LatLngBounds();
-      listings.forEach((listing, index) => {
-        const position = getListingCoordinates(listing, index);
-        bounds.extend(position);
-      });
-      map.fitBounds(bounds, 50); // Add some padding
-    }
-  }, [listings, getListingCoordinates]);
-
-  const onUnmount = useCallback(() => {
-    console.log("Map unmounted");
-    setMapRef(null);
-  }, []);
-
-  // Handle marker click with animation
-  const handleMarkerClick = useCallback((listing: Listing) => {
-    setSelectedListing(listing);
-    
-    // Set animation for this marker
-    setMarkerAnimations(prev => ({
-      ...prev,
-      [listing.id]: true
-    }));
-    
-    // Reset animation after 700ms
-    setTimeout(() => {
-      setMarkerAnimations(prev => ({
-        ...prev,
-        [listing.id]: false
-      }));
-    }, 700);
-  }, []);
-
-  // Handle info window close
-  const handleInfoClose = useCallback(() => {
-    setSelectedListing(null);
-  }, []);
-
-  // Handle view listing details
-  const handleViewListing = useCallback(() => {
-    if (selectedListing) {
-      onListingClick(selectedListing);
-      setSelectedListing(null);
-    }
-  }, [selectedListing, onListingClick]);
-
-  // Show API key input if we need it
-  if (!isApiKeyValid) {
+  };
+  
+  // Show loading state if map isn't loaded yet
+  if (isLoading) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
-        <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+        <span className="text-gray-500 font-medium">Loading map...</span>
       </div>
     );
   }
-
+  
   // Show error state if map failed to load
-  if (loadError) {
-    const errorMessage = handleMapsApiLoadError(loadError);
-    
+  if (mapError) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
@@ -219,10 +392,13 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             <AlertTriangle className="h-5 w-5 text-red-600" />
             <h3 className="text-red-600 font-medium">Google Maps Error</h3>
           </div>
-          <p className="text-gray-700 text-sm mb-3">{errorMessage}</p>
+          <p className="text-gray-700 text-sm mb-3">{mapError}</p>
           <Button 
             variant="outline" 
-            onClick={() => handleApiKeySubmit("")}
+            onClick={() => {
+              setMapError(null);
+              loadGoogleMapsAPI();
+            }}
             className="w-full text-sm"
           >
             Try Again
@@ -231,118 +407,49 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
       </div>
     );
   }
-
-  // Show loading state if map isn't loaded yet
-  if (isLoading || !isLoaded) {
-    return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
-        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-        <span className="text-gray-500 font-medium">Loading map...</span>
-      </div>
-    );
-  }
-
+  
   return (
     <div className="h-full w-full relative">
-      {/* Check if window.google exists before rendering the map */}
-      {window.google && (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={defaultCenter}
-          zoom={3}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={{
-            mapTypeControl: false,
-            streetViewControl: false,
-            fullscreenControl: true,
-            zoomControl: true,
-            styles: mapStyles,
-          }}
-        >
-          {/* Render markers for all listings */}
-          {listings.map((listing, index) => {
-            const position = getListingCoordinates(listing, index);
-            const markerColor = getMarkerColor(listing.type);
-            
-            return (
-              <MarkerF
-                key={listing.id}
-                position={position}
-                onClick={() => handleMarkerClick(listing)}
-                animation={markerAnimations[listing.id] ? google.maps.Animation.BOUNCE : undefined}
-                icon={{
-                  path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
-                  fillColor: markerColor,
-                  fillOpacity: 1,
-                  strokeWeight: 1.5,
-                  strokeColor: "#ffffff",
-                  scale: 1.5,
-                  anchor: new google.maps.Point(12, 24)
+      {/* Search input */}
+      <div className="absolute top-4 left-4 right-4 z-10">
+        <Card className="bg-white/90 backdrop-blur-sm shadow-lg">
+          <CardContent className="p-3">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Search for an address..."
+                value={searchAddress}
+                onChange={(e) => setSearchAddress(e.target.value)}
+                className="flex-grow"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSearchAddress();
                 }}
               />
-            );
-          })}
-
-          {/* Info Window for selected listing */}
-          {selectedListing && (
-            <InfoWindow
-              position={getListingCoordinates(selectedListing, listings.findIndex(l => l.id === selectedListing.id))}
-              onCloseClick={handleInfoClose}
-              options={{ 
-                pixelOffset: new google.maps.Size(0, -30),
-                maxWidth: 320
-              }}
-            >
-              <Card className="w-full border-0 shadow-none">
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs font-medium py-1 border-primary/30">
-                        #{selectedListing.id}
-                      </Badge>
-                      <Badge className="bg-primary/10 text-primary border-0 text-xs font-medium py-1">
-                        {formatPropertyType(selectedListing.type)}
-                      </Badge>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-medium text-gray-900">{selectedListing.address}</h4>
-                      <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-                        <MapPin className="h-3 w-3" />
-                        <span>{selectedListing.city}, {selectedListing.country}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex items-center gap-1.5 text-xs">
-                        <Building2 className="h-3 w-3 text-gray-500" />
-                        <span className="capitalize text-gray-700">{selectedListing.category.replace(/_/g, ' ')}</span>
-                      </div>
-                      
-                      {selectedListing.tenant && (
-                        <div className="flex items-center gap-1.5 text-xs">
-                          <User className="h-3 w-3 text-gray-500" />
-                          <span className="text-gray-700">{selectedListing.tenant.name}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <Button 
-                      className="w-full mt-1 bg-primary hover:bg-primary/90 text-xs py-1.5 px-3"
-                      onClick={handleViewListing}
-                    >
-                      View Details
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </InfoWindow>
-          )}
-        </GoogleMap>
-      )}
+              <Button 
+                onClick={handleSearchAddress} 
+                disabled={isSearching || !searchAddress.trim()}
+                className="min-w-[100px]"
+              >
+                {isSearching ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Searching
+                  </>
+                ) : (
+                  <>
+                    <Search className="mr-2 h-4 w-4" />
+                    Search
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
       
-      {/* Map overlay with legend */}
+      {/* Map container */}
+      <div id="google-map" style={containerStyle} />
+      
+      {/* Property legend */}
       <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-md border border-gray-100">
         <h4 className="text-xs font-medium mb-2 text-gray-700 flex items-center gap-1.5">
           <Map className="h-3 w-3" />
@@ -367,6 +474,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           </div>
         </div>
       </div>
+      
+      {/* View details button for selected listing */}
+      {selectedListing && (
+        <div className="absolute bottom-4 right-4">
+          <Button
+            onClick={() => onListingClick(selectedListing)}
+            className="bg-primary hover:bg-primary/90"
+          >
+            View Details
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
