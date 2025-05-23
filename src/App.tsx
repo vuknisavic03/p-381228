@@ -1,36 +1,42 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "@/pages/Index";
-import UserSpace from "@/pages/UserSpace";
-import WorkspacePicker from "@/pages/workspace/WorkspacePicker";
-import Listings from "@/pages/Listings";
-import Transactions from "@/pages/Transactions";
-import Profile from "@/pages/Profile";
-import Vision from "@/pages/Vision";
-import NotFound from "@/pages/NotFound";
-import MapSearch from "@/pages/MapSearch";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as SonnerToaster } from "sonner";
-import "./App.css";
+import { Toaster } from "@/components/ui/sonner";  // Use only one toaster implementation
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastProvider } from "@/hooks/use-toast";
+import WorkspacePicker from "./pages/workspace/WorkspacePicker";
+import { Overview } from "./components/dashboard/Overview";
+import Profile from "./pages/Profile";
+import Listings from "./pages/Listings";
+import Transactions from "./pages/Transactions";
+import NotFound from "./pages/NotFound";
+import Index from "./pages/Index";
+import Vision from "./pages/Vision";
 
-function App() {
+const queryClient = new QueryClient();
+
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/workspace" element={<UserSpace />} />
-        <Route path="/workspace/picker" element={<WorkspacePicker />} />
-        <Route path="/listings" element={<Listings />} />
-        <Route path="/transactions" element={<Transactions />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/vision" element={<Vision />} />
-        <Route path="/map-search" element={<MapSearch />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Toaster />
-      <SonnerToaster position="top-right" />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <TooltipProvider>
+          <ToastProvider>
+            <Toaster />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/vision" element={<Vision />} />
+              <Route path="/workspace" element={<WorkspacePicker />} />
+              <Route path="/dashboard" element={<Overview />} />
+              <Route path="/listings" element={<Listings />} />
+              <Route path="/transactions" element={<Transactions />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ToastProvider>
+        </TooltipProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;
