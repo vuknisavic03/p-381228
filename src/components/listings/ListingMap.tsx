@@ -18,8 +18,8 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 40.7589,
-  lng: -73.9851
+  lat: 40.7128,
+  lng: -74.0060
 };
 
 // Type definitions for listings
@@ -68,34 +68,29 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Real coordinates for credible addresses
+  // Calculate dynamic locations for listings without explicit coordinates
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
     if (listing.location) return listing.location;
     
-    // Real coordinates based on actual addresses
-    const addressCoordinates: { [key: string]: { lat: number; lng: number } } = {
-      "Belgrade, Dunavska 12": { lat: 44.8176, lng: 20.4633 },
-      "New York, 5th Avenue 789": { lat: 40.7589, lng: -73.9851 },
-      "London, Baker Street 221B": { lat: 51.5238, lng: -0.1585 },
-      "Paris, Champs-Élysées 101": { lat: 48.8698, lng: 2.3075 },
-      "Tokyo, Shibuya Crossing 1-1": { lat: 35.6598, lng: 139.7006 },
-      "Berlin, Brandenburg Gate 1": { lat: 52.5163, lng: 13.3777 },
-      "Sydney, Opera House Drive 2": { lat: -33.8568, lng: 151.2153 },
-      "Dubai, Burj Khalifa Blvd 1": { lat: 25.1972, lng: 55.2744 },
-      "Los Angeles, Hollywood Blvd 6801": { lat: 34.1022, lng: -118.3406 },
-      "Toronto, CN Tower Way 290": { lat: 43.6426, lng: -79.3871 }
-    };
+    const latVariation = (listing.id * 0.01) + (index * 0.005);
+    const lngVariation = (listing.id * 0.01) - (index * 0.007);
     
-    const coordinates = addressCoordinates[listing.address];
-    if (coordinates) {
-      return coordinates;
+    if (listing.city === "New York") {
+      return { lat: 40.7128 + latVariation, lng: -74.0060 + lngVariation };
+    } else if (listing.city === "London") {
+      return { lat: 51.5074 + latVariation, lng: -0.1278 + lngVariation };
+    } else if (listing.city === "Paris") {
+      return { lat: 48.8566 + latVariation, lng: 2.3522 + lngVariation };
+    } else if (listing.city === "Tokyo") {
+      return { lat: 35.6762 + latVariation, lng: 139.6503 + lngVariation };
+    } else if (listing.city === "Belgrade") {
+      return { lat: 44.7866 + latVariation, lng: 20.4489 + lngVariation };
+    } else {
+      return { 
+        lat: defaultCenter.lat + ((index % 5) * 0.02), 
+        lng: defaultCenter.lng + ((index % 3) * 0.03) 
+      };
     }
-    
-    // Fallback for any unlisted addresses
-    return { 
-      lat: defaultCenter.lat + ((index % 5) * 0.01), 
-      lng: defaultCenter.lng + ((index % 3) * 0.01) 
-    };
   }, []);
 
   // Set map reference when loaded

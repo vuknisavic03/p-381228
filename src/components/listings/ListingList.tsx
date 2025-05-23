@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Updated mock listings with credible addresses
+// Mock listings data - same as before
 const mockListings = [
   {
     id: 1,
@@ -27,115 +26,7 @@ const mockListings = [
       email: "alex@example.com"
     }
   },
-  {
-    id: 2,
-    address: "New York, 5th Avenue 789",
-    city: "New York",
-    country: "USA",
-    type: "residential_rental",
-    category: "apartment",
-    tenant: {
-      name: "Sarah Johnson",
-      phone: "555-0123",
-      email: "sarah.j@email.com"
-    }
-  },
-  {
-    id: 3,
-    address: "London, Baker Street 221B",
-    city: "London", 
-    country: "United Kingdom",
-    type: "commercial_rental",
-    category: "office",
-    tenant: null
-  },
-  {
-    id: 4,
-    address: "Paris, Champs-Élysées 101",
-    city: "Paris",
-    country: "France",
-    type: "hospitality",
-    category: "hotel",
-    tenant: {
-      name: "Hotel Management Co.",
-      phone: "+33-1-234-5678",
-      email: "contact@hotelmanagement.fr"
-    }
-  },
-  {
-    id: 5,
-    address: "Tokyo, Shibuya Crossing 1-1",
-    city: "Tokyo",
-    country: "Japan",
-    type: "vacation_rental",
-    category: "apartment",
-    tenant: {
-      name: "Airbnb Host Services",
-      phone: "+81-3-1234-5678",
-      email: "host@airbnb.jp"
-    }
-  },
-  {
-    id: 6,
-    address: "Berlin, Brandenburg Gate 1",
-    city: "Berlin",
-    country: "Germany",
-    type: "residential_rental",
-    category: "house",
-    tenant: {
-      name: "Klaus Mueller",
-      phone: "+49-30-123456",
-      email: "k.mueller@email.de"
-    }
-  },
-  {
-    id: 7,
-    address: "Sydney, Opera House Drive 2",
-    city: "Sydney",
-    country: "Australia",
-    type: "commercial_rental",
-    category: "restaurant",
-    tenant: null
-  },
-  {
-    id: 8,
-    address: "Dubai, Burj Khalifa Blvd 1",
-    city: "Dubai",
-    country: "UAE",
-    type: "hospitality",
-    category: "luxury_hotel",
-    tenant: {
-      name: "Luxury Hospitality Group",
-      phone: "+971-4-123-4567",
-      email: "reservations@luxuryhotel.ae"
-    }
-  },
-  {
-    id: 9,
-    address: "Los Angeles, Hollywood Blvd 6801",
-    city: "Los Angeles",
-    country: "USA",
-    type: "vacation_rental",
-    category: "studio",
-    tenant: {
-      name: "Hollywood Rentals LLC",
-      phone: "555-HOLLYWOOD",
-      email: "rentals@hollywood.com"
-    }
-  },
-  {
-    id: 10,
-    address: "Toronto, CN Tower Way 290",
-    city: "Toronto",
-    country: "Canada", 
-    type: "residential_rental",
-    category: "condo",
-    tenant: {
-      name: "Michael Chen",
-      phone: "+1-416-555-0199",
-      email: "m.chen@email.ca"
-    }
-  }
+  // ... keep existing code (other mock listings)
 ];
 
 interface FilterState {
@@ -146,8 +37,8 @@ interface FilterState {
 }
 
 interface ListingListProps {
-  onListingClick?: (listing: any) => void;
-  onListingsData?: (listings: any[]) => void;
+  onListingClick?: (listing: any) => void;  // New prop for parent component to handle listing clicks
+  onListingsData?: (listings: any[]) => void;  // New prop to share filtered listings data
 }
 
 export function ListingList({ onListingClick, onListingsData }: ListingListProps) {
@@ -204,7 +95,9 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     }
   };
 
+  // Keep existing filter functions
   const toggleFilter = (category: keyof FilterState, value: string) => {
+    // ... keep existing code
     setFilters(prev => {
       const updated = { ...prev };
       if (updated[category].includes(value)) {
@@ -217,6 +110,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
   };
 
   const clearFilters = () => {
+    // ... keep existing code
     setFilters({
       types: [],
       categories: [],
@@ -230,7 +124,9 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     });
   };
 
+  // Keep existing filter group setup
   const filterGroups: FilterGroup[] = [
+    // ... keep existing code (filter groups)
     {
       title: "Property Type",
       options: propertyTypes.map(type => ({
@@ -272,7 +168,9 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     filters.occupancy.length + 
     filters.countries.length;
 
+  // Prepare filter tags - keep existing code
   const filterTags = [
+    // ... keep existing code for filter tags
     ...filters.types.map(type => ({
       category: "Type",
       value: formatPropertyType(type as PropertyType),
@@ -300,6 +198,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
 
   // Filter listings based on search and filters
   const filteredListings = listings.filter(listing => {
+    // ... keep existing code (filtering logic)
     // Text search
     const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -365,6 +264,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
           />
         </div>
         
+        {/* Show active filter tags */}
         <FilterTags tags={filterTags} onClearAll={clearFilters} />
       </div>
 
@@ -383,6 +283,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
                   className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
                   onClick={() => handleListingClick(listing)}
                 >
+                  {/* Keep existing card content */}
                   <div className="flex flex-col">
                     <div className="flex items-center justify-between p-4 pb-2">
                       <div className="flex items-center gap-6 text-sm">
@@ -439,6 +340,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
         )}
       </div>
 
+      {/* Only render the Sheet here if parent hasn't provided a click handler */}
       {!onListingClick && (
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 
