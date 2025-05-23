@@ -45,7 +45,6 @@ interface Listing {
 interface ListingMapProps {
   listings: Listing[];
   onListingClick: (listing: Listing) => void;
-  apiKey?: string;
 }
 
 // Custom map styles
@@ -102,6 +101,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
   
+  // Use our custom hook for Google Maps integration
   const { isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
 
   // Set map reference when loaded
@@ -204,7 +204,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     );
   }
 
-  // Show loading state if map isn't loaded yet
+  // Show error state if map failed to load
   if (loadError) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
@@ -219,6 +219,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     );
   }
 
+  // Show loading state if map isn't loaded yet
   if (!isLoaded) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">

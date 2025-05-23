@@ -12,8 +12,7 @@ import { useLoadScript } from '@react-google-maps/api';
 
 export function useGoogleMapsApi() {
   const [apiKey, setApiKey] = useState<string>(() => {
-    const savedKey = getGoogleMapsApiKey();
-    return savedKey;
+    return getGoogleMapsApiKey();
   });
 
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(() => {
@@ -25,9 +24,10 @@ export function useGoogleMapsApi() {
 
   // Reset script when API key changes
   useEffect(() => {
-    if (apiKey !== getGoogleMapsApiKey()) {
-      removeExistingGoogleMapsScript();
-    }
+    // Remove existing script first to ensure clean reload
+    removeExistingGoogleMapsScript();
+    // Update validity state when API key changes
+    setIsApiKeyValid(isValidGoogleMapsApiKey(apiKey));
   }, [apiKey]);
 
   // Load the Google Maps script
@@ -45,11 +45,6 @@ export function useGoogleMapsApi() {
       cleanupGoogleMapsObjects();
     };
   }, []);
-
-  // Update validity state when API key changes
-  useEffect(() => {
-    setIsApiKeyValid(isValidGoogleMapsApiKey(apiKey));
-  }, [apiKey]);
 
   // Log any errors for debugging
   useEffect(() => {

@@ -10,8 +10,7 @@ import {
   saveGoogleMapsApiKey, 
   removeGoogleMapsApiKey,
   isValidGoogleMapsApiKey,
-  cleanupGoogleMapsObjects,
-  removeExistingGoogleMapsScript
+  removeExistingGoogleMapsScript 
 } from "@/utils/googleMapsUtils";
 
 // Define our props interface
@@ -34,13 +33,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       
       // Notify parent component about the API key
       onApiKeySubmit(savedApiKey);
-      console.log("Using stored Google Maps API key");
     }
-    
-    return () => {
-      // Clean up function
-      cleanupGoogleMapsObjects();
-    };
   }, [onApiKeySubmit]);
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -75,7 +68,6 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
   const handleReset = () => {
     removeGoogleMapsApiKey();
     removeExistingGoogleMapsScript();
-    cleanupGoogleMapsObjects();
     
     setStoredKey(null);
     setApiKey("");

@@ -28,38 +28,7 @@ export function isValidGoogleMapsApiKey(apiKey: string): boolean {
 // Create a script ID to prevent duplicate loading
 export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
 
-// Function to load Google Maps script manually (alternative approach)
-export const loadGoogleMapsScript = (apiKey: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    // Check if script already exists
-    if (document.getElementById(GOOGLE_MAPS_SCRIPT_ID)) {
-      console.log("Google Maps script already loaded");
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = GOOGLE_MAPS_SCRIPT_ID;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-
-    // Define the callback
-    window.initMap = () => {
-      console.log("Google Maps initialized successfully");
-      resolve();
-    };
-
-    script.onerror = (error) => {
-      console.error("Error loading Google Maps script:", error);
-      reject(error);
-    };
-
-    document.head.appendChild(script);
-  });
-};
-
-// Clear existing script before loading new one
+// Function to remove existing script before loading new one
 export const removeExistingGoogleMapsScript = (): void => {
   const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID);
   if (existingScript) {

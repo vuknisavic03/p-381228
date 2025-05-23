@@ -13,11 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  getGoogleMapsApiKey, 
-  isValidGoogleMapsApiKey,
-  saveGoogleMapsApiKey
-} from "@/utils/googleMapsUtils";
+import { isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
 
 export default function Listings() {
@@ -41,11 +37,6 @@ export default function Listings() {
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
     console.log("API key submitted:", apiKey ? "Key provided" : "No key");
-    
-    // Use our utility function to save the key
-    if (apiKey) {
-      saveGoogleMapsApiKey(apiKey);
-    }
     
     // Update our API key in the hook
     setApiKey(apiKey);
