@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Search } from 'lucide-react';
+import { MapPin, Loader2, Map as MapIcon, Building2, User, AlertTriangle, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -193,18 +193,18 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     // Clear existing markers first
     clearAllMarkers();
     
-    const bounds = new google.maps.LatLngBounds();
+    const bounds = new window.google.maps.LatLngBounds();
     const newMarkersMap = new Map<number, google.maps.Marker>();
     
     listings.forEach((listing, index) => {
       const position = getListingCoordinates(listing, index);
       bounds.extend(position);
       
-      const marker = new google.maps.Marker({
+      const marker = new window.google.maps.Marker({
         position,
         map,
         title: listing.address,
-        animation: google.maps.Animation.DROP,
+        animation: window.google.maps.Animation.DROP,
         icon: {
           path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
           fillColor: getMarkerColor(listing.type),
@@ -212,7 +212,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
           strokeWeight: 1.5,
           strokeColor: "#ffffff",
           scale: 1.5,
-          anchor: new google.maps.Point(12, 24)
+          anchor: new window.google.maps.Point(12, 24)
         }
       });
       
@@ -264,9 +264,9 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
       `;
       
       // Create and open the info window
-      const infoWindow = new google.maps.InfoWindow({
+      const infoWindow = new window.google.maps.InfoWindow({
         content: contentString,
-        pixelOffset: new google.maps.Size(0, -30)
+        pixelOffset: new window.google.maps.Size(0, -30)
       });
       
       infoWindow.open({
@@ -276,7 +276,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
       });
       
       // Close info window when clicking elsewhere on map
-      google.maps.event.addListenerOnce(mapRef, 'click', () => {
+      window.google.maps.event.addListenerOnce(mapRef, 'click', () => {
         infoWindow.close();
         setSelectedListing(null);
       });
@@ -298,12 +298,12 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
         mapRef.setZoom(14);
         
         // Create a temporary marker for the search result
-        const searchMarker = new google.maps.Marker({
+        const searchMarker = new window.google.maps.Marker({
           position: location,
           map: mapRef,
-          animation: google.maps.Animation.DROP,
+          animation: window.google.maps.Animation.DROP,
           icon: {
-            path: google.maps.SymbolPath.CIRCLE,
+            path: window.google.maps.SymbolPath.CIRCLE,
             fillColor: '#4f46e5',
             fillOpacity: 1,
             strokeWeight: 2,
@@ -314,7 +314,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
         });
         
         // Add info window
-        const infoWindow = new google.maps.InfoWindow({
+        const infoWindow = new window.google.maps.InfoWindow({
           content: `<div style="padding: 8px;"><strong>Search Result:</strong><br>${results[0].formatted_address}</div>`,
         });
         
@@ -452,7 +452,7 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
       {/* Property legend */}
       <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-md border border-gray-100">
         <h4 className="text-xs font-medium mb-2 text-gray-700 flex items-center gap-1.5">
-          <Map className="h-3 w-3" />
+          <MapIcon className="h-3 w-3" />
           Property Types
         </h4>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">

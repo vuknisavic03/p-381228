@@ -157,7 +157,7 @@ export function loadGoogleMapsScript(apiKey: string): Promise<void> {
 export function geocodeAddress(address: string, geocoder: google.maps.Geocoder): Promise<google.maps.GeocoderResult> {
   return new Promise((resolve, reject) => {
     geocoder.geocode({ address }, (results, status) => {
-      if (status === google.maps.GeocoderStatus.OK && results && results.length > 0) {
+      if (status === window.google.maps.GeocoderStatus.OK && results && results.length > 0) {
         resolve(results[0]);
       } else {
         reject(new Error(`Geocoding failed: ${status}`));
