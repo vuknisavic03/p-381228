@@ -1,129 +1,159 @@
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Map, Key, CheckCircle2 } from 'lucide-react';
+import { Map, CheckCircle2, AlertTriangle, Key, Info } from 'lucide-react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { getGoogleMapsApiKey, isValidGoogleMapsApiKey, saveGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
+// Define our props interface
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
 }
 
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
-  const [apiKey, setApiKey] = useState<string>("");
-  const [storedKey, setStoredKey] = useState<string | null>(null);
+  const [apiKey, setApiKey] = useState<string>(getGoogleMapsApiKey());
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showCustomKeyInput, setShowCustomKeyInput] = useState<boolean>(false);
   const { toast } = useToast();
   
-  // Check if API key is already stored in local storage
+  // On initial render, submit the API key if it's valid
   useEffect(() => {
-    const savedApiKey = localStorage.getItem("googleMapsApiKey");
-    if (savedApiKey) {
-      setStoredKey(savedApiKey);
-      setApiKey(savedApiKey);
-      onApiKeySubmit(savedApiKey);
+    const savedApiKey = getGoogleMapsApiKey();
+    if (isValidGoogleMapsApiKey(savedApiKey) && !showCustomKeyInput) {
+      handleActivateMap();
     }
-  }, [onApiKeySubmit]);
+  }, []);
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleActivateMap = () => {
+    setIsLoading(true);
     
-    if (!apiKey.trim()) {
+    try {
+      // If using demo key, make sure we use that instead of empty input
+      const keyToUse = showCustomKeyInput ? apiKey : getGoogleMapsApiKey();
+      
+      if (isValidGoogleMapsApiKey(keyToUse)) {
+        // Save and submit the API key
+        saveGoogleMapsApiKey(keyToUse);
+        onApiKeySubmit(keyToUse);
+        
+        toast({
+          title: "Map Activated",
+          description: "Google Maps has been activated successfully."
+        });
+      } else {
+        toast({
+          title: "API Key Error",
+          description: "Please enter a valid Google Maps API key.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
       toast({
-        title: "API Key Required",
-        description: "Please enter a Google Maps API key."
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive"
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Store API key in local storage
-    localStorage.setItem("googleMapsApiKey", apiKey);
-    setStoredKey(apiKey);
-    onApiKeySubmit(apiKey);
-    
-    toast({
-      title: "API Key Saved",
-      description: "Your Google Maps API key has been saved successfully."
-    });
   };
-  
-  const handleReset = () => {
-    localStorage.removeItem("googleMapsApiKey");
-    setStoredKey(null);
-    setApiKey("");
-    onApiKeySubmit("");
-    
-    toast({
-      title: "API Key Removed",
-      description: "Your Google Maps API key has been removed."
-    });
+
+  const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setApiKey(e.target.value);
   };
-  
-  if (storedKey) {
-    return (
-      <Card className="w-full max-w-md mx-auto shadow-lg border border-gray-100">
-        <CardContent className="pt-6">
-          <div className="text-center space-y-3">
-            <div className="bg-green-50 rounded-full w-12 h-12 mx-auto flex items-center justify-center">
-              <CheckCircle2 className="h-6 w-6 text-green-500" />
-            </div>
-            <h3 className="font-medium text-base text-gray-900">Google Maps API Key Set</h3>
-            <p className="text-sm text-gray-500">
-              Your map is ready to use with the saved API key.
-            </p>
-            <p className="text-xs text-gray-400 mb-2">
-              Key: {storedKey.substring(0, 5)}...{storedKey.substring(storedKey.length - 5)}
-            </p>
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-center pb-6">
-          <Button variant="outline" size="sm" onClick={handleReset} className="gap-2">
-            <Key className="h-3.5 w-3.5" />
-            Reset API Key
-          </Button>
-        </CardFooter>
-      </Card>
-    );
-  }
-  
+
+  const toggleCustomKeyInput = () => {
+    setShowCustomKeyInput(!showCustomKeyInput);
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg border border-gray-100">
-      <form onSubmit={handleSubmit}>
-        <CardContent className="pt-6">
-          <div className="space-y-5">
-            <div className="text-center">
-              <div className="bg-primary/10 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
-                <Map className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-medium text-lg">Google Maps API Key</h3>
-              <p className="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
-                To view listings on the map, please enter your Google Maps API key below.
+      <CardHeader>
+        <div className="flex justify-center mb-2">
+          <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center">
+            <Map className="h-8 w-8 text-primary" />
+          </div>
+        </div>
+        <CardTitle className="text-center">Google Maps Integration</CardTitle>
+      </CardHeader>
+      
+      <CardContent className="space-y-4">
+        {!showCustomKeyInput ? (
+          <>
+            <p className="text-sm text-gray-500 text-center">
+              Click the button below to activate the map with our demo API key or use your own key.
+            </p>
+            
+            <Alert className="bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-500" />
+              <AlertDescription className="text-sm text-blue-600">
+                We'll use a demo Google Maps API key with restrictions, or you can use your own.
+              </AlertDescription>
+            </Alert>
+            
+            <div className="flex justify-center">
+              <Button 
+                variant="link" 
+                onClick={toggleCustomKeyInput} 
+                className="text-sm text-gray-600"
+              >
+                <Key className="h-3.5 w-3.5 mr-1" />
+                Use my own API key
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="api-key">Google Maps API Key</Label>
+              <Input
+                id="api-key"
+                placeholder="Enter your Google Maps API key"
+                value={apiKey}
+                onChange={handleKeyChange}
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500">
+                This key must have the Maps JavaScript API and Places API enabled.
               </p>
             </div>
             
-            <Input
-              placeholder="Enter your Google Maps API key"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="w-full border-gray-300"
-            />
-            
-            <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded-md">
-              <p className="mb-1.5 font-medium text-gray-700">Important Information:</p>
-              <ul className="space-y-1 list-disc list-inside">
-                <li>This key will be stored in your browser's local storage.</li>
-                <li>You can get a Google Maps API key from the <a href="https://console.cloud.google.com/google/maps-apis/overview" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Google Cloud Console</a>.</li>
-              </ul>
+            <div className="flex justify-center">
+              <Button 
+                variant="link" 
+                onClick={toggleCustomKeyInput} 
+                className="text-sm text-gray-600"
+              >
+                Use demo API key instead
+              </Button>
             </div>
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-center pb-6">
-          <Button type="submit" size="default" className="gap-2">
-            <CheckCircle2 className="h-4 w-4" />
-            Save & Activate Map
-          </Button>
-        </CardFooter>
-      </form>
+          </>
+        )}
+      </CardContent>
+      
+      <CardFooter className="flex justify-center pb-6">
+        <Button 
+          onClick={handleActivateMap} 
+          disabled={isLoading || (showCustomKeyInput && !isValidGoogleMapsApiKey(apiKey))}
+          className="gap-2"
+        >
+          {isLoading ? (
+            <>
+              <AlertTriangle className="h-4 w-4 animate-pulse" />
+              Activating Map...
+            </>
+          ) : (
+            <>
+              <CheckCircle2 className="h-4 w-4" />
+              Activate Map
+            </>
+          )}
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
