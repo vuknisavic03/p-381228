@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
   getGoogleMapsApiKey,
@@ -11,12 +11,14 @@ import {
 import { useLoadScript } from '@react-google-maps/api';
 
 export function useGoogleMapsApi() {
-  const [apiKey, setApiKeyState] = useState<string>(() => getGoogleMapsApiKey());
+  // Use a ref to store the initial API key to prevent re-renders
+  const initialApiKeyRef = useRef<string>(getGoogleMapsApiKey());
+  const [apiKey, setApiKeyState] = useState<string>(initialApiKeyRef.current);
   const { toast } = useToast();
   
-  // Only load script once with the initial API key
+  // Load script just once with the initial API key
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: apiKey || "",
+    googleMapsApiKey: initialApiKeyRef.current || "",
     libraries: GOOGLE_MAPS_LIBRARIES,
     preventGoogleFontsLoading: true,
   });
@@ -45,14 +47,14 @@ export function useGoogleMapsApi() {
         saveGoogleMapsApiKey(newKey);
       }
       
-      // If we already have maps loaded and we're changing to a different valid key,
-      // we need to reload the page since Google Maps doesn't support dynamic key changes
-      if (isLoaded && isValidGoogleMapsApiKey(apiKey) && isValidGoogleMapsApiKey(newKey) && apiKey !== newKey) {
+      // If changing to a different key, we need a page reload
+      if (isLoaded && apiKey !== newKey) {
         toast({
           title: "API Key Updated",
           description: "Refreshing page to apply new API key...",
         });
         
+        // Use a timeout to ensure the toast is shown before reload
         setTimeout(() => {
           window.location.reload();
         }, 1500);

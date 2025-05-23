@@ -44,6 +44,16 @@ export default function Listings() {
     setViewMode(value as "list" | "map");
   };
 
+  // Handle API key submission from map component
+  const handleApiKeySubmit = (apiKey: string) => {
+    console.log("API key received in Listings page");
+    // The key is handled by the useGoogleMapsApi hook, we just acknowledge it here
+    toast({
+      title: "API Key Updated",
+      description: "Your Google Maps API key has been saved."
+    });
+  };
+
   return (
     <DashboardLayout
       workspaceName={workspaceData.name}
@@ -122,6 +132,7 @@ export default function Listings() {
                 <ListingMap 
                   listings={sharedListingData}
                   onListingClick={handleListingClick}
+                  onApiKeySubmit={handleApiKeySubmit}
                 />
               </motion.div>
             )}

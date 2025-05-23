@@ -73,10 +73,3 @@ export function handleMapsApiLoadError(error: Error | null): string {
     return `Error loading Google Maps: ${errorMessage}`;
   }
 }
-
-// Reload the page (used after API key changes)
-export function reloadPage(): void {
-  if (typeof window !== 'undefined') {
-    window.location.reload();
-  }
-}
