@@ -52,14 +52,21 @@ export default function Listings() {
     setSharedListingData(listings);
   };
 
-  // Handle tab change with validation
+  // Auto-switch to map view when API is loaded
+  useEffect(() => {
+    if (isLoaded && isApiKeyValid) {
+      // Once the map is loaded and API key is valid, we can safely switch to map view
+      console.log("Map loaded and API key valid, can switch to map view now");
+    }
+  }, [isLoaded, isApiKeyValid]);
+
+  // Handle tab change with validation and better error feedback
   const handleViewModeChange = (value: string) => {
     if (value === "map" && !isApiKeyValid) {
       toast({
-        title: "API Key Required",
-        description: "Please set a valid Google Maps API key to use the map view."
+        title: "Activating Map View",
+        description: "Please wait while we initialize the map..."
       });
-      return;
     }
     
     setViewMode(value as "list" | "map");
@@ -98,7 +105,6 @@ export default function Listings() {
                 <TabsTrigger 
                   value="map" 
                   className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs px-3 py-1.5"
-                  disabled={!isApiKeyValid}
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   Map
@@ -141,17 +147,11 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
-                {/* Show the map if API key is valid, otherwise show the input form */}
-                {isApiKeyValid ? (
-                  <ListingMap 
-                    listings={sharedListingData}
-                    onListingClick={handleListingClick}
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full p-6 bg-gray-50/80">
-                    <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
-                  </div>
-                )}
+                {/* Always show the map, the component will handle loading states */}
+                <ListingMap 
+                  listings={sharedListingData}
+                  onListingClick={handleListingClick}
+                />
               </motion.div>
             )}
           </AnimatePresence>

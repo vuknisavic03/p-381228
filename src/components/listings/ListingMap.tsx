@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useMemo } from 'react';
+
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
+import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
+import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 
 // Default map settings
 const containerStyle = {
@@ -99,9 +101,17 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
+  const [mapLoadAttempted, setMapLoadAttempted] = useState(false);
   
   // Use our custom hook for Google Maps integration
   const { isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
+
+  // Track when we've attempted to load the map
+  useEffect(() => {
+    if (isLoaded || loadError) {
+      setMapLoadAttempted(true);
+    }
+  }, [isLoaded, loadError]);
 
   // Calculate dynamic locations for listings without explicit coordinates
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
@@ -218,16 +228,26 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
     );
   }
 
-  // Show error state if map failed to load
-  if (loadError) {
+  // Show error state if map failed to load and we've attempted loading
+  if (loadError && mapLoadAttempted) {
+    const errorMessage = handleMapsApiLoadError(loadError);
+    
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
-          <h3 className="text-red-600 font-medium mb-2">Google Maps Error</h3>
-          <p className="text-gray-700 text-sm mb-3">
-            Unable to load Google Maps. The API key may be invalid or there might be network issues.
-          </p>
-          <p className="text-xs text-gray-500">Error details: {loadError.message}</p>
+          <div className="flex items-center gap-2 mb-2">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <h3 className="text-red-600 font-medium">Google Maps Error</h3>
+          </div>
+          <p className="text-gray-700 text-sm mb-3">{errorMessage}</p>
+          <div className="bg-white p-3 rounded border border-gray-200 text-xs text-gray-500">
+            <p className="font-medium mb-1">Common Solutions:</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Make sure the Maps JavaScript API is enabled in Google Cloud Console</li>
+              <li>Check that your API key has the proper restrictions</li>
+              <li>Verify billing is enabled for your Google Cloud project</li>
+            </ul>
+          </div>
         </div>
       </div>
     );

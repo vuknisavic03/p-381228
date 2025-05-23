@@ -7,12 +7,15 @@ import {
   GOOGLE_MAPS_LIBRARIES,
   GOOGLE_MAPS_SCRIPT_ID,
   removeExistingGoogleMapsScript,
-  cleanupGoogleMapsObjects
+  cleanupGoogleMapsObjects,
+  handleMapsApiLoadError
 } from '@/utils/googleMapsUtils';
+import { useToast } from '@/hooks/use-toast';
 
 export function useGoogleMapsApi() {
   const [apiKey, setApiKey] = useState<string>(() => getGoogleMapsApiKey());
   const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(() => isValidGoogleMapsApiKey(getGoogleMapsApiKey()));
+  const { toast } = useToast();
 
   // Use memoized libraries array to prevent unnecessary re-renders
   const libraries = useMemo(() => GOOGLE_MAPS_LIBRARIES, []);
@@ -37,15 +40,27 @@ export function useGoogleMapsApi() {
     preventGoogleFontsLoading: false
   });
 
+  // Handle load errors and provide user feedback
+  useEffect(() => {
+    if (loadError) {
+      console.error("Google Maps load error:", loadError);
+      
+      // Show toast with user-friendly error message
+      const errorMessage = handleMapsApiLoadError(loadError);
+      toast({
+        title: "Google Maps Error",
+        description: errorMessage,
+        variant: "destructive"
+      });
+    }
+  }, [loadError, toast]);
+
   // Debug logging
   useEffect(() => {
     if (isLoaded) {
       console.log("Google Maps script loaded successfully");
     }
-    if (loadError) {
-      console.error("Google Maps load error:", loadError);
-    }
-  }, [isLoaded, loadError]);
+  }, [isLoaded]);
 
   // Clean up on unmount
   useEffect(() => {
