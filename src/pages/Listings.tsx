@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
-import { GoogleMapsApiInput, getGoogleMapsApiKey } from "@/components/listings/GoogleMapsApiInput";
+import { GoogleMapsApiInput } from "@/components/listings/GoogleMapsApiInput";
 import { Button } from "@/components/ui/button";
 import { Plus, List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
+import { getGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
 export default function Listings() {
   const location = useLocation();

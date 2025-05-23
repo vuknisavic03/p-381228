@@ -1,6 +1,5 @@
-
-import React, { useState, useCallback, useEffect } from 'react';
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { GoogleMap, useLoadScript, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { getGoogleMapsApiKey } from './GoogleMapsApiInput';
+import { GOOGLE_MAPS_LIBRARIES } from '@/utils/googleMapsUtils';
 
 // Default map settings
 const containerStyle = {
@@ -97,20 +96,18 @@ const mapStyles = [
   }
 ];
 
-export function ListingMap({ listings, onListingClick, apiKey: propApiKey }: ListingMapProps) {
+export function ListingMap({ listings, onListingClick, apiKey }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-  
-  // Use API key from props if provided, otherwise get from storage
-  // This ensures consistency with what's used in the parent component
-  const apiKey = propApiKey || getGoogleMapsApiKey();
 
-  // Initialize Google Maps API loader
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google-map-script',
+  // Use React.useMemo for libraries to prevent rerendering
+  const libraries = useMemo(() => GOOGLE_MAPS_LIBRARIES, []);
+  
+  // Load the Google Maps script
+  const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: apiKey || '',
-    libraries: ["maps"] as ["maps"],
+    libraries,
     language: "en",
     region: "US"
   });
@@ -211,6 +208,7 @@ export function ListingMap({ listings, onListingClick, apiKey: propApiKey }: Lis
 
   // Show loading state if map isn't loaded yet
   if (loadError) {
+    console.error("Error loading Google Maps:", loadError);
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
         <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
@@ -267,7 +265,7 @@ export function ListingMap({ listings, onListingClick, apiKey: propApiKey }: Lis
           fullscreenControl: true,
           zoomControl: true,
           styles: mapStyles,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          mapTypeId: window.google?.maps?.MapTypeId?.ROADMAP
         }}
       >
         {/* Render markers for all listings */}
@@ -276,11 +274,11 @@ export function ListingMap({ listings, onListingClick, apiKey: propApiKey }: Lis
           const markerColor = getMarkerColor(listing.type);
           
           return (
-            <Marker
+            <MarkerF
               key={listing.id}
               position={position}
               onClick={() => handleMarkerClick(listing)}
-              animation={markerAnimations[listing.id] ? google.maps.Animation.BOUNCE : undefined}
+              animation={markerAnimations[listing.id] ? window.google?.maps?.Animation.BOUNCE : undefined}
               icon={{
                 path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
                 fillColor: markerColor,
@@ -300,7 +298,7 @@ export function ListingMap({ listings, onListingClick, apiKey: propApiKey }: Lis
             position={getListingCoordinates(selectedListing, listings.findIndex(l => l.id === selectedListing.id))}
             onCloseClick={handleInfoClose}
             options={{ 
-              pixelOffset: new google.maps.Size(0, -30),
+              pixelOffset: new window.google.maps.Size(0, -30),
               maxWidth: 320
             }}
           >

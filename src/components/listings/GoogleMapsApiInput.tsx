@@ -5,18 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Map, Key, CheckCircle2 } from 'lucide-react';
-
-// Create a storage key constant for consistency
-const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
+import { 
+  GOOGLE_MAPS_KEY_STORAGE, 
+  getGoogleMapsApiKey, 
+  saveGoogleMapsApiKey, 
+  removeGoogleMapsApiKey 
+} from "@/utils/googleMapsUtils";
 
 // Define our props interface
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
-}
-
-// Function to get API key that can be used across the app
-export function getGoogleMapsApiKey(): string {
-  return localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE) || "";
 }
 
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
@@ -26,7 +24,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
   
   // Check if API key is already stored in local storage
   useEffect(() => {
-    const savedApiKey = localStorage.getItem(GOOGLE_MAPS_KEY_STORAGE);
+    const savedApiKey = getGoogleMapsApiKey();
     if (savedApiKey) {
       setStoredKey(savedApiKey);
       setApiKey(savedApiKey);
@@ -48,7 +46,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     }
     
     // Store API key in local storage
-    localStorage.setItem(GOOGLE_MAPS_KEY_STORAGE, apiKey);
+    saveGoogleMapsApiKey(apiKey);
     setStoredKey(apiKey);
     
     toast({
@@ -58,13 +56,10 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     // Notify parent component
     onApiKeySubmit(apiKey);
-    
-    // Refresh the page to ensure clean initialization
-    window.location.reload();
   };
   
   const handleReset = () => {
-    localStorage.removeItem(GOOGLE_MAPS_KEY_STORAGE);
+    removeGoogleMapsApiKey();
     setStoredKey(null);
     setApiKey("");
     
@@ -75,9 +70,6 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     
     // Notify parent component
     onApiKeySubmit("");
-    
-    // Refresh the page to ensure clean initialization
-    window.location.reload();
   };
   
   if (storedKey) {
@@ -134,6 +126,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
               <ul className="space-y-1 list-disc list-inside">
                 <li>This key will be stored in your browser's local storage.</li>
                 <li>You can get a Google Maps API key from the <a href="https://console.cloud.google.com/google/maps-apis/overview" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Google Cloud Console</a>.</li>
+                <li>Make sure to enable the Maps JavaScript API and Geocoding API.</li>
               </ul>
             </div>
           </div>
