@@ -13,7 +13,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
-import { isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 import { useGoogleMapsApi } from "@/hooks/useGoogleMapsApi";
 
 export default function Listings() {
@@ -31,8 +30,8 @@ export default function Listings() {
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
   
-  // Use our custom hook for Google Maps API
-  const { isApiKeyValid, setApiKey } = useGoogleMapsApi();
+  // Use our custom hook for Google Maps API integration
+  const { isLoaded, isApiKeyValid, setApiKey } = useGoogleMapsApi();
 
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = (apiKey: string) => {
@@ -40,18 +39,9 @@ export default function Listings() {
     
     // Update our API key in the hook
     setApiKey(apiKey);
-    
-    // If API key was removed or is invalid, switch to list view
-    if (!isValidGoogleMapsApiKey(apiKey) && viewMode === "map") {
-      setViewMode("list");
-      toast({
-        title: "Map view unavailable",
-        description: "Please set a Google Maps API key to use the map view."
-      });
-    }
   };
 
-  // Handle listing selection from map view
+  // Handle listing selection from map view or list view
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
     setIsEditSheetOpen(true);
@@ -151,6 +141,7 @@ export default function Listings() {
                 transition={{ duration: 0.2 }}
                 className="absolute inset-0"
               >
+                {/* Show the map if API key is valid, otherwise show the input form */}
                 {isApiKeyValid ? (
                   <ListingMap 
                     listings={sharedListingData}

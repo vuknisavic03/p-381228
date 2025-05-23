@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,24 +8,25 @@ import {
   getGoogleMapsApiKey, 
   saveGoogleMapsApiKey, 
   removeGoogleMapsApiKey,
-  isValidGoogleMapsApiKey,
-  removeExistingGoogleMapsScript 
+  isValidGoogleMapsApiKey
 } from "@/utils/googleMapsUtils";
 
 // Define our props interface
 interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
+  initialApiKey?: string;
 }
 
-export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
+export function GoogleMapsApiInput({ onApiKeySubmit, initialApiKey }: GoogleMapsApiInputProps) {
   const [apiKey, setApiKey] = useState<string>("");
   const [storedKey, setStoredKey] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { toast } = useToast();
   
-  // Check if API key is already stored in local storage
+  // Initialize with API key from props or local storage
   useEffect(() => {
-    const savedApiKey = getGoogleMapsApiKey();
+    const savedApiKey = initialApiKey || getGoogleMapsApiKey();
+    
     if (isValidGoogleMapsApiKey(savedApiKey)) {
       setStoredKey(savedApiKey);
       setApiKey(savedApiKey);
@@ -34,7 +34,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       // Notify parent component about the API key
       onApiKeySubmit(savedApiKey);
     }
-  }, [onApiKeySubmit]);
+  }, [initialApiKey, onApiKeySubmit]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,9 +48,6 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       });
       return;
     }
-    
-    // Clean up existing script
-    removeExistingGoogleMapsScript();
     
     // Store API key in local storage
     saveGoogleMapsApiKey(apiKey);
@@ -67,7 +64,6 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
   
   const handleReset = () => {
     removeGoogleMapsApiKey();
-    removeExistingGoogleMapsScript();
     
     setStoredKey(null);
     setApiKey("");
@@ -82,6 +78,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     onApiKeySubmit("");
   };
   
+  // If we have a stored key, show the "already set" view
   if (storedKey) {
     return (
       <Card className="w-full max-w-md mx-auto shadow-lg border border-gray-100">
@@ -109,6 +106,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
     );
   }
   
+  // Otherwise show the form to enter a new key
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg border border-gray-100">
       <form onSubmit={handleSubmit}>

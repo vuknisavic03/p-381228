@@ -1,9 +1,12 @@
 
-// Stable libraries array defined outside of any component
+// Google Maps libraries array defined outside of any component
 export const GOOGLE_MAPS_LIBRARIES: ["places", "geometry"] = ["places", "geometry"];
 
 // Storage key constant for consistency
 export const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
+
+// Script ID for Google Maps
+export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
 
 // Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
@@ -20,33 +23,31 @@ export function removeGoogleMapsApiKey(): void {
   localStorage.removeItem(GOOGLE_MAPS_KEY_STORAGE);
 }
 
-// Check if the API key is valid
+// Check if the API key is valid (simple client-side validation)
 export function isValidGoogleMapsApiKey(apiKey: string): boolean {
-  return apiKey !== undefined && apiKey !== null && apiKey.trim().length > 0;
+  return Boolean(apiKey && apiKey.trim().length > 0);
 }
 
-// Create a script ID to prevent duplicate loading
-export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script';
-
-// Function to remove existing script before loading new one
-export const removeExistingGoogleMapsScript = (): void => {
+// Remove existing Google Maps script tags
+export function removeExistingGoogleMapsScript(): void {
+  // Remove the script tag with our specific ID
   const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID);
   if (existingScript) {
     existingScript.remove();
-    // Also clean up the callback
-    if (window.google?.maps) {
-      delete window.google.maps;
-    }
-    console.log("Removed existing Google Maps script");
   }
-};
+
+  // Clean up any Google Maps global objects
+  cleanupGoogleMapsObjects();
+}
 
 // Clean up Google global objects
-export const cleanupGoogleMapsObjects = (): void => {
+export function cleanupGoogleMapsObjects(): void {
   if (window.google) {
     delete window.google;
   }
+  
+  // Clean up any callback handlers
   if (window.initMap) {
     delete window.initMap;
   }
-};
+}

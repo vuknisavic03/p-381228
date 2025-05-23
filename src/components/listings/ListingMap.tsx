@@ -1,5 +1,4 @@
-
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -104,34 +103,8 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
   // Use our custom hook for Google Maps integration
   const { isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
 
-  // Set map reference when loaded
-  const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("Map loaded successfully");
-    setMapRef(map);
-    
-    // If we have listings with locations, fit the map to show them all
-    if (listings.length > 0 && listings.some(l => l.location)) {
-      const bounds = new google.maps.LatLngBounds();
-      listings.forEach(listing => {
-        if (listing.location) {
-          bounds.extend(listing.location);
-        } else {
-          // Add dummy location if none exists
-          const dummyLocation = getListingCoordinates(listing, listings.indexOf(listing));
-          bounds.extend(dummyLocation);
-        }
-      });
-      map.fitBounds(bounds, 50); // Add some padding
-    }
-  }, [listings]);
-
-  const onUnmount = useCallback(() => {
-    console.log("Map unmounted");
-    setMapRef(null);
-  }, []);
-
   // Calculate dynamic locations for listings without explicit coordinates
-  const getListingCoordinates = (listing: Listing, index: number) => {
+  const getListingCoordinates = useCallback((listing: Listing, index: number) => {
     if (listing.location) return listing.location;
     
     // Generate some variation based on listing id and index to spread markers
@@ -156,10 +129,31 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
         lng: defaultCenter.lng + ((index % 3) * 0.03) 
       };
     }
-  };
+  }, []);
+
+  // Set map reference when loaded
+  const onLoad = useCallback((map: google.maps.Map) => {
+    console.log("Map loaded successfully");
+    setMapRef(map);
+    
+    // If we have listings with locations, fit the map to show them all
+    if (listings.length > 0) {
+      const bounds = new google.maps.LatLngBounds();
+      listings.forEach((listing, index) => {
+        const position = getListingCoordinates(listing, index);
+        bounds.extend(position);
+      });
+      map.fitBounds(bounds, 50); // Add some padding
+    }
+  }, [listings, getListingCoordinates]);
+
+  const onUnmount = useCallback(() => {
+    console.log("Map unmounted");
+    setMapRef(null);
+  }, []);
 
   // Handle marker click with animation
-  const handleMarkerClick = (listing: Listing) => {
+  const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
     
     // Set animation for this marker
@@ -175,20 +169,40 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
         [listing.id]: false
       }));
     }, 700);
-  };
+  }, []);
 
   // Handle info window close
-  const handleInfoClose = () => {
+  const handleInfoClose = useCallback(() => {
     setSelectedListing(null);
-  };
+  }, []);
 
   // Handle view listing details
-  const handleViewListing = () => {
+  const handleViewListing = useCallback(() => {
     if (selectedListing) {
       onListingClick(selectedListing);
       setSelectedListing(null);
     }
-  };
+  }, [selectedListing, onListingClick]);
+
+  // Get marker colors based on property type - memoized to prevent recreating on each render
+  const getMarkerColor = useMemo(() => (type: PropertyType) => {
+    switch (type) {
+      case "residential_rental":
+        return "#4f46e5"; // Indigo
+      case "commercial_rental":
+        return "#0891b2"; // Cyan
+      case "hospitality":
+        return "#059669"; // Emerald
+      case "vacation_rental":
+        return "#d97706"; // Amber
+      case "mixed_use":
+        return "#9333ea"; // Purple
+      case "industrial":
+        return "#dc2626"; // Red
+      default:
+        return "#6b7280"; // Gray
+    }
+  }, []);
 
   // If API key is not valid, show a message
   if (!isApiKeyValid) {
@@ -228,26 +242,6 @@ export function ListingMap({ listings, onListingClick }: ListingMapProps) {
       </div>
     );
   }
-
-  // Get marker colors based on property type
-  const getMarkerColor = (type: PropertyType) => {
-    switch (type) {
-      case "residential_rental":
-        return "#4f46e5"; // Indigo
-      case "commercial_rental":
-        return "#0891b2"; // Cyan
-      case "hospitality":
-        return "#059669"; // Emerald
-      case "vacation_rental":
-        return "#d97706"; // Amber
-      case "mixed_use":
-        return "#9333ea"; // Purple
-      case "industrial":
-        return "#dc2626"; // Red
-      default:
-        return "#6b7280"; // Gray
-    }
-  };
 
   return (
     <div className="h-full w-full relative">
