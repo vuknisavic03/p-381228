@@ -1,14 +1,14 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-import { MarkerF, InfoWindow, useLoadScript, GoogleMap } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
-import { getGoogleMapsApiKey, handleMapsApiLoadError } from '@/utils/googleMapsUtils';
+import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';
+import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 
 // Default map settings
 const containerStyle = {
@@ -101,19 +101,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [markerAnimations, setMarkerAnimations] = useState<{[key: number]: boolean}>({});
-  const [apiKey, setApiKey] = useState<string>(getGoogleMapsApiKey());
   
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: apiKey,
-    libraries: ['places'],
-  });
+  // Use our custom Maps API hook
+  const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   
-  const [isApiKeyValid, setIsApiKeyValid] = useState<boolean>(Boolean(apiKey && apiKey.trim().length > 0));
-  
-  useEffect(() => {
-    setIsApiKeyValid(Boolean(apiKey && apiKey.trim().length > 0));
-  }, [apiKey]);
-
   // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
     console.log("API key received in ListingMap");
@@ -123,15 +114,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     if (onApiKeySubmit) {
       onApiKeySubmit(newApiKey);
     }
-    
-    // Save to localStorage
-    localStorage.setItem("googleMapsApiKey", newApiKey);
-    
-    // Force reload the page if key changes significantly
-    if (apiKey && newApiKey && apiKey !== newApiKey) {
-      window.location.reload();
-    }
-  }, [apiKey, onApiKeySubmit]);
+  }, [setApiKey, onApiKeySubmit]);
 
   // Calculate dynamic locations for listings without explicit coordinates
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
