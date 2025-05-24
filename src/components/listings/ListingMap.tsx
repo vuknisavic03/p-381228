@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
+
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -53,11 +54,16 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [listingsWithCoords, setListingsWithCoords] = useState<(Listing & { coordinates?: { lat: number; lng: number } })[]>([]);
   const [isProcessingAddresses, setIsProcessingAddresses] = useState(false);
+  const [hasProcessedListings, setHasProcessedListings] = useState(false);
   
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   const { geocodeAddressRealTime } = useRealTimeGeocoding();
   
-  console.log("🗺️ ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "listings:", listings.length);
+  // Use ref to track if processing is already in progress
+  const isProcessingRef = useRef(false);
+  const processedListingIdsRef = useRef<Set<number>>(new Set());
+  
+  console.log("🗺️ ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "listings:", listings.length, "hasProcessed:", hasProcessedListings);
   
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
     console.log("🔑 API key received in ListingMap");
@@ -80,93 +86,144 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     };
   }, []);
 
-  // Simplified geocoding process
+  // Single effect to process listings - with proper dependency management
   useEffect(() => {
     const processListings = async () => {
-      console.log("🔄 Processing listings...", { isLoaded, listingsCount: listings.length, isApiKeyValid });
+      console.log("🔄 Processing listings effect triggered...", { 
+        isLoaded, 
+        listingsCount: listings.length, 
+        isApiKeyValid,
+        isProcessing: isProcessingRef.current,
+        hasProcessed: hasProcessedListings
+      });
       
-      // If no listings, clear the processed listings
-      if (!listings.length) {
-        setListingsWithCoords([]);
+      // Prevent multiple simultaneous processing
+      if (isProcessingRef.current) {
+        console.log("⏸️ Already processing, skipping...");
         return;
       }
 
-      // If maps isn't loaded yet, use fallback coordinates immediately
-      if (!isLoaded) {
-        console.log("⚠️ Maps not loaded, using fallback coordinates");
+      // If no listings, clear everything
+      if (!listings.length) {
+        console.log("📭 No listings, clearing state");
+        setListingsWithCoords([]);
+        setHasProcessedListings(false);
+        processedListingIdsRef.current.clear();
+        return;
+      }
+
+      // Check if we need to reprocess (new listings added)
+      const currentListingIds = new Set(listings.map(l => l.id));
+      const needsReprocessing = !hasProcessedListings || 
+        listings.some(l => !processedListingIdsRef.current.has(l.id));
+
+      if (!needsReprocessing) {
+        console.log("✅ Listings already processed, skipping");
+        return;
+      }
+
+      console.log("🎯 Starting listing processing...");
+      isProcessingRef.current = true;
+      setIsProcessingAddresses(true);
+
+      try {
+        const processedListings = [];
+        
+        for (let i = 0; i < listings.length; i++) {
+          const listing = listings[i];
+          console.log(`📍 Processing listing ${i + 1}/${listings.length}: ${listing.address}`);
+
+          // Check if already processed
+          if (processedListingIdsRef.current.has(listing.id)) {
+            const existingListing = listingsWithCoords.find(l => l.id === listing.id);
+            if (existingListing) {
+              processedListings.push(existingListing);
+              continue;
+            }
+          }
+
+          // Check if we already have coordinates
+          if (listing.location) {
+            console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
+            const processedListing = {
+              ...listing,
+              coordinates: listing.location
+            };
+            processedListings.push(processedListing);
+            processedListingIdsRef.current.add(listing.id);
+          } else if (isLoaded && isApiKeyValid) {
+            // Try geocoding with timeout
+            console.log(`🔍 Attempting to geocode: ${listing.address}, ${listing.city}, ${listing.country}`);
+            
+            try {
+              const coords = await Promise.race([
+                geocodeAddressRealTime(listing.address, listing.city, listing.country),
+                new Promise<null>(resolve => setTimeout(() => resolve(null), 3000)) // 3 second timeout
+              ]);
+              
+              if (coords) {
+                console.log(`✅ Geocoded ${listing.address}:`, coords);
+                const processedListing = {
+                  ...listing,
+                  coordinates: coords
+                };
+                processedListings.push(processedListing);
+              } else {
+                console.log(`⚠️ Geocoding failed/timeout for ${listing.address}, using fallback`);
+                const processedListing = {
+                  ...listing,
+                  coordinates: getBelgradeFallbackCoords(listing.id)
+                };
+                processedListings.push(processedListing);
+              }
+            } catch (error) {
+              console.error(`❌ Error geocoding ${listing.address}:`, error);
+              const processedListing = {
+                ...listing,
+                coordinates: getBelgradeFallbackCoords(listing.id)
+              };
+              processedListings.push(processedListing);
+            }
+            
+            processedListingIdsRef.current.add(listing.id);
+          } else {
+            // No API key or not loaded, use fallback
+            console.log(`⚠️ Maps not ready, using fallback for ${listing.address}`);
+            const processedListing = {
+              ...listing,
+              coordinates: getBelgradeFallbackCoords(listing.id)
+            };
+            processedListings.push(processedListing);
+            processedListingIdsRef.current.add(listing.id);
+          }
+
+          // Small delay between requests
+          if (i < listings.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+
+        console.log("✅ Finished processing all listings:", processedListings.length);
+        setListingsWithCoords(processedListings);
+        setHasProcessedListings(true);
+        
+      } catch (error) {
+        console.error("❌ Error processing listings:", error);
+        // Use fallback for all listings
         const fallbackListings = listings.map(listing => ({
           ...listing,
           coordinates: getBelgradeFallbackCoords(listing.id)
         }));
         setListingsWithCoords(fallbackListings);
-        return;
+        setHasProcessedListings(true);
+      } finally {
+        setIsProcessingAddresses(false);
+        isProcessingRef.current = false;
       }
-
-      setIsProcessingAddresses(true);
-      console.log("🎯 Starting address processing...");
-
-      const processedListings = [];
-      
-      for (let i = 0; i < listings.length; i++) {
-        const listing = listings[i];
-        console.log(`📍 Processing listing ${i + 1}/${listings.length}: ${listing.address}`);
-
-        // Check if we already have coordinates
-        if (listing.location) {
-          console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
-          processedListings.push({
-            ...listing,
-            coordinates: listing.location
-          });
-        } else if (isApiKeyValid) {
-          // Try geocoding with short timeout
-          console.log(`🔍 Attempting to geocode: ${listing.address}, ${listing.city}, ${listing.country}`);
-          
-          try {
-            const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
-            
-            if (coords) {
-              console.log(`✅ Geocoded ${listing.address}:`, coords);
-              processedListings.push({
-                ...listing,
-                coordinates: coords
-              });
-            } else {
-              console.log(`⚠️ Geocoding failed for ${listing.address}, using fallback`);
-              processedListings.push({
-                ...listing,
-                coordinates: getBelgradeFallbackCoords(listing.id)
-              });
-            }
-          } catch (error) {
-            console.error(`❌ Error geocoding ${listing.address}:`, error);
-            processedListings.push({
-              ...listing,
-              coordinates: getBelgradeFallbackCoords(listing.id)
-            });
-          }
-        } else {
-          // No API key, use fallback
-          console.log(`⚠️ No valid API key, using fallback for ${listing.address}`);
-          processedListings.push({
-            ...listing,
-            coordinates: getBelgradeFallbackCoords(listing.id)
-          });
-        }
-
-        // Small delay between requests to avoid overwhelming the API
-        if (i < listings.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-        }
-      }
-
-      console.log("✅ Finished processing all listings:", processedListings.length);
-      setListingsWithCoords(processedListings);
-      setIsProcessingAddresses(false);
     };
 
     processListings();
-  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime, getBelgradeFallbackCoords]);
+  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime, getBelgradeFallbackCoords, hasProcessedListings, listingsWithCoords]);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("🗺️ Map loaded successfully");
@@ -238,9 +295,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show loading state only if map is loading OR actively processing addresses
+  // Show loading state only while actively processing
   if (!isLoaded || isProcessingAddresses) {
-    console.log("⏳ Showing loading state");
+    console.log("⏳ Showing loading state - isLoaded:", isLoaded, "isProcessing:", isProcessingAddresses);
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="bg-white p-8 rounded-xl shadow-lg">
