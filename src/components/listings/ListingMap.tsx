@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
@@ -19,33 +20,6 @@ const containerStyle = {
 const defaultCenter = {
   lat: 44.7866,
   lng: 20.4489
-};
-
-// Accurate address coordinates mapping with real locations
-const realAddressCoordinates: Record<string, { lat: number; lng: number }> = {
-  // Belgrade addresses with accurate coordinates
-  "Dunavska 15, Belgrade": { lat: 44.8186, lng: 20.4575 }, // Dunavska Street in Zemun
-  "Knez Mihailova 42, Belgrade": { lat: 44.8176, lng: 20.4633 }, // Main pedestrian street
-  "Makedonska 23, Belgrade": { lat: 44.8125, lng: 20.4612 }, // Stari Grad municipality
-  "Terazije 35, Belgrade": { lat: 44.8154, lng: 20.4606 }, // Central Belgrade square
-  "Bulevar kralja Aleksandra 73, Belgrade": { lat: 44.8042, lng: 20.4807 }, // Vračar municipality
-  "Svetogorska 12, Belgrade": { lat: 44.8089, lng: 20.4681 }, // Dorćol area
-  "Rajićeva 27, Belgrade": { lat: 44.8168, lng: 20.4598 }, // Old town Belgrade
-  "Skadarlija 29, Belgrade": { lat: 44.8159, lng: 20.4652 }, // Famous bohemian quarter
-  "Nemanjina 4, Belgrade": { lat: 44.8082, lng: 20.4576 }, // Near main railway station
-  "Kosančićev venac 19, Belgrade": { lat: 44.8203, lng: 20.4535 }, // Historic area near Kalemegdan
-  
-  // New York addresses (keeping some international variety)
-  "123 Broadway, New York": { lat: 40.7505, lng: -73.9934 },
-  "456 5th Avenue, New York": { lat: 40.7516, lng: -73.9755 },
-  
-  // London addresses
-  "25 Oxford Street, London": { lat: 51.5154, lng: -0.1423 },
-  "15 Baker Street, London": { lat: 51.5237, lng: -0.1585 },
-  
-  // Paris addresses  
-  "10 Champs-Élysées, Paris": { lat: 48.8698, lng: 2.3076 },
-  "5 Rue de Rivoli, Paris": { lat: 48.8584, lng: 2.3354 }
 };
 
 // Type definitions for listings
@@ -94,19 +68,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Get accurate coordinates for listings
+  // Get coordinates for listings - now uses accurate coordinates from listing data
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
-    if (listing.location) return listing.location;
-    
-    // Check if we have real coordinates for this exact address
-    const realCoords = realAddressCoordinates[listing.address];
-    if (realCoords) {
-      console.log(`Using real coordinates for ${listing.address}:`, realCoords);
-      return realCoords;
+    if (listing.location) {
+      console.log(`Using accurate coordinates for ${listing.address}:`, listing.location);
+      return listing.location;
     }
     
-    // If no exact match, try to match by city with slight variations
-    console.log(`No exact coordinates found for ${listing.address}, using city-based fallback`);
+    // Fallback if no coordinates provided
+    console.log(`No coordinates found for ${listing.address}, using fallback`);
     const latVariation = (listing.id * 0.01) + (index * 0.005);
     const lngVariation = (listing.id * 0.01) - (index * 0.007);
     
@@ -228,7 +198,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           fullscreenControl: false,
           zoomControl: true,
           controlSize: 32,
-          disableDefaultUI: true, // This removes Google logo and other default UI
+          disableDefaultUI: true,
           styles: [
             {
               featureType: "poi",
