@@ -263,10 +263,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
             </div>
             <span className="text-gray-800 font-semibold text-lg mb-2">
-              {isProcessing ? "Processing Locations" : "Loading Map"}
+              Loading...
             </span>
             <span className="text-gray-600 text-sm text-center max-w-xs">
-              {isProcessing ? "Geocoding addresses for precise positioning..." : "Initializing Google Maps interface"}
+              Please wait while we prepare the map
             </span>
           </div>
         </div>
