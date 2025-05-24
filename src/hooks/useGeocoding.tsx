@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { geocodeAddress } from '@/utils/googleMapsUtils';
+import { geocodeAddress, validateGeocodingAccuracy } from '@/utils/googleMapsUtils';
 import { useToast } from '@/hooks/use-toast';
 
 export function useGeocoding() {
@@ -11,15 +11,40 @@ export function useGeocoding() {
     setIsGeocoding(true);
     
     try {
-      const coordinates = await geocodeAddress(address, city, country);
+      const result = await geocodeAddress(address, city, country);
       
-      if (coordinates) {
-        console.log(`Successfully geocoded: ${address}, ${city}, ${country}`, coordinates);
-        return coordinates;
+      if (result) {
+        // Validate the accuracy of the geocoding result
+        const isAccurate = validateGeocodingAccuracy(result);
+        
+        if (isAccurate) {
+          console.log(`High-precision geocoding successful: ${address}, ${city}, ${country}`, {
+            coordinates: { lat: result.lat, lng: result.lng },
+            accuracy: result.accuracy,
+            placeId: result.placeId
+          });
+          
+          // Show success message with accuracy info
+          const accuracyMessage = getAccuracyMessage(result.accuracy);
+          toast({
+            title: "Address Located",
+            description: `Coordinates found with ${accuracyMessage} accuracy`,
+            duration: 3000,
+          });
+          
+          return { lat: result.lat, lng: result.lng };
+        } else {
+          toast({
+            title: "Low Accuracy Warning",
+            description: "Coordinates found but with lower precision. Consider refining the address.",
+            variant: "destructive"
+          });
+          return { lat: result.lat, lng: result.lng };
+        }
       } else {
         toast({
-          title: "Geocoding Failed",
-          description: "Could not find coordinates for this address. Please check the address and try again.",
+          title: "Address Not Found",
+          description: "Could not locate this address. Please verify the address format and try again.",
           variant: "destructive"
         });
         return null;
@@ -28,7 +53,7 @@ export function useGeocoding() {
       console.error('Geocoding error:', error);
       toast({
         title: "Geocoding Error",
-        description: "An error occurred while finding coordinates for this address.",
+        description: "An error occurred while locating the address.",
         variant: "destructive"
       });
       return null;
@@ -41,4 +66,23 @@ export function useGeocoding() {
     getCoordinates,
     isGeocoding
   };
+}
+
+function getAccuracyMessage(accuracy: string): string {
+  switch (accuracy) {
+    case 'MAXIMUM':
+      return 'maximum (building-level)';
+    case 'HIGH':
+      return 'high (rooftop-level)';
+    case 'GOOD':
+      return 'good (street-level)';
+    case 'PLACE_DETAILS':
+      return 'enhanced (place-verified)';
+    case 'ROOFTOP':
+      return 'precise (rooftop)';
+    case 'RANGE_INTERPOLATED':
+      return 'interpolated (street)';
+    default:
+      return 'standard';
+  }
 }
