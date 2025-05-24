@@ -12,145 +12,8 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// REAL Belgrade listings with VERIFIED coordinates from Google Maps
-const mockListings = [
-  {
-    id: 1,
-    address: "Knez Mihailova 42",
-    city: "Belgrade",
-    country: "Serbia", 
-    type: "commercial_rental",
-    category: "retail",
-    tenant: {
-      name: "Belgrade Fashion Store",
-      phone: "+381 11 123-4567",
-      email: "info@fashionstore.rs"
-    },
-    location: { lat: 44.81726, lng: 20.46058 } // Verified Knez Mihailova street coordinates
-  },
-  {
-    id: 2,
-    address: "Terazije 23",
-    city: "Belgrade", 
-    country: "Serbia",
-    type: "residential_rental",
-    category: "apartment",
-    tenant: {
-      name: "Marko Petrović",
-      phone: "+381 11 234-5678",
-      email: "marko.petrovic@example.com"
-    },
-    location: { lat: 44.81548, lng: 20.46038 } // Verified Terazije square coordinates
-  },
-  {
-    id: 3,
-    address: "Skadarlija 5",
-    city: "Belgrade",
-    country: "Serbia", 
-    type: "hospitality",
-    category: "boutique_hotel",
-    tenant: {
-      name: "Bohemian Heritage Hotel",
-      phone: "+381 11 345-6789",
-      email: "reservations@bohemianhotel.rs"
-    },
-    location: { lat: 44.81597, lng: 20.46487 } // Verified Skadarlija street coordinates
-  },
-  {
-    id: 4,
-    address: "Kosančićev venac 17",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "vacation_rental",
-    category: "luxury_apartment",
-    tenant: null,
-    location: { lat: 44.82032, lng: 20.45298 } // Verified Kosančićev venac coordinates
-  },
-  {
-    id: 5,
-    address: "Bulevar kralja Aleksandra 73",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "commercial_rental",
-    category: "office",
-    tenant: {
-      name: "Tech Solutions Belgrade",
-      phone: "+381 11 456-7890",
-      email: "office@techsolutions.rs"
-    },
-    location: { lat: 44.80421, lng: 20.48069 } // Verified Bulevar kralja Aleksandra coordinates
-  },
-  {
-    id: 6,
-    address: "Kralja Petra 45",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "mixed_use",
-    category: "residential_commercial",
-    tenant: {
-      name: "Stari Grad Properties",
-      phone: "+381 11 567-8901",
-      email: "leasing@starigrad.rs"
-    },
-    location: { lat: 44.81843, lng: 20.45738 } // Verified Kralja Petra street coordinates
-  },
-  {
-    id: 7,
-    address: "Cetinjska 15",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "residential_rental",
-    category: "house",
-    tenant: {
-      name: "Ana Nikolić",
-      phone: "+381 11 678-9012",
-      email: "ana.nikolic@example.com"
-    },
-    location: { lat: 44.80156, lng: 20.46837 } // Verified Cetinjska street coordinates
-  },
-  {
-    id: 8,
-    address: "Zmaj Jovina 15",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "commercial_rental",
-    category: "restaurant",
-    tenant: {
-      name: "Traditional Serbian Cuisine",
-      phone: "+381 11 789-0123",
-      email: "info@traditionalcuisine.rs"
-    },
-    location: { lat: 44.81692, lng: 20.46195 } // Verified Zmaj Jovina street coordinates
-  },
-  {
-    id: 9,
-    address: "Savska 5",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "industrial",
-    category: "warehouse",
-    tenant: {
-      name: "Belgrade Logistics",
-      phone: "+381 11 890-1234",
-      email: "operations@belgradelogistics.rs"
-    },
-    location: { lat: 44.80823, lng: 20.45759 } // Verified Savska street coordinates near train station
-  },
-  {
-    id: 10,
-    address: "Studentski trg 1",
-    city: "Belgrade",
-    country: "Serbia",
-    type: "hospitality",
-    category: "hotel",
-    tenant: {
-      name: "University Hotel Belgrade",
-      phone: "+381 11 901-2345",
-      email: "booking@universityhotel.rs"
-    },
-    location: { lat: 44.81857, lng: 20.45749 } // Verified Studentski trg coordinates
-  }
-];
+// Start with empty listings - real data will be loaded from server or added by users
+const initialListings: any[] = [];
 
 interface FilterState {
   types: string[];
@@ -165,14 +28,13 @@ interface ListingListProps {
 }
 
 export function ListingList({ onListingClick, onListingsData }: ListingListProps) {
-  const [listings, setListings] = useState<any[]>(mockListings);
+  const [listings, setListings] = useState<any[]>(initialListings);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   
-  // Enhanced filter state
   const [filters, setFilters] = useState<FilterState>({
     types: [],
     categories: [],
@@ -180,7 +42,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     countries: []
   });
 
-  // Enhanced property types and categories based on form options
   const propertyTypes = ["residential_rental", "commercial_rental", "hospitality", "vacation_rental", "mixed_use", "industrial"];
   const categories = [
     "apartment", "house", "condo", "luxury_apartment", "penthouse",
@@ -188,7 +49,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     "hotel", "boutique_hotel", "resort", "hostel",
     "retail_office", "residential_commercial"
   ];
-  const countries = Array.from(new Set(mockListings.map(l => l.country)));
+  const countries = Array.from(new Set(listings.map(l => l.country).filter(Boolean)));
   const occupancyStatuses = ["Occupied", "Vacant"];
 
   const fetchListings = async () => {
@@ -197,11 +58,16 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
       const res = await fetch("http://localhost:5000/listings");
       const data = await res.json();
       if (data && data.length > 0) {
+        console.log("Loaded listings from server:", data);
         setListings(data);
+      } else {
+        console.log("No listings found on server, starting with empty state");
+        setListings([]);
       }
     } catch (error) {
       console.error("Error fetching listings:", error);
-      // Keep using mock data on error
+      console.log("Server not available, starting with empty state");
+      setListings([]);
     } finally {
       setIsLoading(false);
     }
@@ -209,6 +75,15 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
 
   useEffect(() => {
     fetchListings();
+    
+    // Listen for new listings being added
+    const handleRefresh = () => {
+      console.log("Refreshing listings...");
+      fetchListings();
+    };
+    
+    window.addEventListener('refresh-listings', handleRefresh);
+    return () => window.removeEventListener('refresh-listings', handleRefresh);
   }, []);
 
   const handleListingClick = (listing: any) => {
@@ -403,6 +278,11 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
                           <div className="flex items-center gap-2">
                             <MapPin className="h-4 w-4 text-primary/80" />
                             <span className="font-medium">{listing.address}</span>
+                            {listing.location && (
+                              <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                Geocoded
+                              </span>
+                            )}
                           </div>
                         </div>
                         <PropertyTypeDisplay 
@@ -442,10 +322,17 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
                   </Card>
                 ))
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  {searchTerm || activeFilterCount > 0 
-                    ? 'No Listings Found Matching Your Filters' 
-                    : 'No Listings Available'}
+                <div className="text-center py-12">
+                  <MapPin className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Properties Found</h3>
+                  <p className="text-gray-500 mb-4">
+                    {searchTerm || activeFilterCount > 0 
+                      ? 'No listings match your current filters' 
+                      : 'Start by adding your first property listing with accurate address coordinates'}
+                  </p>
+                  <Button variant="outline" onClick={() => window.location.reload()}>
+                    Refresh Listings
+                  </Button>
                 </div>
               )}
             </div>

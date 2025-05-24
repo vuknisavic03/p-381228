@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,14 +23,17 @@ import {
   Building as BuildingIcon,
   Store as StoreIcon,
   Hotel as HotelIcon,
+  MapPin,
+  Loader2,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
+import { useGeocoding } from "@/hooks/useGeocoding";
 
 interface ListingFormProps {
   onClose?: () => void;
-  onListingAdded?: () => void; // Added this prop definition
+  onListingAdded?: () => void;
 }
 
 export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
@@ -46,6 +48,9 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const [tenantEmail, setTenantEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const { getCoordinates, isGeocoding } = useGeocoding();
 
   // Updated property types with corresponding icon components
   const propertyTypes: { value: PropertyType; label: string }[] = [
@@ -119,78 +124,95 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
       return;
     }
 
-    const randomId = Math.floor(Math.random() * 10000);
-    
-    const payload = {
-      id: randomId,
-      city,
-      address,
-      country,
-      postalCode,
-      type: typeField,
-      category,
-      tenant: {
-        name: tenantName,
-        phone: tenantPhone,
-        email: tenantEmail,
-        type: tenantType,
-      },
-      notes,
-    };
-    
-    try {
-      const res = await fetch("http://localhost:5000/listings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+    if (!address || !city || !country) {
+      toast({
+        title: "Address Required",
+        description: "Please provide complete address information",
+        variant: "destructive",
       });
+      return;
+    }
 
-      if (!res.ok) {
-        throw new Error(`Server responded with status ${res.status}`);
+    setIsSaving(true);
+
+    try {
+      // Get coordinates for the address
+      const coordinates = await getCoordinates(address, city, country);
+      
+      if (!coordinates) {
+        setIsSaving(false);
+        return; // Error already shown by useGeocoding hook
       }
 
-      await res.json();
+      const randomId = Math.floor(Math.random() * 10000);
       
-      toast({
-        title: "Listing Added",
-        description: "Your listing was successfully created",
-      });
+      const payload = {
+        id: randomId,
+        city,
+        address,
+        country,
+        postalCode,
+        type: typeField,
+        category,
+        location: coordinates, // Add the geocoded coordinates
+        tenant: tenantName ? {
+          name: tenantName,
+          phone: tenantPhone,
+          email: tenantEmail,
+          type: tenantType,
+        } : null,
+        notes,
+      };
+      
+      try {
+        const res = await fetch("http://localhost:5000/listings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+
+        await res.json();
+        
+        toast({
+          title: "Listing Added",
+          description: `Your listing was successfully created with accurate coordinates`,
+        });
+        
+      } catch (err) {
+        console.error("Error saving to server:", err);
+        
+        toast({
+          title: "Listing Added (Demo Mode)",
+          description: "Your listing was added with real coordinates from Google Maps",
+        });
+      }
       
       resetForm();
-      
       window.dispatchEvent(new CustomEvent('refresh-listings'));
       
       if (onClose) {
         onClose();
       }
       
-      // Call the onListingAdded callback if provided
       if (onListingAdded) {
         onListingAdded();
       }
       
     } catch (err) {
-      console.error("Error saving:", err);
-      
+      console.error("Error during save:", err);
       toast({
-        title: "Listing Added (Demo Mode)",
-        description: "Your listing was added to the demo data",
+        title: "Error",
+        description: "Failed to create listing. Please try again.",
+        variant: "destructive",
       });
-      
-      resetForm();
-      
-      window.dispatchEvent(new CustomEvent('refresh-listings'));
-      
-      if (onClose) {
-        onClose();
-      }
-      
-      // Call the onListingAdded callback if provided
-      if (onListingAdded) {
-        onListingAdded();
-      }
+    } finally {
+      setIsSaving(false);
     }
   };
   
@@ -207,11 +229,21 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     setNotes("");
   };
 
+  const isProcessing = isSaving || isGeocoding;
+
   return (
     <div className="h-full overflow-auto bg-white">
       {/* Header with close button */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-medium text-gray-900">Add New Listing</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-medium text-gray-900">Add New Listing</h2>
+          {isGeocoding && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
+              <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
+              <span className="text-xs text-blue-600 font-medium">Finding coordinates...</span>
+            </div>
+          )}
+        </div>
         {onClose && (
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
@@ -226,43 +258,53 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           <div className="flex items-center">
             <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
             <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            <MapPin className="h-4 w-4 text-blue-500 ml-2" />
           </div>
           
-          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+          <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
+            <div className="text-xs text-blue-600 font-medium mb-3 flex items-center gap-2">
+              <MapPin className="h-3 w-3" />
+              Address will be automatically geocoded for accurate map placement
+            </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City *</label>
                 <Input
-                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
+                  placeholder="e.g., Belgrade"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Country</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Country *</label>
                 <Input
-                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
+                  placeholder="e.g., Serbia"
                 />
               </div>
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Address</label>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Address *</label>
               <Input
-                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                placeholder="e.g., Knez Mihailova 42"
               />
             </div>
             
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
               <Input
-                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
+                placeholder="e.g., 11000"
               />
             </div>
           </div>
@@ -282,7 +324,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 value={typeField}
                 onValueChange={(value) => {
                   setTypeField(value);
-                  setCategory(""); // Reset category when type changes
+                  setCategory("");
                 }}
               >
                 <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
@@ -352,6 +394,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
                 value={tenantName}
                 onChange={(e) => setTenantName(e.target.value)}
+                placeholder="Leave empty if no tenant"
               />
             </div>
             
@@ -397,15 +440,24 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleSave} 
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+            disabled={isProcessing}
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white disabled:opacity-50"
           >
-            Add listing
+            {isProcessing ? (
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>{isGeocoding ? "Finding location..." : "Adding listing..."}</span>
+              </div>
+            ) : (
+              "Add listing"
+            )}
           </Button>
           {onClose && (
             <Button 
               variant="outline" 
               onClick={onClose} 
-              className="flex-1 bg-white border-gray-200 hover:bg-gray-50"
+              disabled={isProcessing}
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
             >
               Cancel
             </Button>

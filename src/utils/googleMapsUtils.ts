@@ -73,3 +73,34 @@ export function handleMapsApiLoadError(error: Error | null): string {
     return `Error loading Google Maps: ${errorMessage}`;
   }
 }
+
+// Geocoding function to convert address to coordinates
+export async function geocodeAddress(address: string, city: string, country: string): Promise<{lat: number, lng: number} | null> {
+  const fullAddress = `${address}, ${city}, ${country}`;
+  const apiKey = getGoogleMapsApiKey();
+  
+  if (!apiKey) {
+    console.error("No API key available for geocoding");
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${apiKey}`
+    );
+    
+    const data = await response.json();
+    
+    if (data.status === 'OK' && data.results.length > 0) {
+      const location = data.results[0].geometry.location;
+      console.log(`Geocoded "${fullAddress}" to:`, location);
+      return { lat: location.lat, lng: location.lng };
+    } else {
+      console.error('Geocoding failed:', data.status, data.error_message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error during geocoding:', error);
+    return null;
+  }
+}
