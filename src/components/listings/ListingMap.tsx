@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,7 +10,6 @@ import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
-import { useRealTimeGeocoding } from '@/hooks/useRealTimeGeocoding';
 
 const containerStyle = {
   width: '100%',
@@ -54,7 +53,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [isProcessing, setIsProcessing] = useState(false);
   
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
-  const { geocodeAddressRealTime } = useRealTimeGeocoding();
   
   console.log("ListingMap render - isLoaded:", isLoaded, "listings:", listings.length);
   
@@ -65,8 +63,45 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Simple fallback coordinates around Belgrade
-  const getBelgradeFallback = useCallback((index: number) => {
+  // Simple geocoding function
+  const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
+    if (!window.google?.maps?.Geocoder) {
+      console.log("Google Maps Geocoder not available");
+      return null;
+    }
+
+    const geocoder = new window.google.maps.Geocoder();
+    const fullAddress = `${address}, ${city}, ${country}`;
+    
+    try {
+      const result = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
+        geocoder.geocode({ address: fullAddress }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            resolve(results);
+          } else {
+            reject(new Error(`Geocoding failed: ${status}`));
+          }
+        });
+      });
+
+      if (result[0]) {
+        const location = result[0].geometry.location;
+        const coords = {
+          lat: location.lat(),
+          lng: location.lng()
+        };
+        console.log(`Geocoded "${fullAddress}":`, coords);
+        return coords;
+      }
+    } catch (error) {
+      console.log(`Geocoding failed for "${fullAddress}":`, error);
+    }
+    
+    return null;
+  }, []);
+
+  // Generate fallback coordinates
+  const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
     return { 
       lat: defaultCenter.lat + (variation % 0.02) - 0.01, 
@@ -74,20 +109,29 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     };
   }, []);
 
-  // Process listings when map is ready
+  // Create a stable key for listings to prevent unnecessary re-processing
+  const listingsKey = useMemo(() => {
+    return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
+  }, [listings]);
+
+  // Process listings only when map is ready and listings change
   useEffect(() => {
     if (!isLoaded || !isApiKeyValid || !listings.length) {
-      console.log("Not ready to process listings");
+      console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
       return;
     }
 
+    let isCancelled = false;
+
     const processListings = async () => {
-      console.log("Processing", listings.length, "listings");
+      console.log("Starting to process", listings.length, "listings");
       setIsProcessing(true);
 
       const processed = [];
       
       for (let i = 0; i < listings.length; i++) {
+        if (isCancelled) break;
+        
         const listing = listings[i];
         
         // Use existing coordinates if available
@@ -101,9 +145,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
         // Try to geocode
         try {
-          const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
+          const coords = await geocodeAddress(listing.address, listing.city, listing.country);
           
-          if (coords) {
+          if (coords && !isCancelled) {
             processed.push({
               ...listing,
               coordinates: coords
@@ -112,31 +156,41 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             // Use fallback
             processed.push({
               ...listing,
-              coordinates: getBelgradeFallback(i)
+              coordinates: getFallbackCoordinates(i)
             });
           }
         } catch (error) {
           console.error("Error processing listing:", error);
           processed.push({
             ...listing,
-            coordinates: getBelgradeFallback(i)
+            coordinates: getFallbackCoordinates(i)
           });
         }
 
-        // Small delay
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Small delay to prevent rate limiting
+        if (i < listings.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
       }
 
-      console.log("Finished processing listings:", processed.length);
-      setMapListings(processed);
-      setIsProcessing(false);
+      if (!isCancelled) {
+        console.log("Finished processing listings:", processed.length);
+        setMapListings(processed);
+        setIsProcessing(false);
+      }
     };
 
     processListings();
-  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime, getBelgradeFallback]);
+
+    // Cleanup function to cancel processing if component unmounts or dependencies change
+    return () => {
+      isCancelled = true;
+      setIsProcessing(false);
+    };
+  }, [isLoaded, isApiKeyValid, listingsKey, geocodeAddress, getFallbackCoordinates]);
 
   const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("Map loaded");
+    console.log("Map loaded successfully");
     
     if (mapListings.length > 0) {
       const bounds = new google.maps.LatLngBounds();
