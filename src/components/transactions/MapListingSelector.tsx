@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { MapPin, X } from 'lucide-react';
+import { MapPin, X, Building2, Map } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +56,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     setApiKey(newApiKey);
   }, [setApiKey]);
 
-  // Simple geocoding function - same as ListingMap
+  // Exact same geocoding function as ListingMap
   const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
     if (!window.google?.maps?.Geocoder) {
       console.log("Google Maps Geocoder not available");
@@ -93,7 +93,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     return null;
   }, []);
 
-  // Generate fallback coordinates - same as ListingMap
+  // Exact same fallback coordinates function as ListingMap
   const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
     return { 
@@ -102,12 +102,12 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     };
   }, []);
 
-  // Create a stable key for listings to prevent unnecessary re-processing
+  // Exact same listings key generation as ListingMap
   const listingsKey = useMemo(() => {
     return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
   }, [listings]);
 
-  // Process listings - same logic as ListingMap
+  // Exact same listing processing logic as ListingMap
   useEffect(() => {
     if (!isLoaded || !isApiKeyValid || !listings.length) {
       console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
@@ -175,14 +175,48 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
 
     processListings();
 
-    // Cleanup function to cancel processing if component unmounts or dependencies change
     return () => {
       isCancelled = true;
       setIsProcessing(false);
     };
   }, [isLoaded, isApiKeyValid, listingsKey, geocodeAddress, getFallbackCoordinates]);
 
+  // Exact same onLoad function as ListingMap with Google branding removal
   const onLoad = useCallback((map: google.maps.Map) => {
+    console.log("Map loaded successfully");
+    
+    // Hide Google branding and controls
+    const hideGoogleElements = () => {
+      // Hide Google logo
+      const googleLogo = document.querySelector('a[href^="https://maps.google.com/maps"]');
+      if (googleLogo && googleLogo.parentElement) {
+        (googleLogo.parentElement as HTMLElement).style.display = 'none';
+      }
+      
+      // Hide terms/report links
+      const termsLinks = document.querySelectorAll('a[href*="google.com"], [title*="Google"], [alt*="Google"]');
+      termsLinks.forEach(link => {
+        if (link.textContent?.includes('Terms') || 
+            link.textContent?.includes('Report') ||
+            link.getAttribute('href')?.includes('google.com')) {
+          (link as HTMLElement).style.display = 'none';
+        }
+      });
+      
+      // Hide keyboard shortcuts and other Google UI elements
+      const keyboardShortcuts = document.querySelector('[data-value="Keyboard shortcuts"]');
+      if (keyboardShortcuts) {
+        (keyboardShortcuts as HTMLElement).style.display = 'none';
+      }
+    };
+    
+    // Run immediately and on interval to catch dynamically loaded elements
+    hideGoogleElements();
+    const interval = setInterval(hideGoogleElements, 1000);
+    
+    // Clean up interval after 10 seconds
+    setTimeout(() => clearInterval(interval), 10000);
+    
     if (mapListings.length > 0) {
       const bounds = new google.maps.LatLngBounds();
       mapListings.forEach((listing) => {
@@ -207,7 +241,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     );
   }
 
-  // Show loading state
+  // Show loading state - same as ListingMap
   if (!isLoaded || isProcessing) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
@@ -229,48 +263,101 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
         </Button>
       </div>
 
-      {/* Map */}
+      {/* Map with exact same configuration as ListingMap */}
       <Card className="overflow-hidden">
         <CardContent className="p-0">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={defaultCenter}
-            zoom={13}
-            onLoad={onLoad}
-            options={{
-              mapTypeControl: false,
-              streetViewControl: false,
-              fullscreenControl: false,
-              zoomControl: true,
-              disableDefaultUI: true,
-            }}
-          >
-            {mapListings.map((listing, index) => (
-              <MarkerF
-                key={listing.id}
-                position={listing.coordinates}
-                onClick={() => handleMarkerClick(listing)}
-                onMouseOver={() => setHoveredListing(listing.id)}
-                onMouseOut={() => setHoveredListing(null)}
-                icon={{
-                  path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
-                  fillColor: getMarkerColor(listing.type),
-                  fillOpacity: selectedListingId === listing.id ? 1 : (hoveredListing === listing.id ? 0.9 : 0.7),
-                  strokeWeight: selectedListingId === listing.id ? 3 : 2,
-                  strokeColor: selectedListingId === listing.id ? "#ffffff" : "#ffffff",
-                  scale: selectedListingId === listing.id ? 2.8 : (hoveredListing === listing.id ? 2.6 : 2.4),
-                  anchor: new google.maps.Point(12, 24),
-                  labelOrigin: new google.maps.Point(12, 9)
-                }}
-                label={{
-                  text: (index + 1).toString(),
-                  color: "#ffffff",
-                  fontSize: "12px",
-                  fontWeight: "700"
-                }}
-              />
-            ))}
-          </GoogleMap>
+          <div className="h-full w-full relative">
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={defaultCenter}
+              zoom={13}
+              onLoad={onLoad}
+              options={{
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false,
+                zoomControl: true,
+                disableDefaultUI: true,
+                gestureHandling: 'greedy',
+                styles: [
+                  {
+                    featureType: "poi",
+                    elementType: "labels",
+                    stylers: [{ visibility: "off" }]
+                  },
+                  {
+                    featureType: "transit",
+                    elementType: "labels",
+                    stylers: [{ visibility: "off" }]
+                  }
+                ]
+              }}
+            >
+              {mapListings.map((listing, index) => (
+                <MarkerF
+                  key={listing.id}
+                  position={listing.coordinates}
+                  onClick={() => handleMarkerClick(listing)}
+                  onMouseOver={() => setHoveredListing(listing.id)}
+                  onMouseOut={() => setHoveredListing(null)}
+                  icon={{
+                    path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+                    fillColor: getMarkerColor(listing.type),
+                    fillOpacity: selectedListingId === listing.id ? 1 : (hoveredListing === listing.id ? 1 : 0.9),
+                    strokeWeight: selectedListingId === listing.id ? 3 : (hoveredListing === listing.id ? 3 : 2),
+                    strokeColor: "#ffffff",
+                    scale: selectedListingId === listing.id ? 2.8 : (hoveredListing === listing.id ? 2.6 : 2.4),
+                    anchor: new google.maps.Point(12, 24),
+                    labelOrigin: new google.maps.Point(12, 9)
+                  }}
+                  label={{
+                    text: (index + 1).toString(),
+                    color: "#ffffff",
+                    fontSize: "12px",
+                    fontWeight: "700"
+                  }}
+                  animation={selectedListingId === listing.id ? google.maps.Animation.BOUNCE : undefined}
+                />
+              ))}
+            </GoogleMap>
+            
+            {/* Simple legend - same as ListingMap */}
+            <div className="absolute bottom-6 left-6 bg-white p-4 rounded-lg shadow-lg border">
+              <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-800">
+                <Map className="h-4 w-4 text-gray-600" />
+                Property Types
+              </h4>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <div className="h-3 w-3 rounded-full bg-[#4f46e5]"></div>
+                  <span className="text-sm text-gray-700">Residential</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="h-3 w-3 rounded-full bg-[#0891b2]"></div>
+                  <span className="text-sm text-gray-700">Commercial</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="h-3 w-3 rounded-full bg-[#059669]"></div>
+                  <span className="text-sm text-gray-700">Hospitality</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Simple stats overlay - same as ListingMap */}
+            {mapListings.length > 0 && (
+              <div className="absolute top-6 right-6 bg-white p-4 rounded-lg shadow-lg border">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-50 rounded-lg">
+                    <Building2 className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-xl font-semibold text-gray-900">{mapListings.length}</div>
+                    <div className="text-sm text-gray-600">Properties Found</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
 
