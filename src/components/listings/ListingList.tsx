@@ -11,154 +11,158 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Enhanced mock listings data with real New York addresses
+// Updated mock listings data with accurate Belgrade addresses and international variety
 const mockListings = [
   {
     id: 1,
-    address: "123 Broadway, New York",
-    city: "New York",
-    country: "USA",
+    address: "Dunavska 15, Belgrade",
+    city: "Belgrade",
+    country: "Serbia", 
     type: "commercial_rental",
     category: "retail",
     tenant: {
-      name: "Alexander Whitmore",
-      phone: "+1 (555) 123-4567",
-      email: "alex@example.com"
+      name: "Belgrade Retail Co.",
+      phone: "+381 11 123-4567",
+      email: "info@belgraderetail.rs"
     }
   },
   {
     id: 2,
-    address: "456 5th Avenue, New York",
-    city: "New York",
-    country: "USA",
+    address: "Knez Mihailova 42, Belgrade",
+    city: "Belgrade", 
+    country: "Serbia",
     type: "residential_rental",
     category: "apartment",
     tenant: {
-      name: "Sarah Johnson",
-      phone: "+1 (555) 234-5678",
-      email: "sarah.j@example.com"
+      name: "Marko Petrović",
+      phone: "+381 11 234-5678",
+      email: "marko.petrovic@example.com"
     }
   },
   {
     id: 3,
-    address: "789 Madison Avenue, New York",
-    city: "New York",
-    country: "USA",
+    address: "Makedonska 23, Belgrade",
+    city: "Belgrade",
+    country: "Serbia", 
     type: "hospitality",
-    category: "hotel",
+    category: "boutique_hotel",
     tenant: {
-      name: "Grand Hotel Management",
-      phone: "+1 (555) 345-6789",
-      email: "info@grandhotel.com"
+      name: "Heritage Hotel Belgrade",
+      phone: "+381 11 345-6789",
+      email: "reservations@heritagehotel.rs"
     }
   },
   {
     id: 4,
-    address: "321 Park Avenue, New York",
-    city: "New York",
-    country: "USA",
+    address: "Terazije 35, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
     type: "vacation_rental",
-    category: "condo",
+    category: "luxury_apartment",
     tenant: null
   },
   {
     id: 5,
-    address: "25 Wall Street, New York",
-    city: "New York",
-    country: "USA",
+    address: "Bulevar kralja Aleksandra 73, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
     type: "commercial_rental",
     category: "office",
     tenant: {
-      name: "Financial Corp LLC",
-      phone: "+1 (555) 456-7890",
-      email: "contact@financialcorp.com"
+      name: "Tech Solutions Belgrade",
+      phone: "+381 11 456-7890",
+      email: "office@techsolutions.rs"
     }
   },
   {
     id: 6,
-    address: "100 Times Square, New York",
-    city: "New York",
-    country: "USA",
+    address: "Svetogorska 12, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
     type: "mixed_use",
-    category: "retail_office",
+    category: "residential_commercial",
     tenant: {
-      name: "Times Square Ventures",
-      phone: "+1 (555) 567-8901",
-      email: "leasing@tsventures.com"
+      name: "Dorćol Properties",
+      phone: "+381 11 567-8901",
+      email: "leasing@dorcol.rs"
     }
   },
   {
     id: 7,
-    address: "200 Central Park West, New York",
-    city: "New York",
-    country: "USA",
+    address: "Rajićeva 27, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
     type: "residential_rental",
-    category: "luxury_apartment",
+    category: "house",
     tenant: {
-      name: "Michael Thompson",
-      phone: "+1 (555) 678-9012",
-      email: "m.thompson@example.com"
+      name: "Ana Nikolić",
+      phone: "+381 11 678-9012",
+      email: "ana.nikolic@example.com"
     }
   },
   {
     id: 8,
-    address: "15 Columbus Circle, New York",
-    city: "New York",
-    country: "USA",
+    address: "Skadarlija 29, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
     type: "commercial_rental",
     category: "restaurant",
     tenant: {
-      name: "Gourmet Bistro NYC",
-      phone: "+1 (555) 789-0123",
-      email: "info@gourmetbistro.com"
+      name: "Traditional Serbian Cuisine",
+      phone: "+381 11 789-0123",
+      email: "info@traditionalcuisine.rs"
     }
   },
   {
     id: 9,
-    address: "50 Rockefeller Plaza, New York",
+    address: "Nemanjina 4, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
+    type: "industrial",
+    category: "warehouse",
+    tenant: {
+      name: "Belgrade Logistics",
+      phone: "+381 11 890-1234",
+      email: "operations@belgradelogistics.rs"
+    }
+  },
+  {
+    id: 10,
+    address: "Kosančićev venac 19, Belgrade",
+    city: "Belgrade",
+    country: "Serbia",
+    type: "hospitality",
+    category: "hotel",
+    tenant: {
+      name: "Historic Belgrade Hotel",
+      phone: "+381 11 901-2345",
+      email: "booking@historicbelgrade.rs"
+    }
+  },
+  {
+    id: 11,
+    address: "123 Broadway, New York",
     city: "New York",
     country: "USA",
     type: "commercial_rental",
     category: "office",
     tenant: {
-      name: "Media Solutions Inc",
-      phone: "+1 (555) 890-1234",
-      email: "contact@mediasolutions.com"
+      name: "NYC Business Center",
+      phone: "+1 (212) 123-4567",
+      email: "info@nycbusiness.com"
     }
-  },
-  {
-    id: 10,
-    address: "300 East 42nd Street, New York",
-    city: "New York",
-    country: "USA",
-    type: "industrial",
-    category: "warehouse",
-    tenant: {
-      name: "Logistics Pro",
-      phone: "+1 (555) 901-2345",
-      email: "operations@logisticspro.com"
-    }
-  },
-  {
-    id: 11,
-    address: "500 Park Avenue, New York",
-    city: "New York",
-    country: "USA",
-    type: "hospitality",
-    category: "boutique_hotel",
-    tenant: null
   },
   {
     id: 12,
-    address: "1000 2nd Avenue, New York",
-    city: "New York",
-    country: "USA",
+    address: "25 Oxford Street, London",
+    city: "London",
+    country: "UK",
     type: "vacation_rental",
     category: "penthouse",
     tenant: {
-      name: "Luxury Stays NYC",
-      phone: "+1 (555) 012-3456",
-      email: "bookings@luxurystays.com"
+      name: "London Premium Stays",
+      phone: "+44 20 1234 5678",
+      email: "bookings@londonpremium.co.uk"
     }
   }
 ];
