@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
 
-// Updated mockListings with proper PropertyType values
+// Updated mockListings with proper PropertyType values and location data
 const mockListings: Listing[] = [
   {
     id: "1",
@@ -16,6 +16,7 @@ const mockListings: Listing[] = [
     address: "Belgrade, Dunavska 12",
     city: "Belgrade",
     country: "Serbia",
+    location: { lat: 44.8176, lng: 20.4633 },
     tenant: {
       name: "Alexander Whitmore",
       type: "Individual",
@@ -30,6 +31,7 @@ const mockListings: Listing[] = [
     address: "Alexanderplatz 5",
     city: "Berlin",
     country: "Germany",
+    location: { lat: 52.5200, lng: 13.4050 },
     tenant: {
       name: "Tech Innovators GmbH",
       type: "Company",
@@ -44,6 +46,7 @@ const mockListings: Listing[] = [
     address: "Rue de Rivoli 75",
     city: "Paris",
     country: "France",
+    location: { lat: 48.8566, lng: 2.3522 },
     tenant: {
       name: "Vacation Rental Management",
       type: "Company",
@@ -58,6 +61,7 @@ const mockListings: Listing[] = [
     address: "Ilica 15",
     city: "Zagreb",
     country: "Croatia",
+    location: { lat: 45.8150, lng: 15.9819 },
     tenant: {
       name: "Multiple Tenants",
       type: "Various",
@@ -72,6 +76,7 @@ const mockListings: Listing[] = [
     address: "Stephansplatz 10",
     city: "Vienna",
     country: "Austria",
+    location: { lat: 48.2082, lng: 16.3738 },
     tenant: {
       name: "Vienna Stays Ltd",
       type: "Company",
@@ -86,6 +91,7 @@ const mockListings: Listing[] = [
     address: "Industrial Zone 3, Building 7",
     city: "Budapest",
     country: "Hungary",
+    location: { lat: 47.4979, lng: 19.0402 },
     tenant: {
       name: "Logistics Solutions Inc.",
       type: "Company",
