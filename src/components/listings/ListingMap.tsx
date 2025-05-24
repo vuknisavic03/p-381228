@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X } from 'lucide-react';
+import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -220,8 +220,11 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   // Show API key input if needed
   if (!isApiKeyValid) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-        <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 blur-3xl rounded-full"></div>
+          <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
+        </div>
       </div>
     );
   }
@@ -231,22 +234,25 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     const errorMessage = handleMapsApiLoadError(loadError);
     
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-red-50 to-red-100 p-6">
-        <div className="bg-white p-8 rounded-2xl border border-red-200 shadow-lg max-w-md">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-red-100 rounded-lg">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-red-50 via-orange-50 to-red-100 p-6">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 blur-3xl rounded-full"></div>
+          <div className="relative bg-white/90 backdrop-blur-sm p-8 rounded-3xl border border-red-200/50 shadow-2xl max-w-md">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl">
+                <AlertTriangle className="h-7 w-7 text-red-600" />
+              </div>
+              <h3 className="text-red-700 font-bold text-xl">Maps Error</h3>
             </div>
-            <h3 className="text-red-600 font-semibold text-lg">Maps Error</h3>
+            <p className="text-gray-700 text-sm mb-6 leading-relaxed">{errorMessage}</p>
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.reload()}
+              className="w-full h-11 border-red-300 hover:bg-red-50 hover:border-red-400 transition-all duration-200 font-medium"
+            >
+              Reload Page
+            </Button>
           </div>
-          <p className="text-gray-700 text-sm mb-6 leading-relaxed">{errorMessage}</p>
-          <Button 
-            variant="outline" 
-            onClick={() => window.location.reload()}
-            className="w-full h-10 border-red-200 hover:bg-red-50"
-          >
-            Reload Page
-          </Button>
         </div>
       </div>
     );
@@ -255,19 +261,27 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   // Show loading state
   if (!isLoaded || isProcessing) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20">
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-100/40 via-transparent to-purple-100/40"></div>
+        <div className="relative bg-white/95 backdrop-blur-lg p-10 rounded-3xl shadow-2xl border border-white/30">
           <div className="flex flex-col items-center">
-            <div className="relative mb-6">
-              <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <div className="absolute inset-0 h-12 w-12 rounded-full border-2 border-primary/20"></div>
+            <div className="relative mb-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg opacity-30 animate-pulse"></div>
+              <div className="relative p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full">
+                <Loader2 className="h-8 w-8 animate-spin text-white" />
+              </div>
             </div>
-            <span className="text-gray-700 font-medium text-lg mb-2">
-              {isProcessing ? "Processing addresses..." : "Loading map..."}
+            <span className="text-gray-800 font-bold text-xl mb-3">
+              {isProcessing ? "Processing Locations" : "Loading Map"}
             </span>
-            <span className="text-gray-500 text-sm">
-              {isProcessing ? "Geocoding locations for accurate positioning" : "Initializing Google Maps"}
+            <span className="text-gray-600 text-sm text-center max-w-xs">
+              {isProcessing ? "Geocoding addresses for precise positioning..." : "Initializing Google Maps interface"}
             </span>
+            {isProcessing && (
+              <div className="mt-4 w-48 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -299,6 +313,16 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               featureType: "transit",
               elementType: "labels",
               stylers: [{ visibility: "off" }]
+            },
+            {
+              featureType: "water",
+              elementType: "geometry",
+              stylers: [{ color: "#e3f2fd" }]
+            },
+            {
+              featureType: "landscape",
+              elementType: "geometry",
+              stylers: [{ color: "#f8f9fa" }]
             }
           ]
         }}
@@ -316,7 +340,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 2.4 : 2.2,
+              scale: hoveredListing === listing.id ? 2.6 : 2.4,
               anchor: new google.maps.Point(12, 24),
               labelOrigin: new google.maps.Point(12, 9)
             }}
@@ -324,7 +348,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               text: (index + 1).toString(),
               color: "#ffffff",
               fontSize: "12px",
-              fontWeight: "600"
+              fontWeight: "700"
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />
@@ -340,74 +364,80 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               headerDisabled: true
             }}
           >
-            <div className="p-0 m-0 w-[380px]">
-              <Card className="border-0 shadow-xl bg-white">
+            <div className="p-0 m-0 w-[360px]">
+              <Card className="border-0 shadow-2xl bg-white">
                 <CardContent className="p-0">
-                  <div className="p-4 space-y-4">
+                  <div className="p-5 space-y-4">
                     {/* Header with close button */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-3">
                           <Badge 
                             variant="outline" 
-                            className="text-xs font-medium bg-gray-50 border-gray-200 text-gray-600 px-2 py-1"
+                            className="text-xs font-semibold bg-gray-50 border-gray-300 text-gray-700 px-2.5 py-1"
                           >
                             #{selectedListing.id}
                           </Badge>
                           <Badge 
-                            className="text-xs px-2 py-1 font-medium"
-                            style={{ backgroundColor: getMarkerColor(selectedListing.type) + '20', color: getMarkerColor(selectedListing.type) }}
+                            className="text-xs px-2.5 py-1 font-semibold border-0"
+                            style={{ 
+                              backgroundColor: getMarkerColor(selectedListing.type) + '15', 
+                              color: getMarkerColor(selectedListing.type),
+                              border: `1px solid ${getMarkerColor(selectedListing.type)}30`
+                            }}
                           >
                             {formatPropertyType(selectedListing.type)}
                           </Badge>
                         </div>
-                        <h4 className="font-semibold text-gray-900 text-base leading-tight mb-2">
+                        <h4 className="font-bold text-gray-900 text-lg leading-tight mb-3">
                           {selectedListing.address}
                         </h4>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Navigation className="h-4 w-4 flex-shrink-0" />
-                          <span className="truncate">{selectedListing.city}, {selectedListing.country}</span>
+                        <div className="flex items-center gap-2 text-base text-gray-700 mb-3">
+                          <Navigation className="h-4 w-4 flex-shrink-0 text-gray-500" />
+                          <span className="font-medium">{selectedListing.city}, {selectedListing.country}</span>
                         </div>
                       </div>
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={handleInfoClose}
-                        className="h-6 w-6 p-0 hover:bg-gray-100 shrink-0"
+                        className="h-8 w-8 p-0 hover:bg-gray-100 shrink-0 rounded-full transition-all duration-200"
                       >
-                        <X className="h-4 w-4 text-gray-500" />
+                        <X className="h-4 w-4 text-gray-600" />
                       </Button>
                     </div>
                     
                     {/* Property Category */}
-                    <div className="flex items-center gap-3 py-2 border-t border-gray-100">
-                      <Building2 className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                      <span className="font-medium text-gray-700 capitalize text-sm">
+                    <div className="flex items-center gap-3 py-3 px-3 bg-gray-50 rounded-xl border border-gray-100">
+                      <div className="p-2 bg-white rounded-lg shadow-sm">
+                        <Building2 className="h-4 w-4 text-gray-600" />
+                      </div>
+                      <span className="font-semibold text-gray-800 capitalize text-base">
                         {selectedListing.category.replace(/_/g, ' ')}
                       </span>
                     </div>
                     
                     {/* Tenant Information */}
                     {selectedListing.tenant && (
-                      <div className="space-y-3 pt-3 border-t border-gray-100">
-                        <div className="flex items-center gap-3">
-                          <div className="p-1.5 bg-blue-50 rounded-lg">
-                            <User className="h-4 w-4 text-blue-600" />
+                      <div className="space-y-3 pt-2">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="p-2 bg-blue-50 rounded-xl border border-blue-100">
+                            <User className="h-5 w-5 text-blue-600" />
                           </div>
-                          <span className="font-semibold text-gray-900 text-sm">{selectedListing.tenant.name}</span>
+                          <span className="font-bold text-gray-900 text-base">{selectedListing.tenant.name}</span>
                         </div>
                         
                         <div className="space-y-2">
                           {selectedListing.tenant.phone && (
-                            <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
-                              <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                              <span className="text-sm text-gray-700 font-medium">{selectedListing.tenant.phone}</span>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors duration-200">
+                              <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                              <span className="text-sm text-gray-800 font-medium">{selectedListing.tenant.phone}</span>
                             </div>
                           )}
                           {selectedListing.tenant.email && (
-                            <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
-                              <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                              <span className="text-sm text-gray-700 font-medium truncate">{selectedListing.tenant.email}</span>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors duration-200">
+                              <Mail className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                              <span className="text-sm text-gray-800 font-medium truncate">{selectedListing.tenant.email}</span>
                             </div>
                           )}
                         </div>
@@ -415,11 +445,12 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                     )}
                     
                     {/* Action Button */}
-                    <div className="pt-3 border-t border-gray-100">
+                    <div className="pt-2">
                       <Button 
-                        className="w-full h-10 bg-primary hover:bg-primary/90 transition-colors font-medium text-sm"
+                        className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold text-sm shadow-lg hover:shadow-xl"
                         onClick={handleViewListing}
                       >
+                        <Eye className="h-4 w-4 mr-2" />
                         View Full Details
                       </Button>
                     </div>
@@ -431,47 +462,49 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         )}
       </GoogleMap>
       
-      {/* Enhanced legend */}
-      <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/20">
-        <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-800">
-          <Map className="h-4 w-4 text-primary" />
+      {/* Enhanced legend with better design */}
+      <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-2xl border border-white/30">
+        <h4 className="text-sm font-bold mb-4 flex items-center gap-2 text-gray-800">
+          <div className="p-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+            <Map className="h-4 w-4 text-white" />
+          </div>
           Property Types
         </h4>
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <span className="h-3 w-3 rounded-full bg-[#4f46e5] block shadow-sm"></span>
-              <span className="absolute inset-0 h-3 w-3 rounded-full bg-[#4f46e5] animate-ping opacity-30"></span>
+              <div className="h-3 w-3 rounded-full bg-[#4f46e5] shadow-lg"></div>
+              <div className="absolute inset-0 h-3 w-3 rounded-full bg-[#4f46e5] animate-ping opacity-30"></div>
             </div>
             <span className="text-sm text-gray-700 font-medium">Residential</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
-              <span className="h-3 w-3 rounded-full bg-[#0891b2] block shadow-sm"></span>
-              <span className="absolute inset-0 h-3 w-3 rounded-full bg-[#0891b2] animate-ping opacity-30"></span>
+              <div className="h-3 w-3 rounded-full bg-[#0891b2] shadow-lg"></div>
+              <div className="absolute inset-0 h-3 w-3 rounded-full bg-[#0891b2] animate-ping opacity-30"></div>
             </div>
             <span className="text-sm text-gray-700 font-medium">Commercial</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
-              <span className="h-3 w-3 rounded-full bg-[#059669] block shadow-sm"></span>
-              <span className="absolute inset-0 h-3 w-3 rounded-full bg-[#059669] animate-ping opacity-30"></span>
+              <div className="h-3 w-3 rounded-full bg-[#059669] shadow-lg"></div>
+              <div className="absolute inset-0 h-3 w-3 rounded-full bg-[#059669] animate-ping opacity-30"></div>
             </div>
             <span className="text-sm text-gray-700 font-medium">Hospitality</span>
           </div>
         </div>
       </div>
 
-      {/* Stats overlay */}
+      {/* Enhanced stats overlay */}
       {mapListings.length > 0 && (
-        <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/20">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Building2 className="h-5 w-5 text-primary" />
+        <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-2xl border border-white/30">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-100">
+              <Building2 className="h-6 w-6 text-blue-600" />
             </div>
             <div>
-              <div className="text-lg font-semibold text-gray-900">{mapListings.length}</div>
-              <div className="text-sm text-gray-500">Properties</div>
+              <div className="text-2xl font-bold text-gray-900">{mapListings.length}</div>
+              <div className="text-sm text-gray-600 font-medium">Properties Found</div>
             </div>
           </div>
         </div>
