@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -12,8 +13,106 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Start with empty listings - real data will be loaded from server or added by users
-const initialListings: any[] = [];
+// Real Belgrade listings with accurate coordinates for testing
+const initialListings = [
+  {
+    id: 1,
+    address: "Knez Mihailova 42",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "retail",
+    location: { lat: 44.8176, lng: 20.4566 },
+    tenant: {
+      name: "Belgrade Bookstore",
+      phone: "+381 11 234-5678",
+      email: "info@belgradebooks.rs",
+      type: "company"
+    },
+    notes: "Prime location on main pedestrian street"
+  },
+  {
+    id: 2,
+    address: "Skadarlija 29",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "hospitality",
+    category: "restaurant",
+    location: { lat: 44.8158, lng: 20.4612 },
+    tenant: {
+      name: "Traditional Serbian Restaurant",
+      phone: "+381 11 345-6789",
+      email: "reservations@skadarlijarest.rs",
+      type: "company"
+    },
+    notes: "Historic bohemian quarter, tourist area"
+  },
+  {
+    id: 3,
+    address: "Terazije 23",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "residential_rental",
+    category: "apartment_condo",
+    location: { lat: 44.8125, lng: 20.4612 },
+    tenant: {
+      name: "Marko Petrović",
+      phone: "+381 69 123-4567",
+      email: "marko.petrovic@gmail.com",
+      type: "individual"
+    },
+    notes: "City center apartment, 2 bedrooms"
+  },
+  {
+    id: 4,
+    address: "Bulevar Kralja Aleksandra 73",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "office",
+    location: { lat: 44.8047, lng: 20.4781 },
+    tenant: {
+      name: "Tech Solutions d.o.o.",
+      phone: "+381 11 456-7890",
+      email: "office@techsolutions.rs",
+      type: "company"
+    },
+    notes: "Modern office space, IT company"
+  },
+  {
+    id: 5,
+    address: "Zemun Quay 15",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11080",
+    type: "vacation_rental",
+    category: "short_term",
+    location: { lat: 44.8431, lng: 20.4049 },
+    tenant: null,
+    notes: "Danube riverfront, short-term rental"
+  },
+  {
+    id: 6,
+    address: "Novi Beograd Blok 21",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11070",
+    type: "residential_rental",
+    category: "apartment_condo",
+    location: { lat: 44.8178, lng: 20.3997 },
+    tenant: {
+      name: "Ana Jovanović",
+      phone: "+381 64 987-6543",
+      email: "ana.jovanovic@yahoo.com",
+      type: "individual"
+    },
+    notes: "New Belgrade residential block"
+  }
+];
 
 interface FilterState {
   types: string[];
@@ -61,13 +160,13 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
         console.log("Loaded listings from server:", data);
         setListings(data);
       } else {
-        console.log("No listings found on server, starting with empty state");
-        setListings([]);
+        console.log("No listings found on server, using test data");
+        setListings(initialListings);
       }
     } catch (error) {
       console.error("Error fetching listings:", error);
-      console.log("Server not available, starting with empty state");
-      setListings([]);
+      console.log("Server not available, using test data");
+      setListings(initialListings);
     } finally {
       setIsLoading(false);
     }
