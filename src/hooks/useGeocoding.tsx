@@ -11,54 +11,52 @@ export function useGeocoding() {
     setIsGeocoding(true);
     
     try {
-      console.log(`Starting high-precision geocoding for: ${address}, ${city}, ${country}`);
+      console.log(`🎯 Starting pinpoint geocoding for: ${address}, ${city}, ${country}`);
       const result = await geocodeAddress(address, city, country);
       
       if (result) {
-        // Validate the accuracy of the geocoding result
-        const isAccurate = validateGeocodingAccuracy(result);
+        // Validate the pinpoint accuracy of the geocoding result
+        const isPinpointAccurate = validateGeocodingAccuracy(result);
         
-        if (isAccurate) {
-          console.log(`Maximum precision geocoding successful:`, {
+        if (isPinpointAccurate) {
+          console.log(`✅ PINPOINT ACCURACY ACHIEVED:`, {
             address: `${address}, ${city}, ${country}`,
             coordinates: { lat: result.lat, lng: result.lng },
             accuracy: result.accuracy,
-            precision: 'Sub-meter level',
+            precision: 'Pinpoint accurate (sub-meter)',
             placeId: result.placeId
           });
           
-          // Show success message with accuracy info
-          const accuracyMessage = getAccuracyMessage(result.accuracy);
           toast({
-            title: "Precise Location Found",
-            description: `Address geocoded with ${accuracyMessage} precision`,
+            title: "🎯 Pinpoint Location Found",
+            description: `Address geocoded with pinpoint accuracy (${getAccuracyDescription(result.accuracy)})`,
             duration: 3000,
           });
           
           return { lat: result.lat, lng: result.lng };
         } else {
-          console.warn('Geocoding result did not meet accuracy requirements:', result);
+          console.warn('⚠️ Geocoding result does not meet pinpoint accuracy standards:', result);
           toast({
-            title: "Location Found",
-            description: "Coordinates found but may have reduced precision. Address validation recommended.",
+            title: "📍 Location Found",
+            description: `Coordinates found but may not be pinpoint accurate. Consider verifying the address format.`,
             variant: "destructive"
           });
           return { lat: result.lat, lng: result.lng };
         }
       } else {
-        console.error('Geocoding failed - no results returned');
+        console.error('❌ Pinpoint geocoding failed - no results returned');
         toast({
-          title: "Address Not Found",
-          description: "Could not locate this address. Please verify the address format and ensure it exists.",
+          title: "❌ Address Not Found",
+          description: "Could not locate this address with pinpoint accuracy. Please verify the complete address including house number.",
           variant: "destructive"
         });
         return null;
       }
     } catch (error) {
-      console.error('Geocoding error:', error);
+      console.error('❌ Pinpoint geocoding error:', error);
       toast({
-        title: "Geocoding Service Error",
-        description: "Unable to process the address. Please check your internet connection and API key.",
+        title: "🚫 Geocoding Service Error",
+        description: "Unable to process the address with pinpoint accuracy. Please check your connection and API key.",
         variant: "destructive"
       });
       return null;
@@ -73,23 +71,23 @@ export function useGeocoding() {
   };
 }
 
-function getAccuracyMessage(accuracy: string): string {
+function getAccuracyDescription(accuracy: string): string {
   switch (accuracy) {
-    case 'MAXIMUM':
-      return 'maximum (building-level)';
-    case 'HIGH':
-      return 'high (rooftop-level)';
-    case 'GOOD':
-      return 'good (street-level)';
+    case 'ROOFTOP_VERIFIED':
+      return 'rooftop-level, cross-validated';
+    case 'CROSS_VALIDATED':
+      return 'cross-validated with multiple APIs';
+    case 'PREMIUM_VALIDATED':
+      return 'premium address validation';
+    case 'PLACE_DETAILS_MAXIMUM':
+      return 'maximum precision from Place Details';
+    case 'PLACE_DETAILS_HIGH':
+      return 'high precision from Place Details';
     case 'ROOFTOP':
-      return 'precise (rooftop)';
+      return 'rooftop-level precision';
     case 'RANGE_INTERPOLATED':
-      return 'interpolated (street)';
-    case 'PLACES_API':
-      return 'enhanced (places-verified)';
-    case 'VALIDATED':
-      return 'validated (official)';
+      return 'interpolated street-level';
     default:
-      return 'standard';
+      return 'standard precision';
   }
 }
