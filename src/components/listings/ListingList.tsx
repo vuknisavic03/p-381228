@@ -12,135 +12,135 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// New test listings with real addresses for accuracy testing
+// Belgrade test listings for accuracy testing
 const initialListings = [
   {
     id: 1,
-    address: "1600 Pennsylvania Avenue NW",
-    city: "Washington",
-    country: "United States",
-    postalCode: "20500",
+    address: "Knez Mihailova 42",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
     type: "commercial_rental",
-    category: "office",
+    category: "retail",
     tenant: {
-      name: "Government Office",
-      phone: "+1 202-456-1414",
-      email: "info@whitehouse.gov",
+      name: "Fashion Store Belgrade",
+      phone: "+381 11 123 4567",
+      email: "info@fashion.rs",
       type: "company"
     },
-    notes: "Historic government building"
+    notes: "Main pedestrian street"
   },
   {
     id: 2,
-    address: "Times Square",
-    city: "New York",
-    country: "United States",
-    postalCode: "10036",
-    type: "commercial_rental",
-    category: "retail",
-    tenant: {
-      name: "Broadway Store",
-      phone: "+1 212-768-1560",
-      email: "info@broadway.com",
-      type: "company"
-    },
-    notes: "Prime Manhattan location"
-  },
-  {
-    id: 3,
-    address: "Big Ben",
-    city: "London",
-    country: "United Kingdom",
-    postalCode: "SW1A 0AA",
-    type: "hospitality",
-    category: "hotel",
-    tenant: {
-      name: "Historic Tours Ltd",
-      phone: "+44 20 7219 3000",
-      email: "tours@parliament.uk",
-      type: "company"
-    },
-    notes: "Iconic London landmark area"
-  },
-  {
-    id: 4,
-    address: "Champs-Élysées",
-    city: "Paris",
-    country: "France",
-    postalCode: "75008",
-    type: "commercial_rental",
-    category: "retail",
-    tenant: {
-      name: "Paris Fashion Boutique",
-      phone: "+33 1 42 65 55 10",
-      email: "contact@boutique.fr",
-      type: "company"
-    },
-    notes: "Famous shopping avenue"
-  },
-  {
-    id: 5,
-    address: "Brandenburg Gate",
-    city: "Berlin",
-    country: "Germany",
-    postalCode: "10117",
-    type: "hospitality",
-    category: "hotel",
-    tenant: {
-      name: "Berlin Heritage Hotel",
-      phone: "+49 30 227 91 0",
-      email: "info@heritage-berlin.de",
-      type: "company"
-    },
-    notes: "Historic landmark location"
-  },
-  {
-    id: 6,
-    address: "Sydney Opera House",
-    city: "Sydney",
-    country: "Australia",
-    postalCode: "2000",
-    type: "hospitality",
-    category: "hotel",
-    tenant: {
-      name: "Opera House Tours",
-      phone: "+61 2 9250 7111",
-      email: "info@sydneyoperahouse.com",
-      type: "company"
-    },
-    notes: "Iconic Australian landmark"
-  },
-  {
-    id: 7,
-    address: "CN Tower",
-    city: "Toronto",
-    country: "Canada", 
-    postalCode: "M5V 3E6",
+    address: "Terazije 23",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
     type: "commercial_rental",
     category: "office",
     tenant: {
-      name: "Sky High Offices",
-      phone: "+1 416-868-6937",
-      email: "info@cntower.ca",
+      name: "Business Center",
+      phone: "+381 11 234 5678",
+      email: "office@terazije.rs",
       type: "company"
     },
-    notes: "Toronto's iconic tower"
+    notes: "Central Belgrade square"
   },
   {
-    id: 8,
-    address: "Red Square",
-    city: "Moscow",
-    country: "Russia",
-    postalCode: "109012",
+    id: 3,
+    address: "Kalemegdan Park 1",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "hospitality",
+    category: "restaurant",
+    tenant: {
+      name: "Kalemegdan Restaurant",
+      phone: "+381 11 345 6789",
+      email: "info@kalemegdan.rs",
+      type: "company"
+    },
+    notes: "Historic fortress area"
+  },
+  {
+    id: 4,
+    address: "Skadarlija 29",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "hospitality",
+    category: "restaurant",
+    tenant: {
+      name: "Traditional Serbian Restaurant",
+      phone: "+381 11 456 7890",
+      email: "contact@skadarlija.rs",
+      type: "company"
+    },
+    notes: "Bohemian quarter"
+  },
+  {
+    id: 5,
+    address: "Makedonska 22",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "residential_rental",
+    category: "apartment",
+    tenant: {
+      name: "Marko Petrović",
+      phone: "+381 11 567 8901",
+      email: "marko@email.rs",
+      type: "individual"
+    },
+    notes: "City center apartment"
+  },
+  {
+    id: 6,
+    address: "Bulevar Kralja Aleksandra 73",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "office",
+    tenant: {
+      name: "Tech Company Serbia",
+      phone: "+381 11 678 9012",
+      email: "info@tech.rs",
+      type: "company"
+    },
+    notes: "Main boulevard"
+  },
+  {
+    id: 7,
+    address: "Nemanjina 4",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
     type: "commercial_rental",
     category: "retail",
     tenant: {
-      name: "Moscow Heritage Shop",
-      phone: "+7 495 692-47-03",
-      email: "shop@redsquare.ru",
+      name: "Shopping Mall Unit",
+      phone: "+381 11 789 0123",
+      email: "shop@nemanjina.rs",
       type: "company"
     },
-    notes: "Historic Moscow center"
+    notes: "Near train station"
+  },
+  {
+    id: 8,
+    address: "Svetogorska 15",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "residential_rental",
+    category: "apartment",
+    tenant: {
+      name: "Ana Jovanović",
+      phone: "+381 11 890 1234",
+      email: "ana@email.rs",
+      type: "individual"
+    },
+    notes: "Residential area"
   }
 ];
 
@@ -161,7 +161,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
   const [filters, setFilters] = useState<FilterState>({
@@ -190,12 +190,12 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
         console.log("Loaded listings from server:", data);
         setListings(data);
       } else {
-        console.log("No listings found on server, using new test data");
+        console.log("No listings found on server, using Belgrade test data");
         setListings(initialListings);
       }
     } catch (error) {
       console.error("Error fetching listings:", error);
-      console.log("Server not available, using new test data with real addresses");
+      console.log("Server not available, using Belgrade test data");
       setListings(initialListings);
     } finally {
       setIsLoading(false);

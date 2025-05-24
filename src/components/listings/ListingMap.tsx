@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
@@ -11,7 +12,6 @@ import { GoogleMapsApiInput } from './GoogleMapsApiInput';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 import { useRealTimeGeocoding } from '@/hooks/useRealTimeGeocoding';
 
-// Modern map settings
 const containerStyle = {
   width: '100%',
   height: '100%'
@@ -23,7 +23,6 @@ const defaultCenter = {
   lng: 20.4606
 };
 
-// Type definitions for listings
 interface Tenant {
   name: string;
   phone?: string;
@@ -54,14 +53,13 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [listingsWithCoords, setListingsWithCoords] = useState<(Listing & { coordinates?: { lat: number; lng: number } })[]>([]);
+  const [geocodingProgress, setGeocodingProgress] = useState({ current: 0, total: 0 });
   
-  // Use our custom Maps API hook
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   const { geocodeAddressRealTime, isGeocoding } = useRealTimeGeocoding();
   
-  console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "hasError:", !!loadError);
+  console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "listings:", listings.length);
   
-  // Handle API key submission from GoogleMapsApiInput
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
     console.log("API key received in ListingMap");
     setApiKey(newApiKey);
@@ -71,16 +69,23 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Geocode listings that don't have accurate coordinates
+  // Geocode listings that don't have coordinates
   useEffect(() => {
     const geocodeListings = async () => {
-      if (!isLoaded || !listings.length) return;
+      if (!isLoaded || !listings.length || !isApiKeyValid) {
+        setListingsWithCoords(listings.map(listing => ({ ...listing })));
+        return;
+      }
 
-      console.log('🔄 Processing listings for accurate coordinates...');
+      console.log('🔄 Processing listings for coordinates...');
+      setGeocodingProgress({ current: 0, total: listings.length });
       const updatedListings = [];
 
-      for (const listing of listings) {
-        // Check if we already have accurate coordinates
+      for (let i = 0; i < listings.length; i++) {
+        const listing = listings[i];
+        setGeocodingProgress({ current: i + 1, total: listings.length });
+
+        // Check if we already have coordinates
         if (listing.location) {
           console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
           updatedListings.push({
@@ -88,7 +93,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             coordinates: listing.location
           });
         } else {
-          console.log(`🎯 Real-time geocoding needed for: ${listing.address}, ${listing.city}, ${listing.country}`);
+          console.log(`🎯 Geocoding: ${listing.address}, ${listing.city}, ${listing.country}`);
           
           const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
           
@@ -99,10 +104,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             });
             console.log(`✅ Geocoded ${listing.address}:`, coords);
           } else {
-            // Fallback to Belgrade center with offset
+            // Use Belgrade fallback with slight offset
             const fallbackCoords = {
-              lat: defaultCenter.lat + (listing.id * 0.001),
-              lng: defaultCenter.lng + (listing.id * 0.001)
+              lat: defaultCenter.lat + (listing.id * 0.002),
+              lng: defaultCenter.lng + (listing.id * 0.002)
             };
             updatedListings.push({
               ...listing,
@@ -114,22 +119,20 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
       }
 
       setListingsWithCoords(updatedListings);
+      setGeocodingProgress({ current: 0, total: 0 });
     };
 
     geocodeListings();
-  }, [listings, isLoaded, geocodeAddressRealTime]);
+  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime]);
 
-  // Get coordinates for listings - now uses real-time geocoded coordinates
   const getListingCoordinates = useCallback((listing: Listing & { coordinates?: { lat: number; lng: number } }, index: number) => {
     if (listing.coordinates) {
-      console.log(`📍 Using accurate coordinates for ${listing.address}:`, listing.coordinates);
       return listing.coordinates;
     }
     
-    // This should rarely happen now
-    console.log(`⚠️ No coordinates found for ${listing.address}, using Belgrade fallback`);
-    const latVariation = (listing.id * 0.001) + (index * 0.0005);
-    const lngVariation = (listing.id * 0.001) - (index * 0.0007);
+    // Fallback to Belgrade with offset
+    const latVariation = (listing.id * 0.002) + (index * 0.001);
+    const lngVariation = (listing.id * 0.002) - (index * 0.001);
     
     return { 
       lat: defaultCenter.lat + latVariation, 
@@ -137,7 +140,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     };
   }, []);
 
-  // Set map reference when loaded
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("Map loaded successfully");
     setMapRef(map);
@@ -157,17 +159,14 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     setMapRef(null);
   }, []);
 
-  // Handle marker click
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
   }, []);
 
-  // Handle info window close
   const handleInfoClose = useCallback(() => {
     setSelectedListing(null);
   }, []);
 
-  // Handle view listing details
   const handleViewListing = useCallback(() => {
     if (selectedListing) {
       onListingClick(selectedListing);
@@ -175,7 +174,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [selectedListing, onListingClick]);
 
-  // Show API key input if we need it
+  // Show API key input if needed
   if (!isApiKeyValid) {
     console.log("Showing API key input - API key not valid");
     return (
@@ -185,7 +184,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show error state if map failed to load
+  // Show error state
   if (loadError) {
     console.log("Showing error state - load error:", loadError);
     const errorMessage = handleMapsApiLoadError(loadError);
@@ -210,15 +209,17 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show loading state if map isn't loaded yet or geocoding is in progress
-  if (!isLoaded || isGeocoding) {
-    console.log("Showing loading state - map not loaded or geocoding in progress");
+  // Show loading state
+  if (!isLoaded || (geocodingProgress.total > 0 && geocodingProgress.current < geocodingProgress.total)) {
+    console.log("Showing loading state");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="bg-white p-8 rounded-xl shadow-lg">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
           <span className="text-gray-600 font-medium">
-            {isGeocoding ? "Getting accurate coordinates..." : "Loading interactive map..."}
+            {geocodingProgress.total > 0 
+              ? `Processing addresses... ${geocodingProgress.current}/${geocodingProgress.total}` 
+              : "Loading interactive map..."}
           </span>
         </div>
       </div>
@@ -242,9 +243,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           zoomControl: true,
           controlSize: 32,
           disableDefaultUI: true,
-          mapTypeControlOptions: {
-            mapTypeIds: []
-          },
           styles: [
             {
               featureType: "poi",
@@ -259,7 +257,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           ]
         }}
       >
-        {/* Render markers for all listings with accurate coordinates */}
+        {/* Render markers */}
         {listingsWithCoords.map((listing, index) => {
           const position = getListingCoordinates(listing, index);
           const markerColor = getMarkerColor(listing.type);
@@ -282,7 +280,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           );
         })}
 
-        {/* Info Window for selected listing */}
+        {/* Info Window */}
         {selectedListing && (
           <InfoWindow
             position={getListingCoordinates(
@@ -342,7 +340,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         )}
       </GoogleMap>
       
-      {/* Enhanced map legend with all property categories */}
+      {/* Map legend */}
       <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-5 rounded-xl shadow-xl border border-gray-100/50">
         <h4 className="text-sm font-semibold mb-3 text-gray-800 flex items-center gap-2">
           <Map className="h-4 w-4 text-primary" />
@@ -379,7 +377,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   );
 }
 
-// Enhanced marker colors for better property type distinction
 function getMarkerColor(type: PropertyType): string {
   switch (type) {
     case "residential_rental":

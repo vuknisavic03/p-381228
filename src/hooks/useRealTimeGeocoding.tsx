@@ -8,15 +8,18 @@ export function useRealTimeGeocoding() {
   const { toast } = useToast();
 
   const geocodeAddressRealTime = async (address: string, city: string, country: string) => {
+    // Add timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      setIsGeocoding(false);
+      console.warn('⏰ Geocoding timeout reached');
+    }, 10000); // 10 second timeout
+
     setIsGeocoding(true);
     const apiKey = getGoogleMapsApiKey();
     
     if (!apiKey) {
-      toast({
-        title: "No API Key",
-        description: "Google Maps API key is required for accurate geocoding",
-        variant: "destructive"
-      });
+      console.warn("No API key available, skipping geocoding");
+      clearTimeout(timeoutId);
       setIsGeocoding(false);
       return null;
     }
@@ -29,10 +32,6 @@ export function useRealTimeGeocoding() {
       const params = new URLSearchParams({
         address: fullAddress,
         key: apiKey,
-        // Request highest precision
-        location_type: 'ROOFTOP',
-        result_type: 'street_address',
-        // Prefer exact address matches
         language: 'en',
         region: getCountryCode(country).toLowerCase()
       });
@@ -42,14 +41,10 @@ export function useRealTimeGeocoding() {
       );
       
       const data = await response.json();
-      console.log('🔍 Geocoding API response:', data);
+      console.log('🔍 Geocoding API response status:', data.status);
 
       if (data.status === 'OK' && data.results.length > 0) {
-        // Get the most precise result
-        const result = data.results.find(r => 
-          r.geometry.location_type === 'ROOFTOP'
-        ) || data.results[0];
-
+        const result = data.results[0];
         const location = result.geometry.location;
         const locationType = result.geometry.location_type;
         
@@ -60,11 +55,8 @@ export function useRealTimeGeocoding() {
           formatted_address: result.formatted_address
         });
 
-        toast({
-          title: "✅ Address Located",
-          description: `Found precise coordinates for ${address}`,
-          duration: 2000,
-        });
+        clearTimeout(timeoutId);
+        setIsGeocoding(false);
 
         return {
           lat: location.lat,
@@ -73,24 +65,16 @@ export function useRealTimeGeocoding() {
           formatted_address: result.formatted_address
         };
       } else {
-        console.error('❌ Geocoding failed:', data.status, data.error_message);
-        toast({
-          title: "Address Not Found",
-          description: `Could not locate "${address}, ${city}". Please verify the address.`,
-          variant: "destructive"
-        });
+        console.warn('❌ Geocoding failed:', data.status, data.error_message);
+        clearTimeout(timeoutId);
+        setIsGeocoding(false);
         return null;
       }
     } catch (error) {
       console.error('❌ Geocoding error:', error);
-      toast({
-        title: "Geocoding Error",
-        description: "Failed to geocode address. Please try again.",
-        variant: "destructive"
-      });
-      return null;
-    } finally {
+      clearTimeout(timeoutId);
       setIsGeocoding(false);
+      return null;
     }
   };
 
