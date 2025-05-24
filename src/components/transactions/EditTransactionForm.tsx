@@ -1,101 +1,12 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Listing, TransactionFieldsData, PropertyType } from "./TransactionFormTypes";
+import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
-import { formatPropertyType } from "@/utils/propertyTypeUtils";
-
-// Use the same mock listings from TransactionForm with proper PropertyType values
-const mockListings: Listing[] = [
-  {
-    id: "1",
-    name: "Belgrade, Dunavska 12",
-    type: "residential_rental" as PropertyType,
-    address: "Belgrade, Dunavska 12",
-    city: "Belgrade",
-    country: "Serbia",
-    tenant: {
-      name: "Alexander Whitmore",
-      type: "Individual",
-      email: "alex@example.com",
-      phone: "000-000-0000"
-    }
-  },
-  {
-    id: "2",
-    name: "Berlin Office Space",
-    type: "commercial_rental" as PropertyType,
-    address: "Alexanderplatz 5",
-    city: "Berlin",
-    country: "Germany",
-    tenant: {
-      name: "Tech Innovators GmbH",
-      type: "Company",
-      email: "contact@techinnovators.de",
-      phone: "030-555-7890"
-    }
-  },
-  {
-    id: "3",
-    name: "Paris Vacation Apartment",
-    type: "vacation_rental" as PropertyType,
-    address: "Rue de Rivoli 75",
-    city: "Paris",
-    country: "France",
-    tenant: {
-      name: "Vacation Rental Management",
-      type: "Company",
-      email: "bookings@vrm.com",
-      phone: "33-145-678-900"
-    }
-  },
-  {
-    id: "4",
-    name: "Zagreb Mixed-Use Building",
-    type: "mixed_use" as PropertyType,
-    address: "Ilica 15",
-    city: "Zagreb",
-    country: "Croatia",
-    tenant: {
-      name: "Multiple Tenants",
-      type: "Various",
-      email: "management@zgproperties.hr",
-      phone: "385-1-234-5678"
-    }
-  },
-  {
-    id: "5",
-    name: "Vienna Boutique Hotel",
-    type: "hospitality" as PropertyType,
-    address: "Stephansplatz 10",
-    city: "Vienna",
-    country: "Austria",
-    tenant: {
-      name: "Vienna Stays Ltd",
-      type: "Company",
-      email: "reception@viennastays.at",
-      phone: "43-1-987-6543"
-    }
-  },
-  {
-    id: "6",
-    name: "Warehouse Facility",
-    type: "industrial" as PropertyType,
-    address: "Industrial Zone 3, Building 7",
-    city: "Budapest",
-    country: "Hungary",
-    tenant: {
-      name: "Logistics Solutions Inc.",
-      type: "Company",
-      email: "operations@logisticssolutions.com",
-      phone: "36-1-555-1234"
-    }
-  }
-];
+import { fetchListings } from "@/services/listingsService";
 
 interface EditTransactionFormProps {
   transaction: any;
@@ -104,9 +15,8 @@ interface EditTransactionFormProps {
 }
 
 export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTransactionFormProps) {
-  console.log("EditTransactionForm received transaction:", transaction);
-  
-  // Make sure we have a default value for selectedListingId and listingType
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [isLoadingListings, setIsLoadingListings] = useState(true);
   const [fields, setFields] = useState<TransactionFieldsData>({
     selectedListingId: transaction.selectedListingId || "",
     transactionType: transaction.type || "revenue",
@@ -118,6 +28,45 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     listingType: transaction.listingType || "listing",
   });
   const { toast } = useToast();
+
+  // Fetch real listings data on component mount
+  useEffect(() => {
+    const loadListings = async () => {
+      setIsLoadingListings(true);
+      try {
+        const listingsData = await fetchListings();
+        // Transform the listings data to match our Listing interface
+        const transformedListings: Listing[] = listingsData.map((listing: any) => ({
+          id: String(listing.id),
+          name: listing.address || listing.name || `Property #${listing.id}`,
+          type: listing.type || "residential_rental",
+          address: listing.address || "",
+          city: listing.city || "",
+          country: listing.country || "",
+          location: listing.location || { lat: 44.8154, lng: 20.4606 }, // Default Belgrade coordinates
+          tenant: {
+            name: listing.tenant?.name || "No Tenant",
+            type: listing.tenant?.type || "Individual",
+            email: listing.tenant?.email || "",
+            phone: listing.tenant?.phone || ""
+          }
+        }));
+        setListings(transformedListings);
+        console.log("Loaded listings for edit transaction form:", transformedListings);
+      } catch (error) {
+        console.error("Error loading listings:", error);
+        toast({
+          title: "Error loading properties",
+          description: "Failed to load your properties. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoadingListings(false);
+      }
+    };
+
+    loadListings();
+  }, [toast]);
 
   // Keep fields in sync with prop if transaction changes
   useEffect(() => {
@@ -166,6 +115,27 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
   const showNotesSection = fields.selectedListingId || fields.listingType === "general";
 
+  if (isLoadingListings) {
+    return (
+      <div className="h-full overflow-auto bg-white">
+        <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+          <SheetClose asChild>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+              <X className="h-4 w-4" />
+            </Button>
+          </SheetClose>
+        </div>
+        <div className="px-6 py-8 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your properties...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full overflow-auto bg-white">
       {/* Header with close button */}
@@ -181,7 +151,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       {/* Content area */}
       <div className="px-6 py-4 space-y-8">
         <TransactionFields 
-          mockListings={mockListings}
+          mockListings={listings}
           initialValues={fields}
           onChange={setFields}
           editMode={true}
