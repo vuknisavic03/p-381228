@@ -186,3 +186,27 @@
   opacity: 0;
   transition: opacity 300ms;
 }
+
+/* Hide Google Maps branding and attribution */
+.gm-style a[href^="https://maps.google.com/maps"],
+.gm-style a[href^="https://www.google.com/maps"],
+.gm-style .gmnoprint,
+.gm-style [title="Google"],
+.gm-style-cc,
+.gm-bundled-control,
+.gm-fullscreen-control {
+  display: none !important;
+}
+
+/* Hide Google logo and terms */
+.gm-style .gm-style-cc,
+.gm-style .gmnoprint {
+  display: none !important;
+}
+
+/* Additional hiding for any remaining Google elements */
+[title*="Google"],
+[alt*="Google"],
+a[href*="google.com/maps"] {
+  display: none !important;
+}

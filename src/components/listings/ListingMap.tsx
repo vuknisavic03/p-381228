@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
@@ -192,6 +193,38 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("Map loaded successfully");
     
+    // Hide Google branding and controls
+    const hideGoogleElements = () => {
+      // Hide Google logo
+      const googleLogo = document.querySelector('a[href^="https://maps.google.com/maps"]');
+      if (googleLogo && googleLogo.parentElement) {
+        (googleLogo.parentElement as HTMLElement).style.display = 'none';
+      }
+      
+      // Hide terms/report links
+      const termsLinks = document.querySelectorAll('a[href*="google.com"], [title*="Google"], [alt*="Google"]');
+      termsLinks.forEach(link => {
+        if (link.textContent?.includes('Terms') || 
+            link.textContent?.includes('Report') ||
+            link.getAttribute('href')?.includes('google.com')) {
+          (link as HTMLElement).style.display = 'none';
+        }
+      });
+      
+      // Hide keyboard shortcuts and other Google UI elements
+      const keyboardShortcuts = document.querySelector('[data-value="Keyboard shortcuts"]');
+      if (keyboardShortcuts) {
+        (keyboardShortcuts as HTMLElement).style.display = 'none';
+      }
+    };
+    
+    // Run immediately and on interval to catch dynamically loaded elements
+    hideGoogleElements();
+    const interval = setInterval(hideGoogleElements, 1000);
+    
+    // Clean up interval after 10 seconds
+    setTimeout(() => clearInterval(interval), 10000);
+    
     if (mapListings.length > 0) {
       const bounds = new google.maps.LatLngBounds();
       mapListings.forEach((listing) => {
@@ -286,6 +319,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           fullscreenControl: false,
           zoomControl: true,
           disableDefaultUI: true,
+          gestureHandling: 'greedy',
           styles: [
             {
               featureType: "poi",
