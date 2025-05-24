@@ -12,25 +12,25 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Updated mock listings with ACCURATE Belgrade coordinates
+// ACCURATE Belgrade listings with real addresses and coordinates
 const mockListings = [
   {
     id: 1,
-    address: "Dunavska 15, Belgrade",
+    address: "Knez Mihailova 42",
     city: "Belgrade",
     country: "Serbia", 
     type: "commercial_rental",
     category: "retail",
     tenant: {
-      name: "Belgrade Retail Co.",
+      name: "Belgrade Fashion Store",
       phone: "+381 11 123-4567",
-      email: "info@belgraderetail.rs"
+      email: "info@fashionstore.rs"
     },
-    location: { lat: 44.8186, lng: 20.4575 } // Accurate Dunavska location
+    location: { lat: 44.8176, lng: 20.4633 } // Main pedestrian street
   },
   {
     id: 2,
-    address: "Knez Mihailova 42, Belgrade",
+    address: "Terazije 27",
     city: "Belgrade", 
     country: "Serbia",
     type: "residential_rental",
@@ -40,35 +40,35 @@ const mockListings = [
       phone: "+381 11 234-5678",
       email: "marko.petrovic@example.com"
     },
-    location: { lat: 44.8176, lng: 20.4633 } // Main pedestrian street
+    location: { lat: 44.8154, lng: 20.4606 } // Central Belgrade square
   },
   {
     id: 3,
-    address: "Makedonska 23, Belgrade",
+    address: "Skadarlija 29",
     city: "Belgrade",
     country: "Serbia", 
     type: "hospitality",
     category: "boutique_hotel",
     tenant: {
-      name: "Heritage Hotel Belgrade",
+      name: "Bohemian Heritage Hotel",
       phone: "+381 11 345-6789",
-      email: "reservations@heritagehotel.rs"
+      email: "reservations@bohemianhotel.rs"
     },
-    location: { lat: 44.8125, lng: 20.4612 } // Stari Grad area
+    location: { lat: 44.8159, lng: 20.4652 } // Famous bohemian quarter
   },
   {
     id: 4,
-    address: "Terazije 35, Belgrade",
+    address: "Kosančićev venac 19",
     city: "Belgrade",
     country: "Serbia",
     type: "vacation_rental",
     category: "luxury_apartment",
     tenant: null,
-    location: { lat: 44.8154, lng: 20.4606 } // Central Belgrade square
+    location: { lat: 44.8203, lng: 20.4535 } // Historic area near Kalemegdan
   },
   {
     id: 5,
-    address: "Bulevar kralja Aleksandra 73, Belgrade",
+    address: "Bulevar kralja Aleksandra 73",
     city: "Belgrade",
     country: "Serbia",
     type: "commercial_rental",
@@ -82,7 +82,7 @@ const mockListings = [
   },
   {
     id: 6,
-    address: "Svetogorska 12, Belgrade",
+    address: "Svetogorska 12",
     city: "Belgrade",
     country: "Serbia",
     type: "mixed_use",
@@ -96,7 +96,7 @@ const mockListings = [
   },
   {
     id: 7,
-    address: "Rajićeva 27, Belgrade",
+    address: "Rajićeva 27",
     city: "Belgrade",
     country: "Serbia",
     type: "residential_rental",
@@ -110,7 +110,7 @@ const mockListings = [
   },
   {
     id: 8,
-    address: "Skadarlija 29, Belgrade",
+    address: "Makedonska 23",
     city: "Belgrade",
     country: "Serbia",
     type: "commercial_rental",
@@ -120,11 +120,11 @@ const mockListings = [
       phone: "+381 11 789-0123",
       email: "info@traditionalcuisine.rs"
     },
-    location: { lat: 44.8159, lng: 20.4652 } // Famous bohemian quarter
+    location: { lat: 44.8125, lng: 20.4612 } // Stari Grad area
   },
   {
     id: 9,
-    address: "Nemanjina 4, Belgrade",
+    address: "Nemanjina 4",
     city: "Belgrade",
     country: "Serbia",
     type: "industrial",
@@ -138,45 +138,17 @@ const mockListings = [
   },
   {
     id: 10,
-    address: "Kosančićev venac 19, Belgrade",
+    address: "Studentski trg 1",
     city: "Belgrade",
     country: "Serbia",
     type: "hospitality",
     category: "hotel",
     tenant: {
-      name: "Historic Belgrade Hotel",
+      name: "University Hotel Belgrade",
       phone: "+381 11 901-2345",
-      email: "booking@historicbelgrade.rs"
+      email: "booking@universityhotel.rs"
     },
-    location: { lat: 44.8203, lng: 20.4535 } // Historic area near Kalemegdan
-  },
-  {
-    id: 11,
-    address: "123 Broadway, New York",
-    city: "New York",
-    country: "USA",
-    type: "commercial_rental",
-    category: "office",
-    tenant: {
-      name: "NYC Business Center",
-      phone: "+1 (212) 123-4567",
-      email: "info@nycbusiness.com"
-    },
-    location: { lat: 40.7505, lng: -73.9934 }
-  },
-  {
-    id: 12,
-    address: "25 Oxford Street, London",
-    city: "London",
-    country: "UK",
-    type: "vacation_rental",
-    category: "penthouse",
-    tenant: {
-      name: "London Premium Stays",
-      phone: "+44 20 1234 5678",
-      email: "bookings@londonpremium.co.uk"
-    },
-    location: { lat: 51.5154, lng: -0.1423 }
+    location: { lat: 44.8186, lng: 20.4575 } // University area
   }
 ];
 
@@ -249,7 +221,8 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     }
   };
 
-  // ... keep existing code (filter functions)
+  // ... keep existing code (filter functions, toggleFilter, clearFilters, filterGroups, activeFilterCount, filterTags, filteredListings)
+
   const toggleFilter = (category: keyof FilterState, value: string) => {
     setFilters(prev => {
       const updated = { ...prev };
@@ -319,7 +292,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     filters.occupancy.length + 
     filters.countries.length;
 
-  // ... keep existing code (filter tags and filtered listings logic)
   const filterTags = [
     ...filters.types.map(type => ({
       category: "Type",

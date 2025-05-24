@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
@@ -17,9 +16,10 @@ const containerStyle = {
   height: '100%'
 };
 
+// Belgrade center coordinates
 const defaultCenter = {
-  lat: 44.7866,
-  lng: 20.4489
+  lat: 44.8154,
+  lng: 20.4606
 };
 
 // Type definitions for listings
@@ -75,25 +75,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
       return listing.location;
     }
     
-    // Fallback if no coordinates provided
-    console.log(`No coordinates found for ${listing.address}, using fallback`);
-    const latVariation = (listing.id * 0.01) + (index * 0.005);
-    const lngVariation = (listing.id * 0.01) - (index * 0.007);
+    // Fallback for Belgrade only
+    console.log(`No coordinates found for ${listing.address}, using Belgrade fallback`);
+    const latVariation = (listing.id * 0.001) + (index * 0.0005);
+    const lngVariation = (listing.id * 0.001) - (index * 0.0007);
     
-    if (listing.city === "Belgrade") {
-      return { lat: 44.7866 + latVariation, lng: 20.4489 + lngVariation };
-    } else if (listing.city === "New York") {
-      return { lat: 40.7128 + latVariation, lng: -74.0060 + lngVariation };
-    } else if (listing.city === "London") {
-      return { lat: 51.5074 + latVariation, lng: -0.1278 + lngVariation };
-    } else if (listing.city === "Paris") {
-      return { lat: 48.8566 + latVariation, lng: 2.3522 + lngVariation };
-    } else {
-      return { 
-        lat: defaultCenter.lat + ((index % 5) * 0.02), 
-        lng: defaultCenter.lng + ((index % 3) * 0.03) 
-      };
-    }
+    return { 
+      lat: defaultCenter.lat + latVariation, 
+      lng: defaultCenter.lng + lngVariation 
+    };
   }, []);
 
   // Set map reference when loaded
@@ -107,7 +97,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         const position = getListingCoordinates(listing, index);
         bounds.extend(position);
       });
-      map.fitBounds(bounds, 50);
+      map.fitBounds(bounds, 80);
     }
   }, [listings, getListingCoordinates]);
 
@@ -189,7 +179,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={defaultCenter}
-        zoom={3}
+        zoom={13}
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{
@@ -199,6 +189,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           zoomControl: true,
           controlSize: 32,
           disableDefaultUI: true,
+          mapTypeControlOptions: {
+            mapTypeIds: []
+          },
           styles: [
             {
               featureType: "poi",
