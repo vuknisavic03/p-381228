@@ -1,107 +1,16 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
-
-// Updated mockListings to match the listings from the main listings list
-const mockListings: Listing[] = [
-  {
-    id: "1",
-    name: "Sunny Downtown Apartment",
-    type: "residential_rental",
-    address: "123 Main Street, Downtown",
-    city: "Belgrade",
-    country: "Serbia",
-    location: { lat: 44.8176, lng: 20.4633 },
-    tenant: {
-      name: "John Smith",
-      type: "Individual",
-      email: "john.smith@email.com",
-      phone: "+381 60 123 4567"
-    }
-  },
-  {
-    id: "2",
-    name: "Modern Office Complex",
-    type: "commercial_rental",
-    address: "456 Business Ave, Tech District",
-    city: "Berlin",
-    country: "Germany",
-    location: { lat: 52.5200, lng: 13.4050 },
-    tenant: {
-      name: "TechCorp Solutions",
-      type: "Company",
-      email: "office@techcorp.com",
-      phone: "+49 30 987 6543"
-    }
-  },
-  {
-    id: "3",
-    name: "Luxury Villa Resort",
-    type: "vacation_rental",
-    address: "789 Oceanview Drive, Coastal Area",
-    city: "Paris",
-    country: "France",
-    location: { lat: 48.8566, lng: 2.3522 },
-    tenant: {
-      name: "Holiday Rentals Inc",
-      type: "Company",
-      email: "bookings@holidayrentals.com",
-      phone: "+33 1 234 5678"
-    }
-  },
-  {
-    id: "4",
-    name: "Historic Mixed-Use Building",
-    type: "mixed_use",
-    address: "321 Heritage Street, Old Town",
-    city: "Zagreb",
-    country: "Croatia",
-    location: { lat: 45.8150, lng: 15.9819 },
-    tenant: {
-      name: "Mixed Tenants Association",
-      type: "Various",
-      email: "info@mixedbuilding.hr",
-      phone: "+385 1 345 6789"
-    }
-  },
-  {
-    id: "5",
-    name: "Boutique City Hotel",
-    type: "hospitality",
-    address: "654 Hotel Boulevard, City Center",
-    city: "Vienna",
-    country: "Austria",
-    location: { lat: 48.2082, lng: 16.3738 },
-    tenant: {
-      name: "Vienna Hospitality Group",
-      type: "Company",
-      email: "reservations@viennahotels.at",
-      phone: "+43 1 567 8901"
-    }
-  },
-  {
-    id: "6",
-    name: "Industrial Warehouse Complex",
-    type: "industrial",
-    address: "987 Industrial Park, Warehouse District",
-    city: "Budapest",
-    country: "Hungary",
-    location: { lat: 47.4979, lng: 19.0402 },
-    tenant: {
-      name: "LogiTech Warehousing",
-      type: "Company",
-      email: "operations@logitech-warehouse.hu",
-      phone: "+36 1 678 9012"
-    }
-  }
-];
+import { fetchListings } from "@/services/listingsService";
 
 export function TransactionForm({ onClose }: { onClose?: () => void }) {
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [isLoadingListings, setIsLoadingListings] = useState(true);
   const [fields, setFields] = useState<TransactionFieldsData>({
     selectedListingId: "",
     transactionType: "revenue",
@@ -114,6 +23,45 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   });
   const { toast } = useToast();
 
+  // Fetch real listings data on component mount
+  useEffect(() => {
+    const loadListings = async () => {
+      setIsLoadingListings(true);
+      try {
+        const listingsData = await fetchListings();
+        // Transform the listings data to match our Listing interface
+        const transformedListings: Listing[] = listingsData.map((listing: any) => ({
+          id: String(listing.id),
+          name: listing.address || listing.name || `Property #${listing.id}`,
+          type: listing.type || "residential_rental",
+          address: listing.address || "",
+          city: listing.city || "",
+          country: listing.country || "",
+          location: listing.location || { lat: 44.8154, lng: 20.4606 }, // Default Belgrade coordinates
+          tenant: {
+            name: listing.tenant?.name || "No Tenant",
+            type: listing.tenant?.type || "Individual",
+            email: listing.tenant?.email || "",
+            phone: listing.tenant?.phone || ""
+          }
+        }));
+        setListings(transformedListings);
+        console.log("Loaded listings for transaction form:", transformedListings);
+      } catch (error) {
+        console.error("Error loading listings:", error);
+        toast({
+          title: "Error loading properties",
+          description: "Failed to load your properties. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoadingListings(false);
+      }
+    };
+
+    loadListings();
+  }, [toast]);
+
   function handleConfirm() {
     toast({
       title: "Transaction created",
@@ -122,8 +70,29 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
     if (onClose) onClose();
   }
 
-  const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
+  const selectedListing = listings.find(l => l.id === fields.selectedListingId);
   const showNotesSection = selectedListing || fields.listingType === "general";
+
+  if (isLoadingListings) {
+    return (
+      <div className="h-full overflow-auto bg-white">
+        <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h2 className="text-xl font-medium text-gray-900">Add Transaction</h2>
+          {onClose && (
+            <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+        <div className="px-6 py-8 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your properties...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full overflow-auto bg-white">
@@ -140,7 +109,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       {/* Form content */}
       <div className="px-6 py-4 space-y-8">
         <TransactionFields 
-          mockListings={mockListings}
+          mockListings={listings}
           initialValues={fields}
           onChange={setFields}
         />
