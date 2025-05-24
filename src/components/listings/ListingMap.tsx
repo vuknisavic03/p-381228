@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
+import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +51,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapListings, setMapListings] = useState<(Listing & { coordinates: { lat: number; lng: number } })[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hoveredListing, setHoveredListing] = useState<number | null>(null);
   
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   
@@ -231,16 +232,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-red-50 to-red-100 p-6">
-        <div className="bg-white p-6 rounded-xl border border-red-200 shadow-lg max-w-md">
-          <div className="flex items-center gap-3 mb-3">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
-            <h3 className="text-red-600 font-semibold">Google Maps Error</h3>
+        <div className="bg-white p-8 rounded-2xl border border-red-200 shadow-lg max-w-md">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-red-100 rounded-lg">
+              <AlertTriangle className="h-6 w-6 text-red-600" />
+            </div>
+            <h3 className="text-red-600 font-semibold text-lg">Maps Error</h3>
           </div>
-          <p className="text-gray-700 text-sm mb-4">{errorMessage}</p>
+          <p className="text-gray-700 text-sm mb-6 leading-relaxed">{errorMessage}</p>
           <Button 
             variant="outline" 
             onClick={() => window.location.reload()}
-            className="w-full"
+            className="w-full h-10 border-red-200 hover:bg-red-50"
           >
             Reload Page
           </Button>
@@ -252,12 +255,20 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   // Show loading state
   if (!isLoaded || isProcessing) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="bg-white p-8 rounded-xl shadow-lg">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <span className="text-gray-600 font-medium">
-            {isProcessing ? "Processing addresses..." : "Loading map..."}
-          </span>
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20">
+          <div className="flex flex-col items-center">
+            <div className="relative mb-6">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <div className="absolute inset-0 h-12 w-12 rounded-full border-2 border-primary/20"></div>
+            </div>
+            <span className="text-gray-700 font-medium text-lg mb-2">
+              {isProcessing ? "Processing addresses..." : "Loading map..."}
+            </span>
+            <span className="text-gray-500 text-sm">
+              {isProcessing ? "Geocoding locations for accurate positioning" : "Initializing Google Maps"}
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -278,6 +289,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           fullscreenControl: false,
           zoomControl: true,
           disableDefaultUI: true,
+          styles: [
+            {
+              featureType: "poi",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }]
+            },
+            {
+              featureType: "transit",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }]
+            }
+          ]
         }}
       >
         {mapListings.map((listing) => (
@@ -285,15 +308,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             key={listing.id}
             position={listing.coordinates}
             onClick={() => handleMarkerClick(listing)}
+            onMouseOver={() => setHoveredListing(listing.id)}
+            onMouseOut={() => setHoveredListing(null)}
             icon={{
-              path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
+              path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
               fillColor: getMarkerColor(listing.type),
-              fillOpacity: 1,
-              strokeWeight: 2,
+              fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
+              strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#ffffff",
-              scale: 1.8,
+              scale: hoveredListing === listing.id ? 1.2 : 1,
               anchor: new google.maps.Point(12, 24)
             }}
+            animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />
         ))}
 
@@ -301,71 +327,125 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           <InfoWindow
             position={mapListings.find(l => l.id === selectedListing.id)?.coordinates || defaultCenter}
             onCloseClick={handleInfoClose}
+            options={{
+              pixelOffset: new google.maps.Size(0, -10),
+              disableAutoPan: false
+            }}
           >
-            <Card className="w-full border-0 shadow-none">
-              <CardContent className="p-4">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline">#{selectedListing.id}</Badge>
-                    <Badge>{formatPropertyType(selectedListing.type)}</Badge>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold">{selectedListing.address}</h4>
-                    <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
-                      <MapPin className="h-3 w-3" />
-                      <span>{selectedListing.city}, {selectedListing.country}</span>
+            <div className="p-0 m-0 max-w-xs">
+              <Card className="border-0 shadow-lg">
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <Badge variant="outline" className="mb-2 text-xs font-medium">
+                          #{selectedListing.id}
+                        </Badge>
+                        <h4 className="font-semibold text-gray-900 text-base leading-tight">
+                          {selectedListing.address}
+                        </h4>
+                        <div className="flex items-center gap-1.5 mt-2 text-sm text-gray-500">
+                          <Navigation className="h-3.5 w-3.5" />
+                          <span>{selectedListing.city}, {selectedListing.country}</span>
+                        </div>
+                      </div>
+                      <Badge className="shrink-0 text-xs px-2.5 py-1">
+                        {formatPropertyType(selectedListing.type)}
+                      </Badge>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-sm">
-                      <Building2 className="h-3 w-3" />
-                      <span className="capitalize">{selectedListing.category.replace(/_/g, ' ')}</span>
+                    
+                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Building2 className="h-4 w-4 text-gray-400" />
+                        <span className="font-medium text-gray-700 capitalize">
+                          {selectedListing.category.replace(/_/g, ' ')}
+                        </span>
+                      </div>
                     </div>
                     
                     {selectedListing.tenant && (
-                      <div className="flex items-center gap-1 text-sm">
-                        <User className="h-3 w-3" />
-                        <span>{selectedListing.tenant.name}</span>
+                      <div className="space-y-3 pt-2 border-t border-gray-100">
+                        <div className="flex items-center gap-2">
+                          <User className="h-4 w-4 text-gray-400" />
+                          <span className="font-medium text-gray-900">{selectedListing.tenant.name}</span>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          {selectedListing.tenant.phone && (
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                              <Phone className="h-3.5 w-3.5" />
+                              <span>{selectedListing.tenant.phone}</span>
+                            </div>
+                          )}
+                          {selectedListing.tenant.email && (
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                              <Mail className="h-3.5 w-3.5" />
+                              <span>{selectedListing.tenant.email}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
+                    
+                    <Button 
+                      className="w-full mt-4 h-9 bg-primary hover:bg-primary/90 transition-colors"
+                      onClick={handleViewListing}
+                    >
+                      View Details
+                    </Button>
                   </div>
-                  
-                  <Button 
-                    className="w-full mt-2"
-                    onClick={handleViewListing}
-                  >
-                    View Details
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </InfoWindow>
         )}
       </GoogleMap>
       
-      {/* Simple legend */}
-      <div className="absolute bottom-4 left-4 bg-white/95 p-3 rounded-lg shadow-lg">
-        <h4 className="text-xs font-semibold mb-2 flex items-center gap-1">
-          <Map className="h-3 w-3" />
+      {/* Enhanced legend */}
+      <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/20">
+        <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-800">
+          <Map className="h-4 w-4 text-primary" />
           Property Types
         </h4>
-        <div className="space-y-1 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#4f46e5]"></span>
-            <span>Residential</span>
+        <div className="space-y-2.5">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <span className="h-3 w-3 rounded-full bg-[#4f46e5] block shadow-sm"></span>
+              <span className="absolute inset-0 h-3 w-3 rounded-full bg-[#4f46e5] animate-ping opacity-30"></span>
+            </div>
+            <span className="text-sm text-gray-700 font-medium">Residential</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#0891b2]"></span>
-            <span>Commercial</span>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <span className="h-3 w-3 rounded-full bg-[#0891b2] block shadow-sm"></span>
+              <span className="absolute inset-0 h-3 w-3 rounded-full bg-[#0891b2] animate-ping opacity-30"></span>
+            </div>
+            <span className="text-sm text-gray-700 font-medium">Commercial</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#059669]"></span>
-            <span>Hospitality</span>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <span className="h-3 w-3 rounded-full bg-[#059669] block shadow-sm"></span>
+              <span className="absolute inset-0 h-3 w-3 rounded-full bg-[#059669] animate-ping opacity-30"></span>
+            </div>
+            <span className="text-sm text-gray-700 font-medium">Hospitality</span>
           </div>
         </div>
       </div>
+
+      {/* Stats overlay */}
+      {mapListings.length > 0 && (
+        <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/20">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <Building2 className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold text-gray-900">{mapListings.length}</div>
+              <div className="text-sm text-gray-500">Properties</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
