@@ -13,6 +13,7 @@ export interface Listing {
   address: string;
   city: string;
   country: string;
+  location?: { lat: number; lng: number }; // Added location property
   tenant: Tenant;
 }
 

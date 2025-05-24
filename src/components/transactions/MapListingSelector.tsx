@@ -162,7 +162,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
                     #{selectedListingId}
                   </Badge>
                   <Badge className="text-xs bg-blue-100 text-blue-700 border-blue-200">
-                    {formatPropertyType(listings.find(l => l.id === selectedListingId)?.type || "")}
+                    {formatPropertyType(listings.find(l => l.id === selectedListingId)?.type || "residential_rental")}
                   </Badge>
                 </div>
                 <h4 className="font-medium text-gray-900">

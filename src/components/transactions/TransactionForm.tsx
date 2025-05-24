@@ -7,96 +7,96 @@ import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
 
-// Updated mockListings with proper PropertyType values and location data
+// Updated mockListings to match the listings from the main listings list
 const mockListings: Listing[] = [
   {
     id: "1",
-    name: "Belgrade, Dunavska 12",
-    type: "residential_rental", // This is now a valid PropertyType
-    address: "Belgrade, Dunavska 12",
+    name: "Sunny Downtown Apartment",
+    type: "residential_rental",
+    address: "123 Main Street, Downtown",
     city: "Belgrade",
     country: "Serbia",
     location: { lat: 44.8176, lng: 20.4633 },
     tenant: {
-      name: "Alexander Whitmore",
+      name: "John Smith",
       type: "Individual",
-      email: "alex@example.com",
-      phone: "000-000-0000"
+      email: "john.smith@email.com",
+      phone: "+381 60 123 4567"
     }
   },
   {
     id: "2",
-    name: "Berlin Office Space",
+    name: "Modern Office Complex",
     type: "commercial_rental",
-    address: "Alexanderplatz 5",
+    address: "456 Business Ave, Tech District",
     city: "Berlin",
     country: "Germany",
     location: { lat: 52.5200, lng: 13.4050 },
     tenant: {
-      name: "Tech Innovators GmbH",
+      name: "TechCorp Solutions",
       type: "Company",
-      email: "contact@techinnovators.de",
-      phone: "030-555-7890"
+      email: "office@techcorp.com",
+      phone: "+49 30 987 6543"
     }
   },
   {
     id: "3",
-    name: "Paris Vacation Apartment",
+    name: "Luxury Villa Resort",
     type: "vacation_rental",
-    address: "Rue de Rivoli 75",
+    address: "789 Oceanview Drive, Coastal Area",
     city: "Paris",
     country: "France",
     location: { lat: 48.8566, lng: 2.3522 },
     tenant: {
-      name: "Vacation Rental Management",
+      name: "Holiday Rentals Inc",
       type: "Company",
-      email: "bookings@vrm.com",
-      phone: "33-145-678-900"
+      email: "bookings@holidayrentals.com",
+      phone: "+33 1 234 5678"
     }
   },
   {
     id: "4",
-    name: "Zagreb Mixed-Use Building",
+    name: "Historic Mixed-Use Building",
     type: "mixed_use",
-    address: "Ilica 15",
+    address: "321 Heritage Street, Old Town",
     city: "Zagreb",
     country: "Croatia",
     location: { lat: 45.8150, lng: 15.9819 },
     tenant: {
-      name: "Multiple Tenants",
+      name: "Mixed Tenants Association",
       type: "Various",
-      email: "management@zgproperties.hr",
-      phone: "385-1-234-5678"
+      email: "info@mixedbuilding.hr",
+      phone: "+385 1 345 6789"
     }
   },
   {
     id: "5",
-    name: "Vienna Boutique Hotel",
+    name: "Boutique City Hotel",
     type: "hospitality",
-    address: "Stephansplatz 10",
+    address: "654 Hotel Boulevard, City Center",
     city: "Vienna",
     country: "Austria",
     location: { lat: 48.2082, lng: 16.3738 },
     tenant: {
-      name: "Vienna Stays Ltd",
+      name: "Vienna Hospitality Group",
       type: "Company",
-      email: "reception@viennastays.at",
-      phone: "43-1-987-6543"
+      email: "reservations@viennahotels.at",
+      phone: "+43 1 567 8901"
     }
   },
   {
     id: "6",
-    name: "Warehouse Facility",
+    name: "Industrial Warehouse Complex",
     type: "industrial",
-    address: "Industrial Zone 3, Building 7",
+    address: "987 Industrial Park, Warehouse District",
     city: "Budapest",
     country: "Hungary",
     location: { lat: 47.4979, lng: 19.0402 },
     tenant: {
-      name: "Logistics Solutions Inc.",
+      name: "LogiTech Warehousing",
       type: "Company",
-      email: "operations@logisticssolutions.com",
-      phone: "36-1-555-1234"
+      email: "operations@logitech-warehouse.hu",
+      phone: "+36 1 678 9012"
     }
   }
 ];
