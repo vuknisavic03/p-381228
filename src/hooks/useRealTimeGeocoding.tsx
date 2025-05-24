@@ -8,71 +8,60 @@ export function useRealTimeGeocoding() {
   const { toast } = useToast();
 
   const geocodeAddressRealTime = async (address: string, city: string, country: string) => {
-    // Add timeout to prevent infinite loading
-    const timeoutId = setTimeout(() => {
-      setIsGeocoding(false);
-      console.warn('⏰ Geocoding timeout reached');
-    }, 10000); // 10 second timeout
-
     setIsGeocoding(true);
     const apiKey = getGoogleMapsApiKey();
     
     if (!apiKey) {
-      console.warn("No API key available, skipping geocoding");
-      clearTimeout(timeoutId);
+      console.warn("No API key available, using fallback coordinates");
       setIsGeocoding(false);
       return null;
     }
 
     try {
-      console.log(`🎯 Real-time geocoding: "${address}, ${city}, ${country}"`);
+      console.log(`🎯 Attempting geocoding: "${address}, ${city}, ${country}"`);
       
-      // Use the standard Geocoding API with precise parameters
-      const fullAddress = `${address}, ${city}, ${country}`;
-      const params = new URLSearchParams({
-        address: fullAddress,
-        key: apiKey,
-        language: 'en',
-        region: getCountryCode(country).toLowerCase()
+      // Create timeout promise that rejects after 3 seconds
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Geocoding timeout')), 3000);
       });
 
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?${params}`
-      );
-      
-      const data = await response.json();
-      console.log('🔍 Geocoding API response status:', data.status);
-
-      if (data.status === 'OK' && data.results.length > 0) {
-        const result = data.results[0];
-        const location = result.geometry.location;
-        const locationType = result.geometry.location_type;
+      // Use Google's Geocoding service through the Maps JavaScript API
+      if (window.google && window.google.maps && window.google.maps.Geocoder) {
+        const geocoder = new window.google.maps.Geocoder();
+        const fullAddress = `${address}, ${city}, ${country}`;
         
-        console.log(`✅ Geocoded successfully:`, {
-          address: fullAddress,
-          coordinates: location,
-          locationType,
-          formatted_address: result.formatted_address
+        const geocodePromise = new Promise<{lat: number, lng: number} | null>((resolve) => {
+          geocoder.geocode(
+            { 
+              address: fullAddress,
+              region: getCountryCode(country).toLowerCase()
+            },
+            (results, status) => {
+              if (status === 'OK' && results && results[0]) {
+                const location = results[0].geometry.location;
+                resolve({
+                  lat: location.lat(),
+                  lng: location.lng()
+                });
+              } else {
+                console.warn(`Geocoding failed for ${fullAddress}:`, status);
+                resolve(null);
+              }
+            }
+          );
         });
 
-        clearTimeout(timeoutId);
+        // Race between geocoding and timeout
+        const result = await Promise.race([geocodePromise, timeoutPromise]);
         setIsGeocoding(false);
-
-        return {
-          lat: location.lat,
-          lng: location.lng,
-          accuracy: locationType,
-          formatted_address: result.formatted_address
-        };
+        return result as {lat: number, lng: number} | null;
       } else {
-        console.warn('❌ Geocoding failed:', data.status, data.error_message);
-        clearTimeout(timeoutId);
+        console.warn("Google Maps Geocoder not available");
         setIsGeocoding(false);
         return null;
       }
     } catch (error) {
-      console.error('❌ Geocoding error:', error);
-      clearTimeout(timeoutId);
+      console.warn('Geocoding failed, using fallback:', error);
       setIsGeocoding(false);
       return null;
     }

@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
@@ -69,10 +68,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Geocode listings that don't have coordinates
+  // Geocode listings with improved error handling
   useEffect(() => {
     const geocodeListings = async () => {
-      if (!isLoaded || !listings.length || !isApiKeyValid) {
+      if (!isLoaded || !listings.length) {
         setListingsWithCoords(listings.map(listing => ({ ...listing })));
         return;
       }
@@ -92,9 +91,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             ...listing,
             coordinates: listing.location
           });
-        } else {
+        } else if (isApiKeyValid) {
           console.log(`🎯 Geocoding: ${listing.address}, ${listing.city}, ${listing.country}`);
           
+          // Try geocoding with timeout
           const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
           
           if (coords) {
@@ -104,26 +104,49 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             });
             console.log(`✅ Geocoded ${listing.address}:`, coords);
           } else {
-            // Use Belgrade fallback with slight offset
-            const fallbackCoords = {
-              lat: defaultCenter.lat + (listing.id * 0.002),
-              lng: defaultCenter.lng + (listing.id * 0.002)
-            };
+            // Use Belgrade fallback with slight offset based on listing ID
+            const fallbackCoords = getBelgradeFallbackCoords(listing.id);
             updatedListings.push({
               ...listing,
               coordinates: fallbackCoords
             });
-            console.warn(`⚠️ Using fallback coordinates for ${listing.address}:`, fallbackCoords);
+            console.log(`⚠️ Using fallback coordinates for ${listing.address}:`, fallbackCoords);
           }
+        } else {
+          // No API key, use fallback immediately
+          const fallbackCoords = getBelgradeFallbackCoords(listing.id);
+          updatedListings.push({
+            ...listing,
+            coordinates: fallbackCoords
+          });
+          console.log(`⚠️ No API key, using fallback for ${listing.address}:`, fallbackCoords);
+        }
+
+        // Small delay to prevent overwhelming the API
+        if (i < listings.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 100));
         }
       }
 
       setListingsWithCoords(updatedListings);
       setGeocodingProgress({ current: 0, total: 0 });
+      console.log('✅ Finished processing all listings');
     };
 
     geocodeListings();
   }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime]);
+
+  const getBelgradeFallbackCoords = (listingId: number) => {
+    // Generate coordinates around Belgrade with more realistic spread
+    const baseVariation = (listingId * 0.003) % 0.02; // Limit max variation
+    const latVariation = baseVariation * (listingId % 2 === 0 ? 1 : -1);
+    const lngVariation = baseVariation * (listingId % 3 === 0 ? 1 : -1);
+    
+    return { 
+      lat: defaultCenter.lat + latVariation, 
+      lng: defaultCenter.lng + lngVariation 
+    };
+  };
 
   const getListingCoordinates = useCallback((listing: Listing & { coordinates?: { lat: number; lng: number } }, index: number) => {
     if (listing.coordinates) {
@@ -131,13 +154,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
     
     // Fallback to Belgrade with offset
-    const latVariation = (listing.id * 0.002) + (index * 0.001);
-    const lngVariation = (listing.id * 0.002) - (index * 0.001);
-    
-    return { 
-      lat: defaultCenter.lat + latVariation, 
-      lng: defaultCenter.lng + lngVariation 
-    };
+    return getBelgradeFallbackCoords(listing.id);
   }, []);
 
   const onLoad = useCallback((map: google.maps.Map) => {
@@ -209,7 +226,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show loading state
+  // Show loading state only if map is loading OR actively geocoding
   if (!isLoaded || (geocodingProgress.total > 0 && geocodingProgress.current < geocodingProgress.total)) {
     console.log("Showing loading state");
     return (
