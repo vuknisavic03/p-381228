@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation } from 'lucide-react';
@@ -316,7 +315,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 1.8 : 1.5,
+              scale: hoveredListing === listing.id ? 2.0 : 1.7,
               anchor: new google.maps.Point(12, 24)
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
@@ -332,29 +331,29 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               disableAutoPan: false
             }}
           >
-            <div className="p-0 m-0 max-w-xs">
+            <div className="p-0 m-0 w-80">
               <Card className="border-0 shadow-lg">
                 <CardContent className="p-6">
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <Badge variant="outline" className="mb-2 text-xs font-medium">
+                        <Badge variant="outline" className="mb-3 text-xs font-medium">
                           #{selectedListing.id}
                         </Badge>
-                        <h4 className="font-semibold text-gray-900 text-base leading-tight">
+                        <h4 className="font-semibold text-gray-900 text-lg leading-tight mb-3">
                           {selectedListing.address}
                         </h4>
-                        <div className="flex items-center gap-1.5 mt-2 text-sm text-gray-500">
-                          <Navigation className="h-3.5 w-3.5" />
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <Navigation className="h-4 w-4" />
                           <span>{selectedListing.city}, {selectedListing.country}</span>
                         </div>
                       </div>
-                      <Badge className="shrink-0 text-xs px-2.5 py-1">
+                      <Badge className="shrink-0 text-xs px-3 py-1.5">
                         {formatPropertyType(selectedListing.type)}
                       </Badge>
                     </div>
                     
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
+                    <div className="flex items-center justify-between py-3 border-t border-gray-100">
                       <div className="flex items-center gap-2 text-sm">
                         <Building2 className="h-4 w-4 text-gray-400" />
                         <span className="font-medium text-gray-700 capitalize">
@@ -364,22 +363,22 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                     </div>
                     
                     {selectedListing.tenant && (
-                      <div className="space-y-3 pt-2 border-t border-gray-100">
-                        <div className="flex items-center gap-2">
+                      <div className="space-y-4 pt-3 border-t border-gray-100">
+                        <div className="flex items-center gap-2 mb-3">
                           <User className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium text-gray-900">{selectedListing.tenant.name}</span>
+                          <span className="font-medium text-gray-900 text-base">{selectedListing.tenant.name}</span>
                         </div>
                         
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           {selectedListing.tenant.phone && (
                             <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Phone className="h-3.5 w-3.5" />
+                              <Phone className="h-4 w-4" />
                               <span>{selectedListing.tenant.phone}</span>
                             </div>
                           )}
                           {selectedListing.tenant.email && (
                             <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Mail className="h-3.5 w-3.5" />
+                              <Mail className="h-4 w-4" />
                               <span>{selectedListing.tenant.email}</span>
                             </div>
                           )}
@@ -388,7 +387,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                     )}
                     
                     <Button 
-                      className="w-full mt-4 h-9 bg-primary hover:bg-primary/90 transition-colors"
+                      className="w-full mt-5 h-10 bg-primary hover:bg-primary/90 transition-colors"
                       onClick={handleViewListing}
                     >
                       View Details
