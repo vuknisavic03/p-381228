@@ -7,7 +7,6 @@ import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
 
 export default function Transactions() {
   const location = useLocation();
@@ -26,24 +25,23 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col bg-white">
-        {/* Fixed header section with consistent spacing */}
-        <div className="px-6 py-4 flex justify-between items-center bg-white">
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">Edited just now</span>
+        {/* Notion-inspired header */}
+        <div className="border-b border-gray-100">
+          <div className="px-8 py-5 flex items-center justify-between">
+            <div className="flex items-center">
+              <span className="text-sm text-gray-400 font-normal">Edited just now</span>
+            </div>
+            <Button
+              onClick={() => setIsAddFormOpen(true)}
+              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add Transaction
+            </Button>
           </div>
-          <Button
-            onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9 transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            Add Transaction
-          </Button>
         </div>
 
-        {/* Horizontal separator line */}
-        <Separator className="w-full border-[#E4E5EA]" />
-
-        {/* Main content container with white background */}
+        {/* Main content container */}
         <div className="flex-1 relative overflow-hidden bg-white">
           <TransactionActivity />
         </div>

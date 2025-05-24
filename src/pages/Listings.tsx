@@ -12,7 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
-import { Separator } from "@/components/ui/separator";
 
 export default function Listings() {
   const location = useLocation();
@@ -62,46 +61,45 @@ export default function Listings() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col bg-white">
-        {/* Fixed header section with consistent spacing */}
-        <div className="px-6 py-4 flex justify-between items-center bg-white">
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">Edited just now</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Tabs 
-              value={viewMode} 
-              onValueChange={handleViewModeChange}
-              className="mr-2"
-            >
-              <TabsList className="bg-gray-100 p-0.5">
-                <TabsTrigger 
-                  value="list" 
-                  className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs px-3 py-1.5"
-                >
-                  <ListIcon className="h-3.5 w-3.5" />
-                  List
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="map" 
-                  className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs px-3 py-1.5"
-                >
-                  <MapPin className="h-3.5 w-3.5" />
-                  Map
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <Button 
-              onClick={() => setIsAddFormOpen(true)}
-              className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9 transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              Add Listing
-            </Button>
+        {/* Notion-inspired header */}
+        <div className="border-b border-gray-100">
+          <div className="px-8 py-5 flex items-center justify-between">
+            <div className="flex items-center">
+              <span className="text-sm text-gray-400 font-normal">Edited just now</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Tabs 
+                value={viewMode} 
+                onValueChange={handleViewModeChange}
+                className="mr-1"
+              >
+                <TabsList className="bg-gray-50 border border-gray-200 p-1 h-8">
+                  <TabsTrigger 
+                    value="list" 
+                    className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-gray-200 text-xs px-2.5 py-1 h-6 rounded-md"
+                  >
+                    <ListIcon className="h-3 w-3" />
+                    List
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="map" 
+                    className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-gray-200 text-xs px-2.5 py-1 h-6 rounded-md"
+                  >
+                    <MapPin className="h-3 w-3" />
+                    Map
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+              <Button 
+                onClick={() => setIsAddFormOpen(true)}
+                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Add Listing
+              </Button>
+            </div>
           </div>
         </div>
-
-        {/* Horizontal separator line */}
-        <Separator className="w-full border-[#E4E5EA]" />
         
         {/* Main content container */}
         <div className="flex-1 relative overflow-hidden bg-white">
