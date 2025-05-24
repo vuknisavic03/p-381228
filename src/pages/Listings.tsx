@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -65,10 +64,6 @@ export default function Listings() {
         <div className="px-6 py-4 flex justify-between items-center bg-white border-b border-gray-100">
           <div className="flex items-center">
             <h1 className="text-xl font-semibold text-gray-900">Listings</h1>
-            <div className="ml-4 flex items-center px-3 py-1 bg-primary/5 rounded-full">
-              <span className="text-xs text-gray-500 mr-1.5">Total:</span>
-              <span className="text-sm font-medium text-gray-800">{sharedListingData.length} properties</span>
-            </div>
           </div>
           <div className="flex items-center gap-3">
             <Tabs 

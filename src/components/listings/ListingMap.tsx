@@ -316,7 +316,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 1.2 : 1,
+              scale: hoveredListing === listing.id ? 1.8 : 1.5,
               anchor: new google.maps.Point(12, 24)
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
