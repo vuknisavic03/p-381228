@@ -1,5 +1,6 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, InfoWindow, OverlayView } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -303,23 +304,38 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         }}
       >
         {mapListings.map((listing) => (
-          <MarkerF
-            key={listing.id}
-            position={listing.coordinates}
-            onClick={() => handleMarkerClick(listing)}
-            onMouseOver={() => setHoveredListing(listing.id)}
-            onMouseOut={() => setHoveredListing(null)}
-            icon={{
-              path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
-              fillColor: getMarkerColor(listing.type),
-              fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
-              strokeWeight: hoveredListing === listing.id ? 3 : 2,
-              strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 2.0 : 1.7,
-              anchor: new google.maps.Point(12, 24)
-            }}
-            animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
-          />
+          <React.Fragment key={listing.id}>
+            <MarkerF
+              position={listing.coordinates}
+              onClick={() => handleMarkerClick(listing)}
+              onMouseOver={() => setHoveredListing(listing.id)}
+              onMouseOut={() => setHoveredListing(null)}
+              icon={{
+                path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+                fillColor: getMarkerColor(listing.type),
+                fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
+                strokeWeight: hoveredListing === listing.id ? 3 : 2,
+                strokeColor: "#ffffff",
+                scale: hoveredListing === listing.id ? 2.4 : 2.1,
+                anchor: new google.maps.Point(12, 24)
+              }}
+              animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
+            />
+            
+            {/* Listing number overlay */}
+            <OverlayView
+              position={listing.coordinates}
+              mapPaneName="overlayMouseTarget"
+              getPixelPositionOffset={(width, height) => ({
+                x: -(width / 2),
+                y: -(height / 2) - 6
+              })}
+            >
+              <div className="bg-white text-gray-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg border-2 border-white pointer-events-none">
+                #{listing.id}
+              </div>
+            </OverlayView>
+          </React.Fragment>
         ))}
 
         {selectedListing && (
@@ -331,7 +347,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               disableAutoPan: false
             }}
           >
-            <div className="p-0 m-0 w-80">
+            <div className="p-0 m-0 w-96">
               <Card className="border-0 shadow-lg">
                 <CardContent className="p-6">
                   <div className="space-y-5">
@@ -371,15 +387,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                         
                         <div className="space-y-3">
                           {selectedListing.tenant.phone && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Phone className="h-4 w-4" />
-                              <span>{selectedListing.tenant.phone}</span>
+                            <div className="flex items-center gap-2 text-sm text-gray-600 w-full">
+                              <Phone className="h-4 w-4 flex-shrink-0" />
+                              <span className="flex-1 min-w-0">{selectedListing.tenant.phone}</span>
                             </div>
                           )}
                           {selectedListing.tenant.email && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Mail className="h-4 w-4" />
-                              <span>{selectedListing.tenant.email}</span>
+                            <div className="flex items-center gap-2 text-sm text-gray-600 w-full">
+                              <Mail className="h-4 w-4 flex-shrink-0" />
+                              <span className="flex-1 min-w-0 truncate">{selectedListing.tenant.email}</span>
                             </div>
                           )}
                         </div>
