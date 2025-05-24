@@ -1,3 +1,4 @@
+
 // Google Maps libraries array defined outside of any component
 export const GOOGLE_MAPS_LIBRARIES: ["places", "geometry"] = ["places", "geometry"];
 
@@ -73,9 +74,8 @@ export function handleMapsApiLoadError(error: Error | null): string {
   }
 }
 
-// Enhanced geocoding function with maximum precision strategies
+// Advanced geocoding with multiple strategies for maximum accuracy
 export async function geocodeAddress(address: string, city: string, country: string): Promise<{lat: number, lng: number, accuracy: string, placeId?: string} | null> {
-  const fullAddress = `${address}, ${city}, ${country}`;
   const apiKey = getGoogleMapsApiKey();
   
   if (!apiKey) {
@@ -83,22 +83,53 @@ export async function geocodeAddress(address: string, city: string, country: str
     return null;
   }
 
+  // Strategy 1: Try exact address with structured components
+  const result = await tryStructuredGeocoding(address, city, country, apiKey);
+  if (result && isHighAccuracy(result)) {
+    return result;
+  }
+
+  // Strategy 2: Try with Places API for enhanced accuracy
+  const placesResult = await tryPlacesTextSearch(address, city, country, apiKey);
+  if (placesResult && isHighAccuracy(placesResult)) {
+    return placesResult;
+  }
+
+  // Strategy 3: Try Address Validation API (if available)
+  const validatedResult = await tryAddressValidation(address, city, country, apiKey);
+  if (validatedResult && isHighAccuracy(validatedResult)) {
+    return validatedResult;
+  }
+
+  // Strategy 4: Fallback with the best available result
+  return result || placesResult || validatedResult;
+}
+
+// Strategy 1: Structured geocoding with precise parameters
+async function tryStructuredGeocoding(address: string, city: string, country: string, apiKey: string): Promise<{lat: number, lng: number, accuracy: string, placeId?: string} | null> {
   try {
-    // Strategy 1: High-precision geocoding with structured components
+    const fullAddress = `${address}, ${city}, ${country}`;
+    
+    // Extract street number and route for better structuring
+    const addressParts = address.split(' ');
+    const streetNumber = addressParts[0];
+    const route = addressParts.slice(1).join(' ');
+    
     const params = new URLSearchParams({
       address: fullAddress,
       key: apiKey,
-      // Use structured components for better parsing
-      components: `country:${country.toLowerCase()}|locality:${city}|route:${address.split(' ').slice(1).join(' ')}`,
-      // Prioritize most accurate result types
-      result_type: 'street_address|premise|subpremise|street_number',
-      // Only accept high-precision location types
-      location_type: 'ROOFTOP|RANGE_INTERPOLATED',
-      // Request additional precision data
-      extra_computations: 'ADDRESS_DESCRIPTORS'
+      // Use structured components for maximum precision
+      components: `country:${getCountryCode(country)}|locality:${city}|route:${route}|street_number:${streetNumber}`,
+      // Only accept most precise location types
+      location_type: 'ROOFTOP',
+      // Request detailed result types
+      result_type: 'street_address|premise|subpremise',
+      // Enhanced precision parameters
+      language: 'en',
+      region: getCountryCode(country).toLowerCase()
     });
 
-    console.log(`Attempting high-precision geocoding for: "${fullAddress}"`);
+    console.log(`Structured geocoding attempt for: "${fullAddress}"`);
     
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?${params}`
@@ -107,146 +138,177 @@ export async function geocodeAddress(address: string, city: string, country: str
     const data = await response.json();
     
     if (data.status === 'OK' && data.results.length > 0) {
-      // Strategy 2: Select the most accurate result based on multiple criteria
-      const bestResult = selectMostAccurateResult(data.results, address, city);
+      const bestResult = selectBestResult(data.results, address, city);
       
       if (bestResult) {
         const location = bestResult.geometry.location;
         const locationType = bestResult.geometry.location_type;
         const placeId = bestResult.place_id;
         
-        // Strategy 3: Validate result accuracy
-        const accuracyScore = calculateAccuracyScore(bestResult, fullAddress);
-        
-        console.log(`High-precision geocoding successful:`, {
+        console.log(`Structured geocoding successful:`, {
           address: fullAddress,
           coordinates: location,
           locationType,
-          placeId,
-          accuracyScore,
-          addressComponents: bestResult.address_components?.length || 0
+          accuracy: calculatePrecisionScore(bestResult)
         });
         
-        // Return coordinates with maximum precision (8 decimal places ≈ 0.00000011m accuracy)
         return { 
-          lat: parseFloat(location.lat.toFixed(8)), 
-          lng: parseFloat(location.lng.toFixed(8)),
+          lat: parseFloat(location.lat.toFixed(10)), 
+          lng: parseFloat(location.lng.toFixed(10)),
           accuracy: locationType,
           placeId
         };
       }
     }
     
-    // Strategy 4: Fallback to Place Details API for even higher accuracy
-    if (data.results.length > 0 && data.results[0].place_id) {
-      console.log("Attempting Place Details API fallback for maximum precision");
-      return await getPlaceDetailsCoordinates(data.results[0].place_id, apiKey);
-    }
-    
-    console.error('High-precision geocoding failed:', data.status, data.error_message);
+    console.warn('Structured geocoding failed:', data.status);
     return null;
     
   } catch (error) {
-    console.error('Error during high-precision geocoding:', error);
+    console.error('Structured geocoding error:', error);
     return null;
   }
 }
 
-// Strategy 2: Intelligent result selection for maximum accuracy
-function selectMostAccurateResult(results: any[], originalAddress: string, originalCity: string): any | null {
-  // Prioritize results by accuracy hierarchy
-  const accuracyPriority = ['ROOFTOP', 'RANGE_INTERPOLATED', 'GEOMETRIC_CENTER', 'APPROXIMATE'];
-  
-  for (const accuracyType of accuracyPriority) {
-    const candidateResults = results.filter(result => 
-      result.geometry.location_type === accuracyType
+// Strategy 2: Places Text Search for enhanced accuracy
+async function tryPlacesTextSearch(address: string, city: string, country: string, apiKey: string): Promise<{lat: number, lng: number, accuracy: string, placeId?: string} | null> {
+  try {
+    const query = `${address}, ${city}, ${country}`;
+    
+    const params = new URLSearchParams({
+      query: query,
+      key: apiKey,
+      // Bias results to the specified region
+      region: getCountryCode(country).toLowerCase(),
+      // Request detailed fields
+      fields: 'place_id,geometry,formatted_address,address_components,types',
+      // Input type for addresses
+      inputtype: 'textquery'
+    });
+
+    console.log(`Places Text Search for: "${query}"`);
+    
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/place/textsearch/json?${params}`
     );
     
-    if (candidateResults.length > 0) {
-      // Among results of same accuracy type, choose the one with best address component match
-      return candidateResults.reduce((best, current) => {
-        const bestScore = scoreAddressMatch(best, originalAddress, originalCity);
-        const currentScore = scoreAddressMatch(current, originalAddress, originalCity);
-        return currentScore > bestScore ? current : best;
+    const data = await response.json();
+    
+    if (data.status === 'OK' && data.results.length > 0) {
+      const bestResult = data.results[0]; // Places API usually returns best match first
+      
+      if (bestResult.geometry?.location) {
+        const location = bestResult.geometry.location;
+        
+        // Get more precise coordinates using Place Details
+        const detailedResult = await getPlaceDetailsCoordinates(bestResult.place_id, apiKey);
+        if (detailedResult) {
+          return detailedResult;
+        }
+        
+        return { 
+          lat: parseFloat(location.lat.toFixed(10)), 
+          lng: parseFloat(location.lng.toFixed(10)),
+          accuracy: 'PLACES_API',
+          placeId: bestResult.place_id
+        };
+      }
+    }
+    
+    console.warn('Places Text Search failed:', data.status);
+    return null;
+    
+  } catch (error) {
+    console.error('Places Text Search error:', error);
+    return null;
+  }
+}
+
+// Strategy 3: Address Validation API (Premium feature)
+async function tryAddressValidation(address: string, city: string, country: string, apiKey: string): Promise<{lat: number, lng: number, accuracy: string, placeId?: string} | null> {
+  try {
+    const requestBody = {
+      address: {
+        addressLines: [address],
+        locality: city,
+        regionCode: getCountryCode(country),
+        postalCode: "" // Can be enhanced if postal code is available
+      },
+      enableUspsCass: true // For US addresses
+    };
+
+    console.log(`Address Validation API attempt for: "${address}, ${city}, ${country}"`);
+    
+    const response = await fetch(
+      `https://addressvalidation.googleapis.com/v1:validateAddress?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      }
+    );
+    
+    const data = await response.json();
+    
+    if (data.result?.geocode?.location) {
+      const location = data.result.geocode.location;
+      const accuracy = data.result.geocode.locationType || 'VALIDATED';
+      
+      console.log('Address Validation successful:', {
+        coordinates: location,
+        accuracy: accuracy,
+        validationGranularity: data.result.verdict?.validationGranularity
       });
+      
+      return { 
+        lat: parseFloat(location.latitude.toFixed(10)), 
+        lng: parseFloat(location.longitude.toFixed(10)),
+        accuracy: accuracy,
+        placeId: data.result.geocode.placeId
+      };
     }
-  }
-  
-  return results[0]; // Fallback to first result
-}
-
-// Strategy 3: Address matching score calculation
-function scoreAddressMatch(result: any, originalAddress: string, originalCity: string): number {
-  if (!result.address_components) return 0;
-  
-  let score = 0;
-  const components = result.address_components;
-  
-  // Check for street number match
-  const streetNumber = components.find(c => c.types.includes('street_number'));
-  if (streetNumber && originalAddress.includes(streetNumber.long_name)) {
-    score += 40; // High weight for exact street number
-  }
-  
-  // Check for route/street name match
-  const route = components.find(c => c.types.includes('route'));
-  if (route) {
-    const streetName = originalAddress.toLowerCase();
-    if (streetName.includes(route.long_name.toLowerCase())) {
-      score += 30; // High weight for street name match
-    }
-  }
-  
-  // Check for locality match
-  const locality = components.find(c => c.types.includes('locality'));
-  if (locality && locality.long_name.toLowerCase() === originalCity.toLowerCase()) {
-    score += 20; // Medium weight for city match
-  }
-  
-  // Bonus for premise-level results
-  const premise = components.find(c => c.types.includes('premise'));
-  if (premise) {
-    score += 10; // Bonus for building-level accuracy
-  }
-  
-  return score;
-}
-
-// Strategy 3: Accuracy score calculation
-function calculateAccuracyScore(result: any, fullAddress: string): string {
-  const locationType = result.geometry.location_type;
-  const addressComponents = result.address_components?.length || 0;
-  const hasStreetNumber = result.address_components?.some(c => c.types.includes('street_number'));
-  const hasPremise = result.address_components?.some(c => c.types.includes('premise'));
-  
-  if (locationType === 'ROOFTOP' && hasStreetNumber && addressComponents >= 6) {
-    return 'MAXIMUM'; // Best possible accuracy
-  } else if (locationType === 'ROOFTOP' && hasStreetNumber) {
-    return 'HIGH'; // Very good accuracy
-  } else if (locationType === 'RANGE_INTERPOLATED' && hasStreetNumber) {
-    return 'GOOD'; // Good accuracy
-  } else {
-    return 'MODERATE'; // Lower accuracy
+    
+    console.warn('Address Validation failed or not available');
+    return null;
+    
+  } catch (error) {
+    console.warn('Address Validation API not available or error:', error);
+    return null;
   }
 }
 
-// Strategy 4: Place Details API for maximum precision
+// Enhanced Place Details API for maximum precision
 async function getPlaceDetailsCoordinates(placeId: string, apiKey: string): Promise<{lat: number, lng: number, accuracy: string, placeId: string} | null> {
   try {
+    const params = new URLSearchParams({
+      place_id: placeId,
+      key: apiKey,
+      // Request all relevant fields for accuracy analysis
+      fields: 'geometry,address_components,formatted_address,place_id,types,plus_code'
+    });
+    
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry,name,formatted_address&key=${apiKey}`
+      `https://maps.googleapis.com/maps/api/place/details/json?${params}`
     );
     
     const data = await response.json();
     
     if (data.status === 'OK' && data.result?.geometry?.location) {
       const location = data.result.geometry.location;
-      console.log(`Place Details API provided enhanced coordinates for place_id: ${placeId}`, location);
+      const locationType = data.result.geometry.location_type || 'PLACE_DETAILS';
+      
+      console.log(`Place Details enhanced coordinates for place_id: ${placeId}`, {
+        coordinates: location,
+        locationType: locationType,
+        plusCode: data.result.plus_code?.global_code
+      });
       
       return {
-        lat: parseFloat(location.lat.toFixed(8)),
-        lng: parseFloat(location.lng.toFixed(8)),
-        accuracy: 'PLACE_DETAILS',
+        lat: parseFloat(location.lat.toFixed(10)),
+        lng: parseFloat(location.lng.toFixed(10)),
+        accuracy: locationType,
         placeId
       };
     }
@@ -258,21 +320,211 @@ async function getPlaceDetailsCoordinates(placeId: string, apiKey: string): Prom
   }
 }
 
+// Advanced result selection algorithm
+function selectBestResult(results: any[], originalAddress: string, originalCity: string): any | null {
+  if (!results.length) return null;
+  
+  // Score each result based on multiple criteria
+  const scoredResults = results.map(result => ({
+    result,
+    score: calculateResultScore(result, originalAddress, originalCity)
+  }));
+  
+  // Sort by score (highest first)
+  scoredResults.sort((a, b) => b.score - a.score);
+  
+  const bestResult = scoredResults[0];
+  console.log(`Best result selected with score: ${bestResult.score}`, bestResult.result);
+  
+  return bestResult.result;
+}
+
+// Comprehensive scoring algorithm
+function calculateResultScore(result: any, originalAddress: string, originalCity: string): number {
+  let score = 0;
+  const components = result.address_components || [];
+  const locationType = result.geometry?.location_type;
+  
+  // Location type scoring (highest priority)
+  switch (locationType) {
+    case 'ROOFTOP': score += 100; break;
+    case 'RANGE_INTERPOLATED': score += 80; break;
+    case 'GEOMETRIC_CENTER': score += 60; break;
+    case 'APPROXIMATE': score += 40; break;
+    default: score += 20;
+  }
+  
+  // Address component matching
+  const streetNumber = components.find(c => c.types.includes('street_number'));
+  if (streetNumber && originalAddress.includes(streetNumber.long_name)) {
+    score += 50; // Exact street number match
+  }
+  
+  const route = components.find(c => c.types.includes('route'));
+  if (route) {
+    const routeMatch = calculateStringMatch(route.long_name.toLowerCase(), originalAddress.toLowerCase());
+    score += Math.floor(routeMatch * 30); // Street name similarity
+  }
+  
+  const locality = components.find(c => c.types.includes('locality'));
+  if (locality && locality.long_name.toLowerCase() === originalCity.toLowerCase()) {
+    score += 20; // City match
+  }
+  
+  // Bonus for specific result types
+  const resultTypes = result.types || [];
+  if (resultTypes.includes('street_address')) score += 15;
+  if (resultTypes.includes('premise')) score += 10;
+  if (resultTypes.includes('subpremise')) score += 5;
+  
+  return score;
+}
+
+// String similarity calculation
+function calculateStringMatch(str1: string, str2: string): number {
+  const longer = str1.length > str2.length ? str1 : str2;
+  const shorter = str1.length > str2.length ? str2 : str1;
+  
+  if (longer.length === 0) return 1.0;
+  
+  const editDistance = levenshteinDistance(longer, shorter);
+  return (longer.length - editDistance) / longer.length;
+}
+
+// Levenshtein distance calculation
+function levenshteinDistance(str1: string, str2: string): number {
+  const matrix = [];
+  
+  for (let i = 0; i <= str2.length; i++) {
+    matrix[i] = [i];
+  }
+  
+  for (let j = 0; j <= str1.length; j++) {
+    matrix[0][j] = j;
+  }
+  
+  for (let i = 1; i <= str2.length; i++) {
+    for (let j = 1; j <= str1.length; j++) {
+      if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+  
+  return matrix[str2.length][str1.length];
+}
+
+// Precision score calculation
+function calculatePrecisionScore(result: any): string {
+  const locationType = result.geometry?.location_type;
+  const addressComponents = result.address_components?.length || 0;
+  const hasStreetNumber = result.address_components?.some(c => c.types.includes('street_number'));
+  const hasPremise = result.address_components?.some(c => c.types.includes('premise'));
+  
+  if (locationType === 'ROOFTOP' && hasStreetNumber && addressComponents >= 6) {
+    return 'MAXIMUM';
+  } else if (locationType === 'ROOFTOP' && hasStreetNumber) {
+    return 'HIGH';
+  } else if (locationType === 'RANGE_INTERPOLATED' && hasStreetNumber) {
+    return 'GOOD';
+  } else {
+    return 'MODERATE';
+  }
+}
+
+// High accuracy validation
+function isHighAccuracy(result: {lat: number, lng: number, accuracy: string}): boolean {
+  const highAccuracyTypes = ['ROOFTOP', 'PLACES_API', 'VALIDATED', 'MAXIMUM', 'HIGH'];
+  return highAccuracyTypes.includes(result.accuracy);
+}
+
+// Country code mapping for better geocoding
+function getCountryCode(country: string): string {
+  const countryMap: {[key: string]: string} = {
+    'serbia': 'RS',
+    'united states': 'US',
+    'usa': 'US',
+    'united kingdom': 'GB',
+    'uk': 'GB',
+    'germany': 'DE',
+    'france': 'FR',
+    'italy': 'IT',
+    'spain': 'ES',
+    'canada': 'CA',
+    'australia': 'AU',
+    'japan': 'JP',
+    'china': 'CN',
+    'brazil': 'BR',
+    'india': 'IN',
+    'russia': 'RU',
+    'netherlands': 'NL',
+    'belgium': 'BE',
+    'switzerland': 'CH',
+    'austria': 'AT',
+    'poland': 'PL',
+    'sweden': 'SE',
+    'norway': 'NO',
+    'denmark': 'DK',
+    'finland': 'FI',
+    'portugal': 'PT',
+    'greece': 'GR',
+    'turkey': 'TR',
+    'mexico': 'MX',
+    'argentina': 'AR',
+    'chile': 'CL',
+    'colombia': 'CO',
+    'peru': 'PE',
+    'venezuela': 'VE',
+    'south africa': 'ZA',
+    'egypt': 'EG',
+    'israel': 'IL',
+    'saudi arabia': 'SA',
+    'uae': 'AE',
+    'emirates': 'AE',
+    'thailand': 'TH',
+    'singapore': 'SG',
+    'malaysia': 'MY',
+    'indonesia': 'ID',
+    'philippines': 'PH',
+    'vietnam': 'VN',
+    'south korea': 'KR',
+    'korea': 'KR',
+    'taiwan': 'TW',
+    'hong kong': 'HK',
+    'new zealand': 'NZ'
+  };
+  
+  const normalized = country.toLowerCase().trim();
+  return countryMap[normalized] || country.toUpperCase().substring(0, 2);
+}
+
 // Enhanced validation function for geocoding results
 export function validateGeocodingAccuracy(result: {lat: number, lng: number, accuracy: string}): boolean {
-  // Validate coordinate precision
+  // Validate coordinate precision (minimum 8 decimal places for maximum accuracy)
   if (!result.lat || !result.lng) return false;
   
-  // Check if coordinates have sufficient precision (at least 5 decimal places)
+  // Check coordinate bounds (valid lat/lng ranges)
+  if (result.lat < -90 || result.lat > 90 || result.lng < -180 || result.lng > 180) {
+    console.warn('Invalid coordinate bounds detected');
+    return false;
+  }
+  
+  // Check precision (at least 8 decimal places for sub-meter accuracy)
   const latPrecision = result.lat.toString().split('.')[1]?.length || 0;
   const lngPrecision = result.lng.toString().split('.')[1]?.length || 0;
   
-  if (latPrecision < 5 || lngPrecision < 5) {
+  if (latPrecision < 8 || lngPrecision < 8) {
     console.warn('Low coordinate precision detected');
     return false;
   }
   
   // Validate accuracy level
-  const acceptableAccuracy = ['ROOFTOP', 'RANGE_INTERPOLATED', 'PLACE_DETAILS'];
+  const acceptableAccuracy = ['ROOFTOP', 'RANGE_INTERPOLATED', 'PLACES_API', 'VALIDATED', 'MAXIMUM', 'HIGH', 'GOOD'];
   return acceptableAccuracy.includes(result.accuracy);
 }

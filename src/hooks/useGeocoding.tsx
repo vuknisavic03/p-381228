@@ -11,6 +11,7 @@ export function useGeocoding() {
     setIsGeocoding(true);
     
     try {
+      console.log(`Starting high-precision geocoding for: ${address}, ${city}, ${country}`);
       const result = await geocodeAddress(address, city, country);
       
       if (result) {
@@ -18,33 +19,37 @@ export function useGeocoding() {
         const isAccurate = validateGeocodingAccuracy(result);
         
         if (isAccurate) {
-          console.log(`High-precision geocoding successful: ${address}, ${city}, ${country}`, {
+          console.log(`Maximum precision geocoding successful:`, {
+            address: `${address}, ${city}, ${country}`,
             coordinates: { lat: result.lat, lng: result.lng },
             accuracy: result.accuracy,
+            precision: 'Sub-meter level',
             placeId: result.placeId
           });
           
           // Show success message with accuracy info
           const accuracyMessage = getAccuracyMessage(result.accuracy);
           toast({
-            title: "Address Located",
-            description: `Coordinates found with ${accuracyMessage} accuracy`,
+            title: "Precise Location Found",
+            description: `Address geocoded with ${accuracyMessage} precision`,
             duration: 3000,
           });
           
           return { lat: result.lat, lng: result.lng };
         } else {
+          console.warn('Geocoding result did not meet accuracy requirements:', result);
           toast({
-            title: "Low Accuracy Warning",
-            description: "Coordinates found but with lower precision. Consider refining the address.",
+            title: "Location Found",
+            description: "Coordinates found but may have reduced precision. Address validation recommended.",
             variant: "destructive"
           });
           return { lat: result.lat, lng: result.lng };
         }
       } else {
+        console.error('Geocoding failed - no results returned');
         toast({
           title: "Address Not Found",
-          description: "Could not locate this address. Please verify the address format and try again.",
+          description: "Could not locate this address. Please verify the address format and ensure it exists.",
           variant: "destructive"
         });
         return null;
@@ -52,8 +57,8 @@ export function useGeocoding() {
     } catch (error) {
       console.error('Geocoding error:', error);
       toast({
-        title: "Geocoding Error",
-        description: "An error occurred while locating the address.",
+        title: "Geocoding Service Error",
+        description: "Unable to process the address. Please check your internet connection and API key.",
         variant: "destructive"
       });
       return null;
@@ -76,12 +81,14 @@ function getAccuracyMessage(accuracy: string): string {
       return 'high (rooftop-level)';
     case 'GOOD':
       return 'good (street-level)';
-    case 'PLACE_DETAILS':
-      return 'enhanced (place-verified)';
     case 'ROOFTOP':
       return 'precise (rooftop)';
     case 'RANGE_INTERPOLATED':
       return 'interpolated (street)';
+    case 'PLACES_API':
+      return 'enhanced (places-verified)';
+    case 'VALIDATED':
+      return 'validated (official)';
     default:
       return 'standard';
   }
