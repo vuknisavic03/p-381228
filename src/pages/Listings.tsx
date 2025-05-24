@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
 
 export default function Listings() {
   const location = useLocation();
@@ -61,8 +62,8 @@ export default function Listings() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col bg-white">
-        {/* Fixed header section */}
-        <div className="px-6 py-4 flex justify-between items-center bg-white border-b border-gray-100">
+        {/* Fixed header section with consistent spacing */}
+        <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">Edited just now</span>
           </div>
@@ -91,13 +92,16 @@ export default function Listings() {
             </Tabs>
             <Button 
               onClick={() => setIsAddFormOpen(true)}
-              className="flex items-center gap-1.5 bg-primary hover:bg-primary/90 h-9 transition-colors text-sm"
+              className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9 transition-colors"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-4 w-4" />
               Add Listing
             </Button>
           </div>
         </div>
+
+        {/* Horizontal separator line */}
+        <Separator className="w-full border-[#E4E5EA]" />
         
         {/* Main content container */}
         <div className="flex-1 relative overflow-hidden bg-white">
