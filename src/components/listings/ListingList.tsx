@@ -11,22 +11,156 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Mock listings data - same as before
+// Enhanced mock listings data with real New York addresses
 const mockListings = [
   {
     id: 1,
-    address: "Belgrade, Dunavska 12",
-    city: "Belgrade",
-    country: "Serbia",
+    address: "123 Broadway, New York",
+    city: "New York",
+    country: "USA",
     type: "commercial_rental",
     category: "retail",
     tenant: {
       name: "Alexander Whitmore",
-      phone: "000-000-0000",
+      phone: "+1 (555) 123-4567",
       email: "alex@example.com"
     }
   },
-  // ... keep existing code (other mock listings)
+  {
+    id: 2,
+    address: "456 5th Avenue, New York",
+    city: "New York",
+    country: "USA",
+    type: "residential_rental",
+    category: "apartment",
+    tenant: {
+      name: "Sarah Johnson",
+      phone: "+1 (555) 234-5678",
+      email: "sarah.j@example.com"
+    }
+  },
+  {
+    id: 3,
+    address: "789 Madison Avenue, New York",
+    city: "New York",
+    country: "USA",
+    type: "hospitality",
+    category: "hotel",
+    tenant: {
+      name: "Grand Hotel Management",
+      phone: "+1 (555) 345-6789",
+      email: "info@grandhotel.com"
+    }
+  },
+  {
+    id: 4,
+    address: "321 Park Avenue, New York",
+    city: "New York",
+    country: "USA",
+    type: "vacation_rental",
+    category: "condo",
+    tenant: null
+  },
+  {
+    id: 5,
+    address: "25 Wall Street, New York",
+    city: "New York",
+    country: "USA",
+    type: "commercial_rental",
+    category: "office",
+    tenant: {
+      name: "Financial Corp LLC",
+      phone: "+1 (555) 456-7890",
+      email: "contact@financialcorp.com"
+    }
+  },
+  {
+    id: 6,
+    address: "100 Times Square, New York",
+    city: "New York",
+    country: "USA",
+    type: "mixed_use",
+    category: "retail_office",
+    tenant: {
+      name: "Times Square Ventures",
+      phone: "+1 (555) 567-8901",
+      email: "leasing@tsventures.com"
+    }
+  },
+  {
+    id: 7,
+    address: "200 Central Park West, New York",
+    city: "New York",
+    country: "USA",
+    type: "residential_rental",
+    category: "luxury_apartment",
+    tenant: {
+      name: "Michael Thompson",
+      phone: "+1 (555) 678-9012",
+      email: "m.thompson@example.com"
+    }
+  },
+  {
+    id: 8,
+    address: "15 Columbus Circle, New York",
+    city: "New York",
+    country: "USA",
+    type: "commercial_rental",
+    category: "restaurant",
+    tenant: {
+      name: "Gourmet Bistro NYC",
+      phone: "+1 (555) 789-0123",
+      email: "info@gourmetbistro.com"
+    }
+  },
+  {
+    id: 9,
+    address: "50 Rockefeller Plaza, New York",
+    city: "New York",
+    country: "USA",
+    type: "commercial_rental",
+    category: "office",
+    tenant: {
+      name: "Media Solutions Inc",
+      phone: "+1 (555) 890-1234",
+      email: "contact@mediasolutions.com"
+    }
+  },
+  {
+    id: 10,
+    address: "300 East 42nd Street, New York",
+    city: "New York",
+    country: "USA",
+    type: "industrial",
+    category: "warehouse",
+    tenant: {
+      name: "Logistics Pro",
+      phone: "+1 (555) 901-2345",
+      email: "operations@logisticspro.com"
+    }
+  },
+  {
+    id: 11,
+    address: "500 Park Avenue, New York",
+    city: "New York",
+    country: "USA",
+    type: "hospitality",
+    category: "boutique_hotel",
+    tenant: null
+  },
+  {
+    id: 12,
+    address: "1000 2nd Avenue, New York",
+    city: "New York",
+    country: "USA",
+    type: "vacation_rental",
+    category: "penthouse",
+    tenant: {
+      name: "Luxury Stays NYC",
+      phone: "+1 (555) 012-3456",
+      email: "bookings@luxurystays.com"
+    }
+  }
 ];
 
 interface FilterState {
@@ -37,8 +171,8 @@ interface FilterState {
 }
 
 interface ListingListProps {
-  onListingClick?: (listing: any) => void;  // New prop for parent component to handle listing clicks
-  onListingsData?: (listings: any[]) => void;  // New prop to share filtered listings data
+  onListingClick?: (listing: any) => void;
+  onListingsData?: (listings: any[]) => void;
 }
 
 export function ListingList({ onListingClick, onListingsData }: ListingListProps) {
@@ -57,9 +191,14 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     countries: []
   });
 
-  // Keep existing code for filter setup
-  const propertyTypes = Array.from(new Set(mockListings.map(l => l.type)));
-  const categories = Array.from(new Set(mockListings.map(l => l.category)));
+  // Enhanced property types and categories based on form options
+  const propertyTypes = ["residential_rental", "commercial_rental", "hospitality", "vacation_rental", "mixed_use", "industrial"];
+  const categories = [
+    "apartment", "house", "condo", "luxury_apartment", "penthouse",
+    "office", "retail", "restaurant", "warehouse", "factory",
+    "hotel", "boutique_hotel", "resort", "hostel",
+    "retail_office", "residential_commercial"
+  ];
   const countries = Array.from(new Set(mockListings.map(l => l.country)));
   const occupancyStatuses = ["Occupied", "Vacant"];
 
@@ -86,18 +225,15 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
     
-    // If parent component provided handler, call it
     if (onListingClick) {
       onListingClick(listing);
     } else {
-      // Otherwise use internal sheet
       setIsEditSheetOpen(true);
     }
   };
 
-  // Keep existing filter functions
+  // ... keep existing code (filter functions)
   const toggleFilter = (category: keyof FilterState, value: string) => {
-    // ... keep existing code
     setFilters(prev => {
       const updated = { ...prev };
       if (updated[category].includes(value)) {
@@ -110,7 +246,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
   };
 
   const clearFilters = () => {
-    // ... keep existing code
     setFilters({
       types: [],
       categories: [],
@@ -124,9 +259,8 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     });
   };
 
-  // Keep existing filter group setup
+  // Enhanced filter groups with all categories
   const filterGroups: FilterGroup[] = [
-    // ... keep existing code (filter groups)
     {
       title: "Property Type",
       options: propertyTypes.map(type => ({
@@ -168,9 +302,8 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     filters.occupancy.length + 
     filters.countries.length;
 
-  // Prepare filter tags - keep existing code
+  // ... keep existing code (filter tags and filtered listings logic)
   const filterTags = [
-    // ... keep existing code for filter tags
     ...filters.types.map(type => ({
       category: "Type",
       value: formatPropertyType(type as PropertyType),
@@ -196,27 +329,20 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     })),
   ];
 
-  // Filter listings based on search and filters
   const filteredListings = listings.filter(listing => {
-    // ... keep existing code (filtering logic)
-    // Text search
     const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       String(listing.id).includes(searchTerm);
     
-    // Filter by property type
     const matchesType = filters.types.length === 0 || 
       filters.types.includes(listing.type);
     
-    // Filter by category  
     const matchesCategory = filters.categories.length === 0 || 
       filters.categories.includes(listing.category);
     
-    // Filter by country
     const matchesCountry = filters.countries.length === 0 || 
       filters.countries.includes(listing.country);
     
-    // Filter by occupancy status
     const matchesOccupancy = filters.occupancy.length === 0 || (
       (filters.occupancy.includes("Occupied") && listing.tenant) ||
       (filters.occupancy.includes("Vacant") && !listing.tenant)
@@ -225,7 +351,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     return matchesSearch && matchesType && matchesCategory && matchesCountry && matchesOccupancy;
   });
 
-  // Share filtered listings data with parent component if callback provided
   useEffect(() => {
     if (onListingsData) {
       onListingsData(filteredListings);
@@ -234,6 +359,7 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
 
   return (
     <div className="h-full">
+      {/* ... keep existing code (header with search and filters) */}
       <div className="p-4 border-b">
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
@@ -264,10 +390,10 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
           />
         </div>
         
-        {/* Show active filter tags */}
         <FilterTags tags={filterTags} onClearAll={clearFilters} />
       </div>
 
+      {/* ... keep existing code (listing cards and sheet) */}
       <div className="flex-1 p-4 overflow-auto">
         {isLoading ? (
           <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -283,7 +409,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
                   className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
                   onClick={() => handleListingClick(listing)}
                 >
-                  {/* Keep existing card content */}
                   <div className="flex flex-col">
                     <div className="flex items-center justify-between p-4 pb-2">
                       <div className="flex items-center gap-6 text-sm">
@@ -340,7 +465,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
         )}
       </div>
 
-      {/* Only render the Sheet here if parent hasn't provided a click handler */}
       {!onListingClick && (
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 

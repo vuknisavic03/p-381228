@@ -11,7 +11,7 @@ import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 
-// Default map settings
+// Modern map settings
 const containerStyle = {
   width: '100%',
   height: '100%'
@@ -20,6 +20,22 @@ const containerStyle = {
 const defaultCenter = {
   lat: 40.7128,
   lng: -74.0060
+};
+
+// Real address coordinates mapping
+const realAddressCoordinates: Record<string, { lat: number; lng: number }> = {
+  "123 Broadway, New York": { lat: 40.7505, lng: -73.9934 },
+  "456 5th Avenue, New York": { lat: 40.7516, lng: -73.9755 },
+  "789 Madison Avenue, New York": { lat: 40.7614, lng: -73.9776 },
+  "321 Park Avenue, New York": { lat: 40.7550, lng: -73.9738 },
+  "25 Wall Street, New York": { lat: 40.7074, lng: -74.0113 },
+  "100 Times Square, New York": { lat: 40.7580, lng: -73.9855 },
+  "200 Central Park West, New York": { lat: 40.7829, lng: -73.9737 },
+  "15 Columbus Circle, New York": { lat: 40.7681, lng: -73.9819 },
+  "50 Rockefeller Plaza, New York": { lat: 40.7587, lng: -73.9787 },
+  "300 East 42nd Street, New York": { lat: 40.7505, lng: -73.9731 },
+  "500 Park Avenue, New York": { lat: 40.7614, lng: -73.9719 },
+  "1000 2nd Avenue, New York": { lat: 40.7505, lng: -73.9626 }
 };
 
 // Type definitions for listings
@@ -68,10 +84,17 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Calculate dynamic locations for listings without explicit coordinates
+  // Get real coordinates for listings
   const getListingCoordinates = useCallback((listing: Listing, index: number) => {
     if (listing.location) return listing.location;
     
+    // Check if we have real coordinates for this address
+    const realCoords = realAddressCoordinates[listing.address];
+    if (realCoords) {
+      return realCoords;
+    }
+    
+    // Fallback to calculated positions for unknown addresses
     const latVariation = (listing.id * 0.01) + (index * 0.005);
     const lngVariation = (listing.id * 0.01) - (index * 0.007);
     
@@ -135,7 +158,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   if (!isApiKeyValid) {
     console.log("Showing API key input - API key not valid");
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-6">
         <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
       </div>
     );
@@ -147,17 +170,17 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     const errorMessage = handleMapsApiLoadError(loadError);
     
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200 max-w-md">
-          <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
-            <h3 className="text-red-600 font-medium">Google Maps Error</h3>
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-red-50 to-red-100 p-6">
+        <div className="bg-white p-6 rounded-xl border border-red-200 shadow-lg max-w-md">
+          <div className="flex items-center gap-3 mb-3">
+            <AlertTriangle className="h-6 w-6 text-red-600" />
+            <h3 className="text-red-600 font-semibold">Google Maps Error</h3>
           </div>
-          <p className="text-gray-700 text-sm mb-3">{errorMessage}</p>
+          <p className="text-gray-700 text-sm mb-4">{errorMessage}</p>
           <Button 
             variant="outline" 
             onClick={() => window.location.reload()}
-            className="w-full text-sm"
+            className="w-full"
           >
             Reload Page
           </Button>
@@ -170,9 +193,11 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   if (!isLoaded) {
     console.log("Showing loading state - map not loaded");
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
-        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-        <span className="text-gray-500 font-medium">Loading map...</span>
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+          <span className="text-gray-600 font-medium">Loading interactive map...</span>
+        </div>
       </div>
     );
   }
@@ -190,8 +215,22 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         options={{
           mapTypeControl: false,
           streetViewControl: false,
-          fullscreenControl: true,
+          fullscreenControl: false,
           zoomControl: true,
+          controlSize: 32,
+          disableDefaultUI: false,
+          styles: [
+            {
+              featureType: "poi",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }]
+            },
+            {
+              featureType: "transit",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }]
+            }
+          ]
         }}
       >
         {/* Render markers for all listings */}
@@ -208,9 +247,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                 path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
                 fillColor: markerColor,
                 fillOpacity: 1,
-                strokeWeight: 1.5,
+                strokeWeight: 2,
                 strokeColor: "#ffffff",
-                scale: 1.5,
+                scale: 1.8,
                 anchor: new google.maps.Point(12, 24)
               }}
             />
@@ -223,49 +262,49 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             position={getListingCoordinates(selectedListing, listings.findIndex(l => l.id === selectedListing.id))}
             onCloseClick={handleInfoClose}
             options={{ 
-              pixelOffset: new google.maps.Size(0, -30),
-              maxWidth: 320
+              pixelOffset: new google.maps.Size(0, -35),
+              maxWidth: 340
             }}
           >
             <Card className="w-full border-0 shadow-none">
-              <CardContent className="p-4">
-                <div className="space-y-3">
+              <CardContent className="p-5">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-xs font-medium py-1 border-primary/30">
+                    <Badge variant="outline" className="text-xs font-medium py-1.5 px-2.5 border-primary/30">
                       #{selectedListing.id}
                     </Badge>
-                    <Badge className="bg-primary/10 text-primary border-0 text-xs font-medium py-1">
+                    <Badge className="bg-gradient-to-r from-primary/10 to-primary/20 text-primary border-0 text-xs font-medium py-1.5 px-3">
                       {formatPropertyType(selectedListing.type)}
                     </Badge>
                   </div>
                   
                   <div>
-                    <h4 className="font-medium text-gray-900">{selectedListing.address}</h4>
-                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-                      <MapPin className="h-3 w-3" />
+                    <h4 className="font-semibold text-gray-900 text-base">{selectedListing.address}</h4>
+                    <div className="flex items-center gap-1.5 mt-2 text-sm text-gray-500">
+                      <MapPin className="h-4 w-4" />
                       <span>{selectedListing.city}, {selectedListing.country}</span>
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between pt-1">
-                    <div className="flex items-center gap-1.5 text-xs">
-                      <Building2 className="h-3 w-3 text-gray-500" />
-                      <span className="capitalize text-gray-700">{selectedListing.category.replace(/_/g, ' ')}</span>
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Building2 className="h-4 w-4 text-gray-500" />
+                      <span className="capitalize text-gray-700 font-medium">{selectedListing.category.replace(/_/g, ' ')}</span>
                     </div>
                     
                     {selectedListing.tenant && (
-                      <div className="flex items-center gap-1.5 text-xs">
-                        <User className="h-3 w-3 text-gray-500" />
-                        <span className="text-gray-700">{selectedListing.tenant.name}</span>
+                      <div className="flex items-center gap-2 text-sm">
+                        <User className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-700 font-medium">{selectedListing.tenant.name}</span>
                       </div>
                     )}
                   </div>
                   
                   <Button 
-                    className="w-full mt-1 bg-primary hover:bg-primary/90 text-xs py-1.5 px-3"
+                    className="w-full mt-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-sm py-2.5 px-4 font-medium"
                     onClick={handleViewListing}
                   >
-                    View Details
+                    View Property Details
                   </Button>
                 </div>
               </CardContent>
@@ -274,28 +313,36 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         )}
       </GoogleMap>
       
-      {/* Map overlay with legend */}
-      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-md border border-gray-100">
-        <h4 className="text-xs font-medium mb-2 text-gray-700 flex items-center gap-1.5">
-          <Map className="h-3 w-3" />
-          Property Types
+      {/* Modern map overlay with enhanced legend */}
+      <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-5 rounded-xl shadow-xl border border-gray-100/50">
+        <h4 className="text-sm font-semibold mb-3 text-gray-800 flex items-center gap-2">
+          <Map className="h-4 w-4 text-primary" />
+          Property Categories
         </h4>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="h-3 w-3 rounded-full bg-[#4f46e5]"></span>
-            <span className="text-gray-600">Residential Rental</span>
+        <div className="grid grid-cols-1 gap-3">
+          <div className="flex items-center gap-3 text-sm">
+            <span className="h-4 w-4 rounded-full bg-[#4f46e5] shadow-sm"></span>
+            <span className="text-gray-700 font-medium">Residential Rental</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="h-3 w-3 rounded-full bg-[#0891b2]"></span>
-            <span className="text-gray-600">Commercial Rental</span>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="h-4 w-4 rounded-full bg-[#0891b2] shadow-sm"></span>
+            <span className="text-gray-700 font-medium">Commercial Rental</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="h-3 w-3 rounded-full bg-[#059669]"></span>
-            <span className="text-gray-600">Hospitality</span>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="h-4 w-4 rounded-full bg-[#059669] shadow-sm"></span>
+            <span className="text-gray-700 font-medium">Hospitality</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="h-3 w-3 rounded-full bg-[#d97706]"></span>
-            <span className="text-gray-600">Vacation Rental</span>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="h-4 w-4 rounded-full bg-[#d97706] shadow-sm"></span>
+            <span className="text-gray-700 font-medium">Vacation Rental</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="h-4 w-4 rounded-full bg-[#9333ea] shadow-sm"></span>
+            <span className="text-gray-700 font-medium">Mixed Use</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="h-4 w-4 rounded-full bg-[#dc2626] shadow-sm"></span>
+            <span className="text-gray-700 font-medium">Industrial</span>
           </div>
         </div>
       </div>
@@ -303,22 +350,22 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   );
 }
 
-// Get marker colors based on property type
+// Enhanced marker colors for better property type distinction
 function getMarkerColor(type: PropertyType): string {
   switch (type) {
     case "residential_rental":
-      return "#4f46e5";
+      return "#4f46e5"; // Indigo
     case "commercial_rental":
-      return "#0891b2";
+      return "#0891b2"; // Cyan
     case "hospitality":
-      return "#059669";
+      return "#059669"; // Emerald
     case "vacation_rental":
-      return "#d97706";
+      return "#d97706"; // Amber
     case "mixed_use":
-      return "#9333ea";
+      return "#9333ea"; // Purple
     case "industrial":
-      return "#dc2626";
+      return "#dc2626"; // Red
     default:
-      return "#6b7280";
+      return "#6b7280"; // Gray
   }
 }
