@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -23,7 +22,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "retail",
-    location: { lat: 44.8176, lng: 20.4566 },
+    location: { lat: 44.817557, lng: 20.456624 },
     tenant: {
       name: "Belgrade Bookstore",
       phone: "+381 11 234-5678",
@@ -40,7 +39,7 @@ const initialListings = [
     postalCode: "11000",
     type: "hospitality",
     category: "restaurant",
-    location: { lat: 44.8158, lng: 20.4612 },
+    location: { lat: 44.815834, lng: 20.461187 },
     tenant: {
       name: "Traditional Serbian Restaurant",
       phone: "+381 11 345-6789",
@@ -57,7 +56,7 @@ const initialListings = [
     postalCode: "11000",
     type: "residential_rental",
     category: "apartment_condo",
-    location: { lat: 44.8125, lng: 20.4612 },
+    location: { lat: 44.812456, lng: 20.461234 },
     tenant: {
       name: "Marko Petrović",
       phone: "+381 69 123-4567",
@@ -74,7 +73,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "office",
-    location: { lat: 44.8047, lng: 20.4781 },
+    location: { lat: 44.804712, lng: 20.478089 },
     tenant: {
       name: "Tech Solutions d.o.o.",
       phone: "+381 11 456-7890",
@@ -91,7 +90,7 @@ const initialListings = [
     postalCode: "11080",
     type: "vacation_rental",
     category: "short_term",
-    location: { lat: 44.8431, lng: 20.4049 },
+    location: { lat: 44.843123, lng: 20.404876 },
     tenant: null,
     notes: "Danube riverfront, short-term rental"
   },
@@ -103,7 +102,7 @@ const initialListings = [
     postalCode: "11070",
     type: "residential_rental",
     category: "apartment_condo",
-    location: { lat: 44.8178, lng: 20.3997 },
+    location: { lat: 44.817834, lng: 20.399712 },
     tenant: {
       name: "Ana Jovanović",
       phone: "+381 64 987-6543",
@@ -377,11 +376,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
                           <div className="flex items-center gap-2">
                             <MapPin className="h-4 w-4 text-primary/80" />
                             <span className="font-medium">{listing.address}</span>
-                            {listing.location && (
-                              <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-                                Geocoded
-                              </span>
-                            )}
                           </div>
                         </div>
                         <PropertyTypeDisplay 

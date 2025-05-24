@@ -74,7 +74,7 @@ export function handleMapsApiLoadError(error: Error | null): string {
   }
 }
 
-// Geocoding function to convert address to coordinates
+// Enhanced geocoding function with higher precision
 export async function geocodeAddress(address: string, city: string, country: string): Promise<{lat: number, lng: number} | null> {
   const fullAddress = `${address}, ${city}, ${country}`;
   const apiKey = getGoogleMapsApiKey();
@@ -85,16 +85,37 @@ export async function geocodeAddress(address: string, city: string, country: str
   }
 
   try {
+    // Use components parameter for more precise geocoding
+    const params = new URLSearchParams({
+      address: fullAddress,
+      key: apiKey,
+      components: `country:${country.toLowerCase()}|locality:${city}`,
+      result_type: 'street_address|premise|subpremise',
+      location_type: 'ROOFTOP|RANGE_INTERPOLATED'
+    });
+
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${apiKey}`
+      `https://maps.googleapis.com/maps/api/geocode/json?${params}`
     );
     
     const data = await response.json();
     
     if (data.status === 'OK' && data.results.length > 0) {
-      const location = data.results[0].geometry.location;
-      console.log(`Geocoded "${fullAddress}" to:`, location);
-      return { lat: location.lat, lng: location.lng };
+      // Get the most precise result (ROOFTOP is most accurate)
+      const bestResult = data.results.find(result => 
+        result.geometry.location_type === 'ROOFTOP'
+      ) || data.results[0];
+      
+      const location = bestResult.geometry.location;
+      const locationType = bestResult.geometry.location_type;
+      
+      console.log(`Geocoded "${fullAddress}" to:`, location, `(Type: ${locationType})`);
+      
+      // Return coordinates with high precision
+      return { 
+        lat: parseFloat(location.lat.toFixed(6)), 
+        lng: parseFloat(location.lng.toFixed(6))
+      };
     } else {
       console.error('Geocoding failed:', data.status, data.error_message);
       return null;
