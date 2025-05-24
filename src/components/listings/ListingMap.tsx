@@ -9,6 +9,7 @@ import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
+import { useRealTimeGeocoding } from '@/hooks/useRealTimeGeocoding';
 
 // Modern map settings
 const containerStyle = {
@@ -52,9 +53,11 @@ interface ListingMapProps {
 export function ListingMap({ listings, onListingClick, onApiKeySubmit }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
+  const [listingsWithCoords, setListingsWithCoords] = useState<(Listing & { coordinates?: { lat: number; lng: number } })[]>([]);
   
   // Use our custom Maps API hook
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
+  const { geocodeAddressRealTime, isGeocoding } = useRealTimeGeocoding();
   
   console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "hasError:", !!loadError);
   
@@ -68,15 +71,63 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Get coordinates for listings - now uses accurate coordinates from listing data
-  const getListingCoordinates = useCallback((listing: Listing, index: number) => {
-    if (listing.location) {
-      console.log(`Using accurate coordinates for ${listing.address}:`, listing.location);
-      return listing.location;
+  // Geocode listings that don't have accurate coordinates
+  useEffect(() => {
+    const geocodeListings = async () => {
+      if (!isLoaded || !listings.length) return;
+
+      console.log('🔄 Processing listings for accurate coordinates...');
+      const updatedListings = [];
+
+      for (const listing of listings) {
+        // Check if we already have accurate coordinates
+        if (listing.location) {
+          console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
+          updatedListings.push({
+            ...listing,
+            coordinates: listing.location
+          });
+        } else {
+          console.log(`🎯 Real-time geocoding needed for: ${listing.address}, ${listing.city}, ${listing.country}`);
+          
+          const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
+          
+          if (coords) {
+            updatedListings.push({
+              ...listing,
+              coordinates: { lat: coords.lat, lng: coords.lng }
+            });
+            console.log(`✅ Geocoded ${listing.address}:`, coords);
+          } else {
+            // Fallback to Belgrade center with offset
+            const fallbackCoords = {
+              lat: defaultCenter.lat + (listing.id * 0.001),
+              lng: defaultCenter.lng + (listing.id * 0.001)
+            };
+            updatedListings.push({
+              ...listing,
+              coordinates: fallbackCoords
+            });
+            console.warn(`⚠️ Using fallback coordinates for ${listing.address}:`, fallbackCoords);
+          }
+        }
+      }
+
+      setListingsWithCoords(updatedListings);
+    };
+
+    geocodeListings();
+  }, [listings, isLoaded, geocodeAddressRealTime]);
+
+  // Get coordinates for listings - now uses real-time geocoded coordinates
+  const getListingCoordinates = useCallback((listing: Listing & { coordinates?: { lat: number; lng: number } }, index: number) => {
+    if (listing.coordinates) {
+      console.log(`📍 Using accurate coordinates for ${listing.address}:`, listing.coordinates);
+      return listing.coordinates;
     }
     
-    // Fallback for Belgrade only
-    console.log(`No coordinates found for ${listing.address}, using Belgrade fallback`);
+    // This should rarely happen now
+    console.log(`⚠️ No coordinates found for ${listing.address}, using Belgrade fallback`);
     const latVariation = (listing.id * 0.001) + (index * 0.0005);
     const lngVariation = (listing.id * 0.001) - (index * 0.0007);
     
@@ -91,15 +142,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     console.log("Map loaded successfully");
     setMapRef(map);
     
-    if (listings.length > 0) {
+    if (listingsWithCoords.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      listings.forEach((listing, index) => {
+      listingsWithCoords.forEach((listing, index) => {
         const position = getListingCoordinates(listing, index);
         bounds.extend(position);
       });
       map.fitBounds(bounds, 80);
     }
-  }, [listings, getListingCoordinates]);
+  }, [listingsWithCoords, getListingCoordinates]);
 
   const onUnmount = useCallback(() => {
     console.log("Map unmounted");
@@ -159,20 +210,22 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show loading state if map isn't loaded yet
-  if (!isLoaded) {
-    console.log("Showing loading state - map not loaded");
+  // Show loading state if map isn't loaded yet or geocoding is in progress
+  if (!isLoaded || isGeocoding) {
+    console.log("Showing loading state - map not loaded or geocoding in progress");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="bg-white p-8 rounded-xl shadow-lg">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <span className="text-gray-600 font-medium">Loading interactive map...</span>
+          <span className="text-gray-600 font-medium">
+            {isGeocoding ? "Getting accurate coordinates..." : "Loading interactive map..."}
+          </span>
         </div>
       </div>
     );
   }
 
-  console.log("Rendering Google Map with", listings.length, "listings");
+  console.log("Rendering Google Map with", listingsWithCoords.length, "listings");
 
   return (
     <div className="h-full w-full relative">
@@ -206,8 +259,8 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           ]
         }}
       >
-        {/* Render markers for all listings */}
-        {listings.map((listing, index) => {
+        {/* Render markers for all listings with accurate coordinates */}
+        {listingsWithCoords.map((listing, index) => {
           const position = getListingCoordinates(listing, index);
           const markerColor = getMarkerColor(listing.type);
           
@@ -232,7 +285,10 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         {/* Info Window for selected listing */}
         {selectedListing && (
           <InfoWindow
-            position={getListingCoordinates(selectedListing, listings.findIndex(l => l.id === selectedListing.id))}
+            position={getListingCoordinates(
+              listingsWithCoords.find(l => l.id === selectedListing.id) || selectedListing, 
+              listingsWithCoords.findIndex(l => l.id === selectedListing.id)
+            )}
             onCloseClick={handleInfoClose}
             options={{ 
               pixelOffset: new google.maps.Size(0, -35),
