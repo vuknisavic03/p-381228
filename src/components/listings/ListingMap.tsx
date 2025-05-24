@@ -302,7 +302,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
           ]
         }}
       >
-        {mapListings.map((listing) => (
+        {mapListings.map((listing, index) => (
           <MarkerF
             key={listing.id}
             position={listing.coordinates}
@@ -315,8 +315,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 2.0 : 1.7,
-              anchor: new google.maps.Point(12, 24)
+              scale: hoveredListing === listing.id ? 2.4 : 2.2,
+              anchor: new google.maps.Point(12, 24),
+              labelOrigin: new google.maps.Point(12, 9)
+            }}
+            label={{
+              text: (index + 1).toString(),
+              color: "#ffffff",
+              fontSize: "12px",
+              fontWeight: "600"
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />
@@ -328,70 +335,87 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             onCloseClick={handleInfoClose}
             options={{
               pixelOffset: new google.maps.Size(0, -10),
-              disableAutoPan: false
+              disableAutoPan: false,
+              headerDisabled: true
             }}
           >
-            <div className="p-0 m-0 w-80">
-              <Card className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <div className="space-y-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <Badge variant="outline" className="mb-3 text-xs font-medium">
-                          #{selectedListing.id}
-                        </Badge>
-                        <h4 className="font-semibold text-gray-900 text-lg leading-tight mb-3">
-                          {selectedListing.address}
-                        </h4>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <Navigation className="h-4 w-4" />
-                          <span>{selectedListing.city}, {selectedListing.country}</span>
+            <div className="p-0 m-0 w-[420px]">
+              <Card className="border-0 shadow-xl bg-white/95 backdrop-blur-sm">
+                <CardContent className="p-0">
+                  <div className="p-6 space-y-6">
+                    {/* Header Section */}
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <Badge 
+                              variant="outline" 
+                              className="text-xs font-medium bg-gray-50 border-gray-200 text-gray-600"
+                            >
+                              #{selectedListing.id}
+                            </Badge>
+                            <Badge 
+                              className="text-xs px-3 py-1.5 font-medium"
+                              style={{ backgroundColor: getMarkerColor(selectedListing.type) + '20', color: getMarkerColor(selectedListing.type) }}
+                            >
+                              {formatPropertyType(selectedListing.type)}
+                            </Badge>
+                          </div>
+                          <h4 className="font-semibold text-gray-900 text-lg leading-tight mb-3">
+                            {selectedListing.address}
+                          </h4>
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Navigation className="h-4 w-4 flex-shrink-0" />
+                            <span className="truncate">{selectedListing.city}, {selectedListing.country}</span>
+                          </div>
                         </div>
                       </div>
-                      <Badge className="shrink-0 text-xs px-3 py-1.5">
-                        {formatPropertyType(selectedListing.type)}
-                      </Badge>
-                    </div>
-                    
-                    <div className="flex items-center justify-between py-3 border-t border-gray-100">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Building2 className="h-4 w-4 text-gray-400" />
-                        <span className="font-medium text-gray-700 capitalize">
+                      
+                      {/* Property Category */}
+                      <div className="flex items-center gap-3 py-3 border-t border-gray-100">
+                        <Building2 className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                        <span className="font-medium text-gray-700 capitalize text-sm">
                           {selectedListing.category.replace(/_/g, ' ')}
                         </span>
                       </div>
                     </div>
                     
+                    {/* Tenant Information */}
                     {selectedListing.tenant && (
-                      <div className="space-y-4 pt-3 border-t border-gray-100">
-                        <div className="flex items-center gap-2 mb-3">
-                          <User className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium text-gray-900 text-base">{selectedListing.tenant.name}</span>
+                      <div className="space-y-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="p-2 bg-blue-50 rounded-lg">
+                            <User className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <span className="font-semibold text-gray-900 text-base">{selectedListing.tenant.name}</span>
                         </div>
                         
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-1 gap-3">
                           {selectedListing.tenant.phone && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Phone className="h-4 w-4" />
-                              <span>{selectedListing.tenant.phone}</span>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                              <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                              <span className="text-sm text-gray-700 font-medium">{selectedListing.tenant.phone}</span>
                             </div>
                           )}
                           {selectedListing.tenant.email && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Mail className="h-4 w-4" />
-                              <span>{selectedListing.tenant.email}</span>
+                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                              <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                              <span className="text-sm text-gray-700 font-medium truncate">{selectedListing.tenant.email}</span>
                             </div>
                           )}
                         </div>
                       </div>
                     )}
                     
-                    <Button 
-                      className="w-full mt-5 h-10 bg-primary hover:bg-primary/90 transition-colors"
-                      onClick={handleViewListing}
-                    >
-                      View Details
-                    </Button>
+                    {/* Action Button */}
+                    <div className="pt-4 border-t border-gray-100">
+                      <Button 
+                        className="w-full h-11 bg-primary hover:bg-primary/90 transition-colors font-medium"
+                        onClick={handleViewListing}
+                      >
+                        View Full Details
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
