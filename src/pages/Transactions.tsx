@@ -26,7 +26,7 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col bg-white">
-        {/* Fixed header section with Notion-inspired design */}
+        {/* Fixed header section with consistent spacing */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">Edited just now</span>
@@ -44,7 +44,7 @@ export default function Transactions() {
         <Separator className="w-full border-[#E4E5EA]" />
 
         {/* Main content container with white background */}
-        <div className="flex-1 bg-white">
+        <div className="flex-1 relative overflow-hidden bg-white">
           <TransactionActivity />
         </div>
 
