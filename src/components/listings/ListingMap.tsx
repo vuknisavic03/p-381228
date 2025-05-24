@@ -260,84 +260,13 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show elegant loading state
+  // Show simple elegant loading state
   if (!isLoaded || isProcessing) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/30 relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-32 h-32 bg-blue-100/40 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-32 right-24 w-24 h-24 bg-indigo-100/40 rounded-full blur-lg animate-pulse delay-700"></div>
-          <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-purple-100/40 rounded-full blur-md animate-pulse delay-1000"></div>
-        </div>
-
-        {/* Main loading card */}
-        <div className="relative z-10 bg-white/80 backdrop-blur-sm p-12 rounded-2xl shadow-xl border border-white/20">
-          <div className="flex flex-col items-center text-center max-w-sm">
-            {/* Animated map icon */}
-            <div className="relative mb-8">
-              <div className="absolute inset-0 bg-blue-100 rounded-full animate-ping opacity-75"></div>
-              <div className="relative p-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full shadow-lg">
-                <Map className="h-8 w-8 text-white animate-pulse" />
-              </div>
-            </div>
-
-            {/* Loading spinner and text */}
-            <div className="flex items-center gap-3 mb-6">
-              <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
-              <span className="text-gray-800 font-semibold text-lg">
-                {isProcessing ? 'Processing Locations' : 'Loading Map'}
-              </span>
-            </div>
-
-            {/* Progress indication */}
-            <div className="w-full space-y-4">
-              <div className="flex justify-between text-sm text-gray-600 mb-2">
-                <span>Preparing your view</span>
-                <span className="animate-pulse">•••</span>
-              </div>
-              
-              {/* Animated progress bar */}
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-
-            {/* Loading steps */}
-            <div className="mt-8 space-y-3 w-full">
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <span>Initializing Google Maps</span>
-              </div>
-              {isProcessing && (
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse delay-300"></div>
-                  <span>Geocoding property locations</span>
-                </div>
-              )}
-              <div className="flex items-center gap-3 text-sm text-gray-400">
-                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                <span>Rendering markers</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Floating skeleton elements */}
-        <div className="absolute top-8 left-8 right-8 space-y-4 opacity-30">
-          <Skeleton className="h-16 w-48 rounded-lg" />
-          <div className="flex gap-4">
-            <Skeleton className="h-8 w-24 rounded-md" />
-            <Skeleton className="h-8 w-32 rounded-md" />
-          </div>
-        </div>
-
-        <div className="absolute bottom-8 left-8 opacity-30">
-          <Skeleton className="h-32 w-56 rounded-lg" />
-        </div>
-
-        <div className="absolute bottom-8 right-8 opacity-30">
-          <Skeleton className="h-20 w-32 rounded-lg" />
+      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
+        <div className="flex items-center gap-3">
+          <Loader2 className="h-6 w-6 animate-spin text-gray-600" />
+          <span className="text-gray-700 text-lg font-medium">Loading Map</span>
         </div>
       </div>
     );
