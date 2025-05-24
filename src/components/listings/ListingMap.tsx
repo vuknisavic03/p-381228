@@ -315,15 +315,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: hoveredListing === listing.id ? 1 : 0.9,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 2.4 : 2.2,
+              scale: hoveredListing === listing.id ? 2.8 : 2.6,
               anchor: new google.maps.Point(12, 24),
               labelOrigin: new google.maps.Point(12, 9)
             }}
             label={{
               text: (index + 1).toString(),
               color: "#ffffff",
-              fontSize: "12px",
-              fontWeight: "600"
+              fontSize: "13px",
+              fontWeight: "700"
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />
@@ -339,42 +339,42 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               headerDisabled: true
             }}
           >
-            <div className="p-0 m-0 w-[420px]">
-              <Card className="border-0 shadow-xl bg-white/95 backdrop-blur-sm">
+            <div className="p-0 m-0 w-[500px]">
+              <Card className="border-0 shadow-xl bg-white/98 backdrop-blur-sm">
                 <CardContent className="p-0">
-                  <div className="p-6 space-y-6">
+                  <div className="p-7 space-y-6">
                     {/* Header Section */}
-                    <div className="space-y-4">
+                    <div className="space-y-5">
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-3 mb-3">
+                          <div className="flex items-center gap-3 mb-4">
                             <Badge 
                               variant="outline" 
-                              className="text-xs font-medium bg-gray-50 border-gray-200 text-gray-600"
+                              className="text-sm font-medium bg-gray-50 border-gray-200 text-gray-600 px-3 py-1.5"
                             >
                               #{selectedListing.id}
                             </Badge>
                             <Badge 
-                              className="text-xs px-3 py-1.5 font-medium"
+                              className="text-sm px-3 py-2 font-semibold rounded-lg"
                               style={{ backgroundColor: getMarkerColor(selectedListing.type) + '20', color: getMarkerColor(selectedListing.type) }}
                             >
                               {formatPropertyType(selectedListing.type)}
                             </Badge>
                           </div>
-                          <h4 className="font-semibold text-gray-900 text-lg leading-tight mb-3">
+                          <h4 className="font-bold text-gray-900 text-xl leading-tight mb-4">
                             {selectedListing.address}
                           </h4>
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Navigation className="h-4 w-4 flex-shrink-0" />
-                            <span className="truncate">{selectedListing.city}, {selectedListing.country}</span>
+                          <div className="flex items-center gap-2 text-base text-gray-600">
+                            <Navigation className="h-5 w-5 flex-shrink-0" />
+                            <span className="truncate font-medium">{selectedListing.city}, {selectedListing.country}</span>
                           </div>
                         </div>
                       </div>
                       
                       {/* Property Category */}
-                      <div className="flex items-center gap-3 py-3 border-t border-gray-100">
-                        <Building2 className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                        <span className="font-medium text-gray-700 capitalize text-sm">
+                      <div className="flex items-center gap-3 py-4 border-t border-gray-100">
+                        <Building2 className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                        <span className="font-semibold text-gray-800 capitalize text-base">
                           {selectedListing.category.replace(/_/g, ' ')}
                         </span>
                       </div>
@@ -382,24 +382,24 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                     
                     {/* Tenant Information */}
                     {selectedListing.tenant && (
-                      <div className="space-y-4 pt-4 border-t border-gray-100">
+                      <div className="space-y-5 pt-4 border-t border-gray-100">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="p-2 bg-blue-50 rounded-lg">
-                            <User className="h-4 w-4 text-blue-600" />
+                          <div className="p-2.5 bg-blue-50 rounded-lg">
+                            <User className="h-5 w-5 text-blue-600" />
                           </div>
-                          <span className="font-semibold text-gray-900 text-base">{selectedListing.tenant.name}</span>
+                          <span className="font-bold text-gray-900 text-lg">{selectedListing.tenant.name}</span>
                         </div>
                         
                         <div className="grid grid-cols-1 gap-3">
                           {selectedListing.tenant.phone && (
-                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                              <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                              <Phone className="h-5 w-5 text-gray-500 flex-shrink-0" />
                               <span className="text-sm text-gray-700 font-medium">{selectedListing.tenant.phone}</span>
                             </div>
                           )}
                           {selectedListing.tenant.email && (
-                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                              <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                              <Mail className="h-5 w-5 text-gray-500 flex-shrink-0" />
                               <span className="text-sm text-gray-700 font-medium truncate">{selectedListing.tenant.email}</span>
                             </div>
                           )}
@@ -408,9 +408,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                     )}
                     
                     {/* Action Button */}
-                    <div className="pt-4 border-t border-gray-100">
+                    <div className="pt-5 border-t border-gray-100">
                       <Button 
-                        className="w-full h-11 bg-primary hover:bg-primary/90 transition-colors font-medium"
+                        className="w-full h-12 bg-primary hover:bg-primary/90 transition-colors font-semibold text-base"
                         onClick={handleViewListing}
                       >
                         View Full Details
