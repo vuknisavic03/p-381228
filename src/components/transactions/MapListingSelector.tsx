@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { MapPin, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -48,23 +48,149 @@ function getMarkerColor(type: string): string {
 
 export function MapListingSelector({ listings, selectedListingId, onListingSelect, onClose }: MapListingSelectorProps) {
   const [hoveredListing, setHoveredListing] = useState<string | null>(null);
+  const [mapListings, setMapListings] = useState<(Listing & { coordinates: { lat: number; lng: number } })[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
 
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
     setApiKey(newApiKey);
   }, [setApiKey]);
 
-  const onLoad = useCallback((map: google.maps.Map) => {
-    if (listings.length > 0) {
-      const bounds = new google.maps.LatLngBounds();
-      listings.forEach((listing) => {
-        if (listing.location) {
-          bounds.extend(listing.location);
+  // Simple geocoding function - same as ListingMap
+  const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
+    if (!window.google?.maps?.Geocoder) {
+      console.log("Google Maps Geocoder not available");
+      return null;
+    }
+
+    const geocoder = new window.google.maps.Geocoder();
+    const fullAddress = `${address}, ${city}, ${country}`;
+    
+    try {
+      const result = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
+        geocoder.geocode({ address: fullAddress }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            resolve(results);
+          } else {
+            reject(new Error(`Geocoding failed: ${status}`));
+          }
+        });
+      });
+
+      if (result[0]) {
+        const location = result[0].geometry.location;
+        const coords = {
+          lat: location.lat(),
+          lng: location.lng()
+        };
+        console.log(`Geocoded "${fullAddress}":`, coords);
+        return coords;
+      }
+    } catch (error) {
+      console.log(`Geocoding failed for "${fullAddress}":`, error);
+    }
+    
+    return null;
+  }, []);
+
+  // Generate fallback coordinates - same as ListingMap
+  const getFallbackCoordinates = useCallback((index: number) => {
+    const variation = index * 0.005;
+    return { 
+      lat: defaultCenter.lat + (variation % 0.02) - 0.01, 
+      lng: defaultCenter.lng + (variation % 0.02) - 0.01 
+    };
+  }, []);
+
+  // Create a stable key for listings to prevent unnecessary re-processing
+  const listingsKey = useMemo(() => {
+    return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
+  }, [listings]);
+
+  // Process listings - same logic as ListingMap
+  useEffect(() => {
+    if (!isLoaded || !isApiKeyValid || !listings.length) {
+      console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
+      return;
+    }
+
+    let isCancelled = false;
+
+    const processListings = async () => {
+      console.log("Starting to process", listings.length, "listings for MapListingSelector");
+      setIsProcessing(true);
+
+      const processed = [];
+      
+      for (let i = 0; i < listings.length; i++) {
+        if (isCancelled) break;
+        
+        const listing = listings[i];
+        
+        // Use existing coordinates if available
+        if (listing.location?.lat && listing.location?.lng) {
+          processed.push({
+            ...listing,
+            coordinates: listing.location
+          });
+          continue;
         }
+
+        // Try to geocode
+        try {
+          const coords = await geocodeAddress(listing.address, listing.city, listing.country);
+          
+          if (coords && !isCancelled) {
+            processed.push({
+              ...listing,
+              coordinates: coords
+            });
+          } else {
+            // Use fallback
+            processed.push({
+              ...listing,
+              coordinates: getFallbackCoordinates(i)
+            });
+          }
+        } catch (error) {
+          console.error("Error processing listing:", error);
+          processed.push({
+            ...listing,
+            coordinates: getFallbackCoordinates(i)
+          });
+        }
+
+        // Small delay to prevent rate limiting
+        if (i < listings.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+      }
+
+      if (!isCancelled) {
+        console.log("Finished processing listings for MapListingSelector:", processed.length);
+        setMapListings(processed);
+        setIsProcessing(false);
+      }
+    };
+
+    processListings();
+
+    // Cleanup function to cancel processing if component unmounts or dependencies change
+    return () => {
+      isCancelled = true;
+      setIsProcessing(false);
+    };
+  }, [isLoaded, isApiKeyValid, listingsKey, geocodeAddress, getFallbackCoordinates]);
+
+  const onLoad = useCallback((map: google.maps.Map) => {
+    if (mapListings.length > 0) {
+      const bounds = new google.maps.LatLngBounds();
+      mapListings.forEach((listing) => {
+        bounds.extend(listing.coordinates);
       });
       map.fitBounds(bounds, 50);
     }
-  }, [listings]);
+  }, [mapListings]);
 
   const handleMarkerClick = useCallback((listing: Listing) => {
     onListingSelect(listing.id);
@@ -82,7 +208,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
   }
 
   // Show loading state
-  if (!isLoaded) {
+  if (!isLoaded || isProcessing) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
         <div className="flex items-center gap-3">
@@ -92,9 +218,6 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
       </div>
     );
   }
-
-  // Filter listings that have location data
-  const mappableListings = listings.filter(listing => listing.location);
 
   return (
     <div className="space-y-4">
@@ -122,10 +245,10 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
               disableDefaultUI: true,
             }}
           >
-            {mappableListings.map((listing, index) => (
+            {mapListings.map((listing, index) => (
               <MarkerF
                 key={listing.id}
-                position={listing.location!}
+                position={listing.coordinates}
                 onClick={() => handleMarkerClick(listing)}
                 onMouseOver={() => setHoveredListing(listing.id)}
                 onMouseOut={() => setHoveredListing(null)}
