@@ -262,11 +262,8 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             <div className="mb-6">
               <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
             </div>
-            <span className="text-gray-800 font-semibold text-lg mb-2">
-              Loading...
-            </span>
-            <span className="text-gray-600 text-sm text-center max-w-xs">
-              Please wait while we prepare the map
+            <span className="text-gray-800 font-semibold text-lg">
+              Loading
             </span>
           </div>
         </div>
