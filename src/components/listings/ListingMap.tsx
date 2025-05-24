@@ -52,15 +52,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
   const [listingsWithCoords, setListingsWithCoords] = useState<(Listing & { coordinates?: { lat: number; lng: number } })[]>([]);
-  const [geocodingProgress, setGeocodingProgress] = useState({ current: 0, total: 0 });
+  const [isProcessingAddresses, setIsProcessingAddresses] = useState(false);
   
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
-  const { geocodeAddressRealTime, isGeocoding } = useRealTimeGeocoding();
+  const { geocodeAddressRealTime } = useRealTimeGeocoding();
   
-  console.log("ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "listings:", listings.length);
+  console.log("🗺️ ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "listings:", listings.length);
   
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
-    console.log("API key received in ListingMap");
+    console.log("🔑 API key received in ListingMap");
     setApiKey(newApiKey);
     
     if (onApiKeySubmit) {
@@ -68,77 +68,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  // Geocode listings with improved error handling
-  useEffect(() => {
-    const geocodeListings = async () => {
-      if (!isLoaded || !listings.length) {
-        setListingsWithCoords(listings.map(listing => ({ ...listing })));
-        return;
-      }
-
-      console.log('🔄 Processing listings for coordinates...');
-      setGeocodingProgress({ current: 0, total: listings.length });
-      const updatedListings = [];
-
-      for (let i = 0; i < listings.length; i++) {
-        const listing = listings[i];
-        setGeocodingProgress({ current: i + 1, total: listings.length });
-
-        // Check if we already have coordinates
-        if (listing.location) {
-          console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
-          updatedListings.push({
-            ...listing,
-            coordinates: listing.location
-          });
-        } else if (isApiKeyValid) {
-          console.log(`🎯 Geocoding: ${listing.address}, ${listing.city}, ${listing.country}`);
-          
-          // Try geocoding with timeout
-          const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
-          
-          if (coords) {
-            updatedListings.push({
-              ...listing,
-              coordinates: { lat: coords.lat, lng: coords.lng }
-            });
-            console.log(`✅ Geocoded ${listing.address}:`, coords);
-          } else {
-            // Use Belgrade fallback with slight offset based on listing ID
-            const fallbackCoords = getBelgradeFallbackCoords(listing.id);
-            updatedListings.push({
-              ...listing,
-              coordinates: fallbackCoords
-            });
-            console.log(`⚠️ Using fallback coordinates for ${listing.address}:`, fallbackCoords);
-          }
-        } else {
-          // No API key, use fallback immediately
-          const fallbackCoords = getBelgradeFallbackCoords(listing.id);
-          updatedListings.push({
-            ...listing,
-            coordinates: fallbackCoords
-          });
-          console.log(`⚠️ No API key, using fallback for ${listing.address}:`, fallbackCoords);
-        }
-
-        // Small delay to prevent overwhelming the API
-        if (i < listings.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-        }
-      }
-
-      setListingsWithCoords(updatedListings);
-      setGeocodingProgress({ current: 0, total: 0 });
-      console.log('✅ Finished processing all listings');
-    };
-
-    geocodeListings();
-  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime]);
-
-  const getBelgradeFallbackCoords = (listingId: number) => {
+  const getBelgradeFallbackCoords = useCallback((listingId: number) => {
     // Generate coordinates around Belgrade with more realistic spread
-    const baseVariation = (listingId * 0.003) % 0.02; // Limit max variation
+    const baseVariation = (listingId * 0.003) % 0.02;
     const latVariation = baseVariation * (listingId % 2 === 0 ? 1 : -1);
     const lngVariation = baseVariation * (listingId % 3 === 0 ? 1 : -1);
     
@@ -146,33 +78,113 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
       lat: defaultCenter.lat + latVariation, 
       lng: defaultCenter.lng + lngVariation 
     };
-  };
-
-  const getListingCoordinates = useCallback((listing: Listing & { coordinates?: { lat: number; lng: number } }, index: number) => {
-    if (listing.coordinates) {
-      return listing.coordinates;
-    }
-    
-    // Fallback to Belgrade with offset
-    return getBelgradeFallbackCoords(listing.id);
   }, []);
 
+  // Simplified geocoding process
+  useEffect(() => {
+    const processListings = async () => {
+      console.log("🔄 Processing listings...", { isLoaded, listingsCount: listings.length, isApiKeyValid });
+      
+      // If no listings, clear the processed listings
+      if (!listings.length) {
+        setListingsWithCoords([]);
+        return;
+      }
+
+      // If maps isn't loaded yet, use fallback coordinates immediately
+      if (!isLoaded) {
+        console.log("⚠️ Maps not loaded, using fallback coordinates");
+        const fallbackListings = listings.map(listing => ({
+          ...listing,
+          coordinates: getBelgradeFallbackCoords(listing.id)
+        }));
+        setListingsWithCoords(fallbackListings);
+        return;
+      }
+
+      setIsProcessingAddresses(true);
+      console.log("🎯 Starting address processing...");
+
+      const processedListings = [];
+      
+      for (let i = 0; i < listings.length; i++) {
+        const listing = listings[i];
+        console.log(`📍 Processing listing ${i + 1}/${listings.length}: ${listing.address}`);
+
+        // Check if we already have coordinates
+        if (listing.location) {
+          console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
+          processedListings.push({
+            ...listing,
+            coordinates: listing.location
+          });
+        } else if (isApiKeyValid) {
+          // Try geocoding with short timeout
+          console.log(`🔍 Attempting to geocode: ${listing.address}, ${listing.city}, ${listing.country}`);
+          
+          try {
+            const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
+            
+            if (coords) {
+              console.log(`✅ Geocoded ${listing.address}:`, coords);
+              processedListings.push({
+                ...listing,
+                coordinates: coords
+              });
+            } else {
+              console.log(`⚠️ Geocoding failed for ${listing.address}, using fallback`);
+              processedListings.push({
+                ...listing,
+                coordinates: getBelgradeFallbackCoords(listing.id)
+              });
+            }
+          } catch (error) {
+            console.error(`❌ Error geocoding ${listing.address}:`, error);
+            processedListings.push({
+              ...listing,
+              coordinates: getBelgradeFallbackCoords(listing.id)
+            });
+          }
+        } else {
+          // No API key, use fallback
+          console.log(`⚠️ No valid API key, using fallback for ${listing.address}`);
+          processedListings.push({
+            ...listing,
+            coordinates: getBelgradeFallbackCoords(listing.id)
+          });
+        }
+
+        // Small delay between requests to avoid overwhelming the API
+        if (i < listings.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+      }
+
+      console.log("✅ Finished processing all listings:", processedListings.length);
+      setListingsWithCoords(processedListings);
+      setIsProcessingAddresses(false);
+    };
+
+    processListings();
+  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime, getBelgradeFallbackCoords]);
+
   const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("Map loaded successfully");
+    console.log("🗺️ Map loaded successfully");
     setMapRef(map);
     
     if (listingsWithCoords.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      listingsWithCoords.forEach((listing, index) => {
-        const position = getListingCoordinates(listing, index);
-        bounds.extend(position);
+      listingsWithCoords.forEach((listing) => {
+        if (listing.coordinates) {
+          bounds.extend(listing.coordinates);
+        }
       });
       map.fitBounds(bounds, 80);
     }
-  }, [listingsWithCoords, getListingCoordinates]);
+  }, [listingsWithCoords]);
 
   const onUnmount = useCallback(() => {
-    console.log("Map unmounted");
+    console.log("🗺️ Map unmounted");
     setMapRef(null);
   }, []);
 
@@ -193,7 +205,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show API key input if needed
   if (!isApiKeyValid) {
-    console.log("Showing API key input - API key not valid");
+    console.log("🔑 Showing API key input - API key not valid");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-6">
         <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
@@ -203,7 +215,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show error state
   if (loadError) {
-    console.log("Showing error state - load error:", loadError);
+    console.log("❌ Showing error state - load error:", loadError);
     const errorMessage = handleMapsApiLoadError(loadError);
     
     return (
@@ -226,16 +238,16 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show loading state only if map is loading OR actively geocoding
-  if (!isLoaded || (geocodingProgress.total > 0 && geocodingProgress.current < geocodingProgress.total)) {
-    console.log("Showing loading state");
+  // Show loading state only if map is loading OR actively processing addresses
+  if (!isLoaded || isProcessingAddresses) {
+    console.log("⏳ Showing loading state");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="bg-white p-8 rounded-xl shadow-lg">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
           <span className="text-gray-600 font-medium">
-            {geocodingProgress.total > 0 
-              ? `Processing addresses... ${geocodingProgress.current}/${geocodingProgress.total}` 
+            {isProcessingAddresses 
+              ? "Processing addresses for map..." 
               : "Loading interactive map..."}
           </span>
         </div>
@@ -243,7 +255,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  console.log("Rendering Google Map with", listingsWithCoords.length, "listings");
+  console.log("🗺️ Rendering Google Map with", listingsWithCoords.length, "listings");
 
   return (
     <div className="h-full w-full relative">
@@ -275,14 +287,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         }}
       >
         {/* Render markers */}
-        {listingsWithCoords.map((listing, index) => {
-          const position = getListingCoordinates(listing, index);
+        {listingsWithCoords.map((listing) => {
+          if (!listing.coordinates) return null;
+          
           const markerColor = getMarkerColor(listing.type);
           
           return (
             <MarkerF
               key={listing.id}
-              position={position}
+              position={listing.coordinates}
               onClick={() => handleMarkerClick(listing)}
               icon={{
                 path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
@@ -300,10 +313,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         {/* Info Window */}
         {selectedListing && (
           <InfoWindow
-            position={getListingCoordinates(
-              listingsWithCoords.find(l => l.id === selectedListing.id) || selectedListing, 
-              listingsWithCoords.findIndex(l => l.id === selectedListing.id)
-            )}
+            position={listingsWithCoords.find(l => l.id === selectedListing.id)?.coordinates || defaultCenter}
             onCloseClick={handleInfoClose}
             options={{ 
               pixelOffset: new google.maps.Size(0, -35),
