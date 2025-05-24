@@ -244,7 +244,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           {isGeocoding && (
             <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
               <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
-              <span className="text-xs text-blue-600 font-medium">Precision geocoding...</span>
+              <span className="text-xs text-blue-600 font-medium">Loading...</span>
             </div>
           )}
         </div>
@@ -266,11 +266,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </div>
           
           <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
-            <div className="text-xs text-blue-600 font-medium mb-3 flex items-center gap-2">
-              <MapPin className="h-3 w-3" />
-              Advanced geocoding with sub-meter precision for exact coordinates
-            </div>
-            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City *</label>
@@ -450,7 +445,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
             {isProcessing ? (
               <div className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>{isGeocoding ? "Precision geocoding..." : "Adding listing..."}</span>
+                <span>{isGeocoding ? "Loading..." : "Adding listing..."}</span>
               </div>
             ) : (
               "Add listing"
