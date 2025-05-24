@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+
+import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +17,6 @@ const containerStyle = {
   height: '100%'
 };
 
-// Belgrade center coordinates
 const defaultCenter = {
   lat: 44.8154,
   lng: 20.4606
@@ -50,140 +50,102 @@ interface ListingMapProps {
 
 export function ListingMap({ listings, onListingClick, onApiKeySubmit }: ListingMapProps) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
-  const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
-  const [listingsWithCoords, setListingsWithCoords] = useState<(Listing & { coordinates?: { lat: number; lng: number } })[]>([]);
-  const [isProcessingAddresses, setIsProcessingAddresses] = useState(false);
+  const [mapListings, setMapListings] = useState<(Listing & { coordinates: { lat: number; lng: number } })[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   const { geocodeAddressRealTime } = useRealTimeGeocoding();
   
-  console.log("🗺️ ListingMap render - isLoaded:", isLoaded, "isApiKeyValid:", isApiKeyValid, "listings:", listings.length);
+  console.log("ListingMap render - isLoaded:", isLoaded, "listings:", listings.length);
   
   const handleApiKeySubmit = useCallback((newApiKey: string) => {
-    console.log("🔑 API key received in ListingMap");
     setApiKey(newApiKey);
-    
     if (onApiKeySubmit) {
       onApiKeySubmit(newApiKey);
     }
   }, [setApiKey, onApiKeySubmit]);
 
-  const getBelgradeFallbackCoords = useCallback((listingId: number) => {
-    // Generate coordinates around Belgrade with small variation
-    const baseVariation = (listingId * 0.001) % 0.01;
-    const latVariation = baseVariation * (listingId % 2 === 0 ? 1 : -1);
-    const lngVariation = baseVariation * (listingId % 3 === 0 ? 1 : -1);
-    
+  // Simple fallback coordinates around Belgrade
+  const getBelgradeFallback = useCallback((index: number) => {
+    const variation = index * 0.005;
     return { 
-      lat: defaultCenter.lat + latVariation, 
-      lng: defaultCenter.lng + lngVariation 
+      lat: defaultCenter.lat + (variation % 0.02) - 0.01, 
+      lng: defaultCenter.lng + (variation % 0.02) - 0.01 
     };
   }, []);
 
-  // Process listings when map is loaded and listings are available
+  // Process listings when map is ready
   useEffect(() => {
+    if (!isLoaded || !isApiKeyValid || !listings.length) {
+      console.log("Not ready to process listings");
+      return;
+    }
+
     const processListings = async () => {
-      if (!listings.length) {
-        console.log("📭 No listings to process");
-        setListingsWithCoords([]);
-        return;
-      }
+      console.log("Processing", listings.length, "listings");
+      setIsProcessing(true);
 
-      if (!isLoaded || !isApiKeyValid) {
-        console.log("⏸️ Maps not ready yet, waiting...");
-        return;
-      }
-
-      console.log("🎯 Starting to process", listings.length, "listings for geocoding");
-      setIsProcessingAddresses(true);
-
-      try {
-        const processedListings = [];
+      const processed = [];
+      
+      for (let i = 0; i < listings.length; i++) {
+        const listing = listings[i];
         
-        for (let i = 0; i < listings.length; i++) {
-          const listing = listings[i];
-          console.log(`📍 Processing listing ${i + 1}/${listings.length}: ${listing.address}, ${listing.city}`);
-
-          // Check if we already have coordinates
-          if (listing.location?.lat && listing.location?.lng) {
-            console.log(`✅ Using existing coordinates for ${listing.address}:`, listing.location);
-            processedListings.push({
-              ...listing,
-              coordinates: listing.location
-            });
-          } else {
-            // Try real geocoding first
-            console.log(`🔍 Attempting real geocoding for: ${listing.address}, ${listing.city}, ${listing.country}`);
-            
-            try {
-              const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
-              
-              if (coords) {
-                console.log(`✅ Successfully geocoded ${listing.address}:`, coords);
-                processedListings.push({
-                  ...listing,
-                  coordinates: coords
-                });
-              } else {
-                console.log(`⚠️ Geocoding failed for ${listing.address}, using Belgrade fallback`);
-                processedListings.push({
-                  ...listing,
-                  coordinates: getBelgradeFallbackCoords(listing.id)
-                });
-              }
-            } catch (error) {
-              console.error(`❌ Error geocoding ${listing.address}:`, error);
-              processedListings.push({
-                ...listing,
-                coordinates: getBelgradeFallbackCoords(listing.id)
-              });
-            }
-          }
-
-          // Small delay between requests to avoid rate limiting
-          if (i < listings.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 200));
-          }
+        // Use existing coordinates if available
+        if (listing.location?.lat && listing.location?.lng) {
+          processed.push({
+            ...listing,
+            coordinates: listing.location
+          });
+          continue;
         }
 
-        console.log("✅ Finished processing all listings:", processedListings.length);
-        setListingsWithCoords(processedListings);
-        
-      } catch (error) {
-        console.error("❌ Error processing listings:", error);
-        // Use fallback for all listings
-        const fallbackListings = listings.map(listing => ({
-          ...listing,
-          coordinates: getBelgradeFallbackCoords(listing.id)
-        }));
-        setListingsWithCoords(fallbackListings);
-      } finally {
-        setIsProcessingAddresses(false);
+        // Try to geocode
+        try {
+          const coords = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
+          
+          if (coords) {
+            processed.push({
+              ...listing,
+              coordinates: coords
+            });
+          } else {
+            // Use fallback
+            processed.push({
+              ...listing,
+              coordinates: getBelgradeFallback(i)
+            });
+          }
+        } catch (error) {
+          console.error("Error processing listing:", error);
+          processed.push({
+            ...listing,
+            coordinates: getBelgradeFallback(i)
+          });
+        }
+
+        // Small delay
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
+
+      console.log("Finished processing listings:", processed.length);
+      setMapListings(processed);
+      setIsProcessing(false);
     };
 
     processListings();
-  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime, getBelgradeFallbackCoords]);
+  }, [listings, isLoaded, isApiKeyValid, geocodeAddressRealTime, getBelgradeFallback]);
 
   const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("🗺️ Map loaded successfully");
-    setMapRef(map);
+    console.log("Map loaded");
     
-    if (listingsWithCoords.length > 0) {
+    if (mapListings.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      listingsWithCoords.forEach((listing) => {
-        if (listing.coordinates) {
-          bounds.extend(listing.coordinates);
-        }
+      mapListings.forEach((listing) => {
+        bounds.extend(listing.coordinates);
       });
-      map.fitBounds(bounds, 80);
+      map.fitBounds(bounds, 50);
     }
-  }, [listingsWithCoords]);
-
-  const onUnmount = useCallback(() => {
-    console.log("🗺️ Map unmounted");
-    setMapRef(null);
-  }, []);
+  }, [mapListings]);
 
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
@@ -202,7 +164,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show API key input if needed
   if (!isApiKeyValid) {
-    console.log("🔑 Showing API key input - API key not valid");
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-6">
         <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
@@ -212,7 +173,6 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   // Show error state
   if (loadError) {
-    console.log("❌ Showing error state - load error:", loadError);
     const errorMessage = handleMapsApiLoadError(loadError);
     
     return (
@@ -235,24 +195,21 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
     );
   }
 
-  // Show loading state while processing
-  if (!isLoaded || isProcessingAddresses) {
-    console.log("⏳ Showing loading state - isLoaded:", isLoaded, "isProcessing:", isProcessingAddresses);
+  // Show loading state
+  if (!isLoaded || isProcessing) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="bg-white p-8 rounded-xl shadow-lg">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
           <span className="text-gray-600 font-medium">
-            {isProcessingAddresses 
-              ? "Geocoding addresses for accurate positioning..." 
-              : "Loading interactive map..."}
+            {isProcessing ? "Processing addresses..." : "Loading map..."}
           </span>
         </div>
       </div>
     );
   }
 
-  console.log("🗺️ Rendering Google Map with", listingsWithCoords.length, "listings");
+  console.log("Rendering map with", mapListings.length, "listings");
 
   return (
     <div className="h-full w-full relative">
@@ -261,101 +218,71 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         center={defaultCenter}
         zoom={13}
         onLoad={onLoad}
-        onUnmount={onUnmount}
         options={{
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
           zoomControl: true,
-          controlSize: 32,
           disableDefaultUI: true,
-          styles: [
-            {
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            },
-            {
-              featureType: "transit",
-              elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            }
-          ]
         }}
       >
-        {/* Render markers */}
-        {listingsWithCoords.map((listing) => {
-          if (!listing.coordinates) return null;
-          
-          const markerColor = getMarkerColor(listing.type);
-          
-          return (
-            <MarkerF
-              key={listing.id}
-              position={listing.coordinates}
-              onClick={() => handleMarkerClick(listing)}
-              icon={{
-                path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
-                fillColor: markerColor,
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: "#ffffff",
-                scale: 1.8,
-                anchor: new google.maps.Point(12, 24)
-              }}
-            />
-          );
-        })}
+        {mapListings.map((listing) => (
+          <MarkerF
+            key={listing.id}
+            position={listing.coordinates}
+            onClick={() => handleMarkerClick(listing)}
+            icon={{
+              path: "M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
+              fillColor: getMarkerColor(listing.type),
+              fillOpacity: 1,
+              strokeWeight: 2,
+              strokeColor: "#ffffff",
+              scale: 1.8,
+              anchor: new google.maps.Point(12, 24)
+            }}
+          />
+        ))}
 
-        {/* Info Window */}
         {selectedListing && (
           <InfoWindow
-            position={listingsWithCoords.find(l => l.id === selectedListing.id)?.coordinates || defaultCenter}
+            position={mapListings.find(l => l.id === selectedListing.id)?.coordinates || defaultCenter}
             onCloseClick={handleInfoClose}
-            options={{ 
-              pixelOffset: new google.maps.Size(0, -35),
-              maxWidth: 340
-            }}
           >
             <Card className="w-full border-0 shadow-none">
-              <CardContent className="p-5">
-                <div className="space-y-4">
+              <CardContent className="p-4">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-xs font-medium py-1.5 px-2.5 border-primary/30">
-                      #{selectedListing.id}
-                    </Badge>
-                    <Badge className="bg-gradient-to-r from-primary/10 to-primary/20 text-primary border-0 text-xs font-medium py-1.5 px-3">
-                      {formatPropertyType(selectedListing.type)}
-                    </Badge>
+                    <Badge variant="outline">#{selectedListing.id}</Badge>
+                    <Badge>{formatPropertyType(selectedListing.type)}</Badge>
                   </div>
                   
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-base">{selectedListing.address}</h4>
-                    <div className="flex items-center gap-1.5 mt-2 text-sm text-gray-500">
-                      <MapPin className="h-4 w-4" />
+                    <h4 className="font-semibold">{selectedListing.address}</h4>
+                    <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
+                      <MapPin className="h-3 w-3" />
                       <span>{selectedListing.city}, {selectedListing.country}</span>
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Building2 className="h-4 w-4 text-gray-500" />
-                      <span className="capitalize text-gray-700 font-medium">{selectedListing.category.replace(/_/g, ' ')}</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-sm">
+                      <Building2 className="h-3 w-3" />
+                      <span className="capitalize">{selectedListing.category.replace(/_/g, ' ')}</span>
                     </div>
                     
                     {selectedListing.tenant && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <User className="h-4 w-4 text-gray-500" />
-                        <span className="text-gray-700 font-medium">{selectedListing.tenant.name}</span>
+                      <div className="flex items-center gap-1 text-sm">
+                        <User className="h-3 w-3" />
+                        <span>{selectedListing.tenant.name}</span>
                       </div>
                     )}
                   </div>
                   
                   <Button 
-                    className="w-full mt-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-sm py-2.5 px-4 font-medium"
+                    className="w-full mt-2"
                     onClick={handleViewListing}
                   >
-                    View Property Details
+                    View Details
                   </Button>
                 </div>
               </CardContent>
@@ -364,36 +291,24 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         )}
       </GoogleMap>
       
-      {/* Map legend */}
-      <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-5 rounded-xl shadow-xl border border-gray-100/50">
-        <h4 className="text-sm font-semibold mb-3 text-gray-800 flex items-center gap-2">
-          <Map className="h-4 w-4 text-primary" />
-          Property Categories
+      {/* Simple legend */}
+      <div className="absolute bottom-4 left-4 bg-white/95 p-3 rounded-lg shadow-lg">
+        <h4 className="text-xs font-semibold mb-2 flex items-center gap-1">
+          <Map className="h-3 w-3" />
+          Property Types
         </h4>
-        <div className="grid grid-cols-1 gap-3">
-          <div className="flex items-center gap-3 text-sm">
-            <span className="h-4 w-4 rounded-full bg-[#4f46e5] shadow-sm"></span>
-            <span className="text-gray-700 font-medium">Residential Rental</span>
+        <div className="space-y-1 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-[#4f46e5]"></span>
+            <span>Residential</span>
           </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="h-4 w-4 rounded-full bg-[#0891b2] shadow-sm"></span>
-            <span className="text-gray-700 font-medium">Commercial Rental</span>
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-[#0891b2]"></span>
+            <span>Commercial</span>
           </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="h-4 w-4 rounded-full bg-[#059669] shadow-sm"></span>
-            <span className="text-gray-700 font-medium">Hospitality</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="h-4 w-4 rounded-full bg-[#d97706] shadow-sm"></span>
-            <span className="text-gray-700 font-medium">Vacation Rental</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="h-4 w-4 rounded-full bg-[#9333ea] shadow-sm"></span>
-            <span className="text-gray-700 font-medium">Mixed Use</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="h-4 w-4 rounded-full bg-[#dc2626] shadow-sm"></span>
-            <span className="text-gray-700 font-medium">Industrial</span>
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-[#059669]"></span>
+            <span>Hospitality</span>
           </div>
         </div>
       </div>
@@ -404,18 +319,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 function getMarkerColor(type: PropertyType): string {
   switch (type) {
     case "residential_rental":
-      return "#4f46e5"; // Indigo
+      return "#4f46e5";
     case "commercial_rental":
-      return "#0891b2"; // Cyan
+      return "#0891b2";
     case "hospitality":
-      return "#059669"; // Emerald
+      return "#059669";
     case "vacation_rental":
-      return "#d97706"; // Amber
+      return "#d97706";
     case "mixed_use":
-      return "#9333ea"; // Purple
+      return "#9333ea";
     case "industrial":
-      return "#dc2626"; // Red
+      return "#dc2626";
     default:
-      return "#6b7280"; // Gray
+      return "#6b7280";
   }
 }
