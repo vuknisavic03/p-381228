@@ -12,104 +12,135 @@ import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
-// Real Belgrade listings with accurate coordinates for testing
+// New test listings with real addresses for accuracy testing
 const initialListings = [
   {
     id: 1,
-    address: "Knez Mihailova 42",
-    city: "Belgrade",
-    country: "Serbia",
-    postalCode: "11000",
+    address: "1600 Pennsylvania Avenue NW",
+    city: "Washington",
+    country: "United States",
+    postalCode: "20500",
     type: "commercial_rental",
-    category: "retail",
-    location: { lat: 44.817557, lng: 20.456624 },
+    category: "office",
     tenant: {
-      name: "Belgrade Bookstore",
-      phone: "+381 11 234-5678",
-      email: "info@belgradebooks.rs",
+      name: "Government Office",
+      phone: "+1 202-456-1414",
+      email: "info@whitehouse.gov",
       type: "company"
     },
-    notes: "Prime location on main pedestrian street"
+    notes: "Historic government building"
   },
   {
     id: 2,
-    address: "Skadarlija 29",
-    city: "Belgrade",
-    country: "Serbia",
-    postalCode: "11000",
-    type: "hospitality",
-    category: "restaurant",
-    location: { lat: 44.815834, lng: 20.461187 },
+    address: "Times Square",
+    city: "New York",
+    country: "United States",
+    postalCode: "10036",
+    type: "commercial_rental",
+    category: "retail",
     tenant: {
-      name: "Traditional Serbian Restaurant",
-      phone: "+381 11 345-6789",
-      email: "reservations@skadarlijarest.rs",
+      name: "Broadway Store",
+      phone: "+1 212-768-1560",
+      email: "info@broadway.com",
       type: "company"
     },
-    notes: "Historic bohemian quarter, tourist area"
+    notes: "Prime Manhattan location"
   },
   {
     id: 3,
-    address: "Terazije 23",
-    city: "Belgrade",
-    country: "Serbia",
-    postalCode: "11000",
-    type: "residential_rental",
-    category: "apartment_condo",
-    location: { lat: 44.812456, lng: 20.461234 },
+    address: "Big Ben",
+    city: "London",
+    country: "United Kingdom",
+    postalCode: "SW1A 0AA",
+    type: "hospitality",
+    category: "hotel",
     tenant: {
-      name: "Marko Petrović",
-      phone: "+381 69 123-4567",
-      email: "marko.petrovic@gmail.com",
-      type: "individual"
+      name: "Historic Tours Ltd",
+      phone: "+44 20 7219 3000",
+      email: "tours@parliament.uk",
+      type: "company"
     },
-    notes: "City center apartment, 2 bedrooms"
+    notes: "Iconic London landmark area"
   },
   {
     id: 4,
-    address: "Bulevar Kralja Aleksandra 73",
-    city: "Belgrade",
-    country: "Serbia",
-    postalCode: "11000",
+    address: "Champs-Élysées",
+    city: "Paris",
+    country: "France",
+    postalCode: "75008",
     type: "commercial_rental",
-    category: "office",
-    location: { lat: 44.804712, lng: 20.478089 },
+    category: "retail",
     tenant: {
-      name: "Tech Solutions d.o.o.",
-      phone: "+381 11 456-7890",
-      email: "office@techsolutions.rs",
+      name: "Paris Fashion Boutique",
+      phone: "+33 1 42 65 55 10",
+      email: "contact@boutique.fr",
       type: "company"
     },
-    notes: "Modern office space, IT company"
+    notes: "Famous shopping avenue"
   },
   {
     id: 5,
-    address: "Zemun Quay 15",
-    city: "Belgrade",
-    country: "Serbia",
-    postalCode: "11080",
-    type: "vacation_rental",
-    category: "short_term",
-    location: { lat: 44.843123, lng: 20.404876 },
-    tenant: null,
-    notes: "Danube riverfront, short-term rental"
+    address: "Brandenburg Gate",
+    city: "Berlin",
+    country: "Germany",
+    postalCode: "10117",
+    type: "hospitality",
+    category: "hotel",
+    tenant: {
+      name: "Berlin Heritage Hotel",
+      phone: "+49 30 227 91 0",
+      email: "info@heritage-berlin.de",
+      type: "company"
+    },
+    notes: "Historic landmark location"
   },
   {
     id: 6,
-    address: "Novi Beograd Blok 21",
-    city: "Belgrade",
-    country: "Serbia",
-    postalCode: "11070",
-    type: "residential_rental",
-    category: "apartment_condo",
-    location: { lat: 44.817834, lng: 20.399712 },
+    address: "Sydney Opera House",
+    city: "Sydney",
+    country: "Australia",
+    postalCode: "2000",
+    type: "hospitality",
+    category: "hotel",
     tenant: {
-      name: "Ana Jovanović",
-      phone: "+381 64 987-6543",
-      email: "ana.jovanovic@yahoo.com",
-      type: "individual"
+      name: "Opera House Tours",
+      phone: "+61 2 9250 7111",
+      email: "info@sydneyoperahouse.com",
+      type: "company"
     },
-    notes: "New Belgrade residential block"
+    notes: "Iconic Australian landmark"
+  },
+  {
+    id: 7,
+    address: "CN Tower",
+    city: "Toronto",
+    country: "Canada", 
+    postalCode: "M5V 3E6",
+    type: "commercial_rental",
+    category: "office",
+    tenant: {
+      name: "Sky High Offices",
+      phone: "+1 416-868-6937",
+      email: "info@cntower.ca",
+      type: "company"
+    },
+    notes: "Toronto's iconic tower"
+  },
+  {
+    id: 8,
+    address: "Red Square",
+    city: "Moscow",
+    country: "Russia",
+    postalCode: "109012",
+    type: "commercial_rental",
+    category: "retail",
+    tenant: {
+      name: "Moscow Heritage Shop",
+      phone: "+7 495 692-47-03",
+      email: "shop@redsquare.ru",
+      type: "company"
+    },
+    notes: "Historic Moscow center"
   }
 ];
 
@@ -159,12 +190,12 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
         console.log("Loaded listings from server:", data);
         setListings(data);
       } else {
-        console.log("No listings found on server, using test data");
+        console.log("No listings found on server, using new test data");
         setListings(initialListings);
       }
     } catch (error) {
       console.error("Error fetching listings:", error);
-      console.log("Server not available, using test data");
+      console.log("Server not available, using new test data with real addresses");
       setListings(initialListings);
     } finally {
       setIsLoading(false);
