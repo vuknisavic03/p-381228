@@ -1,76 +1,62 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { getGoogleMapsApiKey } from '@/utils/googleMapsUtils';
 
 export function useRealTimeGeocoding() {
   const [isGeocoding, setIsGeocoding] = useState(false);
   const { toast } = useToast();
 
   const geocodeAddressRealTime = async (address: string, city: string, country: string) => {
-    console.log(`🎯 Starting geocoding for: "${address}, ${city}, ${country}"`);
+    console.log(`🎯 Starting real-time geocoding for: "${address}, ${city}, ${country}"`);
     setIsGeocoding(true);
     
     try {
-      const apiKey = getGoogleMapsApiKey();
-      
-      if (!apiKey) {
-        console.warn("❌ No API key available");
+      // Check if Google Maps is loaded and geocoder is available
+      if (!window.google?.maps?.Geocoder) {
+        console.warn("❌ Google Maps Geocoder not available");
         setIsGeocoding(false);
         return null;
       }
 
-      // Check if Google Maps is loaded
-      if (!window.google || !window.google.maps || !window.google.maps.Geocoder) {
-        console.warn("❌ Google Maps not loaded, using fallback");
-        setIsGeocoding(false);
-        return null;
-      }
-
-      console.log("✅ Google Maps API is available, proceeding with geocoding");
+      console.log("✅ Google Maps Geocoder is available, proceeding with geocoding");
       
       const geocoder = new window.google.maps.Geocoder();
       const fullAddress = `${address}, ${city}, ${country}`;
       
-      // Create a promise that resolves with geocoding result
+      // Create a promise for geocoding
       const geocodePromise = new Promise<{lat: number, lng: number} | null>((resolve) => {
-        console.log(`📍 Geocoding address: ${fullAddress}`);
+        console.log(`📍 Geocoding: ${fullAddress}`);
         
-        geocoder.geocode(
-          { 
-            address: fullAddress,
-            region: getCountryCode(country).toLowerCase()
-          },
-          (results, status) => {
-            console.log(`📊 Geocoding status: ${status}`, results);
-            
-            if (status === 'OK' && results && results[0]) {
-              const location = results[0].geometry.location;
-              const coords = {
-                lat: location.lat(),
-                lng: location.lng()
-              };
-              console.log(`✅ Geocoding successful:`, coords);
-              resolve(coords);
-            } else {
-              console.warn(`❌ Geocoding failed for ${fullAddress}. Status: ${status}`);
-              resolve(null);
-            }
+        geocoder.geocode({
+          address: fullAddress,
+          region: getCountryCode(country).toLowerCase()
+        }, (results, status) => {
+          console.log(`📊 Geocoding result - Status: ${status}`, results);
+          
+          if (status === 'OK' && results && results[0]) {
+            const location = results[0].geometry.location;
+            const coords = {
+              lat: location.lat(),
+              lng: location.lng()
+            };
+            console.log(`✅ Successfully geocoded "${fullAddress}":`, coords);
+            resolve(coords);
+          } else {
+            console.warn(`❌ Geocoding failed for "${fullAddress}". Status: ${status}`);
+            resolve(null);
           }
-        );
+        });
       });
 
-      // Add a 5-second timeout
+      // Add timeout
       const timeoutPromise = new Promise<null>((resolve) => {
         setTimeout(() => {
-          console.warn("⏰ Geocoding timeout after 5 seconds");
+          console.warn(`⏰ Geocoding timeout for "${fullAddress}"`);
           resolve(null);
         }, 5000);
       });
 
-      // Race between geocoding and timeout
       const result = await Promise.race([geocodePromise, timeoutPromise]);
-      
       setIsGeocoding(false);
       return result;
       
