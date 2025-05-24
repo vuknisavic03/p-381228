@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -59,11 +60,11 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col bg-gray-50">
+      <div className="h-screen flex flex-col bg-white">
         {/* Fixed header section */}
         <div className="px-6 py-4 flex justify-between items-center bg-white border-b border-gray-100">
-          <div className="flex items-center">
-            <h1 className="text-xl font-semibold text-gray-900">Listings</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-500">Edited just now</span>
           </div>
           <div className="flex items-center gap-3">
             <Tabs 
@@ -99,7 +100,7 @@ export default function Listings() {
         </div>
         
         {/* Main content container */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-hidden bg-white">
           <AnimatePresence mode="wait">
             {viewMode === "list" ? (
               <motion.div

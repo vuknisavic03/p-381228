@@ -28,8 +28,8 @@ export default function Transactions() {
       <div className="h-screen flex flex-col bg-white">
         {/* Fixed header section with Notion-inspired design */}
         <div className="px-6 py-4 flex justify-between items-center bg-white">
-          <div className="flex items-center">
-            <h1 className="text-xl font-semibold text-gray-900">Activity</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-500">Edited just now</span>
           </div>
           <Button
             onClick={() => setIsAddFormOpen(true)}
