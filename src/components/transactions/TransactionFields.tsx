@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Map } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -19,6 +19,7 @@ import {
 import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingSelector } from "./ListingSelector";
 import { ListingTypeToggle } from "./ListingTypeToggle";
+import { MapListingSelector } from "./MapListingSelector";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 
 export function TransactionFields({ 
@@ -28,6 +29,7 @@ export function TransactionFields({
   editMode = false 
 }: TransactionFormFieldsProps) {
   const [fields, setFields] = useState<TransactionFieldsData>(initialValues);
+  const [showMapSelector, setShowMapSelector] = useState(false);
   
   // Log initial values for debugging
   console.log("TransactionFields initialValues:", initialValues);
@@ -70,6 +72,10 @@ export function TransactionFields({
   };
   
   const transactionCategories = getCategoriesForSelection();
+
+  const handleMapListingSelect = (listingId: string) => {
+    setFields(f => ({ ...f, selectedListingId: listingId, category: "" }));
+  };
   
   return (
     <div className="space-y-6">
@@ -87,11 +93,24 @@ export function TransactionFields({
         {fields.listingType === "listing" ? (
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
             <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
-            <ListingSelector
-              listings={mockListings}
-              selectedValue={fields.selectedListingId}
-              onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))} // Reset category when listing changes
-            />
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <ListingSelector
+                  listings={mockListings}
+                  selectedValue={fields.selectedListingId}
+                  onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))} // Reset category when listing changes
+                />
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowMapSelector(true)}
+                className="h-9 px-3 border-gray-200 hover:bg-gray-50"
+              >
+                <Map className="h-4 w-4" />
+              </Button>
+            </div>
             
             {selectedListing && selectedPropertyCategory && (
               <div className="mt-3">
@@ -114,6 +133,20 @@ export function TransactionFields({
           </div>
         )}
       </div>
+
+      {/* Map Selector Modal */}
+      {showMapSelector && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-lg shadow-xl max-w-5xl w-full max-h-[90vh] overflow-hidden">
+            <MapListingSelector
+              listings={mockListings}
+              selectedListingId={fields.selectedListingId}
+              onListingSelect={handleMapListingSelect}
+              onClose={() => setShowMapSelector(false)}
+            />
+          </div>
+        </div>
+      )}
       
       {(selectedListing || fields.listingType === "general") && (
         <>
