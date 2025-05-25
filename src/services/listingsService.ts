@@ -10,7 +10,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "retail",
-    location: { lat: 44.8176, lng: 20.4633 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Fashion Store Belgrade",
       phone: "+381 11 123 4567",
@@ -28,7 +28,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "office",
-    location: { lat: 44.8154, lng: 20.4606 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Business Center",
       phone: "+381 11 234 5678",
@@ -46,7 +46,7 @@ const initialListings = [
     postalCode: "11000",
     type: "hospitality",
     category: "restaurant",
-    location: { lat: 44.8206, lng: 20.4522 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Kalemegdan Restaurant",
       phone: "+381 11 345 6789",
@@ -64,7 +64,7 @@ const initialListings = [
     postalCode: "11000",
     type: "hospitality",
     category: "restaurant",
-    location: { lat: 44.8168, lng: 20.4612 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Traditional Serbian Restaurant",
       phone: "+381 11 456 7890",
@@ -82,7 +82,7 @@ const initialListings = [
     postalCode: "11000",
     type: "residential_rental",
     category: "apartment",
-    location: { lat: 44.8125, lng: 20.4612 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Marko Petrović",
       phone: "+381 11 567 8901",
@@ -100,7 +100,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "office",
-    location: { lat: 44.8043, lng: 20.4781 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Tech Company Serbia",
       phone: "+381 11 678 9012",
@@ -118,7 +118,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "retail",
-    location: { lat: 44.8086, lng: 20.4570 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Shopping Mall Unit",
       phone: "+381 11 789 0123",
@@ -136,7 +136,7 @@ const initialListings = [
     postalCode: "11000",
     type: "residential_rental",
     category: "apartment",
-    location: { lat: 44.8099, lng: 20.4681 },
+    // Remove hardcoded location - let map geocode the real address
     tenant: {
       name: "Ana Jovanović",
       phone: "+381 11 890 1234",
