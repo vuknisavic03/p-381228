@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PropertyType } from "./TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
-import { handleMapsApiLoadError, geocodeAddress } from '@/utils/googleMapsUtils';
+import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
 import { Listing } from './TransactionFormTypes';
 
@@ -43,6 +43,43 @@ export function TransactionMapSelector({
   
   console.log("TransactionMapSelector render - isLoaded:", isLoaded, "listings:", listings.length);
   
+  // Simple geocoding function - identical to ListingMap
+  const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
+    if (!window.google?.maps?.Geocoder) {
+      console.log("Google Maps Geocoder not available");
+      return null;
+    }
+
+    const geocoder = new window.google.maps.Geocoder();
+    const fullAddress = `${address}, ${city}, ${country}`;
+    
+    try {
+      const result = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
+        geocoder.geocode({ address: fullAddress }, (results, status) => {
+          if (status === 'OK' && results && results[0]) {
+            resolve(results);
+          } else {
+            reject(new Error(`Geocoding failed: ${status}`));
+          }
+        });
+      });
+
+      if (result[0]) {
+        const location = result[0].geometry.location;
+        const coords = {
+          lat: location.lat(),
+          lng: location.lng()
+        };
+        console.log(`Geocoded "${fullAddress}":`, coords);
+        return coords;
+      }
+    } catch (error) {
+      console.log(`Geocoding failed for "${fullAddress}":`, error);
+    }
+    
+    return null;
+  }, []);
+
   // Generate fallback coordinates - identical to ListingMap
   const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
@@ -86,14 +123,14 @@ export function TransactionMapSelector({
           continue;
         }
 
-        // Try to geocode using the advanced geocoding from utils
+        // Try to geocode
         try {
           const coords = await geocodeAddress(listing.address, listing.city, listing.country);
           
           if (coords && !isCancelled) {
             processed.push({
               ...listing,
-              coordinates: { lat: coords.lat, lng: coords.lng }
+              coordinates: coords
             });
           } else {
             // Use fallback
@@ -130,7 +167,7 @@ export function TransactionMapSelector({
       isCancelled = true;
       setIsProcessing(false);
     };
-  }, [isLoaded, isApiKeyValid, listingsKey, getFallbackCoordinates]);
+  }, [isLoaded, isApiKeyValid, listingsKey, geocodeAddress, getFallbackCoordinates]);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("Map loaded successfully");
