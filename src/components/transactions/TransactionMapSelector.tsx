@@ -27,9 +27,17 @@ export function TransactionMapSelector({
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(null);
 
-  useEffect(() => {
-    if (!isLoaded || !mapRef.current) return;
+  console.log("TransactionMapSelector - isLoaded:", isLoaded);
+  console.log("TransactionMapSelector - listings count:", listings.length);
+  console.log("TransactionMapSelector - listings:", listings);
 
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current) {
+      console.log("Map not ready - isLoaded:", isLoaded, "mapRef:", !!mapRef.current);
+      return;
+    }
+
+    console.log("Initializing Google Map...");
     const mapInstance = new google.maps.Map(mapRef.current, {
       zoom: 13,
       center: { lat: 44.8154, lng: 20.4606 }, // Belgrade center
@@ -45,6 +53,7 @@ export function TransactionMapSelector({
     const infoWindowInstance = new google.maps.InfoWindow();
     setMap(mapInstance);
     setInfoWindow(infoWindowInstance);
+    console.log("Google Map initialized successfully");
 
     return () => {
       markers.forEach(marker => marker.setMap(null));
@@ -53,7 +62,12 @@ export function TransactionMapSelector({
   }, [isLoaded]);
 
   useEffect(() => {
-    if (!map || !isLoaded) return;
+    if (!map || !isLoaded || listings.length === 0) {
+      console.log("Cannot create markers - map:", !!map, "isLoaded:", isLoaded, "listings:", listings.length);
+      return;
+    }
+
+    console.log("Starting marker creation for", listings.length, "listings");
 
     // Clear existing markers
     markers.forEach(marker => marker.setMap(null));
@@ -63,14 +77,20 @@ export function TransactionMapSelector({
     const bounds = new google.maps.LatLngBounds();
 
     const processListings = async () => {
+      console.log("Processing listings for markers...");
+      
       for (const listing of listings) {
+        console.log("Processing listing:", listing.name, "location:", listing.location);
+        
         let position = listing.location;
         
         if (!position) {
+          console.log("No location found, attempting to geocode:", listing.address);
           try {
             const geocoded = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
             if (geocoded) {
               position = { lat: geocoded.lat, lng: geocoded.lng };
+              console.log("Geocoded successfully:", position);
             }
           } catch (error) {
             console.warn(`Failed to geocode ${listing.address}, ${listing.city}, ${listing.country}:`, error);
@@ -78,9 +98,13 @@ export function TransactionMapSelector({
           }
         }
 
-        if (!position) continue;
+        if (!position) {
+          console.log("No position available for listing:", listing.name);
+          continue;
+        }
 
         const isSelected = listing.id === selectedListingId;
+        console.log("Creating marker for:", listing.name, "at position:", position, "selected:", isSelected);
         
         const marker = new google.maps.Marker({
           position,
@@ -96,7 +120,10 @@ export function TransactionMapSelector({
           }
         });
 
+        console.log("Marker created successfully for:", listing.name);
+
         marker.addListener('click', () => {
+          console.log("Marker clicked for listing:", listing.name);
           const content = `
             <div class="p-3 max-w-xs">
               <div class="flex items-center gap-2 mb-2">
@@ -134,12 +161,17 @@ export function TransactionMapSelector({
         bounds.extend(position);
       }
 
+      console.log("Created", newMarkers.length, "markers total");
+
       if (newMarkers.length > 0) {
+        console.log("Fitting map to bounds...");
         map.fitBounds(bounds);
         const zoom = map.getZoom();
         if (zoom && zoom > 16) {
           map.setZoom(16);
         }
+      } else {
+        console.log("No markers created, keeping default view");
       }
     };
 
@@ -148,6 +180,7 @@ export function TransactionMapSelector({
 
     // Global function for selecting listing from info window
     (window as any).selectListing = (listingId: string) => {
+      console.log("Selecting listing from info window:", listingId);
       const listing = listings.find(l => l.id === listingId);
       if (listing) {
         onListingSelect(listing);
@@ -187,6 +220,9 @@ export function TransactionMapSelector({
         <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg">
           <p className="text-sm text-gray-600 text-center">
             Click on a property marker to view details and select it
+          </p>
+          <p className="text-xs text-gray-500 text-center mt-1">
+            {listings.length} properties • {isLoaded ? 'Map loaded' : 'Loading map...'}
           </p>
         </div>
       </div>
