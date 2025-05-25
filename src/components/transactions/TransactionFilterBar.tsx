@@ -2,6 +2,7 @@
 import React from 'react';
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
+import { DateRange } from "react-day-picker";
 
 interface TransactionFilterBarProps {
   search: string;
@@ -13,8 +14,8 @@ interface TransactionFilterBarProps {
   clearFilters: () => void;
   transactionType: 'revenue' | 'expense';
   setTransactionType: (type: 'revenue' | 'expense') => void;
-  dateRange?: { from?: Date; to?: Date };
-  onDateRangeChange?: (dateRange: { from?: Date; to?: Date } | undefined) => void;
+  dateRange?: DateRange;
+  onDateRangeChange?: (dateRange: DateRange | undefined) => void;
 }
 
 export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
