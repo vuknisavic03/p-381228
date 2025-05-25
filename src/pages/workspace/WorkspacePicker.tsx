@@ -187,10 +187,10 @@ export default function WorkspacePicker() {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="backdrop-blur-md bg-white/90 p-3 border border-slate-200/50 shadow-lg rounded-md">
-          <p className="font-medium text-slate-800 mb-1">{label}</p>
+        <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-lg">
+          <p className="font-medium text-gray-900 mb-1 text-sm">{label}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} className="font-semibold text-slate-900 flex items-center gap-1" style={{ color: entry.color }}>
+            <p key={index} className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
               {activeChartType === 'commission' ? (
                 <span className="text-sm font-medium">{entry.dataKey === 'commission' ? 'Commission: ' : ''}</span>
               ) : (
@@ -207,15 +207,15 @@ export default function WorkspacePicker() {
 
   return (
     <div className="h-screen flex overflow-hidden bg-white">
-      <div className="w-[280px] border-r border-[#EAEAEC] bg-white shadow-sm flex-shrink-0">
-        <div className="p-4 border-b border-[#EAEAEC]">
+      <div className="w-[280px] border-r border-gray-200 bg-white shadow-sm flex-shrink-0">
+        <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-[#1A1A1A] text-lg font-semibold">Workspaces</h2>
+            <h2 className="text-gray-900 text-lg font-semibold">Workspaces</h2>
             <button 
               onClick={() => setIsDialogOpen(true)}
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-[#F9F9FA] hover:bg-[#F0F0F2] transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
             >
-              <Plus className="w-4 h-4 text-[#1A1A1A]" />
+              <Plus className="w-4 h-4 text-gray-900" />
             </button>
           </div>
         </div>
@@ -224,18 +224,18 @@ export default function WorkspacePicker() {
             <button
               key={workspace.name}
               onClick={() => handleWorkspaceSelect(workspace)}
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#F9F9FA] transition-colors text-left mx-1.5"
+              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors text-left mx-1.5"
             >
               <div className="flex items-center gap-2.5">
-                <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                <div className="min-w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-600">
                   {workspace.initials}
                 </div>
                 <div>
-                  <div className="text-[#1A1A1A] font-medium truncate max-w-36 text-base">{workspace.name}</div>
-                  <div className="text-sm text-[#9EA3AD] truncate max-w-36">{workspace.owner}</div>
+                  <div className="text-gray-900 font-medium truncate max-w-36 text-base">{workspace.name}</div>
+                  <div className="text-sm text-gray-500 truncate max-w-36">{workspace.owner}</div>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#9EA3AD]" />
+              <ChevronRight className="w-4 h-4 text-gray-400" />
             </button>
           ))}
         </div>
@@ -248,12 +248,12 @@ export default function WorkspacePicker() {
               <Button
                 onClick={() => setActiveChartType('revenue')}
                 variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
-                className={`gap-2 py-1.5 px-3 rounded-md border border-[#F5F5F6] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
-                  activeChartType === 'revenue' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
+                className={`gap-2 py-1.5 px-3 rounded-md border border-gray-200 bg-white hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 ${
+                  activeChartType === 'revenue' ? 'text-gray-900 shadow-sm' : 'text-gray-600'
                 }`}
                 size="sm"
               >
-                <BarChart className={`w-4 h-4 ${activeChartType === 'revenue' ? 'text-[#9b87f5]' : 'text-[#6E6E76]'}`} />
+                <BarChart className={`w-4 h-4 ${activeChartType === 'revenue' ? 'text-blue-600' : 'text-gray-600'}`} />
                 <span className={`text-xs ${activeChartType === 'revenue' ? 'font-medium' : 'font-normal'}`}>
                   Property Revenue
                 </span>
@@ -261,12 +261,12 @@ export default function WorkspacePicker() {
               <Button
                 onClick={() => setActiveChartType('commission')}
                 variant={activeChartType === 'commission' ? 'outline' : 'outline'}
-                className={`gap-2 py-1.5 px-3 rounded-md border border-[#F5F5F6] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
-                  activeChartType === 'commission' ? 'text-[#1A1A1A] shadow-sm' : 'text-[#6E6E76]'
+                className={`gap-2 py-1.5 px-3 rounded-md border border-gray-200 bg-white hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 ${
+                  activeChartType === 'commission' ? 'text-gray-900 shadow-sm' : 'text-gray-600'
                 }`}
                 size="sm"
               >
-                <TrendingUp className={`w-4 h-4 ${activeChartType === 'commission' ? 'text-[#0EA5E9]' : 'text-[#6E6E76]'}`} />
+                <TrendingUp className={`w-4 h-4 ${activeChartType === 'commission' ? 'text-green-600' : 'text-gray-600'}`} />
                 <span className={`text-xs ${activeChartType === 'commission' ? 'font-medium' : 'font-normal'}`}>
                   Manager Commission
                 </span>
@@ -279,26 +279,26 @@ export default function WorkspacePicker() {
               {workspaces.map((workspace, index) => (
                 <Card 
                   key={index}
-                  className="overflow-hidden border border-[#F5F5F6] rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
+                  className="overflow-hidden border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer bg-white"
                   onClick={() => handleWorkspaceSelect(workspace)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="min-w-8 h-8 rounded-lg bg-gradient-to-br from-[#FAFAFA] to-[#F0F0F2] flex items-center justify-center text-sm font-medium text-[#6E6E76]">
+                        <div className="min-w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-600">
                           {workspace.initials}
                         </div>
                         <div>
-                          <div className="text-[#1A1A1A] font-medium text-base">{workspace.name}</div>
-                          <div className="text-sm text-[#6E6E76]">{workspace.owner}</div>
+                          <div className="text-gray-900 font-medium text-base">{workspace.name}</div>
+                          <div className="text-sm text-gray-600">{workspace.owner}</div>
                         </div>
                       </div>
-                      <div className="text-[#9b87f5] p-1 rounded-lg">
+                      <div className="text-blue-600 p-1 rounded-lg">
                         <BarChart size={18} />
                       </div>
                     </div>
                     
-                    <div className="h-36 mt-2 pt-3 border-t border-[#F5F5F6]">
+                    <div className="h-36 mt-2 pt-3 border-t border-gray-200">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
@@ -306,22 +306,22 @@ export default function WorkspacePicker() {
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.7} />
-                              <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.05} />
+                              <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
+                              <stop offset="95%" stopColor="#2563eb" stopOpacity={0.01} />
                             </linearGradient>
                           </defs>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F5F5F6" opacity={0.7} />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" opacity={0.5} />
                           <XAxis 
                             dataKey="month" 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#9EA3AD', fontSize: 10 }}
+                            tick={{ fill: '#6b7280', fontSize: 10 }}
                             padding={{ left: 10, right: 10 }}
                           />
                           <YAxis 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#9EA3AD', fontSize: 10 }}
+                            tick={{ fill: '#6b7280', fontSize: 10 }}
                             width={35}
                             tickFormatter={(value) => `$${value}k`}
                             padding={{ top: 5 }}
@@ -330,21 +330,21 @@ export default function WorkspacePicker() {
                           <Tooltip 
                             content={<CustomTooltip />} 
                             cursor={{ 
-                              stroke: "#F5F5F6", 
+                              stroke: "#e5e7eb", 
                               strokeWidth: 1, 
                               strokeDasharray: "3 3",
-                              fill: "rgba(240, 240, 245, 0.8)"
+                              fill: "rgba(229, 231, 235, 0.1)"
                             }}
                           />
                           <Area
                             type="monotone"
                             dataKey="value"
-                            stroke="#9b87f5"
+                            stroke="#2563eb"
                             fillOpacity={1}
                             fill={`url(#colorRevenue${index})`}
                             strokeWidth={2}
                             name="revenue"
-                            activeDot={{ r: 5, strokeWidth: 1, stroke: "#9b87f5", fill: '#ffffff' }}
+                            activeDot={{ r: 4, strokeWidth: 0, fill: "#2563eb" }}
                           />
                         </AreaChart>
                       </ResponsiveContainer>
@@ -356,37 +356,37 @@ export default function WorkspacePicker() {
           ) : (
             <div className="px-1 h-[calc(100vh-120px)]">
               <Card 
-                className="overflow-hidden border border-[#F5F5F6] rounded-lg shadow-sm hover:shadow-md transition-all bg-white h-full"
+                className="overflow-hidden border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all bg-white h-full"
               >
                 <CardContent className="p-5 h-full">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-medium text-[#1A1A1A]">Monthly Manager Commission</h3>
-                      <p className="text-sm text-[#6E6E76]">Commission earnings for current year (2025)</p>
+                      <h3 className="text-xl font-medium text-gray-900">Monthly Manager Commission</h3>
+                      <p className="text-sm text-gray-600">Commission earnings for current year (2025)</p>
                     </div>
-                    <div className="text-[#0EA5E9] p-1 rounded-lg">
+                    <div className="text-green-600 p-1 rounded-lg">
                       <TrendingUp size={22} />
                     </div>
                   </div>
                   
-                  <div className="h-[calc(100%-70px)] pt-3 border-t border-[#F5F5F6]">
+                  <div className="h-[calc(100%-70px)] pt-3 border-t border-gray-200">
                     <ResponsiveContainer width="100%" height="95%">
                       <RechartsBarChart
                         data={monthlyCommissionData}
                         margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                       >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} stroke="#F5F5F6" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
                         <XAxis 
                           dataKey="month" 
-                          axisLine={{ stroke: '#F5F5F6', strokeWidth: 1 }}
+                          axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
                           tickLine={false}
-                          tick={{ fill: '#6E6E76', fontSize: 12 }}
+                          tick={{ fill: '#6b7280', fontSize: 12 }}
                           padding={{ left: 10, right: 10 }}
                         />
                         <YAxis 
                           axisLine={false}
                           tickLine={false}
-                          tick={{ fill: '#6E6E76', fontSize: 12 }}
+                          tick={{ fill: '#6b7280', fontSize: 12 }}
                           tickFormatter={(value) => `$${value}k`}
                           width={45}
                           padding={{ top: 10 }}
@@ -395,15 +395,15 @@ export default function WorkspacePicker() {
                         <Tooltip 
                           content={<CustomTooltip />}
                           cursor={{ 
-                            fill: "rgba(240, 240, 245, 0.8)", 
-                            stroke: "#F5F5F6",
+                            fill: "rgba(229, 231, 235, 0.1)", 
+                            stroke: "#e5e7eb",
                             strokeWidth: 1,
                             opacity: 0.9
                           }} 
                         />
                         <Bar 
                           dataKey="commission" 
-                          fill="#0EA5E9"
+                          fill="#16a34a"
                           fillOpacity={0.85}
                           radius={[4, 4, 0, 0]}
                           name="Commission"
