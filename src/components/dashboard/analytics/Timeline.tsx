@@ -22,42 +22,42 @@ interface TimelineProps {
 export function Timeline({ data, isLoading = false, periodLabel = "Performance Timeline" }: TimelineProps) {
   if (isLoading) {
     return (
-      <Card className="p-6 border border-gray-200 rounded-lg bg-white">
-        <CardHeader className="p-0 pb-4">
-          <CardTitle className="text-base font-medium text-gray-900">Performance Timeline</CardTitle>
+      <Card className="shadow-sm border border-[#F0F2FA] p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] animate-fade-in rounded-xl">
+        <CardHeader className="p-0 pb-3">
+          <CardTitle className="text-sm sm:text-base md:text-lg font-medium">Performance Timeline</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="h-48 bg-gray-50 rounded animate-pulse flex items-center justify-center">
-            <p className="text-gray-400 text-sm">Loading data...</p>
+        <CardContent className="p-0 h-full">
+          <div className="h-[160px] sm:h-[180px] md:h-[220px] animate-pulse bg-[#F8F9FE] rounded-lg flex items-center justify-center">
+            <p className="text-[#9EA3AD] text-sm">Loading data...</p>
           </div>
         </CardContent>
       </Card>
     );
   }
 
+  // Safely determine if we have hourly data by checking the first data point
+  // Check if data exists, has at least one element, and if month is a string that includes a colon
   const isHourlyData = data.length > 0 && 
                       typeof data[0].month === 'string' && 
                       data[0].month.includes(':');
 
+  // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
-      const safeLabel = typeof label === 'string' ? label : String(label);
+      // Ensure label is a string
+      const safeLabel = typeof label === 'string' ? label : 
+                         String(label);
       
       return (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
-          <p className="text-sm font-medium text-gray-900 mb-2">{safeLabel}</p>
-          <div className="space-y-1">
+        <div className="backdrop-blur-md bg-white/95 p-3 sm:p-3.5 border border-[#F0F2FA] shadow-lg rounded-xl">
+          <p className="font-medium text-[#1A1F2C] mb-1.5 text-xs sm:text-sm">{safeLabel}</p>
+          <div className="mt-1.5">
             {payload.map((entry, index) => (
-              <div key={`item-${index}`} className="flex items-center gap-2 text-sm">
-                <div 
-                  className="w-2 h-2 rounded-full" 
-                  style={{ backgroundColor: entry.color }}
-                />
-                <span className="text-gray-600">{entry.name}:</span>
-                <span className="font-medium text-gray-900">
-                  ${Number(entry.value).toLocaleString()}
-                </span>
-              </div>
+              <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-1.5 text-xs sm:text-sm my-1">
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                <span className="font-medium">{entry.name}: </span>
+                <span>${Number(entry.value).toLocaleString()}</span>
+              </p>
             ))}
           </div>
         </div>
@@ -66,67 +66,97 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     return null;
   };
 
+  // Determine title based on data type
   const chartTitle = isHourlyData ? "Today's Performance" : periodLabel || "Performance Timeline";
 
+  // Make sure data is formatted correctly
   const safeData = data.map(point => ({
     ...point,
     month: typeof point.month === 'string' ? point.month : String(point.month)
   }));
 
   return (
-    <Card className="p-6 border border-gray-200 rounded-lg bg-white hover:border-gray-300 transition-colors">
-      <CardHeader className="p-0 pb-4">
-        <CardTitle className="text-base font-medium text-gray-900">
+    <Card className="shadow-sm border border-[#F0F2FA] p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-[#E4E5EA] transition-all animate-fade-in rounded-xl">
+      <CardHeader className="p-0 pb-3">
+        <CardTitle className="text-sm sm:text-base md:text-lg font-medium text-[#1A1F2C]">
           {chartTitle}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="h-48">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-[160px] sm:h-[180px] md:h-[220px]">
+          <ResponsiveContainer width="100%" height="100%" className="animate-fade-in">
             <AreaChart
               data={safeData}
-              margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+              margin={{
+                top: 20,
+                right: 5,
+                bottom: 5,
+                left: 15,
+              }}
             >
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.1} />
-                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.1} />
-                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#F97316" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#F97316" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+              <CartesianGrid strokeDasharray="5 5" vertical={false} opacity={0.15} stroke="#9EA3AD" />
               <XAxis 
                 dataKey="month" 
-                tick={{ fill: '#6b7280', fontSize: 11 }} 
+                tick={{ fill: '#6E6E76', fontSize: 10 }} 
                 tickLine={false} 
-                axisLine={false}
+                axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
+                dy={8}
+                padding={{ left: 10, right: 10 }}
               />
               <YAxis 
-                tick={{ fill: '#6b7280', fontSize: 11 }}
+                tick={{ fill: '#6E6E76', fontSize: 10 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={40}
+                width={50}
+                padding={{ top: 10 }}
+                allowDecimals={false}
+                domain={['auto', 'auto']}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip 
+                content={<CustomTooltip />}
+                cursor={{ 
+                  stroke: "#F5F5F6", 
+                  strokeWidth: 1, 
+                  strokeDasharray: "5 5",
+                  fill: "rgba(240, 240, 245, 0.4)"  
+                }}
+              />
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="#6366f1"
+                stroke="#9b87f5"
+                fillOpacity={1}
                 fill="url(#colorRevenue)"
                 strokeWidth={2}
+                activeDot={{ r: 4, fill: "#9b87f5", strokeWidth: 0 }}
                 name="Revenue"
+                animationDuration={1200}
+                animationBegin={300}
+                animationEasing="ease-out"
               />
               <Area
                 type="monotone"
                 dataKey="profit"
-                stroke="#f59e0b"
+                stroke="#F97316"
+                fillOpacity={1}
                 fill="url(#colorProfit)"
                 strokeWidth={2}
+                activeDot={{ r: 4, fill: "#F97316", strokeWidth: 0 }}
                 name="Profit"
+                animationDuration={1200}
+                animationBegin={600}
+                animationEasing="ease-out"
               />
             </AreaChart>
           </ResponsiveContainer>
