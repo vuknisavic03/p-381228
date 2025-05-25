@@ -22,7 +22,7 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#FCFCFD] animate-fade-in">
+    <div className="h-full flex flex-col bg-white animate-fade-in">
       <div className="flex-none px-3 sm:px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-3">
         <Header 
           userName={userName} 
