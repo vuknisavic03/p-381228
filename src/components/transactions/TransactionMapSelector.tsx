@@ -22,7 +22,7 @@ export function TransactionMapSelector({
 }: TransactionMapSelectorProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const { isLoaded } = useGoogleMapsApi();
-  const { geocodeAddress } = useRealTimeGeocoding();
+  const { geocodeAddressRealTime } = useRealTimeGeocoding();
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(null);
@@ -67,14 +67,13 @@ export function TransactionMapSelector({
         let position = listing.location;
         
         if (!position) {
-          const fullAddress = `${listing.address}, ${listing.city}, ${listing.country}`;
           try {
-            const geocoded = await geocodeAddress(fullAddress);
+            const geocoded = await geocodeAddressRealTime(listing.address, listing.city, listing.country);
             if (geocoded) {
               position = { lat: geocoded.lat, lng: geocoded.lng };
             }
           } catch (error) {
-            console.warn(`Failed to geocode ${fullAddress}:`, error);
+            console.warn(`Failed to geocode ${listing.address}, ${listing.city}, ${listing.country}:`, error);
             continue;
           }
         }
@@ -158,7 +157,7 @@ export function TransactionMapSelector({
     return () => {
       delete (window as any).selectListing;
     };
-  }, [map, listings, selectedListingId, isLoaded, geocodeAddress, onListingSelect, infoWindow, markers]);
+  }, [map, listings, selectedListingId, isLoaded, geocodeAddressRealTime, onListingSelect, infoWindow, markers]);
 
   if (!isLoaded) {
     return (
