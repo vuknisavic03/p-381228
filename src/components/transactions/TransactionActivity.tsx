@@ -4,7 +4,6 @@ import { useToast } from "@/hooks/use-toast";
 import { TransactionTable } from "./TransactionTable";
 import { EditTransactionForm } from "./EditTransactionForm";
 import { TransactionFilterBar } from "./TransactionFilterBar";
-import { DateRangeHeader } from "./DateRangeHeader";
 import { FilterSection } from "@/components/ui/modern-filter";
 import { DateRange } from "react-day-picker";
 import { startOfMonth, endOfMonth } from "date-fns";
@@ -215,22 +214,6 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Date Range Header */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900">Transactions</h2>
-              <p className="text-sm text-gray-600 mt-1">Manage your revenue and expenses</p>
-            </div>
-            <DateRangeHeader 
-              dateRange={dateRange}
-              onDateRangeChange={setDateRange}
-            />
-          </div>
-        </div>
-      </div>
-
       {/* Filter bar */}
       <TransactionFilterBar 
         search={search}
@@ -242,6 +225,8 @@ export function TransactionActivity() {
         clearFilters={clearFilters}
         transactionType={transactionType}
         setTransactionType={setTransactionType}
+        dateRange={dateRange}
+        onDateRangeChange={setDateRange}
       />
       
       {/* Transaction table */}

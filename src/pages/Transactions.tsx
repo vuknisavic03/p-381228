@@ -4,9 +4,12 @@ import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionActivity } from "@/components/transactions/TransactionActivity";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
+import { DateRangeHeader } from "@/components/transactions/DateRangeHeader";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { DateRange } from "react-day-picker";
+import { startOfMonth, endOfMonth } from "date-fns";
 
 export default function Transactions() {
   const location = useLocation();
@@ -17,6 +20,10 @@ export default function Transactions() {
   };
 
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: endOfMonth(new Date()),
+  });
 
   return (
     <DashboardLayout
@@ -31,13 +38,19 @@ export default function Transactions() {
             <div className="flex items-center">
               <span className="text-sm text-gray-400 font-normal">Edited just now</span>
             </div>
-            <Button
-              onClick={() => setIsAddFormOpen(true)}
-              className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Add Transaction
-            </Button>
+            <div className="flex items-center gap-3">
+              <DateRangeHeader 
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+              />
+              <Button
+                onClick={() => setIsAddFormOpen(true)}
+                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Add Transaction
+              </Button>
+            </div>
           </div>
         </div>
 
