@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,32 +42,6 @@ export function ModernFilter({
 }: ModernFilterProps) {
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const getActiveFilters = () => {
-    const filters: Array<{ section: string; value: string; label: string }> = [];
-    filterSections.forEach(section => {
-      section.selectedValues.forEach(value => {
-        const option = section.options.find(opt => opt.value === value);
-        if (option) {
-          filters.push({
-            section: section.id,
-            value,
-            label: option.label
-          });
-        }
-      });
-    });
-    return filters;
-  };
-
-  const removeFilter = (sectionId: string, value: string) => {
-    const section = filterSections.find(s => s.id === sectionId);
-    if (section) {
-      section.onToggle(value);
-    }
-  };
-
-  const activeFilters = getActiveFilters();
-
   return (
     <div className={cn("space-y-3", className)}>
       {/* Search and Filter Row */}
@@ -98,11 +71,6 @@ export function ModernFilter({
             >
               <Filter className="h-4 w-4" />
               Filters
-              {activeFilterCount > 0 && (
-                <Badge variant="secondary" className="h-5 px-1.5 text-xs">
-                  {activeFilterCount}
-                </Badge>
-              )}
               <ChevronDown className="h-3 w-3 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -161,37 +129,6 @@ export function ModernFilter({
           </PopoverContent>
         </Popover>
       </div>
-
-      {/* Active Filter Tags */}
-      {activeFilters.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {activeFilters.map((filter, index) => (
-            <Badge
-              key={`${filter.section}-${filter.value}-${index}`}
-              variant="secondary"
-              className="gap-1 py-1 px-2 bg-gray-100 text-gray-700 hover:bg-gray-200"
-            >
-              <span className="text-xs">{filter.label}</span>
-              <button
-                onClick={() => removeFilter(filter.section, filter.value)}
-                className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
-          {activeFilters.length > 1 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClearFilters}
-              className="h-6 px-2 text-xs text-gray-500 hover:text-gray-700"
-            >
-              Clear all
-            </Button>
-          )}
-        </div>
-      )}
     </div>
   );
 }
