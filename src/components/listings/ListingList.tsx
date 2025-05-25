@@ -151,15 +151,14 @@ interface FilterState {
 
 interface ListingListProps {
   onListingClick?: (listing: any) => void;
-  onListingsData?: (listings: any[]) => void;
+  listings: any[];
+  isLoading: boolean;
 }
 
-export function ListingList({ onListingClick, onListingsData }: ListingListProps) {
-  const [listings, setListings] = useState<any[]>(initialListings);
+export function ListingList({ onListingClick, listings, isLoading }: ListingListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
   const [filters, setFilters] = useState<FilterState>({
@@ -178,40 +177,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
   ];
   const countries = Array.from(new Set(listings.map(l => l.country).filter(Boolean)));
   const occupancyStatuses = ["Occupied", "Vacant"];
-
-  const fetchListings = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch("http://localhost:5000/listings");
-      const data = await res.json();
-      if (data && data.length > 0) {
-        console.log("Loaded listings from server:", data);
-        setListings(data);
-      } else {
-        console.log("No listings found on server, using Belgrade test data");
-        setListings(initialListings);
-      }
-    } catch (error) {
-      console.error("Error fetching listings:", error);
-      console.log("Server not available, using Belgrade test data");
-      setListings(initialListings);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchListings();
-    
-    // Listen for new listings being added
-    const handleRefresh = () => {
-      console.log("Refreshing listings...");
-      fetchListings();
-    };
-    
-    window.addEventListener('refresh-listings', handleRefresh);
-    return () => window.removeEventListener('refresh-listings', handleRefresh);
-  }, []);
 
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
@@ -338,12 +303,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     return matchesSearch && matchesType && matchesCategory && matchesCountry && matchesOccupancy;
   });
 
-  useEffect(() => {
-    if (onListingsData) {
-      onListingsData(filteredListings);
-    }
-  }, [filteredListings, onListingsData]);
-
   return (
     <div className="h-full flex flex-col">
       {/* Modern Filter Header */}
@@ -450,9 +409,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
                 listing={selectedListing} 
                 onClose={() => setIsEditSheetOpen(false)}
                 onUpdate={(updatedListing) => {
-                  setListings(listings.map(l => 
-                    l.id === updatedListing.id ? updatedListing : l
-                  ));
                   setIsEditSheetOpen(false);
                 }}
               />
