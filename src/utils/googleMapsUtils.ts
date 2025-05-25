@@ -1,4 +1,3 @@
-
 // Google Maps libraries array defined outside of any component
 export const GOOGLE_MAPS_LIBRARIES: ["places", "geometry"] = ["places", "geometry"];
 
@@ -6,7 +5,7 @@ export const GOOGLE_MAPS_LIBRARIES: ["places", "geometry"] = ["places", "geometr
 export const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
 
 // Default demo API key
-const DEFAULT_DEMO_KEY = "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg";
+const DEFAULT_DEMO_KEY = "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ";
 
 // Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
