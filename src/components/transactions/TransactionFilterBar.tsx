@@ -58,10 +58,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
               <PopoverTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className={cn(
-                    "h-10 gap-2 px-4 bg-white border-gray-200 hover:bg-gray-50 transition-all",
-                    date && "border-blue-300 bg-blue-50 text-blue-700"
-                  )}
+                  className="h-10 gap-2 px-4 bg-white border-gray-200 hover:bg-gray-50 transition-colors"
                 >
                   <CalendarIcon className="h-4 w-4" />
                   <span className="font-medium">
