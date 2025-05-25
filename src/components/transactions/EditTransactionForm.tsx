@@ -43,7 +43,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
           address: listing.address || "",
           city: listing.city || "",
           country: listing.country || "",
-          location: listing.location || { lat: 44.8154, lng: 20.4606 }, // Default Belgrade coordinates
+          location: listing.location, // Don't set default coordinates - let map geocode if needed
           tenant: {
             name: listing.tenant?.name || "No Tenant",
             type: listing.tenant?.type || "Individual",
