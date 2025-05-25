@@ -68,15 +68,12 @@ export function ModernFilter({
         
         <PopoverContent align="end" className="w-80 p-0 shadow-lg border">
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50/50">
-            <h3 className="font-semibold text-gray-900">Filters</h3>
+          <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
+            <h3 className="font-medium text-gray-900">Filters</h3>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => {
-                onClearFilters();
-                setFilterOpen(false);
-              }}
+              onClick={onClearFilters}
               className="h-8 px-3 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             >
               Clear all
@@ -84,16 +81,13 @@ export function ModernFilter({
           </div>
           
           {/* Filter Sections */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto py-2">
             {filterSections.map((section, index) => (
-              <div key={section.id} className={cn(
-                "px-6 py-5",
-                index < filterSections.length - 1 && "border-b border-gray-100"
-              )}>
-                <h4 className="font-medium text-sm text-gray-900 mb-4">
+              <div key={section.id} className="px-6 py-4">
+                <h4 className="font-medium text-sm text-gray-800 mb-3">
                   {section.title}
                 </h4>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {section.options.map((option) => {
                     const isSelected = section.selectedValues.includes(option.value);
                     return (
@@ -101,20 +95,20 @@ export function ModernFilter({
                         key={option.value}
                         onClick={() => section.onToggle(option.value)}
                         className={cn(
-                          "w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm transition-all",
-                          "hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1",
-                          isSelected && "border border-gray-300 bg-gray-50"
+                          "w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors",
+                          "hover:bg-gray-50 focus:outline-none",
+                          isSelected && "outline outline-1 outline-gray-300"
                         )}
                       >
-                        <span className="text-gray-700">{option.label}</span>
-                        <div className="flex items-center gap-3">
+                        <span className="text-gray-700 text-left">{option.label}</span>
+                        <div className="flex items-center gap-2">
                           {option.count !== undefined && (
-                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full min-w-[24px] text-center">
+                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full min-w-[20px] text-center">
                               {option.count}
                             </span>
                           )}
                           {isSelected && (
-                            <Check className="h-4 w-4 text-blue-600" />
+                            <Check className="h-3.5 w-3.5 text-blue-600" />
                           )}
                         </div>
                       </button>
@@ -123,16 +117,6 @@ export function ModernFilter({
                 </div>
               </div>
             ))}
-          </div>
-          
-          {/* Footer */}
-          <div className="px-6 py-4 border-t bg-gray-50/50">
-            <Button
-              onClick={() => setFilterOpen(false)}
-              className="w-full h-9 bg-gray-900 hover:bg-gray-800 text-white"
-            >
-              Apply Filters
-            </Button>
           </div>
         </PopoverContent>
       </Popover>
