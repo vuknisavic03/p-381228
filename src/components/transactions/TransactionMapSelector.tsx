@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
@@ -43,7 +42,7 @@ export function TransactionMapSelector({
   
   console.log("TransactionMapSelector render - isLoaded:", isLoaded, "listings:", listings.length);
   
-  // Simple geocoding function - EXACTLY identical to ListingMap
+  // EXACT SAME geocoding function as ListingMap - no complex strategies
   const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
     if (!window.google?.maps?.Geocoder) {
       console.log("Google Maps Geocoder not available");
@@ -80,7 +79,7 @@ export function TransactionMapSelector({
     return null;
   }, []);
 
-  // Generate fallback coordinates - EXACTLY identical to ListingMap
+  // EXACT SAME fallback coordinates as ListingMap
   const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
     return { 
@@ -94,7 +93,7 @@ export function TransactionMapSelector({
     return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
   }, [listings]);
 
-  // Process listings - EXACTLY identical to ListingMap
+  // EXACT SAME processing logic as ListingMap
   useEffect(() => {
     if (!isLoaded || !isApiKeyValid || !listings.length) {
       console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
