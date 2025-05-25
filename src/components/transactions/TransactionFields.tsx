@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -17,9 +17,10 @@ import {
   GENERAL_CATEGORIES 
 } from "./TransactionFormTypes";
 import { ListingInfoCard } from "./ListingInfoCard";
-import { ListingSelector } from "./ListingSelector";
 import { ListingTypeToggle } from "./ListingTypeToggle";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { TransactionMapSelector } from "./TransactionMapSelector";
 
 export function TransactionFields({ 
   mockListings, 
@@ -28,6 +29,7 @@ export function TransactionFields({
   editMode = false 
 }: TransactionFormFieldsProps) {
   const [fields, setFields] = useState<TransactionFieldsData>(initialValues);
+  const [isMapOpen, setIsMapOpen] = useState(false);
   
   // Log initial values for debugging
   console.log("TransactionFields initialValues:", initialValues);
@@ -70,6 +72,11 @@ export function TransactionFields({
   };
   
   const transactionCategories = getCategoriesForSelection();
+
+  const handleListingSelect = (listing: Listing) => {
+    setFields(f => ({ ...f, selectedListingId: listing.id, category: "" }));
+    setIsMapOpen(false);
+  };
   
   return (
     <div className="space-y-6">
@@ -87,11 +94,35 @@ export function TransactionFields({
         {fields.listingType === "listing" ? (
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
             <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
-            <ListingSelector
-              listings={mockListings}
-              selectedValue={fields.selectedListingId}
-              onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))} // Reset category when listing changes
-            />
+            
+            <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-9 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md justify-start"
+                >
+                  <MapPin className="mr-2 h-4 w-4 text-gray-400" />
+                  {selectedListing ? (
+                    <div className="flex items-center">
+                      <span>{selectedListing.name}</span>
+                      <span className="ml-2 text-xs text-gray-500">
+                        ({formatPropertyType(selectedListing.type)})
+                      </span>
+                    </div>
+                  ) : (
+                    "Select property from map"
+                  )}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-6xl h-[80vh] p-0 bg-black">
+                <TransactionMapSelector
+                  listings={mockListings}
+                  selectedListingId={fields.selectedListingId}
+                  onListingSelect={handleListingSelect}
+                  onClose={() => setIsMapOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
             
             {selectedListing && selectedPropertyCategory && (
               <div className="mt-3">
