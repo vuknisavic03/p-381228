@@ -234,7 +234,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
   // Show API key input if needed
   if (!isApiKeyValid) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50 p-6">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-lg border">
           <GoogleMapsApiInput onApiKeySubmit={handleApiKeySubmit} />
         </div>
@@ -245,10 +245,10 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
   // Show loading state
   if (!isLoaded || isProcessing) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="flex items-center gap-3">
-          <MapPin className="h-6 w-6 animate-pulse text-gray-600" />
-          <span className="text-gray-700 text-lg font-medium">Loading Map</span>
+          <MapPin className="h-6 w-6 animate-pulse text-white" />
+          <span className="text-white text-lg font-medium">Loading Map</span>
         </div>
       </div>
     );
@@ -257,147 +257,151 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
   console.log("Rendering map with", mapListings.length, "listings:", mapListings);
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium text-gray-900">Select Property from Map</h3>
-        <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Map with EXACT configuration from ListingMap */}
-      <Card className="overflow-hidden">
-        <CardContent className="p-0">
-          <div className="h-full w-full relative">
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={defaultCenter}
-              zoom={13}
-              onLoad={onLoad}
-              options={{
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false,
-                zoomControl: true,
-                disableDefaultUI: true,
-                gestureHandling: 'greedy',
-                styles: [
-                  {
-                    featureType: "poi",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                  },
-                  {
-                    featureType: "transit",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                  }
-                ]
-              }}
-            >
-              {mapListings.map((listing, index) => (
-                <MarkerF
-                  key={listing.id}
-                  position={listing.coordinates}
-                  onClick={() => handleMarkerClick(listing)}
-                  onMouseOver={() => setHoveredListing(listing.id)}
-                  onMouseOut={() => setHoveredListing(null)}
-                  icon={{
-                    path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
-                    fillColor: getMarkerColor(listing.type),
-                    fillOpacity: selectedListingId === listing.id ? 1 : (hoveredListing === listing.id ? 1 : 0.9),
-                    strokeWeight: selectedListingId === listing.id ? 3 : (hoveredListing === listing.id ? 3 : 2),
-                    strokeColor: "#ffffff",
-                    scale: selectedListingId === listing.id ? 2.8 : (hoveredListing === listing.id ? 2.6 : 2.4),
-                    anchor: new google.maps.Point(12, 24),
-                    labelOrigin: new google.maps.Point(12, 9)
-                  }}
-                  label={{
-                    text: (index + 1).toString(),
-                    color: "#ffffff",
-                    fontSize: "12px",
-                    fontWeight: "700"
-                  }}
-                  animation={selectedListingId === listing.id ? google.maps.Animation.BOUNCE : undefined}
-                />
-              ))}
-            </GoogleMap>
-            
-            {/* Legend */}
-            <div className="absolute bottom-6 left-6 bg-white p-4 rounded-lg shadow-lg border">
-              <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-800">
-                <Map className="h-4 w-4 text-gray-600" />
-                Property Types
-              </h4>
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="h-3 w-3 rounded-full bg-[#4f46e5]"></div>
-                  <span className="text-sm text-gray-700">Residential</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-3 w-3 rounded-full bg-[#0891b2]"></div>
-                  <span className="text-sm text-gray-700">Commercial</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-3 w-3 rounded-full bg-[#059669]"></div>
-                  <span className="text-sm text-gray-700">Hospitality</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats overlay */}
-            {mapListings.length > 0 && (
-              <div className="absolute top-6 right-6 bg-white p-4 rounded-lg shadow-lg border">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-50 rounded-lg">
-                    <Building2 className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="text-xl font-semibold text-gray-900">{mapListings.length}</div>
-                    <div className="text-sm text-gray-600">Properties Found</div>
-                  </div>
-                </div>
-              </div>
-            )}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+        <div className="space-y-4 p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900">Select Property from Map</h3>
+            <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
+              <X className="h-4 w-4" />
+            </Button>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Selected listing info */}
-      {selectedListingId && (
-        <Card className="border-blue-200 bg-blue-50/50">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="outline" className="text-xs">
-                    #{selectedListingId}
-                  </Badge>
-                  <Badge className="text-xs bg-blue-100 text-blue-700 border-blue-200">
-                    {formatPropertyType(listings.find(l => l.id === selectedListingId)?.type || "residential_rental")}
-                  </Badge>
+          {/* Map with EXACT configuration from ListingMap */}
+          <Card className="overflow-hidden">
+            <CardContent className="p-0">
+              <div className="h-full w-full relative">
+                <GoogleMap
+                  mapContainerStyle={containerStyle}
+                  center={defaultCenter}
+                  zoom={13}
+                  onLoad={onLoad}
+                  options={{
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    zoomControl: true,
+                    disableDefaultUI: true,
+                    gestureHandling: 'greedy',
+                    styles: [
+                      {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [{ visibility: "off" }]
+                      },
+                      {
+                        featureType: "transit",
+                        elementType: "labels",
+                        stylers: [{ visibility: "off" }]
+                      }
+                    ]
+                  }}
+                >
+                  {mapListings.map((listing, index) => (
+                    <MarkerF
+                      key={listing.id}
+                      position={listing.coordinates}
+                      onClick={() => handleMarkerClick(listing)}
+                      onMouseOver={() => setHoveredListing(listing.id)}
+                      onMouseOut={() => setHoveredListing(null)}
+                      icon={{
+                        path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+                        fillColor: getMarkerColor(listing.type),
+                        fillOpacity: selectedListingId === listing.id ? 1 : (hoveredListing === listing.id ? 1 : 0.9),
+                        strokeWeight: selectedListingId === listing.id ? 3 : (hoveredListing === listing.id ? 3 : 2),
+                        strokeColor: "#ffffff",
+                        scale: selectedListingId === listing.id ? 2.8 : (hoveredListing === listing.id ? 2.6 : 2.4),
+                        anchor: new google.maps.Point(12, 24),
+                        labelOrigin: new google.maps.Point(12, 9)
+                      }}
+                      label={{
+                        text: (index + 1).toString(),
+                        color: "#ffffff",
+                        fontSize: "12px",
+                        fontWeight: "700"
+                      }}
+                      animation={selectedListingId === listing.id ? google.maps.Animation.BOUNCE : undefined}
+                    />
+                  ))}
+                </GoogleMap>
+                
+                {/* Legend */}
+                <div className="absolute bottom-6 left-6 bg-white p-4 rounded-lg shadow-lg border">
+                  <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-800">
+                    <Map className="h-4 w-4 text-gray-600" />
+                    Property Types
+                  </h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="h-3 w-3 rounded-full bg-[#4f46e5]"></div>
+                      <span className="text-sm text-gray-700">Residential</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="h-3 w-3 rounded-full bg-[#0891b2]"></div>
+                      <span className="text-sm text-gray-700">Commercial</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="h-3 w-3 rounded-full bg-[#059669]"></div>
+                      <span className="text-sm text-gray-700">Hospitality</span>
+                    </div>
+                  </div>
                 </div>
-                <h4 className="font-medium text-gray-900">
-                  {listings.find(l => l.id === selectedListingId)?.name}
-                </h4>
-                <p className="text-sm text-gray-600">
-                  {listings.find(l => l.id === selectedListingId)?.city}, {listings.find(l => l.id === selectedListingId)?.country}
-                </p>
-              </div>
-              <Button onClick={onClose} className="bg-blue-600 hover:bg-blue-700">
-                Select Property
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
-      {/* Instructions */}
-      <div className="text-center py-2">
-        <p className="text-sm text-gray-600">
-          Click on any marker to select a property for your transaction
-        </p>
+                {/* Stats overlay */}
+                {mapListings.length > 0 && (
+                  <div className="absolute top-6 right-6 bg-white p-4 rounded-lg shadow-lg border">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-50 rounded-lg">
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <div className="text-xl font-semibold text-gray-900">{mapListings.length}</div>
+                        <div className="text-sm text-gray-600">Properties Found</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Selected listing info */}
+          {selectedListingId && (
+            <Card className="border-blue-200 bg-blue-50/50">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge variant="outline" className="text-xs">
+                        #{selectedListingId}
+                      </Badge>
+                      <Badge className="text-xs bg-blue-100 text-blue-700 border-blue-200">
+                        {formatPropertyType(listings.find(l => l.id === selectedListingId)?.type || "residential_rental")}
+                      </Badge>
+                    </div>
+                    <h4 className="font-medium text-gray-900">
+                      {listings.find(l => l.id === selectedListingId)?.name}
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      {listings.find(l => l.id === selectedListingId)?.city}, {listings.find(l => l.id === selectedListingId)?.country}
+                    </p>
+                  </div>
+                  <Button onClick={onClose} className="bg-blue-600 hover:bg-blue-700">
+                    Select Property
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Instructions */}
+          <div className="text-center py-2">
+            <p className="text-sm text-gray-600">
+              Click on any marker to select a property for your transaction
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
