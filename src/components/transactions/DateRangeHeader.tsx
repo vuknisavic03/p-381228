@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { format, subMonths, startOfMonth, endOfMonth, subDays, startOfYear, startOfQuarter, subYears } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -171,47 +171,57 @@ export function DateRangeHeader({
   };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-transparent"
-        >
-          <span>{getDateDisplayString()}</span>
-          <ChevronDown className="w-4 h-4 text-gray-400" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="end">
-        <div className="flex p-3 border-b border-gray-100">
-          <div className="pr-3 border-r border-gray-100">
-            <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
-              <SelectTrigger className="w-[180px] mb-2">
-                <SelectValue placeholder="Select period" />
-              </SelectTrigger>
-              <SelectContent>
-                <div className="text-sm font-semibold px-2 py-1.5 text-gray-500">Period</div>
-                {periodOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+    <div className="flex items-center">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className="flex items-center gap-1.5 border border-[#E7E8EC] rounded-md px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-50"
+          >
+            <CalendarIcon className="w-4 h-4 text-[#1A1A1A] mr-1" />
+            <span className="text-sm font-medium text-[#1A1A1A] hidden sm:inline">
+              {getDateDisplayString()}
+            </span>
+            <span className="text-sm font-medium text-[#1A1A1A] sm:hidden">
+              {selectedPeriod !== "custom" 
+                ? periodOptions.find(o => o.value === selectedPeriod)?.label.split(" ")[0] || "Period"
+                : "Custom"}
+            </span>
+            <ChevronDown className="w-4 h-4 text-[#9EA3AD] ml-1" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="end">
+          <div className="flex p-3 border-b border-gray-100">
+            <div className="pr-3 border-r border-gray-100">
+              <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
+                <SelectTrigger className="w-[180px] mb-2">
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <div className="text-sm font-semibold px-2 py-1.5 text-gray-500">Period</div>
+                  {periodOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="pl-3">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={handleDateChange}
+                numberOfMonths={1}
+                className={cn("p-0 pointer-events-auto")}
+              />
+            </div>
           </div>
-          
-          <div className="pl-3">
-            <Calendar
-              initialFocus
-              mode="range"
-              defaultMonth={date?.from}
-              selected={date}
-              onSelect={handleDateChange}
-              numberOfMonths={1}
-              className={cn("p-0 pointer-events-auto")}
-            />
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
