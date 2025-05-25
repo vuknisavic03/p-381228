@@ -56,7 +56,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     setApiKey(newApiKey);
   }, [setApiKey]);
 
-  // EXACT SAME geocoding function as ListingMap
+  // EXACT geocoding function from ListingMap
   const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
     if (!window.google?.maps?.Geocoder) {
       console.log("Google Maps Geocoder not available");
@@ -83,17 +83,17 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
           lat: location.lat(),
           lng: location.lng()
         };
-        console.log(`MapListingSelector geocoded "${fullAddress}":`, coords);
+        console.log(`Geocoded "${fullAddress}":`, coords);
         return coords;
       }
     } catch (error) {
-      console.log(`MapListingSelector geocoding failed for "${fullAddress}":`, error);
+      console.log(`Geocoding failed for "${fullAddress}":`, error);
     }
     
     return null;
   }, []);
 
-  // EXACT SAME fallback coordinates function as ListingMap
+  // EXACT fallback coordinates function from ListingMap
   const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
     return { 
@@ -102,22 +102,22 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     };
   }, []);
 
-  // EXACT SAME listings key generation as ListingMap
+  // EXACT listings key generation from ListingMap
   const listingsKey = useMemo(() => {
     return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
   }, [listings]);
 
-  // EXACT SAME listing processing logic as ListingMap
+  // EXACT listing processing logic from ListingMap
   useEffect(() => {
     if (!isLoaded || !isApiKeyValid || !listings.length) {
-      console.log("MapListingSelector - Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
+      console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
       return;
     }
 
     let isCancelled = false;
 
     const processListings = async () => {
-      console.log("MapListingSelector - Starting to process", listings.length, "listings");
+      console.log("Starting to process", listings.length, "listings");
       setIsProcessing(true);
 
       const processed = [];
@@ -127,9 +127,8 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
         
         const listing = listings[i];
         
-        // Use existing coordinates if available - EXACT SAME logic as ListingMap
+        // Use existing coordinates if available
         if (listing.location?.lat && listing.location?.lng) {
-          console.log(`MapListingSelector - Using existing coordinates for listing ${listing.id}:`, listing.location);
           processed.push({
             ...listing,
             coordinates: listing.location
@@ -137,43 +136,38 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
           continue;
         }
 
-        // Try to geocode - EXACT SAME logic as ListingMap
+        // Try to geocode
         try {
           const coords = await geocodeAddress(listing.address, listing.city, listing.country);
           
           if (coords && !isCancelled) {
-            console.log(`MapListingSelector - Geocoded coordinates for listing ${listing.id}:`, coords);
             processed.push({
               ...listing,
               coordinates: coords
             });
           } else {
-            // Use fallback - EXACT SAME logic as ListingMap
-            const fallbackCoords = getFallbackCoordinates(i);
-            console.log(`MapListingSelector - Using fallback coordinates for listing ${listing.id}:`, fallbackCoords);
+            // Use fallback
             processed.push({
               ...listing,
-              coordinates: fallbackCoords
+              coordinates: getFallbackCoordinates(i)
             });
           }
         } catch (error) {
-          console.error("MapListingSelector - Error processing listing:", error);
-          const fallbackCoords = getFallbackCoordinates(i);
-          console.log(`MapListingSelector - Using fallback coordinates after error for listing ${listing.id}:`, fallbackCoords);
+          console.error("Error processing listing:", error);
           processed.push({
             ...listing,
-            coordinates: fallbackCoords
+            coordinates: getFallbackCoordinates(i)
           });
         }
 
-        // EXACT SAME delay to prevent rate limiting as ListingMap
+        // Small delay to prevent rate limiting
         if (i < listings.length - 1) {
           await new Promise(resolve => setTimeout(resolve, 200));
         }
       }
 
       if (!isCancelled) {
-        console.log("MapListingSelector - Finished processing listings:", processed.length, processed);
+        console.log("Finished processing listings:", processed.length);
         setMapListings(processed);
         setIsProcessing(false);
       }
@@ -187,11 +181,11 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     };
   }, [isLoaded, isApiKeyValid, listingsKey, geocodeAddress, getFallbackCoordinates]);
 
-  // EXACT SAME onLoad function as ListingMap
+  // EXACT onLoad function from ListingMap
   const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("MapListingSelector - Map loaded successfully");
+    console.log("Map loaded successfully");
     
-    // Hide Google branding and controls - EXACT SAME as ListingMap
+    // Hide Google branding and controls
     const hideGoogleElements = () => {
       // Hide Google logo
       const googleLogo = document.querySelector('a[href^="https://maps.google.com/maps"]');
@@ -233,7 +227,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
   }, [mapListings]);
 
   const handleMarkerClick = useCallback((listing: Listing) => {
-    console.log("MapListingSelector - Marker clicked for listing:", listing.id);
+    console.log("Marker clicked for listing:", listing.id);
     onListingSelect(listing.id);
   }, [onListingSelect]);
 
@@ -248,7 +242,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     );
   }
 
-  // Show loading state - EXACT SAME as ListingMap
+  // Show loading state
   if (!isLoaded || isProcessing) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
@@ -260,7 +254,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
     );
   }
 
-  console.log("MapListingSelector - Rendering map with", mapListings.length, "listings:", mapListings);
+  console.log("Rendering map with", mapListings.length, "listings:", mapListings);
 
   return (
     <div className="space-y-4">
@@ -272,7 +266,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
         </Button>
       </div>
 
-      {/* Map with EXACT SAME configuration as ListingMap */}
+      {/* Map with EXACT configuration from ListingMap */}
       <Card className="overflow-hidden">
         <CardContent className="p-0">
           <div className="h-full w-full relative">
@@ -330,7 +324,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
               ))}
             </GoogleMap>
             
-            {/* EXACT SAME legend as ListingMap */}
+            {/* Legend */}
             <div className="absolute bottom-6 left-6 bg-white p-4 rounded-lg shadow-lg border">
               <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-gray-800">
                 <Map className="h-4 w-4 text-gray-600" />
@@ -352,7 +346,7 @@ export function MapListingSelector({ listings, selectedListingId, onListingSelec
               </div>
             </div>
 
-            {/* EXACT SAME stats overlay as ListingMap */}
+            {/* Stats overlay */}
             {mapListings.length > 0 && (
               <div className="absolute top-6 right-6 bg-white p-4 rounded-lg shadow-lg border">
                 <div className="flex items-center gap-3">
