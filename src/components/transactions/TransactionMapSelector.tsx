@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, Eye } from 'lucide-react';
+import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, Eye, X } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
