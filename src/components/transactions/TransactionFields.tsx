@@ -18,6 +18,7 @@ import {
 } from "./TransactionFormTypes";
 import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingTypeToggle } from "./ListingTypeToggle";
+import { ListingSelector } from "./ListingSelector";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
@@ -35,6 +36,7 @@ export function TransactionFields({
   console.log("TransactionFields initialValues:", initialValues);
   console.log("TransactionFields editMode:", editMode);
   console.log("TransactionFields selectedListingId:", initialValues.selectedListingId);
+  console.log("TransactionFields mockListings:", mockListings);
 
   // Update fields when initialValues change (important for edit mode)
   useEffect(() => {
@@ -74,6 +76,7 @@ export function TransactionFields({
   const transactionCategories = getCategoriesForSelection();
 
   const handleListingSelect = (listing: Listing) => {
+    console.log("Listing selected from map:", listing);
     setFields(f => ({ ...f, selectedListingId: listing.id, category: "" }));
     setIsMapOpen(false);
   };
@@ -95,6 +98,17 @@ export function TransactionFields({
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
             <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
             
+            {/* Traditional dropdown selector */}
+            <div className="mb-3">
+              <ListingSelector
+                listings={mockListings}
+                selectedValue={fields.selectedListingId}
+                onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))}
+                placeholder="Select property from list"
+              />
+            </div>
+
+            {/* Map selector button */}
             <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
               <DialogTrigger asChild>
                 <Button
@@ -104,10 +118,7 @@ export function TransactionFields({
                   <MapPin className="mr-2 h-4 w-4 text-gray-400" />
                   {selectedListing ? (
                     <div className="flex items-center">
-                      <span>{selectedListing.name}</span>
-                      <span className="ml-2 text-xs text-gray-500">
-                        ({formatPropertyType(selectedListing.type)})
-                      </span>
+                      <span>View "{selectedListing.name}" on map</span>
                     </div>
                   ) : (
                     "Select property from map"
