@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -23,7 +24,7 @@ export default function Listings() {
   };
   
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const [viewMode, setViewMode] = useState<"list" | "map">("map"); // Changed default to "map"
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
@@ -70,18 +71,18 @@ export default function Listings() {
           >
             <TabsList className="bg-white border border-gray-200 p-1 h-10">
               <TabsTrigger 
-                value="list" 
-                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
-              >
-                <ListIcon className="h-4 w-4" />
-                List
-              </TabsTrigger>
-              <TabsTrigger 
                 value="map" 
                 className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
               >
                 <MapPin className="h-4 w-4" />
                 Map
+              </TabsTrigger>
+              <TabsTrigger 
+                value="list" 
+                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+              >
+                <ListIcon className="h-4 w-4" />
+                List
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -89,21 +90,7 @@ export default function Listings() {
         
         <div className="flex-1 relative overflow-hidden bg-white">
           <AnimatePresence mode="wait">
-            {viewMode === "list" ? (
-              <motion.div
-                key="list"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="absolute inset-0"
-              >
-                <ListingList 
-                  onListingClick={handleListingClick}
-                  onListingsData={handleListingsData}
-                />
-              </motion.div>
-            ) : (
+            {viewMode === "map" ? (
               <motion.div
                 key="map"
                 initial={{ opacity: 0 }}
@@ -116,6 +103,20 @@ export default function Listings() {
                   listings={sharedListingData}
                   onListingClick={handleListingClick}
                   onApiKeySubmit={handleApiKeySubmit}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="list"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute inset-0"
+              >
+                <ListingList 
+                  onListingClick={handleListingClick}
+                  onListingsData={handleListingsData}
                 />
               </motion.div>
             )}
