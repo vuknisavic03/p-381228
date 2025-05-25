@@ -6,7 +6,7 @@ import { TransactionActivity } from "@/components/transactions/TransactionActivi
 import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { DateRangeHeader } from "@/components/transactions/DateRangeHeader";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Calendar } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { DateRange } from "react-day-picker";
 import { startOfMonth, endOfMonth } from "date-fns";
@@ -31,31 +31,45 @@ export default function Transactions() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col bg-white">
-        {/* Notion-inspired header */}
-        <div className="border-b border-gray-100">
-          <div className="px-8 py-5 flex items-center justify-between">
-            <div className="flex items-center">
-              <span className="text-sm text-gray-400 font-normal">Edited just now</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <DateRangeHeader 
-                dateRange={dateRange}
-                onDateRangeChange={setDateRange}
-              />
-              <Button
-                onClick={() => setIsAddFormOpen(true)}
-                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Add Transaction
-              </Button>
+      <div className="h-screen flex flex-col bg-gray-50/30">
+        {/* Modern Header */}
+        <div className="bg-white border-b border-gray-200/60 backdrop-blur-sm">
+          <div className="px-6 py-6">
+            <div className="flex items-center justify-between">
+              {/* Left Section */}
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+                  Transactions
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  Track and manage your financial activity
+                </p>
+              </div>
+
+              {/* Right Section - Actions */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-3 py-2 bg-gray-50/80 rounded-lg border border-gray-200/60">
+                  <Calendar className="h-4 w-4 text-gray-500" />
+                  <DateRangeHeader 
+                    dateRange={dateRange}
+                    onDateRangeChange={setDateRange}
+                  />
+                </div>
+                
+                <Button
+                  onClick={() => setIsAddFormOpen(true)}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg shadow-sm font-medium transition-all duration-200"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Transaction
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Main content container */}
-        <div className="flex-1 relative overflow-hidden bg-white">
+        {/* Main Content */}
+        <div className="flex-1 relative overflow-hidden">
           <TransactionActivity />
         </div>
 

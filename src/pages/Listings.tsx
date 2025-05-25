@@ -6,9 +6,8 @@ import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
 import { Button } from "@/components/ui/button";
-import { Plus, List as ListIcon, MapPin } from "lucide-react";
+import { Plus, List as ListIcon, MapPin, LayoutGrid } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
@@ -40,8 +39,8 @@ export default function Listings() {
   };
 
   // Handle tab change
-  const handleViewModeChange = (value: string) => {
-    setViewMode(value as "list" | "map");
+  const handleViewModeChange = (mode: "list" | "map") => {
+    setViewMode(mode);
   };
 
   // Handle API key submission from map component
@@ -60,49 +59,63 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col bg-white">
-        {/* Notion-inspired header */}
-        <div className="border-b border-gray-100">
-          <div className="px-8 py-5 flex items-center justify-between">
-            <div className="flex items-center">
-              <span className="text-sm text-gray-400 font-normal">Edited just now</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Tabs 
-                value={viewMode} 
-                onValueChange={handleViewModeChange}
-                className="mr-1"
-              >
-                <TabsList className="bg-gray-50 border border-gray-200 p-1 h-8">
-                  <TabsTrigger 
-                    value="list" 
-                    className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-gray-200 text-xs px-2.5 py-1 h-6 rounded-md"
+      <div className="h-screen flex flex-col bg-gray-50/30">
+        {/* Modern Header */}
+        <div className="bg-white border-b border-gray-200/60 backdrop-blur-sm">
+          <div className="px-6 py-6">
+            <div className="flex items-center justify-between">
+              {/* Left Section */}
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+                  Property Listings
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  Manage your property portfolio and tenants
+                </p>
+              </div>
+
+              {/* Right Section - Actions */}
+              <div className="flex items-center gap-3">
+                {/* View Toggle */}
+                <div className="flex items-center bg-gray-50/80 rounded-lg border border-gray-200/60 p-1">
+                  <button
+                    onClick={() => handleViewModeChange("list")}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      viewMode === "list" 
+                        ? "bg-white text-gray-900 shadow-sm border border-gray-200/60" 
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
                   >
-                    <ListIcon className="h-3 w-3" />
+                    <ListIcon className="h-4 w-4" />
                     List
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="map" 
-                    className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-gray-200 text-xs px-2.5 py-1 h-6 rounded-md"
+                  </button>
+                  <button
+                    onClick={() => handleViewModeChange("map")}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      viewMode === "map" 
+                        ? "bg-white text-gray-900 shadow-sm border border-gray-200/60" 
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
                   >
-                    <MapPin className="h-3 w-3" />
+                    <MapPin className="h-4 w-4" />
                     Map
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-              <Button 
-                onClick={() => setIsAddFormOpen(true)}
-                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Add Listing
-              </Button>
+                  </button>
+                </div>
+                
+                <Button 
+                  onClick={() => setIsAddFormOpen(true)}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg shadow-sm font-medium transition-all duration-200"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Listing
+                </Button>
+              </div>
             </div>
           </div>
         </div>
         
-        {/* Main content container */}
-        <div className="flex-1 relative overflow-hidden bg-white">
+        {/* Main Content */}
+        <div className="flex-1 relative overflow-hidden">
           <AnimatePresence mode="wait">
             {viewMode === "list" ? (
               <motion.div
@@ -124,7 +137,7 @@ export default function Listings() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0 }}
                 className="absolute inset-0"
               >
                 <ListingMap 
