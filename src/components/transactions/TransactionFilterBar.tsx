@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Calendar as CalendarIcon, X } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -35,53 +35,57 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
   const [calendarOpen, setCalendarOpen] = React.useState(false);
 
   return (
-    <div className="border-b border-[#E4E5EA] bg-white">
-      <div className="p-4">
-        <div className="flex items-center justify-between gap-4 mb-3">
-          {/* Left side: Modern Filter */}
-          <div className="flex-1">
+    <div className="border-b border-gray-200 bg-white">
+      <div className="p-6">
+        {/* Main filter row */}
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Search and Filters */}
+          <div className="flex-1 max-w-2xl">
             <ModernFilter
               searchValue={search}
               onSearchChange={setSearch}
-              searchPlaceholder="Search by name, category or notes..."
+              searchPlaceholder="Search transactions..."
               filterSections={filterSections}
               activeFilterCount={activeFilterCount}
               onClearFilters={clearFilters}
             />
           </div>
 
-          {/* Right side: Date and Transaction Type */}
+          {/* Right: Controls */}
           <div className="flex items-center gap-3">
             {/* Date Picker */}
             <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button 
                   variant="outline" 
-                  size="sm"
                   className={cn(
-                    "h-9 gap-2 bg-white border-gray-200 hover:bg-gray-50",
-                    date && "border-gray-300 bg-gray-50"
+                    "h-10 gap-2 px-4 bg-white border-gray-200 hover:bg-gray-50 transition-all",
+                    date && "border-blue-300 bg-blue-50 text-blue-700"
                   )}
                 >
                   <CalendarIcon className="h-4 w-4" />
-                  {date ? format(date, "MMM d, yyyy") : "Date"}
+                  <span className="font-medium">
+                    {date ? format(date, "MMM d, yyyy") : "Any date"}
+                  </span>
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-auto p-0 border border-gray-200">
-                <div className="p-3 border-b border-gray-100">
+                <div className="p-4 border-b border-gray-100 bg-gray-50">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-700">Select a Date</p>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-8 px-2 text-gray-500" 
-                      onClick={() => {
-                        setDate(undefined);
-                        setCalendarOpen(false);
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                    <h4 className="font-semibold text-gray-900">Select Date</h4>
+                    {date && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 px-3 text-xs text-gray-600 hover:text-gray-900" 
+                        onClick={() => {
+                          setDate(undefined);
+                          setCalendarOpen(false);
+                        }}
+                      >
+                        Clear
+                      </Button>
+                    )}
                   </div>
                 </div>
                 <Calendar
@@ -92,7 +96,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
                     setCalendarOpen(false);
                   }}
                   initialFocus
-                  className="p-3"
+                  className="p-4"
                 />
               </PopoverContent>
             </Popover>
@@ -101,7 +105,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             <TransactionTypeToggle 
               value={transactionType} 
               onChange={setTransactionType} 
-              className="h-9"
+              className="h-10"
             />
           </div>
         </div>

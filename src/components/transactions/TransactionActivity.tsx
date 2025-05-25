@@ -1,13 +1,11 @@
-
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
 import { TransactionTable } from "./TransactionTable";
-import { FilterTags } from "@/components/ui/filter-tags";
 import { EditTransactionForm } from "./EditTransactionForm";
 import { TransactionFilterBar } from "./TransactionFilterBar";
-import { format } from "date-fns";
 import { FilterSection } from "@/components/ui/modern-filter";
+import { format } from "date-fns";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -164,36 +162,12 @@ export function TransactionActivity() {
     },
   ];
 
-  // Get total count of active filters
+  // Get total count of active filters (including date)
   const activeFilterCount = 
     selectedCategories.length + 
     selectedPaymentMethods.length + 
     selectedStatuses.length + 
     (date ? 1 : 0);
-
-  // Prepare filter tags for the FilterTags component
-  const filterTags = [
-    ...(date ? [{ 
-      category: "Date", 
-      value: format(date, "MMM d, yyyy"), 
-      onRemove: () => setDate(undefined) 
-    }] : []),
-    ...selectedCategories.map(category => ({
-      category: "Category",
-      value: category,
-      onRemove: () => toggleFilter(selectedCategories, category, setSelectedCategories)
-    })),
-    ...selectedPaymentMethods.map(method => ({
-      category: "Payment",
-      value: method,
-      onRemove: () => toggleFilter(selectedPaymentMethods, method, setSelectedPaymentMethods)
-    })),
-    ...selectedStatuses.map(status => ({
-      category: "Status",
-      value: status,
-      onRemove: () => toggleFilter(selectedStatuses, status, setSelectedStatuses)
-    })),
-  ];
 
   // Filter transactions
   const filteredTransactions = mockTransactions.filter(transaction => {
@@ -239,8 +213,8 @@ export function TransactionActivity() {
   };
 
   return (
-    <div className="h-full">
-      {/* Filter bar component */}
+    <div className="h-full flex flex-col">
+      {/* Filter bar */}
       <TransactionFilterBar 
         search={search}
         setSearch={setSearch}
@@ -253,18 +227,13 @@ export function TransactionActivity() {
         setTransactionType={setTransactionType}
       />
       
-      {/* Show active filter tags */}
-      <FilterTags tags={filterTags} onClearAll={clearFilters} />
-
-      {/* Modern Table with Notion-inspired styling */}
-      <div className="flex-1 overflow-auto p-4">
-        <div className="max-w-full mx-auto">
-          <div className="animate-fade-in">
-            <TransactionTable
-              transactions={filteredTransactions}
-              onEdit={handleEditTransaction}
-            />
-          </div>
+      {/* Transaction table */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-6">
+          <TransactionTable
+            transactions={filteredTransactions}
+            onEdit={handleEditTransaction}
+          />
         </div>
       </div>
 
