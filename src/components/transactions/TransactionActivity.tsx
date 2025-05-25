@@ -213,7 +213,7 @@ export function TransactionActivity() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col">
       {/* Filter bar */}
       <TransactionFilterBar 
         search={search}
