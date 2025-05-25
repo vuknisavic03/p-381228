@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { format, subMonths, startOfMonth, endOfMonth, subDays, startOfYear, startOfQuarter, subYears } from "date-fns";
@@ -176,18 +175,18 @@ export function DateRangeHeader({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="flex items-center gap-1.5 border border-[#E7E8EC] rounded-md px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-50"
+            className="flex items-center gap-2 border-gray-200 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 h-10 font-medium transition-colors"
           >
-            <CalendarIcon className="w-4 h-4 text-[#1A1A1A] mr-1" />
-            <span className="text-sm font-medium text-[#1A1A1A] hidden sm:inline">
+            <CalendarIcon className="w-4 h-4 text-gray-600" />
+            <span className="text-sm text-gray-900 hidden sm:inline">
               {getDateDisplayString()}
             </span>
-            <span className="text-sm font-medium text-[#1A1A1A] sm:hidden">
+            <span className="text-sm text-gray-900 sm:hidden">
               {selectedPeriod !== "custom" 
                 ? periodOptions.find(o => o.value === selectedPeriod)?.label.split(" ")[0] || "Period"
                 : "Custom"}
             </span>
-            <ChevronDown className="w-4 h-4 text-[#9EA3AD] ml-1" />
+            <ChevronDown className="w-4 h-4 text-gray-500" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="end">

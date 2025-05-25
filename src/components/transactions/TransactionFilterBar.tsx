@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
+import { SearchBar } from "@/components/shared/SearchBar";
 import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
 import { DateRange } from "react-day-picker";
 
@@ -29,24 +30,19 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
 }) => {
   return (
     <div className="border-b border-gray-200 bg-white">
-      <div className="p-6">
-        {/* Main filter row */}
+      <div className="px-6 py-4">
         <div className="flex items-center justify-between gap-4">
-          {/* Left: Search and Filters */}
-          <div className="flex-1 max-w-2xl">
-            <ModernFilter
-              searchValue={search}
-              onSearchChange={setSearch}
-              searchPlaceholder="Search transactions..."
-              filterSections={filterSections}
-              activeFilterCount={activeFilterCount}
+          <div className="flex-1">
+            <SearchBar
+              value={search}
+              onChange={setSearch}
+              placeholder="Search transactions..."
+              filterCount={activeFilterCount}
               onClearFilters={clearFilters}
             />
           </div>
 
-          {/* Right: Controls */}
           <div className="flex items-center gap-3">
-            {/* Transaction Type Toggle */}
             <TransactionTypeToggle 
               value={transactionType} 
               onChange={setTransactionType} 

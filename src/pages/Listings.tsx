@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -6,7 +5,8 @@ import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingMap } from "@/components/listings/ListingMap";
 import { Button } from "@/components/ui/button";
-import { Plus, List as ListIcon, MapPin } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
@@ -47,7 +47,6 @@ export default function Listings() {
   // Handle API key submission from map component
   const handleApiKeySubmit = (apiKey: string) => {
     console.log("API key received in Listings page");
-    // The key is handled by the useGoogleMapsApi hook, we just acknowledge it here
     toast({
       title: "API Key Updated",
       description: "Your Google Maps API key has been saved."
@@ -60,48 +59,34 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col bg-white">
-        {/* Notion-inspired header */}
-        <div className="border-b border-gray-100">
-          <div className="px-8 py-5 flex items-center justify-between">
-            <div className="flex items-center">
-              <span className="text-sm text-gray-400 font-normal">Edited just now</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Tabs 
-                value={viewMode} 
-                onValueChange={handleViewModeChange}
-                className="mr-1"
+      <div className="h-screen flex flex-col bg-gray-50">
+        <PageHeader
+          onAddClick={() => setIsAddFormOpen(true)}
+          addButtonText="Add Listing"
+        >
+          <Tabs 
+            value={viewMode} 
+            onValueChange={handleViewModeChange}
+          >
+            <TabsList className="bg-white border border-gray-200 p-1 h-10">
+              <TabsTrigger 
+                value="list" 
+                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
               >
-                <TabsList className="bg-gray-50 border border-gray-200 p-1 h-8">
-                  <TabsTrigger 
-                    value="list" 
-                    className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-gray-200 text-xs px-2.5 py-1 h-6 rounded-md"
-                  >
-                    <ListIcon className="h-3 w-3" />
-                    List
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="map" 
-                    className="gap-1.5 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-gray-200 text-xs px-2.5 py-1 h-6 rounded-md"
-                  >
-                    <MapPin className="h-3 w-3" />
-                    Map
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-              <Button 
-                onClick={() => setIsAddFormOpen(true)}
-                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm px-3 py-1.5 h-8 rounded-md shadow-sm transition-colors"
+                <ListIcon className="h-4 w-4" />
+                List
+              </TabsTrigger>
+              <TabsTrigger 
+                value="map" 
+                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
               >
-                <Plus className="h-3.5 w-3.5" />
-                Add Listing
-              </Button>
-            </div>
-          </div>
-        </div>
+                <MapPin className="h-4 w-4" />
+                Map
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </PageHeader>
         
-        {/* Main content container */}
         <div className="flex-1 relative overflow-hidden bg-white">
           <AnimatePresence mode="wait">
             {viewMode === "list" ? (
@@ -163,7 +148,6 @@ export default function Listings() {
                 listing={selectedListing}
                 onClose={() => setIsEditSheetOpen(false)}
                 onUpdate={(updatedListing) => {
-                  // Update the listing in the shared data
                   const updatedListings = sharedListingData.map(l => 
                     l.id === updatedListing.id ? updatedListing : l
                   );
