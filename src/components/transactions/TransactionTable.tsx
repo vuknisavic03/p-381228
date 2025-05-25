@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 type Transaction = {
   id: number;
@@ -38,111 +38,79 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     return type === "revenue" ? `+$${formattedAmount}` : `-$${formattedAmount}`;
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-green-50 text-green-700 border-green-200";
-      case "failed":
-        return "bg-red-50 text-red-600 border-red-200";
-      case "pending":
-        return "bg-yellow-50 text-yellow-700 border-yellow-200";
-      default:
-        return "bg-gray-50 text-gray-700 border-gray-200";
-    }
-  };
-
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <Table className="text-sm">
-        <TableHeader className="bg-gray-50/80">
-          <TableRow className="border-b border-gray-200 hover:bg-gray-50/80">
-            <TableHead className="pl-6 py-4 font-semibold text-gray-800 w-[140px]">Amount</TableHead>
-            <TableHead className="py-4 font-semibold text-gray-800 w-[200px]">Transaction</TableHead>
-            <TableHead className="py-4 font-semibold text-gray-800 w-[120px]">Date</TableHead>
-            <TableHead className="py-4 font-semibold text-gray-800 w-[130px]">Category</TableHead>
-            <TableHead className="py-4 font-semibold text-gray-800 w-[120px]">Payment</TableHead>
-            <TableHead className="py-4 font-semibold text-gray-800 w-[100px]">Status</TableHead>
-            <TableHead className="py-4 font-semibold text-gray-800">Notes</TableHead>
-            <TableHead className="w-12 pr-4" />
+        <TableHeader>
+          <TableRow className="border-b border-gray-200 bg-gray-50">
+            <TableHead className="pl-4 py-3 text-gray-700 font-medium">Amount</TableHead>
+            <TableHead className="py-3 text-gray-700 font-medium">From</TableHead>
+            <TableHead className="py-3 text-gray-700 font-medium">Date</TableHead>
+            <TableHead className="py-3 text-gray-700 font-medium">Category</TableHead>
+            <TableHead className="py-3 text-gray-700 font-medium">Payment</TableHead>
+            <TableHead className="py-3 text-gray-700 font-medium">Status</TableHead>
+            <TableHead className="py-3 text-gray-700 font-medium">Notes</TableHead>
+            <TableHead className="w-10 pr-4" />
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transactions.map((tx, index) => (
+          {transactions.map((tx) => (
             <TableRow
               key={tx.id}
-              className={`
-                border-b border-gray-100 group transition-all duration-200 hover:bg-gray-50/50 cursor-pointer
-                ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}
-              `}
+              className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer group"
               onClick={() => onEdit(tx)}
             >
-              <TableCell className="pl-6 py-4">
-                <div className="flex items-center gap-2">
-                  <div className={`p-1.5 rounded-lg ${tx.type === "revenue" ? "bg-green-100" : "bg-red-100"}`}>
-                    {tx.type === "revenue" ? (
-                      <ArrowUpRight className="h-3.5 w-3.5 text-green-600" />
-                    ) : (
-                      <ArrowDownLeft className="h-3.5 w-3.5 text-red-500" />
-                    )}
-                  </div>
-                  <span className={`font-semibold text-base ${
-                    tx.type === "revenue" ? "text-green-700" : "text-red-600"
-                  }`}>
-                    {formatAmount(tx.amount, tx.type)}
-                  </span>
-                </div>
+              <TableCell className="pl-4 py-3">
+                <span className={`font-medium ${
+                  tx.type === "revenue" ? "text-green-600" : "text-red-600"
+                }`}>
+                  {formatAmount(tx.amount, tx.type)}
+                </span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <div className="space-y-1">
-                  <div className="font-medium text-gray-900 text-sm">{tx.from}</div>
-                  <div className="text-xs text-gray-500 capitalize">{tx.type}</div>
-                </div>
+              <TableCell className="py-3">
+                <span className="text-gray-900">{tx.from}</span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <div className="text-sm text-gray-700">
+              <TableCell className="py-3">
+                <span className="text-gray-600">
                   {tx.date.toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: '2-digit'
                   })}
-                </div>
-              </TableCell>
-              
-              <TableCell className="py-4">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200 text-xs font-medium">
-                  {tx.category}
                 </span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <span className="text-sm text-gray-600 font-medium">
-                  {tx.paymentMethod}
-                </span>
+              <TableCell className="py-3">
+                <span className="text-gray-900">{tx.category}</span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(tx.status)}`}>
-                  <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                    tx.status === "completed" ? "bg-green-500" : 
-                    tx.status === "failed" ? "bg-red-500" : "bg-yellow-500"
-                  }`} />
+              <TableCell className="py-3">
+                <span className="text-gray-600">{tx.paymentMethod}</span>
+              </TableCell>
+              
+              <TableCell className="py-3">
+                <span className={`inline-flex items-center px-2 py-1 rounded text-xs ${
+                  tx.status === "completed" ? "bg-green-50 text-green-700" : 
+                  tx.status === "failed" ? "bg-red-50 text-red-700" : 
+                  "bg-yellow-50 text-yellow-700"
+                }`}>
                   {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
                 </span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <span className="text-sm text-gray-500 truncate block max-w-[200px]">
+              <TableCell className="py-3">
+                <span className="text-gray-500 truncate block max-w-[200px]">
                   {tx.notes || "—"}
                 </span>
               </TableCell>
               
-              <TableCell className="pr-4 text-right py-4">
+              <TableCell className="pr-4 text-right py-3">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full hover:bg-gray-100 h-8 w-8 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={(e) => {
                     e.stopPropagation();
                     onEdit(tx);
@@ -158,12 +126,10 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       </Table>
       
       {transactions.length === 0 && (
-        <div className="py-20 text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-            <span className="text-2xl text-gray-400">📊</span>
-          </div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">No transactions found</h3>
-          <p className="text-sm text-gray-500">Try adjusting your filters or search criteria</p>
+        <div className="py-16 text-center">
+          <div className="text-gray-400 mb-2">📊</div>
+          <h3 className="text-gray-900 font-medium mb-1">No transactions found</h3>
+          <p className="text-gray-500 text-sm">Try adjusting your filters or search criteria</p>
         </div>
       )}
     </div>
