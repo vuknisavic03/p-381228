@@ -52,47 +52,48 @@ export function ModernFilter({
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
-          className="pl-10"
+          className="pl-10 h-10"
         />
       </div>
 
       {/* Filter Dropdown */}
       <Popover open={filterOpen} onOpenChange={setFilterOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2 h-10">
             <Filter className="h-4 w-4" />
             <span>Filters</span>
             <ChevronDown className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
         
-        <PopoverContent align="end" className="w-72 p-0">
+        <PopoverContent align="end" className="w-80 p-0 shadow-lg border">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <h3 className="font-medium">Filters</h3>
-            {activeFilterCount > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  onClearFilters();
-                  setFilterOpen(false);
-                }}
-                className="h-8 px-3 text-xs"
-              >
-                Clear all
-              </Button>
-            )}
+          <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50/50">
+            <h3 className="font-semibold text-gray-900">Filters</h3>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                onClearFilters();
+                setFilterOpen(false);
+              }}
+              className="h-8 px-3 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            >
+              Clear all
+            </Button>
           </div>
           
           {/* Filter Sections */}
-          <div className="max-h-80 overflow-y-auto">
-            {filterSections.map((section) => (
-              <div key={section.id} className="p-4 border-b last:border-b-0">
-                <h4 className="font-medium text-sm mb-3">
+          <div className="max-h-96 overflow-y-auto">
+            {filterSections.map((section, index) => (
+              <div key={section.id} className={cn(
+                "px-6 py-5",
+                index < filterSections.length - 1 && "border-b border-gray-100"
+              )}>
+                <h4 className="font-medium text-sm text-gray-900 mb-4">
                   {section.title}
                 </h4>
-                <div className="space-y-1">
+                <div className="space-y-2">
                   {section.options.map((option) => {
                     const isSelected = section.selectedValues.includes(option.value);
                     return (
@@ -100,19 +101,20 @@ export function ModernFilter({
                         key={option.value}
                         onClick={() => section.onToggle(option.value)}
                         className={cn(
-                          "w-full flex items-center justify-between p-2 rounded text-sm",
-                          isSelected ? "border border-gray-300" : "hover:bg-gray-50"
+                          "w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm transition-all",
+                          "hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1",
+                          isSelected && "border border-gray-300 bg-gray-50"
                         )}
                       >
-                        <span>{option.label}</span>
-                        <div className="flex items-center gap-2">
+                        <span className="text-gray-700">{option.label}</span>
+                        <div className="flex items-center gap-3">
                           {option.count !== undefined && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full min-w-[24px] text-center">
                               {option.count}
                             </span>
                           )}
                           {isSelected && (
-                            <Check className="h-4 w-4" />
+                            <Check className="h-4 w-4 text-blue-600" />
                           )}
                         </div>
                       </button>
@@ -124,10 +126,10 @@ export function ModernFilter({
           </div>
           
           {/* Footer */}
-          <div className="p-4 border-t">
+          <div className="px-6 py-4 border-t bg-gray-50/50">
             <Button
               onClick={() => setFilterOpen(false)}
-              className="w-full"
+              className="w-full h-9 bg-gray-900 hover:bg-gray-800 text-white"
             >
               Apply Filters
             </Button>
