@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -6,7 +7,7 @@ import { FilterTags } from "@/components/ui/filter-tags";
 import { EditTransactionForm } from "./EditTransactionForm";
 import { TransactionFilterBar } from "./TransactionFilterBar";
 import { format } from "date-fns";
-import { FilterGroup } from "@/components/ui/filter-popover";
+import { FilterSection } from "@/components/ui/modern-filter";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -129,9 +130,10 @@ export function TransactionActivity() {
     });
   };
 
-  // Build filter groups for the FilterPopover component
-  const filterGroups: FilterGroup[] = [
+  // Build filter sections for the ModernFilter component
+  const filterSections: FilterSection[] = [
     {
+      id: "category",
       title: "Category",
       options: categories.map(category => ({
         value: category,
@@ -141,6 +143,7 @@ export function TransactionActivity() {
       onToggle: (value: string) => toggleFilter(selectedCategories, value, setSelectedCategories),
     },
     {
+      id: "paymentMethod", 
       title: "Payment Method",
       options: paymentMethods.map(method => ({
         value: method,
@@ -150,6 +153,7 @@ export function TransactionActivity() {
       onToggle: (value: string) => toggleFilter(selectedPaymentMethods, value, setSelectedPaymentMethods),
     },
     {
+      id: "status",
       title: "Status",
       options: statuses.map(status => ({
         value: status,
@@ -242,7 +246,7 @@ export function TransactionActivity() {
         setSearch={setSearch}
         date={date}
         setDate={setDate}
-        filterGroups={filterGroups}
+        filterSections={filterSections}
         activeFilterCount={activeFilterCount}
         clearFilters={clearFilters}
         transactionType={transactionType}
