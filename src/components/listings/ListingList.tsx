@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { MapPin, Phone, Mail, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
 import { Button } from "@/components/ui/button";
-import { FilterPopover, FilterGroup } from "@/components/ui/filter-popover";
-import { FilterTags } from "@/components/ui/filter-tags";
 import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
 
 // Belgrade test listings for accuracy testing
 const initialListings = [
@@ -251,21 +249,44 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     });
   };
 
-  const filterGroups: FilterGroup[] = [
+  // Calculate counts for each filter option
+  const getOptionCounts = (filterKey: keyof FilterState, options: string[]) => {
+    return options.map(option => {
+      let count = 0;
+      if (filterKey === 'types') {
+        count = listings.filter(l => l.type === option).length;
+      } else if (filterKey === 'categories') {
+        count = listings.filter(l => l.category === option).length;
+      } else if (filterKey === 'countries') {
+        count = listings.filter(l => l.country === option).length;
+      } else if (filterKey === 'occupancy') {
+        if (option === 'Occupied') {
+          count = listings.filter(l => l.tenant).length;
+        } else {
+          count = listings.filter(l => !l.tenant).length;
+        }
+      }
+      return { value: option, label: option, count };
+    });
+  };
+
+  const filterSections: FilterSection[] = [
     {
+      id: "types",
       title: "Property Type",
-      options: propertyTypes.map(type => ({
-        value: type,
-        label: formatPropertyType(type as PropertyType)
+      options: getOptionCounts('types', propertyTypes).map(item => ({
+        ...item,
+        label: formatPropertyType(item.value as PropertyType)
       })),
       selectedValues: filters.types,
       onToggle: (value: string) => toggleFilter("types", value),
     },
     {
+      id: "categories",
       title: "Category",
-      options: categories.map(category => ({
-        value: category,
-        label: category.replace(/_/g, ' ')
+      options: getOptionCounts('categories', categories).map(item => ({
+        ...item,
+        label: item.value.replace(/_/g, ' ')
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ')
@@ -274,14 +295,16 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
       onToggle: (value: string) => toggleFilter("categories", value),
     },
     {
+      id: "occupancy",
       title: "Occupancy Status",
-      options: occupancyStatuses,
+      options: getOptionCounts('occupancy', occupancyStatuses),
       selectedValues: filters.occupancy,
       onToggle: (value: string) => toggleFilter("occupancy", value),
     },
     {
+      id: "countries",
       title: "Country",
-      options: countries,
+      options: getOptionCounts('countries', countries),
       selectedValues: filters.countries,
       onToggle: (value: string) => toggleFilter("countries", value),
     },
@@ -292,32 +315,6 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
     filters.categories.length + 
     filters.occupancy.length + 
     filters.countries.length;
-
-  const filterTags = [
-    ...filters.types.map(type => ({
-      category: "Type",
-      value: formatPropertyType(type as PropertyType),
-      onRemove: () => toggleFilter("types", type)
-    })),
-    ...filters.categories.map(category => ({
-      category: "Category",
-      value: category.replace(/_/g, ' ')
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' '),
-      onRemove: () => toggleFilter("categories", category)
-    })),
-    ...filters.occupancy.map(status => ({
-      category: "Occupancy",
-      value: status,
-      onRemove: () => toggleFilter("occupancy", status)
-    })),
-    ...filters.countries.map(country => ({
-      category: "Country",
-      value: country,
-      onRemove: () => toggleFilter("countries", country)
-    })),
-  ];
 
   const filteredListings = listings.filter(listing => {
     const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -349,38 +346,16 @@ export function ListingList({ onListingClick, onListingsData }: ListingListProps
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header with search and filters */}
+      {/* Modern Filter Header */}
       <div className="p-4 border-b bg-white">
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Search by Address, Tenant or ID..." 
-              className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <FilterPopover 
-            groups={filterGroups}
-            selectedCount={activeFilterCount}
-            onReset={clearFilters}
-            trigger={
-              <Button variant="outline" className="flex items-center gap-2 h-9">
-                <ListFilter className="h-4 w-4" />
-                <span>Filter</span>
-                {activeFilterCount > 0 && (
-                  <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
-            }
-          />
-        </div>
-        
-        <FilterTags tags={filterTags} onClearAll={clearFilters} />
+        <ModernFilter
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          searchPlaceholder="Search by Address, Tenant or ID..."
+          filterSections={filterSections}
+          activeFilterCount={activeFilterCount}
+          onClearFilters={clearFilters}
+        />
       </div>
 
       {/* Scrollable content area */}
