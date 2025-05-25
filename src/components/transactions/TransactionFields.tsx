@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -98,42 +97,38 @@ export function TransactionFields({
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
             <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
             
-            {/* Traditional dropdown selector */}
-            <div className="mb-3">
-              <ListingSelector
-                listings={mockListings}
-                selectedValue={fields.selectedListingId}
-                onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))}
-                placeholder="Select property from list"
-              />
-            </div>
-
-            {/* Map selector button */}
-            <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-9 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md justify-start"
-                >
-                  <MapPin className="mr-2 h-4 w-4 text-gray-400" />
-                  {selectedListing ? (
-                    <div className="flex items-center">
-                      <span>View "{selectedListing.name}" on map</span>
-                    </div>
-                  ) : (
-                    "Select property from map"
-                  )}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-6xl h-[80vh] p-0 bg-black">
-                <TransactionMapSelector
+            {/* Dropdown selector and map button side by side */}
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <ListingSelector
                   listings={mockListings}
-                  selectedListingId={fields.selectedListingId}
-                  onListingSelect={handleListingSelect}
-                  onClose={() => setIsMapOpen(false)}
+                  selectedValue={fields.selectedListingId}
+                  onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "" }))}
+                  placeholder="Select property from list"
                 />
-              </DialogContent>
-            </Dialog>
+              </div>
+
+              {/* Small map button on the right */}
+              <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-9 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  >
+                    <MapPin className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-6xl h-[80vh] p-0 bg-black">
+                  <TransactionMapSelector
+                    listings={mockListings}
+                    selectedListingId={fields.selectedListingId}
+                    onListingSelect={handleListingSelect}
+                    onClose={() => setIsMapOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
             
             {selectedListing && selectedPropertyCategory && (
               <div className="mt-3">
