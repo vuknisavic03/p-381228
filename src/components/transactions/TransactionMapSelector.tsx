@@ -43,7 +43,7 @@ export function TransactionMapSelector({
   
   console.log("TransactionMapSelector render - isLoaded:", isLoaded, "listings:", listings.length);
   
-  // Simple geocoding function - identical to ListingMap
+  // Simple geocoding function - EXACTLY identical to ListingMap
   const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
     if (!window.google?.maps?.Geocoder) {
       console.log("Google Maps Geocoder not available");
@@ -80,7 +80,7 @@ export function TransactionMapSelector({
     return null;
   }, []);
 
-  // Generate fallback coordinates - identical to ListingMap
+  // Generate fallback coordinates - EXACTLY identical to ListingMap
   const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
     return { 
@@ -94,7 +94,7 @@ export function TransactionMapSelector({
     return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
   }, [listings]);
 
-  // Process listings only when map is ready and listings change - identical to ListingMap
+  // Process listings - EXACTLY identical to ListingMap
   useEffect(() => {
     if (!isLoaded || !isApiKeyValid || !listings.length) {
       console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
