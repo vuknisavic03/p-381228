@@ -4,8 +4,10 @@ import { useToast } from "@/hooks/use-toast";
 import { TransactionTable } from "./TransactionTable";
 import { EditTransactionForm } from "./EditTransactionForm";
 import { TransactionFilterBar } from "./TransactionFilterBar";
+import { DateRangeHeader } from "./DateRangeHeader";
 import { FilterSection } from "@/components/ui/modern-filter";
-import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
+import { startOfMonth, endOfMonth } from "date-fns";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -87,7 +89,10 @@ const mockTransactions: Transaction[] = [
 
 export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: endOfMonth(new Date()),
+  });
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [search, setSearch] = useState('');
   const { toast } = useToast();
@@ -97,7 +102,6 @@ export function TransactionActivity() {
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [amountRange, setAmountRange] = useState<{ min?: number; max?: number }>({});
-  const [dateRange, setDateRange] = useState<{ start?: Date; end?: Date }>({});
 
   // Collect available categories, payment methods, statuses from data
   const categories = Array.from(new Set(mockTransactions.map(t => t.category)));
@@ -115,12 +119,14 @@ export function TransactionActivity() {
 
   // Clear all filters
   const clearFilters = () => {
-    setDate(undefined);
+    setDateRange({
+      from: startOfMonth(new Date()),
+      to: endOfMonth(new Date()),
+    });
     setSelectedCategories([]);
     setSelectedPaymentMethods([]);
     setSelectedStatuses([]);
     setAmountRange({});
-    setDateRange({});
     toast({
       title: "Filters cleared",
       description: "All filters have been reset",
@@ -162,25 +168,20 @@ export function TransactionActivity() {
     },
   ];
 
-  // Get total count of active filters (including date)
+  // Get total count of active filters (including date range)
   const activeFilterCount = 
     selectedCategories.length + 
     selectedPaymentMethods.length + 
-    selectedStatuses.length + 
-    (date ? 1 : 0);
+    selectedStatuses.length;
 
-  // Filter transactions
+  // Filter transactions with date range
   const filteredTransactions = mockTransactions.filter(transaction => {
     if (transaction.type !== transactionType) return false;
     
-    if (date) {
+    if (dateRange?.from || dateRange?.to) {
       const transactionDate = new Date(transaction.date);
-      if (
-        transactionDate.getFullYear() !== date.getFullYear() ||
-        transactionDate.getMonth() !== date.getMonth() ||
-        transactionDate.getDate() !== date.getDate()
-      )
-        return false;
+      if (dateRange.from && transactionDate < dateRange.from) return false;
+      if (dateRange.to && transactionDate > dateRange.to) return false;
     }
     
     if (selectedCategories.length && !selectedCategories.includes(transaction.category)) return false;
@@ -214,12 +215,28 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
+      {/* Date Range Header */}
+      <div className="border-b border-gray-200 bg-white">
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-900">Transactions</h2>
+              <p className="text-sm text-gray-600 mt-1">Manage your revenue and expenses</p>
+            </div>
+            <DateRangeHeader 
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Filter bar */}
       <TransactionFilterBar 
         search={search}
         setSearch={setSearch}
-        date={date}
-        setDate={setDate}
+        date={undefined}
+        setDate={() => {}}
         filterSections={filterSections}
         activeFilterCount={activeFilterCount}
         clearFilters={clearFilters}
