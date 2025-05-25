@@ -1,7 +1,6 @@
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
+import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, Eye } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -269,7 +268,7 @@ export function TransactionMapSelector({
   console.log("Rendering map with", mapListings.length, "listings");
 
   return (
-    <div className="h-full w-full relative">
+    <div className="h-full w-full relative overflow-hidden">
       <Button
         onClick={onClose}
         variant="ghost"
@@ -346,7 +345,7 @@ export function TransactionMapSelector({
               <Card className="border-0 shadow-lg bg-white">
                 <CardContent className="p-0">
                   <div className="p-5 space-y-4">
-                    {/* Header with close button */}
+                    {/* Header section */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-3">
@@ -370,14 +369,6 @@ export function TransactionMapSelector({
                           <span className="font-medium">{selectedListing.city}, {selectedListing.country}</span>
                         </div>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleInfoClose}
-                        className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
-                      >
-                        <X className="h-4 w-4 text-gray-600" />
-                      </Button>
                     </div>
                     
                     {/* Property Name */}

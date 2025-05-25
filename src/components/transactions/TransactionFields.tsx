@@ -119,7 +119,7 @@ export function TransactionFields({
                     <MapPin className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-6xl h-[80vh] p-0 bg-black">
+                <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
                   <TransactionMapSelector
                     listings={mockListings}
                     selectedListingId={fields.selectedListingId}
@@ -172,7 +172,7 @@ export function TransactionFields({
               <div className="h-px bg-gray-100 flex-1 mx-4"></div>
               <TransactionTypeToggle
                 value={fields.transactionType}
-                onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))} // Reset category when transaction type changes
+                onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
               />
             </div>
             
