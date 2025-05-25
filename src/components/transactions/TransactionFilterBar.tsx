@@ -33,11 +33,12 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
       <div className="px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1">
-            <SearchBar
-              value={search}
-              onChange={setSearch}
-              placeholder="Search transactions..."
-              filterCount={activeFilterCount}
+            <ModernFilter
+              searchValue={search}
+              onSearchChange={setSearch}
+              searchPlaceholder="Search transactions..."
+              filterSections={filterSections}
+              activeFilterCount={activeFilterCount}
               onClearFilters={clearFilters}
             />
           </div>

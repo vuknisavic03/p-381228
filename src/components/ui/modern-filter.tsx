@@ -52,24 +52,29 @@ export function ModernFilter({
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
-          className="pl-10 h-10"
+          className="pl-10 h-10 border-gray-200 focus:border-blue-300 focus:ring-blue-300 bg-white"
         />
       </div>
 
       {/* Filter Dropdown */}
       <Popover open={filterOpen} onOpenChange={setFilterOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="gap-2 h-10">
+          <Button variant="outline" className="gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white">
             <Filter className="h-4 w-4" />
             <span>Filters</span>
+            {activeFilterCount > 0 && (
+              <span className="ml-1 bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-medium">
+                {activeFilterCount}
+              </span>
+            )}
             <ChevronDown className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
         
-        <PopoverContent align="end" className="w-80 p-0 shadow-lg border">
+        <PopoverContent align="end" className="w-80 p-0 shadow-lg border bg-white z-50">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
-            <h3 className="font-medium text-gray-900">Filters</h3>
+            <h3 className="font-semibold text-gray-900">Filters</h3>
             <Button
               variant="ghost"
               size="sm"
@@ -84,7 +89,7 @@ export function ModernFilter({
           <div className="max-h-80 overflow-y-auto py-2">
             {filterSections.map((section, index) => (
               <div key={section.id} className="px-6 py-4">
-                <h4 className="font-medium text-sm text-gray-800 mb-3">
+                <h4 className="font-medium text-sm text-gray-900 mb-3">
                   {section.title}
                 </h4>
                 <div className="space-y-1">
@@ -97,10 +102,10 @@ export function ModernFilter({
                         className={cn(
                           "w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors",
                           "hover:bg-gray-50 focus:outline-none",
-                          isSelected && "outline outline-1 outline-gray-300"
+                          isSelected && "bg-blue-50 border border-blue-200"
                         )}
                       >
-                        <span className="text-gray-700 text-left">{option.label}</span>
+                        <span className="text-gray-700 text-left font-medium">{option.label}</span>
                         <div className="flex items-center gap-2">
                           {option.count !== undefined && (
                             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full min-w-[20px] text-center">

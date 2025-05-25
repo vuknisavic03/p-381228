@@ -175,7 +175,7 @@ export function DateRangeHeader({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="flex items-center gap-2 border-gray-200 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 h-10 font-medium transition-colors"
+            className="flex items-center gap-2 border-gray-200 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 h-10 font-medium transition-colors shadow-sm"
           >
             <CalendarIcon className="w-4 h-4 text-gray-600" />
             <span className="text-sm text-gray-900 hidden sm:inline">
@@ -189,14 +189,14 @@ export function DateRangeHeader({
             <ChevronDown className="w-4 h-4 text-gray-500" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
+        <PopoverContent className="w-auto p-0 bg-white shadow-lg z-50" align="end">
           <div className="flex p-3 border-b border-gray-100">
             <div className="pr-3 border-r border-gray-100">
               <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
-                <SelectTrigger className="w-[180px] mb-2">
+                <SelectTrigger className="w-[180px] mb-2 border-gray-200">
                   <SelectValue placeholder="Select period" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white">
                   <div className="text-sm font-semibold px-2 py-1.5 text-gray-500">Period</div>
                   {periodOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
