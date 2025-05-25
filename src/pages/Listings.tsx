@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { useToast } from "@/hooks/use-toast";
+import { fetchListings } from "@/services/listingsService";
 
 export default function Listings() {
   const location = useLocation();
@@ -24,20 +25,38 @@ export default function Listings() {
   };
   
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "map">("map"); // Changed default to "map"
+  const [viewMode, setViewMode] = useState<"list" | "map">("map");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [sharedListingData, setSharedListingData] = useState<any[]>([]);
+  const [isLoadingListings, setIsLoadingListings] = useState(true);
+
+  // Fetch listings when component mounts
+  useEffect(() => {
+    const loadListings = async () => {
+      try {
+        setIsLoadingListings(true);
+        const listings = await fetchListings();
+        setSharedListingData(listings);
+      } catch (error) {
+        console.error("Error loading listings:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load listings",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoadingListings(false);
+      }
+    };
+
+    loadListings();
+  }, [toast]);
 
   // Handle listing selection from map view or list view
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
     setIsEditSheetOpen(true);
-  };
-
-  // Handle receiving listing data from ListingList component
-  const handleListingsData = (listings: any[]) => {
-    setSharedListingData(listings);
   };
 
   // Handle tab change
@@ -52,6 +71,21 @@ export default function Listings() {
       title: "API Key Updated",
       description: "Your Google Maps API key has been saved."
     });
+  };
+
+  // Handle when a new listing is added
+  const handleListingAdded = () => {
+    setIsAddFormOpen(false);
+    // Refresh listings
+    const loadListings = async () => {
+      try {
+        const listings = await fetchListings();
+        setSharedListingData(listings);
+      } catch (error) {
+        console.error("Error reloading listings:", error);
+      }
+    };
+    loadListings();
   };
 
   return (
@@ -116,7 +150,8 @@ export default function Listings() {
               >
                 <ListingList 
                   onListingClick={handleListingClick}
-                  onListingsData={handleListingsData}
+                  listings={sharedListingData}
+                  isLoading={isLoadingListings}
                 />
               </motion.div>
             )}
@@ -131,9 +166,7 @@ export default function Listings() {
           >
             <ListingForm 
               onClose={() => setIsAddFormOpen(false)} 
-              onListingAdded={() => {
-                setIsAddFormOpen(false);
-              }}
+              onListingAdded={handleListingAdded}
             />
           </SheetContent>
         </Sheet>
