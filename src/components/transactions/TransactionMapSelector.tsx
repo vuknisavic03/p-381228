@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
@@ -42,7 +43,7 @@ export function TransactionMapSelector({
   
   console.log("TransactionMapSelector render - isLoaded:", isLoaded, "listings:", listings.length);
   
-  // EXACT SAME geocoding function as ListingMap - no complex strategies
+  // Simple geocoding function - EXACTLY from ListingMap
   const geocodeAddress = useCallback(async (address: string, city: string, country: string) => {
     if (!window.google?.maps?.Geocoder) {
       console.log("Google Maps Geocoder not available");
@@ -79,7 +80,7 @@ export function TransactionMapSelector({
     return null;
   }, []);
 
-  // EXACT SAME fallback coordinates as ListingMap
+  // Generate fallback coordinates - EXACTLY from ListingMap
   const getFallbackCoordinates = useCallback((index: number) => {
     const variation = index * 0.005;
     return { 
@@ -88,12 +89,12 @@ export function TransactionMapSelector({
     };
   }, []);
 
-  // Create a stable key for listings to prevent unnecessary re-processing
+  // Create a stable key for listings to prevent unnecessary re-processing - EXACTLY from ListingMap
   const listingsKey = useMemo(() => {
     return listings.map(l => `${l.id}-${l.address}-${l.city}`).join('|');
   }, [listings]);
 
-  // EXACT SAME processing logic as ListingMap
+  // Process listings only when map is ready and listings change - EXACTLY from ListingMap
   useEffect(() => {
     if (!isLoaded || !isApiKeyValid || !listings.length) {
       console.log("Not ready to process listings:", { isLoaded, isApiKeyValid, listingsLength: listings.length });
@@ -171,7 +172,7 @@ export function TransactionMapSelector({
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("Map loaded successfully");
     
-    // Hide Google branding and controls - identical to ListingMap
+    // Hide Google branding and controls - EXACTLY from ListingMap
     const hideGoogleElements = () => {
       // Hide Google logo
       const googleLogo = document.querySelector('a[href^="https://maps.google.com/maps"]');
@@ -227,7 +228,7 @@ export function TransactionMapSelector({
     }
   }, [selectedListing, onListingSelect]);
 
-  // Show simple elegant loading state
+  // Show simple elegant loading state - EXACTLY from ListingMap
   if (!isLoaded || isProcessing) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center bg-gray-50">
@@ -239,7 +240,7 @@ export function TransactionMapSelector({
     );
   }
 
-  // Show error state
+  // Show error state - EXACTLY from ListingMap
   if (loadError) {
     const errorMessage = handleMapsApiLoadError(loadError);
     
