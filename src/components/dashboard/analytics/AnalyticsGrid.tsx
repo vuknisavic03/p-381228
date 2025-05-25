@@ -13,13 +13,13 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
   const { data, isLoading, error } = useAnalyticsData(dateRange);
   
   return (
-    <div className="flex flex-col w-full space-y-6 animate-fade-in">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 sm:gap-6">
+    <div className="flex flex-col w-full space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         <div className="col-span-1">
           <ChartCard
             title="Revenue"
             icon={BarChart}
-            color="bg-[#9b87f5]"
+            color="bg-gray-100"
             value={isLoading ? "Loading..." : `$${data?.totals.revenue.toLocaleString()}`}
             change={isLoading ? { value: 0, positive: true } : data?.changes?.revenue}
             chartData={isLoading ? [] : data?.revenue || []}
@@ -32,7 +32,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
           <ChartCard
             title="Profit"
             icon={TrendingUp}
-            color="bg-[#F97316]"
+            color="bg-gray-100"
             value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
             change={isLoading ? { value: 0, positive: true } : data?.changes?.profit}
             chartData={isLoading ? [] : data?.profit || []}
@@ -45,7 +45,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
           <ChartCard
             title="Income"
             icon={CircleDollarSign}
-            color="bg-[#0EA5E9]"
+            color="bg-gray-100"
             value={isLoading ? "Loading..." : `${data?.totals.income}%`}
             change={isLoading ? { value: 0, positive: true } : data?.changes?.income}
             chartData={isLoading ? [] : data?.income || []}
@@ -58,7 +58,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
           <ChartCard
             title="Peak Profit"
             icon={LineChart}
-            color="bg-[#D946EF]"
+            color="bg-gray-100"
             value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
             change={isLoading ? { value: 0, positive: true } : data?.changes?.peakProfit}
             chartData={isLoading ? [] : data?.peakProfit || []}
@@ -70,7 +70,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
       </div>
 
       {!isLoading && data?.timeline && (
-        <div className="animate-fade-in" style={{ animationDelay: "200ms" }}>
+        <div style={{ animationDelay: "200ms" }}>
           <Timeline 
             data={data.timeline || []} 
             periodLabel={data.periodLabel} 

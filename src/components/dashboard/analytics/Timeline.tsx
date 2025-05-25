@@ -22,13 +22,13 @@ interface TimelineProps {
 export function Timeline({ data, isLoading = false, periodLabel = "Performance Timeline" }: TimelineProps) {
   if (isLoading) {
     return (
-      <Card className="shadow-sm border border-[#F0F2FA] p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] animate-fade-in rounded-xl">
+      <Card className="border border-gray-200 p-5 bg-white h-[280px]">
         <CardHeader className="p-0 pb-3">
-          <CardTitle className="text-sm sm:text-base md:text-lg font-medium">Performance Timeline</CardTitle>
+          <CardTitle className="text-lg font-medium text-gray-900">Performance Timeline</CardTitle>
         </CardHeader>
         <CardContent className="p-0 h-full">
-          <div className="h-[160px] sm:h-[180px] md:h-[220px] animate-pulse bg-[#F8F9FE] rounded-lg flex items-center justify-center">
-            <p className="text-[#9EA3AD] text-sm">Loading data...</p>
+          <div className="h-[220px] animate-pulse bg-gray-50 rounded-lg flex items-center justify-center">
+            <p className="text-gray-500 text-sm">Loading data...</p>
           </div>
         </CardContent>
       </Card>
@@ -36,7 +36,6 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   }
 
   // Safely determine if we have hourly data by checking the first data point
-  // Check if data exists, has at least one element, and if month is a string that includes a colon
   const isHourlyData = data.length > 0 && 
                       typeof data[0].month === 'string' && 
                       data[0].month.includes(':');
@@ -44,19 +43,17 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
-      // Ensure label is a string
-      const safeLabel = typeof label === 'string' ? label : 
-                         String(label);
+      const safeLabel = typeof label === 'string' ? label : String(label);
       
       return (
-        <div className="backdrop-blur-md bg-white/95 p-3 sm:p-3.5 border border-[#F0F2FA] shadow-lg rounded-xl">
-          <p className="font-medium text-[#1A1F2C] mb-1.5 text-xs sm:text-sm">{safeLabel}</p>
-          <div className="mt-1.5">
+        <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-lg">
+          <p className="font-medium text-gray-900 mb-2 text-sm">{safeLabel}</p>
+          <div className="mt-2">
             {payload.map((entry, index) => (
-              <p key={`item-${index}`} style={{ color: entry.color }} className="flex items-center gap-1.5 text-xs sm:text-sm my-1">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }}></span>
-                <span className="font-medium">{entry.name}: </span>
-                <span>${Number(entry.value).toLocaleString()}</span>
+              <p key={`item-${index}`} className="flex items-center gap-2 text-sm my-1">
+                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                <span className="font-medium text-gray-700">{entry.name}: </span>
+                <span className="text-gray-900">${Number(entry.value).toLocaleString()}</span>
               </p>
             ))}
           </div>
@@ -76,15 +73,15 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
   }));
 
   return (
-    <Card className="shadow-sm border border-[#F0F2FA] p-4 sm:p-5 bg-white h-[220px] sm:h-[260px] md:h-[280px] hover:shadow-md hover:border-[#E4E5EA] transition-all animate-fade-in rounded-xl">
+    <Card className="border border-gray-200 p-5 bg-white h-[280px]">
       <CardHeader className="p-0 pb-3">
-        <CardTitle className="text-sm sm:text-base md:text-lg font-medium text-[#1A1F2C]">
+        <CardTitle className="text-lg font-medium text-gray-900">
           {chartTitle}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="h-[160px] sm:h-[180px] md:h-[220px]">
-          <ResponsiveContainer width="100%" height="100%" className="animate-fade-in">
+        <div className="h-[220px]">
+          <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={safeData}
               margin={{
@@ -96,25 +93,25 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
             >
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#9b87f5" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#9b87f5" stopOpacity={0.05} />
+                  <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#2563eb" stopOpacity={0.01} />
                 </linearGradient>
                 <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#F97316" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#F97316" stopOpacity={0.05} />
+                  <stop offset="5%" stopColor="#16a34a" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#16a34a" stopOpacity={0.01} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="5 5" vertical={false} opacity={0.15} stroke="#9EA3AD" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
               <XAxis 
                 dataKey="month" 
-                tick={{ fill: '#6E6E76', fontSize: 10 }} 
+                tick={{ fill: '#6b7280', fontSize: 12 }} 
                 tickLine={false} 
-                axisLine={{ strokeWidth: 1, stroke: '#F5F5F6' }}
+                axisLine={{ strokeWidth: 1, stroke: '#e5e7eb' }}
                 dy={8}
                 padding={{ left: 10, right: 10 }}
               />
               <YAxis 
-                tick={{ fill: '#6E6E76', fontSize: 10 }}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
@@ -126,20 +123,20 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
               <Tooltip 
                 content={<CustomTooltip />}
                 cursor={{ 
-                  stroke: "#F5F5F6", 
+                  stroke: "#e5e7eb", 
                   strokeWidth: 1, 
-                  strokeDasharray: "5 5",
-                  fill: "rgba(240, 240, 245, 0.4)"  
+                  strokeDasharray: "3 3",
+                  fill: "rgba(229, 231, 235, 0.1)"  
                 }}
               />
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="#9b87f5"
+                stroke="#2563eb"
                 fillOpacity={1}
                 fill="url(#colorRevenue)"
                 strokeWidth={2}
-                activeDot={{ r: 4, fill: "#9b87f5", strokeWidth: 0 }}
+                activeDot={{ r: 4, fill: "#2563eb", strokeWidth: 0 }}
                 name="Revenue"
                 animationDuration={1200}
                 animationBegin={300}
@@ -148,11 +145,11 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
               <Area
                 type="monotone"
                 dataKey="profit"
-                stroke="#F97316"
+                stroke="#16a34a"
                 fillOpacity={1}
                 fill="url(#colorProfit)"
                 strokeWidth={2}
-                activeDot={{ r: 4, fill: "#F97316", strokeWidth: 0 }}
+                activeDot={{ r: 4, fill: "#16a34a", strokeWidth: 0 }}
                 name="Profit"
                 animationDuration={1200}
                 animationBegin={600}
