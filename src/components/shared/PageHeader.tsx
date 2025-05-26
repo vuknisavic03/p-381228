@@ -29,7 +29,7 @@ export function PageHeader({
           {children}
           <Button
             onClick={onAddClick}
-            className="flex items-center gap-2 h-10 px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+            className="flex items-center gap-2 h-10 px-4 py-2 rounded-lg font-medium transition-colors shadow-sm bg-blue-600 text-white hover:bg-blue-700"
           >
             <Plus className="h-4 w-4" />
             {addButtonText}
