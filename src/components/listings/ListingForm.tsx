@@ -30,6 +30,7 @@ import { toast } from "@/hooks/use-toast";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { useGeocoding } from "@/hooks/useGeocoding";
+import { LocationAutofill } from "./LocationAutofill";
 
 interface ListingFormProps {
   onClose?: () => void;
@@ -274,35 +275,32 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           
           <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City *</label>
-                <Input
-                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="e.g., Belgrade"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Country *</label>
-                <Input
-                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  placeholder="e.g., Serbia"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Address *</label>
-              <Input
+              <LocationAutofill
+                value={city}
+                onChange={setCity}
+                placeholder="e.g., Belgrade"
+                label="City *"
+                type="city"
                 className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="e.g., Knez Mihailova 42"
+              />
+              <LocationAutofill
+                value={country}
+                onChange={setCountry}
+                placeholder="e.g., Serbia"
+                label="Country *"
+                type="country"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
               />
             </div>
+            
+            <LocationAutofill
+              value={address}
+              onChange={setAddress}
+              placeholder="e.g., Knez Mihailova 42"
+              label="Address *"
+              type="address"
+              className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+            />
             
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
