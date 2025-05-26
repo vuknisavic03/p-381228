@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import {
   Home,
   Building2,
@@ -44,6 +47,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const [postalCode, setPostalCode] = useState("");
   const [typeField, setTypeField] = useState<string>("");
   const [category, setCategory] = useState("");
+  const [occupancyStatus, setOccupancyStatus] = useState<"occupied" | "vacant">("occupied");
   const [tenantName, setTenantName] = useState("");
   const [tenantPhone, setTenantPhone] = useState("");
   const [tenantEmail, setTenantEmail] = useState("");
@@ -109,6 +113,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     return typeToCategoryMap[typeField as keyof typeof typeToCategoryMap] || [];
   };
 
+  // Check if current property type should show occupancy status
+  const shouldShowOccupancyStatus = () => {
+    return typeField && !["hospitality", "vacation_rental"].includes(typeField);
+  };
+
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
   };
@@ -167,6 +176,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         type: typeField,
         category,
         location: coordinates, // High-precision geocoded coordinates
+        ...(shouldShowOccupancyStatus() && { occupancyStatus }), // Only include if property type needs it
         tenant: tenantName ? {
           name: tenantName,
           phone: tenantPhone,
@@ -235,6 +245,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     setPostalCode("");
     setTypeField("");
     setCategory("");
+    setOccupancyStatus("occupied");
     setTenantName("");
     setTenantPhone("");
     setTenantEmail("");
@@ -337,6 +348,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 onValueChange={(value) => {
                   setTypeField(value);
                   setCategory("");
+                  setOccupancyStatus("occupied"); // Reset occupancy when type changes
                 }}
               >
                 <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
@@ -377,59 +389,88 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Occupancy Status - only show for certain property types */}
+            {shouldShowOccupancyStatus() && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-2 ml-0.5">Occupancy Status</label>
+                <RadioGroup
+                  value={occupancyStatus}
+                  onValueChange={(value: "occupied" | "vacant") => setOccupancyStatus(value)}
+                  className="flex gap-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="occupied" id="occupied" />
+                    <Label htmlFor="occupied" className="text-sm text-gray-700 cursor-pointer">
+                      Occupied
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="vacant" id="vacant" />
+                    <Label htmlFor="vacant" className="text-sm text-gray-700 cursor-pointer">
+                      Vacant
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Tenant Details Section */}
-        <div className="space-y-4 group">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center flex-1">
-              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={toggleTenantType} 
-              className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
-            >
-              {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-            </Button>
-          </div>
-          
-          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
-                {tenantType === "individual" ? "Full Name" : "Company Name"}
-              </label>
-              <Input
-                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                value={tenantName}
-                onChange={(e) => setTenantName(e.target.value)}
-                placeholder="Leave empty if no tenant"
-              />
+        {/* Tenant Details Section - only show if occupied or for hospitality/vacation rental */}
+        {(occupancyStatus === "occupied" || !shouldShowOccupancyStatus()) && (
+          <div className="space-y-4 group">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center flex-1">
+                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
+                  {["hospitality", "vacation_rental"].includes(typeField) ? "Guest Information" : "Tenant Information"}
+                </h3>
+                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={toggleTenantType} 
+                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+              >
+                {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
+              </Button>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                  {tenantType === "individual" ? "Full Name" : "Company Name"}
+                </label>
                 <Input
                   className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                  value={tenantPhone}
-                  onChange={(e) => setTenantPhone(e.target.value)}
+                  value={tenantName}
+                  onChange={(e) => setTenantName(e.target.value)}
+                  placeholder={shouldShowOccupancyStatus() ? "Leave empty if no tenant" : "Optional"}
                 />
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
-                <Input
-                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                  value={tenantEmail}
-                  onChange={(e) => setTenantEmail(e.target.value)}
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    value={tenantPhone}
+                    onChange={(e) => setTenantPhone(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    value={tenantEmail}
+                    onChange={(e) => setTenantEmail(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Additional Details Section */}
         <div className="space-y-4 group">
