@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,10 +35,25 @@ import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { useGeocoding } from "@/hooks/useGeocoding";
 import { LocationAutofill } from "./LocationAutofill";
+import { UnitsManager } from "./UnitsManager";
 
 interface ListingFormProps {
   onClose?: () => void;
   onListingAdded?: () => void;
+}
+
+interface Unit {
+  id: string;
+  unitNumber: string;
+  category: string;
+  occupancyStatus: "occupied" | "vacant";
+  tenant?: {
+    name: string;
+    phone: string;
+    email: string;
+    type: "individual" | "company";
+  };
+  notes?: string;
 }
 
 export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
@@ -54,6 +70,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const [notes, setNotes] = useState("");
   const [tenantType, setTenantType] = useState("individual");
   const [isSaving, setIsSaving] = useState(false);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [useUnitsMode, setUseUnitsMode] = useState(false);
 
   const { getCoordinates, isGeocoding } = useGeocoding();
 
@@ -113,12 +131,10 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     return typeToCategoryMap[typeField as keyof typeof typeToCategoryMap] || [];
   };
 
-  // Check if current property type should show occupancy status
   const shouldShowOccupancyStatus = () => {
     return typeField && !["hospitality", "vacation_rental"].includes(typeField);
   };
 
-  // Check if current property type should show tenant/guest information
   const shouldShowTenantInfo = () => {
     return typeField && !["hospitality", "vacation_rental"].includes(typeField);
   };
@@ -141,10 +157,19 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
       return;
     }
 
-    if (!category) {
+    if (!useUnitsMode && !category) {
       toast({
         title: "Category Required",
         description: "Please select a property category",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (useUnitsMode && units.length === 0) {
+      toast({
+        title: "Units Required",
+        description: "Please add at least one unit",
         variant: "destructive",
       });
       return;
@@ -164,12 +189,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     try {
       console.log(`Attempting maximum precision geocoding for: ${address}, ${city}, ${country}`);
       
-      // Get high-precision coordinates for the address
       const coordinates = await getCoordinates(address, city, country);
       
       if (!coordinates) {
         setIsSaving(false);
-        return; // Error already shown by useGeocoding hook
+        return;
       }
 
       console.log(`High-precision coordinates obtained:`, coordinates);
@@ -183,10 +207,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         country,
         postalCode,
         type: typeField,
-        category,
-        location: coordinates, // High-precision geocoded coordinates
-        ...(shouldShowOccupancyStatus() && { occupancyStatus }), // Only include if property type needs it
-        tenant: (shouldShowTenantInfo() && tenantName) ? {
+        category: useUnitsMode ? "mixed" : category,
+        location: coordinates,
+        units: useUnitsMode ? units : undefined,
+        ...(shouldShowOccupancyStatus() && !useUnitsMode && { occupancyStatus }),
+        tenant: (!useUnitsMode && shouldShowTenantInfo() && tenantName) ? {
           name: tenantName,
           phone: tenantPhone,
           email: tenantEmail,
@@ -212,7 +237,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         
         toast({
           title: "Listing Added Successfully",
-          description: `Property geocoded with maximum precision and saved`,
+          description: `Property ${useUnitsMode ? 'with multiple units' : ''} geocoded with maximum precision and saved`,
         });
         
       } catch (err) {
@@ -220,7 +245,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         
         toast({
           title: "Listing Added (Demo Mode)",
-          description: "Property added with precise coordinates from enhanced geocoding",
+          description: `Property ${useUnitsMode ? 'with multiple units' : ''} added with precise coordinates from enhanced geocoding`,
         });
       }
       
@@ -259,16 +284,17 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     setTenantPhone("");
     setTenantEmail("");
     setNotes("");
+    setUnits([]);
+    setUseUnitsMode(false);
   };
 
   const isProcessing = isSaving || isGeocoding;
 
-  // Check if required fields are filled
   const isFormValid = address.trim() !== "" && 
                      city.trim() !== "" && 
                      country.trim() !== "" && 
                      typeField !== "" && 
-                     category !== "";
+                     (useUnitsMode ? units.length > 0 : category !== "");
 
   return (
     <div className="h-full overflow-auto bg-white">
@@ -349,26 +375,38 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
               <div className="ml-2 h-px bg-gray-100 flex-1"></div>
             </div>
-            {shouldShowOccupancyStatus() && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={toggleOccupancyStatus} 
-                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setUseUnitsMode(!useUnitsMode)}
+                className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
               >
-                {occupancyStatus === "occupied" ? (
-                  <div className="flex items-center gap-1.5">
-                    <Users className="h-3 w-3 text-green-600" />
-                    <span>Occupied</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5">
-                    <UserX className="h-3 w-3 text-orange-600" />
-                    <span>Vacant</span>
-                  </div>
-                )}
+                {useUnitsMode ? "Single Unit" : "Multiple Units"}
               </Button>
-            )}
+              {!useUnitsMode && shouldShowOccupancyStatus() && (
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleOccupancyStatus} 
+                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+                >
+                  {occupancyStatus === "occupied" ? (
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3 w-3 text-green-600" />
+                      <span>Occupied</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <UserX className="h-3 w-3 text-orange-600" />
+                      <span>Vacant</span>
+                    </div>
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
           
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
@@ -379,7 +417,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 onValueChange={(value) => {
                   setTypeField(value);
                   setCategory("");
-                  setOccupancyStatus("occupied"); // Reset occupancy when type changes
+                  setOccupancyStatus("occupied");
+                  setUnits([]);
                 }}
               >
                 <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
@@ -398,33 +437,46 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               </Select>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
-              <Select
-                value={category}
-                onValueChange={setCategory}
-                disabled={!typeField}
-              >
-                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
-                  <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {getAvailableCategories().map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      <div className="flex items-center gap-2">
-                        <cat.Icon className="h-4 w-4 text-gray-500" />
-                        <span>{cat.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {!useUnitsMode && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
+                <Select
+                  value={category}
+                  onValueChange={setCategory}
+                  disabled={!typeField}
+                >
+                  <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                    <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getAvailableCategories().map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        <div className="flex items-center gap-2">
+                          <cat.Icon className="h-4 w-4 text-gray-500" />
+                          <span>{cat.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Tenant Details Section - only show if occupied AND not hospitality/vacation rental */}
-        {shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
+        {/* Units Manager - only show if using multiple units mode */}
+        {useUnitsMode && typeField && (
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <UnitsManager
+              propertyType={typeField as PropertyType}
+              units={units}
+              onUnitsChange={setUnits}
+            />
+          </div>
+        )}
+
+        {/* Tenant Details Section - only show if single unit mode, occupied AND not hospitality/vacation rental */}
+        {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
               <div className="flex items-center flex-1">
@@ -434,6 +486,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 <div className="ml-2 h-px bg-gray-100 flex-1"></div>
               </div>
               <Button 
+                type="button"
                 variant="outline" 
                 size="sm" 
                 onClick={toggleTenantType} 

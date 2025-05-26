@@ -29,6 +29,21 @@ import { Label } from "@/components/ui/label";
 import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
+import { UnitsManager } from "./UnitsManager";
+
+interface Unit {
+  id: string;
+  unitNumber: string;
+  category: string;
+  occupancyStatus: "occupied" | "vacant";
+  tenant?: {
+    name: string;
+    phone: string;
+    email: string;
+    type: "individual" | "company";
+  };
+  notes?: string;
+}
 
 interface EditListingFormProps {
   listing: any;
@@ -52,6 +67,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     notes: listing.notes || "",
   });
 
+  const [units, setUnits] = useState<Unit[]>(listing.units || []);
+  const [useUnitsMode, setUseUnitsMode] = useState(listing.units && listing.units.length > 0);
+
   // Ensure type and category are properly set when component mounts
   useEffect(() => {
     setFormData(prev => ({
@@ -60,6 +78,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       category: listing.category || "",
       occupancyStatus: listing.occupancyStatus || (listing.tenant?.name ? "occupied" : "vacant")
     }));
+    setUnits(listing.units || []);
+    setUseUnitsMode(listing.units && listing.units.length > 0);
   }, [listing]);
 
   // Updated property types with corresponding icon components
@@ -151,7 +171,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       const updatedListing = {
         ...listing,
         ...formData,
-        tenant: formData.occupancyStatus === "occupied" ? {
+        units: useUnitsMode ? units : undefined,
+        category: useUnitsMode ? "mixed" : formData.category,
+        tenant: (!useUnitsMode && formData.occupancyStatus === "occupied") ? {
           name: formData.tenantName,
           phone: formData.tenantPhone,
           email: formData.tenantEmail,
@@ -189,7 +211,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       onUpdate({
         ...listing,
         ...formData,
-        tenant: formData.occupancyStatus === "occupied" ? {
+        units: useUnitsMode ? units : undefined,
+        category: useUnitsMode ? "mixed" : formData.category,
+        tenant: (!useUnitsMode && formData.occupancyStatus === "occupied") ? {
           name: formData.tenantName,
           phone: formData.tenantPhone,
           email: formData.tenantEmail,
@@ -281,26 +305,37 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
               <div className="ml-2 h-px bg-gray-100 flex-1"></div>
             </div>
-            {shouldShowOccupancyStatus() && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={toggleOccupancyStatus} 
-                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setUseUnitsMode(!useUnitsMode)}
+                className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
               >
-                {formData.occupancyStatus === "occupied" ? (
-                  <div className="flex items-center gap-1.5">
-                    <Users className="h-3 w-3 text-green-600" />
-                    <span>Occupied</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5">
-                    <UserX className="h-3 w-3 text-orange-600" />
-                    <span>Vacant</span>
-                  </div>
-                )}
+                {useUnitsMode ? "Single Unit" : "Multiple Units"}
               </Button>
-            )}
+              {!useUnitsMode && shouldShowOccupancyStatus() && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleOccupancyStatus} 
+                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+                >
+                  {formData.occupancyStatus === "occupied" ? (
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3 w-3 text-green-600" />
+                      <span>Occupied</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <UserX className="h-3 w-3 text-orange-600" />
+                      <span>Vacant</span>
+                    </div>
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
           
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
@@ -314,6 +349,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     type: value,
                     category: ""
                   }));
+                  setUnits([]);
                 }}
               >
                 <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
@@ -339,45 +375,58 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               </Select>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
-              <Select
-                value={formData.category}
-                onValueChange={(value) => {
-                  setFormData(prev => ({
-                    ...prev,
-                    category: value
-                  }));
-                }}
-                disabled={!formData.type}
-              >
-                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
-                  <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
-                    {formData.category && CategoryIcon && (
-                      <div className="flex items-center gap-2">
-                        <CategoryIcon className="h-4 w-4" />
-                        <span>{selectedCategoryOption?.label}</span>
-                      </div>
-                    )}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {getAvailableCategories().map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      <div className="flex items-center gap-2">
-                        <cat.Icon className="h-4 w-4" />
-                        <span>{cat.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {!useUnitsMode && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      category: value
+                    }));
+                  }}
+                  disabled={!formData.type}
+                >
+                  <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                    <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
+                      {formData.category && CategoryIcon && (
+                        <div className="flex items-center gap-2">
+                          <CategoryIcon className="h-4 w-4" />
+                          <span>{selectedCategoryOption?.label}</span>
+                        </div>
+                      )}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getAvailableCategories().map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        <div className="flex items-center gap-2">
+                          <cat.Icon className="h-4 w-4" />
+                          <span>{cat.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Tenant Details Section - Only show if occupied AND not hospitality/vacation rental */}
-        {shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
+        {/* Units Manager - only show if using multiple units mode */}
+        {useUnitsMode && formData.type && (
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <UnitsManager
+              propertyType={formData.type as PropertyType}
+              units={units}
+              onUnitsChange={setUnits}
+            />
+          </div>
+        )}
+
+        {/* Tenant Details Section - Only show if single unit mode, occupied AND not hospitality/vacation rental */}
+        {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
