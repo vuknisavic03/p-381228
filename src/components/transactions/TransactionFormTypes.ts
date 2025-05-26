@@ -1,4 +1,3 @@
-
 export interface Tenant {
   name: string;
   type: string;
@@ -15,6 +14,7 @@ export interface Listing {
   country: string;
   location?: { lat: number; lng: number }; // Added location property
   tenant: Tenant;
+  occupancyStatus?: "occupied" | "vacant"; // Added occupancy status
 }
 
 export type PropertyType = 

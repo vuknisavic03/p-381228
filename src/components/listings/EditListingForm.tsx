@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,9 @@ import {
   Hotel,
   Briefcase,
   X,
-  Bed
+  Bed,
+  Users,
+  UserX
 } from "lucide-react";
 import {
   Select,
@@ -23,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
@@ -41,6 +44,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     postalCode: listing.postalCode || "",
     type: listing.type || "",
     category: listing.category || "",
+    occupancyStatus: listing.occupancyStatus || (listing.tenant?.name ? "occupied" : "vacant"),
     tenantName: listing.tenant?.name || "",
     tenantPhone: listing.tenant?.phone || "",
     tenantEmail: listing.tenant?.email || "",
@@ -53,7 +57,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     setFormData(prev => ({
       ...prev,
       type: listing.type || "",
-      category: listing.category || ""
+      category: listing.category || "",
+      occupancyStatus: listing.occupancyStatus || (listing.tenant?.name ? "occupied" : "vacant")
     }));
   }, [listing]);
 
@@ -125,12 +130,12 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       const updatedListing = {
         ...listing,
         ...formData,
-        tenant: {
+        tenant: formData.occupancyStatus === "occupied" ? {
           name: formData.tenantName,
           phone: formData.tenantPhone,
           email: formData.tenantEmail,
           type: formData.tenantType,
-        }
+        } : null
       };
 
       const res = await fetch(`http://localhost:5000/listings/${listing.id}`, {
@@ -163,12 +168,12 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       onUpdate({
         ...listing,
         ...formData,
-        tenant: {
+        tenant: formData.occupancyStatus === "occupied" ? {
           name: formData.tenantName,
           phone: formData.tenantPhone,
           email: formData.tenantEmail,
           type: formData.tenantType,
-        }
+        } : null
       });
       onClose();
     }
@@ -328,58 +333,100 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
 
-        {/* Tenant Details Section - Updated with proper spacing */}
+        {/* Occupancy Status Section */}
         <div className="space-y-4 group">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
-            <div className="h-px bg-gray-100 flex-1 mx-4"></div>
-            <div className="ml-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={toggleTenantType} 
-                className="h-8 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-4"
-              >
-                {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-              </Button>
-            </div>
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Occupancy Status</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
           </div>
           
-          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
-                {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
-              </label>
-              <Input
-                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                name="tenantName"
-                value={formData.tenantName}
-                onChange={handleChange}
-              />
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <RadioGroup
+              value={formData.occupancyStatus}
+              onValueChange={(value) => {
+                setFormData(prev => ({
+                  ...prev,
+                  occupancyStatus: value,
+                  // Clear tenant info if vacant
+                  tenantName: value === "vacant" ? "" : prev.tenantName,
+                  tenantPhone: value === "vacant" ? "" : prev.tenantPhone,
+                  tenantEmail: value === "vacant" ? "" : prev.tenantEmail,
+                }));
+              }}
+              className="flex gap-6"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="occupied" id="occupied" />
+                <Label htmlFor="occupied" className="flex items-center gap-2 cursor-pointer">
+                  <Users className="h-4 w-4 text-green-600" />
+                  <span>Occupied</span>
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="vacant" id="vacant" />
+                <Label htmlFor="vacant" className="flex items-center gap-2 cursor-pointer">
+                  <UserX className="h-4 w-4 text-orange-600" />
+                  <span>Vacant</span>
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+        </div>
+
+        {/* Tenant Details Section - Only show if occupied */}
+        {formData.occupancyStatus === "occupied" && (
+          <div className="space-y-4 group">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
+              <div className="h-px bg-gray-100 flex-1 mx-4"></div>
+              <div className="ml-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleTenantType} 
+                  className="h-8 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-4"
+                >
+                  {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
+                </Button>
+              </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                  {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
+                </label>
                 <Input
                   className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                  name="tenantPhone"
-                  value={formData.tenantPhone}
+                  name="tenantName"
+                  value={formData.tenantName}
                   onChange={handleChange}
                 />
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
-                <Input
-                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                  name="tenantEmail"
-                  value={formData.tenantEmail}
-                  onChange={handleChange}
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    name="tenantPhone"
+                    value={formData.tenantPhone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    name="tenantEmail"
+                    value={formData.tenantEmail}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Additional Details Section */}
         <div className="space-y-4 group">

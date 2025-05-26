@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import { MapPin, Phone, Mail, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Loader2, Users, UserX } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -176,7 +177,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
     "retail_office", "residential_commercial"
   ];
   const countries = Array.from(new Set(listings.map(l => l.country).filter(Boolean)));
-  const occupancyStatuses = ["Occupied", "Vacant"];
+  const occupancyStatuses = ["occupied", "vacant"];
 
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
@@ -225,11 +226,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
       } else if (filterKey === 'countries') {
         count = listings.filter(l => l.country === option).length;
       } else if (filterKey === 'occupancy') {
-        if (option === 'Occupied') {
-          count = listings.filter(l => l.tenant).length;
-        } else {
-          count = listings.filter(l => !l.tenant).length;
-        }
+        count = listings.filter(l => l.occupancyStatus === option || (!l.occupancyStatus && option === 'occupied' && l.tenant) || (!l.occupancyStatus && option === 'vacant' && !l.tenant)).length;
       }
       return { value: option, label: option, count };
     });
@@ -262,7 +259,10 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
     {
       id: "occupancy",
       title: "Occupancy Status",
-      options: getOptionCounts('occupancy', occupancyStatuses),
+      options: getOptionCounts('occupancy', occupancyStatuses).map(item => ({
+        ...item,
+        label: item.value.charAt(0).toUpperCase() + item.value.slice(1)
+      })),
       selectedValues: filters.occupancy,
       onToggle: (value: string) => toggleFilter("occupancy", value),
     },
@@ -295,10 +295,9 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
     const matchesCountry = filters.countries.length === 0 || 
       filters.countries.includes(listing.country);
     
-    const matchesOccupancy = filters.occupancy.length === 0 || (
-      (filters.occupancy.includes("Occupied") && listing.tenant) ||
-      (filters.occupancy.includes("Vacant") && !listing.tenant)
-    );
+    const listingOccupancy = listing.occupancyStatus || (listing.tenant ? 'occupied' : 'vacant');
+    const matchesOccupancy = filters.occupancy.length === 0 || 
+      filters.occupancy.includes(listingOccupancy);
 
     return matchesSearch && matchesType && matchesCategory && matchesCountry && matchesOccupancy;
   });
@@ -328,57 +327,76 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
           ) : (
             <div className="space-y-2">
               {filteredListings.length > 0 ? (
-                filteredListings.map((listing) => (
-                  <Card 
-                    key={listing.id} 
-                    className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
-                    onClick={() => handleListingClick(listing)}
-                  >
-                    <div className="flex flex-col">
-                      <div className="flex items-center justify-between p-4 pb-2">
-                        <div className="flex items-center gap-6 text-sm">
-                          <span className="text-[#9EA3AD] font-medium">#{listing.id}</span>
+                filteredListings.map((listing) => {
+                  const occupancyStatus = listing.occupancyStatus || (listing.tenant ? 'occupied' : 'vacant');
+                  return (
+                    <Card 
+                      key={listing.id} 
+                      className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
+                      onClick={() => handleListingClick(listing)}
+                    >
+                      <div className="flex flex-col">
+                        <div className="flex items-center justify-between p-4 pb-2">
+                          <div className="flex items-center gap-6 text-sm">
+                            <span className="text-[#9EA3AD] font-medium">#{listing.id}</span>
+                            <div className="flex items-center gap-2">
+                              <MapPin className="h-4 w-4 text-primary/80" />
+                              <span className="font-medium">{listing.address}</span>
+                            </div>
+                          </div>
                           <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-primary/80" />
-                            <span className="font-medium">{listing.address}</span>
+                            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                              occupancyStatus === 'occupied' 
+                                ? 'bg-green-50 text-green-700 border border-green-200'
+                                : 'bg-orange-50 text-orange-700 border border-orange-200'
+                            }`}>
+                              {occupancyStatus === 'occupied' ? (
+                                <Users className="h-3 w-3" />
+                              ) : (
+                                <UserX className="h-3 w-3" />
+                              )}
+                              <span>{occupancyStatus === 'occupied' ? 'Occupied' : 'Vacant'}</span>
+                            </div>
+                            <PropertyTypeDisplay 
+                              type={listing.type as PropertyType} 
+                              className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium"
+                            />
                           </div>
                         </div>
-                        <PropertyTypeDisplay 
-                          type={listing.type as PropertyType} 
-                          className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium"
-                        />
-                      </div>
-                      
-                      <div className="h-px bg-[#E4E5EA] mx-4" />
-                      
-                      <div className="flex items-center justify-between p-4 pt-2">
-                        <div className="flex items-center gap-8 text-sm">
-                          <span className="text-[#9EA3AD] font-medium">{listing.tenant?.name || 'No Tenant'}</span>
-                          <div className="flex items-center gap-8">
-                            {listing.tenant?.phone && (
-                              <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
-                                <Phone className="h-4 w-4 text-[#9EA3AD]" />
-                                <span>{listing.tenant.phone}</span>
-                              </div>
-                            )}
-                            {listing.tenant?.email && (
-                              <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
-                                <Mail className="h-4 w-4 text-[#9EA3AD]" />
-                                <span>{listing.tenant.email}</span>
-                              </div>
-                            )}
+                        
+                        <div className="h-px bg-[#E4E5EA] mx-4" />
+                        
+                        <div className="flex items-center justify-between p-4 pt-2">
+                          <div className="flex items-center gap-8 text-sm">
+                            <span className="text-[#9EA3AD] font-medium">
+                              {listing.tenant?.name || 'No Tenant'}
+                            </span>
+                            <div className="flex items-center gap-8">
+                              {listing.tenant?.phone && (
+                                <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
+                                  <Phone className="h-4 w-4 text-[#9EA3AD]" />
+                                  <span>{listing.tenant.phone}</span>
+                                </div>
+                              )}
+                              {listing.tenant?.email && (
+                                <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
+                                  <Mail className="h-4 w-4 text-[#9EA3AD]" />
+                                  <span>{listing.tenant.email}</span>
+                                </div>
+                              )}
+                            </div>
                           </div>
+                          <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
+                            {listing.category?.replace(/_/g, ' ')
+                              .split(' ')
+                              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                              .join(' ')}
+                          </span>
                         </div>
-                        <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
-                          {listing.category?.replace(/_/g, ' ')
-                            .split(' ')
-                            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                            .join(' ')}
-                        </span>
                       </div>
-                    </div>
-                  </Card>
-                ))
+                    </Card>
+                  );
+                })
               ) : (
                 <div className="text-center py-12">
                   <MapPin className="h-12 w-12 text-gray-300 mx-auto mb-4" />

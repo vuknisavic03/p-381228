@@ -10,7 +10,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "retail",
-    // Remove hardcoded location - let map geocode the real address
+    occupancyStatus: "occupied",
     tenant: {
       name: "Fashion Store Belgrade",
       phone: "+381 11 123 4567",
@@ -28,7 +28,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "office",
-    // Remove hardcoded location - let map geocode the real address
+    occupancyStatus: "occupied",
     tenant: {
       name: "Business Center",
       phone: "+381 11 234 5678",
@@ -46,7 +46,7 @@ const initialListings = [
     postalCode: "11000",
     type: "hospitality",
     category: "restaurant",
-    // Remove hardcoded location - let map geocode the real address
+    occupancyStatus: "occupied",
     tenant: {
       name: "Kalemegdan Restaurant",
       phone: "+381 11 345 6789",
@@ -64,14 +64,9 @@ const initialListings = [
     postalCode: "11000",
     type: "hospitality",
     category: "restaurant",
-    // Remove hardcoded location - let map geocode the real address
-    tenant: {
-      name: "Traditional Serbian Restaurant",
-      phone: "+381 11 456 7890",
-      email: "contact@skadarlija.rs",
-      type: "company"
-    },
-    notes: "Bohemian quarter"
+    occupancyStatus: "vacant",
+    tenant: null,
+    notes: "Bohemian quarter - available for rent"
   },
   {
     id: "5",
@@ -82,7 +77,7 @@ const initialListings = [
     postalCode: "11000",
     type: "residential_rental",
     category: "apartment",
-    // Remove hardcoded location - let map geocode the real address
+    occupancyStatus: "occupied",
     tenant: {
       name: "Marko Petrović",
       phone: "+381 11 567 8901",
@@ -100,14 +95,9 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "office",
-    // Remove hardcoded location - let map geocode the real address
-    tenant: {
-      name: "Tech Company Serbia",
-      phone: "+381 11 678 9012",
-      email: "info@tech.rs",
-      type: "company"
-    },
-    notes: "Main boulevard"
+    occupancyStatus: "vacant",
+    tenant: null,
+    notes: "Main boulevard - office space available"
   },
   {
     id: "7",
@@ -118,7 +108,7 @@ const initialListings = [
     postalCode: "11000",
     type: "commercial_rental",
     category: "retail",
-    // Remove hardcoded location - let map geocode the real address
+    occupancyStatus: "occupied",
     tenant: {
       name: "Shopping Mall Unit",
       phone: "+381 11 789 0123",
@@ -136,14 +126,9 @@ const initialListings = [
     postalCode: "11000",
     type: "residential_rental",
     category: "apartment",
-    // Remove hardcoded location - let map geocode the real address
-    tenant: {
-      name: "Ana Jovanović",
-      phone: "+381 11 890 1234",
-      email: "ana@email.rs",
-      type: "individual"
-    },
-    notes: "Residential area"
+    occupancyStatus: "vacant",
+    tenant: null,
+    notes: "Residential area - available for rent"
   }
 ];
 
