@@ -138,7 +138,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           <Button 
             onClick={handleConfirm}
             disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >
             Add transaction
           </Button>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
@@ -181,7 +182,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
           <Button
             onClick={handleUpdate}
             disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >
             Save changes
           </Button>
