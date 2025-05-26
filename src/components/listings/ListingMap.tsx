@@ -380,7 +380,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
                             #{selectedListing.id}
                           </Badge>
                           <Badge 
-                            className="text-xs px-2 py-1 font-medium border bg-blue-50 text-blue-700 border-blue-200"
+                            className="text-xs px-2 py-1 font-medium border bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:border-blue-300 transition-colors cursor-pointer"
                           >
                             {formatPropertyType(selectedListing.type)}
                           </Badge>
