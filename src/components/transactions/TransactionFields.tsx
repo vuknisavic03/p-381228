@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -146,7 +147,7 @@ export function TransactionFields({
           <div className="bg-purple-50/30 border border-purple-100 rounded-lg p-5">
             <div className="text-sm text-purple-700 font-medium mb-2">General Transaction</div>
             <p className="text-xs text-gray-600 mb-3">
-              This transaction will apply to your entire portfolio, not a specific property.
+              Applies to your entire portfolio, not a specific property.
             </p>
           </div>
         )}
