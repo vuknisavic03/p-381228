@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -118,6 +117,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     return typeField && !["hospitality", "vacation_rental"].includes(typeField);
   };
 
+  // Check if current property type should show tenant/guest information
+  const shouldShowTenantInfo = () => {
+    return typeField && !["hospitality", "vacation_rental"].includes(typeField);
+  };
+
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
   };
@@ -177,7 +181,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         category,
         location: coordinates, // High-precision geocoded coordinates
         ...(shouldShowOccupancyStatus() && { occupancyStatus }), // Only include if property type needs it
-        tenant: tenantName ? {
+        tenant: (shouldShowTenantInfo() && tenantName) ? {
           name: tenantName,
           phone: tenantPhone,
           email: tenantEmail,
@@ -417,13 +421,13 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </div>
         </div>
 
-        {/* Tenant Details Section - only show if occupied or for hospitality/vacation rental */}
-        {(occupancyStatus === "occupied" || !shouldShowOccupancyStatus()) && (
+        {/* Tenant Details Section - only show if occupied AND not hospitality/vacation rental */}
+        {shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
               <div className="flex items-center flex-1">
                 <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
-                  {["hospitality", "vacation_rental"].includes(typeField) ? "Guest Information" : "Tenant Information"}
+                  Tenant Information
                 </h3>
                 <div className="ml-2 h-px bg-gray-100 flex-1"></div>
               </div>
@@ -446,7 +450,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
                   value={tenantName}
                   onChange={(e) => setTenantName(e.target.value)}
-                  placeholder={shouldShowOccupancyStatus() ? "Leave empty if no tenant" : "Optional"}
+                  placeholder="Leave empty if no tenant"
                 />
               </div>
               
