@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { MapPin, Loader2 } from "lucide-react";
-import { getGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
 interface LocationSuggestion {
   description: string;
@@ -34,19 +33,27 @@ export function LocationAutofill({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
 
   const getPlaceTypes = () => {
     switch (type) {
       case "address":
-        return "address";
+        return ["address"];
       case "city":
-        return "(cities)";
+        return ["(cities)"];
       case "country":
-        return "(regions)";
+        return ["(regions)"];
       default:
-        return "geocode";
+        return ["geocode"];
     }
   };
+
+  // Initialize the autocomplete service when Google Maps is loaded
+  useEffect(() => {
+    if (window.google?.maps?.places?.AutocompleteService) {
+      autocompleteService.current = new google.maps.places.AutocompleteService();
+    }
+  }, []);
 
   const fetchSuggestions = async (query: string) => {
     if (query.length < 2) {
@@ -54,37 +61,40 @@ export function LocationAutofill({
       return;
     }
 
+    if (!autocompleteService.current) {
+      console.warn("Google Places AutocompleteService not available");
+      return;
+    }
+
     setIsLoading(true);
     
     try {
-      const apiKey = getGoogleMapsApiKey();
-      if (!apiKey) {
-        console.warn("No Google Maps API key available");
-        setIsLoading(false);
-        return;
-      }
+      const request: google.maps.places.AutocompletionRequest = {
+        input: query,
+        types: getPlaceTypes()
+      };
 
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&types=${getPlaceTypes()}&key=${apiKey}`,
-        { mode: 'cors' }
+      autocompleteService.current.getPlacePredictions(
+        request,
+        (predictions, status) => {
+          setIsLoading(false);
+          
+          if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
+            const formattedSuggestions = predictions.map(prediction => ({
+              description: prediction.description,
+              place_id: prediction.place_id,
+              types: prediction.types
+            }));
+            setSuggestions(formattedSuggestions);
+          } else {
+            console.warn('Places API error:', status);
+            setSuggestions([]);
+          }
+        }
       );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      if (data.status === 'OK') {
-        setSuggestions(data.predictions || []);
-      } else {
-        console.warn('Places API error:', data.status);
-        setSuggestions([]);
-      }
     } catch (error) {
       console.error('Error fetching suggestions:', error);
       setSuggestions([]);
-    } finally {
       setIsLoading(false);
     }
   };
