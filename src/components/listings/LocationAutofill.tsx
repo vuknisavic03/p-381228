@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -17,6 +16,7 @@ interface LocationAutofillProps {
   label: string;
   type: "address" | "city" | "country";
   className?: string;
+  onLocationSelect?: (locationData: { city?: string; country?: string; address?: string }) => void;
 }
 
 export function LocationAutofill({ 
@@ -25,7 +25,8 @@ export function LocationAutofill({
   placeholder, 
   label, 
   type,
-  className 
+  className,
+  onLocationSelect
 }: LocationAutofillProps) {
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,7 @@ export function LocationAutofill({
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
+  const placesService = useRef<google.maps.places.PlacesService | null>(null);
 
   const getPlaceTypes = () => {
     switch (type) {
@@ -52,8 +54,38 @@ export function LocationAutofill({
   useEffect(() => {
     if (window.google?.maps?.places?.AutocompleteService) {
       autocompleteService.current = new google.maps.places.AutocompleteService();
+      
+      // Create a temporary div for PlacesService
+      const mapDiv = document.createElement('div');
+      const map = new google.maps.Map(mapDiv);
+      placesService.current = new google.maps.places.PlacesService(map);
     }
   }, []);
+
+  const parseLocationComponents = (placeDetails: google.maps.places.PlaceResult) => {
+    const components = placeDetails.address_components || [];
+    let city = '';
+    let country = '';
+    let address = '';
+
+    components.forEach(component => {
+      const types = component.types;
+      
+      if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+        city = component.long_name;
+      } else if (types.includes('country')) {
+        country = component.long_name;
+      } else if (types.includes('street_number') || types.includes('route')) {
+        if (address) {
+          address += ' ' + component.long_name;
+        } else {
+          address = component.long_name;
+        }
+      }
+    });
+
+    return { city, country, address };
+  };
 
   const fetchSuggestions = async (query: string) => {
     if (query.length < 2) {
@@ -131,7 +163,45 @@ export function LocationAutofill({
   };
 
   const handleSuggestionSelect = (suggestion: LocationSuggestion) => {
-    onChange(suggestion.description);
+    // For city type, we want to extract just the city name and auto-populate country
+    if (type === "city" && placesService.current && onLocationSelect) {
+      const request = {
+        placeId: suggestion.place_id,
+        fields: ['address_components', 'name']
+      };
+
+      placesService.current.getDetails(request, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+          const locationData = parseLocationComponents(place);
+          
+          // Set just the city name in the current field
+          onChange(locationData.city || place.name || suggestion.description.split(',')[0]);
+          
+          // Notify parent to auto-populate other fields
+          onLocationSelect({
+            city: locationData.city || place.name || suggestion.description.split(',')[0],
+            country: locationData.country
+          });
+        } else {
+          // Fallback: just use the first part of the description
+          const cityName = suggestion.description.split(',')[0];
+          onChange(cityName);
+          
+          // Try to extract country from description
+          const parts = suggestion.description.split(',').map(s => s.trim());
+          if (parts.length > 1) {
+            onLocationSelect({
+              city: cityName,
+              country: parts[parts.length - 1]
+            });
+          }
+        }
+      });
+    } else {
+      // For other types, just use the full description
+      onChange(suggestion.description);
+    }
+    
     setShowSuggestions(false);
     setSuggestions([]);
     setSelectedIndex(-1);

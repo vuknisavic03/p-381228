@@ -53,6 +53,13 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   const { getCoordinates, isGeocoding } = useGeocoding();
 
+  // Handle location selection for auto-population
+  const handleCityLocationSelect = (locationData: { city?: string; country?: string }) => {
+    if (locationData.country) {
+      setCountry(locationData.country);
+    }
+  };
+
   // Updated property types with corresponding icon components
   const propertyTypes: { value: PropertyType; label: string }[] = [
     { value: "residential_rental", label: "Residential Rental" },
@@ -282,6 +289,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 label="City *"
                 type="city"
                 className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                onLocationSelect={handleCityLocationSelect}
               />
               <LocationAutofill
                 value={country}
