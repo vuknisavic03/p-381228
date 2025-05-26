@@ -344,9 +344,31 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
         {/* Property Type Section */}
         <div className="space-y-4 group">
-          <div className="flex items-center">
-            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
-            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            </div>
+            {shouldShowOccupancyStatus() && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={toggleOccupancyStatus} 
+                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+              >
+                {occupancyStatus === "occupied" ? (
+                  <div className="flex items-center gap-1.5">
+                    <Users className="h-3 w-3 text-green-600" />
+                    <span>Occupied</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    <UserX className="h-3 w-3 text-orange-600" />
+                    <span>Vacant</span>
+                  </div>
+                )}
+              </Button>
+            )}
           </div>
           
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
@@ -398,52 +420,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Occupancy Status - only show for certain property types */}
-            {shouldShowOccupancyStatus() && (
-              <div className="space-y-4 group">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center flex-1">
-                    <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Occupancy Status</h3>
-                    <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={toggleOccupancyStatus} 
-                    className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
-                  >
-                    {occupancyStatus === "occupied" ? (
-                      <div className="flex items-center gap-1.5">
-                        <Users className="h-3 w-3 text-green-600" />
-                        <span>Occupied</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1.5">
-                        <UserX className="h-3 w-3 text-orange-600" />
-                        <span>Vacant</span>
-                      </div>
-                    )}
-                  </Button>
-                </div>
-                
-                <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
-                  <div className="flex items-center gap-3">
-                    {occupancyStatus === "occupied" ? (
-                      <div className="flex items-center gap-2 text-green-700">
-                        <Users className="h-4 w-4" />
-                        <span className="text-sm font-medium">Property is currently occupied</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-orange-700">
-                        <UserX className="h-4 w-4" />
-                        <span className="text-sm font-medium">Property is currently vacant</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
