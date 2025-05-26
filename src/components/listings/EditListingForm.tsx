@@ -120,6 +120,17 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }));
   };
 
+  const toggleOccupancyStatus = () => {
+    setFormData(prev => ({
+      ...prev,
+      occupancyStatus: prev.occupancyStatus === "occupied" ? "vacant" : "occupied",
+      // Clear tenant info if switching to vacant
+      tenantName: prev.occupancyStatus === "occupied" ? "" : prev.tenantName,
+      tenantPhone: prev.occupancyStatus === "occupied" ? "" : prev.tenantPhone,
+      tenantEmail: prev.occupancyStatus === "occupied" ? "" : prev.tenantEmail,
+    }));
+  };
+
   const getAvailableCategories = () => {
     if (!formData.type) return [];
     return typeToCategoryMap[formData.type as keyof typeof typeToCategoryMap] || [];
@@ -335,41 +346,45 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
         {/* Occupancy Status Section */}
         <div className="space-y-4 group">
-          <div className="flex items-center">
-            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Occupancy Status</h3>
-            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Occupancy Status</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleOccupancyStatus} 
+              className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+            >
+              {formData.occupancyStatus === "occupied" ? (
+                <div className="flex items-center gap-1.5">
+                  <Users className="h-3 w-3 text-green-600" />
+                  <span>Occupied</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <UserX className="h-3 w-3 text-orange-600" />
+                  <span>Vacant</span>
+                </div>
+              )}
+            </Button>
           </div>
           
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
-            <RadioGroup
-              value={formData.occupancyStatus}
-              onValueChange={(value) => {
-                setFormData(prev => ({
-                  ...prev,
-                  occupancyStatus: value,
-                  // Clear tenant info if vacant
-                  tenantName: value === "vacant" ? "" : prev.tenantName,
-                  tenantPhone: value === "vacant" ? "" : prev.tenantPhone,
-                  tenantEmail: value === "vacant" ? "" : prev.tenantEmail,
-                }));
-              }}
-              className="flex gap-6"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="occupied" id="occupied" />
-                <Label htmlFor="occupied" className="flex items-center gap-2 cursor-pointer">
-                  <Users className="h-4 w-4 text-green-600" />
-                  <span>Occupied</span>
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="vacant" id="vacant" />
-                <Label htmlFor="vacant" className="flex items-center gap-2 cursor-pointer">
-                  <UserX className="h-4 w-4 text-orange-600" />
-                  <span>Vacant</span>
-                </Label>
-              </div>
-            </RadioGroup>
+            <div className="flex items-center gap-3">
+              {formData.occupancyStatus === "occupied" ? (
+                <div className="flex items-center gap-2 text-green-700">
+                  <Users className="h-4 w-4" />
+                  <span className="text-sm font-medium">Property is currently occupied</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-orange-700">
+                  <UserX className="h-4 w-4" />
+                  <span className="text-sm font-medium">Property is currently vacant</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

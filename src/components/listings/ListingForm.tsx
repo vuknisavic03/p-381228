@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import {
   Home,
@@ -27,6 +26,8 @@ import {
   Hotel as HotelIcon,
   MapPin,
   Loader2,
+  Users,
+  UserX,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
@@ -124,6 +125,10 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   const toggleTenantType = () => {
     setTenantType(tenantType === "individual" ? "company" : "individual");
+  };
+
+  const toggleOccupancyStatus = () => {
+    setOccupancyStatus(occupancyStatus === "occupied" ? "vacant" : "occupied");
   };
 
   const handleSave = async () => {
@@ -396,26 +401,47 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
             {/* Occupancy Status - only show for certain property types */}
             {shouldShowOccupancyStatus() && (
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-2 ml-0.5">Occupancy Status</label>
-                <RadioGroup
-                  value={occupancyStatus}
-                  onValueChange={(value: "occupied" | "vacant") => setOccupancyStatus(value)}
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="occupied" id="occupied" />
-                    <Label htmlFor="occupied" className="text-sm text-gray-700 cursor-pointer">
-                      Occupied
-                    </Label>
+              <div className="space-y-4 group">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center flex-1">
+                    <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Occupancy Status</h3>
+                    <div className="ml-2 h-px bg-gray-100 flex-1"></div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="vacant" id="vacant" />
-                    <Label htmlFor="vacant" className="text-sm text-gray-700 cursor-pointer">
-                      Vacant
-                    </Label>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={toggleOccupancyStatus} 
+                    className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+                  >
+                    {occupancyStatus === "occupied" ? (
+                      <div className="flex items-center gap-1.5">
+                        <Users className="h-3 w-3 text-green-600" />
+                        <span>Occupied</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5">
+                        <UserX className="h-3 w-3 text-orange-600" />
+                        <span>Vacant</span>
+                      </div>
+                    )}
+                  </Button>
+                </div>
+                
+                <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+                  <div className="flex items-center gap-3">
+                    {occupancyStatus === "occupied" ? (
+                      <div className="flex items-center gap-2 text-green-700">
+                        <Users className="h-4 w-4" />
+                        <span className="text-sm font-medium">Property is currently occupied</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-orange-700">
+                        <UserX className="h-4 w-4" />
+                        <span className="text-sm font-medium">Property is currently vacant</span>
+                      </div>
+                    )}
                   </div>
-                </RadioGroup>
+                </div>
               </div>
             )}
           </div>
