@@ -235,6 +235,13 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   const isProcessing = isSaving || isGeocoding;
 
+  // Check if required fields are filled
+  const isFormValid = address.trim() !== "" && 
+                     city.trim() !== "" && 
+                     country.trim() !== "" && 
+                     typeField !== "" && 
+                     category !== "";
+
   return (
     <div className="h-full overflow-auto bg-white">
       {/* Header with close button */}
@@ -439,8 +446,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleSave} 
-            disabled={isProcessing}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white disabled:opacity-50"
+            disabled={isProcessing || !isFormValid}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
           >
             {isProcessing ? (
               <div className="flex items-center gap-2">
