@@ -247,210 +247,211 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   return (
     <div className="h-full bg-white flex flex-col">
       {/* Header */}
-      <div className="flex-shrink-0 px-8 py-6 border-b border-gray-100">
+      <div className="flex-shrink-0 px-12 py-8 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Edit Property</h1>
-            <p className="text-sm text-gray-500 mt-1">Update your property information</p>
+            <h1 className="text-3xl font-semibold text-gray-900">Edit Property</h1>
+            <p className="text-base text-gray-500 mt-2">Update your property information</p>
           </div>
           <SheetClose asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-md hover:bg-gray-100">
-              <X className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-md hover:bg-gray-100">
+              <X className="h-5 w-5" />
               <span className="sr-only">Close</span>
             </Button>
           </SheetClose>
         </div>
       </div>
 
-      {/* Form content */}
-      <div className="flex-1 overflow-auto px-8 py-6">
-        <div className="max-w-2xl space-y-8">
+      {/* Form content - Optimized for wider space */}
+      <div className="flex-1 overflow-auto px-12 py-10">
+        <div className="max-w-5xl space-y-12">
           {/* Location Section */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-2">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                <MapPin className="h-4 w-4 text-blue-600" />
+          <div className="space-y-8">
+            <div className="flex items-center gap-4 pb-3">
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                <MapPin className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-lg font-medium text-gray-900">Location</h2>
-                <p className="text-sm text-gray-500">Where is this property located?</p>
+                <h2 className="text-xl font-semibold text-gray-900">Location</h2>
+                <p className="text-base text-gray-500">Where is this property located?</p>
               </div>
             </div>
             
-            <div className="space-y-4 pl-11">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-8 pl-14">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                  <label className="block text-base font-medium text-gray-700 mb-4">City</label>
                   <Input
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
                     placeholder="Enter city"
-                    className="h-10"
+                    className="h-14 text-base"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                  <label className="block text-base font-medium text-gray-700 mb-4">Country</label>
                   <Input
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
                     placeholder="Enter country"
-                    className="h-10"
+                    className="h-14 text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-base font-medium text-gray-700 mb-4">Postal Code</label>
+                  <Input
+                    name="postalCode"
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    placeholder="Enter postal code"
+                    className="h-14 text-base"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
+                <label className="block text-base font-medium text-gray-700 mb-4">Street Address</label>
                 <Input
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   placeholder="Enter full address"
-                  className="h-10"
-                />
-              </div>
-              
-              <div className="w-1/2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                <Input
-                  name="postalCode"
-                  value={formData.postalCode}
-                  onChange={handleChange}
-                  placeholder="Enter postal code"
-                  className="h-10"
+                  className="h-14 text-base"
                 />
               </div>
             </div>
           </div>
 
           {/* Property Type Section */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-2">
-              <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                <BuildingIcon className="h-4 w-4 text-green-600" />
+          <div className="space-y-8">
+            <div className="flex items-center gap-4 pb-3">
+              <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                <BuildingIcon className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <h2 className="text-lg font-medium text-gray-900">Property Details</h2>
-                <p className="text-sm text-gray-500">What type of property is this?</p>
+                <h2 className="text-xl font-semibold text-gray-900">Property Details</h2>
+                <p className="text-base text-gray-500">What type of property is this?</p>
               </div>
             </div>
             
-            <div className="space-y-6 pl-11">
+            <div className="space-y-10 pl-14">
               {/* Unit Mode Toggle */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between p-8 bg-gray-50 rounded-2xl">
                 <div>
-                  <h3 className="font-medium text-gray-900">Property Structure</h3>
-                  <p className="text-sm text-gray-500">Choose if this property has multiple units</p>
+                  <h3 className="text-lg font-semibold text-gray-900">Property Structure</h3>
+                  <p className="text-base text-gray-500 mt-1">Choose if this property has multiple units</p>
                 </div>
                 <Button
                   type="button"
                   variant={useUnitsMode ? "default" : "outline"}
-                  size="sm"
+                  size="lg"
                   onClick={() => setUseUnitsMode(!useUnitsMode)}
-                  className="ml-4"
+                  className="ml-6 h-12 px-8 text-base"
                 >
                   {useUnitsMode ? "Multiple Units" : "Single Unit"}
                 </Button>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(value) => {
-                    setFormData(prev => ({
-                      ...prev,
-                      type: value,
-                      category: ""
-                    }));
-                    setUnits([]);
-                  }}
-                >
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Select property type">
-                      {formData.type && (
-                        <div className="flex items-center gap-2">
-                          {getPropertyTypeIcon(formData.type as PropertyType)}
-                          <span>{selectedTypeOption?.label || formatPropertyType(formData.type as PropertyType)}</span>
-                        </div>
-                      )}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {propertyTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        <div className="flex items-center gap-2">
-                          {getPropertyTypeIcon(type.value)}
-                          <span>{type.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {!useUnitsMode && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <label className="block text-base font-medium text-gray-700 mb-4">Property Type</label>
                   <Select
-                    value={formData.category}
+                    value={formData.type}
                     onValueChange={(value) => {
                       setFormData(prev => ({
                         ...prev,
-                        category: value
+                        type: value,
+                        category: ""
                       }));
+                      setUnits([]);
                     }}
-                    disabled={!formData.type}
                   >
-                    <SelectTrigger className="h-10">
-                      <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
-                        {formData.category && CategoryIcon && (
-                          <div className="flex items-center gap-2">
-                            <CategoryIcon className="h-4 w-4" />
-                            <span>{selectedCategoryOption?.label}</span>
+                    <SelectTrigger className="h-14 text-base">
+                      <SelectValue placeholder="Select property type">
+                        {formData.type && (
+                          <div className="flex items-center gap-3">
+                            {getPropertyTypeIcon(formData.type as PropertyType)}
+                            <span>{selectedTypeOption?.label || formatPropertyType(formData.type as PropertyType)}</span>
                           </div>
                         )}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {getAvailableCategories().map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>
-                          <div className="flex items-center gap-2">
-                            <cat.Icon className="h-4 w-4" />
-                            <span>{cat.label}</span>
+                      {propertyTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          <div className="flex items-center gap-3">
+                            {getPropertyTypeIcon(type.value)}
+                            <span>{type.label}</span>
                           </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              )}
+
+                {!useUnitsMode && (
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-4">Category</label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          category: value
+                        }));
+                      }}
+                      disabled={!formData.type}
+                    >
+                      <SelectTrigger className="h-14 text-base">
+                        <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
+                          {formData.category && CategoryIcon && (
+                            <div className="flex items-center gap-3">
+                              <CategoryIcon className="h-5 w-5" />
+                              <span>{selectedCategoryOption?.label}</span>
+                            </div>
+                          )}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getAvailableCategories().map((cat) => (
+                          <SelectItem key={cat.value} value={cat.value}>
+                            <div className="flex items-center gap-3">
+                              <cat.Icon className="h-5 w-5" />
+                              <span>{cat.label}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
 
               {/* Occupancy Status for single unit */}
               {!useUnitsMode && shouldShowOccupancyStatus() && (
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-8 bg-gray-50 rounded-2xl">
                   <div>
-                    <h3 className="font-medium text-gray-900">Occupancy Status</h3>
-                    <p className="text-sm text-gray-500">Is this property currently occupied?</p>
+                    <h3 className="text-lg font-semibold text-gray-900">Occupancy Status</h3>
+                    <p className="text-base text-gray-500 mt-1">Is this property currently occupied?</p>
                   </div>
                   <Button
                     type="button"
                     variant="outline"
-                    size="sm"
+                    size="lg"
                     onClick={toggleOccupancyStatus}
-                    className="ml-4"
+                    className="ml-6 h-12 px-8"
                   >
                     {formData.occupancyStatus === "occupied" ? (
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-green-600" />
-                        <span>Occupied</span>
+                      <div className="flex items-center gap-3">
+                        <Users className="h-5 w-5 text-green-600" />
+                        <span className="text-base">Occupied</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <UserX className="h-4 w-4 text-orange-600" />
-                        <span>Vacant</span>
+                      <div className="flex items-center gap-3">
+                        <UserX className="h-5 w-5 text-orange-600" />
+                        <span className="text-base">Vacant</span>
                       </div>
                     )}
                   </Button>
@@ -461,17 +462,17 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
           {/* Units Manager */}
           {useUnitsMode && formData.type && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 pb-2">
-                <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
-                  <Hash className="h-4 w-4 text-purple-600" />
+            <div className="space-y-8">
+              <div className="flex items-center gap-4 pb-3">
+                <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+                  <Hash className="h-5 w-5 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-medium text-gray-900">Units</h2>
-                  <p className="text-sm text-gray-500">Manage individual units in this property</p>
+                  <h2 className="text-xl font-semibold text-gray-900">Units</h2>
+                  <p className="text-base text-gray-500">Manage individual units in this property</p>
                 </div>
               </div>
-              <div className="pl-11">
+              <div className="pl-14">
                 <UnitsManager
                   propertyType={formData.type as PropertyType}
                   units={units}
@@ -483,28 +484,29 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
           {/* Tenant Information */}
           {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 pb-2">
-                <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
-                  <User className="h-4 w-4 text-orange-600" />
+            <div className="space-y-8">
+              <div className="flex items-center gap-4 pb-3">
+                <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center">
+                  <User className="h-5 w-5 text-orange-600" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-lg font-medium text-gray-900">Tenant Information</h2>
-                  <p className="text-sm text-gray-500">Details about the current tenant</p>
+                  <h2 className="text-xl font-semibold text-gray-900">Tenant Information</h2>
+                  <p className="text-base text-gray-500">Details about the current tenant</p>
                 </div>
                 <Button
                   type="button"
                   variant="outline"
-                  size="sm"
+                  size="lg"
                   onClick={toggleTenantType}
+                  className="h-12 px-8"
                 >
                   {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
                 </Button>
               </div>
               
-              <div className="space-y-4 pl-11">
+              <div className="space-y-8 pl-14">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-4">
                     {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                   </label>
                   <Input
@@ -512,34 +514,34 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     value={formData.tenantName}
                     onChange={handleChange}
                     placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                    className="h-10"
+                    className="h-14 text-base"
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <label className="block text-base font-medium text-gray-700 mb-4">Phone Number</label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <Input
                         name="tenantPhone"
                         value={formData.tenantPhone}
                         onChange={handleChange}
                         placeholder="Enter phone number"
-                        className="h-10 pl-10"
+                        className="h-14 pl-12 text-base"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <label className="block text-base font-medium text-gray-700 mb-4">Email Address</label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <Input
                         name="tenantEmail"
                         value={formData.tenantEmail}
                         onChange={handleChange}
                         placeholder="Enter email address"
-                        className="h-10 pl-10"
+                        className="h-14 pl-12 text-base"
                       />
                     </div>
                   </div>
@@ -549,24 +551,24 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           )}
 
           {/* Additional Notes */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-2">
-              <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
-                <FileText className="h-4 w-4 text-gray-600" />
+          <div className="space-y-8">
+            <div className="flex items-center gap-4 pb-3">
+              <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center">
+                <FileText className="h-5 w-5 text-gray-600" />
               </div>
               <div>
-                <h2 className="text-lg font-medium text-gray-900">Additional Notes</h2>
-                <p className="text-sm text-gray-500">Any other important details about this property</p>
+                <h2 className="text-xl font-semibold text-gray-900">Additional Notes</h2>
+                <p className="text-base text-gray-500">Any other important details about this property</p>
               </div>
             </div>
             
-            <div className="pl-11">
+            <div className="pl-14">
               <Textarea
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
                 placeholder="Add any additional notes, special features, or important details..."
-                className="min-h-[100px] resize-none"
+                className="min-h-[140px] resize-none text-base p-4"
               />
             </div>
           </div>
@@ -574,18 +576,18 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       </div>
       
       {/* Action Buttons */}
-      <div className="flex-shrink-0 px-8 py-6 border-t border-gray-100 bg-white">
-        <div className="flex gap-3 max-w-2xl">
+      <div className="flex-shrink-0 px-12 py-8 border-t border-gray-100 bg-white">
+        <div className="flex gap-6 max-w-5xl">
           <Button 
             onClick={handleSubmit} 
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-14 text-lg font-medium rounded-xl"
           >
             Save changes
           </Button>
           <Button 
             variant="outline" 
             onClick={onClose} 
-            className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-11"
+            className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-14 text-lg font-medium rounded-xl"
           >
             Cancel
           </Button>
