@@ -139,60 +139,8 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
-  const occupiedUnits = units.filter(unit => unit.occupancyStatus === "occupied").length;
-  const vacantUnits = units.filter(unit => unit.occupancyStatus === "vacant").length;
-
   return (
     <div className="space-y-6">
-      {/* Elegant Header Section - Notion Style */}
-      <div className="bg-white rounded-lg p-6 border border-gray-100">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            {/* Icon container with subtle background */}
-            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <Building className="h-5 w-5 text-blue-600" />
-            </div>
-            
-            <div className="space-y-1">
-              {/* Main title with Notion-like typography */}
-              <h3 className="text-lg font-semibold text-gray-900 leading-tight">
-                Units Management
-              </h3>
-              
-              {/* Subtitle with elegant spacing and muted color */}
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="font-medium">{units.length} {units.length === 1 ? 'unit' : 'units'}</span>
-                {shouldShowOccupancyStatus() && units.length > 0 && (
-                  <>
-                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <span className="flex items-center gap-3">
-                      <span className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        <span>{occupiedUnits} occupied</span>
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                        <span>{vacantUnits} vacant</span>
-                      </span>
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-          
-          {/* Add button with refined styling */}
-          <Button
-            type="button"
-            onClick={addUnit}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 h-9 rounded-lg shadow-sm font-medium text-sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Unit
-          </Button>
-        </div>
-      </div>
-
       {/* Units Grid */}
       {units.length > 0 ? (
         <div className="grid gap-4">
