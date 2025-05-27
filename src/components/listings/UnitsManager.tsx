@@ -79,7 +79,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
   const addUnit = () => {
     const newUnit: Unit = {
       id: Date.now().toString(),
-      unitNumber: "",
+      unitNumber: `Unit ${units.length + 1}`,
       category: "",
       occupancyStatus: "vacant",
     };
