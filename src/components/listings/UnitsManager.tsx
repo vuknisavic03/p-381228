@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -177,7 +176,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                       <Input
                         value={unit.unitNumber}
                         onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                        className="h-8 text-sm font-medium"
+                        className="h-6 text-sm font-medium border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 px-2 py-1 max-w-xs"
                         placeholder="Unit name"
                         autoFocus
                         onBlur={() => saveUnitName(unit.id)}
