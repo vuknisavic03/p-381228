@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -158,11 +157,11 @@ export default function Listings() {
           </AnimatePresence>
         </div>
         
-        {/* Add Listing Sheet - 2000px width */}
+        {/* Add Listing Sheet - Made wider */}
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent 
             side="right" 
-            className="w-[2000px] sm:w-[2000px] max-w-[95vw] p-0 border-l shadow-2xl bg-white"
+            className="w-[600px] sm:w-[720px] max-w-[85vw] p-0 border-l shadow-2xl bg-white"
           >
             <ListingForm 
               onClose={() => setIsAddFormOpen(false)} 
@@ -171,11 +170,11 @@ export default function Listings() {
           </SheetContent>
         </Sheet>
         
-        {/* Edit Listing Sheet - 2000px width */}
+        {/* Edit Listing Sheet - Made wider */}
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 
             side="right" 
-            className="w-[2000px] sm:w-[2000px] max-w-[95vw] p-0 border-l shadow-2xl transition-transform duration-300"
+            className="w-[600px] sm:w-[720px] max-w-[85vw] p-0 border-l shadow-2xl transition-transform duration-300"
           >
             {selectedListing && (
               <EditListingForm

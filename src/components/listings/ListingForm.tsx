@@ -3,11 +3,36 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Loader2, Users, UserX, MapPin, Building, Hash, User, FileText } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import {
+  Home,
+  Building2,
+  Factory,
+  Store,
+  Building,
+  Warehouse,
+  Hotel,
+  Briefcase,
+  X,
+  Bed,
+  Building as BuildingIcon,
+  Store as StoreIcon,
+  Hotel as HotelIcon,
+  MapPin,
+  Loader2,
+  Users,
+  UserX,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
-import { getPropertyTypeIcon } from "@/utils/propertyTypeUtils";
+import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { useGeocoding } from "@/hooks/useGeocoding";
 import { LocationAutofill } from "./LocationAutofill";
 import { UnitsManager } from "./UnitsManager";
@@ -67,34 +92,34 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   const typeToCategoryMap = {
     residential_rental: [
-      { value: "single_family", label: "Single-family Home" },
-      { value: "multi_family", label: "Multi-family (Duplex, Triplex)" },
-      { value: "apartment_condo", label: "Apartment / Condo" },
+      { value: "single_family", label: "Single-family Home", Icon: Home },
+      { value: "multi_family", label: "Multi-family (Duplex, Triplex)", Icon: Building },
+      { value: "apartment_condo", label: "Apartment / Condo", Icon: Building2 },
     ],
     commercial_rental: [
-      { value: "office", label: "Office" },
-      { value: "retail", label: "Retail" },
-      { value: "medical", label: "Medical / Professional Unit" },
+      { value: "office", label: "Office", Icon: BuildingIcon },
+      { value: "retail", label: "Retail", Icon: StoreIcon },
+      { value: "medical", label: "Medical / Professional Unit", Icon: Building2 },
     ],
     industrial: [
-      { value: "warehouse", label: "Warehouse" },
-      { value: "distribution", label: "Distribution Facility" },
-      { value: "manufacturing", label: "Manufacturing Facility" },
+      { value: "warehouse", label: "Warehouse", Icon: Warehouse },
+      { value: "distribution", label: "Distribution Facility", Icon: Factory },
+      { value: "manufacturing", label: "Manufacturing Facility", Icon: Factory },
     ],
     hospitality: [
-      { value: "hotel", label: "Hotel" },
-      { value: "motel", label: "Motel" },
-      { value: "bed_breakfast", label: "Bed & Breakfast" },
+      { value: "hotel", label: "Hotel", Icon: HotelIcon },
+      { value: "motel", label: "Motel", Icon: Hotel },
+      { value: "bed_breakfast", label: "Bed & Breakfast", Icon: Bed },
     ],
     vacation_rental: [
-      { value: "short_term", label: "Short-term Rental (Airbnb-style)" },
-      { value: "serviced_apartment", label: "Serviced Apartment" },
-      { value: "holiday_home", label: "Holiday Home / Villa" },
+      { value: "short_term", label: "Short-term Rental (Airbnb-style)", Icon: Home },
+      { value: "serviced_apartment", label: "Serviced Apartment", Icon: Building2 },
+      { value: "holiday_home", label: "Holiday Home / Villa", Icon: Home },
     ],
     mixed_use: [
-      { value: "residential_commercial", label: "Residential-Commercial" },
-      { value: "live_work", label: "Live-Work" },
-      { value: "multi_purpose", label: "Multi-Purpose" },
+      { value: "residential_commercial", label: "Residential-Commercial", Icon: Building },
+      { value: "live_work", label: "Live-Work", Icon: Home },
+      { value: "multi_purpose", label: "Multi-Purpose", Icon: Building },
     ],
   };
 
@@ -109,6 +134,44 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   const shouldShowTenantInfo = () => {
     return typeField && !["hospitality", "vacation_rental"].includes(typeField);
+  };
+
+  const toggleTenantType = () => {
+    console.log("Toggle tenant type clicked, current type:", tenantType);
+    setTenantType(prev => {
+      const newType = prev === "individual" ? "company" : "individual";
+      console.log("Switching tenant type from", prev, "to", newType);
+      return newType;
+    });
+  };
+
+  const toggleOccupancyStatus = () => {
+    setOccupancyStatus(occupancyStatus === "occupied" ? "vacant" : "occupied");
+  };
+
+  const updateUnitTenant = (unitId: string, tenantData: Partial<Unit['tenant']>) => {
+    setUnits(units.map(unit => 
+      unit.id === unitId 
+        ? { 
+            ...unit, 
+            tenant: unit.tenant ? { ...unit.tenant, ...tenantData } : {
+              name: tenantData.name || "",
+              phone: tenantData.phone || "",
+              email: tenantData.email || "",
+              type: tenantData.type || "individual"
+            }
+          }
+        : unit
+    ));
+  };
+
+  const toggleUnitTenantType = (unitId: string) => {
+    const unit = units.find(u => u.id === unitId);
+    if (unit?.tenant) {
+      updateUnitTenant(unitId, {
+        type: unit.tenant.type === "individual" ? "company" : "individual"
+      });
+    }
   };
 
   const handleSave = async () => {
@@ -253,294 +316,275 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   };
 
   const isProcessing = isSaving || isGeocoding;
+
   const isFormValid = address.trim() !== "" && 
                      city.trim() !== "" && 
                      country.trim() !== "" && 
                      typeField !== "" && 
                      (useUnitsMode ? units.length > 0 : category !== "");
 
+  const getOccupiedUnits = () => {
+    return units.filter(unit => unit.occupancyStatus === "occupied");
+  };
+
   return (
-    <div className="h-full bg-white">
-      {/* Clean Header */}
-      <div className="border-b border-gray-100 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Add New Property</h1>
-            <p className="text-gray-500 text-sm mt-1">Create a new property listing</p>
-          </div>
-          <div className="flex items-center gap-4">
-            {isGeocoding && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
-                <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-                <span className="text-sm text-blue-600 font-medium">Loading...</span>
-              </div>
-            )}
-            {onClose && (
-              <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
+    <div className="h-full overflow-auto bg-white">
+      {/* Header with close button */}
+      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-medium text-gray-900">Add New Listing</h2>
+          {isGeocoding && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
+              <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
+              <span className="text-xs text-blue-600 font-medium">Loading...</span>
+            </div>
+          )}
         </div>
+        {onClose && (
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto p-6">
-        <div className="max-w-7xl mx-auto space-y-8">
+      {/* Form content */}
+      <div className="px-6 py-4 space-y-8">
+        {/* Property Information Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            <MapPin className="h-4 w-4 text-blue-500 ml-2" />
+          </div>
           
-          {/* Location Card */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <MapPin className="h-5 w-5 text-blue-600" />
-              <h2 className="text-lg font-medium text-gray-900">Location</h2>
+          <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <LocationAutofill
+                value={city}
+                onChange={setCity}
+                placeholder="e.g., Belgrade"
+                label="City *"
+                type="city"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                onLocationSelect={handleCityLocationSelect}
+              />
+              <LocationAutofill
+                value={country}
+                onChange={setCountry}
+                placeholder="e.g., Serbia"
+                label="Country *"
+                type="country"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+              />
             </div>
             
-            <div className="space-y-4">
-              <div className="grid grid-cols-6 gap-4">
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
-                  <LocationAutofill
-                    value={address}
-                    onChange={setAddress}
-                    placeholder="123 Main Street"
-                    label=""
-                    type="address"
-                    className="h-11 text-base"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
-                  <LocationAutofill
-                    value={city}
-                    onChange={setCity}
-                    placeholder="New York"
-                    label=""
-                    type="city"
-                    className="h-11 text-base"
-                    onLocationSelect={handleCityLocationSelect}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
-                  <LocationAutofill
-                    value={country}
-                    onChange={setCountry}
-                    placeholder="United States"
-                    label=""
-                    type="country"
-                    className="h-11 text-base"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                  <Input
-                    value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
-                    placeholder="10001"
-                    className="h-11 text-base"
-                  />
-                </div>
-              </div>
+            <LocationAutofill
+              value={address}
+              onChange={setAddress}
+              placeholder="e.g., Knez Mihailova 42"
+              label="Address *"
+              type="address"
+              className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+            />
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                placeholder="e.g., 11000"
+              />
             </div>
           </div>
+        </div>
 
-          {/* Property Type Card */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Building className="h-5 w-5 text-green-600" />
-              <h2 className="text-lg font-medium text-gray-900">Property Details</h2>
+        {/* Property Type Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
             </div>
-            
-            <div className="space-y-6">
-              {/* Unit Mode Toggle */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <h3 className="font-medium text-gray-900">Property Structure</h3>
-                  <p className="text-gray-500 text-sm">Choose between single unit or multiple units</p>
-                </div>
-                <Button
-                  type="button"
-                  variant={useUnitsMode ? "default" : "outline"}
-                  onClick={() => setUseUnitsMode(!useUnitsMode)}
-                  className="h-10"
-                >
-                  {useUnitsMode ? "Multiple Units" : "Single Unit"}
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
-                  <Select
-                    value={typeField}
-                    onValueChange={(value) => {
-                      setTypeField(value);
-                      setCategory("");
-                      setOccupancyStatus("occupied");
-                      setUnits([]);
-                    }}
-                  >
-                    <SelectTrigger className="h-11 text-base">
-                      <SelectValue placeholder="Select property type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {propertyTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          <div className="flex items-center gap-2">
-                            {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
-                            <span>{type.label}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {!useUnitsMode && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                    <Select
-                      value={category}
-                      onValueChange={setCategory}
-                      disabled={!typeField}
-                    >
-                      <SelectTrigger className="h-11 text-base">
-                        <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {getAvailableCategories().map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value}>
-                            <span>{cat.label}</span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-              </div>
-
-              {/* Occupancy Status for single unit */}
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setUseUnitsMode(!useUnitsMode)}
+                className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
+              >
+                {useUnitsMode ? "Multiple Units" : "Single Unit"}
+              </Button>
               {!useUnitsMode && shouldShowOccupancyStatus() && (
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <h3 className="font-medium text-gray-900">Occupancy Status</h3>
-                    <p className="text-gray-500 text-sm">Current occupancy status</p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setOccupancyStatus(occupancyStatus === "occupied" ? "vacant" : "occupied")}
-                    className="h-10"
-                  >
-                    {occupancyStatus === "occupied" ? (
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-green-600" />
-                        <span>Occupied</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <UserX className="h-4 w-4 text-orange-600" />
-                        <span>Vacant</span>
-                      </div>
-                    )}
-                  </Button>
-                </div>
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleOccupancyStatus} 
+                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+                >
+                  {occupancyStatus === "occupied" ? (
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3 w-3 text-green-600" />
+                      <span>Occupied</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <UserX className="h-3 w-3 text-orange-600" />
+                      <span>Vacant</span>
+                    </div>
+                  )}
+                </Button>
               )}
             </div>
           </div>
-
-          {/* Units Manager */}
-          {useUnitsMode && typeField && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Hash className="h-5 w-5 text-purple-600" />
-                <h2 className="text-lg font-medium text-gray-900">Units Management</h2>
-              </div>
-              <UnitsManager
-                propertyType={typeField as PropertyType}
-                units={units}
-                onUnitsChange={setUnits}
-              />
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Type</label>
+              <Select
+                value={typeField}
+                onValueChange={(value) => {
+                  setTypeField(value);
+                  setCategory("");
+                  setOccupancyStatus("occupied");
+                  setUnits([]);
+                }}
+              >
+                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                  <SelectValue placeholder="Select property type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {propertyTypes.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <div className="flex items-center gap-2">
+                        {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
+                        <span>{type.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          )}
 
-          {/* Tenant Information */}
-          {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <User className="h-5 w-5 text-orange-600" />
-                  <h2 className="text-lg font-medium text-gray-900">Tenant Information</h2>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setTenantType(prev => prev === "individual" ? "company" : "individual")}
-                  className="h-10"
+            {!useUnitsMode && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
+                <Select
+                  value={category}
+                  onValueChange={setCategory}
+                  disabled={!typeField}
                 >
-                  {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-                </Button>
+                  <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                    <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getAvailableCategories().map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        <div className="flex items-center gap-2">
+                          <cat.Icon className="h-4 w-4 text-gray-500" />
+                          <span>{cat.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              
-              <div className="grid grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {tenantType === "individual" ? "Full Name" : "Company Name"}
-                  </label>
-                  <Input
-                    value={tenantName}
-                    onChange={(e) => setTenantName(e.target.value)}
-                    placeholder={tenantType === "individual" ? "John Doe" : "ABC Corp"}
-                    className="h-11 text-base"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                  <Input
-                    value={tenantPhone}
-                    onChange={(e) => setTenantPhone(e.target.value)}
-                    placeholder="+1 (555) 123-4567"
-                    className="h-11 text-base"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                  <Input
-                    value={tenantEmail}
-                    onChange={(e) => setTenantEmail(e.target.value)}
-                    placeholder="tenant@example.com"
-                    className="h-11 text-base"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
+        </div>
 
-          {/* Notes */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <FileText className="h-5 w-5 text-gray-600" />
-              <h2 className="text-lg font-medium text-gray-900">Additional Notes</h2>
+        {/* Units Manager - only show if using multiple units mode */}
+        {useUnitsMode && typeField && (
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <UnitsManager
+              propertyType={typeField as PropertyType}
+              units={units}
+              onUnitsChange={setUnits}
+            />
+          </div>
+        )}
+
+        {/* Tenant Details Section - only show if single unit mode, occupied AND not hospitality/vacation rental */}
+        {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
+          <div className="space-y-4 group">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center flex-1">
+                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
+                  Tenant Information
+                </h3>
+                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              </div>
+              <Button 
+                type="button"
+                variant="outline" 
+                size="sm" 
+                onClick={toggleTenantType} 
+                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+              >
+                {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
+              </Button>
             </div>
             
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                  {tenantType === "individual" ? "Full Name" : "Company Name"}
+                </label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  value={tenantName}
+                  onChange={(e) => setTenantName(e.target.value)}
+                  placeholder="Leave empty if no tenant"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    value={tenantPhone}
+                    onChange={(e) => setTenantPhone(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    value={tenantEmail}
+                    onChange={(e) => setTenantEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Additional Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Details</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
             <Textarea
+              className="min-h-[120px] w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 resize-none text-sm rounded-md"
+              placeholder="Add notes or additional details about this property..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add any additional notes, special features, or important details about this property..."
-              className="min-h-[120px] text-base resize-none"
             />
           </div>
         </div>
-      </div>
-      
-      {/* Action Buttons */}
-      <div className="border-t border-gray-100 p-6">
-        <div className="max-w-7xl mx-auto flex gap-4">
+        
+        {/* Action Buttons */}
+        <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleSave} 
             disabled={isProcessing || !isFormValid}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11 text-base font-medium"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
           >
             {isProcessing ? (
               <div className="flex items-center gap-2">
@@ -548,7 +592,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 <span>{isGeocoding ? "Loading..." : "Adding listing..."}</span>
               </div>
             ) : (
-              "Add Listing"
+              "Add listing"
             )}
           </Button>
           {onClose && (
@@ -556,7 +600,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               variant="outline" 
               onClick={onClose} 
               disabled={isProcessing}
-              className="flex-1 h-11 text-base font-medium"
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
             >
               Cancel
             </Button>
