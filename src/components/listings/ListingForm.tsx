@@ -375,22 +375,22 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
             <div className="space-y-4 pl-11">
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
                   <LocationAutofill
                     value={city}
                     onChange={setCity}
                     placeholder="Enter city"
-                    label="City"
                     type="city"
                     className="h-10"
                     onLocationSelect={handleCityLocationSelect}
                   />
                 </div>
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
                   <LocationAutofill
                     value={country}
                     onChange={setCountry}
                     placeholder="Enter country"
-                    label="Country"
                     type="country"
                     className="h-10"
                   />
@@ -398,11 +398,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               </div>
               
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
                 <LocationAutofill
                   value={address}
                   onChange={setAddress}
                   placeholder="Enter full address"
-                  label="Street Address"
                   type="address"
                   className="h-10"
                 />
