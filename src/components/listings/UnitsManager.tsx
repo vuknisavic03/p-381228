@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -146,7 +147,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
       {units.length > 0 ? (
         <div className="grid gap-4">
           {units.map((unit) => (
-            <Card key={unit.id} className="p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <Card key={unit.id} className="group p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
               {/* Unit Header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
