@@ -158,11 +158,11 @@ export default function Listings() {
           </AnimatePresence>
         </div>
         
-        {/* Add Listing Sheet - Much wider horizontally */}
+        {/* Add Listing Sheet - 2000px width */}
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent 
             side="right" 
-            className="w-[1600px] sm:w-[1600px] max-w-[90vw] p-0 border-l shadow-2xl bg-white"
+            className="w-[2000px] sm:w-[2000px] max-w-[95vw] p-0 border-l shadow-2xl bg-white"
           >
             <ListingForm 
               onClose={() => setIsAddFormOpen(false)} 
@@ -171,11 +171,11 @@ export default function Listings() {
           </SheetContent>
         </Sheet>
         
-        {/* Edit Listing Sheet - Much wider horizontally */}
+        {/* Edit Listing Sheet - 2000px width */}
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 
             side="right" 
-            className="w-[1600px] sm:w-[1600px] max-w-[90vw] p-0 border-l shadow-2xl transition-transform duration-300"
+            className="w-[2000px] sm:w-[2000px] max-w-[95vw] p-0 border-l shadow-2xl transition-transform duration-300"
           >
             {selectedListing && (
               <EditListingForm
