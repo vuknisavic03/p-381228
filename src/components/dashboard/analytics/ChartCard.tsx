@@ -226,7 +226,7 @@ export function ChartCard({
               }} 
             />
             <Area
-              type={chartType === "spline" ? "monotone" : "linear"}
+              type="monotone"
               dataKey="value"
               stroke={colorValue}
               fillOpacity={1}
