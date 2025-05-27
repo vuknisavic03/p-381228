@@ -136,7 +136,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   };
 
   const toggleTenantType = () => {
-    setTenantType(tenantType === "individual" ? "company" : "individual");
+    setTenantType(prev => prev === "individual" ? "company" : "individual");
   };
 
   const toggleOccupancyStatus = () => {
