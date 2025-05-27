@@ -29,11 +29,6 @@ import {
   Loader2,
   Users,
   UserX,
-  Hash,
-  User,
-  Phone,
-  Mail,
-  FileText
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
@@ -333,323 +328,263 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   };
 
   return (
-    <div className="h-full bg-white flex flex-col">
-      {/* Header */}
-      <div className="flex-shrink-0 px-8 py-6 border-b border-gray-100">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Add New Property</h1>
-            <p className="text-sm text-gray-500 mt-1">Create a new property listing</p>
-          </div>
-          <div className="flex items-center gap-3">
-            {isGeocoding && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-lg">
-                <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
-                <span className="text-sm text-blue-600 font-medium">Loading...</span>
-              </div>
-            )}
-            {onClose && (
-              <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-md hover:bg-gray-100">
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
+    <div className="h-full overflow-auto bg-white">
+      {/* Header with close button */}
+      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-medium text-gray-900">Add New Listing</h2>
+          {isGeocoding && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
+              <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
+              <span className="text-xs text-blue-600 font-medium">Loading...</span>
+            </div>
+          )}
         </div>
+        {onClose && (
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       {/* Form content */}
-      <div className="flex-1 overflow-auto px-8 py-6">
-        <div className="max-w-2xl space-y-8">
-          {/* Location Section */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-2">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                <MapPin className="h-4 w-4 text-blue-600" />
-              </div>
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">Location</h2>
-                <p className="text-sm text-gray-500">Where is this property located?</p>
-              </div>
+      <div className="px-6 py-4 space-y-8">
+        {/* Property Information Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            <MapPin className="h-4 w-4 text-blue-500 ml-2" />
+          </div>
+          
+          <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <LocationAutofill
+                value={city}
+                onChange={setCity}
+                placeholder="e.g., Belgrade"
+                label="City *"
+                type="city"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                onLocationSelect={handleCityLocationSelect}
+              />
+              <LocationAutofill
+                value={country}
+                onChange={setCountry}
+                placeholder="e.g., Serbia"
+                label="Country *"
+                type="country"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+              />
             </div>
             
-            <div className="space-y-4 pl-11">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <LocationAutofill
-                    value={city}
-                    onChange={setCity}
-                    placeholder="Enter city"
-                    label="City"
-                    type="city"
-                    className="h-10"
-                    onLocationSelect={handleCityLocationSelect}
-                  />
-                </div>
-                <div>
-                  <LocationAutofill
-                    value={country}
-                    onChange={setCountry}
-                    placeholder="Enter country"
-                    label="Country"
-                    type="country"
-                    className="h-10"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <LocationAutofill
-                  value={address}
-                  onChange={setAddress}
-                  placeholder="Enter full address"
-                  label="Street Address"
-                  type="address"
-                  className="h-10"
-                />
-              </div>
-              
-              <div className="w-1/2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                <Input
-                  value={postalCode}
-                  onChange={(e) => setPostalCode(e.target.value)}
-                  placeholder="Enter postal code"
-                  className="h-10"
-                />
-              </div>
+            <LocationAutofill
+              value={address}
+              onChange={setAddress}
+              placeholder="e.g., Knez Mihailova 42"
+              label="Address *"
+              type="address"
+              className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+            />
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                placeholder="e.g., 11000"
+              />
             </div>
           </div>
+        </div>
 
-          {/* Property Type Section */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-2">
-              <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                <BuildingIcon className="h-4 w-4 text-green-600" />
-              </div>
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">Property Details</h2>
-                <p className="text-sm text-gray-500">What type of property is this?</p>
-              </div>
+        {/* Property Type Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
             </div>
-            
-            <div className="space-y-6 pl-11">
-              {/* Unit Mode Toggle */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <h3 className="font-medium text-gray-900">Property Structure</h3>
-                  <p className="text-sm text-gray-500">Choose if this property has multiple units</p>
-                </div>
-                <Button
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setUseUnitsMode(!useUnitsMode)}
+                className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
+              >
+                {useUnitsMode ? "Multiple Units" : "Single Unit"}
+              </Button>
+              {!useUnitsMode && shouldShowOccupancyStatus() && (
+                <Button 
                   type="button"
-                  variant={useUnitsMode ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setUseUnitsMode(!useUnitsMode)}
-                  className="ml-4"
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleOccupancyStatus} 
+                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
                 >
-                  {useUnitsMode ? "Multiple Units" : "Single Unit"}
+                  {occupancyStatus === "occupied" ? (
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3 w-3 text-green-600" />
+                      <span>Occupied</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <UserX className="h-3 w-3 text-orange-600" />
+                      <span>Vacant</span>
+                    </div>
+                  )}
                 </Button>
-              </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Type</label>
+              <Select
+                value={typeField}
+                onValueChange={(value) => {
+                  setTypeField(value);
+                  setCategory("");
+                  setOccupancyStatus("occupied");
+                  setUnits([]);
+                }}
+              >
+                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                  <SelectValue placeholder="Select property type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {propertyTypes.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <div className="flex items-center gap-2">
+                        {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
+                        <span>{type.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
+            {!useUnitsMode && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
                 <Select
-                  value={typeField}
-                  onValueChange={(value) => {
-                    setTypeField(value);
-                    setCategory("");
-                    setOccupancyStatus("occupied");
-                    setUnits([]);
-                  }}
+                  value={category}
+                  onValueChange={setCategory}
+                  disabled={!typeField}
                 >
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Select property type" />
+                  <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                    <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {propertyTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
+                    {getAvailableCategories().map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
                         <div className="flex items-center gap-2">
-                          {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
-                          <span>{type.label}</span>
+                          <cat.Icon className="h-4 w-4 text-gray-500" />
+                          <span>{cat.label}</span>
                         </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-
-              {!useUnitsMode && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                  <Select
-                    value={category}
-                    onValueChange={setCategory}
-                    disabled={!typeField}
-                  >
-                    <SelectTrigger className="h-10">
-                      <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getAvailableCategories().map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>
-                          <div className="flex items-center gap-2">
-                            <cat.Icon className="h-4 w-4 text-gray-500" />
-                            <span>{cat.label}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-
-              {/* Occupancy Status for single unit */}
-              {!useUnitsMode && shouldShowOccupancyStatus() && (
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <h3 className="font-medium text-gray-900">Occupancy Status</h3>
-                    <p className="text-sm text-gray-500">Is this property currently occupied?</p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={toggleOccupancyStatus}
-                    className="ml-4"
-                  >
-                    {occupancyStatus === "occupied" ? (
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-green-600" />
-                        <span>Occupied</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <UserX className="h-4 w-4 text-orange-600" />
-                        <span>Vacant</span>
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Units Manager */}
-          {useUnitsMode && typeField && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 pb-2">
-                <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
-                  <Hash className="h-4 w-4 text-purple-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900">Units</h2>
-                  <p className="text-sm text-gray-500">Manage individual units in this property</p>
-                </div>
-              </div>
-              <div className="pl-11">
-                <UnitsManager
-                  propertyType={typeField as PropertyType}
-                  units={units}
-                  onUnitsChange={setUnits}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Tenant Information */}
-          {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 pb-2">
-                <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
-                  <User className="h-4 w-4 text-orange-600" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-lg font-medium text-gray-900">Tenant Information</h2>
-                  <p className="text-sm text-gray-500">Details about the current tenant</p>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={toggleTenantType}
-                >
-                  {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-                </Button>
-              </div>
-              
-              <div className="space-y-4 pl-11">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {tenantType === "individual" ? "Full Name" : "Company Name"}
-                  </label>
-                  <Input
-                    value={tenantName}
-                    onChange={(e) => setTenantName(e.target.value)}
-                    placeholder={tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                    className="h-10"
-                  />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        value={tenantPhone}
-                        onChange={(e) => setTenantPhone(e.target.value)}
-                        placeholder="Enter phone number"
-                        className="h-10 pl-10"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        value={tenantEmail}
-                        onChange={(e) => setTenantEmail(e.target.value)}
-                        placeholder="Enter email address"
-                        className="h-10 pl-10"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Additional Notes */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 pb-2">
-              <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
-                <FileText className="h-4 w-4 text-gray-600" />
-              </div>
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">Additional Notes</h2>
-                <p className="text-sm text-gray-500">Any other important details about this property</p>
-              </div>
-            </div>
-            
-            <div className="pl-11">
-              <Textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Add any additional notes, special features, or important details..."
-                className="min-h-[100px] resize-none"
-              />
-            </div>
+            )}
           </div>
         </div>
-      </div>
-      
-      {/* Action Buttons */}
-      <div className="flex-shrink-0 px-8 py-6 border-t border-gray-100 bg-white">
-        <div className="flex gap-3 max-w-2xl">
+
+        {/* Units Manager - only show if using multiple units mode */}
+        {useUnitsMode && typeField && (
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <UnitsManager
+              propertyType={typeField as PropertyType}
+              units={units}
+              onUnitsChange={setUnits}
+            />
+          </div>
+        )}
+
+        {/* Tenant Details Section - only show if single unit mode, occupied AND not hospitality/vacation rental */}
+        {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
+          <div className="space-y-4 group">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center flex-1">
+                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
+                  Tenant Information
+                </h3>
+                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              </div>
+              <Button 
+                type="button"
+                variant="outline" 
+                size="sm" 
+                onClick={toggleTenantType} 
+                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+              >
+                {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
+              </Button>
+            </div>
+            
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                  {tenantType === "individual" ? "Full Name" : "Company Name"}
+                </label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  value={tenantName}
+                  onChange={(e) => setTenantName(e.target.value)}
+                  placeholder="Leave empty if no tenant"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    value={tenantPhone}
+                    onChange={(e) => setTenantPhone(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    value={tenantEmail}
+                    onChange={(e) => setTenantEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Additional Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Details</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <Textarea
+              className="min-h-[120px] w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 resize-none text-sm rounded-md"
+              placeholder="Add notes or additional details about this property..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+        </div>
+        
+        {/* Action Buttons */}
+        <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleSave} 
             disabled={isProcessing || !isFormValid}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
           >
             {isProcessing ? (
               <div className="flex items-center gap-2">
@@ -665,7 +600,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               variant="outline" 
               onClick={onClose} 
               disabled={isProcessing}
-              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-11"
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
             >
               Cancel
             </Button>
