@@ -149,24 +149,6 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Building className="h-4 w-4 text-gray-600" />
-          <span className="text-sm font-medium text-gray-700">
-            Units ({units.length})
-          </span>
-        </div>
-        <Button
-          onClick={addUnit}
-          size="sm"
-          className="bg-blue-600 hover:bg-blue-700 text-white h-8 px-3 text-xs"
-        >
-          <Plus className="h-3 w-3 mr-1" />
-          Add Unit
-        </Button>
-      </div>
-
       {/* Units List */}
       {units.length > 0 ? (
         <div className="space-y-3">
@@ -174,17 +156,17 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
             <Card key={unit.id} className="group p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-all">
               {/* Unit Header */}
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-8 h-8 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="flex items-center justify-center w-8 h-8 bg-blue-50 rounded-lg flex-shrink-0">
                     <Building className="h-4 w-4 text-blue-600" />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     {editingUnit === unit.id ? (
                       <div className="flex items-center gap-2">
                         <Input
                           value={unit.unitNumber}
                           onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                          className="h-7 text-sm font-medium"
+                          className="h-7 text-sm font-medium flex-1"
                           placeholder="Unit name"
                           autoFocus
                           onKeyDown={(e) => {
@@ -199,7 +181,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                         <Button
                           size="sm"
                           onClick={() => handleUnitNameSave(unit.id)}
-                          className="h-7 w-7 p-0 bg-green-600 hover:bg-green-700"
+                          className="h-7 w-7 p-0 bg-green-600 hover:bg-green-700 flex-shrink-0"
                         >
                           <Check className="h-3 w-3" />
                         </Button>
@@ -207,7 +189,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           size="sm"
                           variant="outline"
                           onClick={() => setEditingUnit(null)}
-                          className="h-7 w-7 p-0"
+                          className="h-7 w-7 p-0 flex-shrink-0"
                         >
                           <X className="h-3 w-3" />
                         </Button>
@@ -215,7 +197,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     ) : (
                       <div className="flex items-center gap-2">
                         <span 
-                          className="text-sm font-medium text-gray-900 cursor-pointer hover:text-blue-600 transition-colors"
+                          className="text-sm font-medium text-gray-900 cursor-pointer hover:text-blue-600 transition-colors truncate"
                           onClick={() => setEditingUnit(unit.id)}
                         >
                           {unit.unitNumber || "Unnamed Unit"}
@@ -224,7 +206,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           size="sm"
                           variant="ghost"
                           onClick={() => setEditingUnit(unit.id)}
-                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                         >
                           <Edit3 className="h-3 w-3" />
                         </Button>
@@ -233,7 +215,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-shrink-0">
                   {shouldShowOccupancyStatus() && (
                     <Button
                       variant="ghost"
@@ -330,6 +312,17 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
               </div>
             </Card>
           ))}
+          
+          {/* Add Unit Button at Bottom */}
+          <Button
+            onClick={addUnit}
+            size="sm"
+            variant="outline"
+            className="w-full h-10 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Another Unit
+          </Button>
         </div>
       ) : (
         /* Empty State */
