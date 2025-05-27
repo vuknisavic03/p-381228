@@ -335,7 +335,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   return (
     <div className="h-full bg-white flex flex-col">
       {/* Header */}
-      <div className="flex-shrink-0 px-8 py-6 border-b border-gray-100">
+      <div className="flex-shrink-0 px-10 py-6 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">Add New Property</h1>
@@ -357,11 +357,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         </div>
       </div>
 
-      {/* Form content */}
-      <div className="flex-1 overflow-auto px-8 py-6">
-        <div className="max-w-2xl space-y-8">
+      {/* Form content - Wider max width to utilize the extra space */}
+      <div className="flex-1 overflow-auto px-10 py-8">
+        <div className="max-w-4xl space-y-10">
           {/* Location Section */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center gap-3 pb-2">
               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                 <MapPin className="h-4 w-4 text-blue-600" />
@@ -372,56 +372,56 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               </div>
             </div>
             
-            <div className="space-y-4 pl-11">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-6 pl-11">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
                   <LocationAutofill
                     value={city}
                     onChange={setCity}
                     placeholder="Enter city"
+                    label="City"
                     type="city"
-                    className="h-10"
+                    className="h-12"
                     onLocationSelect={handleCityLocationSelect}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
                   <LocationAutofill
                     value={country}
                     onChange={setCountry}
                     placeholder="Enter country"
+                    label="Country"
                     type="country"
-                    className="h-10"
+                    className="h-12"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
                 <LocationAutofill
                   value={address}
                   onChange={setAddress}
                   placeholder="Enter full address"
+                  label="Street Address"
                   type="address"
-                  className="h-10"
+                  className="h-12"
                 />
               </div>
               
-              <div className="w-1/2">
+              <div className="w-full lg:w-1/2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
                 <Input
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   placeholder="Enter postal code"
-                  className="h-10"
+                  className="h-12"
                 />
               </div>
             </div>
           </div>
 
           {/* Property Type Section */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center gap-3 pb-2">
               <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
                 <BuildingIcon className="h-4 w-4 text-green-600" />
@@ -432,9 +432,9 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               </div>
             </div>
             
-            <div className="space-y-6 pl-11">
+            <div className="space-y-8 pl-11">
               {/* Unit Mode Toggle */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl">
                 <div>
                   <h3 className="font-medium text-gray-900">Property Structure</h3>
                   <p className="text-sm text-gray-500">Choose if this property has multiple units</p>
@@ -450,61 +450,63 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 </Button>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
-                <Select
-                  value={typeField}
-                  onValueChange={(value) => {
-                    setTypeField(value);
-                    setCategory("");
-                    setOccupancyStatus("occupied");
-                    setUnits([]);
-                  }}
-                >
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Select property type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {propertyTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        <div className="flex items-center gap-2">
-                          {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
-                          <span>{type.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {!useUnitsMode && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
                   <Select
-                    value={category}
-                    onValueChange={setCategory}
-                    disabled={!typeField}
+                    value={typeField}
+                    onValueChange={(value) => {
+                      setTypeField(value);
+                      setCategory("");
+                      setOccupancyStatus("occupied");
+                      setUnits([]);
+                    }}
                   >
-                    <SelectTrigger className="h-10">
-                      <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Select property type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {getAvailableCategories().map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>
+                      {propertyTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
                           <div className="flex items-center gap-2">
-                            <cat.Icon className="h-4 w-4 text-gray-500" />
-                            <span>{cat.label}</span>
+                            {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
+                            <span>{type.label}</span>
                           </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              )}
+
+                {!useUnitsMode && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <Select
+                      value={category}
+                      onValueChange={setCategory}
+                      disabled={!typeField}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getAvailableCategories().map((cat) => (
+                          <SelectItem key={cat.value} value={cat.value}>
+                            <div className="flex items-center gap-2">
+                              <cat.Icon className="h-4 w-4 text-gray-500" />
+                              <span>{cat.label}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
 
               {/* Occupancy Status for single unit */}
               {!useUnitsMode && shouldShowOccupancyStatus() && (
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl">
                   <div>
                     <h3 className="font-medium text-gray-900">Occupancy Status</h3>
                     <p className="text-sm text-gray-500">Is this property currently occupied?</p>
@@ -535,7 +537,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
           {/* Units Manager */}
           {useUnitsMode && typeField && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div className="flex items-center gap-3 pb-2">
                 <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
                   <Hash className="h-4 w-4 text-purple-600" />
@@ -557,7 +559,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
           {/* Tenant Information */}
           {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div className="flex items-center gap-3 pb-2">
                 <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
                   <User className="h-4 w-4 text-orange-600" />
@@ -576,7 +578,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 </Button>
               </div>
               
-              <div className="space-y-4 pl-11">
+              <div className="space-y-6 pl-11">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {tenantType === "individual" ? "Full Name" : "Company Name"}
@@ -585,11 +587,11 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                     value={tenantName}
                     onChange={(e) => setTenantName(e.target.value)}
                     placeholder={tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                    className="h-10"
+                    className="h-12"
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                     <div className="relative">
@@ -598,7 +600,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                         value={tenantPhone}
                         onChange={(e) => setTenantPhone(e.target.value)}
                         placeholder="Enter phone number"
-                        className="h-10 pl-10"
+                        className="h-12 pl-10"
                       />
                     </div>
                   </div>
@@ -610,7 +612,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                         value={tenantEmail}
                         onChange={(e) => setTenantEmail(e.target.value)}
                         placeholder="Enter email address"
-                        className="h-10 pl-10"
+                        className="h-12 pl-10"
                       />
                     </div>
                   </div>
@@ -620,7 +622,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           )}
 
           {/* Additional Notes */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center gap-3 pb-2">
               <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
                 <FileText className="h-4 w-4 text-gray-600" />
@@ -636,7 +638,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add any additional notes, special features, or important details..."
-                className="min-h-[100px] resize-none"
+                className="min-h-[120px] resize-none"
               />
             </div>
           </div>
@@ -644,12 +646,12 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
       </div>
       
       {/* Action Buttons */}
-      <div className="flex-shrink-0 px-8 py-6 border-t border-gray-100 bg-white">
-        <div className="flex gap-3 max-w-2xl">
+      <div className="flex-shrink-0 px-10 py-6 border-t border-gray-100 bg-white">
+        <div className="flex gap-4 max-w-4xl">
           <Button 
             onClick={handleSave} 
             disabled={isProcessing || !isFormValid}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-medium"
           >
             {isProcessing ? (
               <div className="flex items-center gap-2">
@@ -665,7 +667,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               variant="outline" 
               onClick={onClose} 
               disabled={isProcessing}
-              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-11"
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-12 text-base font-medium"
             >
               Cancel
             </Button>
