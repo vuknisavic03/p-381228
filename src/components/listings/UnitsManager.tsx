@@ -120,11 +120,22 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
   };
 
   const toggleUnitTenantType = (unitId: string) => {
+    console.log("Toggle unit tenant type clicked for unit:", unitId);
     const unit = units.find(u => u.id === unitId);
-    if (unit?.tenant) {
-      updateUnitTenant(unitId, {
-        type: unit.tenant.type === "individual" ? "company" : "individual"
-      });
+    if (unit) {
+      const currentType = unit.tenant?.type || "individual";
+      const newType = currentType === "individual" ? "company" : "individual";
+      console.log("Switching unit tenant type from", currentType, "to", newType);
+      
+      // Ensure we have a tenant object, create one if it doesn't exist
+      const updatedTenant = {
+        name: unit.tenant?.name || "",
+        phone: unit.tenant?.phone || "",
+        email: unit.tenant?.email || "",
+        type: newType
+      };
+      
+      updateUnit(unitId, { tenant: updatedTenant });
     }
   };
 
