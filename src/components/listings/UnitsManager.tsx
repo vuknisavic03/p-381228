@@ -124,7 +124,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     const unit = units.find(u => u.id === unitId);
     if (unit) {
       const currentType = unit.tenant?.type || "individual";
-      const newType = currentType === "individual" ? "company" : "individual";
+      const newType: "individual" | "company" = currentType === "individual" ? "company" : "individual";
       console.log("Switching unit tenant type from", currentType, "to", newType);
       
       // Ensure we have a tenant object, create one if it doesn't exist
