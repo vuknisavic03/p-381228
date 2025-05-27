@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Trash2, Plus, Users, UserX, Building } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Trash2, Plus, Users, UserX, Building, Edit3, Check, X, Mail, Phone, User } from "lucide-react";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
 interface Unit {
@@ -28,6 +29,8 @@ interface UnitsManagerProps {
 }
 
 export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManagerProps) {
+  const [editingUnit, setEditingUnit] = useState<string | null>(null);
+
   // Category maps based on property type
   const typeToCategoryMap = {
     residential_rental: [
@@ -120,14 +123,11 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
   };
 
   const toggleUnitTenantType = (unitId: string) => {
-    console.log("Toggle unit tenant type clicked for unit:", unitId);
     const unit = units.find(u => u.id === unitId);
     if (unit) {
       const currentType = unit.tenant?.type || "individual";
       const newType: "individual" | "company" = currentType === "individual" ? "company" : "individual";
-      console.log("Switching unit tenant type from", currentType, "to", newType);
       
-      // Ensure we have a tenant object, create one if it doesn't exist
       const updatedTenant = {
         name: unit.tenant?.name || "",
         phone: unit.tenant?.phone || "",
@@ -139,156 +139,215 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
+  const occupiedUnits = units.filter(unit => unit.occupancyStatus === "occupied").length;
+  const vacantUnits = units.filter(unit => unit.occupancyStatus === "vacant").length;
+
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Building className="h-4 w-4 text-gray-500" />
-          <h3 className="text-sm font-medium text-gray-800">Units Management</h3>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl">
+            <Building className="h-6 w-6 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Units Management</h3>
+            <p className="text-sm text-gray-600">
+              {units.length} {units.length === 1 ? 'unit' : 'units'} total
+              {shouldShowOccupancyStatus() && (
+                <span className="ml-2">
+                  • {occupiedUnits} occupied • {vacantUnits} vacant
+                </span>
+              )}
+            </p>
+          </div>
         </div>
         <Button
           type="button"
-          variant="outline"
-          size="sm"
           onClick={addUnit}
-          className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm"
         >
-          <Plus className="h-3 w-3 mr-1" />
+          <Plus className="h-4 w-4 mr-2" />
           Add Unit
         </Button>
       </div>
 
-      <div className="space-y-3">
-        {units.map((unit) => (
-          <Card key={unit.id} className="p-4 space-y-3">
-            {/* Unit Name/Number - Now at the top */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 flex-1">
-                <label className="block text-xs font-medium text-gray-500">Unit Name/Number</label>
-                <Input
-                  value={unit.unitNumber}
-                  onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                  className="h-7 flex-1 text-xs"
-                  placeholder="Enter unit name or number"
-                />
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => removeUnit(unit.id)}
-                className="h-7 w-7 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 flex-shrink-0 ml-2"
-              >
-                <Trash2 className="h-3 w-3" />
-              </Button>
-            </div>
-
-            {/* Unit Details */}
-            <div className="flex items-center gap-2">
-              <Select
-                value={unit.category}
-                onValueChange={(value) => updateUnit(unit.id, { category: value })}
-              >
-                <SelectTrigger className="h-7 text-xs flex-1 min-w-0">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {getAvailableCategories().map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      <span className="text-xs">{cat.label}</span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {shouldShowOccupancyStatus() && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => toggleOccupancyStatus(unit.id)}
-                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2 flex-shrink-0"
-                >
-                  {unit.occupancyStatus === "occupied" ? (
-                    <div className="flex items-center gap-1">
-                      <Users className="h-3 w-3 text-green-600" />
-                      <span>Occupied</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1">
-                      <UserX className="h-3 w-3 text-orange-600" />
-                      <span>Vacant</span>
-                    </div>
-                  )}
-                </Button>
-              )}
-            </div>
-
-            {/* Tenant Details - Show only if occupied and tenant info should be shown */}
-            {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-3 w-3 text-green-600" />
-                    <h4 className="text-xs font-medium text-gray-700">Tenant Details</h4>
+      {/* Units Grid */}
+      {units.length > 0 ? (
+        <div className="grid gap-4">
+          {units.map((unit) => (
+            <Card key={unit.id} className="p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              {/* Unit Header */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg">
+                    <Building className="h-5 w-5 text-gray-600" />
                   </div>
-                  <Button 
-                    type="button"
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => toggleUnitTenantType(unit.id)} 
-                    className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2"
-                  >
-                    {unit.tenant?.type === "individual" ? "Switch to Company" : "Switch to Individual"}
-                  </Button>
+                  <div>
+                    {editingUnit === unit.id ? (
+                      <div className="flex items-center gap-2">
+                        <Input
+                          value={unit.unitNumber}
+                          onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
+                          className="h-8 w-32 text-sm"
+                          placeholder="Unit name"
+                        />
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setEditingUnit(null)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Check className="h-4 w-4 text-green-600" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium text-gray-900">{unit.unitNumber}</h4>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setEditingUnit(unit.id)}
+                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Edit3 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">
-                      {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                    </label>
-                    <Input
-                      className="h-7 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-xs rounded-md"
-                      value={unit.tenant?.name || ""}
-                      onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
-                      placeholder="Enter tenant name"
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Phone</label>
-                      <Input
-                        className="h-7 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-xs rounded-md"
-                        value={unit.tenant?.phone || ""}
-                        onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
-                        placeholder="Phone number"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
-                      <Input
-                        className="h-7 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-xs rounded-md"
-                        value={unit.tenant?.email || ""}
-                        onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
-                        placeholder="Email address"
-                      />
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2">
+                  {shouldShowOccupancyStatus() && (
+                    <Badge
+                      variant={unit.occupancyStatus === "occupied" ? "default" : "secondary"}
+                      className={`cursor-pointer transition-colors ${
+                        unit.occupancyStatus === "occupied" 
+                          ? "bg-green-100 text-green-700 hover:bg-green-200" 
+                          : "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      }`}
+                      onClick={() => toggleOccupancyStatus(unit.id)}
+                    >
+                      {unit.occupancyStatus === "occupied" ? (
+                        <><Users className="h-3 w-3 mr-1" />Occupied</>
+                      ) : (
+                        <><UserX className="h-3 w-3 mr-1" />Vacant</>
+                      )}
+                    </Badge>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeUnit(unit.id)}
+                    className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
-            )}
-          </Card>
-        ))}
-        
-        {units.length === 0 && (
-          <div className="text-center py-6 text-gray-500">
-            <Building className="h-6 w-6 mx-auto mb-2 text-gray-300" />
-            <p className="text-xs">No units added yet. Click "Add Unit" to get started.</p>
+
+              {/* Unit Details */}
+              <div className="space-y-4">
+                {/* Category Selection */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <Select
+                    value={unit.category}
+                    onValueChange={(value) => updateUnit(unit.id, { category: value })}
+                  >
+                    <SelectTrigger className="w-full bg-gray-50 border-gray-200">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getAvailableCategories().map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Tenant Information */}
+                {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-green-600" />
+                        <h5 className="font-medium text-green-800">Tenant Information</h5>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="cursor-pointer text-xs"
+                        onClick={() => toggleUnitTenantType(unit.id)}
+                      >
+                        {unit.tenant?.type === "individual" ? "Individual" : "Company"}
+                      </Badge>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">
+                          {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        </label>
+                        <Input
+                          value={unit.tenant?.name || ""}
+                          onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
+                          placeholder="Enter name"
+                          className="bg-white border-green-200 text-sm"
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            <Phone className="h-3 w-3 inline mr-1" />
+                            Phone
+                          </label>
+                          <Input
+                            value={unit.tenant?.phone || ""}
+                            onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
+                            placeholder="Phone number"
+                            className="bg-white border-green-200 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            <Mail className="h-3 w-3 inline mr-1" />
+                            Email
+                          </label>
+                          <Input
+                            value={unit.tenant?.email || ""}
+                            onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
+                            placeholder="Email address"
+                            className="bg-white border-green-200 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        /* Empty State */
+        <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+          <div className="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4">
+            <Building className="h-8 w-8 text-gray-400" />
           </div>
-        )}
-      </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No units added yet</h3>
+          <p className="text-gray-600 mb-4">Start by adding your first unit to manage this property.</p>
+          <Button
+            onClick={addUnit}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Your First Unit
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
