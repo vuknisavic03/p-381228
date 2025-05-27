@@ -136,10 +136,15 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   };
 
   const toggleTenantType = () => {
-    setFormData(prev => ({
-      ...prev,
-      tenantType: prev.tenantType === "individual" ? "company" : "individual"
-    }));
+    console.log("Toggle tenant type clicked, current type:", formData.tenantType);
+    setFormData(prev => {
+      const newType = prev.tenantType === "individual" ? "company" : "individual";
+      console.log("Switching tenant type from", prev.tenantType, "to", newType);
+      return {
+        ...prev,
+        tenantType: newType
+      };
+    });
   };
 
   const toggleOccupancyStatus = () => {

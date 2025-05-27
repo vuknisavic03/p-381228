@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -136,7 +137,12 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   };
 
   const toggleTenantType = () => {
-    setTenantType(prev => prev === "individual" ? "company" : "individual");
+    console.log("Toggle tenant type clicked, current type:", tenantType);
+    setTenantType(prev => {
+      const newType = prev === "individual" ? "company" : "individual";
+      console.log("Switching tenant type from", prev, "to", newType);
+      return newType;
+    });
   };
 
   const toggleOccupancyStatus = () => {
