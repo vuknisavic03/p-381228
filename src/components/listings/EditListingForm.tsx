@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -513,21 +512,19 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       
       {/* Action Buttons */}
       <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
-        <div className="grid grid-cols-2 gap-3 w-full">
-          <Button 
-            onClick={handleSubmit} 
-            className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-          >
-            Save changes
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
-            className="bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button 
+          onClick={handleSubmit} 
+          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+        >
+          Save changes
+        </Button>
+        <Button 
+          variant="outline" 
+          onClick={onClose} 
+          className="bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );
