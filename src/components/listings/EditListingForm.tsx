@@ -16,7 +16,8 @@ import {
   X,
   Bed,
   Users,
-  UserX
+  UserX,
+  MapPin
 } from "lucide-react";
 import {
   Select,
@@ -234,10 +235,10 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   const CategoryIcon = selectedCategoryOption?.Icon;
 
   return (
-    <div className="h-full flex flex-col bg-white">
-      {/* Compact Header */}
-      <div className="flex-shrink-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-lg font-medium text-gray-900">Edit Listing</h2>
+    <div className="h-full overflow-auto bg-white">
+      {/* Header with close button */}
+      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <h2 className="text-xl font-medium text-gray-900">Edit Listing</h2>
         <SheetClose asChild>
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
@@ -246,274 +247,277 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         </SheetClose>
       </div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-3">
-        <div className="space-y-4 max-w-full">
-          {/* Property Location - Compact */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium text-gray-800">Property Location</h3>
-              <div className="flex-1 h-px bg-gray-100"></div>
+      {/* Form content */}
+      <div className="px-6 py-4 space-y-8">
+        {/* Property Location Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            <MapPin className="h-4 w-4 text-blue-500 ml-2" />
+          </div>
+          
+          <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City *</label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Country *</label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
             
-            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3 space-y-2">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">City</label>
-                  <Input
-                    className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Country</label>
-                  <Input
-                    className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Address</label>
-                <Input
-                  className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Postal Code</label>
-                <Input
-                  className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                  name="postalCode"
-                  value={formData.postalCode}
-                  onChange={handleChange}
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Address *</label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
+              <Input
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                name="postalCode"
+                value={formData.postalCode}
+                onChange={handleChange}
+              />
             </div>
           </div>
+        </div>
 
-          {/* Property Classification - Compact */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 flex-1">
-                <h3 className="text-sm font-medium text-gray-800">Classification</h3>
-                <div className="flex-1 h-px bg-gray-100"></div>
-              </div>
-              <div className="flex items-center gap-1">
-                <Button
+        {/* Property Type Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setUseUnitsMode(!useUnitsMode)}
+                className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
+              >
+                {useUnitsMode ? "Multiple Units" : "Single Unit"}
+              </Button>
+              {!useUnitsMode && shouldShowOccupancyStatus() && (
+                <Button 
                   type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setUseUnitsMode(!useUnitsMode)}
-                  className="h-6 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-2"
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleOccupancyStatus} 
+                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
                 >
-                  {useUnitsMode ? "Multiple Units" : "Single Unit"}
+                  {formData.occupancyStatus === "occupied" ? (
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3 w-3 text-green-600" />
+                      <span>Occupied</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <UserX className="h-3 w-3 text-orange-600" />
+                      <span>Vacant</span>
+                    </div>
+                  )}
                 </Button>
-                {!useUnitsMode && shouldShowOccupancyStatus() && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={toggleOccupancyStatus} 
-                    className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2"
-                  >
-                    {formData.occupancyStatus === "occupied" ? (
-                      <div className="flex items-center gap-1">
-                        <Users className="h-3 w-3 text-green-600" />
-                        <span>Occupied</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1">
-                        <UserX className="h-3 w-3 text-orange-600" />
-                        <span>Vacant</span>
+              )}
+            </div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Type</label>
+              <Select
+                value={formData.type}
+                onValueChange={(value) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    type: value,
+                    category: ""
+                  }));
+                  setUnits([]);
+                }}
+              >
+                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                  <SelectValue placeholder="Select property type">
+                    {formData.type && (
+                      <div className="flex items-center gap-2">
+                        {getPropertyTypeIcon(formData.type as PropertyType)}
+                        <span>{selectedTypeOption?.label || formatPropertyType(formData.type as PropertyType)}</span>
                       </div>
                     )}
-                  </Button>
-                )}
-              </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {propertyTypes.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      <div className="flex items-center gap-2">
+                        {getPropertyTypeIcon(type.value)}
+                        <span>{type.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            
-            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3 space-y-2">
+
+            {!useUnitsMode && (
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Property Type</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
                 <Select
-                  value={formData.type}
+                  value={formData.category}
                   onValueChange={(value) => {
                     setFormData(prev => ({
                       ...prev,
-                      type: value,
-                      category: ""
+                      category: value
                     }));
-                    setUnits([]);
                   }}
+                  disabled={!formData.type}
                 >
-                  <SelectTrigger className="border-gray-200 bg-white h-8 focus:ring-1 focus:ring-gray-200 text-sm">
-                    <SelectValue placeholder="Select property type">
-                      {formData.type && (
+                  <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                    <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
+                      {formData.category && CategoryIcon && (
                         <div className="flex items-center gap-2">
-                          {getPropertyTypeIcon(formData.type as PropertyType)}
-                          <span>{selectedTypeOption?.label || formatPropertyType(formData.type as PropertyType)}</span>
+                          <CategoryIcon className="h-4 w-4" />
+                          <span>{selectedCategoryOption?.label}</span>
                         </div>
                       )}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {propertyTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
+                    {getAvailableCategories().map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
                         <div className="flex items-center gap-2">
-                          {getPropertyTypeIcon(type.value)}
-                          <span>{type.label}</span>
+                          <cat.Icon className="h-4 w-4" />
+                          <span>{cat.label}</span>
                         </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-
-              {!useUnitsMode && (
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value) => {
-                      setFormData(prev => ({
-                        ...prev,
-                        category: value
-                      }));
-                    }}
-                    disabled={!formData.type}
-                  >
-                    <SelectTrigger className="border-gray-200 bg-white h-8 focus:ring-1 focus:ring-gray-200 text-sm">
-                      <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
-                        {formData.category && CategoryIcon && (
-                          <div className="flex items-center gap-2">
-                            <CategoryIcon className="h-4 w-4" />
-                            <span>{selectedCategoryOption?.label}</span>
-                          </div>
-                        )}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getAvailableCategories().map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>
-                          <div className="flex items-center gap-2">
-                            <cat.Icon className="h-4 w-4" />
-                            <span>{cat.label}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            </div>
+            )}
           </div>
+        </div>
 
-          {/* Units Manager - Compact */}
-          {useUnitsMode && formData.type && (
-            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3">
-              <UnitsManager
-                propertyType={formData.type as PropertyType}
-                units={units}
-                onUnitsChange={setUnits}
-              />
+        {/* Units Manager */}
+        {useUnitsMode && formData.type && (
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <UnitsManager
+              propertyType={formData.type as PropertyType}
+              units={units}
+              onUnitsChange={setUnits}
+            />
+          </div>
+        )}
+
+        {/* Tenant Information - only show if single unit mode, occupied AND not hospitality/vacation rental */}
+        {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
+          <div className="space-y-4 group">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center flex-1">
+                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
+                  Tenant Information
+                </h3>
+                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              </div>
+              <Button 
+                type="button"
+                variant="outline" 
+                size="sm" 
+                onClick={toggleTenantType} 
+                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
+              >
+                {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
+              </Button>
             </div>
-          )}
-
-          {/* Tenant Information - Compact */}
-          {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 flex-1">
-                  <h3 className="text-sm font-medium text-gray-800">Tenant Info</h3>
-                  <div className="flex-1 h-px bg-gray-100"></div>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={toggleTenantType} 
-                  className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2"
-                >
-                  {formData.tenantType === "individual" ? "Individual" : "Company"}
-                </Button>
+            
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                  {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
+                </label>
+                <Input
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  name="tenantName"
+                  value={formData.tenantName}
+                  onChange={handleChange}
+                />
               </div>
               
-              <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3 space-y-2">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">
-                    {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
-                  </label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
                   <Input
-                    className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                    name="tenantName"
-                    value={formData.tenantName}
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    name="tenantPhone"
+                    value={formData.tenantPhone}
                     onChange={handleChange}
                   />
                 </div>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Phone</label>
-                    <Input
-                      className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                      name="tenantPhone"
-                      value={formData.tenantPhone}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
-                    <Input
-                      className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
-                      name="tenantEmail"
-                      value={formData.tenantEmail}
-                      onChange={handleChange}
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                  <Input
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    name="tenantEmail"
+                    value={formData.tenantEmail}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Notes - Compact */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium text-gray-800">Notes</h3>
-              <div className="flex-1 h-px bg-gray-100"></div>
-            </div>
-            
-            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3">
-              <Textarea
-                placeholder="Additional details..."
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-                className="min-h-[60px] text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200 resize-none"
-              />
-            </div>
+        {/* Additional Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Details</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <Textarea
+              className="min-h-[120px] w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 resize-none text-sm rounded-md"
+              placeholder="Add notes or additional details about this property..."
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+            />
           </div>
         </div>
       </div>
       
-      {/* Fixed Action Buttons */}
-      <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-100 flex gap-2">
+      {/* Action Buttons */}
+      <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
         <Button 
           onClick={handleSubmit} 
-          className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-8 text-sm"
+          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-9 text-sm"
         >
           Save changes
         </Button>
         <Button 
           variant="outline" 
           onClick={onClose} 
-          className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-8 text-sm"
+          className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-9 text-sm"
         >
           Cancel
         </Button>
