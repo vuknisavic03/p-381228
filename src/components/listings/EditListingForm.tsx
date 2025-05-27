@@ -508,23 +508,23 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             />
           </div>
         </div>
-      </div>
-      
-      {/* Action Buttons */}
-      <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
-        <Button 
-          onClick={handleSubmit} 
-          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-        >
-          Save changes
-        </Button>
-        <Button 
-          variant="outline" 
-          onClick={onClose} 
-          className="bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
-        >
-          Cancel
-        </Button>
+        
+        {/* Action Buttons - copied from ListingForm.tsx */}
+        <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
+          <Button 
+            onClick={handleSubmit} 
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+          >
+            Save changes
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className="flex-1 bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
