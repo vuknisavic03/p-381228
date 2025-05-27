@@ -5,6 +5,20 @@ export interface Tenant {
   phone: string;
 }
 
+export interface Unit {
+  id: string;
+  unitNumber: string;
+  category: string;
+  occupancyStatus: "occupied" | "vacant";
+  tenant?: {
+    name: string;
+    phone: string;
+    email: string;
+    type: "individual" | "company";
+  };
+  notes?: string;
+}
+
 export interface Listing {
   id: string;
   name: string;
@@ -15,6 +29,7 @@ export interface Listing {
   location?: { lat: number; lng: number }; // Added location property
   tenant: Tenant;
   occupancyStatus?: "occupied" | "vacant"; // Added occupancy status
+  units?: Unit[]; // Added units for multi-unit properties
 }
 
 export type PropertyType = 
@@ -58,6 +73,7 @@ export interface PropertyCategory {
 
 export interface TransactionFieldsData {
   selectedListingId: string;
+  selectedUnitId?: string; // Added unit selection
   transactionType: "revenue" | "expense";
   category: string;
   amount: string;

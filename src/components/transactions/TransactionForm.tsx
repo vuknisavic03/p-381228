@@ -13,6 +13,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   const [isLoadingListings, setIsLoadingListings] = useState(true);
   const [fields, setFields] = useState<TransactionFieldsData>({
     selectedListingId: "",
+    selectedUnitId: "", // Added unit selection
     transactionType: "revenue",
     category: "",
     amount: "",
@@ -43,7 +44,8 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
             type: listing.tenant?.type || "Individual",
             email: listing.tenant?.email || "",
             phone: listing.tenant?.phone || ""
-          }
+          },
+          units: listing.units || [] // Include units data
         }));
         setListings(transformedListings);
         console.log("Loaded listings for transaction form:", transformedListings);

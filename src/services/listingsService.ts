@@ -17,7 +17,27 @@ const initialListings = [
       email: "info@fashion.rs",
       type: "company"
     },
-    notes: "Main pedestrian street"
+    notes: "Main pedestrian street",
+    units: [
+      {
+        id: "1-1",
+        unitNumber: "Ground Floor",
+        category: "retail",
+        occupancyStatus: "occupied",
+        tenant: {
+          name: "Fashion Store Belgrade",
+          phone: "+381 11 123 4567",
+          email: "info@fashion.rs",
+          type: "company"
+        }
+      },
+      {
+        id: "1-2",
+        unitNumber: "First Floor",
+        category: "retail",
+        occupancyStatus: "vacant"
+      }
+    ]
   },
   {
     id: "2",
@@ -84,7 +104,39 @@ const initialListings = [
       email: "marko@email.rs",
       type: "individual"
     },
-    notes: "City center apartment"
+    notes: "City center apartment",
+    units: [
+      {
+        id: "5-1",
+        unitNumber: "Apt 1A",
+        category: "apartment_condo",
+        occupancyStatus: "occupied",
+        tenant: {
+          name: "Marko Petrović",
+          phone: "+381 11 567 8901",
+          email: "marko@email.rs",
+          type: "individual"
+        }
+      },
+      {
+        id: "5-2", 
+        unitNumber: "Apt 1B",
+        category: "apartment_condo",
+        occupancyStatus: "vacant"
+      },
+      {
+        id: "5-3",
+        unitNumber: "Apt 2A",
+        category: "apartment_condo", 
+        occupancyStatus: "occupied",
+        tenant: {
+          name: "Ana Milic",
+          phone: "+381 11 567 8902",
+          email: "ana@email.rs",
+          type: "individual"
+        }
+      }
+    ]
   },
   {
     id: "6",
