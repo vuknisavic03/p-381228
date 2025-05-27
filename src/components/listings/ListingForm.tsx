@@ -379,7 +379,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 onClick={() => setUseUnitsMode(!useUnitsMode)}
                 className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
               >
-                {useUnitsMode ? "Single Unit" : "Multiple Units"}
+                {useUnitsMode ? "Multiple Units" : "Single Unit"}
               </Button>
               {!useUnitsMode && shouldShowOccupancyStatus() && (
                 <Button 
