@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -234,7 +235,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* Header with close button */}
+      {/* Compact Header */}
       <div className="flex-shrink-0 bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
         <h2 className="text-lg font-medium text-gray-900">Edit Listing</h2>
         <SheetClose asChild>
@@ -245,31 +246,31 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         </SheetClose>
       </div>
 
-      {/* Scrollable form content */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="px-4 py-4 space-y-6">
-          {/* Property Information Section */}
-          <div className="space-y-3 group">
-            <div className="flex items-center">
-              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto px-4 py-3">
+        <div className="space-y-4 max-w-full">
+          {/* Property Location - Compact */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-medium text-gray-800">Property Location</h3>
+              <div className="flex-1 h-px bg-gray-100"></div>
             </div>
             
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-4 space-y-3">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3 space-y-2">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">City</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">City</label>
                   <Input
-                    className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Country</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Country</label>
                   <Input
-                    className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
@@ -278,9 +279,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               </div>
               
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Address</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Address</label>
                 <Input
-                  className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
@@ -288,9 +289,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               </div>
               
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Postal Code</label>
                 <Input
-                  className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                  className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
@@ -299,20 +300,20 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           </div>
 
-          {/* Property Type Section */}
-          <div className="space-y-3 group">
+          {/* Property Classification - Compact */}
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center flex-1">
-                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
-                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              <div className="flex items-center gap-2 flex-1">
+                <h3 className="text-sm font-medium text-gray-800">Classification</h3>
+                <div className="flex-1 h-px bg-gray-100"></div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setUseUnitsMode(!useUnitsMode)}
-                  className="h-6 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-2.5"
+                  className="h-6 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-2"
                 >
                   {useUnitsMode ? "Multiple Units" : "Single Unit"}
                 </Button>
@@ -321,7 +322,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     variant="outline" 
                     size="sm" 
                     onClick={toggleOccupancyStatus} 
-                    className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2.5"
+                    className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2"
                   >
                     {formData.occupancyStatus === "occupied" ? (
                       <div className="flex items-center gap-1">
@@ -339,9 +340,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               </div>
             </div>
             
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-4 space-y-3">
+            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3 space-y-2">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Type</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Property Type</label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) => {
@@ -353,7 +354,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     setUnits([]);
                   }}
                 >
-                  <SelectTrigger className="border-gray-200 bg-white h-8 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                  <SelectTrigger className="border-gray-200 bg-white h-8 focus:ring-1 focus:ring-gray-200 text-sm">
                     <SelectValue placeholder="Select property type">
                       {formData.type && (
                         <div className="flex items-center gap-2">
@@ -378,7 +379,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
               {!useUnitsMode && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
                   <Select
                     value={formData.category}
                     onValueChange={(value) => {
@@ -389,7 +390,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     }}
                     disabled={!formData.type}
                   >
-                    <SelectTrigger className="border-gray-200 bg-white h-8 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
+                    <SelectTrigger className="border-gray-200 bg-white h-8 focus:ring-1 focus:ring-gray-200 text-sm">
                       <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
                         {formData.category && CategoryIcon && (
                           <div className="flex items-center gap-2">
@@ -415,9 +416,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           </div>
 
-          {/* Units Manager - only show if using multiple units mode */}
+          {/* Units Manager - Compact */}
           {useUnitsMode && formData.type && (
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-4">
+            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3">
               <UnitsManager
                 propertyType={formData.type as PropertyType}
                 units={units}
@@ -426,51 +427,51 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           )}
 
-          {/* Tenant Details Section - Only show if single unit mode, occupied AND not hospitality/vacation rental */}
+          {/* Tenant Information - Compact */}
           {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
-            <div className="space-y-3 group">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Tenant Information</h3>
-                <div className="h-px bg-gray-100 flex-1 mx-4"></div>
-                <div className="ml-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={toggleTenantType} 
-                    className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2.5"
-                  >
-                    {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-                  </Button>
+                <div className="flex items-center gap-2 flex-1">
+                  <h3 className="text-sm font-medium text-gray-800">Tenant Info</h3>
+                  <div className="flex-1 h-px bg-gray-100"></div>
                 </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={toggleTenantType} 
+                  className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2"
+                >
+                  {formData.tenantType === "individual" ? "Individual" : "Company"}
+                </Button>
               </div>
               
-              <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-4 space-y-3">
+              <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3 space-y-2">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
                     {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                   </label>
                   <Input
-                    className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                    className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                     name="tenantName"
                     value={formData.tenantName}
                     onChange={handleChange}
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Phone</label>
                     <Input
-                      className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                      className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                       name="tenantPhone"
                       value={formData.tenantPhone}
                       onChange={handleChange}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
                     <Input
-                      className="h-8 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
+                      className="h-8 text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200"
                       name="tenantEmail"
                       value={formData.tenantEmail}
                       onChange={handleChange}
@@ -481,20 +482,20 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             </div>
           )}
 
-          {/* Additional Details Section */}
-          <div className="space-y-3 group">
-            <div className="flex items-center">
-              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Details</h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          {/* Notes - Compact */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-medium text-gray-800">Notes</h3>
+              <div className="flex-1 h-px bg-gray-100"></div>
             </div>
             
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-4">
+            <div className="bg-gray-50/60 border border-gray-100 rounded-lg p-3">
               <Textarea
-                placeholder="Add notes or additional details about this property..."
+                placeholder="Additional details..."
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
-                className="min-h-[80px] w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 resize-none text-sm rounded-md"
+                className="min-h-[60px] text-sm border-gray-200 bg-white focus:ring-1 focus:ring-gray-200 resize-none"
               />
             </div>
           </div>
@@ -502,17 +503,17 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       </div>
       
       {/* Fixed Action Buttons */}
-      <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-100 flex gap-3">
+      <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-100 flex gap-2">
         <Button 
           onClick={handleSubmit} 
-          className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-9"
+          className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-8 text-sm"
         >
           Save changes
         </Button>
         <Button 
           variant="outline" 
           onClick={onClose} 
-          className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-9"
+          className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-8 text-sm"
         >
           Cancel
         </Button>
