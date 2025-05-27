@@ -144,32 +144,53 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
-      <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl">
-            <Building className="h-6 w-6 text-blue-600" />
+      {/* Elegant Header Section - Notion Style */}
+      <div className="bg-white rounded-lg p-6 border border-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {/* Icon container with subtle background */}
+            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+              <Building className="h-5 w-5 text-blue-600" />
+            </div>
+            
+            <div className="space-y-1">
+              {/* Main title with Notion-like typography */}
+              <h3 className="text-lg font-semibold text-gray-900 leading-tight">
+                Units Management
+              </h3>
+              
+              {/* Subtitle with elegant spacing and muted color */}
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <span className="font-medium">{units.length} {units.length === 1 ? 'unit' : 'units'}</span>
+                {shouldShowOccupancyStatus() && units.length > 0 && (
+                  <>
+                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <span className="flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                        <span>{occupiedUnits} occupied</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                        <span>{vacantUnits} vacant</span>
+                      </span>
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">Units Management</h3>
-            <p className="text-sm text-gray-600">
-              {units.length} {units.length === 1 ? 'unit' : 'units'} total
-              {shouldShowOccupancyStatus() && (
-                <span className="ml-2">
-                  • {occupiedUnits} occupied • {vacantUnits} vacant
-                </span>
-              )}
-            </p>
-          </div>
+          
+          {/* Add button with refined styling */}
+          <Button
+            type="button"
+            onClick={addUnit}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 h-9 rounded-lg shadow-sm font-medium text-sm"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Unit
+          </Button>
         </div>
-        <Button
-          type="button"
-          onClick={addUnit}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Unit
-        </Button>
       </div>
 
       {/* Units Grid */}
