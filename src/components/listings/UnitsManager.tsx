@@ -85,7 +85,6 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
       occupancyStatus: "vacant",
     };
     onUnitsChange([...units, newUnit]);
-    setEditingUnit(newUnit.id);
   };
 
   const removeUnit = (unitId: string) => {
@@ -143,8 +142,21 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
-  const handleUnitNameSave = (unitId: string) => {
+  const startEditing = (unitId: string) => {
+    setEditingUnit(unitId);
+  };
+
+  const saveUnitName = (unitId: string) => {
     setEditingUnit(null);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, unitId: string) => {
+    if (e.key === 'Enter') {
+      saveUnitName(unitId);
+    }
+    if (e.key === 'Escape') {
+      setEditingUnit(null);
+    }
   };
 
   return (
@@ -162,27 +174,19 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                   <div className="flex-1 min-w-0">
                     {editingUnit === unit.id ? (
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={unit.unitNumber}
-                          onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                          className="h-8 text-sm font-medium flex-1"
-                          placeholder="Unit name"
-                          autoFocus
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              handleUnitNameSave(unit.id);
-                            }
-                            if (e.key === 'Escape') {
-                              setEditingUnit(null);
-                            }
-                          }}
-                        />
-                      </div>
+                      <Input
+                        value={unit.unitNumber}
+                        onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
+                        className="h-8 text-sm font-medium"
+                        placeholder="Unit name"
+                        autoFocus
+                        onBlur={() => saveUnitName(unit.id)}
+                        onKeyDown={(e) => handleKeyDown(e, unit.id)}
+                      />
                     ) : (
                       <span 
-                        className="text-sm font-medium text-gray-900 cursor-pointer hover:text-blue-600 transition-colors truncate"
-                        onClick={() => setEditingUnit(unit.id)}
+                        className="text-sm font-medium text-gray-900 cursor-pointer hover:text-blue-600 transition-colors truncate block"
+                        onClick={() => startEditing(unit.id)}
                       >
                         {unit.unitNumber || "Unnamed Unit"}
                       </span>
@@ -190,116 +194,102 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                 </div>
                 
-                {/* Right side elements - hide when editing unit name */}
-                {editingUnit === unit.id ? (
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                {/* Right side elements */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {shouldShowOccupancyStatus() && (
                     <Button
-                      size="sm"
-                      onClick={() => handleUnitNameSave(unit.id)}
-                      className="h-8 w-8 p-0 bg-green-600 hover:bg-green-700 flex-shrink-0"
-                    >
-                      <Check className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {shouldShowOccupancyStatus() && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleOccupancyStatus(unit.id)}
-                        className={`h-8 px-3 text-xs font-medium ${
-                          unit.occupancyStatus === "occupied" 
-                            ? "bg-green-50 text-green-700 hover:bg-green-100" 
-                            : "bg-orange-50 text-orange-700 hover:bg-orange-100"
-                        }`}
-                      >
-                        {unit.occupancyStatus === "occupied" ? (
-                          <><Users className="h-3 w-3 mr-1" />Occupied</>
-                        ) : (
-                          <><UserX className="h-3 w-3 mr-1" />Vacant</>
-                        )}
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
                       variant="ghost"
-                      onClick={() => removeUnit(unit.id)}
-                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      size="sm"
+                      onClick={() => toggleOccupancyStatus(unit.id)}
+                      className={`h-8 px-3 text-xs font-medium ${
+                        unit.occupancyStatus === "occupied" 
+                          ? "bg-green-50 text-green-700 hover:bg-green-100" 
+                          : "bg-orange-50 text-orange-700 hover:bg-orange-100"
+                      }`}
                     >
-                      <Trash2 className="h-3 w-3" />
+                      {unit.occupancyStatus === "occupied" ? (
+                        <><Users className="h-3 w-3 mr-1" />Occupied</>
+                      ) : (
+                        <><UserX className="h-3 w-3 mr-1" />Vacant</>
+                      )}
                     </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeUnit(unit.id)}
+                    className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Unit Details */}
+              <div className="space-y-3">
+                {/* Category Selection */}
+                <div>
+                  <Select
+                    value={unit.category}
+                    onValueChange={(value) => updateUnit(unit.id, { category: value })}
+                  >
+                    <SelectTrigger className="h-8 w-full bg-gray-50 border-gray-200 text-xs">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getAvailableCategories().map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value} className="text-xs">
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Tenant Information */}
+                {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-1.5">
+                        <User className="h-3 w-3 text-green-600" />
+                        <span className="text-xs font-medium text-green-800">Tenant</span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-6 text-xs px-2"
+                        onClick={() => toggleUnitTenantType(unit.id)}
+                      >
+                        {unit.tenant?.type === "individual" ? "Individual" : "Company"}
+                      </Button>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Input
+                        value={unit.tenant?.name || ""}
+                        onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
+                        placeholder={unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        className="h-7 bg-white border-green-200 text-xs"
+                      />
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <Input
+                          value={unit.tenant?.phone || ""}
+                          onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
+                          placeholder="Phone"
+                          className="h-7 bg-white border-green-200 text-xs"
+                        />
+                        <Input
+                          value={unit.tenant?.email || ""}
+                          onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
+                          placeholder="Email"
+                          className="h-7 bg-white border-green-200 text-xs"
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
-
-              {/* Unit Details - hide when editing unit name */}
-              {editingUnit !== unit.id && (
-                <div className="space-y-3">
-                  {/* Category Selection */}
-                  <div>
-                    <Select
-                      value={unit.category}
-                      onValueChange={(value) => updateUnit(unit.id, { category: value })}
-                    >
-                      <SelectTrigger className="h-8 w-full bg-gray-50 border-gray-200 text-xs">
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {getAvailableCategories().map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value} className="text-xs">
-                            {cat.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Tenant Information */}
-                  {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-1.5">
-                          <User className="h-3 w-3 text-green-600" />
-                          <span className="text-xs font-medium text-green-800">Tenant</span>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-6 text-xs px-2"
-                          onClick={() => toggleUnitTenantType(unit.id)}
-                        >
-                          {unit.tenant?.type === "individual" ? "Individual" : "Company"}
-                        </Button>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Input
-                          value={unit.tenant?.name || ""}
-                          onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
-                          placeholder={unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                          className="h-7 bg-white border-green-200 text-xs"
-                        />
-                        
-                        <div className="grid grid-cols-2 gap-2">
-                          <Input
-                            value={unit.tenant?.phone || ""}
-                            onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
-                            placeholder="Phone"
-                            className="h-7 bg-white border-green-200 text-xs"
-                          />
-                          <Input
-                            value={unit.tenant?.email || ""}
-                            onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
-                            placeholder="Email"
-                            className="h-7 bg-white border-green-200 text-xs"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
             </Card>
           ))}
           
