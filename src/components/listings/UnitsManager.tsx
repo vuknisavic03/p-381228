@@ -150,15 +150,30 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
       <div className="space-y-3">
         {units.map((unit) => (
           <Card key={unit.id} className="p-4 space-y-3">
-            {/* Unit Basic Details */}
+            {/* Unit Name/Number - Now at the top */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 flex-1">
+                <label className="block text-xs font-medium text-gray-500">Unit Name/Number</label>
+                <Input
+                  value={unit.unitNumber}
+                  onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
+                  className="h-7 flex-1 text-xs"
+                  placeholder="Enter unit name or number"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => removeUnit(unit.id)}
+                className="h-7 w-7 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 flex-shrink-0 ml-2"
+              >
+                <Trash2 className="h-3 w-3" />
+              </Button>
+            </div>
+
+            {/* Unit Details */}
             <div className="flex items-center gap-2">
-              <Input
-                value={unit.unitNumber}
-                onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                className="h-7 w-20 text-xs flex-shrink-0"
-                placeholder="Unit #"
-              />
-              
               <Select
                 value={unit.category}
                 onValueChange={(value) => updateUnit(unit.id, { category: value })}
@@ -196,16 +211,6 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   )}
                 </Button>
               )}
-
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => removeUnit(unit.id)}
-                className="h-7 w-7 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 flex-shrink-0"
-              >
-                <Trash2 className="h-3 w-3" />
-              </Button>
             </div>
 
             {/* Tenant Details - Show only if occupied and tenant info should be shown */}
