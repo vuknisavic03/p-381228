@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -75,14 +74,12 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   const { getCoordinates, isGeocoding } = useGeocoding();
 
-  // Handle location selection for auto-population
   const handleCityLocationSelect = (locationData: { city?: string; country?: string }) => {
     if (locationData.country) {
       setCountry(locationData.country);
     }
   };
 
-  // Updated property types with corresponding icon components
   const propertyTypes: { value: PropertyType; label: string }[] = [
     { value: "residential_rental", label: "Residential Rental" },
     { value: "commercial_rental", label: "Commercial Rental" },
@@ -92,7 +89,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     { value: "mixed_use", label: "Mixed Use" },
   ];
 
-  // Updated category maps based on the new structure
   const typeToCategoryMap = {
     residential_rental: [
       { value: "single_family", label: "Single-family Home", Icon: Home },
