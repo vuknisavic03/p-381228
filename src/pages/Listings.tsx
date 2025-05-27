@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -162,7 +161,7 @@ export default function Listings() {
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent 
             side="right" 
-            className="w-[900px] sm:w-[1000px] max-w-[90vw] p-0 border-l shadow-2xl bg-white"
+            className="w-[1400px] sm:w-[1400px] max-w-[95vw] p-0 border-l shadow-2xl bg-white"
           >
             <ListingForm 
               onClose={() => setIsAddFormOpen(false)} 
@@ -175,7 +174,7 @@ export default function Listings() {
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 
             side="right" 
-            className="w-[900px] sm:w-[1000px] max-w-[90vw] p-0 border-l shadow-2xl transition-transform duration-300"
+            className="w-[1400px] sm:w-[1400px] max-w-[95vw] p-0 border-l shadow-2xl transition-transform duration-300"
           >
             {selectedListing && (
               <EditListingForm
