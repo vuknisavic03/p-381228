@@ -70,6 +70,10 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     return propertyType && !["hospitality", "vacation_rental"].includes(propertyType);
   };
 
+  const shouldShowTenantInfo = () => {
+    return propertyType && !["hospitality", "vacation_rental"].includes(propertyType);
+  };
+
   const addUnit = () => {
     const newUnit: Unit = {
       id: Date.now().toString(),
@@ -101,6 +105,29 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
+  const updateUnitTenant = (unitId: string, tenantData: Partial<Unit['tenant']>) => {
+    const unit = units.find(u => u.id === unitId);
+    if (unit) {
+      updateUnit(unitId, {
+        tenant: unit.tenant ? { ...unit.tenant, ...tenantData } : {
+          name: tenantData.name || "",
+          phone: tenantData.phone || "",
+          email: tenantData.email || "",
+          type: tenantData.type || "individual"
+        }
+      });
+    }
+  };
+
+  const toggleUnitTenantType = (unitId: string) => {
+    const unit = units.find(u => u.id === unitId);
+    if (unit?.tenant) {
+      updateUnitTenant(unitId, {
+        type: unit.tenant.type === "individual" ? "company" : "individual"
+      });
+    }
+  };
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
@@ -120,9 +147,10 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
         </Button>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         {units.map((unit) => (
-          <Card key={unit.id} className="p-3">
+          <Card key={unit.id} className="p-4 space-y-3">
+            {/* Unit Basic Details */}
             <div className="flex items-center gap-2">
               <Input
                 value={unit.unitNumber}
@@ -179,6 +207,62 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                 <Trash2 className="h-3 w-3" />
               </Button>
             </div>
+
+            {/* Tenant Details - Show only if occupied and tenant info should be shown */}
+            {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-3 w-3 text-green-600" />
+                    <h4 className="text-xs font-medium text-gray-700">Tenant Details</h4>
+                  </div>
+                  <Button 
+                    type="button"
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => toggleUnitTenantType(unit.id)} 
+                    className="h-6 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-2"
+                  >
+                    {unit.tenant?.type === "individual" ? "Switch to Company" : "Switch to Individual"}
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                      {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                    </label>
+                    <Input
+                      className="h-7 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-xs rounded-md"
+                      value={unit.tenant?.name || ""}
+                      onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
+                      placeholder="Enter tenant name"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Phone</label>
+                      <Input
+                        className="h-7 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-xs rounded-md"
+                        value={unit.tenant?.phone || ""}
+                        onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
+                        placeholder="Phone number"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
+                      <Input
+                        className="h-7 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-xs rounded-md"
+                        value={unit.tenant?.email || ""}
+                        onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
+                        placeholder="Email address"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </Card>
         ))}
         

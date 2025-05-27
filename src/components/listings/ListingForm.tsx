@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -498,77 +497,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               units={units}
               onUnitsChange={setUnits}
             />
-          </div>
-        )}
-
-        {/* Tenant Details for Occupied Units - only show if multi-unit mode and has occupied units */}
-        {useUnitsMode && shouldShowTenantInfo() && getOccupiedUnits().length > 0 && (
-          <div className="space-y-4 group">
-            <div className="flex items-center">
-              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
-                Tenant Information for Occupied Units
-              </h3>
-              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-            </div>
-            
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-6">
-              {getOccupiedUnits().map((unit) => (
-                <div key={unit.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-green-600" />
-                      <h4 className="text-sm font-medium text-gray-800">
-                        {unit.unitNumber} - Tenant Details
-                      </h4>
-                    </div>
-                    <Button 
-                      type="button"
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => toggleUnitTenantType(unit.id)} 
-                      className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
-                    >
-                      {unit.tenant?.type === "individual" ? "Switch to Company" : "Switch to Individual"}
-                    </Button>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
-                        {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                      </label>
-                      <Input
-                        className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                        value={unit.tenant?.name || ""}
-                        onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
-                        placeholder="Enter tenant name"
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
-                        <Input
-                          className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                          value={unit.tenant?.phone || ""}
-                          onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
-                          placeholder="Phone number"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
-                        <Input
-                          className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
-                          value={unit.tenant?.email || ""}
-                          onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
-                          placeholder="Email address"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
