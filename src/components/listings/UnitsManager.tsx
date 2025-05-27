@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -186,7 +184,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                         <Input
                           value={unit.unitNumber}
                           onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                          className="h-8 text-sm font-semibold border-blue-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 bg-blue-50/50 rounded-lg px-3 w-40"
+                          className="h-7 text-sm font-semibold border-blue-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-100 bg-blue-50/50 rounded-md px-2 w-32"
                           placeholder="Unit name"
                           autoFocus
                           onBlur={() => saveUnitName(unit.id)}
@@ -197,17 +195,17 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                             size="sm"
                             variant="ghost"
                             onClick={() => saveUnitName(unit.id)}
-                            className="h-7 w-7 p-0 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-md"
+                            className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-md"
                           >
-                            <Check className="h-3.5 w-3.5" />
+                            <Check className="h-3 w-3" />
                           </Button>
                           <Button
                             size="sm"
                             variant="ghost"
                             onClick={cancelEditing}
-                            className="h-7 w-7 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-md"
+                            className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-md"
                           >
-                            <X className="h-3.5 w-3.5" />
+                            <X className="h-3 w-3" />
                           </Button>
                         </div>
                       </div>
@@ -360,4 +358,3 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     </div>
   );
 }
-
