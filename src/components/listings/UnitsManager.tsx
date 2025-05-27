@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,11 +79,13 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
   const addUnit = () => {
     const newUnit: Unit = {
       id: Date.now().toString(),
-      unitNumber: `Unit ${units.length + 1}`,
+      unitNumber: "",
       category: "",
       occupancyStatus: "vacant",
     };
     onUnitsChange([...units, newUnit]);
+    // Automatically start editing the new unit
+    setEditingUnit(newUnit.id);
   };
 
   const removeUnit = (unitId: string) => {
@@ -159,7 +160,8 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           value={unit.unitNumber}
                           onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
                           className="h-8 w-32 text-sm"
-                          placeholder="Unit name"
+                          placeholder="Enter unit name"
+                          autoFocus
                         />
                         <Button
                           size="sm"
@@ -172,7 +174,9 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <h4 className="font-medium text-gray-900">{unit.unitNumber}</h4>
+                        <h4 className="font-medium text-gray-900">
+                          {unit.unitNumber || "Unnamed Unit"}
+                        </h4>
                         <Button
                           size="sm"
                           variant="ghost"
@@ -314,6 +318,20 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Your First Unit
+          </Button>
+        </div>
+      )}
+
+      {/* Add Unit Button for existing units */}
+      {units.length > 0 && (
+        <div className="flex justify-center pt-4">
+          <Button
+            onClick={addUnit}
+            variant="outline"
+            className="bg-white border-gray-200 hover:bg-gray-50"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Another Unit
           </Button>
         </div>
       )}
