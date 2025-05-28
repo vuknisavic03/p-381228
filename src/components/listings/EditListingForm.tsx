@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +33,7 @@ import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Unit {
   id: string;
@@ -230,87 +230,88 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-2xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Edit Listing</h1>
-            <p className="text-gray-600 mt-1">Update your property information</p>
-          </div>
-          <SheetClose asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
-              <X className="h-4 w-4" />
-            </Button>
-          </SheetClose>
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b bg-white">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900">Edit Listing</h1>
+          <p className="text-sm text-gray-600 mt-1">Update your property information</p>
         </div>
+        <SheetClose asChild>
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+            <X className="h-4 w-4" />
+          </Button>
+        </SheetClose>
+      </div>
 
-        <div className="space-y-8">
+      {/* Scrollable Content */}
+      <ScrollArea className="flex-1">
+        <div className="p-6 space-y-6">
           {/* Property Location */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 mb-6">
-              <MapPin className="h-5 w-5 text-blue-600" />
-              <h2 className="text-lg font-semibold text-gray-900">Property Location</h2>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-blue-600" />
+              <h2 className="text-sm font-medium text-gray-900">Property Location</h2>
             </div>
             
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="city" className="text-sm font-medium text-gray-700">City *</Label>
+                  <Label htmlFor="city" className="text-xs font-medium text-gray-700">City *</Label>
                   <Input
                     id="city"
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
                     placeholder="e.g., Belgrade"
-                    className="mt-1"
+                    className="mt-1 h-9"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="country" className="text-sm font-medium text-gray-700">Country *</Label>
+                  <Label htmlFor="country" className="text-xs font-medium text-gray-700">Country *</Label>
                   <Input
                     id="country"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
                     placeholder="e.g., Serbia"
-                    className="mt-1"
+                    className="mt-1 h-9"
                   />
                 </div>
               </div>
               
               <div>
-                <Label htmlFor="address" className="text-sm font-medium text-gray-700">Address *</Label>
+                <Label htmlFor="address" className="text-xs font-medium text-gray-700">Address *</Label>
                 <Input
                   id="address"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   placeholder="e.g., Knez Mihailova 42"
-                  className="mt-1"
+                  className="mt-1 h-9"
                 />
               </div>
               
               <div>
-                <Label htmlFor="postalCode" className="text-sm font-medium text-gray-700">Postal Code</Label>
+                <Label htmlFor="postalCode" className="text-xs font-medium text-gray-700">Postal Code</Label>
                 <Input
                   id="postalCode"
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
                   placeholder="e.g., 11000"
-                  className="mt-1"
+                  className="mt-1 h-9"
                 />
               </div>
             </div>
           </div>
 
           {/* Property Type */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between mb-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-blue-600" />
-                <h2 className="text-lg font-semibold text-gray-900">Property Type</h2>
+                <Building2 className="h-4 w-4 text-blue-600" />
+                <h2 className="text-sm font-medium text-gray-900">Property Type</h2>
               </div>
               <div className="flex items-center gap-2">
                 <Button
@@ -318,7 +319,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   variant="outline"
                   size="sm"
                   onClick={() => setUseUnitsMode(!useUnitsMode)}
-                  className="text-xs"
+                  className="text-xs h-7 px-2"
                 >
                   {useUnitsMode ? "Multiple Units" : "Single Unit"}
                 </Button>
@@ -328,7 +329,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     variant="outline" 
                     size="sm" 
                     onClick={toggleOccupancyStatus} 
-                    className="text-xs"
+                    className="text-xs h-7 px-2"
                   >
                     {formData.occupancyStatus === "occupied" ? (
                       <div className="flex items-center gap-1.5">
@@ -346,9 +347,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               </div>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <Label htmlFor="type" className="text-sm font-medium text-gray-700">Property Type</Label>
+                <Label htmlFor="type" className="text-xs font-medium text-gray-700">Property Type</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) => {
@@ -360,7 +361,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     setUnits([]);
                   }}
                 >
-                  <SelectTrigger className="mt-1">
+                  <SelectTrigger className="mt-1 h-9">
                     <SelectValue placeholder="Select property type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -378,7 +379,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
               {!useUnitsMode && (
                 <div>
-                  <Label htmlFor="category" className="text-sm font-medium text-gray-700">Category</Label>
+                  <Label htmlFor="category" className="text-xs font-medium text-gray-700">Category</Label>
                   <Select
                     value={formData.category}
                     onValueChange={(value) => {
@@ -389,7 +390,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     }}
                     disabled={!formData.type}
                   >
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1 h-9">
                       <SelectValue placeholder={formData.type ? "Select category" : "Select type first"} />
                     </SelectTrigger>
                     <SelectContent>
@@ -410,7 +411,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
           {/* Units Manager */}
           {useUnitsMode && formData.type && (
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="space-y-4">
               <UnitsManager
                 propertyType={formData.type as PropertyType}
                 units={units}
@@ -421,26 +422,26 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
           {/* Tenant Information */}
           {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between mb-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-blue-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">Tenant Information</h2>
+                  <Users className="h-4 w-4 text-blue-600" />
+                  <h2 className="text-sm font-medium text-gray-900">Tenant Information</h2>
                 </div>
                 <Button 
                   type="button"
                   variant="outline" 
                   size="sm" 
                   onClick={toggleTenantType} 
-                  className="text-xs"
+                  className="text-xs h-7 px-2"
                 >
                   {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
                 </Button>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
-                  <Label htmlFor="tenantName" className="text-sm font-medium text-gray-700">
+                  <Label htmlFor="tenantName" className="text-xs font-medium text-gray-700">
                     {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                   </Label>
                   <Input
@@ -449,31 +450,31 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     value={formData.tenantName}
                     onChange={handleChange}
                     placeholder="Enter tenant name"
-                    className="mt-1"
+                    className="mt-1 h-9"
                   />
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="tenantPhone" className="text-sm font-medium text-gray-700">Phone</Label>
+                    <Label htmlFor="tenantPhone" className="text-xs font-medium text-gray-700">Phone</Label>
                     <Input
                       id="tenantPhone"
                       name="tenantPhone"
                       value={formData.tenantPhone}
                       onChange={handleChange}
                       placeholder="Phone number"
-                      className="mt-1"
+                      className="mt-1 h-9"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="tenantEmail" className="text-sm font-medium text-gray-700">Email</Label>
+                    <Label htmlFor="tenantEmail" className="text-xs font-medium text-gray-700">Email</Label>
                     <Input
                       id="tenantEmail"
                       name="tenantEmail"
                       value={formData.tenantEmail}
                       onChange={handleChange}
                       placeholder="Email address"
-                      className="mt-1"
+                      className="mt-1 h-9"
                     />
                   </div>
                 </div>
@@ -482,42 +483,42 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           )}
 
           {/* Additional Details */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 mb-6">
-              <Briefcase className="h-5 w-5 text-blue-600" />
-              <h2 className="text-lg font-semibold text-gray-900">Additional Details</h2>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4 text-blue-600" />
+              <h2 className="text-sm font-medium text-gray-900">Additional Details</h2>
             </div>
             
             <div>
-              <Label htmlFor="notes" className="text-sm font-medium text-gray-700">Notes</Label>
+              <Label htmlFor="notes" className="text-xs font-medium text-gray-700">Notes</Label>
               <Textarea
                 id="notes"
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
                 placeholder="Add any additional notes about this property..."
-                className="mt-1 min-h-[100px]"
+                className="mt-1 min-h-[80px] resize-none"
               />
             </div>
           </div>
-          
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
-            <Button 
-              onClick={handleSubmit} 
-              className="flex-1 bg-blue-600 hover:bg-blue-700"
-            >
-              Save Changes
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={onClose} 
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
         </div>
+      </ScrollArea>
+      
+      {/* Action Buttons */}
+      <div className="flex gap-3 p-6 border-t bg-white">
+        <Button 
+          onClick={handleSubmit} 
+          className="flex-1 h-9 bg-blue-600 hover:bg-blue-700"
+        >
+          Save Changes
+        </Button>
+        <Button 
+          variant="outline" 
+          onClick={onClose} 
+          className="flex-1 h-9"
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );
