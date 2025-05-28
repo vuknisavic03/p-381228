@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -328,9 +329,17 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   return (
     <div className="h-full overflow-auto bg-white">
-      {/* Header */}
+      {/* Header with close button */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">Add New Listing</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-medium text-gray-900">Add New Listing</h2>
+          {isGeocoding && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
+              <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
+              <span className="text-xs text-blue-600 font-medium">Loading...</span>
+            </div>
+          )}
+        </div>
         {onClose && (
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
@@ -339,70 +348,71 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-6 space-y-8">
-        {/* Location */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-medium text-gray-900">Location</h3>
+      <div className="px-6 py-4 space-y-8">
+        {/* Property Information Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Location</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            <MapPin className="h-4 w-4 text-blue-500 ml-2" />
+          </div>
           
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label className="text-xs text-gray-500 mb-1">City</Label>
-                <LocationAutofill
-                  value={city}
-                  onChange={setCity}
-                  placeholder="Enter city"
-                  type="city"
-                  className="h-9 text-sm"
-                  onLocationSelect={handleCityLocationSelect}
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-gray-500 mb-1">Country</Label>
-                <LocationAutofill
-                  value={country}
-                  onChange={setCountry}
-                  placeholder="Enter country"
-                  type="country"
-                  className="h-9 text-sm"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <Label className="text-xs text-gray-500 mb-1">Address</Label>
+          <div className="bg-blue-50/30 border border-blue-100 rounded-lg p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <LocationAutofill
-                value={address}
-                onChange={setAddress}
-                placeholder="Enter street address"
-                type="address"
-                className="h-9 text-sm"
+                value={city}
+                onChange={setCity}
+                placeholder="e.g., Belgrade"
+                label="City *"
+                type="city"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+                onLocationSelect={handleCityLocationSelect}
+              />
+              <LocationAutofill
+                value={country}
+                onChange={setCountry}
+                placeholder="e.g., Serbia"
+                label="Country *"
+                type="country"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
               />
             </div>
             
+            <LocationAutofill
+              value={address}
+              onChange={setAddress}
+              placeholder="e.g., Knez Mihailova 42"
+              label="Address *"
+              type="address"
+              className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
+            />
+            
             <div>
-              <Label className="text-xs text-gray-500 mb-1">Postal Code</Label>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Postal Code</label>
               <Input
-                className="h-9 text-sm"
+                className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-md"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
-                placeholder="Enter postal code"
+                placeholder="e.g., 11000"
               />
             </div>
           </div>
         </div>
 
-        {/* Property Type */}
-        <div className="space-y-4">
+        {/* Property Type Section */}
+        <div className="space-y-4 group">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-900">Property Type</h3>
+            <div className="flex items-center flex-1">
+              <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Property Classification</h3>
+              <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+            </div>
             <div className="flex items-center gap-2">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setUseUnitsMode(!useUnitsMode)}
-                className="h-7 text-xs px-3"
+                className="h-7 text-xs bg-white hover:bg-blue-50 border-blue-200 rounded-full px-3"
               >
                 {useUnitsMode ? "Multiple Units" : "Single Unit"}
               </Button>
@@ -412,21 +422,27 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   variant="outline" 
                   size="sm" 
                   onClick={toggleOccupancyStatus} 
-                  className="h-7 text-xs px-3"
+                  className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
                 >
                   {occupancyStatus === "occupied" ? (
-                    <><Users className="h-3 w-3 mr-1" />Occupied</>
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3 w-3 text-green-600" />
+                      <span>Occupied</span>
+                    </div>
                   ) : (
-                    <><UserX className="h-3 w-3 mr-1" />Vacant</>
+                    <div className="flex items-center gap-1.5">
+                      <UserX className="h-3 w-3 text-orange-600" />
+                      <span>Vacant</span>
+                    </div>
                   )}
                 </Button>
               )}
             </div>
           </div>
           
-          <div className="space-y-3">
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
             <div>
-              <Label className="text-xs text-gray-500 mb-1">Type</Label>
+              <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Type</label>
               <Select
                 value={typeField}
                 onValueChange={(value) => {
@@ -436,7 +452,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   setUnits([]);
                 }}
               >
-                <SelectTrigger className="h-9 text-sm">
+                <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
                   <SelectValue placeholder="Select property type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -454,13 +470,13 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
             {!useUnitsMode && (
               <div>
-                <Label className="text-xs text-gray-500 mb-1">Category</Label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</label>
                 <Select
                   value={category}
                   onValueChange={setCategory}
                   disabled={!typeField}
                 >
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
                     <SelectValue placeholder={typeField ? "Select category" : "Select type first"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -479,10 +495,9 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </div>
         </div>
 
-        {/* Units Manager */}
+        {/* Units Manager - only show if using multiple units mode */}
         {useUnitsMode && typeField && (
-          <div className="space-y-4">
-            <h3 className="text-sm font-medium text-gray-900">Units</h3>
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
             <UnitsManager
               propertyType={typeField as PropertyType}
               units={units}
@@ -491,52 +506,55 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </div>
         )}
 
-        {/* Tenant Information */}
+        {/* Tenant Details Section - only show if single unit mode, occupied AND not hospitality/vacation rental */}
         {!useUnitsMode && shouldShowTenantInfo() && (occupancyStatus === "occupied") && (
-          <div className="space-y-4">
+          <div className="space-y-4 group">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-900">Tenant Information</h3>
+              <div className="flex items-center flex-1">
+                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">
+                  Tenant Information
+                </h3>
+                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+              </div>
               <Button 
                 type="button"
                 variant="outline" 
                 size="sm" 
                 onClick={toggleTenantType} 
-                className="h-7 text-xs px-3"
+                className="h-7 text-xs bg-white hover:bg-gray-50 border-gray-200 rounded-full px-3"
               >
-                {tenantType === "individual" ? "Individual" : "Company"}
+                {tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
               </Button>
             </div>
             
-            <div className="space-y-3">
+            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-4">
               <div>
-                <Label className="text-xs text-gray-500 mb-1">
+                <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
                   {tenantType === "individual" ? "Full Name" : "Company Name"}
-                </Label>
+                </label>
                 <Input
-                  className="h-9 text-sm"
+                  className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
                   value={tenantName}
                   onChange={(e) => setTenantName(e.target.value)}
                   placeholder="Leave empty if no tenant"
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-xs text-gray-500 mb-1">Phone</Label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Phone</label>
                   <Input
-                    className="h-9 text-sm"
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
                     value={tenantPhone}
                     onChange={(e) => setTenantPhone(e.target.value)}
-                    placeholder="Phone number"
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-gray-500 mb-1">Email</Label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Email</label>
                   <Input
-                    className="h-9 text-sm"
+                    className="h-9 w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md"
                     value={tenantEmail}
                     onChange={(e) => setTenantEmail(e.target.value)}
-                    placeholder="Email address"
                   />
                 </div>
               </div>
@@ -544,15 +562,21 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </div>
         )}
 
-        {/* Notes */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-medium text-gray-900">Notes</h3>
-          <Textarea
-            className="min-h-[100px] text-sm resize-none"
-            placeholder="Add notes or additional details..."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
+        {/* Additional Details Section */}
+        <div className="space-y-4 group">
+          <div className="flex items-center">
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Additional Details</h3>
+            <div className="ml-2 h-px bg-gray-100 flex-1"></div>
+          </div>
+          
+          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+            <Textarea
+              className="min-h-[120px] w-full border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 resize-none text-sm rounded-md"
+              placeholder="Add notes or additional details about this property..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
         </div>
         
         {/* Action Buttons */}
@@ -560,7 +584,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           <Button 
             onClick={handleSave} 
             disabled={isProcessing || !isFormValid}
-            className="flex-1"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
           >
             {isProcessing ? (
               <div className="flex items-center gap-2">
@@ -576,7 +600,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               variant="outline" 
               onClick={onClose} 
               disabled={isProcessing}
-              className="flex-1"
+              className="flex-1 bg-white border-gray-200 hover:bg-gray-50 disabled:opacity-50"
             >
               Cancel
             </Button>
