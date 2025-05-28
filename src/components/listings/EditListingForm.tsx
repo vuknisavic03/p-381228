@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,10 @@ import {
   Bed,
   Users,
   UserX,
-  MapPin
+  MapPin,
+  Building as BuildingIcon,
+  Store as StoreIcon,
+  Hotel as HotelIcon,
 } from "lucide-react";
 import {
   Select,
@@ -25,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
@@ -83,7 +86,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     setUseUnitsMode(listing.units && listing.units.length > 0);
   }, [listing]);
 
-  // Updated property types with corresponding icon components
   const propertyTypes: { value: PropertyType; label: string }[] = [
     { value: "residential_rental", label: "Residential Rental" },
     { value: "commercial_rental", label: "Commercial Rental" },
@@ -93,7 +95,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     { value: "mixed_use", label: "Mixed Use" },
   ];
 
-  // Updated category maps based on the new structure
   const typeToCategoryMap = {
     residential_rental: [
       { value: "single_family", label: "Single-family Home", Icon: Home },
@@ -101,8 +102,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       { value: "apartment_condo", label: "Apartment / Condo", Icon: Building2 },
     ],
     commercial_rental: [
-      { value: "office", label: "Office", Icon: Building },
-      { value: "retail", label: "Retail", Icon: Store },
+      { value: "office", label: "Office", Icon: BuildingIcon },
+      { value: "retail", label: "Retail", Icon: StoreIcon },
       { value: "medical", label: "Medical / Professional Unit", Icon: Building2 },
     ],
     industrial: [
@@ -111,7 +112,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       { value: "manufacturing", label: "Manufacturing Facility", Icon: Factory },
     ],
     hospitality: [
-      { value: "hotel", label: "Hotel", Icon: Hotel },
+      { value: "hotel", label: "Hotel", Icon: HotelIcon },
       { value: "motel", label: "Motel", Icon: Hotel },
       { value: "bed_breakfast", label: "Bed & Breakfast", Icon: Bed },
     ],
@@ -150,7 +151,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     setFormData(prev => ({
       ...prev,
       occupancyStatus: prev.occupancyStatus === "occupied" ? "vacant" : "occupied",
-      // Clear tenant info if switching to vacant
       tenantName: prev.occupancyStatus === "occupied" ? "" : prev.tenantName,
       tenantPhone: prev.occupancyStatus === "occupied" ? "" : prev.tenantPhone,
       tenantEmail: prev.occupancyStatus === "occupied" ? "" : prev.tenantEmail,
@@ -162,12 +162,10 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     return typeToCategoryMap[formData.type as keyof typeof typeToCategoryMap] || [];
   };
 
-  // Check if current property type should show occupancy status
   const shouldShowOccupancyStatus = () => {
     return formData.type && !["hospitality", "vacation_rental"].includes(formData.type);
   };
 
-  // Check if current property type should show tenant information
   const shouldShowTenantInfo = () => {
     return formData.type && !["hospitality", "vacation_rental"].includes(formData.type);
   };
@@ -230,23 +228,14 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }
   };
 
-  // Find the currently selected type option
-  const selectedTypeOption = propertyTypes.find(type => type.value === formData.type);
-
-  // Find the currently selected category option
-  const selectedCategoryOptions = getAvailableCategories();
-  const selectedCategoryOption = selectedCategoryOptions.find(cat => cat.value === formData.category);
-  const CategoryIcon = selectedCategoryOption?.Icon;
-
   return (
     <div className="h-full overflow-auto bg-white">
-      {/* Header with close button */}
+      {/* Header */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
         <h2 className="text-xl font-medium text-gray-900">Edit Listing</h2>
         <SheetClose asChild>
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
           </Button>
         </SheetClose>
       </div>
@@ -270,6 +259,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
+                  placeholder="e.g., Belgrade"
                 />
               </div>
               <div>
@@ -279,6 +269,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
+                  placeholder="e.g., Serbia"
                 />
               </div>
             </div>
@@ -290,6 +281,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
+                placeholder="e.g., Knez Mihailova 42"
               />
             </div>
             
@@ -300,6 +292,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                 name="postalCode"
                 value={formData.postalCode}
                 onChange={handleChange}
+                placeholder="e.g., 11000"
               />
             </div>
           </div>
@@ -361,20 +354,13 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                 }}
               >
                 <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
-                  <SelectValue placeholder="Select property type">
-                    {formData.type && (
-                      <div className="flex items-center gap-2">
-                        {getPropertyTypeIcon(formData.type as PropertyType)}
-                        <span>{selectedTypeOption?.label || formatPropertyType(formData.type as PropertyType)}</span>
-                      </div>
-                    )}
-                  </SelectValue>
+                  <SelectValue placeholder="Select property type" />
                 </SelectTrigger>
                 <SelectContent>
                   {propertyTypes.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       <div className="flex items-center gap-2">
-                        {getPropertyTypeIcon(type.value)}
+                        {React.cloneElement(getPropertyTypeIcon(type.value), { className: "h-4 w-4 text-gray-500" })}
                         <span>{type.label}</span>
                       </div>
                     </SelectItem>
@@ -397,20 +383,13 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   disabled={!formData.type}
                 >
                   <SelectTrigger className="border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-md">
-                    <SelectValue placeholder={formData.type ? "Select category" : "Select type first"}>
-                      {formData.category && CategoryIcon && (
-                        <div className="flex items-center gap-2">
-                          <CategoryIcon className="h-4 w-4" />
-                          <span>{selectedCategoryOption?.label}</span>
-                        </div>
-                      )}
-                    </SelectValue>
+                    <SelectValue placeholder={formData.type ? "Select category" : "Select type first"} />
                   </SelectTrigger>
                   <SelectContent>
                     {getAvailableCategories().map((cat) => (
                       <SelectItem key={cat.value} value={cat.value}>
                         <div className="flex items-center gap-2">
-                          <cat.Icon className="h-4 w-4" />
+                          <cat.Icon className="h-4 w-4 text-gray-500" />
                           <span>{cat.label}</span>
                         </div>
                       </SelectItem>
@@ -433,7 +412,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         )}
 
-        {/* Tenant Information - only show if single unit mode, occupied AND not hospitality/vacation rental */}
+        {/* Tenant Information */}
         {!useUnitsMode && shouldShowTenantInfo() && formData.occupancyStatus === "occupied" && (
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
@@ -464,6 +443,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   name="tenantName"
                   value={formData.tenantName}
                   onChange={handleChange}
+                  placeholder="Leave empty if no tenant"
                 />
               </div>
               
@@ -509,7 +489,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
         </div>
         
-        {/* Action Buttons - copied from ListingForm.tsx */}
+        {/* Action Buttons */}
         <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleSubmit} 
