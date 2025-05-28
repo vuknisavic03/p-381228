@@ -138,35 +138,35 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-6">
       {/* Units List */}
       {units.length > 0 ? (
-        <div className="space-y-3">
+        <div className="space-y-6">
           {units.map((unit) => (
-            <Card key={unit.id} className="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
+            <Card key={unit.id} className="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all duration-200">
               {/* Unit Header */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="flex items-center justify-center w-8 h-8 bg-blue-50 rounded-lg">
-                    <Building className="h-4 w-4 text-blue-600" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="flex items-center justify-center w-10 h-10 bg-blue-50 rounded-full">
+                    <Building className="h-5 w-5 text-blue-600" />
                   </div>
                   
                   <div className="flex-1">
                     <Input
                       value={unit.unitNumber}
                       onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                      className="h-8 text-sm font-medium bg-transparent border-0 focus:bg-gray-50 focus:border focus:border-gray-200 rounded px-2 -mx-2"
+                      className="h-10 text-sm font-medium bg-gray-50 border-gray-200 rounded-full px-4 focus:bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
                       placeholder="Unit name"
                     />
                   </div>
                 </div>
                 
                 {/* Status and Actions */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {shouldShowOccupancyStatus() && (
                     <Badge
                       variant="outline"
-                      className={`cursor-pointer text-xs ${
+                      className={`cursor-pointer text-sm px-3 py-1 rounded-full transition-colors ${
                         unit.occupancyStatus === "occupied" 
                           ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" 
                           : "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
@@ -174,9 +174,9 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                       onClick={() => toggleOccupancyStatus(unit.id)}
                     >
                       {unit.occupancyStatus === "occupied" ? (
-                        <><Users className="h-3 w-3 mr-1" />Occupied</>
+                        <><Users className="h-4 w-4 mr-2" />Occupied</>
                       ) : (
-                        <><UserX className="h-3 w-3 mr-1" />Vacant</>
+                        <><UserX className="h-4 w-4 mr-2" />Vacant</>
                       )}
                     </Badge>
                   )}
@@ -184,70 +184,84 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     size="sm"
                     variant="ghost"
                     onClick={() => removeUnit(unit.id)}
-                    className="h-7 w-7 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50"
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
               {/* Unit Details */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {/* Category Selection */}
-                <Select
-                  value={unit.category}
-                  onValueChange={(value) => updateUnit(unit.id, { category: value })}
-                >
-                  <SelectTrigger className="h-8 text-sm">
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {getAvailableCategories().map((cat) => (
-                      <SelectItem key={cat.value} value={cat.value} className="text-sm">
-                        {cat.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <Select
+                    value={unit.category}
+                    onValueChange={(value) => updateUnit(unit.id, { category: value })}
+                  >
+                    <SelectTrigger className="h-10 text-sm rounded-lg border-gray-200 focus:border-blue-300 focus:ring-2 focus:ring-blue-100">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getAvailableCategories().map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value} className="text-sm">
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 {/* Tenant Information */}
                 {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-green-600" />
-                        <span className="text-sm font-medium text-green-800">Tenant</span>
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <User className="h-5 w-5 text-green-600" />
+                        <span className="text-sm font-medium text-green-800">Tenant Information</span>
                       </div>
                       <Badge
                         variant="outline"
-                        className="cursor-pointer text-xs bg-green-100 text-green-700 border-green-300 hover:bg-green-200"
+                        className="cursor-pointer text-sm bg-green-100 text-green-700 border-green-300 hover:bg-green-200 rounded-full px-3 py-1"
                         onClick={() => toggleUnitTenantType(unit.id)}
                       >
                         {unit.tenant?.type === "individual" ? "Individual" : "Company"}
                       </Badge>
                     </div>
                     
-                    <div className="space-y-2">
-                      <Input
-                        value={unit.tenant?.name || ""}
-                        onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
-                        placeholder={unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                        className="h-8 text-sm bg-white border-green-200"
-                      />
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-medium text-green-700 mb-1">
+                          {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        </label>
+                        <Input
+                          value={unit.tenant?.name || ""}
+                          onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
+                          placeholder={unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                          className="h-9 text-sm bg-white border-green-200 rounded-lg focus:border-green-300 focus:ring-2 focus:ring-green-100"
+                        />
+                      </div>
                       
-                      <div className="grid grid-cols-2 gap-2">
-                        <Input
-                          value={unit.tenant?.phone || ""}
-                          onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
-                          placeholder="Phone"
-                          className="h-8 text-sm bg-white border-green-200"
-                        />
-                        <Input
-                          value={unit.tenant?.email || ""}
-                          onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
-                          placeholder="Email"
-                          className="h-8 text-sm bg-white border-green-200"
-                        />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-green-700 mb-1">Phone</label>
+                          <Input
+                            value={unit.tenant?.phone || ""}
+                            onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
+                            placeholder="Phone"
+                            className="h-9 text-sm bg-white border-green-200 rounded-lg focus:border-green-300 focus:ring-2 focus:ring-green-100"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-green-700 mb-1">Email</label>
+                          <Input
+                            value={unit.tenant?.email || ""}
+                            onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
+                            placeholder="Email"
+                            className="h-9 text-sm bg-white border-green-200 rounded-lg focus:border-green-300 focus:ring-2 focus:ring-green-100"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -261,22 +275,22 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
             onClick={addUnit}
             size="sm"
             variant="outline"
-            className="w-full h-10 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+            className="w-full h-12 border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-xl"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-5 w-5 mr-2" />
             Add Unit
           </Button>
         </div>
       ) : (
         /* Empty State */
-        <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-          <Building className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+        <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+          <Building className="h-16 w-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No units added</h3>
-          <p className="text-sm text-gray-600 mb-4">Add units to manage this property</p>
+          <p className="text-sm text-gray-600 mb-6">Add units to manage this property</p>
           <Button
             onClick={addUnit}
             size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add First Unit
