@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -52,15 +53,27 @@ export function LocationAutofill({
 
   // Initialize the autocomplete service when Google Maps is loaded
   useEffect(() => {
-    if (window.google?.maps?.places?.AutocompleteService) {
-      autocompleteService.current = new google.maps.places.AutocompleteService();
+    const initializeServices = () => {
+      console.log(`🔧 Initializing LocationAutofill services for ${type}...`);
       
-      // Create a temporary div for PlacesService
-      const mapDiv = document.createElement('div');
-      const map = new google.maps.Map(mapDiv);
-      placesService.current = new google.maps.places.PlacesService(map);
-    }
-  }, []);
+      if (window.google?.maps?.places?.AutocompleteService) {
+        autocompleteService.current = new google.maps.places.AutocompleteService();
+        console.log("✅ AutocompleteService initialized");
+        
+        // Create a temporary div for PlacesService
+        const mapDiv = document.createElement('div');
+        const map = new google.maps.Map(mapDiv);
+        placesService.current = new google.maps.places.PlacesService(map);
+        console.log("✅ PlacesService initialized");
+      } else {
+        console.warn("❌ Google Maps Places API not available yet, retrying...");
+        // Retry after a short delay
+        setTimeout(initializeServices, 500);
+      }
+    };
+
+    initializeServices();
+  }, [type]);
 
   const parseLocationComponents = (placeDetails: google.maps.places.PlaceResult) => {
     const components = placeDetails.address_components || [];
@@ -90,14 +103,16 @@ export function LocationAutofill({
   const fetchSuggestions = async (query: string) => {
     if (query.length < 2) {
       setSuggestions([]);
+      setShowSuggestions(false);
       return;
     }
 
     if (!autocompleteService.current) {
-      console.warn("Google Places AutocompleteService not available");
+      console.warn("❌ Google Places AutocompleteService not available");
       return;
     }
 
+    console.log(`🔍 Fetching suggestions for "${query}" (type: ${type})`);
     setIsLoading(true);
     
     try {
@@ -110,6 +125,7 @@ export function LocationAutofill({
         request,
         (predictions, status) => {
           setIsLoading(false);
+          console.log(`📍 Received ${predictions?.length || 0} predictions with status: ${status}`);
           
           if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
             const formattedSuggestions = predictions.map(prediction => ({
@@ -118,9 +134,11 @@ export function LocationAutofill({
               types: prediction.types
             }));
             setSuggestions(formattedSuggestions);
+            setShowSuggestions(true);
           } else {
             console.warn('Places API error:', status);
             setSuggestions([]);
+            setShowSuggestions(false);
           }
         }
       );
@@ -128,6 +146,7 @@ export function LocationAutofill({
       console.error('Error fetching suggestions:', error);
       setSuggestions([]);
       setIsLoading(false);
+      setShowSuggestions(false);
     }
   };
 
@@ -137,6 +156,7 @@ export function LocationAutofill({
         fetchSuggestions(value);
       } else {
         setSuggestions([]);
+        setShowSuggestions(false);
       }
     }, 300);
 
@@ -157,12 +177,22 @@ export function LocationAutofill({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    console.log(`📝 Input changed to: "${newValue}"`);
     onChange(newValue);
     setShowSuggestions(true);
     setSelectedIndex(-1);
   };
 
+  const handleInputFocus = () => {
+    console.log(`🎯 Input focused for ${type}`);
+    if (suggestions.length > 0) {
+      setShowSuggestions(true);
+    }
+  };
+
   const handleSuggestionSelect = (suggestion: LocationSuggestion) => {
+    console.log(`✅ Selected suggestion: ${suggestion.description} (type: ${type})`);
+    
     // For city type, we want to extract just the city name and auto-populate country
     if (type === "city" && placesService.current && onLocationSelect) {
       const request = {
@@ -175,13 +205,16 @@ export function LocationAutofill({
           const locationData = parseLocationComponents(place);
           
           // Set just the city name in the current field
-          onChange(locationData.city || place.name || suggestion.description.split(',')[0]);
+          const cityName = locationData.city || place.name || suggestion.description.split(',')[0];
+          onChange(cityName);
           
           // Notify parent to auto-populate other fields
           onLocationSelect({
-            city: locationData.city || place.name || suggestion.description.split(',')[0],
+            city: cityName,
             country: locationData.country
           });
+          
+          console.log(`🏙️ Auto-populated city: ${cityName}, country: ${locationData.country}`);
         } else {
           // Fallback: just use the first part of the description
           const cityName = suggestion.description.split(',')[0];
@@ -189,7 +222,7 @@ export function LocationAutofill({
           
           // Try to extract country from description
           const parts = suggestion.description.split(',').map(s => s.trim());
-          if (parts.length > 1) {
+          if (parts.length > 1 && onLocationSelect) {
             onLocationSelect({
               city: cityName,
               country: parts[parts.length - 1]
@@ -244,7 +277,7 @@ export function LocationAutofill({
           ref={inputRef}
           value={value}
           onChange={handleInputChange}
-          onFocus={() => setShowSuggestions(true)}
+          onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className={className}
