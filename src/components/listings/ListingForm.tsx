@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -226,20 +225,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   return (
     <div className="flex flex-col h-full bg-white">
-      {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-gray-100">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">Add New Property</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Create a new property listing for your portfolio</p>
-        </div>
-        <SheetClose asChild>
-          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
-            <X className="h-4 w-4" />
-          </Button>
-        </SheetClose>
-      </div>
-
-      {/* Content */}
+      {/* Content - removed header section */}
       <div className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <div className="px-6 pt-6">
