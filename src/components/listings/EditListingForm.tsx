@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -237,7 +238,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       {/* Content */}
       <div className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <div className="px-6 pt-6">
+          <div className="px-6 pt-12">
             <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 bg-gray-50 p-1 h-10">
               <TabsTrigger value="location" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm">
                 Location
