@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +36,7 @@ import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
+import { LocationAutofill } from "./LocationAutofill";
 
 interface Unit {
   id: string;
@@ -123,6 +123,15 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleLocationSelect = (locationData: { city?: string; country?: string; address?: string }) => {
+    setFormData(prev => ({
+      ...prev,
+      ...(locationData.city && { city: locationData.city }),
+      ...(locationData.country && { country: locationData.country }),
+      ...(locationData.address && { address: locationData.address })
     }));
   };
 
@@ -263,38 +272,38 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-3 block">City *</Label>
-                    <Input
-                      id="city"
-                      name="city"
+                    <LocationAutofill
                       value={formData.city}
-                      onChange={handleChange}
+                      onChange={(value) => setFormData(prev => ({ ...prev, city: value }))}
                       placeholder="e.g., Belgrade"
+                      label="City *"
+                      type="city"
                       className="h-12 text-base"
+                      onLocationSelect={handleLocationSelect}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-3 block">Country *</Label>
-                    <Input
-                      id="country"
-                      name="country"
+                    <LocationAutofill
                       value={formData.country}
-                      onChange={handleChange}
+                      onChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
                       placeholder="e.g., Serbia"
+                      label="Country *"
+                      type="country"
                       className="h-12 text-base"
+                      onLocationSelect={handleLocationSelect}
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <Label htmlFor="address" className="text-sm font-medium text-gray-700 mb-3 block">Full Address *</Label>
-                  <Input
-                    id="address"
-                    name="address"
+                  <LocationAutofill
                     value={formData.address}
-                    onChange={handleChange}
+                    onChange={(value) => setFormData(prev => ({ ...prev, address: value }))}
                     placeholder="e.g., Knez Mihailova 42"
+                    label="Full Address *"
+                    type="address"
                     className="h-12 text-base"
+                    onLocationSelect={handleLocationSelect}
                   />
                 </div>
                 
