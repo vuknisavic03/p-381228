@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Plus, Users, UserX, Building, User } from "lucide-react";
+import { Trash2, Plus, Users, UserX, Building, User, Edit3 } from "lucide-react";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
 interface Unit {
@@ -29,6 +29,8 @@ interface UnitsManagerProps {
 }
 
 export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManagerProps) {
+  const [editingUnitId, setEditingUnitId] = useState<string | null>(null);
+
   // Category maps based on property type
   const typeToCategoryMap = {
     residential_rental: [
@@ -137,6 +139,19 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
+  const handleUnitNameSubmit = (unitId: string, newName: string) => {
+    updateUnit(unitId, { unitNumber: newName.trim() || `Unit ${units.findIndex(u => u.id === unitId) + 1}` });
+    setEditingUnitId(null);
+  };
+
+  const handleUnitNameKeyDown = (e: React.KeyboardEvent, unitId: string, value: string) => {
+    if (e.key === 'Enter') {
+      handleUnitNameSubmit(unitId, value);
+    } else if (e.key === 'Escape') {
+      setEditingUnitId(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Units List */}
@@ -152,21 +167,33 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                   
                   <div className="flex-1">
-                    <Input
-                      value={unit.unitNumber}
-                      onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
-                      className="h-10 text-sm font-medium bg-gray-50 border-gray-200 rounded-full px-4 focus:bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
-                      placeholder="Unit name"
-                    />
+                    {editingUnitId === unit.id ? (
+                      <Input
+                        defaultValue={unit.unitNumber}
+                        className="h-9 text-sm font-medium border-blue-300 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all"
+                        placeholder="Unit name"
+                        autoFocus
+                        onBlur={(e) => handleUnitNameSubmit(unit.id, e.target.value)}
+                        onKeyDown={(e) => handleUnitNameKeyDown(e, unit.id, e.currentTarget.value)}
+                      />
+                    ) : (
+                      <div 
+                        onClick={() => setEditingUnitId(unit.id)}
+                        className="h-9 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg cursor-pointer transition-all duration-200 flex items-center group"
+                      >
+                        <span className="flex-1">{unit.unitNumber}</span>
+                        <Edit3 className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    )}
                   </div>
                 </div>
                 
                 {/* Status and Actions */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 ml-4">
                   {shouldShowOccupancyStatus() && (
                     <Badge
                       variant="outline"
-                      className={`cursor-pointer text-sm px-3 py-1 rounded-full transition-colors ${
+                      className={`cursor-pointer text-sm px-3 py-1.5 h-9 rounded-lg transition-colors ${
                         unit.occupancyStatus === "occupied" 
                           ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" 
                           : "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
@@ -184,7 +211,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     size="sm"
                     variant="ghost"
                     onClick={() => removeUnit(unit.id)}
-                    className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full"
+                    className="h-9 w-9 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
