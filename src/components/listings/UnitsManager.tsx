@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Plus, Users, UserX, Building, User, Edit3 } from "lucide-react";
+import { Trash2, Plus, Users, UserX, Building, User } from "lucide-react";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
 interface Unit {
@@ -29,8 +29,6 @@ interface UnitsManagerProps {
 }
 
 export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManagerProps) {
-  const [editingUnitId, setEditingUnitId] = useState<string | null>(null);
-
   // Category maps based on property type
   const typeToCategoryMap = {
     residential_rental: [
@@ -139,67 +137,39 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
-  const handleUnitNameSave = (unitId: string, newName: string) => {
-    updateUnit(unitId, { unitNumber: newName });
-    setEditingUnitId(null);
-  };
-
-  const handleUnitNameKeyPress = (e: React.KeyboardEvent, unitId: string, newName: string) => {
-    if (e.key === 'Enter') {
-      handleUnitNameSave(unitId, newName);
-    }
-    if (e.key === 'Escape') {
-      setEditingUnitId(null);
-    }
-  };
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Units List */}
       {units.length > 0 ? (
-        <div className="space-y-8">
+        <div className="space-y-6">
           {units.map((unit) => (
-            <Card key={unit.id} className="p-8 bg-white border border-gray-200 rounded-2xl hover:shadow-lg transition-all duration-300">
+            <Card key={unit.id} className="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-all duration-200">
               {/* Unit Header */}
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-6 flex-1">
-                  <div className="flex items-center justify-center w-12 h-12 bg-blue-50 rounded-xl">
-                    <Building className="h-6 w-6 text-blue-600" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="flex items-center justify-center w-10 h-10 bg-blue-50 rounded-full">
+                    <Building className="h-5 w-5 text-blue-600" />
                   </div>
                   
                   <div className="flex-1">
-                    {editingUnitId === unit.id ? (
-                      <Input
-                        defaultValue={unit.unitNumber}
-                        onBlur={(e) => handleUnitNameSave(unit.id, e.target.value)}
-                        onKeyDown={(e) => handleUnitNameKeyPress(e, unit.id, e.currentTarget.value)}
-                        className="h-12 text-lg font-semibold bg-white border-2 border-blue-300 rounded-xl px-4 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all max-w-xs"
-                        placeholder="Unit name"
-                        autoFocus
-                      />
-                    ) : (
-                      <div 
-                        className="flex items-center gap-3 cursor-pointer group max-w-xs"
-                        onClick={() => setEditingUnitId(unit.id)}
-                      >
-                        <span className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                          {unit.unitNumber}
-                        </span>
-                        <Edit3 className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100" />
-                      </div>
-                    )}
+                    <Input
+                      value={unit.unitNumber}
+                      onChange={(e) => updateUnit(unit.id, { unitNumber: e.target.value })}
+                      className="h-10 text-sm font-medium bg-gray-50 border-gray-200 rounded-full px-4 focus:bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                      placeholder="Unit name"
+                    />
                   </div>
                 </div>
                 
                 {/* Status and Actions */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   {shouldShowOccupancyStatus() && (
                     <Badge
                       variant="outline"
-                      className={`cursor-pointer text-sm font-medium px-4 py-2 h-12 rounded-xl transition-all duration-200 border-2 ${
+                      className={`cursor-pointer text-sm px-3 py-1 rounded-full transition-colors ${
                         unit.occupancyStatus === "occupied" 
-                          ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100 hover:border-green-300" 
-                          : "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100 hover:border-orange-300"
+                          ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" 
+                          : "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
                       }`}
                       onClick={() => toggleOccupancyStatus(unit.id)}
                     >
@@ -214,23 +184,23 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     size="sm"
                     variant="ghost"
                     onClick={() => removeUnit(unit.id)}
-                    className="h-10 w-10 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full"
                   >
-                    <Trash2 className="h-5 w-5" />
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
               {/* Unit Details */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Category Selection */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                   <Select
                     value={unit.category}
                     onValueChange={(value) => updateUnit(unit.id, { category: value })}
                   >
-                    <SelectTrigger className="h-12 text-sm rounded-xl border-2 border-gray-200 focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all">
+                    <SelectTrigger className="h-10 text-sm rounded-lg border-gray-200 focus:border-blue-300 focus:ring-2 focus:ring-blue-100">
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -245,51 +215,51 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
                 {/* Tenant Information */}
                 {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
-                  <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between mb-6">
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <User className="h-5 w-5 text-green-600" />
-                        <span className="text-sm font-semibold text-green-800">Tenant Information</span>
+                        <span className="text-sm font-medium text-green-800">Tenant Information</span>
                       </div>
                       <Badge
                         variant="outline"
-                        className="cursor-pointer text-sm bg-green-100 text-green-700 border-green-300 hover:bg-green-200 rounded-xl px-4 py-2"
+                        className="cursor-pointer text-sm bg-green-100 text-green-700 border-green-300 hover:bg-green-200 rounded-full px-3 py-1"
                         onClick={() => toggleUnitTenantType(unit.id)}
                       >
                         {unit.tenant?.type === "individual" ? "Individual" : "Company"}
                       </Badge>
                     </div>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
-                        <label className="block text-xs font-semibold text-green-700 mb-2">
+                        <label className="block text-xs font-medium text-green-700 mb-1">
                           {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
                         </label>
                         <Input
                           value={unit.tenant?.name || ""}
                           onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
                           placeholder={unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                          className="h-10 text-sm bg-white border-green-200 rounded-xl focus:border-green-300 focus:ring-2 focus:ring-green-100"
+                          className="h-9 text-sm bg-white border-green-200 rounded-lg focus:border-green-300 focus:ring-2 focus:ring-green-100"
                         />
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-semibold text-green-700 mb-2">Phone</label>
+                          <label className="block text-xs font-medium text-green-700 mb-1">Phone</label>
                           <Input
                             value={unit.tenant?.phone || ""}
                             onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
                             placeholder="Phone"
-                            className="h-10 text-sm bg-white border-green-200 rounded-xl focus:border-green-300 focus:ring-2 focus:ring-green-100"
+                            className="h-9 text-sm bg-white border-green-200 rounded-lg focus:border-green-300 focus:ring-2 focus:ring-green-100"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-green-700 mb-2">Email</label>
+                          <label className="block text-xs font-medium text-green-700 mb-1">Email</label>
                           <Input
                             value={unit.tenant?.email || ""}
                             onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
                             placeholder="Email"
-                            className="h-10 text-sm bg-white border-green-200 rounded-xl focus:border-green-300 focus:ring-2 focus:ring-green-100"
+                            className="h-9 text-sm bg-white border-green-200 rounded-lg focus:border-green-300 focus:ring-2 focus:ring-green-100"
                           />
                         </div>
                       </div>
@@ -305,24 +275,24 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
             onClick={addUnit}
             size="sm"
             variant="outline"
-            className="w-full h-16 border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-2xl transition-all"
+            className="w-full h-12 border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-xl"
           >
-            <Plus className="h-6 w-6 mr-3" />
+            <Plus className="h-5 w-5 mr-2" />
             Add Unit
           </Button>
         </div>
       ) : (
         /* Empty State */
-        <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-          <Building className="h-20 w-20 text-gray-400 mx-auto mb-6" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-3">No units added</h3>
-          <p className="text-sm text-gray-600 mb-8">Add units to manage this property</p>
+        <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+          <Building className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No units added</h3>
+          <p className="text-sm text-gray-600 mb-6">Add units to manage this property</p>
           <Button
             onClick={addUnit}
             size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 h-12"
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6"
           >
-            <Plus className="h-5 w-5 mr-2" />
+            <Plus className="h-4 w-4 mr-2" />
             Add First Unit
           </Button>
         </div>
