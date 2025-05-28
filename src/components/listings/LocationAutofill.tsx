@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin, Loader2, AlertCircle } from "lucide-react";
 
 interface LocationSuggestion {
   description: string;
@@ -33,6 +32,8 @@ export function LocationAutofill({
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [isApiReady, setIsApiReady] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
@@ -51,12 +52,56 @@ export function LocationAutofill({
     }
   };
 
-  // Initialize the autocomplete service when Google Maps is loaded
+  // Check for Google Maps API availability
   useEffect(() => {
-    const initializeServices = () => {
-      console.log(`🔧 Initializing LocationAutofill services for ${type}...`);
+    const checkApiAvailability = () => {
+      console.log(`🔍 Checking Google Maps API availability for ${type}...`);
       
-      if (window.google?.maps?.places?.AutocompleteService) {
+      if (typeof window === 'undefined') {
+        console.log("❌ Window is undefined");
+        setApiError("Browser environment not ready");
+        return false;
+      }
+      
+      if (!window.google) {
+        console.log("❌ window.google is not available");
+        setApiError("Google Maps API not loaded");
+        return false;
+      }
+      
+      if (!window.google.maps) {
+        console.log("❌ window.google.maps is not available");
+        setApiError("Google Maps core not loaded");
+        return false;
+      }
+      
+      if (!window.google.maps.places) {
+        console.log("❌ window.google.maps.places is not available");
+        setApiError("Google Places API not loaded");
+        return false;
+      }
+      
+      if (!window.google.maps.places.AutocompleteService) {
+        console.log("❌ AutocompleteService not available");
+        setApiError("Autocomplete service not available");
+        return false;
+      }
+      
+      console.log("✅ Google Maps API is fully available");
+      setApiError(null);
+      return true;
+    };
+
+    const initializeServices = () => {
+      if (!checkApiAvailability()) {
+        // Retry after a delay
+        setTimeout(initializeServices, 1000);
+        return;
+      }
+      
+      try {
+        console.log(`🔧 Initializing LocationAutofill services for ${type}...`);
+        
         autocompleteService.current = new google.maps.places.AutocompleteService();
         console.log("✅ AutocompleteService initialized");
         
@@ -65,10 +110,14 @@ export function LocationAutofill({
         const map = new google.maps.Map(mapDiv);
         placesService.current = new google.maps.places.PlacesService(map);
         console.log("✅ PlacesService initialized");
-      } else {
-        console.warn("❌ Google Maps Places API not available yet, retrying...");
-        // Retry after a short delay
-        setTimeout(initializeServices, 500);
+        
+        setIsApiReady(true);
+        setApiError(null);
+      } catch (error) {
+        console.error("❌ Error initializing Google Maps services:", error);
+        setApiError("Failed to initialize Google Maps services");
+        // Retry after a delay
+        setTimeout(initializeServices, 2000);
       }
     };
 
@@ -107,13 +156,15 @@ export function LocationAutofill({
       return;
     }
 
-    if (!autocompleteService.current) {
-      console.warn("❌ Google Places AutocompleteService not available");
+    if (!isApiReady || !autocompleteService.current) {
+      console.warn("❌ Google Places AutocompleteService not ready");
+      setApiError("Google Maps API not ready");
       return;
     }
 
     console.log(`🔍 Fetching suggestions for "${query}" (type: ${type})`);
     setIsLoading(true);
+    setApiError(null);
     
     try {
       const request: google.maps.places.AutocompletionRequest = {
@@ -135,10 +186,17 @@ export function LocationAutofill({
             }));
             setSuggestions(formattedSuggestions);
             setShowSuggestions(true);
+            setApiError(null);
+          } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+            console.log('No results found');
+            setSuggestions([]);
+            setShowSuggestions(false);
+            setApiError(null);
           } else {
             console.warn('Places API error:', status);
             setSuggestions([]);
             setShowSuggestions(false);
+            setApiError(`Search failed: ${status}`);
           }
         }
       );
@@ -147,10 +205,13 @@ export function LocationAutofill({
       setSuggestions([]);
       setIsLoading(false);
       setShowSuggestions(false);
+      setApiError("Search failed");
     }
   };
 
   useEffect(() => {
+    if (!isApiReady) return;
+    
     const timeoutId = setTimeout(() => {
       if (value.trim()) {
         fetchSuggestions(value);
@@ -161,7 +222,7 @@ export function LocationAutofill({
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [value, type]);
+  }, [value, type, isApiReady]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -181,6 +242,7 @@ export function LocationAutofill({
     onChange(newValue);
     setShowSuggestions(true);
     setSelectedIndex(-1);
+    setApiError(null);
   };
 
   const handleInputFocus = () => {
@@ -240,7 +302,7 @@ export function LocationAutofill({
     setSelectedIndex(-1);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  function handleKeyDown(e: React.KeyboardEvent) {
     if (!showSuggestions || suggestions.length === 0) return;
 
     switch (e.key) {
@@ -265,7 +327,7 @@ export function LocationAutofill({
         setSelectedIndex(-1);
         break;
     }
-  };
+  }
 
   return (
     <div ref={containerRef} className="relative">
@@ -287,7 +349,18 @@ export function LocationAutofill({
             <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
           </div>
         )}
+        {apiError && !isLoading && (
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <AlertCircle className="h-4 w-4 text-red-400" />
+          </div>
+        )}
       </div>
+      
+      {apiError && (
+        <div className="mt-1 text-xs text-red-600 ml-0.5">
+          {apiError}
+        </div>
+      )}
       
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
