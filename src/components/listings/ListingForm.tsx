@@ -1,15 +1,9 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
+
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Home,
@@ -22,26 +16,27 @@ import {
   Briefcase,
   X,
   Bed,
+  Users,
+  UserX,
+  MapPin,
   Building as BuildingIcon,
   Store as StoreIcon,
   Hotel as HotelIcon,
-  MapPin,
-  Loader2,
-  Users,
-  UserX,
   ArrowRight,
+  CheckCircle,
 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
-import { useGeocoding } from "@/hooks/useGeocoding";
-import { LocationAutofill } from "./LocationAutofill";
 import { UnitsManager } from "./UnitsManager";
-
-interface ListingFormProps {
-  onClose?: () => void;
-  onListingAdded?: () => void;
-}
 
 interface Unit {
   id: string;
@@ -57,6 +52,11 @@ interface Unit {
   notes?: string;
 }
 
+interface ListingFormProps {
+  onClose: () => void;
+  onListingAdded?: () => void;
+}
+
 export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const [formData, setFormData] = useState({
     city: "",
@@ -65,7 +65,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     postalCode: "",
     type: "",
     category: "",
-    occupancyStatus: "occupied" as "occupied" | "vacant",
+    occupancyStatus: "vacant" as "occupied" | "vacant",
     tenantName: "",
     tenantPhone: "",
     tenantEmail: "",
@@ -76,15 +76,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const [units, setUnits] = useState<Unit[]>([]);
   const [useUnitsMode, setUseUnitsMode] = useState(false);
   const [activeTab, setActiveTab] = useState("location");
-  const [isSaving, setIsSaving] = useState(false);
-
-  const { getCoordinates, isGeocoding } = useGeocoding();
-
-  const handleCityLocationSelect = (locationData: { city?: string; country?: string }) => {
-    if (locationData.country) {
-      setFormData(prev => ({ ...prev, country: locationData.country || "" }));
-    }
-  };
 
   const propertyTypes: { value: PropertyType; label: string; description: string }[] = [
     { value: "residential_rental", label: "Residential", description: "Homes, apartments, condos for rent" },
@@ -135,19 +126,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     }));
   };
 
-  const getAvailableCategories = () => {
-    if (!formData.type) return [];
-    return typeToCategoryMap[formData.type as keyof typeof typeToCategoryMap] || [];
-  };
-
-  const shouldShowOccupancyStatus = () => {
-    return formData.type && !["hospitality", "vacation_rental"].includes(formData.type);
-  };
-
-  const shouldShowTenantInfo = () => {
-    return formData.type && !["hospitality", "vacation_rental"].includes(formData.type);
-  };
-
   const toggleTenantType = () => {
     setFormData(prev => ({
       ...prev,
@@ -168,260 +146,174 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
     }));
   };
 
-  const handleSave = async () => {
-    if (!formData.type) {
-      toast({
-        title: "Type Required",
-        description: "Please select a property type",
-        variant: "destructive",
-      });
-      return;
-    }
+  const getAvailableCategories = () => {
+    if (!formData.type) return [];
+    return typeToCategoryMap[formData.type as keyof typeof typeToCategoryMap] || [];
+  };
 
-    if (!useUnitsMode && !formData.category) {
-      toast({
-        title: "Category Required",
-        description: "Please select a property category",
-        variant: "destructive",
-      });
-      return;
-    }
+  const shouldShowOccupancyStatus = () => {
+    return formData.type && !["hospitality", "vacation_rental"].includes(formData.type);
+  };
 
-    if (useUnitsMode && units.length === 0) {
-      toast({
-        title: "Units Required",
-        description: "Please add at least one unit",
-        variant: "destructive",
-      });
-      return;
-    }
+  const shouldShowTenantInfo = () => {
+    return formData.type && !["hospitality", "vacation_rental"].includes(formData.type);
+  };
 
-    if (!formData.address || !formData.city || !formData.country) {
-      toast({
-        title: "Address Required",
-        description: "Please provide complete address information",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSaving(true);
-
+  const handleSubmit = async () => {
     try {
-      console.log(`Attempting maximum precision geocoding for: ${formData.address}, ${formData.city}, ${formData.country}`);
+      const finalCategory = useUnitsMode ? "mixed" : formData.category;
       
-      const coordinates = await getCoordinates(formData.address, formData.city, formData.country);
-      
-      if (!coordinates) {
-        setIsSaving(false);
-        return;
-      }
-
-      console.log(`High-precision coordinates obtained:`, coordinates);
-
-      const randomId = Math.floor(Math.random() * 10000);
-      
-      const payload = {
-        id: randomId,
-        city: formData.city,
-        address: formData.address,
-        country: formData.country,
-        postalCode: formData.postalCode,
-        type: formData.type,
-        category: useUnitsMode ? "mixed" : formData.category,
-        location: coordinates,
+      const newListing = {
+        ...formData,
+        category: finalCategory,
         units: useUnitsMode ? units : undefined,
-        ...(shouldShowOccupancyStatus() && !useUnitsMode && { occupancyStatus: formData.occupancyStatus }),
-        tenant: (!useUnitsMode && shouldShowTenantInfo() && formData.tenantName) ? {
+        tenant: (!useUnitsMode && formData.occupancyStatus === "occupied") ? {
           name: formData.tenantName,
           phone: formData.tenantPhone,
           email: formData.tenantEmail,
           type: formData.tenantType,
-        } : null,
-        notes: formData.notes,
+        } : null
       };
-      
-      try {
-        const res = await fetch("http://localhost:5000/listings", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
 
-        if (!res.ok) {
-          throw new Error(`Server responded with status ${res.status}`);
-        }
+      const res = await fetch("http://localhost:5000/listings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newListing),
+      });
 
-        await res.json();
-        
-        toast({
-          title: "Listing Added Successfully",
-          description: `Property ${useUnitsMode ? 'with multiple units' : ''} geocoded with maximum precision and saved`,
-        });
-        
-      } catch (err) {
-        console.error("Error saving to server:", err);
-        
-        toast({
-          title: "Listing Added (Demo Mode)",
-          description: `Property ${useUnitsMode ? 'with multiple units' : ''} added with precise coordinates from enhanced geocoding`,
-        });
+      if (!res.ok) {
+        throw new Error(`Server responded with status ${res.status}`);
       }
-      
-      resetForm();
-      window.dispatchEvent(new CustomEvent('refresh-listings'));
-      
-      if (onClose) {
-        onClose();
+
+      toast({
+        title: "Property Added",
+        description: "Your new property has been successfully added to your portfolio.",
+      });
+
+      if (onListingAdded) {
+        onListingAdded();
       }
+      onClose();
+    } catch (err) {
+      console.error("Error adding listing:", err);
+      
+      toast({
+        title: "Property Added (Demo Mode)",
+        description: "Your new property has been added to the demo data.",
+      });
       
       if (onListingAdded) {
         onListingAdded();
       }
-      
-    } catch (err) {
-      console.error("Error during save:", err);
-      toast({
-        title: "Error",
-        description: "Failed to create listing. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSaving(false);
+      onClose();
     }
   };
-  
-  const resetForm = () => {
-    setFormData({
-      city: "",
-      address: "",
-      country: "",
-      postalCode: "",
-      type: "",
-      category: "",
-      occupancyStatus: "occupied",
-      tenantName: "",
-      tenantPhone: "",
-      tenantEmail: "",
-      tenantType: "individual",
-      notes: "",
-    });
-    setUnits([]);
-    setUseUnitsMode(false);
-    setActiveTab("location");
-  };
 
-  const isProcessing = isSaving || isGeocoding;
-  const canProceed = formData.address.trim() !== "" && 
-                     formData.city.trim() !== "" && 
-                     formData.country.trim() !== "";
+  const canProceed = formData.city && formData.address && formData.country;
+  const canProceedToDetails = formData.type && (useUnitsMode || formData.category);
 
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
       <div className="flex items-center justify-between p-8 border-b border-gray-100">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-            <Building2 className="h-5 w-5 text-blue-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Add New Listing</h1>
-            <p className="text-sm text-gray-500 mt-1">Create a new property listing</p>
-          </div>
-          {isGeocoding && (
-            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full ml-4">
-              <Loader2 className="h-3 w-3 animate-spin text-blue-600" />
-              <span className="text-xs text-blue-600 font-medium">Loading...</span>
-            </div>
-          )}
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900">Add New Property</h1>
+          <p className="text-sm text-gray-500 mt-1">Create a new property listing for your portfolio</p>
         </div>
-        {onClose && (
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-9 w-9 p-0 rounded-full hover:bg-gray-100">
+        <SheetClose asChild>
+          <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
           </Button>
-        )}
+        </SheetClose>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <div className="px-8 pt-6">
-            <TabsList className="grid w-full grid-cols-4 h-12 bg-gray-50 p-1 rounded-xl">
-              <TabsTrigger value="location" className="text-sm font-medium rounded-lg h-10">Location</TabsTrigger>
-              <TabsTrigger value="type" className="text-sm font-medium rounded-lg h-10" disabled={!canProceed}>Type</TabsTrigger>
-              <TabsTrigger value="details" className="text-sm font-medium rounded-lg h-10" disabled={!formData.type}>Details</TabsTrigger>
-              <TabsTrigger value="notes" className="text-sm font-medium rounded-lg h-10" disabled={!formData.type}>Notes</TabsTrigger>
+          <div className="px-8 pt-8">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 bg-gray-50 p-1 h-12">
+              <TabsTrigger value="location" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                Location
+              </TabsTrigger>
+              <TabsTrigger value="type" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!canProceed}>
+                Type
+              </TabsTrigger>
+              <TabsTrigger value="details" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!formData.type}>
+                Details
+              </TabsTrigger>
+              <TabsTrigger value="notes" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!canProceedToDetails}>
+                Notes
+              </TabsTrigger>
             </TabsList>
           </div>
 
           {/* Location Tab */}
           <TabsContent value="location" className="flex-1 overflow-y-auto px-8 pb-8">
-            <div className="space-y-8 pt-8">
+            <div className="max-w-2xl mx-auto space-y-8 pt-8">
               <div className="text-center">
-                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
                   <MapPin className="h-8 w-8 text-blue-600" />
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-3">Property Location</h2>
-                <p className="text-gray-500 max-w-md mx-auto">Where is your property located? We'll use this information to find it on the map.</p>
+                <p className="text-gray-500 max-w-md mx-auto">Enter the address and location details for your property</p>
               </div>
 
-              <div className="max-w-2xl mx-auto space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="city" className="text-sm font-semibold text-gray-700">City *</Label>
-                    <LocationAutofill
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-3 block">City *</Label>
+                    <Input
+                      id="city"
+                      name="city"
                       value={formData.city}
-                      onChange={(value) => setFormData(prev => ({ ...prev, city: value }))}
+                      onChange={handleChange}
                       placeholder="e.g., Belgrade"
-                      label=""
-                      type="city"
-                      className="h-12 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-xl px-4"
-                      onLocationSelect={handleCityLocationSelect}
+                      className="h-12 text-base"
                     />
                   </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="country" className="text-sm font-semibold text-gray-700">Country *</Label>
-                    <LocationAutofill
+                  <div>
+                    <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-3 block">Country *</Label>
+                    <Input
+                      id="country"
+                      name="country"
                       value={formData.country}
-                      onChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
+                      onChange={handleChange}
                       placeholder="e.g., Serbia"
-                      label=""
-                      type="country"
-                      className="h-12 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-xl px-4"
+                      className="h-12 text-base"
                     />
                   </div>
                 </div>
                 
-                <div className="space-y-3">
-                  <Label htmlFor="address" className="text-sm font-semibold text-gray-700">Full Address *</Label>
-                  <LocationAutofill
+                <div>
+                  <Label htmlFor="address" className="text-sm font-medium text-gray-700 mb-3 block">Full Address *</Label>
+                  <Input
+                    id="address"
+                    name="address"
                     value={formData.address}
-                    onChange={(value) => setFormData(prev => ({ ...prev, address: value }))}
+                    onChange={handleChange}
                     placeholder="e.g., Knez Mihailova 42"
-                    label=""
-                    type="address"
-                    className="h-12 w-full border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-xl px-4"
+                    className="h-12 text-base"
                   />
                 </div>
                 
-                <div className="space-y-3">
-                  <Label htmlFor="postalCode" className="text-sm font-semibold text-gray-700">Postal Code</Label>
+                <div>
+                  <Label htmlFor="postalCode" className="text-sm font-medium text-gray-700 mb-3 block">Postal Code</Label>
                   <Input
                     id="postalCode"
                     name="postalCode"
                     value={formData.postalCode}
                     onChange={handleChange}
                     placeholder="e.g., 11000"
-                    className="h-12 rounded-xl"
+                    className="h-12 text-base"
                   />
                 </div>
               </div>
 
               {canProceed && (
-                <div className="pt-6 max-w-2xl mx-auto">
-                  <Button onClick={() => setActiveTab("type")} className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-xl text-base font-medium">
+                <div className="pt-6">
+                  <Button onClick={() => setActiveTab("type")} className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700">
                     Continue to Property Type
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -432,139 +324,100 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
           {/* Property Type Tab */}
           <TabsContent value="type" className="flex-1 overflow-y-auto px-8 pb-8">
-            <div className="space-y-8 pt-8">
+            <div className="max-w-2xl mx-auto space-y-8 pt-8">
               <div className="text-center">
-                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
                   <Building2 className="h-8 w-8 text-blue-600" />
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-3">Property Classification</h2>
-                <p className="text-gray-500 max-w-md mx-auto">What type of property are you listing? This helps us categorize it correctly.</p>
+                <p className="text-gray-500 max-w-md mx-auto">Choose the type and structure of your property</p>
               </div>
 
-              <div className="max-w-3xl mx-auto space-y-8">
-                {/* Units Mode Toggle */}
-                <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                        <Building className="h-5 w-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">Property Structure</h3>
-                        <p className="text-sm text-gray-600">Does this property have multiple units?</p>
-                      </div>
-                    </div>
-                    <Button
-                      type="button"
-                      variant={useUnitsMode ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setUseUnitsMode(!useUnitsMode)}
-                      className="px-6 h-10 rounded-xl font-medium"
+              {/* Units Mode Toggle */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Property Structure</h3>
+                    <p className="text-sm text-gray-500">Does this property have multiple units to manage separately?</p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant={useUnitsMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setUseUnitsMode(!useUnitsMode)}
+                    className="text-sm px-4 py-2"
+                  >
+                    {useUnitsMode ? "Multiple Units" : "Single Unit"}
+                  </Button>
+                </div>
+                {useUnitsMode && (
+                  <p className="text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
+                    You can configure individual units in the next step with their own categories and tenant information.
+                  </p>
+                )}
+              </div>
+
+              {/* Property Type Selection */}
+              <div className="space-y-6">
+                <h3 className="font-semibold text-gray-900">Property Type</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  {propertyTypes.map((type) => (
+                    <div
+                      key={type.value}
+                      className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                        formData.type === type.value
+                          ? "border-blue-500 bg-blue-50 ring-2 ring-blue-100"
+                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      }`}
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, type: type.value, category: "" }));
+                        setUnits([]);
+                      }}
                     >
-                      {useUnitsMode ? "Multiple Units" : "Single Unit"}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Property Type Selection */}
-                <div className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Property Type</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {propertyTypes.map((type) => (
-                      <div
-                        key={type.value}
-                        className={`p-6 border-2 rounded-2xl cursor-pointer transition-all hover:shadow-md ${
-                          formData.type === type.value
-                            ? "border-blue-500 bg-blue-50 shadow-lg"
-                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                        }`}
-                        onClick={() => {
-                          setFormData(prev => ({ ...prev, type: type.value, category: "" }));
-                          setUnits([]);
-                        }}
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                            formData.type === type.value ? "bg-blue-100" : "bg-gray-100"
-                          }`}>
-                            {React.cloneElement(getPropertyTypeIcon(type.value), { 
-                              className: `h-6 w-6 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
-                            })}
-                          </div>
-                          <div className="flex-1">
-                            <h4 className={`font-semibold text-base ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
-                              {type.label}
-                            </h4>
-                            <p className={`text-sm mt-2 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
-                              {type.description}
-                            </p>
-                          </div>
+                      <div className="flex items-start gap-4">
+                        {React.cloneElement(getPropertyTypeIcon(type.value), { 
+                          className: `h-6 w-6 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
+                        })}
+                        <div className="flex-1">
+                          <h4 className={`font-semibold text-base ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
+                            {type.label}
+                          </h4>
+                          <p className={`text-sm mt-1 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
+                            {type.description}
+                          </p>
                         </div>
+                        {formData.type === type.value && (
+                          <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Category Selection */}
-                {formData.type && !useUnitsMode && (
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-gray-900">Specific Category</h3>
-                    <div className="grid grid-cols-1 gap-4">
-                      {getAvailableCategories().map((cat) => (
-                        <div
-                          key={cat.value}
-                          className={`p-5 border-2 rounded-xl cursor-pointer transition-all hover:shadow-sm ${
-                            formData.category === cat.value
-                              ? "border-blue-500 bg-blue-50"
-                              : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                          }`}
-                          onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                              formData.category === cat.value ? "bg-blue-100" : "bg-gray-100"
-                            }`}>
-                              <cat.Icon className={`h-5 w-5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
-                            </div>
-                            <div className="flex-1">
-                              <h4 className={`font-medium ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
-                                {cat.label}
-                              </h4>
-                              <p className={`text-sm mt-1 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
-                                {cat.description}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
                     </div>
-                  </div>
-                )}
-
-                {formData.type && (useUnitsMode || formData.category) && (
-                  <div className="pt-6">
-                    <Button onClick={() => setActiveTab("details")} className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-xl text-base font-medium">
-                      Continue to Details
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </div>
-                )}
+                  ))}
+                </div>
               </div>
+
+              {formData.type && (
+                <div className="pt-6">
+                  <Button onClick={() => setActiveTab("details")} className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700">
+                    Continue to Details
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              )}
             </div>
           </TabsContent>
 
           {/* Details Tab */}
           <TabsContent value="details" className="flex-1 overflow-y-auto px-8 pb-8">
-            <div className="space-y-8 pt-8">
+            <div className="max-w-2xl mx-auto space-y-8 pt-8">
               {/* Units Manager */}
               {useUnitsMode && formData.type && (
-                <div className="max-w-4xl mx-auto">
+                <div>
                   <div className="text-center mb-8">
-                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
                       <Building className="h-8 w-8 text-blue-600" />
                     </div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-3">Manage Units</h2>
-                    <p className="text-gray-500 max-w-md mx-auto">Add and configure individual units for this property.</p>
+                    <p className="text-gray-500 max-w-md mx-auto">Add and configure individual units within your property</p>
                   </div>
                   <UnitsManager
                     propertyType={formData.type as PropertyType}
@@ -574,11 +427,53 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 </div>
               )}
 
-              {/* Occupancy and Tenant Info for Single Unit */}
-              {!useUnitsMode && shouldShowTenantInfo() && (
-                <div className="max-w-2xl mx-auto space-y-8">
+              {/* Category Selection for Single Unit */}
+              {!useUnitsMode && formData.type && (
+                <div className="space-y-6">
                   <div className="text-center">
-                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
+                      <Building className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <h2 className="text-xl font-semibold text-gray-900 mb-3">Specific Category</h2>
+                    <p className="text-gray-500 max-w-md mx-auto">Choose the specific type within {formatPropertyType(formData.type as PropertyType)}</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    {getAvailableCategories().map((cat) => (
+                      <div
+                        key={cat.value}
+                        className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.category === cat.value
+                            ? "border-blue-500 bg-blue-50 ring-2 ring-blue-100"
+                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                        }`}
+                        onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
+                      >
+                        <div className="flex items-start gap-4">
+                          <cat.Icon className={`h-6 w-6 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
+                          <div className="flex-1">
+                            <h4 className={`font-semibold text-base ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
+                              {cat.label}
+                            </h4>
+                            <p className={`text-sm mt-1 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
+                              {cat.description}
+                            </p>
+                          </div>
+                          {formData.category === cat.value && (
+                            <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Occupancy and Tenant Info for Single Unit */}
+              {!useUnitsMode && shouldShowTenantInfo() && formData.category && (
+                <div className="space-y-8">
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
                       <Users className="h-8 w-8 text-blue-600" />
                     </div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-3">Occupancy Status</h2>
@@ -586,33 +481,37 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   </div>
 
                   {shouldShowOccupancyStatus() && (
-                    <div className="bg-gradient-to-r from-gray-50 to-green-50 rounded-2xl p-6 border border-gray-100">
+                    <div className="bg-gray-50 rounded-xl p-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                            formData.occupancyStatus === "occupied" ? "bg-green-100" : "bg-orange-100"
-                          }`}>
-                            {formData.occupancyStatus === "occupied" ? (
-                              <Users className="h-6 w-6 text-green-600" />
-                            ) : (
-                              <UserX className="h-6 w-6 text-orange-600" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-semibold text-gray-900 text-lg">
-                              {formData.occupancyStatus === "occupied" ? "Occupied" : "Vacant"}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {formData.occupancyStatus === "occupied" ? "Property has tenants" : "Property is available"}
-                            </p>
-                          </div>
+                          {formData.occupancyStatus === "occupied" ? (
+                            <>
+                              <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                                <Users className="h-5 w-5 text-green-600" />
+                              </div>
+                              <div>
+                                <p className="font-semibold text-gray-900">Occupied</p>
+                                <p className="text-sm text-gray-500">Property has tenants</p>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="flex items-center justify-center w-10 h-10 bg-orange-100 rounded-full">
+                                <UserX className="h-5 w-5 text-orange-600" />
+                              </div>
+                              <div>
+                                <p className="font-semibold text-gray-900">Vacant</p>
+                                <p className="text-sm text-gray-500">Property is available</p>
+                              </div>
+                            </>
+                          )}
                         </div>
                         <Button 
                           type="button"
                           variant="outline" 
                           size="sm" 
                           onClick={toggleOccupancyStatus}
-                          className="px-6 h-10 rounded-xl font-medium"
+                          className="px-4 py-2"
                         >
                           Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
                         </Button>
@@ -624,21 +523,21 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   {formData.occupancyStatus === "occupied" && (
                     <div className="space-y-6">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900">Tenant Information</h3>
+                        <h3 className="font-semibold text-gray-900">Tenant Information</h3>
                         <Button 
                           type="button"
                           variant="outline" 
                           size="sm" 
                           onClick={toggleTenantType}
-                          className="px-6 h-10 rounded-xl font-medium"
+                          className="px-4 py-2"
                         >
                           {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
                         </Button>
                       </div>
                       
                       <div className="space-y-6">
-                        <div className="space-y-3">
-                          <Label htmlFor="tenantName" className="text-sm font-semibold text-gray-700">
+                        <div>
+                          <Label htmlFor="tenantName" className="text-sm font-medium text-gray-700 mb-3 block">
                             {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                           </Label>
                           <Input
@@ -647,31 +546,31 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                             value={formData.tenantName}
                             onChange={handleChange}
                             placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                            className="h-12 rounded-xl"
+                            className="h-12 text-base"
                           />
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="space-y-3">
-                            <Label htmlFor="tenantPhone" className="text-sm font-semibold text-gray-700">Phone</Label>
+                        <div className="grid grid-cols-2 gap-6">
+                          <div>
+                            <Label htmlFor="tenantPhone" className="text-sm font-medium text-gray-700 mb-3 block">Phone</Label>
                             <Input
                               id="tenantPhone"
                               name="tenantPhone"
                               value={formData.tenantPhone}
                               onChange={handleChange}
                               placeholder="Phone number"
-                              className="h-12 rounded-xl"
+                              className="h-12 text-base"
                             />
                           </div>
-                          <div className="space-y-3">
-                            <Label htmlFor="tenantEmail" className="text-sm font-semibold text-gray-700">Email</Label>
+                          <div>
+                            <Label htmlFor="tenantEmail" className="text-sm font-medium text-gray-700 mb-3 block">Email</Label>
                             <Input
                               id="tenantEmail"
                               name="tenantEmail"
                               value={formData.tenantEmail}
                               onChange={handleChange}
                               placeholder="Email address"
-                              className="h-12 rounded-xl"
+                              className="h-12 text-base"
                             />
                           </div>
                         </div>
@@ -681,52 +580,45 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 </div>
               )}
 
-              <div className="pt-6 max-w-2xl mx-auto">
-                <Button onClick={() => setActiveTab("notes")} className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-xl text-base font-medium">
-                  Continue to Notes
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </div>
+              {canProceedToDetails && (
+                <div className="pt-6">
+                  <Button onClick={() => setActiveTab("notes")} className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700">
+                    Continue to Notes
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              )}
             </div>
           </TabsContent>
 
           {/* Notes Tab */}
           <TabsContent value="notes" className="flex-1 overflow-y-auto px-8 pb-8">
-            <div className="space-y-8 pt-8">
+            <div className="max-w-2xl mx-auto space-y-8 pt-8">
               <div className="text-center">
-                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
                   <Briefcase className="h-8 w-8 text-blue-600" />
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-3">Additional Notes</h2>
-                <p className="text-gray-500 max-w-md mx-auto">Add any additional information about this property that might be helpful.</p>
+                <p className="text-gray-500 max-w-md mx-auto">Add any additional information or special details about this property</p>
               </div>
               
-              <div className="max-w-2xl mx-auto space-y-3">
-                <Label htmlFor="notes" className="text-sm font-semibold text-gray-700">Notes (Optional)</Label>
-                <Textarea
-                  id="notes"
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                  placeholder="Add any additional notes, special features, or important details about this property..."
-                  className="min-h-[200px] resize-none rounded-xl"
-                />
+              <div className="space-y-6">
+                <div>
+                  <Label htmlFor="notes" className="text-sm font-medium text-gray-700 mb-3 block">Notes (Optional)</Label>
+                  <Textarea
+                    id="notes"
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleChange}
+                    placeholder="Add any additional notes, special features, maintenance requirements, or important details about this property..."
+                    className="min-h-[160px] resize-none text-base"
+                  />
+                </div>
               </div>
 
-              <div className="pt-6 max-w-2xl mx-auto">
-                <Button 
-                  onClick={handleSave} 
-                  disabled={isProcessing || !formData.type || (useUnitsMode ? units.length === 0 : !formData.category)}
-                  className="w-full h-12 bg-green-600 hover:bg-green-700 disabled:opacity-50 rounded-xl text-base font-medium"
-                >
-                  {isProcessing ? (
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      <span>{isGeocoding ? "Loading..." : "Adding listing..."}</span>
-                    </div>
-                  ) : (
-                    "Add Listing"
-                  )}
+              <div className="pt-6">
+                <Button onClick={handleSubmit} className="w-full h-12 text-base bg-green-600 hover:bg-green-700">
+                  Add Property to Portfolio
                 </Button>
               </div>
             </div>
