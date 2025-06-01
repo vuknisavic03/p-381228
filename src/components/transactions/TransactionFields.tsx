@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, User, DollarSign, Calendar, Phone, Mail } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -50,7 +49,7 @@ export function TransactionFields({
   }, [fields, onChange]);
 
   const selectedListing = mockListings.find(l => l.id === fields.selectedListingId);
-  console.log("Selected listing:", selectedListing);
+  const selectedUnit = selectedListing?.units?.find(u => u.id === fields.selectedUnitId);
   
   // Get the property category based on the selected listing type
   const selectedPropertyCategory = selectedListing 
@@ -137,6 +136,7 @@ export function TransactionFields({
             {/* Unit Selection - only show if listing has multiple units */}
             {hasMultipleUnits && (
               <div className="mb-4">
+                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Unit Selection</div>
                 <UnitSelector
                   units={selectedListing.units || []}
                   selectedUnitId={fields.selectedUnitId || ""}
@@ -146,48 +146,122 @@ export function TransactionFields({
               </div>
             )}
             
-            {/* Selected Property Summary - only show when property is selected */}
+            {/* Enhanced Property Details Card */}
             {selectedListing && (
-              <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="font-medium text-gray-900 mb-1">{selectedListing.name}</div>
-                    <div className="text-sm text-gray-600 mb-3">{selectedListing.address}</div>
-                    
-                    {/* Show selected unit info if applicable */}
-                    {fields.selectedUnitId && selectedListing.units && (
-                      <div className="mb-3">
-                        {(() => {
-                          const selectedUnit = selectedListing.units.find(u => u.id === fields.selectedUnitId);
-                          return selectedUnit ? (
-                            <div className="text-sm">
-                              <span className="font-medium text-gray-700">Unit: </span>
-                              <span className="text-gray-600">{selectedUnit.unitNumber}</span>
-                              {selectedUnit.tenant && (
-                                <span className="ml-2 text-gray-500">• {selectedUnit.tenant.name}</span>
-                              )}
-                            </div>
-                          ) : null;
-                        })()}
+              <div className="mt-4 bg-white border border-gray-200 rounded-lg overflow-hidden">
+                {/* Property Header */}
+                <div className="p-4 border-b border-gray-100">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 text-lg mb-1">{selectedListing.name}</h4>
+                      <div className="flex items-center text-gray-600 gap-1.5">
+                        <MapPin className="h-4 w-4 text-gray-400" />
+                        <span className="text-sm">{selectedListing.address}</span>
                       </div>
-                    )}
-                    
-                    {/* Tenant info for single-unit properties */}
-                    {!hasMultipleUnits && selectedListing.tenant && (
-                      <div className="text-sm">
-                        <span className="font-medium text-gray-700">Tenant: </span>
-                        <span className="text-gray-600">{selectedListing.tenant.name}</span>
-                        <span className="text-gray-500 ml-2">• {selectedListing.tenant.type}</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1.5 rounded-md ml-4">
-                    <span className="text-xs font-medium text-gray-700">
-                      {selectedPropertyCategory?.label || formatPropertyType(selectedListing.type)}
-                    </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-blue-50 px-3 py-1.5 rounded-lg">
+                      <span className="text-sm font-medium text-blue-700">
+                        {selectedPropertyCategory?.label || formatPropertyType(selectedListing.type)}
+                      </span>
+                    </div>
                   </div>
                 </div>
+
+                {/* Unit-specific or Property-level Details */}
+                {selectedUnit ? (
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-700">Unit {selectedUnit.unitNumber}</span>
+                        <span className={cn(
+                          "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium",
+                          selectedUnit.occupancyStatus === "occupied" 
+                            ? "bg-green-100 text-green-800" 
+                            : "bg-gray-100 text-gray-600"
+                        )}>
+                          {selectedUnit.occupancyStatus === "occupied" ? "Occupied" : "Vacant"}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                        {selectedUnit.category}
+                      </span>
+                    </div>
+
+                    {selectedUnit.tenant && (
+                      <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-2 mb-2">
+                            <User className="h-4 w-4 text-gray-400" />
+                            <span className="font-medium text-gray-900">{selectedUnit.tenant.name}</span>
+                            <span className="text-xs bg-white px-2 py-0.5 rounded border text-gray-600">
+                              {selectedUnit.tenant.type}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="space-y-1.5 ml-6">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Mail className="h-3.5 w-3.5 text-gray-400" />
+                            <span>{selectedUnit.tenant.email}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Phone className="h-3.5 w-3.5 text-gray-400" />
+                            <span>{selectedUnit.tenant.phone}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedUnit.notes && (
+                      <div className="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
+                        <strong>Notes:</strong> {selectedUnit.notes}
+                      </div>
+                    )}
+                  </div>
+                ) : !hasMultipleUnits && selectedListing.tenant ? (
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-700">Property Tenant</span>
+                        <span className={cn(
+                          "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium",
+                          selectedListing.occupancyStatus === "occupied" 
+                            ? "bg-green-100 text-green-800" 
+                            : "bg-gray-100 text-gray-600"
+                        )}>
+                          {selectedListing.occupancyStatus === "occupied" ? "Occupied" : "Vacant"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-400" />
+                        <span className="font-medium text-gray-900">{selectedListing.tenant.name}</span>
+                        <span className="text-xs bg-white px-2 py-0.5 rounded border text-gray-600">
+                          {selectedListing.tenant.type}
+                        </span>
+                      </div>
+                      <div className="space-y-1.5 ml-6">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Mail className="h-3.5 w-3.5 text-gray-400" />
+                          <span>{selectedListing.tenant.email}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Phone className="h-3.5 w-3.5 text-gray-400" />
+                          <span>{selectedListing.tenant.phone}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                        No tenant assigned
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
