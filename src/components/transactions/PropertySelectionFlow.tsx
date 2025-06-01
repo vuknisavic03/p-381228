@@ -1,6 +1,6 @@
 
 import React from "react";
-import { ArrowRight, CheckCircle, Circle } from "lucide-react";
+import { ArrowRight, CheckCircle, Circle, Building2, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { PropertySelector } from "./PropertySelector";
 import { UnitSelectorCard } from "./UnitSelectorCard";
@@ -29,15 +29,19 @@ export function PropertySelectionFlow({
 
   return (
     <div className="space-y-8">
-      {/* Progress Steps */}
-      <div className="flex items-center gap-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
-        <div className="flex items-center gap-3">
-          {isPropertySelected ? (
-            <CheckCircle className="h-6 w-6 text-green-500" />
-          ) : (
-            <Circle className="h-6 w-6 text-gray-300" />
-          )}
-          <span className={`text-sm font-medium ${
+      {/* Progress Steps with Modern Design */}
+      <div className="flex items-center gap-6 p-6 bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl border border-gray-200">
+        <div className="flex items-center gap-4">
+          <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+            isPropertySelected ? "bg-green-500" : "bg-gray-300"
+          } transition-all duration-300`}>
+            {isPropertySelected ? (
+              <CheckCircle className="h-5 w-5 text-white" />
+            ) : (
+              <Circle className="h-5 w-5 text-white" />
+            )}
+          </div>
+          <span className={`text-base font-semibold transition-colors duration-300 ${
             isPropertySelected ? "text-green-700" : "text-gray-500"
           }`}>
             Select Property
@@ -46,14 +50,18 @@ export function PropertySelectionFlow({
         
         {hasUnits && (
           <>
-            <ArrowRight className="h-5 w-5 text-gray-300" />
-            <div className="flex items-center gap-3">
-              {isUnitSelected ? (
-                <CheckCircle className="h-6 w-6 text-green-500" />
-              ) : (
-                <Circle className="h-6 w-6 text-gray-300" />
-              )}
-              <span className={`text-sm font-medium ${
+            <ArrowRight className="h-5 w-5 text-gray-400" />
+            <div className="flex items-center gap-4">
+              <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                isUnitSelected ? "bg-green-500" : "bg-gray-300"
+              } transition-all duration-300`}>
+                {isUnitSelected ? (
+                  <CheckCircle className="h-5 w-5 text-white" />
+                ) : (
+                  <Circle className="h-5 w-5 text-white" />
+                )}
+              </div>
+              <span className={`text-base font-semibold transition-colors duration-300 ${
                 isUnitSelected ? "text-green-700" : "text-gray-500"
               }`}>
                 Select Unit
@@ -63,15 +71,18 @@ export function PropertySelectionFlow({
         )}
       </div>
 
-      {/* Step 1: Property Selection */}
-      <Card className="p-8 shadow-sm border border-gray-200">
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Choose Property
-          </h3>
-          <p className="text-sm text-gray-600">
-            Select the property for this transaction from your portfolio
-          </p>
+      {/* Step 1: Property Selection with Enhanced Card */}
+      <Card className="p-8 shadow-sm border border-gray-200 rounded-2xl hover:shadow-md transition-all duration-200">
+        <div className="mb-8 space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center">
+              <Building2 className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">Choose Property</h3>
+              <p className="text-sm text-gray-600">Select the property for this transaction</p>
+            </div>
+          </div>
         </div>
         
         <PropertySelector
@@ -81,16 +92,23 @@ export function PropertySelectionFlow({
         />
       </Card>
 
-      {/* Step 2: Unit Selection (only if property has units) */}
+      {/* Step 2: Unit Selection with Enhanced Design */}
       {selectedListing && hasUnits && (
-        <Card className="p-8 shadow-sm border border-gray-200">
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Choose Unit
-            </h3>
-            <p className="text-sm text-gray-600">
-              Select the specific unit at <span className="font-medium text-gray-900">{selectedListing.name}</span>
-            </p>
+        <Card className="p-8 shadow-sm border border-gray-200 rounded-2xl hover:shadow-md transition-all duration-200">
+          <div className="mb-8 space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-purple-100 flex items-center justify-center">
+                <Building2 className="h-5 w-5 text-purple-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Choose Unit</h3>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <MapPin className="h-3.5 w-3.5" />
+                  <span>Select the specific unit at</span>
+                  <span className="font-semibold text-gray-900">{selectedListing.name}</span>
+                </div>
+              </div>
+            </div>
           </div>
           
           <UnitSelectorCard
@@ -101,16 +119,18 @@ export function PropertySelectionFlow({
         </Card>
       )}
 
-      {/* Completion Status */}
+      {/* Completion Status with Celebration Design */}
       {isComplete && (
-        <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
-          <CheckCircle className="h-6 w-6 text-green-500" />
-          <div>
-            <span className="text-sm font-medium text-green-700">
-              Selection complete!
+        <div className="flex items-center gap-4 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl">
+          <div className="h-12 w-12 rounded-full bg-green-500 flex items-center justify-center">
+            <CheckCircle className="h-6 w-6 text-white" />
+          </div>
+          <div className="space-y-1">
+            <span className="text-base font-bold text-green-800">
+              Perfect! Selection Complete
             </span>
-            <p className="text-xs text-green-600 mt-1">
-              You can now proceed with the transaction details.
+            <p className="text-sm text-green-600">
+              You can now proceed with the transaction details below.
             </p>
           </div>
         </div>

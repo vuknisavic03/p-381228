@@ -1,9 +1,8 @@
 
 import React, { useState } from "react";
-import { Search, Building2, MapPin, Users, CheckCircle2 } from "lucide-react";
+import { Search, Building2, MapPin, Users, CheckCircle2, Crown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Listing } from "./TransactionFormTypes";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
@@ -24,24 +23,27 @@ export function PropertySelector({ listings, selectedListingId, onSelect }: Prop
   );
 
   return (
-    <div className="space-y-4">
-      {/* Search */}
+    <div className="space-y-6">
+      {/* Enhanced Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
         <Input
           placeholder="Search properties by name, address, or city..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 h-11 border-gray-200 bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+          className="pl-12 h-12 border-gray-200 bg-gray-50 hover:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-xl text-base transition-all duration-200"
         />
       </div>
 
-      {/* Property List */}
-      <div className="space-y-3 max-h-80 overflow-y-auto">
+      {/* Property List with Modern Cards */}
+      <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
         {filteredListings.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <Building2 className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-            <p className="text-sm">No properties found</p>
+          <div className="text-center py-12 text-gray-500">
+            <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+              <Building2 className="h-8 w-8 text-gray-300" />
+            </div>
+            <p className="text-base font-medium">No properties found</p>
+            <p className="text-sm text-gray-400 mt-1">Try adjusting your search terms</p>
           </div>
         ) : (
           filteredListings.map((listing) => {
@@ -50,72 +52,87 @@ export function PropertySelector({ listings, selectedListingId, onSelect }: Prop
             return (
               <Card
                 key={listing.id}
-                className={`relative p-4 cursor-pointer transition-all border-2 hover:border-blue-200 hover:shadow-sm ${
+                className={`relative p-6 cursor-pointer transition-all duration-200 border-2 hover:shadow-lg ${
                   isSelected 
-                    ? "border-blue-500 bg-blue-50/50 shadow-sm" 
-                    : "border-gray-100 bg-white"
+                    ? "border-blue-500 bg-blue-50/50 shadow-md scale-[1.02]" 
+                    : "border-gray-200 bg-white hover:border-blue-200"
                 }`}
                 onClick={() => onSelect(listing.id)}
               >
                 {/* Selection indicator */}
                 {isSelected && (
-                  <div className="absolute top-3 right-3">
-                    <CheckCircle2 className="h-5 w-5 text-blue-500" />
+                  <div className="absolute top-4 right-4">
+                    <div className="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center">
+                      <CheckCircle2 className="h-4 w-4 text-white" />
+                    </div>
                   </div>
                 )}
 
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-4">
                   {/* Property Icon */}
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${
-                    isSelected ? "bg-blue-100" : "bg-gray-100"
+                  <div className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-200 ${
+                    isSelected ? "bg-blue-500" : "bg-gray-100"
                   }`}>
-                    <Building2 className={`h-5 w-5 ${isSelected ? "text-blue-600" : "text-gray-500"}`} />
+                    <Building2 className={`h-6 w-6 transition-colors duration-200 ${
+                      isSelected ? "text-white" : "text-gray-500"
+                    }`} />
                   </div>
 
                   {/* Property Details */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-gray-900 text-base truncate">
+                  <div className="flex-1 min-w-0 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <h3 className="font-bold text-gray-900 text-lg truncate">
                           {listing.name}
                         </h3>
-                        <div className="flex items-center gap-1.5 mt-1">
-                          <MapPin className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
-                          <span className="text-sm text-gray-600 truncate">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <MapPin className="h-4 w-4 flex-shrink-0" />
+                          <span className="text-sm truncate">
                             {listing.address}, {listing.city}
                           </span>
                         </div>
                       </div>
                       
-                      <Badge variant="secondary" className="ml-2 bg-gray-100 text-gray-700 text-xs">
+                      <Badge 
+                        variant="secondary" 
+                        className="ml-3 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1"
+                      >
                         {formatPropertyType(listing.type)}
                       </Badge>
                     </div>
 
-                    {/* Occupancy and Units Info */}
-                    <div className="flex items-center gap-3 text-xs">
+                    {/* Enhanced Occupancy and Units Info */}
+                    <div className="flex items-center gap-4 pt-2 border-t border-gray-100">
                       {listing.units && listing.units.length > 0 ? (
-                        <div className="flex items-center gap-1.5">
-                          <Users className="h-3.5 w-3.5 text-gray-400" />
-                          <span className="text-gray-600">
-                            {listing.units.length} {listing.units.length === 1 ? 'unit' : 'units'}
-                          </span>
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                            <Users className="h-4 w-4 text-indigo-600" />
+                          </div>
+                          <div className="text-sm">
+                            <span className="font-semibold text-gray-900">
+                              {listing.units.length} {listing.units.length === 1 ? 'Unit' : 'Units'}
+                            </span>
+                            <div className="text-xs text-gray-500">Multi-unit property</div>
+                          </div>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1.5">
-                          <div className={`w-2 h-2 rounded-full ${
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${
                             listing.occupancyStatus === "occupied" ? "bg-green-500" : "bg-gray-400"
                           }`} />
-                          <span className="text-gray-600">
+                          <span className="text-sm font-medium text-gray-700">
                             {listing.occupancyStatus === "occupied" ? "Occupied" : "Vacant"}
                           </span>
                         </div>
                       )}
                       
                       {listing.tenant && (
-                        <span className="text-gray-500">
-                          • {listing.tenant.name}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <Crown className="h-4 w-4 text-amber-500" />
+                          <span className="text-sm text-gray-600 font-medium">
+                            {listing.tenant.name}
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
