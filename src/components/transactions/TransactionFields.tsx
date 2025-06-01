@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin, User, DollarSign, Calendar, Phone, Mail } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, User, DollarSign, Phone, Mail } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
