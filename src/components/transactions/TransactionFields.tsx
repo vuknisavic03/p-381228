@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -15,7 +16,6 @@ import {
   PROPERTY_CATEGORIES, 
   GENERAL_CATEGORIES 
 } from "./TransactionFormTypes";
-import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingTypeToggle } from "./ListingTypeToggle";
 import { ListingSelector } from "./ListingSelector";
 import { UnitSelector } from "./UnitSelector";
@@ -99,10 +99,10 @@ export function TransactionFields({
         
         {fields.listingType === "listing" ? (
           <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
-            <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
+            <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property Selection</div>
             
             {/* Dropdown selector and map button side by side */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mb-4">
               <div className="flex-1">
                 <ListingSelector
                   listings={mockListings}
@@ -136,7 +136,7 @@ export function TransactionFields({
 
             {/* Unit Selection - only show if listing has multiple units */}
             {hasMultipleUnits && (
-              <div className="mt-4">
+              <div className="mb-4">
                 <UnitSelector
                   units={selectedListing.units || []}
                   selectedUnitId={fields.selectedUnitId || ""}
@@ -146,14 +146,47 @@ export function TransactionFields({
               </div>
             )}
             
-            {selectedListing && selectedPropertyCategory && (
-              <div className="mt-3">
-                <div className="text-xs text-gray-600 flex items-center justify-between">
-                  <span>Property Type: <span className="font-medium text-gray-800">{selectedPropertyCategory.label}</span></span>
-                  <span className="bg-gray-100 text-xs px-2 py-1 rounded-md flex items-center gap-1">
-                    {selectedPropertyCategory.subtypes.find(s => s.value.toString().includes(selectedListing.type))?.label || 
-                     formatPropertyType(selectedListing.type)}
-                  </span>
+            {/* Selected Property Summary - only show when property is selected */}
+            {selectedListing && (
+              <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900 mb-1">{selectedListing.name}</div>
+                    <div className="text-sm text-gray-600 mb-3">{selectedListing.address}</div>
+                    
+                    {/* Show selected unit info if applicable */}
+                    {fields.selectedUnitId && selectedListing.units && (
+                      <div className="mb-3">
+                        {(() => {
+                          const selectedUnit = selectedListing.units.find(u => u.id === fields.selectedUnitId);
+                          return selectedUnit ? (
+                            <div className="text-sm">
+                              <span className="font-medium text-gray-700">Unit: </span>
+                              <span className="text-gray-600">{selectedUnit.unitNumber}</span>
+                              {selectedUnit.tenant && (
+                                <span className="ml-2 text-gray-500">• {selectedUnit.tenant.name}</span>
+                              )}
+                            </div>
+                          ) : null;
+                        })()}
+                      </div>
+                    )}
+                    
+                    {/* Tenant info for single-unit properties */}
+                    {!hasMultipleUnits && selectedListing.tenant && (
+                      <div className="text-sm">
+                        <span className="font-medium text-gray-700">Tenant: </span>
+                        <span className="text-gray-600">{selectedListing.tenant.name}</span>
+                        <span className="text-gray-500 ml-2">• {selectedListing.tenant.type}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1.5 rounded-md ml-4">
+                    <span className="text-xs font-medium text-gray-700">
+                      {selectedPropertyCategory?.label || formatPropertyType(selectedListing.type)}
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
@@ -170,17 +203,6 @@ export function TransactionFields({
       
       {(selectedListing || fields.listingType === "general") && (
         <>
-          {/* Listing Info Card Section - only shown for listing type */}
-          {fields.listingType === "listing" && selectedListing && (
-            <div className="space-y-4 group">
-              <div className="flex items-center">
-                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Selected Property</h3>
-                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-              </div>
-              <ListingInfoCard listing={selectedListing} />
-            </div>
-          )}
-          
           {/* Transaction Details Section */}
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
