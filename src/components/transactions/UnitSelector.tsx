@@ -58,38 +58,31 @@ export function UnitSelector({ units, selectedUnitId, onUnitSelect, placeholder 
       <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Unit</div>
       
       <Select value={selectedUnitId} onValueChange={onUnitSelect}>
-        <SelectTrigger className="w-full h-auto min-h-[3.5rem] border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
+        <SelectTrigger className="w-full h-auto min-h-[2.5rem] border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
           <SelectValue placeholder={placeholder}>
             {selectedUnit ? (
-              <div className="flex items-center justify-between w-full py-2">
+              <div className="flex items-center justify-between w-full py-1">
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 bg-blue-50 rounded-lg">
-                    <Building className="h-5 w-5 text-blue-600" />
+                  <div className="flex items-center justify-center w-8 h-8 bg-blue-50 rounded-lg">
+                    <Building className="h-4 w-4 text-blue-600" />
                   </div>
                   <div className="flex flex-col items-start">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-gray-900 text-base">{selectedUnit.unitNumber}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-900">{selectedUnit.unitNumber}</span>
                       {getStatusBadge(selectedUnit.occupancyStatus)}
                     </div>
-                    {selectedUnit.tenant ? (
-                      <div className="text-sm text-gray-600">
-                        <div className="font-medium">{selectedUnit.tenant.name}</div>
-                        <div className="text-xs text-gray-500 mt-0.5">{selectedUnit.tenant.type}</div>
-                      </div>
-                    ) : (
-                      <div className="text-sm text-gray-500">
-                        Available for rent
-                      </div>
+                    {selectedUnit.tenant && (
+                      <span className="text-xs text-gray-500 mt-0.5">
+                        {selectedUnit.tenant.name}
+                      </span>
                     )}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-3 text-gray-400 py-2">
-                <div className="flex items-center justify-center w-10 h-10 bg-gray-50 rounded-lg">
-                  <Building className="h-5 w-5" />
-                </div>
-                <span className="text-base">{placeholder}</span>
+              <div className="flex items-center gap-2 text-gray-400">
+                <Building className="h-4 w-4" />
+                <span>{placeholder}</span>
               </div>
             )}
           </SelectValue>
@@ -97,14 +90,14 @@ export function UnitSelector({ units, selectedUnitId, onUnitSelect, placeholder 
         
         <SelectContent className="w-full max-h-80">
           {/* Search input */}
-          <div className="p-3 border-b border-gray-100">
+          <div className="p-2 border-b border-gray-100">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search units or tenants..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 h-9 border-gray-200 bg-gray-50 text-sm focus:bg-white"
+                className="pl-9 h-8 border-gray-200 bg-gray-50 text-sm focus:bg-white"
               />
             </div>
           </div>
@@ -122,7 +115,7 @@ export function UnitSelector({ units, selectedUnitId, onUnitSelect, placeholder 
                   value={unit.id}
                   className="p-0"
                 >
-                  <div className="flex items-center gap-3 w-full p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3 w-full p-3 hover:bg-gray-50 transition-colors">
                     <div className="flex items-center justify-center w-10 h-10 bg-blue-50 rounded-lg">
                       <Building className="h-5 w-5 text-blue-600" />
                     </div>
@@ -138,7 +131,6 @@ export function UnitSelector({ units, selectedUnitId, onUnitSelect, placeholder 
                       {unit.tenant ? (
                         <div className="text-xs text-gray-600">
                           <div className="font-medium">{unit.tenant.name}</div>
-                          <div className="text-gray-500 mt-0.5">{unit.tenant.type}</div>
                           {unit.tenant.email && (
                             <div className="text-gray-500 mt-0.5">{unit.tenant.email}</div>
                           )}
