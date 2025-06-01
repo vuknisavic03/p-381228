@@ -48,7 +48,7 @@ export default function Transactions() {
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent
             side="right"
-            className="w-[680px] sm:w-[720px] lg:w-[800px] p-0 border-l shadow-2xl bg-white"
+            className="w-[800px] sm:w-[900px] lg:w-[1000px] p-0 border-l shadow-2xl bg-white"
           >
             <TransactionForm onClose={() => setIsAddFormOpen(false)} />
           </SheetContent>

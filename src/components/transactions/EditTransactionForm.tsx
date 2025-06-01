@@ -121,7 +121,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
   if (isLoadingListings) {
     return (
       <div className="h-full overflow-auto bg-gray-50">
-        <div className="sticky top-0 z-10 bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-between shadow-sm">
+        <div className="sticky top-0 z-10 bg-white px-10 py-8 border-b border-gray-200 flex items-center justify-between shadow-sm">
           <h2 className="text-2xl font-semibold text-gray-900">Edit Transaction</h2>
           <SheetClose asChild>
             <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-full hover:bg-gray-100">
@@ -129,7 +129,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
             </Button>
           </SheetClose>
         </div>
-        <div className="px-8 py-12 flex items-center justify-center">
+        <div className="px-10 py-12 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900 mx-auto mb-4"></div>
             <p className="text-gray-600 text-lg">Loading your properties...</p>
@@ -142,7 +142,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
   return (
     <div className="h-full overflow-auto bg-gray-50">
       {/* Header with close button */}
-      <div className="sticky top-0 z-10 bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-between shadow-sm">
+      <div className="sticky top-0 z-10 bg-white px-10 py-8 border-b border-gray-200 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
           <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -166,7 +166,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       </div>
       
       {/* Content area */}
-      <div className="px-8 py-8 max-w-4xl mx-auto space-y-8">
+      <div className="px-10 py-10 max-w-5xl mx-auto space-y-10">
         <TransactionFields 
           mockListings={listings}
           initialValues={fields}
@@ -175,8 +175,8 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
         />
         
         {showNotesSection && (
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div className="mb-4">
+          <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+            <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Additional Information</h3>
               <p className="text-sm text-gray-600">Add any notes or details about this transaction</p>
             </div>
@@ -185,25 +185,25 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
               placeholder="Enter any additional details, notes, or comments about this transaction..."
               value={fields.notes}
               onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-              className="min-h-[120px] bg-gray-50 border-gray-200 resize-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-lg"
+              className="min-h-[140px] bg-gray-50 border-gray-200 resize-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-lg"
             />
           </div>
         )}
 
         {/* Footer with action buttons */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-          <div className="flex gap-4">
+        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+          <div className="flex gap-6">
             <Button
               onClick={handleUpdate}
               disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-medium"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-14 text-base font-medium"
             >
               Save Changes
             </Button>
             <Button
               variant="outline"
               onClick={onClose}
-              className="flex-1 bg-white border-gray-300 hover:bg-gray-50 h-12 text-base font-medium"
+              className="flex-1 bg-white border-gray-300 hover:bg-gray-50 h-14 text-base font-medium"
             >
               Cancel
             </Button>
