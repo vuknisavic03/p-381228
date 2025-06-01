@@ -28,14 +28,14 @@ export function PropertySelectionFlow({
   const isComplete = isPropertySelected && isUnitSelected;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Progress Steps */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+        <div className="flex items-center gap-3">
           {isPropertySelected ? (
-            <CheckCircle className="h-5 w-5 text-green-500" />
+            <CheckCircle className="h-6 w-6 text-green-500" />
           ) : (
-            <Circle className="h-5 w-5 text-gray-300" />
+            <Circle className="h-6 w-6 text-gray-300" />
           )}
           <span className={`text-sm font-medium ${
             isPropertySelected ? "text-green-700" : "text-gray-500"
@@ -46,12 +46,12 @@ export function PropertySelectionFlow({
         
         {hasUnits && (
           <>
-            <ArrowRight className="h-4 w-4 text-gray-300" />
-            <div className="flex items-center gap-2">
+            <ArrowRight className="h-5 w-5 text-gray-300" />
+            <div className="flex items-center gap-3">
               {isUnitSelected ? (
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-6 w-6 text-green-500" />
               ) : (
-                <Circle className="h-5 w-5 text-gray-300" />
+                <Circle className="h-6 w-6 text-gray-300" />
               )}
               <span className={`text-sm font-medium ${
                 isUnitSelected ? "text-green-700" : "text-gray-500"
@@ -64,13 +64,13 @@ export function PropertySelectionFlow({
       </div>
 
       {/* Step 1: Property Selection */}
-      <Card className="p-6">
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+      <Card className="p-8 shadow-sm border border-gray-200">
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
             Choose Property
           </h3>
           <p className="text-sm text-gray-600">
-            Select the property for this transaction
+            Select the property for this transaction from your portfolio
           </p>
         </div>
         
@@ -83,13 +83,13 @@ export function PropertySelectionFlow({
 
       {/* Step 2: Unit Selection (only if property has units) */}
       {selectedListing && hasUnits && (
-        <Card className="p-6">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+        <Card className="p-8 shadow-sm border border-gray-200">
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Choose Unit
             </h3>
             <p className="text-sm text-gray-600">
-              Select the specific unit at <span className="font-medium">{selectedListing.name}</span>
+              Select the specific unit at <span className="font-medium text-gray-900">{selectedListing.name}</span>
             </p>
           </div>
           
@@ -103,11 +103,16 @@ export function PropertySelectionFlow({
 
       {/* Completion Status */}
       {isComplete && (
-        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <CheckCircle className="h-5 w-5 text-green-500" />
-          <span className="text-sm font-medium text-green-700">
-            Selection complete! You can now proceed with the transaction details.
-          </span>
+        <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
+          <CheckCircle className="h-6 w-6 text-green-500" />
+          <div>
+            <span className="text-sm font-medium text-green-700">
+              Selection complete!
+            </span>
+            <p className="text-xs text-green-600 mt-1">
+              You can now proceed with the transaction details.
+            </p>
+          </div>
         </div>
       )}
     </div>

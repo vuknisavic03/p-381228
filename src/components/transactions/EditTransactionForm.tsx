@@ -20,6 +20,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
   const [isLoadingListings, setIsLoadingListings] = useState(true);
   const [fields, setFields] = useState<TransactionFieldsData>({
     selectedListingId: transaction.selectedListingId || "",
+    selectedUnitId: transaction.selectedUnitId || "",
     transactionType: transaction.type || "revenue",
     category: transaction.category || "",
     amount: transaction.amount?.toString() || "",
@@ -99,6 +100,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     const updatedTransaction = {
       ...transaction,
       selectedListingId: fields.selectedListingId,
+      selectedUnitId: fields.selectedUnitId,
       type: fields.transactionType,
       category: fields.category,
       amount: parseFloat(fields.amount),
@@ -118,19 +120,19 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
   if (isLoadingListings) {
     return (
-      <div className="h-full overflow-auto bg-white">
-        <div className="sticky top-0 z-10 bg-white px-8 py-6 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">Edit Transaction</h2>
+      <div className="h-full overflow-auto bg-gray-50">
+        <div className="sticky top-0 z-10 bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-between shadow-sm">
+          <h2 className="text-2xl font-semibold text-gray-900">Edit Transaction</h2>
           <SheetClose asChild>
-            <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-full hover:bg-gray-100">
-              <X className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-full hover:bg-gray-100">
+              <X className="h-5 w-5" />
             </Button>
           </SheetClose>
         </div>
         <div className="px-8 py-12 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading your properties...</p>
+            <p className="text-gray-600 text-lg">Loading your properties...</p>
           </div>
         </div>
       </div>
@@ -138,12 +140,12 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
   }
 
   return (
-    <div className="h-full overflow-auto bg-white">
+    <div className="h-full overflow-auto bg-gray-50">
       {/* Header with close button */}
-      <div className="sticky top-0 z-10 bg-white px-8 py-6 border-b border-gray-100 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <div className="sticky top-0 z-10 bg-white px-8 py-6 border-b border-gray-200 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M16 2v5h5"></path>
               <path d="M21 6v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h11l6 3z"></path>
               <path d="M8 12h8"></path>
@@ -153,18 +155,18 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
           </div>
           <div>
             <h2 className="text-2xl font-semibold text-gray-900">Edit Transaction</h2>
-            <p className="text-sm text-gray-500 mt-1">Update transaction details</p>
+            <p className="text-sm text-gray-600 mt-1">Update transaction details and information</p>
           </div>
         </div>
         <SheetClose asChild>
-          <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-full hover:bg-gray-100">
-            <X className="h-4 w-4" />
+          <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-full hover:bg-gray-100">
+            <X className="h-5 w-5" />
           </Button>
         </SheetClose>
       </div>
       
       {/* Content area */}
-      <div className="px-8 py-8 space-y-10">
+      <div className="px-8 py-8 max-w-4xl mx-auto space-y-8">
         <TransactionFields 
           mockListings={listings}
           initialValues={fields}
@@ -173,40 +175,39 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
         />
         
         {showNotesSection && (
-          <div className="space-y-5 group">
-            <div className="flex items-center">
-              <h3 className="text-base font-semibold text-gray-800 group-hover:text-gray-950 transition-colors">Additional Information</h3>
-              <div className="ml-3 h-px bg-gray-100 flex-1"></div>
+          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Additional Information</h3>
+              <p className="text-sm text-gray-600">Add any notes or details about this transaction</p>
             </div>
             
-            <div className="bg-gray-50/50 border border-gray-100 rounded-xl p-6">
-              <div className="mb-3 text-sm font-medium text-gray-700">Notes</div>
-              <Textarea
-                placeholder="Add additional details or notes"
-                value={fields.notes}
-                onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                className="min-h-[150px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-lg"
-              />
-            </div>
+            <Textarea
+              placeholder="Enter any additional details, notes, or comments about this transaction..."
+              value={fields.notes}
+              onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
+              className="min-h-[120px] bg-gray-50 border-gray-200 resize-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm rounded-lg"
+            />
           </div>
         )}
 
         {/* Footer with action buttons */}
-        <div className="pt-6 flex gap-4 sticky bottom-0 bg-white border-t border-gray-100 py-6 -mx-8 px-8 mt-10">
-          <Button
-            onClick={handleUpdate}
-            disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-12 rounded-xl text-base font-medium"
-          >
-            Save changes
-          </Button>
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="flex-1 bg-white border-gray-200 hover:bg-gray-50 h-12 rounded-xl text-base font-medium"
-          >
-            Cancel
-          </Button>
+        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className="flex gap-4">
+            <Button
+              onClick={handleUpdate}
+              disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-medium"
+            >
+              Save Changes
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="flex-1 bg-white border-gray-300 hover:bg-gray-50 h-12 text-base font-medium"
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </div>
     </div>
