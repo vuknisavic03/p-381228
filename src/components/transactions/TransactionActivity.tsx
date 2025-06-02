@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -243,7 +242,7 @@ export function TransactionActivity() {
       {/* Edit sheet */}
       {editingTransaction && (
         <Sheet open={!!editingTransaction} onOpenChange={() => setEditingTransaction(null)}>
-          <SheetContent side="right" className="w-[800px] sm:w-[900px] lg:w-[1000px] p-0 border-l shadow-xl bg-white">
+          <SheetContent side="right" className="w-[480px] sm:w-[540px] p-0 border-l shadow-xl bg-white">
             <EditTransactionForm
               transaction={editingTransaction}
               onClose={() => setEditingTransaction(null)}

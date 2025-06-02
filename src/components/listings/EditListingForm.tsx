@@ -238,47 +238,21 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       {/* Content */}
       <div className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <div className="px-6 pt-16 pb-6 bg-gradient-to-b from-gray-50/50 to-white border-b border-gray-100">
-            <div className="max-w-2xl mx-auto">
-              <div className="text-center mb-8">
-                <h1 className="text-2xl font-semibold text-gray-900 mb-2">Edit Property</h1>
-                <p className="text-gray-500 text-sm">Update your property details and information</p>
-              </div>
-              
-              <TabsList className="grid w-full grid-cols-4 bg-white border border-gray-200 p-1.5 h-12 rounded-xl shadow-sm">
-                <TabsTrigger 
-                  value="location" 
-                  className="text-sm font-medium rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-blue-200 transition-all duration-200"
-                >
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Location
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="type" 
-                  className="text-sm font-medium rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-blue-200 transition-all duration-200" 
-                  disabled={!canProceed}
-                >
-                  <Building2 className="h-4 w-4 mr-2" />
-                  Type
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="details" 
-                  className="text-sm font-medium rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-blue-200 transition-all duration-200" 
-                  disabled={!formData.type}
-                >
-                  <Building className="h-4 w-4 mr-2" />
-                  Details
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="notes" 
-                  className="text-sm font-medium rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-blue-200 transition-all duration-200" 
-                  disabled={!canProceedToDetails}
-                >
-                  <Briefcase className="h-4 w-4 mr-2" />
-                  Notes
-                </TabsTrigger>
-              </TabsList>
-            </div>
+          <div className="px-6 pt-12">
+            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 bg-gray-50 p-1 h-10">
+              <TabsTrigger value="location" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                Location
+              </TabsTrigger>
+              <TabsTrigger value="type" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!canProceed}>
+                Type
+              </TabsTrigger>
+              <TabsTrigger value="details" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!formData.type}>
+                Details
+              </TabsTrigger>
+              <TabsTrigger value="notes" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!canProceedToDetails}>
+                Notes
+              </TabsTrigger>
+            </TabsList>
           </div>
 
           {/* Location Tab */}
