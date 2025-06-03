@@ -56,22 +56,22 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       <Table className="text-sm">
         <TableHeader>
           <TableRow className="border-none bg-gray-50/70">
-            <TableHead className="pl-8 py-5 text-gray-600 font-medium text-xs uppercase tracking-wider">
+            <TableHead className="pl-8 py-5 text-gray-600 font-medium text-sm uppercase tracking-wider">
               Amount
             </TableHead>
-            <TableHead className="py-5 text-gray-600 font-medium text-xs uppercase tracking-wider">
+            <TableHead className="py-5 text-gray-600 font-medium text-sm uppercase tracking-wider">
               From
             </TableHead>
-            <TableHead className="py-5 text-gray-600 font-medium text-xs uppercase tracking-wider">
+            <TableHead className="py-5 text-gray-600 font-medium text-sm uppercase tracking-wider">
               Date
             </TableHead>
-            <TableHead className="py-5 text-gray-600 font-medium text-xs uppercase tracking-wider">
+            <TableHead className="py-5 text-gray-600 font-medium text-sm uppercase tracking-wider">
               Category
             </TableHead>
-            <TableHead className="py-5 text-gray-600 font-medium text-xs uppercase tracking-wider">
+            <TableHead className="py-5 text-gray-600 font-medium text-sm uppercase tracking-wider">
               Payment
             </TableHead>
-            <TableHead className="py-5 text-gray-600 font-medium text-xs uppercase tracking-wider">
+            <TableHead className="py-5 text-gray-600 font-medium text-sm uppercase tracking-wider">
               Status
             </TableHead>
             <TableHead className="w-12 pr-8" />
@@ -89,7 +89,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                   <div className={`w-3 h-3 rounded-full ${
                     tx.type === "revenue" ? "bg-emerald-500" : "bg-red-500"
                   }`} />
-                  <span className={`font-semibold text-lg ${
+                  <span className={`font-semibold text-sm ${
                     tx.type === "revenue" ? "text-emerald-600" : "text-red-600"
                   }`}>
                     {formatAmount(tx.amount, tx.type)}
@@ -98,11 +98,11 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </TableCell>
               
               <TableCell className="py-6">
-                <div className="text-gray-900 font-medium">{tx.from}</div>
+                <div className="text-gray-900 font-medium text-sm">{tx.from}</div>
               </TableCell>
               
               <TableCell className="py-6">
-                <div className="text-gray-700 font-medium">
+                <div className="text-gray-700 font-medium text-sm">
                   {tx.date.toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -112,7 +112,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </TableCell>
               
               <TableCell className="py-6">
-                <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
                   {tx.category}
                 </span>
               </TableCell>
@@ -120,12 +120,12 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               <TableCell className="py-6">
                 <div className="flex items-center gap-2.5">
                   <CreditCard className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-700">{tx.paymentMethod}</span>
+                  <span className="text-gray-700 text-sm">{tx.paymentMethod}</span>
                 </div>
               </TableCell>
               
               <TableCell className="py-6">
-                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${
                   tx.status === "completed" ? "bg-emerald-50 text-emerald-700" : 
                   tx.status === "failed" ? "bg-red-50 text-red-700" : 
                   "bg-amber-50 text-amber-700"
