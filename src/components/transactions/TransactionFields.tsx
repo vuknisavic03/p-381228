@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin, Building } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -19,6 +19,7 @@ import {
 import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingTypeToggle } from "./ListingTypeToggle";
 import { ListingSelector } from "./ListingSelector";
+import { UnitSelector } from "./UnitSelector";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
@@ -136,47 +137,11 @@ export function TransactionFields({
 
             {/* Unit Selection - only show if listing has multiple units */}
             {hasMultipleUnits && (
-              <div className="mt-3">
-                <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Unit</div>
-                <Select
-                  value={fields.selectedUnitId || ""}
-                  onValueChange={(value) => setFields(f => ({ ...f, selectedUnitId: value }))}
-                >
-                  <SelectTrigger className="w-full h-9 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-md">
-                    <SelectValue placeholder="Select unit">
-                      {fields.selectedUnitId ? (
-                        <div className="flex items-center gap-2">
-                          <Building className="h-3 w-3 text-gray-500" />
-                          <span>{selectedListing?.units?.find(u => u.id === fields.selectedUnitId)?.unitNumber}</span>
-                          <span className="text-xs text-gray-500">
-                            ({selectedListing?.units?.find(u => u.id === fields.selectedUnitId)?.occupancyStatus})
-                          </span>
-                        </div>
-                      ) : (
-                        "Select unit"
-                      )}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {selectedListing?.units?.map((unit) => (
-                      <SelectItem key={unit.id} value={unit.id}>
-                        <div className="flex items-center gap-2">
-                          <Building className="h-3 w-3 text-gray-500" />
-                          <span className="font-medium">{unit.unitNumber}</span>
-                          <span className="text-xs text-gray-500">
-                            ({unit.occupancyStatus})
-                          </span>
-                          {unit.tenant && (
-                            <span className="text-xs text-green-600">
-                              - {unit.tenant.name}
-                            </span>
-                          )}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <UnitSelector
+                units={selectedListing.units}
+                selectedUnitId={fields.selectedUnitId || ""}
+                onUnitSelect={(unitId) => setFields(f => ({ ...f, selectedUnitId: unitId }))}
+              />
             )}
             
             {selectedListing && selectedPropertyCategory && (
