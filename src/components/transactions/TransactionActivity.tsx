@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -210,8 +209,8 @@ const mockTransactions: Transaction[] = [
 export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: startOfMonth(new Date()),
-    to: endOfMonth(new Date()),
+    from: new Date(2025, 4, 1), // May 1, 2025
+    to: new Date(2025, 4, 31), // May 31, 2025
   });
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [search, setSearch] = useState('');
@@ -240,8 +239,8 @@ export function TransactionActivity() {
   // Clear all filters
   const clearFilters = () => {
     setDateRange({
-      from: startOfMonth(new Date()),
-      to: endOfMonth(new Date()),
+      from: new Date(2025, 4, 1), // May 1, 2025
+      to: new Date(2025, 4, 31), // May 31, 2025
     });
     setSelectedCategories([]);
     setSelectedPaymentMethods([]);
