@@ -25,6 +25,10 @@ interface UnitSelectorProps {
 export function UnitSelector({ units, selectedUnitId, onUnitSelect }: UnitSelectorProps) {
   if (!units || units.length === 0) return null;
 
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   return (
     <div className="space-y-2">
       {units.map((unit) => (
@@ -63,7 +67,7 @@ export function UnitSelector({ units, selectedUnitId, onUnitSelect }: UnitSelect
                       ? "bg-green-100 text-green-700"
                       : "bg-gray-100 text-gray-600"
                   )}>
-                    {unit.occupancyStatus}
+                    {capitalizeFirstLetter(unit.occupancyStatus)}
                   </span>
                 </div>
                 
