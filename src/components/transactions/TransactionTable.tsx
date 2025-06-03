@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -51,6 +52,19 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     }
   };
 
+  const getCategoryBadgeVariant = (category: string) => {
+    switch (category.toLowerCase()) {
+      case "rent":
+        return "default";
+      case "maintenance":
+        return "secondary";
+      case "utilities":
+        return "outline";
+      default:
+        return "secondary";
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg border shadow-sm">
       <Table>
@@ -95,7 +109,9 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </TableCell>
               
               <TableCell>
-                <span className="text-gray-700">{tx.category}</span>
+                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs">
+                  {tx.category}
+                </Badge>
               </TableCell>
               
               <TableCell>
