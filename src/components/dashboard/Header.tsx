@@ -42,7 +42,6 @@ export function Header({
         <DateRangePicker
           dateRange={dateRange}
           onDateRangeChange={onDateRangeChange}
-          className="border border-[#E7E8EC] rounded-md px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-50"
         />
       </div>
     </div>
