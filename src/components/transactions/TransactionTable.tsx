@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight, DollarSign, CircleCheck, Clock, AlertCircle } from "lucide-react";
+import { ChevronRight, DollarSign } from "lucide-react";
 
 type Transaction = {
   id: number;
@@ -21,7 +21,6 @@ type Transaction = {
   paymentMethod: string;
   from: string;
   notes?: string;
-  status: string;
   selectedListingId: string;
 };
 
@@ -39,19 +38,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     return type === "revenue" ? `+$${formattedAmount}` : `-$${formattedAmount}`;
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <CircleCheck className="h-4 w-4 text-green-500" />;
-      case "pending":
-        return <Clock className="h-4 w-4 text-amber-500" />;
-      case "failed":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Clock className="h-4 w-4 text-gray-400" />;
-    }
-  };
-
   const getCategoryBadgeVariant = (category: string): "secondary" | "default" | "destructive" | "outline" => {
     return "secondary";
   };
@@ -66,7 +52,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             <TableHead className="font-medium text-gray-700">Date</TableHead>
             <TableHead className="font-medium text-gray-700">Category</TableHead>
             <TableHead className="font-medium text-gray-700">Payment</TableHead>
-            <TableHead className="font-medium text-gray-700">Status</TableHead>
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
@@ -107,13 +92,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               
               <TableCell>
                 <span className="text-gray-600">{tx.paymentMethod}</span>
-              </TableCell>
-              
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  {getStatusIcon(tx.status)}
-                  <span className="text-gray-700 capitalize">{tx.status}</span>
-                </div>
               </TableCell>
               
               <TableCell className="text-right">

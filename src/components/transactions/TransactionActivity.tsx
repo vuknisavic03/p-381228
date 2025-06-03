@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -17,7 +18,6 @@ type Transaction = {
   paymentMethod: string;
   from: string;
   notes?: string;
-  status: string;
   selectedListingId: string;
 };
 
@@ -32,7 +32,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'Alexander Whitmore',
     notes: 'Monthly rent payment for unit 4B',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -44,7 +43,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     from: 'Sarah Johnson',
     notes: 'Security deposit for apartment lease agreement',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -56,7 +54,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     from: 'City Plumbing Services',
     notes: 'Emergency plumbing repair in unit 4B - leaking pipes',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -68,7 +65,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Cash',
     from: 'Watson Enterprises',
     notes: 'Late rent payment for April - received with late fee',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -80,7 +76,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'City Power & Light',
     notes: 'Monthly electricity bill for common areas',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -92,7 +87,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'Tech Solutions LLC',
     notes: 'Commercial office rent - monthly payment',
-    status: 'completed',
     selectedListingId: '2'
   },
   {
@@ -104,7 +98,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Check',
     from: 'Premier Construction Co.',
     notes: 'HVAC system repair and maintenance',
-    status: 'pending',
     selectedListingId: '2'
   },
   {
@@ -116,7 +109,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     from: 'Michael Chen',
     notes: 'Late payment fee for May rent',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -128,7 +120,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'Professional Cleaners Inc.',
     notes: 'Deep cleaning after tenant move-out',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -140,7 +131,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'ACH Transfer',
     from: 'Jennifer Martinez',
     notes: 'Monthly rent for luxury apartment unit',
-    status: 'completed',
     selectedListingId: '3'
   },
   {
@@ -152,7 +142,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Bank Transfer',
     from: 'PropertyGuard Insurance',
     notes: 'Monthly property insurance premium',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -164,7 +153,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Cash',
     from: 'David Thompson',
     notes: 'Monthly parking space rental fee',
-    status: 'completed',
     selectedListingId: '2'
   },
   {
@@ -176,7 +164,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Check',
     from: 'City Tax Office',
     notes: 'Quarterly property tax payment',
-    status: 'failed',
     selectedListingId: '1'
   },
   {
@@ -188,7 +175,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     from: 'Emma Rodriguez',
     notes: 'Rental application processing fee',
-    status: 'completed',
     selectedListingId: '1'
   },
   {
@@ -200,7 +186,6 @@ const mockTransactions: Transaction[] = [
     paymentMethod: 'Cash',
     from: 'Green Thumb Gardens',
     notes: 'Monthly lawn care and garden maintenance',
-    status: 'pending',
     selectedListingId: '3'
   }
 ];
@@ -218,13 +203,11 @@ export function TransactionActivity() {
   // Enhanced filter state
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([]);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [amountRange, setAmountRange] = useState<{ min?: number; max?: number }>({});
 
-  // Collect available categories, payment methods, statuses from data
+  // Collect available categories, payment methods from data
   const categories = Array.from(new Set(mockTransactions.map(t => t.category)));
   const paymentMethods = Array.from(new Set(mockTransactions.map(t => t.paymentMethod)));
-  const statuses = Array.from(new Set(mockTransactions.map(t => t.status)));
 
   // Function to toggle a value in a filter array
   function toggleFilter(selected: string[], value: string, onChange: (v: string[]) => void) {
@@ -243,7 +226,6 @@ export function TransactionActivity() {
     });
     setSelectedCategories([]);
     setSelectedPaymentMethods([]);
-    setSelectedStatuses([]);
     setAmountRange({});
     toast({
       title: "Filters cleared",
@@ -274,23 +256,12 @@ export function TransactionActivity() {
       selectedValues: selectedPaymentMethods,
       onToggle: (value: string) => toggleFilter(selectedPaymentMethods, value, setSelectedPaymentMethods),
     },
-    {
-      id: "status",
-      title: "Status",
-      options: statuses.map(status => ({
-        value: status,
-        label: status.charAt(0).toUpperCase() + status.slice(1)
-      })),
-      selectedValues: selectedStatuses,
-      onToggle: (value: string) => toggleFilter(selectedStatuses, value, setSelectedStatuses),
-    },
   ];
 
   // Get total count of active filters (including date range)
   const activeFilterCount = 
     selectedCategories.length + 
-    selectedPaymentMethods.length + 
-    selectedStatuses.length;
+    selectedPaymentMethods.length;
 
   // Filter transactions
   const filteredTransactions = mockTransactions.filter(transaction => {
@@ -304,7 +275,6 @@ export function TransactionActivity() {
     
     if (selectedCategories.length && !selectedCategories.includes(transaction.category)) return false;
     if (selectedPaymentMethods.length && !selectedPaymentMethods.includes(transaction.paymentMethod)) return false;
-    if (selectedStatuses.length && !selectedStatuses.includes(transaction.status)) return false;
     
     if (search && !(
       transaction.from.toLowerCase().includes(search.toLowerCase()) ||
