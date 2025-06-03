@@ -75,7 +75,7 @@ export function UnitSelector({ units, selectedUnitId, onUnitSelect }: UnitSelect
                   <div className="flex items-center gap-1 mt-1">
                     <User className="h-3 w-3 text-gray-400" />
                     <span className="text-sm text-gray-600">{unit.tenant.name}</span>
-                    <span className="text-xs text-gray-400">({unit.tenant.type})</span>
+                    <span className="text-xs text-gray-400">({capitalizeFirstLetter(unit.tenant.type)})</span>
                   </div>
                 ) : (
                   <span className="text-sm text-gray-500 mt-1 block">No tenant assigned</span>
