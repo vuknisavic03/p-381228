@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
@@ -347,7 +348,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             }}
             label={{
               text: (index + 1).toString(),
-              color: "#ffffff",
+              color: "#000000",
               fontSize: "12px",
               fontWeight: "700"
             }}

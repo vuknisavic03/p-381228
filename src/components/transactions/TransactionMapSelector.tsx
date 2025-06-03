@@ -324,7 +324,7 @@ export function TransactionMapSelector({
             }}
             label={{
               text: (index + 1).toString(),
-              color: "#ffffff",
+              color: "#000000",
               fontSize: "12px",
               fontWeight: "700"
             }}

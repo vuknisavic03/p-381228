@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { format, subMonths, startOfMonth, endOfMonth, subDays, startOfYear, startOfQuarter, subYears } from "date-fns";
@@ -166,7 +167,7 @@ export function DateRangePicker({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="flex items-center gap-2 px-4 py-2 h-10 font-medium transition-colors focus-visible:ring-offset-0 focus-visible:ring-1 focus-visible:ring-gray-300"
+            className="flex items-center gap-2 px-4 py-2 h-10 font-medium transition-colors focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           >
             <CalendarIcon className="w-4 h-4 text-gray-600" />
             <span className="text-sm text-gray-900 hidden sm:inline">
