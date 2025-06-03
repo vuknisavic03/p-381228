@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -297,58 +298,56 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-36 mt-2 pt-3 border-t border-gray-200 flex items-center justify-center">
-                      <div className="w-full h-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart
-                            data={workspace.revenueData}
-                            margin={{ top: 15, right: 15, left: 15, bottom: 15 }}
-                          >
-                            <defs>
-                              <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
-                                <stop offset="95%" stopColor="#2563eb" stopOpacity={0.01} />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" opacity={0.5} />
-                            <XAxis 
-                              dataKey="month" 
-                              axisLine={false}
-                              tickLine={false}
-                              tick={{ fill: '#6b7280', fontSize: 10 }}
-                              padding={{ left: 0, right: 0 }}
-                            />
-                            <YAxis 
-                              axisLine={false}
-                              tickLine={false}
-                              tick={{ fill: '#6b7280', fontSize: 10 }}
-                              width={35}
-                              tickFormatter={(value) => `$${value}k`}
-                              padding={{ top: 5 }}
-                              domain={['auto', 'auto']}
-                            />
-                            <Tooltip 
-                              content={<CustomTooltip />} 
-                              cursor={{ 
-                                stroke: "#e5e7eb", 
-                                strokeWidth: 1, 
-                                strokeDasharray: "3 3",
-                                fill: "rgba(229, 231, 235, 0.1)"
-                              }}
-                            />
-                            <Area
-                              type="monotone"
-                              dataKey="value"
-                              stroke="#2563eb"
-                              fillOpacity={1}
-                              fill={`url(#colorRevenue${index})`}
-                              strokeWidth={2}
-                              name="revenue"
-                              activeDot={{ r: 4, strokeWidth: 0, fill: "#2563eb" }}
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
+                    <div className="h-36 mt-2 pt-3 border-t border-gray-200">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart
+                          data={workspace.revenueData}
+                          margin={{ top: 5, right: 5, left: 10, bottom: 5 }}
+                        >
+                          <defs>
+                            <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
+                              <stop offset="95%" stopColor="#2563eb" stopOpacity={0.01} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" opacity={0.5} />
+                          <XAxis 
+                            dataKey="month" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: '#6b7280', fontSize: 10 }}
+                            padding={{ left: 10, right: 10 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: '#6b7280', fontSize: 10 }}
+                            width={35}
+                            tickFormatter={(value) => `$${value}k`}
+                            padding={{ top: 5 }}
+                            domain={['auto', 'auto']}
+                          />
+                          <Tooltip 
+                            content={<CustomTooltip />} 
+                            cursor={{ 
+                              stroke: "#e5e7eb", 
+                              strokeWidth: 1, 
+                              strokeDasharray: "3 3",
+                              fill: "rgba(229, 231, 235, 0.1)"
+                            }}
+                          />
+                          <Area
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#2563eb"
+                            fillOpacity={1}
+                            fill={`url(#colorRevenue${index})`}
+                            strokeWidth={2}
+                            name="revenue"
+                            activeDot={{ r: 4, strokeWidth: 0, fill: "#2563eb" }}
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
                     </div>
                   </CardContent>
                 </Card>
@@ -370,49 +369,47 @@ export default function WorkspacePicker() {
                     </div>
                   </div>
                   
-                  <div className="h-[calc(100%-70px)] pt-3 border-t border-gray-200 flex items-center justify-center">
-                    <div className="w-full h-full">
-                      <ResponsiveContainer width="100%" height="95%">
-                        <RechartsBarChart
-                          data={monthlyCommissionData}
-                          margin={{ top: 30, right: 40, left: 30, bottom: 30 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
-                          <XAxis 
-                            dataKey="month" 
-                            axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
-                            tickLine={false}
-                            tick={{ fill: '#6b7280', fontSize: 12 }}
-                            padding={{ left: 0, right: 0 }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: '#6b7280', fontSize: 12 }}
-                            tickFormatter={(value) => `$${value}k`}
-                            width={45}
-                            padding={{ top: 10 }}
-                            domain={['auto', 'auto']}
-                          />
-                          <Tooltip 
-                            content={<CustomTooltip />}
-                            cursor={{ 
-                              fill: "rgba(229, 231, 235, 0.1)", 
-                              stroke: "#e5e7eb",
-                              strokeWidth: 1,
-                              opacity: 0.9
-                            }} 
-                          />
-                          <Bar 
-                            dataKey="commission" 
-                            fill="#16a34a"
-                            fillOpacity={0.85}
-                            radius={[4, 4, 0, 0]}
-                            name="Commission"
-                          />
-                        </RechartsBarChart>
-                      </ResponsiveContainer>
-                    </div>
+                  <div className="h-[calc(100%-70px)] pt-3 border-t border-gray-200">
+                    <ResponsiveContainer width="100%" height="95%">
+                      <RechartsBarChart
+                        data={monthlyCommissionData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
+                        <XAxis 
+                          dataKey="month" 
+                          axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                          tickLine={false}
+                          tick={{ fill: '#6b7280', fontSize: 12 }}
+                          padding={{ left: 10, right: 10 }}
+                        />
+                        <YAxis 
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fill: '#6b7280', fontSize: 12 }}
+                          tickFormatter={(value) => `$${value}k`}
+                          width={45}
+                          padding={{ top: 10 }}
+                          domain={['auto', 'auto']}
+                        />
+                        <Tooltip 
+                          content={<CustomTooltip />}
+                          cursor={{ 
+                            fill: "rgba(229, 231, 235, 0.1)", 
+                            stroke: "#e5e7eb",
+                            strokeWidth: 1,
+                            opacity: 0.9
+                          }} 
+                        />
+                        <Bar 
+                          dataKey="commission" 
+                          fill="#16a34a"
+                          fillOpacity={0.85}
+                          radius={[4, 4, 0, 0]}
+                          name="Commission"
+                        />
+                      </RechartsBarChart>
+                    </ResponsiveContainer>
                   </div>
                 </CardContent>
               </Card>
