@@ -6,13 +6,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface HeaderProps {
   userName?: string;
@@ -221,21 +214,23 @@ export function Header({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">
-            <div className="flex p-3 border-b border-gray-100">
+            <div className="flex p-3">
               <div className="pr-3 border-r border-gray-100">
-                <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
-                  <SelectTrigger className="w-[180px] mb-2">
-                    <SelectValue placeholder="Select period" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <div className="text-sm font-semibold px-2 py-1.5 text-gray-500">Period</div>
-                    {periodOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="text-sm font-semibold px-2 py-1.5 text-gray-500 mb-2">Period</div>
+                <div className="space-y-1">
+                  {periodOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      className={cn(
+                        "w-full text-left px-2 py-1.5 text-sm rounded-md hover:bg-gray-100 transition-colors",
+                        selectedPeriod === option.value ? "bg-gray-100 font-medium" : ""
+                      )}
+                      onClick={() => handlePeriodChange(option.value)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
               
               <div className="pl-3">
