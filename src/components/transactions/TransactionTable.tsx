@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -53,16 +52,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   const getCategoryBadgeVariant = (category: string) => {
-    switch (category.toLowerCase()) {
-      case "rent":
-        return "default";
-      case "maintenance":
-        return "secondary";
-      case "utilities":
-        return "outline";
-      default:
-        return "secondary";
-    }
+    return "secondary";
   };
 
   return (
