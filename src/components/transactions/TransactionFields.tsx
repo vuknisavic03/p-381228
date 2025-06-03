@@ -140,7 +140,7 @@ export function TransactionFields({
             {hasMultipleUnits && (
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="text-xs font-medium text-gray-500 ml-0.5">Apply to</div>
+                  <div className="text-xs font-medium text-gray-500 ml-0.5">Select Specific Unit (Optional)</div>
                   {selectedPropertyCategory && (
                     <span className="bg-gray-100 text-xs px-2 py-1 rounded-md flex items-center gap-1 text-gray-600">
                       {selectedPropertyCategory.subtypes.find(s => s.value.toString().includes(selectedListing.type))?.label || 
@@ -149,32 +149,9 @@ export function TransactionFields({
                   )}
                 </div>
                 
-                {/* Whole Property Option */}
-                <div className="mb-3">
-                  <Button
-                    type="button"
-                    variant={!fields.selectedUnitId ? "default" : "outline"}
-                    size="sm"
-                    className={cn(
-                      "w-full justify-start text-left h-10 font-normal border-gray-200",
-                      !fields.selectedUnitId 
-                        ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" 
-                        : "bg-white text-gray-700 hover:bg-gray-50"
-                    )}
-                    onClick={() => setFields(f => ({ ...f, selectedUnitId: "" }))}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className={cn(
-                        "w-2 h-2 rounded-full",
-                        !fields.selectedUnitId ? "bg-blue-500" : "bg-gray-300"
-                      )} />
-                      <span>Whole Property</span>
-                      <span className="text-xs text-gray-500 ml-auto">All units included</span>
-                    </div>
-                  </Button>
+                <div className="text-xs text-gray-500 mb-3 ml-0.5">
+                  Leave unselected to apply to all units, or choose a specific unit:
                 </div>
-                
-                <div className="text-xs font-medium text-gray-500 mb-2 ml-0.5">Or select specific unit:</div>
                 <div className="space-y-2">
                   <UnitSelector
                     units={selectedListing.units}
