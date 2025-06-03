@@ -296,10 +296,13 @@ export function TransactionActivity() {
 
   // Filter transactions with date range
   const filteredTransactions = mockTransactions.filter(transaction => {
+    console.log('Filtering transaction:', transaction.id, 'type:', transaction.type, 'vs selected:', transactionType);
+    
     if (transaction.type !== transactionType) return false;
     
     if (dateRange?.from || dateRange?.to) {
       const transactionDate = new Date(transaction.date);
+      console.log('Date filtering - transaction date:', transactionDate, 'range:', dateRange);
       if (dateRange.from && transactionDate < dateRange.from) return false;
       if (dateRange.to && transactionDate > dateRange.to) return false;
     }
@@ -317,6 +320,11 @@ export function TransactionActivity() {
 
     return true;
   });
+
+  console.log('Total mock transactions:', mockTransactions.length);
+  console.log('Current transaction type:', transactionType);
+  console.log('Current date range:', dateRange);
+  console.log('Filtered transactions:', filteredTransactions.length);
 
   // Handle transaction edit
   const handleEditTransaction = (tx: Transaction) => {
