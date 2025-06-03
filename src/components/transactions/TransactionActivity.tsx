@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -22,7 +23,7 @@ type Transaction = {
   selectedListingId: string;
 };
 
-// Mock transaction data
+// Enhanced mock transaction data for better table design testing
 const mockTransactions: Transaction[] = [
   {
     id: 1,
@@ -32,9 +33,9 @@ const mockTransactions: Transaction[] = [
     category: 'Rent',
     paymentMethod: 'Bank Transfer',
     from: 'Alexander Whitmore',
-    notes: 'Monthly rent payment',
+    notes: 'Monthly rent payment for unit 4B',
     status: 'completed',
-    selectedListingId: '1' // Belgrade, Dunavska 12
+    selectedListingId: '1'
   },
   {
     id: 2,
@@ -44,7 +45,7 @@ const mockTransactions: Transaction[] = [
     category: 'Deposit',
     paymentMethod: 'Credit Card',
     from: 'Sarah Johnson',
-    notes: 'Security deposit for apartment',
+    notes: 'Security deposit for apartment lease agreement',
     status: 'completed',
     selectedListingId: '1'
   },
@@ -56,7 +57,7 @@ const mockTransactions: Transaction[] = [
     category: 'Maintenance',
     paymentMethod: 'Credit Card',
     from: 'City Plumbing Services',
-    notes: 'Plumbing repair in unit 4B',
+    notes: 'Emergency plumbing repair in unit 4B - leaking pipes',
     status: 'completed',
     selectedListingId: '1'
   },
@@ -68,7 +69,7 @@ const mockTransactions: Transaction[] = [
     category: 'Rent',
     paymentMethod: 'Cash',
     from: 'Watson Enterprises',
-    notes: 'Late rent payment for April',
+    notes: 'Late rent payment for April - received with late fee',
     status: 'completed',
     selectedListingId: '1'
   },
@@ -80,9 +81,129 @@ const mockTransactions: Transaction[] = [
     category: 'Utilities',
     paymentMethod: 'Bank Transfer',
     from: 'City Power & Light',
-    notes: 'Electricity bill for common areas',
+    notes: 'Monthly electricity bill for common areas',
     status: 'completed',
     selectedListingId: '1'
+  },
+  {
+    id: 6,
+    type: 'revenue',
+    amount: 2200,
+    date: new Date(2025, 4, 15), // May 15, 2025
+    category: 'Rent',
+    paymentMethod: 'Bank Transfer',
+    from: 'Tech Solutions LLC',
+    notes: 'Commercial office rent - monthly payment',
+    status: 'completed',
+    selectedListingId: '2'
+  },
+  {
+    id: 7,
+    type: 'expense',
+    amount: 800,
+    date: new Date(2025, 4, 12), // May 12, 2025
+    category: 'Repairs',
+    paymentMethod: 'Check',
+    from: 'Premier Construction Co.',
+    notes: 'HVAC system repair and maintenance',
+    status: 'pending',
+    selectedListingId: '2'
+  },
+  {
+    id: 8,
+    type: 'revenue',
+    amount: 75,
+    date: new Date(2025, 4, 10), // May 10, 2025
+    category: 'Late Fee',
+    paymentMethod: 'Credit Card',
+    from: 'Michael Chen',
+    notes: 'Late payment fee for May rent',
+    status: 'completed',
+    selectedListingId: '1'
+  },
+  {
+    id: 9,
+    type: 'expense',
+    amount: 250,
+    date: new Date(2025, 4, 7), // May 7, 2025
+    category: 'Cleaning',
+    paymentMethod: 'Bank Transfer',
+    from: 'Professional Cleaners Inc.',
+    notes: 'Deep cleaning after tenant move-out',
+    status: 'completed',
+    selectedListingId: '1'
+  },
+  {
+    id: 10,
+    type: 'revenue',
+    amount: 1800,
+    date: new Date(2025, 4, 20), // May 20, 2025
+    category: 'Rent',
+    paymentMethod: 'ACH Transfer',
+    from: 'Jennifer Martinez',
+    notes: 'Monthly rent for luxury apartment unit',
+    status: 'completed',
+    selectedListingId: '3'
+  },
+  {
+    id: 11,
+    type: 'expense',
+    amount: 180,
+    date: new Date(2025, 4, 18), // May 18, 2025
+    category: 'Insurance',
+    paymentMethod: 'Bank Transfer',
+    from: 'PropertyGuard Insurance',
+    notes: 'Monthly property insurance premium',
+    status: 'completed',
+    selectedListingId: '1'
+  },
+  {
+    id: 12,
+    type: 'revenue',
+    amount: 500,
+    date: new Date(2025, 4, 25), // May 25, 2025
+    category: 'Parking',
+    paymentMethod: 'Cash',
+    from: 'David Thompson',
+    notes: 'Monthly parking space rental fee',
+    status: 'completed',
+    selectedListingId: '2'
+  },
+  {
+    id: 13,
+    type: 'expense',
+    amount: 1200,
+    date: new Date(2025, 4, 3), // May 3, 2025
+    category: 'Property Tax',
+    paymentMethod: 'Check',
+    from: 'City Tax Office',
+    notes: 'Quarterly property tax payment',
+    status: 'failed',
+    selectedListingId: '1'
+  },
+  {
+    id: 14,
+    type: 'revenue',
+    amount: 300,
+    date: new Date(2025, 4, 22), // May 22, 2025
+    category: 'Application Fee',
+    paymentMethod: 'Credit Card',
+    from: 'Emma Rodriguez',
+    notes: 'Rental application processing fee',
+    status: 'completed',
+    selectedListingId: '1'
+  },
+  {
+    id: 15,
+    type: 'expense',
+    amount: 95,
+    date: new Date(2025, 4, 14), // May 14, 2025
+    category: 'Landscaping',
+    paymentMethod: 'Cash',
+    from: 'Green Thumb Gardens',
+    notes: 'Monthly lawn care and garden maintenance',
+    status: 'pending',
+    selectedListingId: '3'
   }
 ];
 
