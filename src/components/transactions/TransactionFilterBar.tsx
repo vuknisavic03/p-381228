@@ -1,22 +1,17 @@
 
 import React from 'react';
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
-import { SearchBar } from "@/components/shared/SearchBar";
-import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
-import { DateRange } from "react-day-picker";
+import { TransactionFilters } from "./TransactionFilters";
+import { FilterSection } from "@/components/ui/modern-filter";
 
 interface TransactionFilterBarProps {
   search: string;
   setSearch: (value: string) => void;
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
   filterSections: FilterSection[];
   activeFilterCount: number;
   clearFilters: () => void;
   transactionType: 'revenue' | 'expense';
   setTransactionType: (type: 'revenue' | 'expense') => void;
-  dateRange?: DateRange;
-  onDateRangeChange?: (dateRange: DateRange | undefined) => void;
 }
 
 export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
@@ -33,13 +28,12 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
       <div className="px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1">
-            <ModernFilter
-              searchValue={search}
-              onSearchChange={setSearch}
-              searchPlaceholder="Search transactions..."
+            <TransactionFilters
+              search={search}
+              setSearch={setSearch}
               filterSections={filterSections}
               activeFilterCount={activeFilterCount}
-              onClearFilters={clearFilters}
+              clearFilters={clearFilters}
             />
           </div>
 

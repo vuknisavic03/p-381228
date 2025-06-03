@@ -6,7 +6,6 @@ import { EditTransactionForm } from "./EditTransactionForm";
 import { TransactionFilterBar } from "./TransactionFilterBar";
 import { FilterSection } from "@/components/ui/modern-filter";
 import { DateRange } from "react-day-picker";
-import { startOfMonth, endOfMonth } from "date-fns";
 
 // Define type based on TransactionTable
 type Transaction = {
@@ -209,8 +208,8 @@ const mockTransactions: Transaction[] = [
 export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(2025, 4, 1), // May 1, 2025
-    to: new Date(2025, 4, 31), // May 31, 2025
+    from: new Date(2025, 4, 1),
+    to: new Date(2025, 4, 31),
   });
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [search, setSearch] = useState('');
@@ -239,8 +238,8 @@ export function TransactionActivity() {
   // Clear all filters
   const clearFilters = () => {
     setDateRange({
-      from: new Date(2025, 4, 1), // May 1, 2025
-      to: new Date(2025, 4, 31), // May 31, 2025
+      from: new Date(2025, 4, 1),
+      to: new Date(2025, 4, 31),
     });
     setSelectedCategories([]);
     setSelectedPaymentMethods([]);
@@ -293,15 +292,12 @@ export function TransactionActivity() {
     selectedPaymentMethods.length + 
     selectedStatuses.length;
 
-  // Filter transactions with date range
+  // Filter transactions
   const filteredTransactions = mockTransactions.filter(transaction => {
-    console.log('Filtering transaction:', transaction.id, 'type:', transaction.type, 'vs selected:', transactionType);
-    
     if (transaction.type !== transactionType) return false;
     
     if (dateRange?.from || dateRange?.to) {
       const transactionDate = new Date(transaction.date);
-      console.log('Date filtering - transaction date:', transactionDate, 'range:', dateRange);
       if (dateRange.from && transactionDate < dateRange.from) return false;
       if (dateRange.to && transactionDate > dateRange.to) return false;
     }
@@ -342,22 +338,16 @@ export function TransactionActivity() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Filter bar */}
       <TransactionFilterBar 
         search={search}
         setSearch={setSearch}
-        date={undefined}
-        setDate={() => {}}
         filterSections={filterSections}
         activeFilterCount={activeFilterCount}
         clearFilters={clearFilters}
         transactionType={transactionType}
         setTransactionType={setTransactionType}
-        dateRange={dateRange}
-        onDateRangeChange={setDateRange}
       />
       
-      {/* Transaction table */}
       <div className="flex-1 overflow-auto">
         <div className="p-6">
           <TransactionTable
@@ -367,7 +357,6 @@ export function TransactionActivity() {
         </div>
       </div>
 
-      {/* Edit sheet */}
       {editingTransaction && (
         <Sheet open={!!editingTransaction} onOpenChange={() => setEditingTransaction(null)}>
           <SheetContent side="right" className="w-[480px] sm:w-[540px] p-0 border-l shadow-xl bg-white">
