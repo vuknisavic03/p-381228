@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, DollarSign, Calendar, CreditCard, User, FileText, CircleCheck, Clock, AlertCircle } from "lucide-react";
 
 type Transaction = {
   id: number;
@@ -38,86 +38,156 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     return type === "revenue" ? `+$${formattedAmount}` : `-$${formattedAmount}`;
   };
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <CircleCheck className="h-4 w-4 text-green-600" />;
+      case "pending":
+        return <Clock className="h-4 w-4 text-yellow-600" />;
+      case "failed":
+        return <AlertCircle className="h-4 w-4 text-red-600" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-400" />;
+    }
+  };
+
+  const getPaymentMethodIcon = (method: string) => {
+    if (method.toLowerCase().includes('card')) {
+      return <CreditCard className="h-4 w-4 text-gray-500" />;
+    }
+    return <DollarSign className="h-4 w-4 text-gray-500" />;
+  };
+
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
       <Table className="text-sm">
         <TableHeader>
-          <TableRow className="border-b border-gray-200 bg-gray-50">
-            <TableHead className="pl-4 py-3 text-gray-700 font-medium">Amount</TableHead>
-            <TableHead className="py-3 text-gray-700 font-medium">From</TableHead>
-            <TableHead className="py-3 text-gray-700 font-medium">Date</TableHead>
-            <TableHead className="py-3 text-gray-700 font-medium">Category</TableHead>
-            <TableHead className="py-3 text-gray-700 font-medium">Payment</TableHead>
-            <TableHead className="py-3 text-gray-700 font-medium">Status</TableHead>
-            <TableHead className="py-3 text-gray-700 font-medium">Notes</TableHead>
-            <TableHead className="w-10 pr-4" />
+          <TableRow className="border-b border-gray-200 bg-gray-50/50">
+            <TableHead className="pl-6 py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                Amount
+              </div>
+            </TableHead>
+            <TableHead className="py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                From
+              </div>
+            </TableHead>
+            <TableHead className="py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Date
+              </div>
+            </TableHead>
+            <TableHead className="py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">Category</TableHead>
+            <TableHead className="py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">Payment</TableHead>
+            <TableHead className="py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">Status</TableHead>
+            <TableHead className="py-4 text-gray-700 font-semibold text-xs uppercase tracking-wide">
+              <div className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Notes
+              </div>
+            </TableHead>
+            <TableHead className="w-12 pr-6" />
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transactions.map((tx) => (
+          {transactions.map((tx, index) => (
             <TableRow
               key={tx.id}
-              className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer group"
+              className={`border-b border-gray-100 hover:bg-gray-50/50 cursor-pointer group transition-all duration-200 ${
+                index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+              }`}
               onClick={() => onEdit(tx)}
             >
-              <TableCell className="pl-4 py-3">
-                <span className={`font-medium ${
-                  tx.type === "revenue" ? "text-green-600" : "text-red-600"
+              <TableCell className="pl-6 py-4">
+                <div className="flex items-center gap-3">
+                  <div className={`w-2 h-8 rounded-full ${
+                    tx.type === "revenue" ? "bg-green-500" : "bg-red-500"
+                  }`} />
+                  <span className={`font-semibold text-base ${
+                    tx.type === "revenue" ? "text-green-700" : "text-red-700"
+                  }`}>
+                    {formatAmount(tx.amount, tx.type)}
+                  </span>
+                </div>
+              </TableCell>
+              
+              <TableCell className="py-4">
+                <div className="flex flex-col">
+                  <span className="text-gray-900 font-medium">{tx.from}</span>
+                </div>
+              </TableCell>
+              
+              <TableCell className="py-4">
+                <div className="flex flex-col">
+                  <span className="text-gray-900 font-medium">
+                    {tx.date.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </span>
+                  <span className="text-gray-500 text-xs">
+                    {tx.date.getFullYear()}
+                  </span>
+                </div>
+              </TableCell>
+              
+              <TableCell className="py-4">
+                <div className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                  {tx.category}
+                </div>
+              </TableCell>
+              
+              <TableCell className="py-4">
+                <div className="flex items-center gap-2">
+                  {getPaymentMethodIcon(tx.paymentMethod)}
+                  <span className="text-gray-700 text-sm">{tx.paymentMethod}</span>
+                </div>
+              </TableCell>
+              
+              <TableCell className="py-4">
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${
+                  tx.status === "completed" ? "bg-green-50 text-green-700 border border-green-200" : 
+                  tx.status === "failed" ? "bg-red-50 text-red-700 border border-red-200" : 
+                  "bg-yellow-50 text-yellow-700 border border-yellow-200"
                 }`}>
-                  {formatAmount(tx.amount, tx.type)}
-                </span>
+                  {getStatusIcon(tx.status)}
+                  <span className="capitalize">{tx.status}</span>
+                </div>
               </TableCell>
               
-              <TableCell className="py-3">
-                <span className="text-gray-900">{tx.from}</span>
+              <TableCell className="py-4 max-w-[200px]">
+                {tx.notes ? (
+                  <div className="group relative">
+                    <span className="text-gray-600 text-sm truncate block">
+                      {tx.notes}
+                    </span>
+                    {tx.notes.length > 50 && (
+                      <div className="absolute hidden group-hover:block bg-gray-900 text-white text-xs rounded-lg p-2 top-full left-0 z-10 mt-1 shadow-lg max-w-xs">
+                        {tx.notes}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-gray-400 text-sm">—</span>
+                )}
               </TableCell>
               
-              <TableCell className="py-3">
-                <span className="text-gray-600">
-                  {tx.date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: '2-digit'
-                  })}
-                </span>
-              </TableCell>
-              
-              <TableCell className="py-3">
-                <span className="text-gray-900">{tx.category}</span>
-              </TableCell>
-              
-              <TableCell className="py-3">
-                <span className="text-gray-600">{tx.paymentMethod}</span>
-              </TableCell>
-              
-              <TableCell className="py-3">
-                <span className={`inline-flex items-center px-2 py-1 rounded text-xs ${
-                  tx.status === "completed" ? "bg-green-50 text-green-700" : 
-                  tx.status === "failed" ? "bg-red-50 text-red-700" : 
-                  "bg-yellow-50 text-yellow-700"
-                }`}>
-                  {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
-                </span>
-              </TableCell>
-              
-              <TableCell className="py-3">
-                <span className="text-gray-500 truncate block max-w-[200px]">
-                  {tx.notes || "—"}
-                </span>
-              </TableCell>
-              
-              <TableCell className="pr-4 text-right py-3">
+              <TableCell className="pr-6 text-right py-4">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-gray-100"
                   onClick={(e) => {
                     e.stopPropagation();
                     onEdit(tx);
                   }}
                   aria-label="Edit transaction"
                 >
-                  <ChevronRight className="h-4 w-4 text-gray-400" />
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
                 </Button>
               </TableCell>
             </TableRow>
@@ -126,10 +196,14 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       </Table>
       
       {transactions.length === 0 && (
-        <div className="py-16 text-center">
-          <div className="text-gray-400 mb-2">📊</div>
-          <h3 className="text-gray-900 font-medium mb-1">No transactions found</h3>
-          <p className="text-gray-500 text-sm">Try adjusting your filters or search criteria</p>
+        <div className="py-20 text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+            <DollarSign className="h-8 w-8 text-gray-400" />
+          </div>
+          <h3 className="text-gray-900 font-semibold text-lg mb-2">No transactions found</h3>
+          <p className="text-gray-500 text-sm max-w-sm mx-auto">
+            Try adjusting your filters or search criteria to find the transactions you're looking for.
+          </p>
         </div>
       )}
     </div>
