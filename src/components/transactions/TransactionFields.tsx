@@ -137,21 +137,22 @@ export function TransactionFields({
 
             {/* Unit Selection - only show if listing has multiple units */}
             {hasMultipleUnits && (
-              <UnitSelector
-                units={selectedListing.units}
-                selectedUnitId={fields.selectedUnitId || ""}
-                onUnitSelect={(unitId) => setFields(f => ({ ...f, selectedUnitId: unitId }))}
-              />
-            )}
-            
-            {selectedListing && selectedPropertyCategory && (
-              <div className="mt-3">
-                <div className="text-xs text-gray-600 flex items-center justify-between">
-                  <span>Property Type: <span className="font-medium text-gray-800">{selectedPropertyCategory.label}</span></span>
-                  <span className="bg-gray-100 text-xs px-2 py-1 rounded-md flex items-center gap-1">
-                    {selectedPropertyCategory.subtypes.find(s => s.value.toString().includes(selectedListing.type))?.label || 
-                     formatPropertyType(selectedListing.type)}
-                  </span>
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-xs font-medium text-gray-500 ml-0.5">Select Unit</div>
+                  {selectedPropertyCategory && (
+                    <span className="bg-gray-100 text-xs px-2 py-1 rounded-md flex items-center gap-1 text-gray-600">
+                      {selectedPropertyCategory.subtypes.find(s => s.value.toString().includes(selectedListing.type))?.label || 
+                       formatPropertyType(selectedListing.type)}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <UnitSelector
+                    units={selectedListing.units}
+                    selectedUnitId={fields.selectedUnitId || ""}
+                    onUnitSelect={(unitId) => setFields(f => ({ ...f, selectedUnitId: unitId }))}
+                  />
                 </div>
               </div>
             )}
