@@ -34,9 +34,6 @@ export function ListingSelector({
           {selectedListing ? (
             <div className="flex items-center">
               <span>{selectedListing.name}</span>
-              <span className="ml-2 text-xs text-gray-500">
-                ({formatPropertyType(selectedListing.type)})
-              </span>
             </div>
           ) : (
             placeholder
