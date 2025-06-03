@@ -214,16 +214,16 @@ export function Header({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="end">
-            <div className="flex p-3">
-              <div className="pr-3 border-r border-gray-100">
-                <div className="text-sm font-semibold px-2 py-1.5 text-gray-500 mb-2">Period</div>
-                <div className="space-y-1">
+            <div className="flex">
+              <div className="w-32 p-2 border-r border-gray-100 bg-gray-50">
+                <div className="text-xs font-medium text-gray-500 mb-2 px-2">Period</div>
+                <div className="space-y-0.5">
                   {periodOptions.map((option) => (
                     <button
                       key={option.value}
                       className={cn(
-                        "w-full text-left px-2 py-1.5 text-sm rounded-md hover:bg-gray-100 transition-colors",
-                        selectedPeriod === option.value ? "bg-gray-100 font-medium" : ""
+                        "w-full text-left px-2 py-1.5 text-xs rounded hover:bg-white transition-colors",
+                        selectedPeriod === option.value ? "bg-white font-medium shadow-sm" : "text-gray-600"
                       )}
                       onClick={() => handlePeriodChange(option.value)}
                     >
@@ -233,7 +233,7 @@ export function Header({
                 </div>
               </div>
               
-              <div className="pl-3">
+              <div className="p-2">
                 <Calendar
                   initialFocus
                   mode="range"
@@ -241,7 +241,7 @@ export function Header({
                   selected={date}
                   onSelect={handleDateChange}
                   numberOfMonths={1}
-                  className={cn("p-0 pointer-events-auto")}
+                  className="p-0"
                 />
               </div>
             </div>
