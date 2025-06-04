@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, X, Eye } from 'lucide-react';
@@ -53,6 +52,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
   const [mapListings, setMapListings] = useState<(Listing & { coordinates: { lat: number; lng: number } })[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [hoveredListing, setHoveredListing] = useState<number | null>(null);
+  const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   
   const { apiKey, setApiKey, isLoaded, loadError, isApiKeyValid } = useGoogleMapsApi();
   
@@ -193,6 +193,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("Map loaded successfully");
+    setMapInstance(map);
     
     // Hide Google branding and controls
     const hideGoogleElements = () => {
@@ -237,7 +238,18 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
-  }, []);
+    
+    // Adjust map position to keep InfoWindow visible
+    if (mapInstance) {
+      const listingWithCoords = mapListings.find(l => l.id === listing.id);
+      if (listingWithCoords) {
+        // Pan the map up by 150 pixels to ensure InfoWindow stays visible
+        setTimeout(() => {
+          mapInstance.panBy(0, -150);
+        }, 100);
+      }
+    }
+  }, [mapInstance, mapListings]);
 
   const handleInfoClose = useCallback(() => {
     setSelectedListing(null);
