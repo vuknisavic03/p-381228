@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, Eye, X } from 'lucide-react';
@@ -217,14 +218,28 @@ export function TransactionMapSelector({
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
     
-    // Adjust map position to keep InfoWindow visible
+    // Center the marker position with offset for InfoWindow visibility
     if (mapInstance) {
       const listingWithCoords = mapListings.find(l => l.id === listing.id);
       if (listingWithCoords) {
-        // Pan the map up by 150 pixels to ensure InfoWindow stays visible
-        setTimeout(() => {
-          mapInstance.panBy(0, -150);
-        }, 100);
+        // Calculate center point with vertical offset to account for InfoWindow height
+        const bounds = mapInstance.getBounds();
+        if (bounds) {
+          const ne = bounds.getNorthEast();
+          const sw = bounds.getSouthWest();
+          const centerLat = (ne.lat() + sw.lat()) / 2;
+          
+          // Offset the center point up by approximately 1/4 of the visible height
+          const latRange = ne.lat() - sw.lat();
+          const offsetLat = centerLat + (latRange * 0.15); // Move center up
+          
+          const newCenter = {
+            lat: offsetLat,
+            lng: listingWithCoords.coordinates.lng
+          };
+          
+          mapInstance.setCenter(newCenter);
+        }
       }
     }
   }, [mapInstance, mapListings]);
@@ -350,7 +365,7 @@ export function TransactionMapSelector({
             onCloseClick={handleInfoClose}
             options={{
               pixelOffset: new google.maps.Size(0, -10),
-              disableAutoPan: false,
+              disableAutoPan: true,
               headerDisabled: true
             }}
           >
