@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -226,10 +225,18 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   return (
     <div className="flex flex-col h-full bg-white">
-      {/* Content - removed header section */}
+      {/* Header with close button */}
+      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <h2 className="text-xl font-medium text-gray-900">Add New Property</h2>
+        <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+
+      {/* Content */}
       <div className="flex-1 overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <div className="px-6 pt-12">
+          <div className="px-6 pt-6">
             <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 bg-gray-50 p-1 h-10">
               <TabsTrigger value="location" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm">
                 Location
