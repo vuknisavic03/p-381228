@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow } from '@react-google-maps/api';
 import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navigation, Eye, X } from 'lucide-react';
@@ -218,24 +217,27 @@ export function TransactionMapSelector({
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
     
-    // Center the marker position with offset for InfoWindow visibility
+    // Center the popup position in the map view
     if (mapInstance) {
       const listingWithCoords = mapListings.find(l => l.id === listing.id);
       if (listingWithCoords) {
-        // Calculate center point with vertical offset to account for InfoWindow height
         const bounds = mapInstance.getBounds();
         if (bounds) {
-          const ne = bounds.getNorthEast();
-          const sw = bounds.getSouthWest();
-          const centerLat = (ne.lat() + sw.lat()) / 2;
+          // Calculate the popup position (appears below the marker)
+          const markerLat = listingWithCoords.coordinates.lat;
+          const markerLng = listingWithCoords.coordinates.lng;
           
-          // Offset the center point up by approximately 1/4 of the visible height
-          const latRange = ne.lat() - sw.lat();
-          const offsetLat = centerLat + (latRange * 0.15); // Move center up
+          // Estimate popup height in lat degrees (approximately 200px popup height)
+          const latRange = bounds.getNorthEast().lat - bounds.getSouthWest().lat;
+          const popupHeightInLatDegrees = (latRange * 200) / mapInstance.getDiv()!.clientHeight;
           
+          // Position where the popup will appear (below the marker)
+          const popupCenterLat = markerLat - (popupHeightInLatDegrees / 2);
+          
+          // Set map center to show the popup in the center of the view
           const newCenter = {
-            lat: offsetLat,
-            lng: listingWithCoords.coordinates.lng
+            lat: popupCenterLat,
+            lng: markerLng
           };
           
           mapInstance.setCenter(newCenter);
