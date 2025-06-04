@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Search, Filter, ChevronDown, Check } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Search, Filter, ChevronDown, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface FilterOption {
@@ -40,8 +41,6 @@ export function ModernFilter({
   onClearFilters,
   className
 }: ModernFilterProps) {
-  const [filterOpen, setFilterOpen] = useState(false);
-
   return (
     <div className={cn("flex items-center gap-3", className)}>
       {/* Search Input */}
@@ -52,79 +51,88 @@ export function ModernFilter({
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
-          className="pl-10 h-10 border-gray-200 focus:border-blue-300 focus:ring-blue-300 bg-white"
+          className="pl-10 h-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 bg-white rounded-lg shadow-sm"
         />
+        {searchValue && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onSearchChange('')}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-100 rounded-full"
+          >
+            <X className="h-3 w-3" />
+          </Button>
+        )}
       </div>
 
-      {/* Filter Dropdown */}
-      <Popover open={filterOpen} onOpenChange={setFilterOpen}>
-        <PopoverTrigger asChild>
-          <Button variant="outline" className="gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white">
-            <Filter className="h-4 w-4" />
-            <span>Filters</span>
-            {activeFilterCount > 0 && (
-              <span className="ml-1 bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-medium">
-                {activeFilterCount}
-              </span>
-            )}
-            <ChevronDown className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        
-        <PopoverContent align="end" className="w-80 p-0 shadow-lg border bg-white z-50">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
-            <h3 className="font-semibold text-gray-900">Filters</h3>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClearFilters}
-              className="h-8 px-3 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            >
-              Clear all
-            </Button>
-          </div>
-          
-          {/* Filter Sections */}
-          <div className="max-h-80 overflow-y-auto py-2">
-            {filterSections.map((section, index) => (
-              <div key={section.id} className="px-6 py-4">
-                <h4 className="font-medium text-sm text-gray-900 mb-3">
+      {/* Filter Sections as Individual Dropdowns */}
+      <div className="flex items-center gap-2">
+        {filterSections.map((section) => (
+          <DropdownMenu key={section.id}>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline" 
+                className={cn(
+                  "gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white rounded-lg shadow-sm transition-all duration-200",
+                  section.selectedValues.length > 0 && "border-blue-500 bg-blue-50 text-blue-700"
+                )}
+              >
+                <span className="text-sm font-medium">{section.title}</span>
+                {section.selectedValues.length > 0 && (
+                  <span className="bg-blue-100 text-blue-700 text-xs px-1.5 py-0.5 rounded-full font-medium">
+                    {section.selectedValues.length}
+                  </span>
+                )}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            
+            <DropdownMenuContent align="start" className="w-64 p-0 shadow-lg border bg-white z-50 rounded-lg">
+              <div className="px-4 py-3 border-b bg-gray-50 rounded-t-lg">
+                <DropdownMenuLabel className="text-sm font-semibold text-gray-900 p-0">
                   {section.title}
-                </h4>
-                <div className="space-y-1">
-                  {section.options.map((option) => {
-                    const isSelected = section.selectedValues.includes(option.value);
-                    return (
-                      <button
-                        key={option.value}
-                        onClick={() => section.onToggle(option.value)}
-                        className={cn(
-                          "w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors",
-                          "hover:bg-gray-50 focus:outline-none",
-                          isSelected && "bg-blue-50 border border-blue-200"
-                        )}
-                      >
-                        <span className="text-gray-700 text-left font-medium">{option.label}</span>
-                        <div className="flex items-center gap-2">
-                          {option.count !== undefined && (
-                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full min-w-[20px] text-center">
-                              {option.count}
-                            </span>
-                          )}
-                          {isSelected && (
-                            <Check className="h-3.5 w-3.5 text-blue-600" />
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                </DropdownMenuLabel>
               </div>
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
+              
+              <div className="max-h-64 overflow-y-auto p-1">
+                {section.options.map((option) => (
+                  <DropdownMenuCheckboxItem
+                    key={option.value}
+                    checked={section.selectedValues.includes(option.value)}
+                    onCheckedChange={() => section.onToggle(option.value)}
+                    className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-gray-50 rounded-md mx-1"
+                  >
+                    <span className="text-sm text-gray-700">{option.label}</span>
+                    {option.count !== undefined && (
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full ml-2">
+                        {option.count}
+                      </span>
+                    )}
+                  </DropdownMenuCheckboxItem>
+                ))}
+                {section.options.length === 0 && (
+                  <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                    No options available
+                  </div>
+                )}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ))}
+
+        {/* Clear All Filters Button */}
+        {activeFilterCount > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClearFilters}
+            className="gap-1 h-10 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X className="h-3 w-3" />
+            <span className="text-sm">Clear</span>
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

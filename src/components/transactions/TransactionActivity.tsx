@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -239,20 +238,28 @@ export function TransactionActivity() {
     {
       id: "category",
       title: "Category",
-      options: categories.map(category => ({
-        value: category,
-        label: category
-      })),
+      options: categories.map(category => {
+        const count = mockTransactions.filter(t => t.category === category && t.type === transactionType).length;
+        return {
+          value: category,
+          label: category,
+          count
+        };
+      }),
       selectedValues: selectedCategories,
       onToggle: (value: string) => toggleFilter(selectedCategories, value, setSelectedCategories),
     },
     {
       id: "paymentMethod", 
       title: "Payment Method",
-      options: paymentMethods.map(method => ({
-        value: method,
-        label: method
-      })),
+      options: paymentMethods.map(method => {
+        const count = mockTransactions.filter(t => t.paymentMethod === method && t.type === transactionType).length;
+        return {
+          value: method,
+          label: method,
+          count
+        };
+      }),
       selectedValues: selectedPaymentMethods,
       onToggle: (value: string) => toggleFilter(selectedPaymentMethods, value, setSelectedPaymentMethods),
     },

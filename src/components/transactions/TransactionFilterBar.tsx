@@ -24,9 +24,9 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
   setTransactionType,
 }) => {
   return (
-    <div className="border-b border-gray-200 bg-white">
+    <div className="border-b border-gray-200 bg-white shadow-sm">
       <div className="px-6 py-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-6">
           <div className="flex-1">
             <TransactionFilters
               search={search}
@@ -37,7 +37,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             />
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center">
             <TransactionTypeToggle 
               value={transactionType} 
               onChange={setTransactionType} 
