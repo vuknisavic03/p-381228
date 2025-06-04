@@ -222,14 +222,16 @@ export function TransactionMapSelector({
       const listingWithCoords = mapListings.find(l => l.id === listing.id);
       if (listingWithCoords) {
         const bounds = mapInstance.getBounds();
-        if (bounds) {
+        const mapDiv = mapInstance.getDiv();
+        if (bounds && mapDiv && mapDiv.clientHeight) {
           // Calculate the popup position (appears below the marker)
           const markerLat = listingWithCoords.coordinates.lat;
           const markerLng = listingWithCoords.coordinates.lng;
           
           // Estimate popup height in lat degrees (approximately 200px popup height)
-          const latRange = bounds.getNorthEast().lat - bounds.getSouthWest().lat;
-          const popupHeightInLatDegrees = (latRange * 200) / mapInstance.getDiv()!.clientHeight;
+          const latRange = bounds.getNorthEast().lat() - bounds.getSouthWest().lat();
+          const mapHeight = mapDiv.clientHeight;
+          const popupHeightInLatDegrees = (latRange * 200) / mapHeight;
           
           // Position where the popup will appear (below the marker)
           const popupCenterLat = markerLat - (popupHeightInLatDegrees / 2);
