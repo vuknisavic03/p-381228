@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -315,31 +316,33 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
               {/* Tenant Information */}
               {shouldShowTenantInfo() && currentUnit.occupancyStatus === "occupied" && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
-                    <Button 
-                      type="button"
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => toggleUnitTenantType(currentUnit.id)}
-                      className="text-xs"
-                    >
-                      {currentUnit.tenant?.type === "individual" ? "Switch to Company" : "Switch to Individual"}
-                    </Button>
-                  </div>
+                  <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
                   
                   <div className="space-y-4">
-                    <div>
-                      <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-700 mb-2 block">
-                        {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                      </Label>
-                      <Input
-                        id={`tenantName-${currentUnit.id}`}
-                        value={currentUnit.tenant?.name || ""}
-                        onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
-                        placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                        className="h-11"
-                      />
+                    <div className="flex gap-3">
+                      <div className="flex-1">
+                        <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-700 mb-2 block">
+                          {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        </Label>
+                        <Input
+                          id={`tenantName-${currentUnit.id}`}
+                          value={currentUnit.tenant?.name || ""}
+                          onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
+                          placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
+                          className="h-11"
+                        />
+                      </div>
+                      <div className="flex items-end">
+                        <Button 
+                          type="button"
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => toggleUnitTenantType(currentUnit.id)}
+                          className="text-xs h-11"
+                        >
+                          {currentUnit.tenant?.type === "individual" ? "Switch to Company" : "Switch to Individual"}
+                        </Button>
+                      </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
