@@ -353,12 +353,23 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                   
                   <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-4">
-                    {/* Name Field with Tenant Type Toggle */}
+                    {/* Name Field with Tenant Type Toggle - Horizontal Layout */}
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
-                          {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                        </Label>
+                      <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
+                        {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                      </Label>
+                      
+                      <div className="flex gap-3 items-end">
+                        {/* Name Input - Smaller width */}
+                        <div className="flex-1 max-w-xs">
+                          <Input
+                            id={`tenantName-${currentUnit.id}`}
+                            value={currentUnit.tenant?.name || ""}
+                            onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
+                            placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
+                            className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                          />
+                        </div>
                         
                         {/* Tenant Type Toggle - Horizontal with Name Field */}
                         <div className="flex bg-gray-50 border border-gray-100 rounded-lg p-1">
@@ -388,13 +399,6 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           </button>
                         </div>
                       </div>
-                      <Input
-                        id={`tenantName-${currentUnit.id}`}
-                        value={currentUnit.tenant?.name || ""}
-                        onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
-                        placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                        className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
-                      />
                     </div>
                     
                     {/* Contact Information */}
