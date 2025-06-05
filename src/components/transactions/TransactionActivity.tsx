@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -204,8 +205,17 @@ export function TransactionActivity() {
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<string[]>([]);
   const [amountRange, setAmountRange] = useState<{ min?: number; max?: number }>({});
 
-  // Collect available categories, payment methods from data
-  const categories = Array.from(new Set(mockTransactions.map(t => t.category)));
+  // Clear category selection when transaction type changes
+  React.useEffect(() => {
+    setSelectedCategories([]);
+  }, [transactionType]);
+
+  // Collect available categories and payment methods based on current transaction type
+  const categories = Array.from(new Set(
+    mockTransactions
+      .filter(t => t.type === transactionType)
+      .map(t => t.category)
+  ));
   const paymentMethods = Array.from(new Set(mockTransactions.map(t => t.paymentMethod)));
 
   // Function to toggle a value in a filter array
