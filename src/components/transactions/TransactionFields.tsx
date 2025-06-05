@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,13 +16,13 @@ import {
   PROPERTY_CATEGORIES, 
   GENERAL_CATEGORIES 
 } from "./TransactionFormTypes";
-import { ListingInfoCard } from "./ListingInfoCard";
 import { ListingTypeToggle } from "./ListingTypeToggle";
 import { ListingSelector } from "./ListingSelector";
 import { UnitSelector } from "./UnitSelector";
-import { formatPropertyType } from "@/utils/propertyTypeUtils";
+import { formatPropertyType, getPropertyTypeIcon } from "@/utils/propertyTypeUtils";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
+import { Mail, Phone } from "lucide-react";
 
 export function TransactionFields({ 
   mockListings, 
@@ -104,7 +103,7 @@ export function TransactionFields({
             <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
             
             {/* Dropdown selector and map button side by side */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mb-4">
               <div className="flex-1">
                 <ListingSelector
                   listings={mockListings}
@@ -136,9 +135,52 @@ export function TransactionFields({
               </Dialog>
             </div>
 
+            {/* Selected Property Info - Shown directly below property selector */}
+            {selectedListing && (
+              <div className="rounded-lg border border-gray-200 bg-white p-4 mb-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900 text-sm">{selectedListing.name}</h4>
+                    <div className="flex items-center text-gray-600 gap-1 mt-1">
+                      <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                      <span className="text-xs">{selectedListing.address}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 bg-gray-100 px-2 py-1 rounded-md">
+                    {getPropertyTypeIcon(selectedListing.type)}
+                    <span className="text-xs font-medium text-gray-700">
+                      {formatPropertyType(selectedListing.type)}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="h-px bg-gray-100 mb-3" />
+                
+                <div>
+                  <div className="text-xs font-medium text-gray-500 mb-2">Tenant</div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900 text-sm">{selectedListing.tenant.name}</div>
+                      <div className="text-xs text-gray-500 mt-0.5">{selectedListing.tenant.type}</div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                        <Mail className="h-3 w-3 text-gray-400" /> 
+                        <span>{selectedListing.tenant.email}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                        <Phone className="h-3 w-3 text-gray-400" /> 
+                        <span>{selectedListing.tenant.phone}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Unit Selection - show if listing has multiple units */}
             {hasMultipleUnits && (
-              <div className="mt-4">
+              <div>
                 <div className="flex items-center justify-between mb-3">
                   <div className="text-xs font-medium text-gray-500 ml-0.5">Apply to</div>
                   {selectedPropertyCategory && (
@@ -197,17 +239,6 @@ export function TransactionFields({
       
       {(selectedListing || fields.listingType === "general") && (
         <>
-          {/* Listing Info Card Section - only shown for listing type */}
-          {fields.listingType === "listing" && selectedListing && (
-            <div className="space-y-4 group">
-              <div className="flex items-center">
-                <h3 className="text-sm font-medium text-gray-800 group-hover:text-gray-950 transition-colors">Selected Property</h3>
-                <div className="ml-2 h-px bg-gray-100 flex-1"></div>
-              </div>
-              <ListingInfoCard listing={selectedListing} />
-            </div>
-          )}
-          
           {/* Transaction Details Section */}
           <div className="space-y-4 group">
             <div className="flex items-center justify-between">
@@ -320,4 +351,3 @@ export function TransactionFields({
     </div>
   );
 }
-
