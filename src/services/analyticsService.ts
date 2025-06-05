@@ -1,17 +1,19 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
 import { 
   subDays, 
   eachDayOfInterval, 
   eachHourOfInterval, 
+  eachYearOfInterval,
   format, 
   differenceInDays, 
   isEqual, 
   startOfDay, 
   endOfDay,
   startOfMonth,
-  endOfMonth
+  endOfMonth,
+  startOfYear,
+  endOfYear
 } from "date-fns";
 
 // Types for our analytics data
@@ -50,7 +52,7 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     
     return {
       timePoints: filteredHours,
-      formatter: (date: Date) => format(date, "HH:mm"), // Removed timezone
+      formatter: (date: Date) => format(date, "HH:mm"),
       groupKey: "hour"
     };
   }
@@ -60,33 +62,43 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
-      formatter: (date: Date) => format(date, "MMM dd"), // Removed timezone
+      formatter: (date: Date) => format(date, "MMM dd"),
       groupKey: "day"
     };
   }
   
-  // For longer ranges, aggregate data by week or month depending on length
+  // For medium ranges (less than 90 days), show weekly data
   if (diffDays < 90) {
-    // Weekly data for medium ranges
     const days = eachDayOfInterval({ start, end });
     // Get every 7th day to represent weeks
     const weeks = days.filter((_, index) => index % 7 === 0);
     
     return {
       timePoints: weeks,
-      formatter: (date: Date) => `${format(date, "MMM dd")}`, // Removed timezone
+      formatter: (date: Date) => `${format(date, "MMM dd")}`,
       groupKey: "week"
     };
   }
   
-  // Monthly data for long ranges
+  // For very long ranges (more than 1000 days, like "All time"), show yearly data
+  if (diffDays > 1000) {
+    const years = eachYearOfInterval({ start, end });
+    
+    return {
+      timePoints: years,
+      formatter: (date: Date) => format(date, "yyyy"),
+      groupKey: "year"
+    };
+  }
+  
+  // For other long ranges, show monthly data
   const days = eachDayOfInterval({ start, end });
   // Get roughly every 30th day to represent months
   const months = days.filter((_, index) => index % 30 === 0);
   
   return {
     timePoints: months,
-    formatter: (date: Date) => format(date, "MMM yyyy"), // Removed timezone
+    formatter: (date: Date) => format(date, "MMM yyyy"),
     groupKey: "month"
   };
 };
