@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -353,51 +352,50 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                   
                   <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-5">
-                    {/* Tenant Type Selection */}
-                    <div className="space-y-3">
-                      <Label className="text-sm font-medium text-gray-500">Tenant Type</Label>
-                      <div className="flex items-center gap-3">
-                        <div className="flex bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
+                    {/* Name Field with Tenant Type Toggle */}
+                    <div className="grid grid-cols-3 gap-4 items-end">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-gray-500">Type</Label>
+                        <div className="flex bg-white border border-gray-200 rounded-md p-0.5 shadow-sm">
                           <button
                             type="button"
                             onClick={() => updateUnitTenant(currentUnit.id, { type: "individual" })}
-                            className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                            className={`px-2 py-1.5 text-xs font-medium rounded transition-all flex items-center gap-1.5 ${
                               currentUnit.tenant?.type === "individual"
                                 ? "bg-blue-500 text-white shadow-sm"
                                 : "text-gray-600 hover:text-gray-700 hover:bg-gray-50"
                             }`}
                           >
-                            <User className="h-4 w-4" />
+                            <User className="h-3 w-3" />
                             Individual
                           </button>
                           <button
                             type="button"
                             onClick={() => updateUnitTenant(currentUnit.id, { type: "company" })}
-                            className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                            className={`px-2 py-1.5 text-xs font-medium rounded transition-all flex items-center gap-1.5 ${
                               currentUnit.tenant?.type === "company"
                                 ? "bg-blue-500 text-white shadow-sm"
                                 : "text-gray-600 hover:text-gray-700 hover:bg-gray-50"
                             }`}
                           >
-                            <Building2 className="h-4 w-4" />
+                            <Building2 className="h-3 w-3" />
                             Company
                           </button>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Name Field */}
-                    <div className="space-y-2">
-                      <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
-                        {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                      </Label>
-                      <Input
-                        id={`tenantName-${currentUnit.id}`}
-                        value={currentUnit.tenant?.name || ""}
-                        onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
-                        placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                        className="bg-white border-gray-200 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
-                      />
+                      <div className="col-span-2 space-y-2">
+                        <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
+                          {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        </Label>
+                        <Input
+                          id={`tenantName-${currentUnit.id}`}
+                          value={currentUnit.tenant?.name || ""}
+                          onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
+                          placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
+                          className="bg-white border-gray-200 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                        />
+                      </div>
                     </div>
                     
                     {/* Contact Information */}
