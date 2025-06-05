@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { UnitOverview } from "@/services/overviewService";
+import { formatPropertyType, getPropertyTypeIcon } from "@/utils/propertyTypeUtils";
 
 interface UnitsTableProps {
   units: UnitOverview[];
@@ -49,7 +50,7 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-hidden rounded-b-xl">
+        <div className="overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
