@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
 import { 
@@ -121,40 +120,32 @@ const getRandomValue = (min: number, max: number) => {
 
 // Mock function that would be replaced with actual database calls
 const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
-  // This would be replaced with an actual API call to your database
-  // For example: const response = await fetch('/api/analytics?from=${dateRange?.from}&to=${dateRange?.to}');
-  // return await response.json();
-  
   // Generate time-based data points for the selected date range
-  const { timePoints, formatter, groupKey } = generateDataForRange(dateRange);
+  const { timePoints, formatter } = generateDataForRange(dateRange);
   
   // Generate revenue data - ensure month is a string
   const revenue = timePoints.map((point: Date) => ({
     month: formatter(point),
-    value: getRandomValue(20, 110),
-    [groupKey]: point
+    value: getRandomValue(20, 110)
   }));
   
   // Generate profit data - ensure month is a string
   const profit = timePoints.map((point: Date) => ({
     month: formatter(point),
-    value: getRandomValue(10, 55),
-    [groupKey]: point
+    value: getRandomValue(10, 55)
   }));
   
   // Generate peak profit data - ensure month is a string
   const peakProfit = timePoints.map((point: Date) => ({
     month: formatter(point),
-    value: getRandomValue(15, 100),
-    [groupKey]: point
+    value: getRandomValue(15, 100)
   }));
   
-  // Generate timeline data - ensure month is a string
+  // Generate timeline data - ensure month is a string ONLY
   const timeline = timePoints.map((point: Date) => ({
-    month: formatter(point), // Convert date to string format without timezone
+    month: formatter(point), // Only the formatted string, no Date object
     revenue: getRandomValue(20000, 110000),
-    profit: getRandomValue(10000, 55000),
-    [groupKey]: point
+    profit: getRandomValue(10000, 55000)
   }));
   
   // Calculate totals based on the generated data
