@@ -1,9 +1,12 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
 import { 
   subDays, 
   eachDayOfInterval, 
   eachHourOfInterval, 
+  eachWeekOfInterval,
+  eachMonthOfInterval,
   eachYearOfInterval,
   format, 
   differenceInDays, 
@@ -13,7 +16,8 @@ import {
   startOfMonth,
   endOfMonth,
   startOfYear,
-  endOfYear
+  endOfYear,
+  startOfWeek
 } from "date-fns";
 
 // Types for our analytics data
@@ -57,8 +61,19 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     };
   }
   
-  // For short ranges (less than 14 days), show daily data
-  if (diffDays < 14) {
+  // For short ranges (7-40 days), show weekly data - covers "This month", "Last month"
+  if (diffDays >= 7 && diffDays <= 40) {
+    const weeks = eachWeekOfInterval({ start, end }, { weekStartsOn: 1 }); // Start week on Monday
+    
+    return {
+      timePoints: weeks,
+      formatter: (date: Date) => format(date, "MMM dd"),
+      groupKey: "week"
+    };
+  }
+  
+  // For very short ranges (less than 7 days), show daily data
+  if (diffDays < 7) {
     const days = eachDayOfInterval({ start, end });
     return {
       timePoints: days,
@@ -67,21 +82,19 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     };
   }
   
-  // For medium ranges (less than 90 days), show weekly data
-  if (diffDays < 90) {
-    const days = eachDayOfInterval({ start, end });
-    // Get every 7th day to represent weeks
-    const weeks = days.filter((_, index) => index % 7 === 0);
+  // For medium ranges (40-400 days), show monthly data - covers "Last 3 months", quarters, "This year", "Last year"
+  if (diffDays > 40 && diffDays <= 400) {
+    const months = eachMonthOfInterval({ start, end });
     
     return {
-      timePoints: weeks,
-      formatter: (date: Date) => `${format(date, "MMM dd")}`,
-      groupKey: "week"
+      timePoints: months,
+      formatter: (date: Date) => format(date, "MMM yyyy"),
+      groupKey: "month"
     };
   }
   
-  // For very long ranges (more than 1000 days, like "All time"), show yearly data
-  if (diffDays > 1000) {
+  // For very long ranges (more than 400 days, like "All time"), show yearly data
+  if (diffDays > 400) {
     const years = eachYearOfInterval({ start, end });
     
     return {
@@ -91,10 +104,8 @@ const generateDataForRange = (range: DateRange | undefined): any => {
     };
   }
   
-  // For other long ranges, show monthly data
-  const days = eachDayOfInterval({ start, end });
-  // Get roughly every 30th day to represent months
-  const months = days.filter((_, index) => index % 30 === 0);
+  // Fallback to monthly data
+  const months = eachMonthOfInterval({ start, end });
   
   return {
     timePoints: months,
