@@ -43,79 +43,81 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <Card className="shadow-sm border-gray-200">
+      <CardHeader className="border-b border-gray-100 bg-white">
+        <CardTitle className="flex items-center gap-2 text-gray-900 font-semibold">
           Units Overview
-          <Badge variant="secondary">{units.length} Units</Badge>
+          <Badge variant="secondary" className="bg-gray-100 text-gray-700 font-medium">
+            {units.length} Units
+          </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="font-semibold">Unit</TableHead>
-                <TableHead className="font-semibold">Property</TableHead>
-                <TableHead className="font-semibold">Category</TableHead>
-                <TableHead className="font-semibold">Tenant</TableHead>
-                <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold text-right">Revenue</TableHead>
-                <TableHead className="font-semibold text-right">Expenses</TableHead>
-                <TableHead className="font-semibold text-right">Net Profit</TableHead>
+              <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
+                <TableHead className="font-semibold text-gray-800">Unit</TableHead>
+                <TableHead className="font-semibold text-gray-800">Property</TableHead>
+                <TableHead className="font-semibold text-gray-800">Category</TableHead>
+                <TableHead className="font-semibold text-gray-800">Tenant</TableHead>
+                <TableHead className="font-semibold text-gray-800">Status</TableHead>
+                <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
+                <TableHead className="font-semibold text-gray-800 text-right">Expenses</TableHead>
+                <TableHead className="font-semibold text-gray-800 text-right">Net Profit</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {units.map((unit) => (
-                <TableRow key={unit.id} className="hover:bg-gray-50">
-                  <TableCell>
-                    <div className="font-medium text-gray-900">{unit.unitNumber}</div>
+                <TableRow key={unit.id} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
+                  <TableCell className="py-4">
+                    <div className="font-semibold text-gray-900">{unit.unitNumber}</div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <div className="text-sm font-medium text-gray-700">{unit.listingName}</div>
                   </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="text-xs font-medium border-gray-300">
+                  <TableCell className="py-4">
+                    <Badge variant="outline" className="text-xs font-medium border-gray-300 text-gray-700">
                       {formatCategory(unit.category)}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     {unit.tenantName ? (
                       <div>
                         <div className="font-medium text-sm text-gray-900">{unit.tenantName}</div>
                         {unit.tenantType && (
-                          <div className="text-xs text-gray-500">{formatTenantType(unit.tenantType)}</div>
+                          <div className="text-xs text-gray-600 mt-1">{formatTenantType(unit.tenantType)}</div>
                         )}
                       </div>
                     ) : (
-                      <span className="text-gray-400 text-sm italic">No Tenant</span>
+                      <span className="text-gray-500 text-sm italic">No Tenant</span>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Badge 
                       variant={unit.occupancyStatus === 'occupied' ? 'default' : 'secondary'}
-                      className={`${
+                      className={`font-medium ${
                         unit.occupancyStatus === 'occupied' 
-                          ? 'bg-green-100 text-green-800 border-green-200' 
-                          : 'bg-gray-100 text-gray-700 border-gray-200'
-                      } font-medium`}
+                          ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-100' 
+                          : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-100'
+                      }`}
                     >
                       {formatStatus(unit.occupancyStatus)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <span className="font-semibold text-green-600">
+                  <TableCell className="text-right py-4">
+                    <span className="font-semibold text-emerald-600">
                       +${unit.revenue.toLocaleString()}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <span className="font-semibold text-red-600">
+                  <TableCell className="text-right py-4">
+                    <span className="font-semibold text-rose-600">
                       -${unit.expenses.toLocaleString()}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right py-4">
                     <span className={`font-semibold ${
-                      unit.profit >= 0 ? 'text-green-600' : 'text-red-600'
+                      unit.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'
                     }`}>
                       {unit.profit >= 0 ? '+' : ''}${unit.profit.toLocaleString()}
                     </span>
