@@ -28,10 +28,6 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
     );
   }
 
-  const formatStatus = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-  };
-
   const formatCategory = (category: string) => {
     return category.split(' ').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
@@ -61,7 +57,6 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
                 <TableHead className="font-semibold text-gray-800">Property</TableHead>
                 <TableHead className="font-semibold text-gray-800">Category</TableHead>
                 <TableHead className="font-semibold text-gray-800">Tenant</TableHead>
-                <TableHead className="font-semibold text-gray-800">Status</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Expenses</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Net Profit</TableHead>
@@ -93,32 +88,20 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
                       <span className="text-gray-500 text-sm italic">No Tenant</span>
                     )}
                   </TableCell>
-                  <TableCell className="py-4">
-                    <Badge 
-                      variant={unit.occupancyStatus === 'occupied' ? 'default' : 'secondary'}
-                      className={`font-medium ${
-                        unit.occupancyStatus === 'occupied' 
-                          ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-100' 
-                          : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-100'
-                      }`}
-                    >
-                      {formatStatus(unit.occupancyStatus)}
-                    </Badge>
-                  </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className="font-semibold text-emerald-600">
+                    <span className="text-green-600">
                       +${unit.revenue.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className="font-semibold text-rose-600">
+                    <span className="text-red-500">
                       -${unit.expenses.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className={`font-semibold ${
-                      unit.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'
-                    }`}>
+                    <span className={
+                      unit.profit >= 0 ? 'text-green-600' : 'text-red-500'
+                    }>
                       {unit.profit >= 0 ? '+' : ''}${unit.profit.toLocaleString()}
                     </span>
                   </TableCell>

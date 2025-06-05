@@ -84,8 +84,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </TableCell>
               
               <TableCell className="py-4">
-                <span className={`font-medium text-sm ${
-                  tx.type === "revenue" ? "text-emerald-600" : "text-rose-600"
+                <span className={`text-sm ${
+                  tx.type === "revenue" ? "text-green-600" : "text-red-500"
                 }`}>
                   {formatAmount(tx.amount, tx.type)}
                 </span>

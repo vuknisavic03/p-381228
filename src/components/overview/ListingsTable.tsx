@@ -29,10 +29,6 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
     );
   }
 
-  const formatStatus = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-  };
-
   return (
     <Card className="shadow-sm border-gray-200">
       <CardHeader className="border-b border-gray-100 bg-white">
@@ -50,7 +46,6 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
                 <TableHead className="font-semibold text-gray-800">Property</TableHead>
                 <TableHead className="font-semibold text-gray-800">Type</TableHead>
-                <TableHead className="font-semibold text-gray-800">Status</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Expenses</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Net Profit</TableHead>
@@ -73,32 +68,20 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
                       <span className="text-sm font-medium text-gray-700">{formatPropertyType(listing.type)}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="py-4">
-                    <Badge 
-                      variant={listing.occupancyStatus === 'occupied' ? 'default' : 'secondary'}
-                      className={`font-medium ${
-                        listing.occupancyStatus === 'occupied' 
-                          ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-100' 
-                          : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-100'
-                      }`}
-                    >
-                      {formatStatus(listing.occupancyStatus)}
-                    </Badge>
-                  </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className="font-semibold text-emerald-600">
+                    <span className="text-green-600">
                       +${listing.revenue.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className="font-semibold text-rose-600">
+                    <span className="text-red-500">
                       -${listing.expenses.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className={`font-semibold ${
-                      listing.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'
-                    }`}>
+                    <span className={
+                      listing.profit >= 0 ? 'text-green-600' : 'text-red-500'
+                    }>
                       {listing.profit >= 0 ? '+' : ''}${listing.profit.toLocaleString()}
                     </span>
                   </TableCell>
