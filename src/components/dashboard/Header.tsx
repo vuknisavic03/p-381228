@@ -9,6 +9,7 @@ interface HeaderProps {
   userName?: string;
   workspaceName?: string;
   onDateRangeChange?: (dateRange: DateRange | undefined) => void;
+  onPeriodLabelChange?: (label: string) => void;
   dateRange?: DateRange;
   activeView?: ViewType;
   onViewChange?: (view: ViewType) => void;
@@ -19,6 +20,7 @@ export function Header({
   userName = "Kevin", 
   workspaceName = "Kevin's Workspace",
   onDateRangeChange,
+  onPeriodLabelChange,
   dateRange,
   activeView,
   onViewChange,
@@ -52,6 +54,7 @@ export function Header({
         <DateRangePicker
           dateRange={dateRange}
           onDateRangeChange={onDateRangeChange}
+          onPeriodLabelChange={onPeriodLabelChange}
         />
       </div>
     </div>

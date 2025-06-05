@@ -10,6 +10,7 @@ import { DateRange } from "react-day-picker";
 
 interface DateRangePickerProps {
   onDateRangeChange?: (dateRange: DateRange | undefined) => void;
+  onPeriodLabelChange?: (label: string) => void;
   dateRange?: DateRange;
   className?: string;
 }
@@ -22,6 +23,7 @@ type PeriodOption = {
 
 export function DateRangePicker({ 
   onDateRangeChange,
+  onPeriodLabelChange,
   dateRange,
   className
 }: DateRangePickerProps) {
@@ -116,23 +118,28 @@ export function DateRangePicker({
       if (onDateRangeChange) {
         onDateRangeChange(thisMonthRange);
       }
+      if (onPeriodLabelChange) {
+        onPeriodLabelChange("This month");
+      }
     }
   }, []);
 
   const handlePeriodChange = (value: string) => {
     setSelectedPeriod(value);
     
-    if (value === "custom") {
-      return;
-    }
-    
     const selectedOption = periodOptions.find(option => option.value === value);
     if (selectedOption) {
-      const newDateRange = selectedOption.getDateRange();
-      setDate(newDateRange);
+      if (value !== "custom") {
+        const newDateRange = selectedOption.getDateRange();
+        setDate(newDateRange);
+        
+        if (onDateRangeChange) {
+          onDateRangeChange(newDateRange);
+        }
+      }
       
-      if (onDateRangeChange) {
-        onDateRangeChange(newDateRange);
+      if (onPeriodLabelChange) {
+        onPeriodLabelChange(selectedOption.label);
       }
     }
   };
@@ -143,6 +150,10 @@ export function DateRangePicker({
     
     if (onDateRangeChange) {
       onDateRangeChange(newDateRange);
+    }
+    
+    if (onPeriodLabelChange) {
+      onPeriodLabelChange("Custom range");
     }
   };
 

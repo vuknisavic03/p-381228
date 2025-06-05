@@ -63,8 +63,20 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     return null;
   };
 
-  // Determine title based on data type
-  const chartTitle = isHourlyData ? "Today's Performance" : periodLabel || "Performance Timeline";
+  // Determine title based on data type and period
+  const getChartTitle = () => {
+    if (isHourlyData) {
+      return "Today's Performance";
+    }
+    
+    // Handle period labels from date picker
+    if (periodLabel === "Custom range") {
+      return "Custom range";
+    }
+    
+    // For other periods, add "view" except for custom range
+    return periodLabel || "Performance Timeline";
+  };
 
   // Make sure data is formatted correctly
   const safeData = data.map(point => ({
@@ -76,7 +88,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     <Card className="border border-gray-200 p-5 bg-white h-[280px]">
       <CardHeader className="p-0 pb-3">
         <CardTitle className="text-lg font-medium text-gray-900">
-          {chartTitle}
+          {getChartTitle()}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">

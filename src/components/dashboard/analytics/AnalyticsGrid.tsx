@@ -7,9 +7,10 @@ import { DateRange } from "react-day-picker";
 
 interface AnalyticsGridProps {
   dateRange?: DateRange;
+  periodLabel?: string;
 }
 
-export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
+export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
   const { data, isLoading, error } = useAnalyticsData(dateRange);
   
   return (
@@ -73,7 +74,7 @@ export function AnalyticsGrid({ dateRange }: AnalyticsGridProps) {
         <div style={{ animationDelay: "200ms" }}>
           <Timeline 
             data={data.timeline || []} 
-            periodLabel={data.periodLabel} 
+            periodLabel={periodLabel || data.periodLabel} 
           />
         </div>
       )}

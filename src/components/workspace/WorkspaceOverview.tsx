@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Header } from "@/components/dashboard/Header";
 import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
@@ -20,6 +21,7 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
     to: endOfMonth(new Date()),
   });
   
+  const [periodLabel, setPeriodLabel] = useState<string>("This month");
   const [activeView, setActiveView] = useState<ViewType>('portfolio');
 
   const { data: listings, isLoading: listingsLoading } = useQuery({
@@ -38,12 +40,16 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
     setDateRange(newDateRange);
   };
 
+  const handlePeriodLabelChange = (label: string) => {
+    setPeriodLabel(label);
+  };
+
   const renderActiveView = () => {
     switch (activeView) {
       case 'portfolio':
         return (
           <div className="space-y-8">
-            <AnalyticsGrid dateRange={dateRange} />
+            <AnalyticsGrid dateRange={dateRange} periodLabel={periodLabel} />
           </div>
         );
       case 'listings':
@@ -70,6 +76,7 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
           userName={userName} 
           workspaceName={workspaceName} 
           onDateRangeChange={handleDateRangeChange}
+          onPeriodLabelChange={handlePeriodLabelChange}
           dateRange={dateRange}
           activeView={activeView}
           onViewChange={setActiveView}
