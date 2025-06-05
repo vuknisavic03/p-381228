@@ -43,13 +43,13 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   const handleRowClick = (transaction: Transaction) => {
-    console.log('Row clicked, transaction:', transaction);
+    console.log('Row clicked, transaction ID:', transaction.id, 'transaction:', transaction);
     onEdit(transaction);
   };
 
   const handleButtonClick = (e: React.MouseEvent, transaction: Transaction) => {
     e.stopPropagation();
-    console.log('Button clicked, transaction:', transaction);
+    console.log('Button clicked, transaction ID:', transaction.id, 'transaction:', transaction);
     onEdit(transaction);
   };
 
@@ -58,6 +58,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow className="border-b bg-gray-50">
+            <TableHead className="font-medium text-gray-700">ID</TableHead>
             <TableHead className="font-medium text-gray-700">Amount</TableHead>
             <TableHead className="font-medium text-gray-700">From</TableHead>
             <TableHead className="font-medium text-gray-700">Date</TableHead>
@@ -69,10 +70,15 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         <TableBody>
           {transactions.map((tx) => (
             <TableRow
-              key={tx.id}
+              key={`transaction-${tx.id}`}
               className="hover:bg-gray-50 cursor-pointer group transition-colors"
               onClick={() => handleRowClick(tx)}
+              data-transaction-id={tx.id}
             >
+              <TableCell>
+                <span className="text-sm text-gray-500 font-mono">#{tx.id}</span>
+              </TableCell>
+              
               <TableCell>
                 <span className={`font-medium ${
                   tx.type === "revenue" ? "text-green-600" : "text-red-600"
@@ -111,7 +117,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                   size="icon"
                   className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={(e) => handleButtonClick(e, tx)}
-                  aria-label="Edit transaction"
+                  aria-label={`Edit transaction #${tx.id}`}
                 >
                   <ChevronRight className="h-4 w-4 text-gray-400" />
                 </Button>

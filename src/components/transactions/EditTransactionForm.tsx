@@ -30,6 +30,9 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
   });
   const { toast } = useToast();
 
+  // Log which transaction is being edited
+  console.log('EditTransactionForm - Editing transaction ID:', transaction.id, 'Full transaction:', transaction);
+
   // Fetch real listings data on component mount
   useEffect(() => {
     const loadListings = async () => {
@@ -72,7 +75,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
   // Keep fields in sync with prop if transaction changes
   useEffect(() => {
-    console.log("Transaction data changed in EditForm:", transaction);
+    console.log("Transaction data changed in EditForm, new transaction ID:", transaction.id, "Full transaction:", transaction);
     setFields({
       selectedListingId: transaction.selectedListingId || "",
       selectedUnitId: transaction.selectedUnitId || "",
@@ -99,9 +102,12 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       notes: fields.notes,
       listingType: fields.listingType,
     };
+    
+    console.log('Updating transaction ID:', transaction.id, 'with data:', updatedTransaction);
+    
     toast({
       title: "Transaction Updated",
-      description: "Your changes have been saved successfully.",
+      description: `Transaction #${transaction.id} has been saved successfully.`,
     });
     onUpdate(updatedTransaction);
   }
@@ -113,7 +119,10 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     return (
       <div className="h-full overflow-auto bg-white">
         <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+          <div>
+            <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+            <p className="text-sm text-gray-500">Transaction #{transaction.id}</p>
+          </div>
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
             <X className="h-4 w-4" />
           </Button>
@@ -132,7 +141,10 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     <div className="h-full overflow-auto bg-white">
       {/* Header with close button */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+        <div>
+          <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+          <p className="text-sm text-gray-500">Transaction #{transaction.id} • {transaction.type === 'revenue' ? 'Revenue' : 'Expense'}</p>
+        </div>
         <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
           <X className="h-4 w-4" />
         </Button>

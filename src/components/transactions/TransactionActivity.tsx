@@ -310,27 +310,27 @@ export function TransactionActivity() {
 
   // Handle transaction edit
   const handleEditTransaction = (tx: Transaction) => {
-    console.log('handleEditTransaction called with:', tx);
+    console.log('handleEditTransaction called with transaction ID:', tx.id, 'Full transaction:', tx);
     setEditingTransaction(tx);
   };
 
   // Implement an onUpdate callback for EditTransactionForm
   const handleUpdateTransaction = (updatedTransaction: Transaction) => {
-    console.log('handleUpdateTransaction called with:', updatedTransaction);
+    console.log('handleUpdateTransaction called with transaction ID:', updatedTransaction.id, 'Updated transaction:', updatedTransaction);
     setEditingTransaction(null);
     toast({
       title: "Transaction Updated",
-      description: "Transaction was updated successfully.",
+      description: `Transaction #${updatedTransaction.id} was updated successfully.`,
       duration: 3000
     });
   };
 
   const handleCloseEdit = () => {
-    console.log('handleCloseEdit called');
+    console.log('handleCloseEdit called, closing transaction ID:', editingTransaction?.id);
     setEditingTransaction(null);
   };
 
-  console.log('Current editingTransaction:', editingTransaction);
+  console.log('Current editingTransaction ID:', editingTransaction?.id, 'Full editingTransaction:', editingTransaction);
 
   return (
     <div className="h-full flex flex-col">
