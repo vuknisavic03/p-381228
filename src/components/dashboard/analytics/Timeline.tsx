@@ -12,13 +12,6 @@ import {
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { TimelineDataPoint } from "@/services/analyticsService";
-import { 
-  differenceInDays, 
-  startOfDay, 
-  endOfDay,
-  startOfMonth,
-  endOfMonth
-} from "date-fns";
 import { DateRange } from "react-day-picker";
 
 interface TimelineProps {
@@ -44,39 +37,10 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     );
   }
 
-  // Determine data granularity based on date range
-  const getDataGranularity = () => {
-    if (!dateRange?.from) return "month";
-    
-    const defaultEnd = endOfMonth(new Date());
-    const defaultStart = startOfMonth(new Date());
-    
-    const start = dateRange?.from ? startOfDay(dateRange.from) : defaultStart;
-    const end = dateRange?.to ? endOfDay(dateRange.to) : defaultEnd;
-    
-    const diffDays = differenceInDays(end, start);
-    
-    // Single day - hourly data
-    if (diffDays === 0) return "hour";
-    
-    // 7-40 days - weekly data (This month, Last month)
-    if (diffDays >= 7 && diffDays <= 40) return "week";
-    
-    // Less than 7 days - daily data
-    if (diffDays < 7) return "day";
-    
-    // 40-400 days - monthly data (quarters, This/Last year)
-    if (diffDays > 40 && diffDays <= 400) return "month";
-    
-    // More than 400 days - yearly data (All time)
-    if (diffDays > 400) return "year";
-    
-    return "month";
-  };
-
-  // Safely determine data type
-  const dataGranularity = getDataGranularity();
-  const isHourlyData = dataGranularity === "hour";
+  // Detect if we have hourly data by checking the format
+  const isHourlyData = data.length > 0 && 
+                      typeof data[0].month === 'string' && 
+                      data[0].month.includes(':');
 
   // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
