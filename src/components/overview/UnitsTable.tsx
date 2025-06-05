@@ -29,12 +29,6 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
     );
   }
 
-  const formatCategory = (category: string) => {
-    return category.split(' ').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-  };
-
   const formatTenantType = (type: string) => {
     return type.charAt(0).toUpperCase() + type.slice(1);
   };
@@ -72,9 +66,10 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="py-4">
-                    <Badge variant="outline" className="text-xs font-medium border-gray-300 text-gray-700">
-                      {formatCategory(unit.category)}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-400">{getPropertyTypeIcon(unit.category as any)}</span>
+                      <span className="text-sm font-medium text-gray-700">{formatPropertyType(unit.category as any)}</span>
+                    </div>
                   </TableCell>
                   <TableCell className="py-4">
                     {unit.tenantName ? (
