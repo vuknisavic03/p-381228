@@ -37,10 +37,22 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     );
   }
 
+  // Clean the data to ensure proper formatting and remove any timezone info
+  const cleanData = data.map(point => {
+    let cleanMonth = typeof point.month === 'string' ? point.month : String(point.month);
+    
+    // Remove timezone information if present (like "GMT+0000 (Coordinated Universal Time)")
+    cleanMonth = cleanMonth.replace(/\s+GMT[+-]\d{4}.*$/i, '').trim();
+    
+    return {
+      ...point,
+      month: cleanMonth
+    };
+  });
+
   // Detect if we have hourly data by checking the format
-  const isHourlyData = data.length > 0 && 
-                      typeof data[0].month === 'string' && 
-                      data[0].month.includes(':');
+  const isHourlyData = cleanData.length > 0 && 
+                      cleanData[0].month.includes(':');
 
   // Custom tooltip formatter
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
@@ -80,12 +92,6 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
     return periodLabel || "Performance Timeline";
   };
 
-  // Make sure data is formatted correctly
-  const safeData = data.map(point => ({
-    ...point,
-    month: typeof point.month === 'string' ? point.month : String(point.month)
-  }));
-
   return (
     <Card className="border border-gray-200 p-5 bg-white h-[280px]">
       <CardHeader className="p-0 pb-3">
@@ -97,7 +103,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
         <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={safeData}
+              data={cleanData}
               margin={{
                 top: 20,
                 right: 5,
