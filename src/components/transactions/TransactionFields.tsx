@@ -85,6 +85,12 @@ export function TransactionFields({
   // Check if selected listing has multiple units
   const hasMultipleUnits = selectedListing?.units && selectedListing.units.length > 0;
   
+  // Check if tenant has meaningful data
+  const hasTenant = selectedListing?.tenant && 
+    selectedListing.tenant.name && 
+    selectedListing.tenant.name !== "No Tenant" && 
+    selectedListing.tenant.name.trim() !== "";
+  
   return (
     <div className="space-y-6">
       {/* Transaction Type Section */}
@@ -154,27 +160,36 @@ export function TransactionFields({
                   </div>
                 </div>
                 
-                <div className="h-px bg-gray-100 mb-3" />
-                
-                <div>
-                  <div className="text-xs font-medium text-gray-500 mb-2">Tenant</div>
-                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900 text-sm">{selectedListing.tenant.name}</div>
-                      <div className="text-xs text-gray-500 mt-0.5">{selectedListing.tenant.type}</div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                        <Mail className="h-3 w-3 text-gray-400" /> 
-                        <span>{selectedListing.tenant.email}</span>
+                {/* Only show tenant section if there's a valid tenant */}
+                {hasTenant && (
+                  <>
+                    <div className="h-px bg-gray-100 mb-3" />
+                    
+                    <div>
+                      <div className="text-xs font-medium text-gray-500 mb-2">Tenant</div>
+                      <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 text-sm">{selectedListing.tenant.name}</div>
+                          <div className="text-xs text-gray-500 mt-0.5">{selectedListing.tenant.type}</div>
+                        </div>
+                        <div className="space-y-1">
+                          {selectedListing.tenant.email && (
+                            <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                              <Mail className="h-3 w-3 text-gray-400" /> 
+                              <span>{selectedListing.tenant.email}</span>
+                            </div>
+                          )}
+                          {selectedListing.tenant.phone && (
+                            <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                              <Phone className="h-3 w-3 text-gray-400" /> 
+                              <span>{selectedListing.tenant.phone}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                        <Phone className="h-3 w-3 text-gray-400" /> 
-                        <span>{selectedListing.tenant.phone}</span>
-                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
             )}
 
