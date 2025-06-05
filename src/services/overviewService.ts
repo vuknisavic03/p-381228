@@ -1,6 +1,7 @@
-
 import { fetchListings } from "./listingsService";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { DateRange } from "react-day-picker";
+import { isWithinInterval, parseISO } from 'date-fns';
 
 export interface OverviewMetrics {
   totalRevenue: number;
@@ -42,30 +43,45 @@ export interface UnitOverview {
   tenantType?: string;
 }
 
-// Mock transaction data for calculations
+// Mock transaction data for calculations with dates
 const mockTransactions = [
-  { id: 1, type: 'revenue', amount: 1200, selectedListingId: '1', selectedUnitId: '1-1' },
-  { id: 2, type: 'revenue', amount: 1500, selectedListingId: '1', selectedUnitId: '' },
-  { id: 3, type: 'expense', amount: 350, selectedListingId: '1', selectedUnitId: '1-1' },
-  { id: 4, type: 'revenue', amount: 950, selectedListingId: '2', selectedUnitId: '' },
-  { id: 5, type: 'expense', amount: 120, selectedListingId: '2', selectedUnitId: '' },
-  { id: 6, type: 'revenue', amount: 2200, selectedListingId: '3', selectedUnitId: '' },
-  { id: 7, type: 'expense', amount: 800, selectedListingId: '3', selectedUnitId: '' },
-  { id: 8, type: 'revenue', amount: 1800, selectedListingId: '5', selectedUnitId: '5-1' },
-  { id: 9, type: 'revenue', amount: 1600, selectedListingId: '5', selectedUnitId: '5-3' },
-  { id: 10, type: 'expense', amount: 250, selectedListingId: '5', selectedUnitId: '' },
+  { id: 1, type: 'revenue', amount: 1200, selectedListingId: '1', selectedUnitId: '1-1', date: '2024-01-15' },
+  { id: 2, type: 'revenue', amount: 1500, selectedListingId: '1', selectedUnitId: '', date: '2024-02-15' },
+  { id: 3, type: 'expense', amount: 350, selectedListingId: '1', selectedUnitId: '1-1', date: '2024-01-20' },
+  { id: 4, type: 'revenue', amount: 950, selectedListingId: '2', selectedUnitId: '', date: '2024-03-15' },
+  { id: 5, type: 'expense', amount: 120, selectedListingId: '2', selectedUnitId: '', date: '2024-02-28' },
+  { id: 6, type: 'revenue', amount: 2200, selectedListingId: '3', selectedUnitId: '', date: '2024-04-15' },
+  { id: 7, type: 'expense', amount: 800, selectedListingId: '3', selectedUnitId: '', date: '2024-04-20' },
+  { id: 8, type: 'revenue', amount: 1800, selectedListingId: '5', selectedUnitId: '5-1', date: '2024-05-15' },
+  { id: 9, type: 'revenue', amount: 1600, selectedListingId: '5', selectedUnitId: '5-3', date: '2024-05-15' },
+  { id: 10, type: 'expense', amount: 250, selectedListingId: '5', selectedUnitId: '', date: '2024-05-20' },
 ];
 
-export const fetchOverviewMetrics = async (): Promise<OverviewMetrics> => {
+const filterTransactionsByDateRange = (transactions: typeof mockTransactions, dateRange?: DateRange) => {
+  if (!dateRange?.from || !dateRange?.to) {
+    return transactions;
+  }
+  
+  return transactions.filter(transaction => {
+    const transactionDate = parseISO(transaction.date);
+    return isWithinInterval(transactionDate, {
+      start: dateRange.from!,
+      end: dateRange.to!
+    });
+  });
+};
+
+export const fetchOverviewMetrics = async (dateRange?: DateRange): Promise<OverviewMetrics> => {
   const listings = await fetchListings();
+  const filteredTransactions = filterTransactionsByDateRange(mockTransactions, dateRange);
   
   let totalUnits = 0;
   let occupiedUnits = 0;
   let totalRevenue = 0;
   let totalExpenses = 0;
   
-  // Calculate revenue and expenses from transactions
-  mockTransactions.forEach(transaction => {
+  // Calculate revenue and expenses from filtered transactions
+  filteredTransactions.forEach(transaction => {
     if (transaction.type === 'revenue') {
       totalRevenue += transaction.amount;
     } else {
@@ -105,12 +121,13 @@ export const fetchOverviewMetrics = async (): Promise<OverviewMetrics> => {
   };
 };
 
-export const fetchListingOverviews = async (): Promise<ListingOverview[]> => {
+export const fetchListingOverviews = async (dateRange?: DateRange): Promise<ListingOverview[]> => {
   const listings = await fetchListings();
+  const filteredTransactions = filterTransactionsByDateRange(mockTransactions, dateRange);
   
   return listings.map(listing => {
-    // Calculate revenue and expenses for this listing
-    const listingTransactions = mockTransactions.filter(t => t.selectedListingId === listing.id);
+    // Calculate revenue and expenses for this listing from filtered transactions
+    const listingTransactions = filteredTransactions.filter(t => t.selectedListingId === listing.id);
     const revenue = listingTransactions.filter(t => t.type === 'revenue').reduce((sum, t) => sum + t.amount, 0);
     const expenses = listingTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
     
@@ -135,15 +152,16 @@ export const fetchListingOverviews = async (): Promise<ListingOverview[]> => {
   });
 };
 
-export const fetchUnitOverviews = async (): Promise<UnitOverview[]> => {
+export const fetchUnitOverviews = async (dateRange?: DateRange): Promise<UnitOverview[]> => {
   const listings = await fetchListings();
+  const filteredTransactions = filterTransactionsByDateRange(mockTransactions, dateRange);
   const units: UnitOverview[] = [];
   
   listings.forEach(listing => {
     if (listing.units && listing.units.length > 0) {
       // Multi-unit listing
       listing.units.forEach(unit => {
-        const unitTransactions = mockTransactions.filter(t => 
+        const unitTransactions = filteredTransactions.filter(t => 
           t.selectedListingId === listing.id && t.selectedUnitId === unit.id
         );
         const revenue = unitTransactions.filter(t => t.type === 'revenue').reduce((sum, t) => sum + t.amount, 0);
@@ -165,7 +183,7 @@ export const fetchUnitOverviews = async (): Promise<UnitOverview[]> => {
       });
     } else {
       // Single unit listing
-      const listingTransactions = mockTransactions.filter(t => t.selectedListingId === listing.id);
+      const listingTransactions = filteredTransactions.filter(t => t.selectedListingId === listing.id);
       const revenue = listingTransactions.filter(t => t.type === 'revenue').reduce((sum, t) => sum + t.amount, 0);
       const expenses = listingTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
       
