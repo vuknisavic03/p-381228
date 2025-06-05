@@ -99,7 +99,7 @@ export function TransactionFields({
         </div>
         
         {fields.listingType === "listing" ? (
-          <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5">
+          <div className="bg-white border border-gray-200 rounded-lg p-5">
             <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Property</div>
             
             {/* Dropdown selector and map button side by side */}
@@ -228,7 +228,7 @@ export function TransactionFields({
             )}
           </div>
         ) : (
-          <div className="bg-purple-50/30 border border-purple-100 rounded-lg p-5">
+          <div className="bg-white border border-purple-200 rounded-lg p-5">
             <div className="text-sm text-purple-700 font-medium mb-2">General Transaction</div>
             <p className="text-xs text-gray-600 mb-3">
               Applies to your entire portfolio, not a specific property.
@@ -250,7 +250,7 @@ export function TransactionFields({
               />
             </div>
             
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-6">
+            <div className="bg-white border border-gray-200 rounded-lg p-5 space-y-6">
               {/* Category */}
               <div>
                 <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Category</div>
@@ -284,7 +284,7 @@ export function TransactionFields({
               <div className="ml-2 h-px bg-gray-100 flex-1"></div>
             </div>
             
-            <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 space-y-6">
+            <div className="bg-white border border-gray-200 rounded-lg p-5 space-y-6">
               {/* Amount */}
               <div>
                 <div className="text-xs font-medium text-gray-500 mb-1.5 ml-0.5">Amount</div>
