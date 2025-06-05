@@ -54,15 +54,15 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg border shadow-sm">
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="border-b bg-gray-50">
-            <TableHead className="font-medium text-gray-700">Description</TableHead>
-            <TableHead className="font-medium text-gray-700">Amount</TableHead>
-            <TableHead className="font-medium text-gray-700">Date</TableHead>
-            <TableHead className="font-medium text-gray-700">Category</TableHead>
-            <TableHead className="font-medium text-gray-700">Payment Method</TableHead>
+          <TableRow className="border-b bg-gray-50/80">
+            <TableHead className="font-semibold text-gray-800 text-sm">Description</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm">Amount</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm">Date</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm">Category</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm">Payment Method</TableHead>
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
@@ -70,29 +70,29 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           {transactions.map((tx) => (
             <TableRow
               key={`transaction-${tx.id}`}
-              className="hover:bg-gray-50 cursor-pointer group transition-colors"
+              className="hover:bg-gray-50/70 cursor-pointer group transition-all duration-200 border-b border-gray-100 last:border-b-0"
               onClick={() => handleRowClick(tx)}
               data-transaction-id={tx.id}
             >
-              <TableCell className="max-w-[300px]">
+              <TableCell className="max-w-[300px] py-4">
                 <div className="space-y-1">
-                  <div className="font-medium text-gray-900 truncate">{tx.from}</div>
+                  <div className="font-medium text-gray-900 truncate text-sm">{tx.from}</div>
                   {tx.notes && (
-                    <div className="text-sm text-gray-500 truncate">{tx.notes}</div>
+                    <div className="text-xs text-gray-500 truncate leading-relaxed">{tx.notes}</div>
                   )}
                 </div>
               </TableCell>
               
-              <TableCell>
-                <span className={`font-semibold text-lg ${
-                  tx.type === "revenue" ? "text-green-600" : "text-red-600"
+              <TableCell className="py-4">
+                <span className={`font-medium text-sm ${
+                  tx.type === "revenue" ? "text-emerald-600" : "text-rose-600"
                 }`}>
                   {formatAmount(tx.amount, tx.type)}
                 </span>
               </TableCell>
               
-              <TableCell>
-                <span className="text-gray-700 font-medium">
+              <TableCell className="py-4">
+                <span className="text-gray-700 font-medium text-sm">
                   {tx.date.toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -101,25 +101,25 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 </span>
               </TableCell>
               
-              <TableCell>
-                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium">
+              <TableCell className="py-4">
+                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium px-2.5 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
                   {tx.category}
                 </Badge>
               </TableCell>
               
-              <TableCell>
-                <span className="text-gray-600">{tx.paymentMethod}</span>
+              <TableCell className="py-4">
+                <span className="text-gray-600 text-sm">{tx.paymentMethod}</span>
               </TableCell>
               
-              <TableCell className="text-right">
+              <TableCell className="text-right py-4">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-gray-100"
                   onClick={(e) => handleButtonClick(e, tx)}
                   aria-label={`Edit transaction from ${tx.from}`}
                 >
-                  <ChevronRight className="h-4 w-4 text-gray-400" />
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
                 </Button>
               </TableCell>
             </TableRow>
@@ -128,12 +128,12 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       </Table>
       
       {transactions.length === 0 && (
-        <div className="py-16 text-center">
-          <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-            <DollarSign className="h-6 w-6 text-gray-400" />
+        <div className="py-20 text-center">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gray-50 flex items-center justify-center">
+            <DollarSign className="h-8 w-8 text-gray-300" />
           </div>
-          <h3 className="text-gray-900 font-medium text-lg mb-2">No transactions found</h3>
-          <p className="text-gray-500 text-sm max-w-sm mx-auto">
+          <h3 className="text-gray-900 font-semibold text-xl mb-3">No transactions found</h3>
+          <p className="text-gray-500 text-sm max-w-md mx-auto leading-relaxed">
             Try adjusting your filters or search criteria to find the transactions you're looking for.
           </p>
         </div>
