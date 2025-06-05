@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -346,47 +347,47 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
               {/* Tenant Information */}
               {shouldShowTenantInfo() && currentUnit.occupancyStatus === "occupied" && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                      <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
-                    </div>
-                    
-                    {/* Tenant Type Toggle - Horizontal */}
-                    <div className="flex bg-gray-50 border border-gray-100 rounded-lg p-1">
-                      <button
-                        type="button"
-                        onClick={() => updateUnitTenant(currentUnit.id, { type: "individual" })}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
-                          currentUnit.tenant?.type === "individual"
-                            ? "bg-gray-200 text-gray-700 shadow-sm"
-                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                        }`}
-                      >
-                        <User className="h-3.5 w-3.5" />
-                        Individual
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => updateUnitTenant(currentUnit.id, { type: "company" })}
-                        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
-                          currentUnit.tenant?.type === "company"
-                            ? "bg-gray-200 text-gray-700 shadow-sm"
-                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                        }`}
-                      >
-                        <Building2 className="h-3.5 w-3.5" />
-                        Company
-                      </button>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
                   </div>
                   
                   <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-4">
-                    {/* Name Field */}
+                    {/* Name Field with Tenant Type Toggle */}
                     <div className="space-y-2">
-                      <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
-                        {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                      </Label>
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
+                          {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        </Label>
+                        
+                        {/* Tenant Type Toggle - Horizontal with Name Field */}
+                        <div className="flex bg-gray-50 border border-gray-100 rounded-lg p-1">
+                          <button
+                            type="button"
+                            onClick={() => updateUnitTenant(currentUnit.id, { type: "individual" })}
+                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                              currentUnit.tenant?.type === "individual"
+                                ? "bg-white text-gray-700 shadow-sm"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            <User className="h-3.5 w-3.5" />
+                            Individual
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateUnitTenant(currentUnit.id, { type: "company" })}
+                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                              currentUnit.tenant?.type === "company"
+                                ? "bg-white text-gray-700 shadow-sm"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            <Building2 className="h-3.5 w-3.5" />
+                            Company
+                          </button>
+                        </div>
+                      </div>
                       <Input
                         id={`tenantName-${currentUnit.id}`}
                         value={currentUnit.tenant?.name || ""}
