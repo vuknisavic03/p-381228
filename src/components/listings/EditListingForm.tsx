@@ -456,15 +456,34 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
-                        <Button 
-                          type="button"
-                          variant="outline" 
-                          size="sm" 
-                          onClick={toggleTenantType}
-                          className="text-xs"
-                        >
-                          {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
-                        </Button>
+                        
+                        {/* Tenant Type Toggle - Smaller and More Elegant */}
+                        <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                          <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
+                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                              formData.tenantType === "individual"
+                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            <Users className="h-3 w-3" />
+                            Individual
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
+                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                              formData.tenantType === "company"
+                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            <Building2 className="h-3 w-3" />
+                            Company
+                          </button>
+                        </div>
                       </div>
                       
                       <div className="space-y-4">
