@@ -121,17 +121,17 @@ export function ChartCard({
   const renderChart = () => {
     if (chartType === "donut") {
       return (
-        <div className="flex flex-col items-center h-full p-4">
-          <div className="w-full h-[180px] mb-2">
+        <div className="flex flex-col items-center h-full">
+          <div className="w-full h-[200px] mb-2">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
                   data={chartData as DonutDataPoint[]}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  outerRadius="75%"
-                  innerRadius="60%"
+                  outerRadius="80%"
+                  innerRadius="65%"
                   fill={colorValue}
                   dataKey="value"
                   startAngle={90}
@@ -153,7 +153,7 @@ export function ChartCard({
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap justify-center gap-3 text-sm">
+          <div className="flex flex-wrap justify-center gap-3 mt-1 px-2 text-sm">
             {(chartData as DonutDataPoint[]).map((entry, index) => (
               <div key={index} className="flex items-center gap-2">
                 <div 
@@ -169,15 +169,15 @@ export function ChartCard({
     }
 
     return (
-      <div className="h-[200px] p-4">
+      <div className="h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}
             margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
+              top: 15,
+              right: 5,
+              bottom: 5,
+              left: 15,
             }}
           >
             <defs>
@@ -198,6 +198,7 @@ export function ChartCard({
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
               dy={8}
+              padding={{ left: 10, right: 10 }}
               tickFormatter={(value) => {
                 if (value instanceof Date) {
                   return value.toLocaleDateString();
@@ -209,8 +210,9 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
-              width={40}
+              width={45}
               tickFormatter={(value) => `$${value}k`}
+              padding={{ top: 10 }}
               allowDecimals={false}
               domain={['auto', 'auto']}
             />
@@ -249,8 +251,8 @@ export function ChartCard({
   };
 
   return (
-    <Card className="border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
-      <CardHeader className="p-5 pb-3">
+    <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
+      <CardHeader className="p-0 pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
           <div className="bg-gray-100 text-gray-600 p-2 rounded-lg">
@@ -259,7 +261,7 @@ export function ChartCard({
         </div>
       </CardHeader>
       
-      <div className="px-5">
+      <div className="mt-2">
         <div className="flex items-baseline space-x-2">
           <span className="text-3xl font-bold text-gray-900">{value}</span>
           <span className={`text-sm ${change.positive ? 'text-green-600' : 'text-red-600'} flex items-center`}>
@@ -268,7 +270,7 @@ export function ChartCard({
         </div>
       </div>
       
-      <div className="flex-grow border-t border-gray-200 mt-3">
+      <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
         {renderChart()}
       </div>
     </Card>
