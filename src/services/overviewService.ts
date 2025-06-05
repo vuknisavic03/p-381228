@@ -1,5 +1,6 @@
 
 import { fetchListings } from "./listingsService";
+import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
 export interface OverviewMetrics {
   totalRevenue: number;
@@ -16,7 +17,7 @@ export interface OverviewMetrics {
 export interface ListingOverview {
   id: string;
   name: string;
-  type: string;
+  type: PropertyType;
   category: string;
   occupancyStatus: string;
   revenue: number;
@@ -121,7 +122,7 @@ export const fetchListingOverviews = async (): Promise<ListingOverview[]> => {
     return {
       id: listing.id,
       name: listing.name,
-      type: listing.type,
+      type: listing.type as PropertyType,
       category: listing.category,
       occupancyStatus: listing.occupancyStatus,
       revenue,
