@@ -3,13 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Header } from "@/components/dashboard/Header";
 import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
 import { ViewType } from "@/components/overview/ViewSelector";
-import { MetricsOverview } from "@/components/overview/MetricsOverview";
 import { ListingsTable } from "@/components/overview/ListingsTable";
 import { UnitsTable } from "@/components/overview/UnitsTable";
 import { DateRange } from "react-day-picker";
 import { startOfMonth, endOfMonth } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
-import { fetchOverviewMetrics, fetchListingOverviews, fetchUnitOverviews } from "@/services/overviewService";
+import { fetchListingOverviews, fetchUnitOverviews } from "@/services/overviewService";
 
 interface WorkspaceOverviewProps {
   userName?: string;
@@ -23,12 +22,6 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
   });
   
   const [activeView, setActiveView] = useState<ViewType>('portfolio');
-
-  // Fetch overview data
-  const { data: metrics, isLoading: metricsLoading } = useQuery({
-    queryKey: ['overview-metrics'],
-    queryFn: fetchOverviewMetrics,
-  });
 
   const { data: listings, isLoading: listingsLoading } = useQuery({
     queryKey: ['listing-overviews'],
@@ -51,21 +44,18 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
       case 'portfolio':
         return (
           <div className="space-y-8">
-            {metrics && <MetricsOverview metrics={metrics} isLoading={metricsLoading} />}
             <AnalyticsGrid dateRange={dateRange} />
           </div>
         );
       case 'listings':
         return (
           <div className="space-y-8">
-            {metrics && <MetricsOverview metrics={metrics} isLoading={metricsLoading} />}
             <ListingsTable listings={listings || []} isLoading={listingsLoading} />
           </div>
         );
       case 'units':
         return (
           <div className="space-y-8">
-            {metrics && <MetricsOverview metrics={metrics} isLoading={metricsLoading} />}
             <UnitsTable units={units || []} isLoading={unitsLoading} />
           </div>
         );
