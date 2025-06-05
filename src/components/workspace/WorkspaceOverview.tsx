@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from "@/components/dashboard/Header";
 import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
-import { ViewSelector, ViewType } from "@/components/overview/ViewSelector";
+import { ViewType } from "@/components/overview/ViewSelector";
 import { MetricsOverview } from "@/components/overview/MetricsOverview";
 import { ListingsTable } from "@/components/overview/ListingsTable";
 import { UnitsTable } from "@/components/overview/UnitsTable";
@@ -82,11 +82,10 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
           workspaceName={workspaceName} 
           onDateRangeChange={handleDateRangeChange}
           dateRange={dateRange}
+          activeView={activeView}
+          onViewChange={setActiveView}
+          showViewSelector={true}
         />
-        
-        <div className="mt-6 flex justify-center">
-          <ViewSelector activeView={activeView} onViewChange={setActiveView} />
-        </div>
       </div>
       
       <div className="flex-1 overflow-auto px-4 sm:px-6 lg:px-10 pb-8 pt-2 md:pt-4">

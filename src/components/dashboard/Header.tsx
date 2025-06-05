@@ -3,19 +3,26 @@ import React from "react";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { DateRangePicker } from "@/components/shared/DateRangePicker";
+import { ViewSelector, ViewType } from "@/components/overview/ViewSelector";
 
 interface HeaderProps {
   userName?: string;
   workspaceName?: string;
   onDateRangeChange?: (dateRange: DateRange | undefined) => void;
   dateRange?: DateRange;
+  activeView?: ViewType;
+  onViewChange?: (view: ViewType) => void;
+  showViewSelector?: boolean;
 }
 
 export function Header({ 
   userName = "Kevin", 
   workspaceName = "Kevin's Workspace",
   onDateRangeChange,
-  dateRange
+  dateRange,
+  activeView,
+  onViewChange,
+  showViewSelector = false
 }: HeaderProps) {
   const currentHour = new Date().getHours();
   let greeting = "Good morning";
@@ -38,7 +45,10 @@ export function Header({
           Today, {format(new Date(), "MMM dd")}
         </p>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-3">
+        {showViewSelector && activeView && onViewChange && (
+          <ViewSelector activeView={activeView} onViewChange={onViewChange} />
+        )}
         <DateRangePicker
           dateRange={dateRange}
           onDateRangeChange={onDateRangeChange}

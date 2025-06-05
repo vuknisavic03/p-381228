@@ -1,8 +1,13 @@
 
 import React from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Building, Home, PieChart } from 'lucide-react';
-import { cn } from "@/lib/utils";
+import { Building, Home, PieChart, ChevronDown } from 'lucide-react';
 
 export type ViewType = 'portfolio' | 'listings' | 'units';
 
@@ -18,28 +23,38 @@ export function ViewSelector({ activeView, onViewChange }: ViewSelectorProps) {
     { id: 'units' as ViewType, label: 'Units', icon: Home }
   ];
 
+  const currentView = views.find(view => view.id === activeView);
+  const CurrentIcon = currentView?.icon || PieChart;
+
   return (
-    <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
-      {views.map(view => {
-        const Icon = view.icon;
-        return (
-          <Button
-            key={view.id}
-            variant="ghost"
-            size="sm"
-            onClick={() => onViewChange(view.id)}
-            className={cn(
-              "gap-2 px-4 py-2 rounded-md transition-all",
-              activeView === view.id
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {view.label}
-          </Button>
-        );
-      })}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 px-4 py-2 h-10 font-medium transition-colors focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        >
+          <CurrentIcon className="w-4 h-4 text-gray-600" />
+          <span className="text-sm text-gray-900">
+            {currentView?.label || 'Portfolio'}
+          </span>
+          <ChevronDown className="w-4 h-4 text-gray-500" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-48 bg-white shadow-lg z-50" align="start">
+        {views.map(view => {
+          const Icon = view.icon;
+          return (
+            <DropdownMenuItem
+              key={view.id}
+              onClick={() => onViewChange(view.id)}
+              className="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+              <Icon className="h-4 w-4 text-gray-600" />
+              {view.label}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
