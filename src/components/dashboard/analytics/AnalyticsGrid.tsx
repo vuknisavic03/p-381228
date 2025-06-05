@@ -74,7 +74,8 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         <div style={{ animationDelay: "200ms" }}>
           <Timeline 
             data={data.timeline || []} 
-            periodLabel={periodLabel || data.periodLabel} 
+            periodLabel={periodLabel || data.periodLabel}
+            dateRange={dateRange}
           />
         </div>
       )}
