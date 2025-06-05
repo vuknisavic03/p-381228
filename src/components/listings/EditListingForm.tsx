@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -499,8 +500,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                         <div className="flex items-center gap-3">
                           {formData.occupancyStatus === "occupied" ? (
                             <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-full">
-                                <Users className="h-4 w-4 text-green-600" />
+                              <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
+                                <Users className="h-4 w-4 text-blue-600" />
                               </div>
                               <div>
                                 <p className="font-medium text-gray-900 text-sm">Occupied</p>
@@ -509,8 +510,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                             </>
                           ) : (
                             <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-full">
-                                <UserX className="h-4 w-4 text-orange-600" />
+                              <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
+                                <UserX className="h-4 w-4 text-gray-600" />
                               </div>
                               <div>
                                 <p className="font-medium text-gray-900 text-sm">Vacant</p>
@@ -630,7 +631,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               </div>
 
               <div className="pt-4">
-                <Button onClick={handleSubmit} className="w-full h-10 text-sm bg-green-600 hover:bg-green-700">
+                <Button onClick={handleSubmit} className="w-full h-10 text-sm bg-blue-600 hover:bg-blue-700">
                   Update Property
                 </Button>
               </div>
