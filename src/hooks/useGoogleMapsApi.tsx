@@ -8,7 +8,12 @@ import {
   GOOGLE_MAPS_LIBRARIES,
   handleMapsApiLoadError
 } from '@/utils/googleMapsUtils';
+import { validateApiKey } from '@/utils/validationSchemas';
+import { secureLog, RateLimiter } from '@/utils/securityConfig';
 import { useLoadScript } from '@react-google-maps/api';
+
+// Rate limiter for API key attempts
+const rateLimiter = new RateLimiter(5, 300000); // 5 attempts per 5 minutes
 
 export function useGoogleMapsApi() {
   // Use a ref to store the initial API key to prevent re-renders
@@ -26,7 +31,7 @@ export function useGoogleMapsApi() {
   // Handle load errors
   useEffect(() => {
     if (loadError) {
-      console.error("Google Maps load error:", loadError);
+      secureLog("Google Maps load error", { error: loadError.message });
       
       const errorMessage = handleMapsApiLoadError(loadError);
       toast({
@@ -37,14 +42,45 @@ export function useGoogleMapsApi() {
     }
   }, [loadError, toast]);
 
-  // API key setter that handles saving and potential reload
+  // Secure API key setter with validation and rate limiting
   const setApiKey = (newKey: string) => {
-    console.log("Setting new API key:", newKey ? "***provided***" : "empty");
+    const clientId = 'maps-user'; // Simple client identifier
+    
+    // Rate limiting check
+    if (!rateLimiter.check(clientId)) {
+      toast({
+        title: "Too Many Attempts",
+        description: "Please wait before trying again.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    secureLog("Setting new API key");
     
     if (newKey !== apiKey) {
-      // Save the new key
+      // Validate the API key format
+      const validation = validateApiKey(newKey);
+      if (!validation.success) {
+        toast({
+          title: "Invalid API Key",
+          description: "Please enter a valid Google Maps API key.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Additional security validation
       if (isValidGoogleMapsApiKey(newKey)) {
         saveGoogleMapsApiKey(newKey);
+        secureLog("API key validation successful");
+      } else {
+        toast({
+          title: "API Key Validation Failed",
+          description: "The provided API key format is invalid.",
+          variant: "destructive"
+        });
+        return;
       }
       
       // If changing to a different key, we need a page reload
