@@ -1,9 +1,9 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Home,
   Building2,
@@ -12,16 +12,13 @@ import {
   Building,
   Warehouse,
   Hotel,
-  Briefcase,
   X,
   Bed,
   Users,
   UserX,
-  MapPin,
   Building as BuildingIcon,
   Store as StoreIcon,
   Hotel as HotelIcon,
-  ArrowRight,
   CheckCircle,
 } from "lucide-react";
 import {
@@ -32,7 +29,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { SheetClose } from "../ui/sheet";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
@@ -75,7 +71,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
   const [units, setUnits] = useState<Unit[]>(listing.units || []);
   const [useUnitsMode, setUseUnitsMode] = useState(listing.units && listing.units.length > 0);
-  const [activeTab, setActiveTab] = useState("location");
 
   // Ensure type and category are properly set when component mounts
   useEffect(() => {
@@ -149,7 +144,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     setFormData(prev => ({
       ...prev,
       occupancyStatus: prev.occupancyStatus === "occupied" ? "vacant" : "occupied",
-      // Clear tenant fields when switching to vacant
       ...(prev.occupancyStatus === "occupied" ? {
         tenantName: "",
         tenantPhone: "",
@@ -229,235 +223,169 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }
   };
 
-  const canProceed = formData.city && formData.address && formData.country;
-  const canProceedToDetails = formData.type && (useUnitsMode || formData.category);
+  const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
 
   return (
     <div className="flex flex-col h-full bg-white">
-      {/* Header with close button */}
-      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-medium text-gray-900">Edit Property</h2>
+      {/* Header */}
+      <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+        <div>
+          <h1 className="text-2xl font-medium text-gray-900">Edit Property</h1>
+          <p className="text-sm text-gray-500 mt-1">Update the details of your property listing</p>
+        </div>
         <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
           <X className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <div className="px-6 pt-6">
-            <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 bg-gray-50 p-1 h-10">
-              <TabsTrigger value="location" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                Location
-              </TabsTrigger>
-              <TabsTrigger value="type" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!canProceed}>
-                Type
-              </TabsTrigger>
-              <TabsTrigger value="details" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!formData.type}>
-                Details
-              </TabsTrigger>
-              <TabsTrigger value="notes" className="text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm" disabled={!canProceedToDetails}>
-                Notes
-              </TabsTrigger>
-            </TabsList>
+      <div className="flex-1 overflow-y-auto px-8 py-6">
+        <div className="max-w-2xl space-y-12">
+          
+          {/* Location Section */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">Location</h2>
+              <p className="text-sm text-gray-600">Update the location details of your property</p>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-2 block">City</Label>
+                  <Input
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="e.g., Belgrade"
+                    className="h-11"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-2 block">Country</Label>
+                  <Input
+                    id="country"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    placeholder="e.g., Serbia"
+                    className="h-11"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="address" className="text-sm font-medium text-gray-700 mb-2 block">Full Address</Label>
+                <Input
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="e.g., Knez Mihailova 42"
+                  className="h-11"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="postalCode" className="text-sm font-medium text-gray-700 mb-2 block">Postal Code</Label>
+                <Input
+                  id="postalCode"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="e.g., 11000"
+                  className="h-11"
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Location Tab */}
-          <TabsContent value="location" className="flex-1 overflow-y-auto px-6 pb-6">
-            <div className="max-w-2xl mx-auto space-y-6 pt-6">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-4">
-                  <MapPin className="h-6 w-6 text-blue-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Property Location</h2>
-                <p className="text-gray-500 max-w-md mx-auto text-sm">Update the address and location details for your property</p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-2 block">City *</Label>
-                    <Input
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder="e.g., Belgrade"
-                      className="h-10 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-2 block">Country *</Label>
-                    <Input
-                      id="country"
-                      name="country"
-                      value={formData.country}
-                      onChange={handleChange}
-                      placeholder="e.g., Serbia"
-                      className="h-10 text-sm"
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="address" className="text-sm font-medium text-gray-700 mb-2 block">Full Address *</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    placeholder="e.g., Knez Mihailova 42"
-                    className="h-10 text-sm"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="postalCode" className="text-sm font-medium text-gray-700 mb-2 block">Postal Code</Label>
-                  <Input
-                    id="postalCode"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleChange}
-                    placeholder="e.g., 11000"
-                    className="h-10 text-sm"
-                  />
-                </div>
-              </div>
-
-              {canProceed && (
-                <div className="pt-4">
-                  <Button onClick={() => setActiveTab("type")} className="w-full h-10 text-sm bg-blue-600 hover:bg-blue-700">
-                    Continue to Property Type
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              )}
+          {/* Property Type Section */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">Property Type</h2>
+              <p className="text-sm text-gray-600">Update the type and structure of your property</p>
             </div>
-          </TabsContent>
 
-          {/* Property Type Tab */}
-          <TabsContent value="type" className="flex-1 overflow-y-auto px-6 pb-6">
-            <div className="max-w-2xl mx-auto space-y-6 pt-6">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-4">
-                  <Building2 className="h-6 w-6 text-blue-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Property Classification</h2>
-                <p className="text-gray-500 max-w-md mx-auto text-sm">Update the type and structure of your property</p>
+            {/* Units Mode Toggle */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900 text-sm">Property Structure</p>
+                <p className="text-xs text-gray-500">Does this property have multiple units?</p>
               </div>
+              <Button
+                type="button"
+                variant={useUnitsMode ? "default" : "outline"}
+                size="sm"
+                onClick={() => setUseUnitsMode(!useUnitsMode)}
+                className="text-xs"
+              >
+                {useUnitsMode ? "Multiple Units" : "Single Unit"}
+              </Button>
+            </div>
 
-              {/* Units Mode Toggle */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <h3 className="font-medium text-gray-900 mb-1 text-sm">Property Structure</h3>
-                    <p className="text-xs text-gray-500">Does this property have multiple units to manage separately?</p>
-                  </div>
-                  <Button
-                    type="button"
-                    variant={useUnitsMode ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setUseUnitsMode(!useUnitsMode)}
-                    className="text-xs px-3 py-1.5 h-8"
-                  >
-                    {useUnitsMode ? "Multiple Units" : "Single Unit"}
-                  </Button>
-                </div>
-                {useUnitsMode && (
-                  <p className="text-xs text-blue-600 bg-blue-50 p-3 rounded-lg">
-                    You can configure individual units in the next step with their own categories and tenant information.
-                  </p>
-                )}
-              </div>
-
-              {/* Property Type Selection */}
-              <div className="space-y-4">
-                <h3 className="font-medium text-gray-900 text-sm">Property Type</h3>
-                <div className="grid grid-cols-1 gap-3">
-                  {propertyTypes.map((type) => (
-                    <div
-                      key={type.value}
-                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                        formData.type === type.value
-                          ? "border-blue-500 bg-blue-50 ring-2 ring-blue-100"
-                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                      }`}
-                      onClick={() => {
-                        setFormData(prev => ({ ...prev, type: type.value, category: "" }));
-                        setUnits([]);
-                      }}
-                    >
-                      <div className="flex items-start gap-3">
-                        {React.cloneElement(getPropertyTypeIcon(type.value), { 
-                          className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
-                        })}
-                        <div className="flex-1">
-                          <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
-                            {type.label}
-                          </h4>
-                          <p className={`text-xs mt-1 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
-                            {type.description}
-                          </p>
-                        </div>
-                        {formData.type === type.value && (
-                          <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5" />
-                        )}
-                      </div>
+            {/* Property Type Selection */}
+            <div className="grid grid-cols-1 gap-3">
+              {propertyTypes.map((type) => (
+                <div
+                  key={type.value}
+                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                    formData.type === type.value
+                      ? "border-blue-200 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                  }`}
+                  onClick={() => {
+                    setFormData(prev => ({ ...prev, type: type.value, category: "" }));
+                    setUnits([]);
+                  }}
+                >
+                  <div className="flex items-start gap-3">
+                    {React.cloneElement(getPropertyTypeIcon(type.value), { 
+                      className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
+                    })}
+                    <div className="flex-1">
+                      <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
+                        {type.label}
+                      </h4>
+                      <p className={`text-xs mt-1 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
+                        {type.description}
+                      </p>
                     </div>
-                  ))}
+                    {formData.type === type.value && (
+                      <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5" />
+                    )}
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Details Section */}
+          {formData.type && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-lg font-medium text-gray-900 mb-2">Details</h2>
+                <p className="text-sm text-gray-600">Configure the specific details of your property</p>
               </div>
 
-              {formData.type && (
-                <div className="pt-4">
-                  <Button onClick={() => setActiveTab("details")} className="w-full h-10 text-sm bg-blue-600 hover:bg-blue-700">
-                    Continue to Details
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Details Tab */}
-          <TabsContent value="details" className="flex-1 overflow-y-auto px-6 pb-6">
-            <div className="max-w-2xl mx-auto space-y-6 pt-6">
               {/* Units Manager */}
-              {useUnitsMode && formData.type && (
+              {useUnitsMode ? (
+                <UnitsManager
+                  propertyType={formData.type as PropertyType}
+                  units={units}
+                  onUnitsChange={setUnits}
+                />
+              ) : (
                 <div>
-                  <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-4">
-                      <Building className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-2">Manage Units</h2>
-                    <p className="text-gray-500 max-w-md mx-auto text-sm">Update and configure individual units within your property</p>
-                  </div>
-                  <UnitsManager
-                    propertyType={formData.type as PropertyType}
-                    units={units}
-                    onUnitsChange={setUnits}
-                  />
-                </div>
-              )}
-
-              {/* Category Selection for Single Unit */}
-              {!useUnitsMode && formData.type && (
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-4">
-                      <Building className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-2">Specific Category</h2>
-                    <p className="text-gray-500 max-w-md mx-auto text-sm">Choose the specific type within {formatPropertyType(formData.type as PropertyType)}</p>
-                  </div>
-
+                  <Label className="text-sm font-medium text-gray-700 mb-3 block">Specific Category</Label>
                   <div className="grid grid-cols-1 gap-3">
                     {getAvailableCategories().map((cat) => (
                       <div
                         key={cat.value}
-                        className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
                           formData.category === cat.value
-                            ? "border-blue-500 bg-blue-50 ring-2 ring-blue-100"
+                            ? "border-blue-200 bg-blue-50"
                             : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                         }`}
                         onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
@@ -484,65 +412,56 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
               {/* Occupancy and Tenant Info for Single Unit */}
               {!useUnitsMode && shouldShowTenantInfo() && formData.category && (
-                <div className="space-y-6">
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-4">
-                      <Users className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-2">Occupancy Status</h2>
-                    <p className="text-gray-500 max-w-md mx-auto text-sm">Is this property currently occupied by tenants?</p>
-                  </div>
-
-                  {shouldShowOccupancyStatus() && (
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          {formData.occupancyStatus === "occupied" ? (
-                            <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
-                                <Users className="h-4 w-4 text-blue-600" />
-                              </div>
-                              <div>
-                                <p className="font-medium text-gray-900 text-sm">Occupied</p>
-                                <p className="text-xs text-gray-500">Property has tenants</p>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
-                                <UserX className="h-4 w-4 text-gray-600" />
-                              </div>
-                              <div>
-                                <p className="font-medium text-gray-900 text-sm">Vacant</p>
-                                <p className="text-xs text-gray-500">Property is available</p>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                        <Button 
-                          type="button"
-                          variant="outline" 
-                          size="sm" 
-                          onClick={toggleOccupancyStatus}
-                          className="px-3 py-1.5 text-xs h-8"
-                        >
-                          Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
-                        </Button>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-700 mb-3 block">Occupancy Status</Label>
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        {formData.occupancyStatus === "occupied" ? (
+                          <>
+                            <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
+                              <Users className="h-4 w-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900 text-sm">Occupied</p>
+                              <p className="text-xs text-gray-500">Property has tenants</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
+                              <UserX className="h-4 w-4 text-gray-600" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900 text-sm">Vacant</p>
+                              <p className="text-xs text-gray-500">Property is available</p>
+                            </div>
+                          </>
+                        )}
                       </div>
+                      <Button 
+                        type="button"
+                        variant="outline" 
+                        size="sm" 
+                        onClick={toggleOccupancyStatus}
+                        className="text-xs"
+                      >
+                        Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
+                      </Button>
                     </div>
-                  )}
+                  </div>
 
                   {/* Tenant Information */}
                   {formData.occupancyStatus === "occupied" && (
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-gray-900 text-sm">Tenant Information</h3>
+                        <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
                         <Button 
                           type="button"
                           variant="outline" 
                           size="sm" 
                           onClick={toggleTenantType}
-                          className="px-3 py-1.5 text-xs h-8"
+                          className="text-xs"
                         >
                           {formData.tenantType === "individual" ? "Switch to Company" : "Switch to Individual"}
                         </Button>
@@ -559,7 +478,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                             value={formData.tenantName}
                             onChange={handleChange}
                             placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                            className="h-10 text-sm"
+                            className="h-11"
                           />
                         </div>
                         
@@ -572,7 +491,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                               value={formData.tenantPhone}
                               onChange={handleChange}
                               placeholder="Phone number"
-                              className="h-10 text-sm"
+                              className="h-11"
                             />
                           </div>
                           <div>
@@ -583,7 +502,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                               value={formData.tenantEmail}
                               onChange={handleChange}
                               placeholder="Email address"
-                              className="h-10 text-sm"
+                              className="h-11"
                             />
                           </div>
                         </div>
@@ -592,51 +511,48 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   )}
                 </div>
               )}
-
-              {(useUnitsMode || formData.category) && (
-                <div className="pt-4">
-                  <Button onClick={() => setActiveTab("notes")} className="w-full h-10 text-sm bg-blue-600 hover:bg-blue-700">
-                    Continue to Notes
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              )}
             </div>
-          </TabsContent>
+          )}
 
-          {/* Notes Tab */}
-          <TabsContent value="notes" className="flex-1 overflow-y-auto px-6 pb-6">
-            <div className="max-w-2xl mx-auto space-y-6 pt-6">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-4">
-                  <Briefcase className="h-6 w-6 text-blue-600" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Additional Notes</h2>
-                <p className="text-gray-500 max-w-md mx-auto text-sm">Update any additional information or special details about this property</p>
-              </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="notes" className="text-sm font-medium text-gray-700 mb-2 block">Notes (Optional)</Label>
-                  <Textarea
-                    id="notes"
-                    name="notes"
-                    value={formData.notes}
-                    onChange={handleChange}
-                    placeholder="Add any additional notes, special features, maintenance requirements, or important details about this property..."
-                    className="min-h-[120px] resize-none text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <Button onClick={handleSubmit} className="w-full h-10 text-sm bg-blue-600 hover:bg-blue-700">
-                  Update Property
-                </Button>
-              </div>
+          {/* Notes Section */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">Notes</h2>
+              <p className="text-sm text-gray-600">Update any additional information about this property</p>
             </div>
-          </TabsContent>
-        </Tabs>
+            
+            <div>
+              <Textarea
+                id="notes"
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                placeholder="Add any additional notes, special features, maintenance requirements, or important details..."
+                className="min-h-[120px] resize-none"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-gray-100 px-8 py-4">
+        <div className="flex gap-3">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={!isFormValid}
+            className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Update Property
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className="flex-1 h-11"
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
