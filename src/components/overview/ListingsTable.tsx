@@ -49,7 +49,6 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
                 <TableHead className="font-semibold">Property</TableHead>
                 <TableHead className="font-semibold">Type</TableHead>
                 <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold">Occupancy</TableHead>
                 <TableHead className="font-semibold text-right">Revenue</TableHead>
                 <TableHead className="font-semibold text-right">Expenses</TableHead>
                 <TableHead className="font-semibold text-right">Net Profit</TableHead>
@@ -83,14 +82,6 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
                     >
                       {formatStatus(listing.occupancyStatus)}
                     </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900">
-                        {listing.occupiedUnits}/{listing.unitsCount}
-                      </span>
-                      <span className="text-sm text-gray-500">Units</span>
-                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <span className="font-semibold text-green-600">
