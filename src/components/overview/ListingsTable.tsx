@@ -46,6 +46,7 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
                 <TableHead className="font-semibold text-gray-800">Property</TableHead>
                 <TableHead className="font-semibold text-gray-800">Type</TableHead>
+                <TableHead className="font-semibold text-gray-800">Tenants</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Expenses</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Net Profit</TableHead>
@@ -55,18 +56,20 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
               {listings.map((listing) => (
                 <TableRow key={listing.id} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
                   <TableCell className="py-4">
-                    <div>
-                      <div className="font-semibold text-gray-900">{listing.name}</div>
-                      {listing.tenantName && (
-                        <div className="text-sm text-gray-600 mt-1">Tenant: {listing.tenantName}</div>
-                      )}
-                    </div>
+                    <div className="font-semibold text-gray-900">{listing.name}</div>
                   </TableCell>
                   <TableCell className="py-4">
                     <div className="flex items-center gap-2">
                       <span className="text-gray-400">{getPropertyTypeIcon(listing.type)}</span>
                       <span className="text-sm font-medium text-gray-700">{formatPropertyType(listing.type)}</span>
                     </div>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    {listing.tenantName ? (
+                      <span className="text-gray-900 font-medium">{listing.tenantName}</span>
+                    ) : (
+                      <span className="text-gray-500 text-sm italic">No Tenant</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-right py-4">
                     <span className="text-green-500">

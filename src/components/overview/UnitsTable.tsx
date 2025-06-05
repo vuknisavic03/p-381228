@@ -55,8 +55,8 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
             <TableHeader>
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
                 <TableHead className="font-semibold text-gray-800">Unit</TableHead>
-                <TableHead className="font-semibold text-gray-800">Property</TableHead>
                 <TableHead className="font-semibold text-gray-800">Type</TableHead>
+                <TableHead className="font-semibold text-gray-800">Tenants</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Expenses</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Net Profit</TableHead>
