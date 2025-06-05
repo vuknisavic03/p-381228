@@ -352,53 +352,52 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
                   </div>
                   
-                  <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-4">
-                    {/* Name Field with Tenant Type Toggle - Horizontal Layout */}
-                    <div className="space-y-2">
-                      <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
-                        {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                      </Label>
-                      
-                      <div className="flex gap-3 items-end">
-                        {/* Name Input - Smaller width */}
-                        <div className="flex-1 max-w-xs">
-                          <Input
-                            id={`tenantName-${currentUnit.id}`}
-                            value={currentUnit.tenant?.name || ""}
-                            onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
-                            placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                            className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
-                          />
-                        </div>
-                        
-                        {/* Tenant Type Toggle - Horizontal with Name Field */}
-                        <div className="flex bg-gray-50 border border-gray-100 rounded-lg p-1">
+                  <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-5">
+                    {/* Tenant Type Selection */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-medium text-gray-500">Tenant Type</Label>
+                      <div className="flex items-center gap-3">
+                        <div className="flex bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
                           <button
                             type="button"
                             onClick={() => updateUnitTenant(currentUnit.id, { type: "individual" })}
-                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                            className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
                               currentUnit.tenant?.type === "individual"
-                                ? "bg-white text-gray-700 shadow-sm"
-                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                ? "bg-blue-500 text-white shadow-sm"
+                                : "text-gray-600 hover:text-gray-700 hover:bg-gray-50"
                             }`}
                           >
-                            <User className="h-3.5 w-3.5" />
+                            <User className="h-4 w-4" />
                             Individual
                           </button>
                           <button
                             type="button"
                             onClick={() => updateUnitTenant(currentUnit.id, { type: "company" })}
-                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                            className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
                               currentUnit.tenant?.type === "company"
-                                ? "bg-white text-gray-700 shadow-sm"
-                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                ? "bg-blue-500 text-white shadow-sm"
+                                : "text-gray-600 hover:text-gray-700 hover:bg-gray-50"
                             }`}
                           >
-                            <Building2 className="h-3.5 w-3.5" />
+                            <Building2 className="h-4 w-4" />
                             Company
                           </button>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Name Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor={`tenantName-${currentUnit.id}`} className="text-sm font-medium text-gray-500">
+                        {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                      </Label>
+                      <Input
+                        id={`tenantName-${currentUnit.id}`}
+                        value={currentUnit.tenant?.name || ""}
+                        onChange={(e) => updateUnitTenant(currentUnit.id, { name: e.target.value })}
+                        placeholder={currentUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
+                        className="bg-white border-gray-200 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                      />
                     </div>
                     
                     {/* Contact Information */}
@@ -410,7 +409,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           value={currentUnit.tenant?.phone || ""}
                           onChange={(e) => updateUnitTenant(currentUnit.id, { phone: e.target.value })}
                           placeholder="Enter phone number"
-                          className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                          className="bg-white border-gray-200 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
                         />
                       </div>
                       <div className="space-y-2">
@@ -420,7 +419,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           value={currentUnit.tenant?.email || ""}
                           onChange={(e) => updateUnitTenant(currentUnit.id, { email: e.target.value })}
                           placeholder="Enter email address"
-                          className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                          className="bg-white border-gray-200 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
                         />
                       </div>
                     </div>
