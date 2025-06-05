@@ -1,4 +1,5 @@
 
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -229,47 +230,48 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
           {/* Current Unit Configuration */}
           {currentUnit && (
             <div className="space-y-6">
-              {/* Unit Name */}
-              <div>
-                <Label htmlFor={`unitNumber-${currentUnit.id}`} className="text-sm font-medium text-gray-700 mb-2 block">Unit Name</Label>
-                {editingUnitId === currentUnit.id ? (
-                  <Input
-                    defaultValue={currentUnit.unitNumber}
-                    className="h-11"
-                    placeholder="Unit name"
-                    autoFocus
-                    onBlur={(e) => handleUnitNameSubmit(currentUnit.id, e.target.value)}
-                    onKeyDown={(e) => handleUnitNameKeyDown(e, currentUnit.id, e.currentTarget.value)}
-                  />
-                ) : (
-                  <div 
-                    onClick={() => setEditingUnitId(currentUnit.id)}
-                    className="px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg cursor-pointer transition-colors hover:bg-gray-50 flex items-center justify-between group h-11"
-                  >
-                    <span>{currentUnit.unitNumber}</span>
-                    <Edit3 className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                )}
-              </div>
+              {/* Unit Name and Category - Horizontal Layout */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor={`unitNumber-${currentUnit.id}`} className="text-sm font-medium text-gray-700 mb-2 block">Unit Name</Label>
+                  {editingUnitId === currentUnit.id ? (
+                    <Input
+                      defaultValue={currentUnit.unitNumber}
+                      className="h-11"
+                      placeholder="Unit name"
+                      autoFocus
+                      onBlur={(e) => handleUnitNameSubmit(currentUnit.id, e.target.value)}
+                      onKeyDown={(e) => handleUnitNameKeyDown(e, currentUnit.id, e.currentTarget.value)}
+                    />
+                  ) : (
+                    <div 
+                      onClick={() => setEditingUnitId(currentUnit.id)}
+                      className="px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg cursor-pointer transition-colors hover:bg-gray-50 flex items-center justify-between group h-11"
+                    >
+                      <span>{currentUnit.unitNumber}</span>
+                      <Edit3 className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  )}
+                </div>
 
-              {/* Category */}
-              <div>
-                <Label className="text-sm font-medium text-gray-700 mb-2 block">Category</Label>
-                <Select
-                  value={currentUnit.category}
-                  onValueChange={(value) => updateUnit(currentUnit.id, { category: value })}
-                >
-                  <SelectTrigger className="h-11">
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {getAvailableCategories().map((cat) => (
-                      <SelectItem key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div>
+                  <Label className="text-sm font-medium text-gray-700 mb-2 block">Category</Label>
+                  <Select
+                    value={currentUnit.category}
+                    onValueChange={(value) => updateUnit(currentUnit.id, { category: value })}
+                  >
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getAvailableCategories().map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               {/* Occupancy Status */}
@@ -393,3 +395,4 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     </div>
   );
 }
+
