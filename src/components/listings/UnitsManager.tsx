@@ -360,30 +360,30 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                           {currentUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
                         </Label>
                         
-                        {/* Tenant Type Toggle - Horizontal with Name Field */}
-                        <div className="flex bg-gray-50 border border-gray-100 rounded-lg p-1">
+                        {/* Tenant Type Toggle - Smaller and More Elegant */}
+                        <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
                           <button
                             type="button"
                             onClick={() => updateUnitTenant(currentUnit.id, { type: "individual" })}
-                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
                               currentUnit.tenant?.type === "individual"
-                                ? "bg-white text-gray-700 shadow-sm"
+                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
                                 : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                             }`}
                           >
-                            <User className="h-3.5 w-3.5" />
+                            <User className="h-3 w-3" />
                             Individual
                           </button>
                           <button
                             type="button"
                             onClick={() => updateUnitTenant(currentUnit.id, { type: "company" })}
-                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
                               currentUnit.tenant?.type === "company"
-                                ? "bg-white text-gray-700 shadow-sm"
+                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
                                 : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                             }`}
                           >
-                            <Building2 className="h-3.5 w-3.5" />
+                            <Building2 className="h-3 w-3" />
                             Company
                           </button>
                         </div>
