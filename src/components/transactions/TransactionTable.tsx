@@ -54,7 +54,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow className="border-b bg-gray-50/80">
@@ -85,7 +85,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               
               <TableCell className="py-4">
                 <span className={`text-sm ${
-                  tx.type === "revenue" ? "text-green-600" : "text-red-500"
+                  tx.type === "revenue" ? "text-green-500" : "text-red-400"
                 }`}>
                   {formatAmount(tx.amount, tx.type)}
                 </span>

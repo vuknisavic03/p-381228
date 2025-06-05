@@ -30,7 +30,7 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
   }
 
   return (
-    <Card className="shadow-sm border-gray-200">
+    <Card className="shadow-sm border-gray-200 overflow-hidden">
       <CardHeader className="border-b border-gray-100 bg-white">
         <CardTitle className="flex items-center gap-2 text-gray-900 font-semibold">
           Listings Overview
@@ -40,7 +40,7 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
+        <div className="overflow-hidden rounded-b-xl">
           <Table>
             <TableHeader>
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
@@ -69,18 +69,18 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className="text-green-600">
+                    <span className="text-green-500">
                       +${listing.revenue.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="text-right py-4">
-                    <span className="text-red-500">
+                    <span className="text-red-400">
                       -${listing.expenses.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="text-right py-4">
                     <span className={
-                      listing.profit >= 0 ? 'text-green-600' : 'text-red-500'
+                      listing.profit >= 0 ? 'text-green-500' : 'text-red-400'
                     }>
                       {listing.profit >= 0 ? '+' : ''}${listing.profit.toLocaleString()}
                     </span>
