@@ -310,11 +310,13 @@ export function TransactionActivity() {
 
   // Handle transaction edit
   const handleEditTransaction = (tx: Transaction) => {
+    console.log('handleEditTransaction called with:', tx);
     setEditingTransaction(tx);
   };
 
   // Implement an onUpdate callback for EditTransactionForm
   const handleUpdateTransaction = (updatedTransaction: Transaction) => {
+    console.log('handleUpdateTransaction called with:', updatedTransaction);
     setEditingTransaction(null);
     toast({
       title: "Transaction Updated",
@@ -322,6 +324,13 @@ export function TransactionActivity() {
       duration: 3000
     });
   };
+
+  const handleCloseEdit = () => {
+    console.log('handleCloseEdit called');
+    setEditingTransaction(null);
+  };
+
+  console.log('Current editingTransaction:', editingTransaction);
 
   return (
     <div className="h-full flex flex-col">
@@ -345,11 +354,11 @@ export function TransactionActivity() {
       </div>
 
       {editingTransaction && (
-        <Sheet open={!!editingTransaction} onOpenChange={() => setEditingTransaction(null)}>
+        <Sheet open={!!editingTransaction} onOpenChange={handleCloseEdit}>
           <SheetContent side="right" className="w-[480px] sm:w-[540px] p-0 border-l shadow-xl bg-white">
             <EditTransactionForm
               transaction={editingTransaction}
-              onClose={() => setEditingTransaction(null)}
+              onClose={handleCloseEdit}
               onUpdate={handleUpdateTransaction}
             />
           </SheetContent>

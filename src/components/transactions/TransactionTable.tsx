@@ -42,6 +42,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     return "secondary";
   };
 
+  const handleRowClick = (transaction: Transaction) => {
+    console.log('Row clicked, transaction:', transaction);
+    onEdit(transaction);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent, transaction: Transaction) => {
+    e.stopPropagation();
+    console.log('Button clicked, transaction:', transaction);
+    onEdit(transaction);
+  };
+
   return (
     <div className="bg-white rounded-lg border shadow-sm">
       <Table>
@@ -60,7 +71,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             <TableRow
               key={tx.id}
               className="hover:bg-gray-50 cursor-pointer group transition-colors"
-              onClick={() => onEdit(tx)}
+              onClick={() => handleRowClick(tx)}
             >
               <TableCell>
                 <span className={`font-medium ${
@@ -99,10 +110,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEdit(tx);
-                  }}
+                  onClick={(e) => handleButtonClick(e, tx)}
                   aria-label="Edit transaction"
                 >
                   <ChevronRight className="h-4 w-4 text-gray-400" />
