@@ -55,8 +55,7 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
                 <TableHead className="font-semibold text-gray-800">Unit</TableHead>
                 <TableHead className="font-semibold text-gray-800">Property</TableHead>
-                <TableHead className="font-semibold text-gray-800">Category</TableHead>
-                <TableHead className="font-semibold text-gray-800">Tenant</TableHead>
+                <TableHead className="font-semibold text-gray-800">Type</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Expenses</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Net Profit</TableHead>
@@ -66,10 +65,10 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
               {units.map((unit) => (
                 <TableRow key={unit.id} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
                   <TableCell className="py-4">
-                    <div className="font-semibold text-gray-900">{unit.unitNumber}</div>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <div className="text-sm font-medium text-gray-700">{unit.listingName}</div>
+                    <div>
+                      <div className="font-semibold text-gray-900">{unit.unitNumber}</div>
+                      <div className="text-sm text-gray-600 mt-1">{unit.listingName}</div>
+                    </div>
                   </TableCell>
                   <TableCell className="py-4">
                     <Badge variant="outline" className="text-xs font-medium border-gray-300 text-gray-700">
@@ -79,9 +78,9 @@ export function UnitsTable({ units, isLoading }: UnitsTableProps) {
                   <TableCell className="py-4">
                     {unit.tenantName ? (
                       <div>
-                        <div className="font-medium text-sm text-gray-900">{unit.tenantName}</div>
+                        <div className="font-semibold text-gray-900">{unit.tenantName}</div>
                         {unit.tenantType && (
-                          <div className="text-xs text-gray-600 mt-1">{formatTenantType(unit.tenantType)}</div>
+                          <div className="text-sm text-gray-600 mt-1">{formatTenantType(unit.tenantType)}</div>
                         )}
                       </div>
                     ) : (
