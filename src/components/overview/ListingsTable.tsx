@@ -29,12 +29,16 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
     );
   }
 
+  const formatStatus = (status: string) => {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           Listings Overview
-          <Badge variant="secondary">{listings.length} properties</Badge>
+          <Badge variant="secondary">{listings.length} Properties</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -42,54 +46,67 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Property</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Occupancy</TableHead>
-                <TableHead>Units</TableHead>
-                <TableHead className="text-right">Revenue</TableHead>
-                <TableHead className="text-right">Expenses</TableHead>
-                <TableHead className="text-right">Profit</TableHead>
+                <TableHead className="font-semibold">Property</TableHead>
+                <TableHead className="font-semibold">Type</TableHead>
+                <TableHead className="font-semibold">Status</TableHead>
+                <TableHead className="font-semibold">Occupancy</TableHead>
+                <TableHead className="font-semibold text-right">Revenue</TableHead>
+                <TableHead className="font-semibold text-right">Expenses</TableHead>
+                <TableHead className="font-semibold text-right">Net Profit</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {listings.map((listing) => (
-                <TableRow key={listing.id}>
+                <TableRow key={listing.id} className="hover:bg-gray-50">
                   <TableCell>
                     <div>
-                      <div className="font-medium">{listing.name}</div>
+                      <div className="font-medium text-gray-900">{listing.name}</div>
                       {listing.tenantName && (
-                        <div className="text-sm text-gray-500">{listing.tenantName}</div>
+                        <div className="text-sm text-gray-500">Tenant: {listing.tenantName}</div>
                       )}
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       {getPropertyTypeIcon(listing.type)}
-                      <span className="text-sm">{formatPropertyType(listing.type)}</span>
+                      <span className="text-sm font-medium">{formatPropertyType(listing.type)}</span>
                     </div>
                   </TableCell>
                   <TableCell>
                     <Badge 
                       variant={listing.occupancyStatus === 'occupied' ? 'default' : 'secondary'}
-                      className={listing.occupancyStatus === 'occupied' ? 'bg-green-100 text-green-800' : ''}
+                      className={`${
+                        listing.occupancyStatus === 'occupied' 
+                          ? 'bg-green-100 text-green-800 border-green-200' 
+                          : 'bg-gray-100 text-gray-700 border-gray-200'
+                      } font-medium`}
                     >
-                      {listing.occupancyStatus}
+                      {formatStatus(listing.occupancyStatus)}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm">
-                      {listing.occupiedUnits}/{listing.unitsCount}
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-900">
+                        {listing.occupiedUnits}/{listing.unitsCount}
+                      </span>
+                      <span className="text-sm text-gray-500">Units</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <span className="font-semibold text-green-600">
+                      +${listing.revenue.toLocaleString()}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right font-medium text-green-600">
-                    ${listing.revenue.toLocaleString()}
+                  <TableCell className="text-right">
+                    <span className="font-semibold text-red-600">
+                      -${listing.expenses.toLocaleString()}
+                    </span>
                   </TableCell>
-                  <TableCell className="text-right font-medium text-red-600">
-                    ${listing.expenses.toLocaleString()}
-                  </TableCell>
-                  <TableCell className="text-right font-medium">
-                    <span className={listing.profit >= 0 ? 'text-green-600' : 'text-red-600'}>
-                      ${listing.profit.toLocaleString()}
+                  <TableCell className="text-right">
+                    <span className={`font-semibold ${
+                      listing.profit >= 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {listing.profit >= 0 ? '+' : ''}${listing.profit.toLocaleString()}
                     </span>
                   </TableCell>
                 </TableRow>
