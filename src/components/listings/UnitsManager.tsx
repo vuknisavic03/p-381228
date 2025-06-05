@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -180,7 +179,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex items-center justify-center w-10 h-10 bg-gray-50 rounded-lg">
-                  <Building className="h-5 w-5 text-gray-400" />
+                  <Building className="h-5 w-5 text-blue-500" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-700">Property Units</h3>
@@ -251,7 +250,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
               {/* Unit Basic Information */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
                   <h4 className="text-base font-semibold text-gray-600">Unit Details</h4>
                 </div>
                 
@@ -303,7 +302,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
               {shouldShowOccupancyStatus() && (
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                     <h4 className="text-base font-semibold text-gray-600">Occupancy Status</h4>
                   </div>
                   
@@ -312,7 +311,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                       {currentUnit.occupancyStatus === "occupied" ? (
                         <>
                           <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg">
-                            <Users className="h-5 w-5 text-gray-500" />
+                            <Users className="h-5 w-5 text-green-500" />
                           </div>
                           <div>
                             <p className="font-semibold text-gray-600">Occupied</p>
@@ -349,7 +348,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
                       <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
                     </div>
                     
