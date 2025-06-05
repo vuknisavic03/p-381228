@@ -58,12 +58,11 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow className="border-b bg-gray-50">
-            <TableHead className="font-medium text-gray-700">ID</TableHead>
+            <TableHead className="font-medium text-gray-700">Description</TableHead>
             <TableHead className="font-medium text-gray-700">Amount</TableHead>
-            <TableHead className="font-medium text-gray-700">From</TableHead>
             <TableHead className="font-medium text-gray-700">Date</TableHead>
             <TableHead className="font-medium text-gray-700">Category</TableHead>
-            <TableHead className="font-medium text-gray-700">Payment</TableHead>
+            <TableHead className="font-medium text-gray-700">Payment Method</TableHead>
             <TableHead className="w-12"></TableHead>
           </TableRow>
         </TableHeader>
@@ -75,12 +74,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               onClick={() => handleRowClick(tx)}
               data-transaction-id={tx.id}
             >
-              <TableCell>
-                <span className="text-sm text-gray-500 font-mono">#{tx.id}</span>
+              <TableCell className="max-w-[300px]">
+                <div className="space-y-1">
+                  <div className="font-medium text-gray-900 truncate">{tx.from}</div>
+                  {tx.notes && (
+                    <div className="text-sm text-gray-500 truncate">{tx.notes}</div>
+                  )}
+                </div>
               </TableCell>
               
               <TableCell>
-                <span className={`font-medium ${
+                <span className={`font-semibold text-lg ${
                   tx.type === "revenue" ? "text-green-600" : "text-red-600"
                 }`}>
                   {formatAmount(tx.amount, tx.type)}
@@ -88,11 +92,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </TableCell>
               
               <TableCell>
-                <span className="text-gray-900">{tx.from}</span>
-              </TableCell>
-              
-              <TableCell>
-                <span className="text-gray-600">
+                <span className="text-gray-700 font-medium">
                   {tx.date.toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -102,7 +102,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </TableCell>
               
               <TableCell>
-                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs">
+                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium">
                   {tx.category}
                 </Badge>
               </TableCell>
@@ -117,7 +117,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                   size="icon"
                   className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={(e) => handleButtonClick(e, tx)}
-                  aria-label={`Edit transaction #${tx.id}`}
+                  aria-label={`Edit transaction from ${tx.from}`}
                 >
                   <ChevronRight className="h-4 w-4 text-gray-400" />
                 </Button>
