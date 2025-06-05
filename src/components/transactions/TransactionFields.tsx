@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,7 +22,7 @@ import { UnitSelector } from "./UnitSelector";
 import { formatPropertyType, getPropertyTypeIcon } from "@/utils/propertyTypeUtils";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, UserX } from "lucide-react";
 
 export function TransactionFields({ 
   mockListings, 
@@ -185,7 +186,15 @@ export function TransactionFields({
                       </div>
                     </div>
                   ) : (
-                    <div className="text-sm text-gray-500">No Tenant</div>
+                    <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50 rounded-md border border-gray-100">
+                      <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
+                        <UserX className="h-4 w-4 text-gray-400" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-600">No Tenant Assigned</div>
+                        <div className="text-xs text-gray-500">This property is currently vacant</div>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
