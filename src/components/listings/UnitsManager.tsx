@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -368,18 +367,6 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   </div>
                 </div>
               )}
-
-              {/* Notes */}
-              <div>
-                <Label htmlFor={`notes-${currentUnit.id}`} className="text-sm font-medium text-gray-700 mb-2 block">Notes</Label>
-                <Textarea
-                  id={`notes-${currentUnit.id}`}
-                  value={currentUnit.notes || ""}
-                  onChange={(e) => updateUnit(currentUnit.id, { notes: e.target.value })}
-                  placeholder="Add any additional notes, special features, maintenance requirements, or important details..."
-                  className="min-h-[120px] resize-none"
-                />
-              </div>
             </div>
           )}
         </div>
