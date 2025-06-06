@@ -73,7 +73,7 @@ export function ModernFilter({
               <Button 
                 variant="outline" 
                 className={cn(
-                  "gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white rounded-lg shadow-sm transition-all duration-200",
+                  "gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white rounded-lg shadow-sm",
                   section.selectedValues.length > 0 && "border-blue-500 bg-blue-50 text-blue-700"
                 )}
               >
@@ -94,7 +94,7 @@ export function ModernFilter({
                 </DropdownMenuLabel>
               </div>
               
-              <div className="max-h-64 overflow-y-auto p-2">
+              <div className="max-h-64 overflow-y-auto p-1">
                 {section.options.map((option) => {
                   const isSelected = section.selectedValues.includes(option.value);
                   return (
@@ -102,40 +102,33 @@ export function ModernFilter({
                       key={option.value}
                       onClick={() => section.onToggle(option.value)}
                       className={cn(
-                        "flex items-center justify-between px-3 py-2.5 cursor-pointer rounded-md transition-all duration-200 group",
+                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1",
                         isSelected 
-                          ? "bg-blue-50 text-blue-700 border border-blue-200" 
-                          : "hover:bg-gray-50 text-gray-700 border border-transparent"
+                          ? "bg-blue-50 text-blue-700" 
+                          : "hover:bg-gray-50 text-gray-700"
                       )}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={cn(
-                          "flex items-center justify-center w-4 h-4 rounded border-2 transition-all duration-200",
-                          isSelected 
-                            ? "bg-blue-600 border-blue-600" 
-                            : "border-gray-300 group-hover:border-gray-400"
-                        )}>
-                          {isSelected && (
-                            <Check className="h-2.5 w-2.5 text-white" />
-                          )}
-                        </div>
-                        <span className="text-sm font-medium">{option.label}</span>
+                      <span className="text-sm">{option.label}</span>
+                      <div className="flex items-center gap-2">
+                        {option.count !== undefined && (
+                          <span className={cn(
+                            "text-xs px-2 py-0.5 rounded-full",
+                            isSelected 
+                              ? "bg-blue-100 text-blue-700" 
+                              : "bg-gray-100 text-gray-500"
+                          )}>
+                            {option.count}
+                          </span>
+                        )}
+                        {isSelected && (
+                          <Check className="h-3 w-3 text-blue-600" />
+                        )}
                       </div>
-                      {option.count !== undefined && (
-                        <span className={cn(
-                          "text-xs px-2 py-1 rounded-full font-medium transition-colors",
-                          isSelected 
-                            ? "bg-blue-100 text-blue-700" 
-                            : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
-                        )}>
-                          {option.count}
-                        </span>
-                      )}
                     </div>
                   );
                 })}
                 {section.options.length === 0 && (
-                  <div className="px-3 py-4 text-sm text-gray-500 text-center">
+                  <div className="px-3 py-2 text-sm text-gray-500 text-center">
                     No options available
                   </div>
                 )}
@@ -150,7 +143,7 @@ export function ModernFilter({
             variant="ghost"
             size="sm"
             onClick={onClearFilters}
-            className="gap-1 h-10 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className="gap-1 h-10 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
           >
             <X className="h-3 w-3" />
             <span className="text-sm">Clear</span>
