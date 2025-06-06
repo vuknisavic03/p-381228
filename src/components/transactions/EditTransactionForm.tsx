@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
@@ -151,13 +153,15 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-8">
+      <div className="px-6 py-4 space-y-6">
         <TransactionFields 
           mockListings={listings}
           initialValues={fields}
           onChange={setFields}
           editMode={true}
         />
+        
+        <Separator className="my-6" />
         
         {showNotesSection && (
           <div className="space-y-4 group">
@@ -179,6 +183,8 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
         )}
 
         {/* Action Buttons */}
+        <Separator className="my-6" />
+        
         <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
           <Button 
             onClick={handleUpdate}

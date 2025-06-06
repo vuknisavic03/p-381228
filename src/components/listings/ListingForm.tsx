@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
@@ -231,7 +232,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-8 py-6">
-        <div className="max-w-2xl space-y-12">
+        <div className="max-w-2xl space-y-8">
           
           {/* Location Section */}
           <div className="space-y-6">
@@ -291,6 +292,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               </div>
             </div>
           </div>
+
+          <Separator className="my-8" />
 
           {/* Property Type Section */}
           <div className="space-y-6">
@@ -354,177 +357,187 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
           {/* Details Section */}
           {formData.type && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-lg font-medium text-gray-900 mb-2">Details</h2>
-                <p className="text-sm text-gray-600">Configure the specific details of your property</p>
-              </div>
-
-              {/* Units Manager */}
-              {useUnitsMode ? (
-                <UnitsManager
-                  propertyType={formData.type as PropertyType}
-                  units={units}
-                  onUnitsChange={setUnits}
-                />
-              ) : (
+            <>
+              <Separator className="my-8" />
+              
+              <div className="space-y-6">
                 <div>
-                  <Label className="text-sm font-medium text-gray-700 mb-3 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-3">
-                    {getAvailableCategories().map((cat) => (
-                      <div
-                        key={cat.value}
-                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                          formData.category === cat.value
-                            ? "border-blue-200 bg-blue-50"
-                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
-                      >
-                        <div className="flex items-start gap-3">
-                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
-                          <div className="flex-1">
-                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
-                              {cat.label}
-                            </h4>
-                            <p className={`text-xs mt-1 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
-                              {cat.description}
-                            </p>
-                          </div>
-                          {formData.category === cat.value && (
-                            <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5" />
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-2">Details</h2>
+                  <p className="text-sm text-gray-600">Configure the specific details of your property</p>
                 </div>
-              )}
 
-              {/* Occupancy and Tenant Info for Single Unit */}
-              {!useUnitsMode && shouldShowTenantInfo() && formData.category && (
-                <div className="space-y-4">
+                {/* Units Manager */}
+                {useUnitsMode ? (
+                  <UnitsManager
+                    propertyType={formData.type as PropertyType}
+                    units={units}
+                    onUnitsChange={setUnits}
+                  />
+                ) : (
                   <div>
-                    <Label className="text-sm font-medium text-gray-700 mb-3 block">Occupancy Status</Label>
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        {formData.occupancyStatus === "occupied" ? (
-                          <>
-                            <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
-                              <Users className="h-4 w-4 text-blue-600" />
+                    <Label className="text-sm font-medium text-gray-700 mb-3 block">Specific Category</Label>
+                    <div className="grid grid-cols-1 gap-3">
+                      {getAvailableCategories().map((cat) => (
+                        <div
+                          key={cat.value}
+                          className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                            formData.category === cat.value
+                              ? "border-blue-200 bg-blue-50"
+                              : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
+                        >
+                          <div className="flex items-start gap-3">
+                            <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
+                            <div className="flex-1">
+                              <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
+                                {cat.label}
+                              </h4>
+                              <p className={`text-xs mt-1 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
+                                {cat.description}
+                              </p>
                             </div>
-                            <div>
-                              <p className="font-medium text-gray-900 text-sm">Occupied</p>
-                              <p className="text-xs text-gray-500">Property has tenants</p>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
-                              <UserX className="h-4 w-4 text-gray-600" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-gray-900 text-sm">Vacant</p>
-                              <p className="text-xs text-gray-500">Property is available</p>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      <Button 
-                        type="button"
-                        variant="outline" 
-                        size="sm" 
-                        onClick={toggleOccupancyStatus}
-                        className="text-xs"
-                      >
-                        Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
-                      </Button>
+                            {formData.category === cat.value && (
+                              <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5" />
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
+                )}
 
-                  {/* Tenant Information */}
-                  {formData.occupancyStatus === "occupied" && (
+                {/* Occupancy and Tenant Info for Single Unit */}
+                {!useUnitsMode && shouldShowTenantInfo() && formData.category && (
+                  <>
+                    <Separator className="my-6" />
+                    
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
-                        
-                        {/* Tenant Type Toggle - Smaller and More Elegant */}
-                        <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
-                          <button
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700 mb-3 block">Occupancy Status</Label>
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            {formData.occupancyStatus === "occupied" ? (
+                              <>
+                                <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
+                                  <Users className="h-4 w-4 text-blue-600" />
+                                </div>
+                                <div>
+                                  <p className="font-medium text-gray-900 text-sm">Occupied</p>
+                                  <p className="text-xs text-gray-500">Property has tenants</p>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
+                                  <UserX className="h-4 w-4 text-gray-600" />
+                                </div>
+                                <div>
+                                  <p className="font-medium text-gray-900 text-sm">Vacant</p>
+                                  <p className="text-xs text-gray-500">Property is available</p>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                          <Button 
                             type="button"
-                            onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
-                              formData.tenantType === "individual"
-                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                            }`}
+                            variant="outline" 
+                            size="sm" 
+                            onClick={toggleOccupancyStatus}
+                            className="text-xs"
                           >
-                            <Users className="h-3 w-3" />
-                            Individual
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
-                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
-                              formData.tenantType === "company"
-                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                            }`}
-                          >
-                            <Building2 className="h-3 w-3" />
-                            Company
-                          </button>
+                            Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
+                          </Button>
                         </div>
                       </div>
-                      
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="tenantName" className="text-sm font-medium text-gray-700 mb-2 block">
-                            {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
-                          </Label>
-                          <Input
-                            id="tenantName"
-                            name="tenantName"
-                            value={formData.tenantName}
-                            onChange={handleChange}
-                            placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                            className="h-11"
-                          />
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="tenantPhone" className="text-sm font-medium text-gray-700 mb-2 block">Phone</Label>
-                            <Input
-                              id="tenantPhone"
-                              name="tenantPhone"
-                              value={formData.tenantPhone}
-                              onChange={handleChange}
-                              placeholder="Phone number"
-                              className="h-11"
-                            />
+
+                      {/* Tenant Information */}
+                      {formData.occupancyStatus === "occupied" && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
+                            
+                            {/* Tenant Type Toggle - Smaller and More Elegant */}
+                            <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                              <button
+                                type="button"
+                                onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
+                                className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                                  formData.tenantType === "individual"
+                                    ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                }`}
+                              >
+                                <Users className="h-3 w-3" />
+                                Individual
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
+                                className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                                  formData.tenantType === "company"
+                                    ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                }`}
+                              >
+                                <Building2 className="h-3 w-3" />
+                                Company
+                              </button>
+                            </div>
                           </div>
-                          <div>
-                            <Label htmlFor="tenantEmail" className="text-sm font-medium text-gray-700 mb-2 block">Email</Label>
-                            <Input
-                              id="tenantEmail"
-                              name="tenantEmail"
-                              value={formData.tenantEmail}
-                              onChange={handleChange}
-                              placeholder="Email address"
-                              className="h-11"
-                            />
+                          
+                          <div className="space-y-4">
+                            <div>
+                              <Label htmlFor="tenantName" className="text-sm font-medium text-gray-700 mb-2 block">
+                                {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
+                              </Label>
+                              <Input
+                                id="tenantName"
+                                name="tenantName"
+                                value={formData.tenantName}
+                                onChange={handleChange}
+                                placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
+                                className="h-11"
+                              />
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label htmlFor="tenantPhone" className="text-sm font-medium text-gray-700 mb-2 block">Phone</Label>
+                                <Input
+                                  id="tenantPhone"
+                                  name="tenantPhone"
+                                  value={formData.tenantPhone}
+                                  onChange={handleChange}
+                                  placeholder="Phone number"
+                                  className="h-11"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="tenantEmail" className="text-sm font-medium text-gray-700 mb-2 block">Email</Label>
+                                <Input
+                                  id="tenantEmail"
+                                  name="tenantEmail"
+                                  value={formData.tenantEmail}
+                                  onChange={handleChange}
+                                  placeholder="Email address"
+                                  className="h-11"
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
+                  </>
+                )}
+              </div>
+            </>
           )}
 
           {/* Notes Section */}
+          <Separator className="my-8" />
+          
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-medium text-gray-900 mb-2">Notes</h2>
