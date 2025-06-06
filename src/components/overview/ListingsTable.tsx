@@ -55,11 +55,18 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
             <TableBody>
               {listings.map((listing) => {
                 const getTenantDisplay = () => {
+                  // For hospitality and vacation rental, don't show tenant info
+                  if (listing.type === 'hospitality' || listing.type === 'vacation_rental') {
+                    return null;
+                  }
+                  
                   if (listing.unitsCount > 1) {
                     return "Multiple Tenants";
                   }
                   return listing.tenantName || "No Tenant";
                 };
+
+                const tenantDisplay = getTenantDisplay();
 
                 return (
                   <TableRow key={listing.id} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
@@ -73,13 +80,17 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
                       </div>
                     </TableCell>
                     <TableCell className="py-4">
-                      <span className={
-                        listing.unitsCount > 1 || listing.tenantName 
-                          ? "text-gray-900 font-medium" 
-                          : "text-gray-500 text-sm italic"
-                      }>
-                        {getTenantDisplay()}
-                      </span>
+                      {tenantDisplay ? (
+                        <span className={
+                          listing.unitsCount > 1 || listing.tenantName 
+                            ? "text-gray-900 font-medium" 
+                            : "text-gray-500 text-sm italic"
+                        }>
+                          {tenantDisplay}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-sm">—</span>
+                      )}
                     </TableCell>
                     <TableCell className="text-right py-4">
                       <span className="text-green-500">
