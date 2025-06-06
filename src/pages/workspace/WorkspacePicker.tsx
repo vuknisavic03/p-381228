@@ -302,7 +302,7 @@ export default function WorkspacePicker() {
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
-                          margin={{ top: 15, right: 20, left: 20, bottom: 20 }}
+                          margin={{ top: 5, right: 5, left: 10, bottom: 5 }}
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
@@ -316,18 +316,16 @@ export default function WorkspacePicker() {
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#6b7280', fontSize: 10 }}
-                            padding={{ left: 15, right: 15 }}
-                            dy={5}
+                            padding={{ left: 10, right: 10 }}
                           />
                           <YAxis 
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#6b7280', fontSize: 10 }}
-                            width={40}
+                            width={35}
                             tickFormatter={(value) => `$${value}k`}
-                            padding={{ top: 10, bottom: 10 }}
+                            padding={{ top: 5 }}
                             domain={['auto', 'auto']}
-                            dx={-5}
                           />
                           <Tooltip 
                             content={<CustomTooltip />} 
@@ -375,7 +373,7 @@ export default function WorkspacePicker() {
                     <ResponsiveContainer width="100%" height="95%">
                       <RechartsBarChart
                         data={monthlyCommissionData}
-                        margin={{ top: 30, right: 40, left: 40, bottom: 30 }}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
                         <XAxis 
@@ -383,18 +381,16 @@ export default function WorkspacePicker() {
                           axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
                           tickLine={false}
                           tick={{ fill: '#6b7280', fontSize: 12 }}
-                          padding={{ left: 20, right: 20 }}
-                          dy={10}
+                          padding={{ left: 10, right: 10 }}
                         />
                         <YAxis 
                           axisLine={false}
                           tickLine={false}
                           tick={{ fill: '#6b7280', fontSize: 12 }}
                           tickFormatter={(value) => `$${value}k`}
-                          width={50}
-                          padding={{ top: 15, bottom: 15 }}
+                          width={45}
+                          padding={{ top: 10 }}
                           domain={['auto', 'auto']}
-                          dx={-10}
                         />
                         <Tooltip 
                           content={<CustomTooltip />}
