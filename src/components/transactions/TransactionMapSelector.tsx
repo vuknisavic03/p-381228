@@ -242,10 +242,7 @@ export function TransactionMapSelector({
             lng: markerLng
           };
           
-          mapInstance.panTo(newCenter, {
-            duration: 800,
-            easing: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-          });
+          mapInstance.panTo(newCenter);
         }
       }
     }
