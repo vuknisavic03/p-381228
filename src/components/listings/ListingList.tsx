@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { MapPin, Phone, Mail, Loader2, Users, UserX } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -211,6 +210,7 @@ interface ListingListProps {
 }
 
 export function ListingList({ onListingClick, listings, isLoading }: ListingListProps) {
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);

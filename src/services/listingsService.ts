@@ -65,7 +65,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "hospitality",
-    category: "restaurant",
+    category: "hotel",
     occupancyStatus: "occupied",
     tenant: {
       name: "Kalemegdan Restaurant",
@@ -83,7 +83,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "hospitality",
-    category: "restaurant",
+    category: "bed_breakfast",
     occupancyStatus: "vacant",
     tenant: null,
     notes: "Bohemian quarter - available for rent"
@@ -96,7 +96,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "residential_rental",
-    category: "apartment",
+    category: "apartment_condo",
     occupancyStatus: "occupied",
     tenant: {
       name: "Marko Petrović",
@@ -177,7 +177,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "residential_rental",
-    category: "apartment",
+    category: "single_family",
     occupancyStatus: "vacant",
     tenant: null,
     notes: "Residential area - available for rent"
