@@ -11,6 +11,60 @@ import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUti
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
 
+// Category mapping from ListingForm - this ensures consistency
+const typeToCategoryMap = {
+  residential_rental: [
+    { value: "single_family", label: "Single-family Home" },
+    { value: "multi_family", label: "Multi-family" },
+    { value: "apartment_condo", label: "Apartment/Condo" },
+  ],
+  commercial_rental: [
+    { value: "office", label: "Office Space" },
+    { value: "retail", label: "Retail Store" },
+    { value: "medical", label: "Medical/Professional" },
+  ],
+  industrial: [
+    { value: "warehouse", label: "Warehouse" },
+    { value: "distribution", label: "Distribution Facility" },
+    { value: "manufacturing", label: "Manufacturing" },
+  ],
+  hospitality: [
+    { value: "hotel", label: "Hotel" },
+    { value: "motel", label: "Motel" },
+    { value: "bed_breakfast", label: "Bed & Breakfast" },
+  ],
+  vacation_rental: [
+    { value: "short_term", label: "Short-term Rental" },
+    { value: "serviced_apartment", label: "Serviced Apartment" },
+    { value: "holiday_home", label: "Holiday Home" },
+  ],
+  mixed_use: [
+    { value: "residential_commercial", label: "Residential-Commercial" },
+    { value: "live_work", label: "Live-Work Space" },
+    { value: "multi_purpose", label: "Multi-Purpose" },
+  ],
+};
+
+// Helper function to get category label
+const getCategoryLabel = (type: string, category: string) => {
+  const typeCategories = typeToCategoryMap[type as keyof typeof typeToCategoryMap];
+  if (!typeCategories) return category;
+  
+  const foundCategory = typeCategories.find(cat => cat.value === category);
+  return foundCategory ? foundCategory.label : category;
+};
+
+// Helper function to get all available categories for filtering
+const getAllAvailableCategories = (listings: any[]) => {
+  const categoriesSet = new Set<string>();
+  listings.forEach(listing => {
+    if (listing.category) {
+      categoriesSet.add(listing.category);
+    }
+  });
+  return Array.from(categoriesSet);
+};
+
 // Belgrade test listings for accuracy testing
 const initialListings = [
   {
@@ -52,7 +106,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "hospitality",
-    category: "restaurant",
+    category: "hotel",
     tenant: {
       name: "Kalemegdan Restaurant",
       phone: "+381 11 345 6789",
@@ -68,7 +122,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "hospitality",
-    category: "restaurant",
+    category: "bed_breakfast",
     tenant: {
       name: "Traditional Serbian Restaurant",
       phone: "+381 11 456 7890",
@@ -84,7 +138,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "residential_rental",
-    category: "apartment",
+    category: "apartment_condo",
     tenant: {
       name: "Marko Petrović",
       phone: "+381 11 567 8901",
@@ -132,7 +186,7 @@ const initialListings = [
     country: "Serbia",
     postalCode: "11000",
     type: "residential_rental",
-    category: "apartment",
+    category: "single_family",
     tenant: {
       name: "Ana Jovanović",
       phone: "+381 11 890 1234",
@@ -170,12 +224,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
   });
 
   const propertyTypes = ["residential_rental", "commercial_rental", "hospitality", "vacation_rental", "mixed_use", "industrial"];
-  const categories = [
-    "apartment", "house", "condo", "luxury_apartment", "penthouse",
-    "office", "retail", "restaurant", "warehouse", "factory",
-    "hotel", "boutique_hotel", "resort", "hostel",
-    "retail_office", "residential_commercial"
-  ];
+  const categories = getAllAvailableCategories(listings);
   const countries = Array.from(new Set(listings.map(l => l.country).filter(Boolean)));
   const occupancyStatuses = ["occupied", "vacant"];
 
@@ -248,10 +297,10 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
       title: "Category",
       options: getOptionCounts('categories', categories).map(item => ({
         ...item,
-        label: item.value.replace(/_/g, ' ')
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ')
+        label: getCategoryLabel(
+          listings.find(l => l.category === item.value)?.type || '',
+          item.value
+        )
       })),
       selectedValues: filters.categories,
       onToggle: (value: string) => toggleFilter("categories", value),
@@ -397,10 +446,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
                             </div>
                           </div>
                           <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
-                            {listing.category?.replace(/_/g, ' ')
-                              .split(' ')
-                              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                              .join(' ')}
+                            {getCategoryLabel(listing.type, listing.category)}
                           </span>
                         </div>
                       </div>
