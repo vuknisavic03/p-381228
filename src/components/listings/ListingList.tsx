@@ -328,7 +328,10 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
             <div className="space-y-2">
               {filteredListings.length > 0 ? (
                 filteredListings.map((listing) => {
-                  const occupancyStatus = listing.occupancyStatus || (listing.tenant ? 'occupied' : 'vacant');
+                  // For hospitality and vacation rental, don't show occupancy status
+                  const shouldShowOccupancy = listing.type !== 'hospitality' && listing.type !== 'vacation_rental';
+                  const occupancyStatus = shouldShowOccupancy ? (listing.occupancyStatus || (listing.tenant ? 'occupied' : 'vacant')) : null;
+                  
                   return (
                     <Card 
                       key={listing.id} 
@@ -345,18 +348,20 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                              occupancyStatus === 'occupied' 
-                                ? 'bg-green-50 text-green-700 border border-green-200'
-                                : 'bg-orange-50 text-orange-700 border border-orange-200'
-                            }`}>
-                              {occupancyStatus === 'occupied' ? (
-                                <Users className="h-3 w-3" />
-                              ) : (
-                                <UserX className="h-3 w-3" />
-                              )}
-                              <span>{occupancyStatus === 'occupied' ? 'Occupied' : 'Vacant'}</span>
-                            </div>
+                            {shouldShowOccupancy && (
+                              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                                occupancyStatus === 'occupied' 
+                                  ? 'bg-green-50 text-green-700 border border-green-200'
+                                  : 'bg-orange-50 text-orange-700 border border-orange-200'
+                              }`}>
+                                {occupancyStatus === 'occupied' ? (
+                                  <Users className="h-3 w-3" />
+                                ) : (
+                                  <UserX className="h-3 w-3" />
+                                )}
+                                <span>{occupancyStatus === 'occupied' ? 'Occupied' : 'Vacant'}</span>
+                              </div>
+                            )}
                             <PropertyTypeDisplay 
                               type={listing.type as PropertyType} 
                               className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium"
@@ -368,17 +373,22 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
                         
                         <div className="flex items-center justify-between p-4 pt-2">
                           <div className="flex items-center gap-8 text-sm">
-                            <span className="text-[#9EA3AD] font-medium">
-                              {listing.tenant?.name || 'No Tenant'}
-                            </span>
+                            {/* Only show tenant info for non-hospitality/vacation rental properties */}
+                            {shouldShowOccupancy ? (
+                              <span className="text-[#9EA3AD] font-medium">
+                                {listing.tenant?.name || 'No Tenant'}
+                              </span>
+                            ) : (
+                              <span className="text-[#9EA3AD] font-medium">—</span>
+                            )}
                             <div className="flex items-center gap-8">
-                              {listing.tenant?.phone && (
+                              {shouldShowOccupancy && listing.tenant?.phone && (
                                 <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
                                   <Phone className="h-4 w-4 text-[#9EA3AD]" />
                                   <span>{listing.tenant.phone}</span>
                                 </div>
                               )}
-                              {listing.tenant?.email && (
+                              {shouldShowOccupancy && listing.tenant?.email && (
                                 <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
                                   <Mail className="h-4 w-4 text-[#9EA3AD]" />
                                   <span>{listing.tenant.email}</span>
