@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Trash2, Plus, Users, UserX, Building, Edit3, User, Building2 } from "lucide-react";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
@@ -31,7 +31,7 @@ interface UnitsManagerProps {
 
 export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManagerProps) {
   const [editingUnitId, setEditingUnitId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>(units.length > 0 ? units[0].id : "");
+  const [selectedUnitId, setSelectedUnitId] = useState<string>(units.length > 0 ? units[0].id : "");
 
   // Category maps based on property type
   const typeToCategoryMap = {
@@ -87,18 +87,18 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
       occupancyStatus: "vacant",
     };
     onUnitsChange([...units, newUnit]);
-    setActiveTab(newUnit.id);
+    setSelectedUnitId(newUnit.id);
   };
 
   const removeUnit = (unitId: string) => {
     const updatedUnits = units.filter(unit => unit.id !== unitId);
     onUnitsChange(updatedUnits);
     
-    // Set active tab to first remaining unit or empty string if no units left
+    // Set selected unit to first remaining unit or empty string if no units left
     if (updatedUnits.length > 0) {
-      setActiveTab(updatedUnits[0].id);
+      setSelectedUnitId(updatedUnits[0].id);
     } else {
-      setActiveTab("");
+      setSelectedUnitId("");
     }
   };
 
@@ -146,6 +146,8 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
     }
   };
 
+  const selectedUnit = units.find(unit => unit.id === selectedUnitId);
+
   return (
     <div className="space-y-6">
       {units.length > 0 ? (
@@ -173,214 +175,233 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
             </div>
           </div>
 
-          {/* Units Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-              <TabsList className="w-full justify-start mb-6">
-                {units.map((unit, index) => (
-                  <TabsTrigger key={unit.id} value={unit.id} className="relative">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${
-                        unit.occupancyStatus === "occupied" ? "bg-green-400" : "bg-gray-300"
-                      }`} />
-                      {unit.unitNumber}
-                    </div>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-
-              {units.map((unit) => (
-                <TabsContent key={unit.id} value={unit.id} className="mt-0 space-y-6">
-                  {/* Unit Actions */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                      <h4 className="text-base font-semibold text-gray-600">Unit Details</h4>
-                    </div>
-                    {units.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeUnit(unit.id)}
-                        className="h-9 w-9 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+          {/* Unit Carousel Slider */}
+          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+            <div className="max-w-2xl">
+              <Carousel className="w-full">
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {units.map((unit) => (
+                    <CarouselItem key={unit.id} className="pl-2 md:pl-4 basis-1/3 md:basis-1/4">
+                      <div 
+                        onClick={() => setSelectedUnitId(unit.id)}
+                        className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                          selectedUnitId === unit.id 
+                            ? 'border-blue-500 bg-blue-50' 
+                            : 'border-gray-200 hover:border-gray-300 bg-white'
+                        }`}
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-
-                  {/* Unit Basic Information */}
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor={`unitNumber-${unit.id}`} className="text-sm font-medium text-gray-500">Unit Name</Label>
-                      {editingUnitId === unit.id ? (
-                        <Input
-                          defaultValue={unit.unitNumber}
-                          className="h-10 border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
-                          placeholder="Enter unit name"
-                          autoFocus
-                          onBlur={(e) => handleUnitNameSubmit(unit.id, e.target.value)}
-                          onKeyDown={(e) => handleUnitNameKeyDown(e, unit.id, e.currentTarget.value)}
-                        />
-                      ) : (
-                        <div 
-                          onClick={() => setEditingUnitId(unit.id)}
-                          className="px-3 py-2.5 text-sm bg-gray-25 border border-gray-100 rounded-lg cursor-pointer transition-all hover:border-gray-200 hover:bg-gray-50 flex items-center justify-between group h-10"
-                        >
-                          <span className="text-gray-700 font-medium">{unit.unitNumber}</span>
-                          <Edit3 className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className={`w-2 h-2 rounded-full ${
+                            unit.occupancyStatus === "occupied" ? "bg-green-400" : "bg-gray-300"
+                          }`} />
+                          <span className="text-sm font-medium text-gray-700 truncate">
+                            {unit.unitNumber}
+                          </span>
                         </div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {getAvailableCategories().find(cat => cat.value === unit.category)?.label || unit.category}
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+            </div>
+          </div>
+
+          {/* Selected Unit Details */}
+          {selectedUnit && (
+            <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-6">
+              {/* Unit Actions */}
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <h4 className="text-base font-semibold text-gray-600">Unit Details</h4>
+                </div>
+                {units.length > 1 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeUnit(selectedUnit.id)}
+                    className="h-9 w-9 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+
+              {/* Unit Basic Information */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor={`unitNumber-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">Unit Name</Label>
+                  {editingUnitId === selectedUnit.id ? (
+                    <Input
+                      defaultValue={selectedUnit.unitNumber}
+                      className="h-10 border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                      placeholder="Enter unit name"
+                      autoFocus
+                      onBlur={(e) => handleUnitNameSubmit(selectedUnit.id, e.target.value)}
+                      onKeyDown={(e) => handleUnitNameKeyDown(e, selectedUnit.id, e.currentTarget.value)}
+                    />
+                  ) : (
+                    <div 
+                      onClick={() => setEditingUnitId(selectedUnit.id)}
+                      className="px-3 py-2.5 text-sm bg-gray-25 border border-gray-100 rounded-lg cursor-pointer transition-all hover:border-gray-200 hover:bg-gray-50 flex items-center justify-between group h-10"
+                    >
+                      <span className="text-gray-700 font-medium">{selectedUnit.unitNumber}</span>
+                      <Edit3 className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-500">Property Category</Label>
+                  <Select
+                    value={selectedUnit.category}
+                    onValueChange={(value) => updateUnit(selectedUnit.id, { category: value })}
+                  >
+                    <SelectTrigger className="h-10 border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getAvailableCategories().map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Occupancy Status */}
+              {shouldShowOccupancyStatus() && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <h4 className="text-base font-semibold text-gray-600">Occupancy Status</h4>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-4 bg-gray-25 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors">
+                    <div className="flex items-center gap-3">
+                      {selectedUnit.occupancyStatus === "occupied" ? (
+                        <>
+                          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg">
+                            <Users className="h-5 w-5 text-green-500" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-600">Occupied</p>
+                            <p className="text-sm text-gray-400">This unit has tenants</p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-center justify-center w-10 h-10 bg-gray-75 rounded-lg">
+                            <UserX className="h-5 w-5 text-gray-400" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-600">Vacant</p>
+                            <p className="text-sm text-gray-400">This unit is available</p>
+                          </div>
+                        </>
                       )}
                     </div>
+                    <Button 
+                      type="button"
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => toggleOccupancyStatus(selectedUnit.id)}
+                      className="text-sm border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600"
+                    >
+                      Switch to {selectedUnit.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
+                    </Button>
+                  </div>
+                </div>
+              )}
 
+              {/* Tenant Information */}
+              {shouldShowTenantInfo() && selectedUnit.occupancyStatus === "occupied" && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
+                  </div>
+                  
+                  <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-4">
+                    {/* Name Field with Tenant Type Toggle */}
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-500">Property Category</Label>
-                      <Select
-                        value={unit.category}
-                        onValueChange={(value) => updateUnit(unit.id, { category: value })}
-                      >
-                        <SelectTrigger className="h-10 border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200">
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {getAvailableCategories().map((cat) => (
-                            <SelectItem key={cat.value} value={cat.value}>
-                              {cat.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor={`tenantName-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">
+                          {selectedUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                        </Label>
+                        
+                        {/* Tenant Type Toggle */}
+                        <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                          <button
+                            type="button"
+                            onClick={() => updateUnitTenant(selectedUnit.id, { type: "individual" })}
+                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                              selectedUnit.tenant?.type === "individual"
+                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            <User className="h-3 w-3" />
+                            Individual
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateUnitTenant(selectedUnit.id, { type: "company" })}
+                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                              selectedUnit.tenant?.type === "company"
+                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            <Building2 className="h-3 w-3" />
+                            Company
+                          </button>
+                        </div>
+                      </div>
+                      <Input
+                        id={`tenantName-${selectedUnit.id}`}
+                        value={selectedUnit.tenant?.name || ""}
+                        onChange={(e) => updateUnitTenant(selectedUnit.id, { name: e.target.value })}
+                        placeholder={selectedUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
+                        className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                      />
+                    </div>
+                    
+                    {/* Contact Information */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor={`tenantPhone-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">Phone Number</Label>
+                        <Input
+                          id={`tenantPhone-${selectedUnit.id}`}
+                          value={selectedUnit.tenant?.phone || ""}
+                          onChange={(e) => updateUnitTenant(selectedUnit.id, { phone: e.target.value })}
+                          placeholder="Enter phone number"
+                          className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`tenantEmail-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">Email Address</Label>
+                        <Input
+                          id={`tenantEmail-${selectedUnit.id}`}
+                          value={selectedUnit.tenant?.email || ""}
+                          onChange={(e) => updateUnitTenant(selectedUnit.id, { email: e.target.value })}
+                          placeholder="Enter email address"
+                          className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                        />
+                      </div>
                     </div>
                   </div>
-
-                  {/* Occupancy Status */}
-                  {shouldShowOccupancyStatus() && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                        <h4 className="text-base font-semibold text-gray-600">Occupancy Status</h4>
-                      </div>
-                      
-                      <div className="flex items-center justify-between p-4 bg-gray-25 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors">
-                        <div className="flex items-center gap-3">
-                          {unit.occupancyStatus === "occupied" ? (
-                            <>
-                              <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg">
-                                <Users className="h-5 w-5 text-green-500" />
-                              </div>
-                              <div>
-                                <p className="font-semibold text-gray-600">Occupied</p>
-                                <p className="text-sm text-gray-400">This unit has tenants</p>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="flex items-center justify-center w-10 h-10 bg-gray-75 rounded-lg">
-                                <UserX className="h-5 w-5 text-gray-400" />
-                              </div>
-                              <div>
-                                <p className="font-semibold text-gray-600">Vacant</p>
-                                <p className="text-sm text-gray-400">This unit is available</p>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                        <Button 
-                          type="button"
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => toggleOccupancyStatus(unit.id)}
-                          className="text-sm border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600"
-                        >
-                          Switch to {unit.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tenant Information */}
-                  {shouldShowTenantInfo() && unit.occupancyStatus === "occupied" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                        <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
-                      </div>
-                      
-                      <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-4">
-                        {/* Name Field with Tenant Type Toggle */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor={`tenantName-${unit.id}`} className="text-sm font-medium text-gray-500">
-                              {unit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                            </Label>
-                            
-                            {/* Tenant Type Toggle */}
-                            <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
-                              <button
-                                type="button"
-                                onClick={() => updateUnitTenant(unit.id, { type: "individual" })}
-                                className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
-                                  unit.tenant?.type === "individual"
-                                    ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                                }`}
-                              >
-                                <User className="h-3 w-3" />
-                                Individual
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => updateUnitTenant(unit.id, { type: "company" })}
-                                className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
-                                  unit.tenant?.type === "company"
-                                    ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                                }`}
-                              >
-                                <Building2 className="h-3 w-3" />
-                                Company
-                              </button>
-                            </div>
-                          </div>
-                          <Input
-                            id={`tenantName-${unit.id}`}
-                            value={unit.tenant?.name || ""}
-                            onChange={(e) => updateUnitTenant(unit.id, { name: e.target.value })}
-                            placeholder={unit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                            className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
-                          />
-                        </div>
-                        
-                        {/* Contact Information */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor={`tenantPhone-${unit.id}`} className="text-sm font-medium text-gray-500">Phone Number</Label>
-                            <Input
-                              id={`tenantPhone-${unit.id}`}
-                              value={unit.tenant?.phone || ""}
-                              onChange={(e) => updateUnitTenant(unit.id, { phone: e.target.value })}
-                              placeholder="Enter phone number"
-                              className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor={`tenantEmail-${unit.id}`} className="text-sm font-medium text-gray-500">Email Address</Label>
-                            <Input
-                              id={`tenantEmail-${unit.id}`}
-                              value={unit.tenant?.email || ""}
-                              onChange={(e) => updateUnitTenant(unit.id, { email: e.target.value })}
-                              placeholder="Enter email address"
-                              className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </TabsContent>
-              ))}
+                </div>
+              )}
             </div>
-          </Tabs>
+          )}
         </div>
       ) : (
         /* Empty State */
