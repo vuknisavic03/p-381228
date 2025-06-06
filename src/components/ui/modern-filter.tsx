@@ -102,26 +102,19 @@ export function ModernFilter({
                       key={option.value}
                       onClick={() => section.onToggle(option.value)}
                       className={cn(
-                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1",
-                        isSelected 
-                          ? "bg-blue-50 text-blue-700" 
-                          : "hover:bg-gray-50 text-gray-700"
+                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 hover:bg-gray-50",
+                        isSelected && "ring-1 ring-blue-200 bg-blue-50"
                       )}
                     >
                       <span className="text-sm">{option.label}</span>
                       <div className="flex items-center gap-2">
                         {option.count !== undefined && (
-                          <span className={cn(
-                            "text-xs px-2 py-0.5 rounded-full",
-                            isSelected 
-                              ? "bg-blue-100 text-blue-700" 
-                              : "bg-gray-100 text-gray-500"
-                          )}>
+                          <span className="text-xs text-gray-500">
                             {option.count}
                           </span>
                         )}
                         {isSelected && (
-                          <Check className="h-3 w-3 text-blue-600" />
+                          <Check className="h-4 w-4 text-blue-600" />
                         )}
                       </div>
                     </div>
