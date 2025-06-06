@@ -73,7 +73,7 @@ export function ModernFilter({
               <Button 
                 variant="outline" 
                 className={cn(
-                  "gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white rounded-lg shadow-sm",
+                  "gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white rounded-lg shadow-sm transition-all duration-200",
                   section.selectedValues.length > 0 && "border-blue-500 bg-blue-50 text-blue-700"
                 )}
               >
@@ -95,28 +95,37 @@ export function ModernFilter({
               </div>
               
               <div className="max-h-64 overflow-y-auto p-1">
-                {section.options.map((option) => {
+                {section.options.map((option, index) => {
                   const isSelected = section.selectedValues.includes(option.value);
+                  const prevOptionSelected = index > 0 && section.selectedValues.includes(section.options[index - 1].value);
                   return (
                     <div
                       key={option.value}
                       onClick={() => section.onToggle(option.value)}
                       className={cn(
-                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 hover:bg-gray-50",
-                        isSelected && "ring-1 ring-blue-200 bg-blue-50"
+                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors",
+                        isSelected 
+                          ? "bg-blue-50 text-blue-700" 
+                          : "hover:bg-gray-50 text-gray-700",
+                        isSelected && prevOptionSelected && "mt-2"
                       )}
                     >
-                      <span className="text-sm">{option.label}</span>
-                      <div className="flex items-center gap-2">
-                        {option.count !== undefined && (
-                          <span className="text-xs text-gray-500">
-                            {option.count}
-                          </span>
-                        )}
+                      <div className="flex items-center gap-4">
                         {isSelected && (
-                          <Check className="h-4 w-4 text-blue-600" />
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                         )}
+                        <span className="text-sm">{option.label}</span>
                       </div>
+                      {option.count !== undefined && (
+                        <span className={cn(
+                          "text-xs px-2 py-0.5 rounded-full ml-2",
+                          isSelected 
+                            ? "bg-blue-100 text-blue-700" 
+                            : "bg-gray-100 text-gray-500"
+                        )}>
+                          {option.count}
+                        </span>
+                      )}
                     </div>
                   );
                 })}
@@ -136,7 +145,7 @@ export function ModernFilter({
             variant="ghost"
             size="sm"
             onClick={onClearFilters}
-            className="gap-1 h-10 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+            className="gap-1 h-10 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <X className="h-3 w-3" />
             <span className="text-sm">Clear</span>
