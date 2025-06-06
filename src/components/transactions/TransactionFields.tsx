@@ -24,6 +24,40 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
 import { Mail, Phone, UserX } from "lucide-react";
 
+// Category mapping from ListingForm - this ensures consistency
+const typeToCategoryMap = {
+  residential_rental: [
+    { value: "single_family", label: "Single-family Home" },
+    { value: "multi_family", label: "Multi-family" },
+    { value: "apartment_condo", label: "Apartment/Condo" },
+  ],
+  commercial_rental: [
+    { value: "office", label: "Office Space" },
+    { value: "retail", label: "Retail Store" },
+    { value: "medical", label: "Medical/Professional" },
+  ],
+  industrial: [
+    { value: "warehouse", label: "Warehouse" },
+    { value: "distribution", label: "Distribution Facility" },
+    { value: "manufacturing", label: "Manufacturing" },
+  ],
+  hospitality: [
+    { value: "hotel", label: "Hotel" },
+    { value: "motel", label: "Motel" },
+    { value: "bed_breakfast", label: "Bed & Breakfast" },
+  ],
+  vacation_rental: [
+    { value: "short_term", label: "Short-term Rental" },
+    { value: "serviced_apartment", label: "Serviced Apartment" },
+    { value: "holiday_home", label: "Holiday Home" },
+  ],
+  mixed_use: [
+    { value: "residential_commercial", label: "Residential-Commercial" },
+    { value: "live_work", label: "Live-Work Space" },
+    { value: "multi_purpose", label: "Multi-Purpose" },
+  ],
+};
+
 export function TransactionFields({ 
   mockListings, 
   initialValues, 
@@ -65,11 +99,19 @@ export function TransactionFields({
       return fields.transactionType === "revenue" 
         ? GENERAL_CATEGORIES.revenue 
         : GENERAL_CATEGORIES.expense;
-    } else if (selectedPropertyCategory) {
-      // Return property-specific categories
-      return fields.transactionType === "revenue"
-        ? selectedPropertyCategory.revenueCategories
-        : selectedPropertyCategory.expenseCategories;
+    } else if (selectedListing) {
+      // Get categories based on the property type from the listing form mapping
+      const propertyTypeCategories = typeToCategoryMap[selectedListing.type as keyof typeof typeToCategoryMap];
+      if (propertyTypeCategories) {
+        // For transactions, we use the property subcategories as transaction categories
+        return propertyTypeCategories;
+      }
+      // Fallback to the property categories system if available
+      return selectedPropertyCategory ? (
+        fields.transactionType === "revenue"
+          ? selectedPropertyCategory.revenueCategories
+          : selectedPropertyCategory.expenseCategories
+      ) : [];
     }
     return []; // Fallback empty array
   };
