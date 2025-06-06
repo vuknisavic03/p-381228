@@ -78,11 +78,6 @@ export function ModernFilter({
                 )}
               >
                 <span className="text-sm font-medium">{section.title}</span>
-                {section.selectedValues.length > 0 && (
-                  <span className="bg-blue-100 text-blue-700 text-xs px-1.5 py-0.5 rounded-full font-medium">
-                    {section.selectedValues.length}
-                  </span>
-                )}
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -128,19 +123,6 @@ export function ModernFilter({
             </DropdownMenuContent>
           </DropdownMenu>
         ))}
-
-        {/* Clear All Filters Button */}
-        {activeFilterCount > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClearFilters}
-            className="gap-1 h-10 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X className="h-3 w-3" />
-            <span className="text-sm">Clear</span>
-          </Button>
-        )}
       </div>
     </div>
   );
