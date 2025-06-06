@@ -53,43 +53,54 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {listings.map((listing) => (
-                <TableRow key={listing.id} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
-                  <TableCell className="py-4">
-                    <div className="font-semibold text-gray-900">{listing.name}</div>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-400">{getPropertyTypeIcon(listing.type)}</span>
-                      <span className="text-sm font-medium text-gray-700">{formatPropertyType(listing.type)}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    {listing.tenantName ? (
-                      <span className="text-gray-900 font-medium">{listing.tenantName}</span>
-                    ) : (
-                      <span className="text-gray-500 text-sm italic">No Tenant</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right py-4">
-                    <span className="text-green-500">
-                      +${listing.revenue.toLocaleString()}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right py-4">
-                    <span className="text-red-400">
-                      -${listing.expenses.toLocaleString()}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right py-4">
-                    <span className={
-                      listing.profit >= 0 ? 'text-green-500' : 'text-red-400'
-                    }>
-                      {listing.profit >= 0 ? '+' : ''}${listing.profit.toLocaleString()}
-                    </span>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {listings.map((listing) => {
+                const getTenantDisplay = () => {
+                  if (listing.unitsCount > 1) {
+                    return "Multiple Tenants";
+                  }
+                  return listing.tenantName || "No Tenant";
+                };
+
+                return (
+                  <TableRow key={listing.id} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
+                    <TableCell className="py-4">
+                      <div className="font-semibold text-gray-900">{listing.name}</div>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-400">{getPropertyTypeIcon(listing.type)}</span>
+                        <span className="text-sm font-medium text-gray-700">{formatPropertyType(listing.type)}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <span className={
+                        listing.unitsCount > 1 || listing.tenantName 
+                          ? "text-gray-900 font-medium" 
+                          : "text-gray-500 text-sm italic"
+                      }>
+                        {getTenantDisplay()}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right py-4">
+                      <span className="text-green-500">
+                        +${listing.revenue.toLocaleString()}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right py-4">
+                      <span className="text-red-400">
+                        -${listing.expenses.toLocaleString()}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right py-4">
+                      <span className={
+                        listing.profit >= 0 ? 'text-green-500' : 'text-red-400'
+                      }>
+                        {listing.profit >= 0 ? '+' : ''}${listing.profit.toLocaleString()}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
