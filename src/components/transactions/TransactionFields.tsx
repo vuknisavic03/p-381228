@@ -58,6 +58,11 @@ const typeToCategoryMap = {
   ],
 };
 
+// Helper function to capitalize tenant type
+const capitalizeTenantType = (type: string) => {
+  return type.charAt(0).toUpperCase() + type.slice(1);
+};
+
 export function TransactionFields({ 
   mockListings, 
   initialValues, 
@@ -210,7 +215,7 @@ export function TransactionFields({
                     <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
                       <div className="flex-1">
                         <div className="font-medium text-gray-900 text-sm">{selectedListing.tenant.name}</div>
-                        <div className="text-xs text-gray-500 mt-0.5">{selectedListing.tenant.type}</div>
+                        <div className="text-xs text-gray-500 mt-0.5">{capitalizeTenantType(selectedListing.tenant.type)}</div>
                       </div>
                       <div className="space-y-1">
                         {selectedListing.tenant.email && (
