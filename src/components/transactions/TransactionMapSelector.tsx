@@ -217,7 +217,7 @@ export function TransactionMapSelector({
   const handleMarkerClick = useCallback((listing: Listing) => {
     setSelectedListing(listing);
     
-    // Center the popup position in the map view
+    // Center the popup position in the map view with smooth transition
     if (mapInstance) {
       const listingWithCoords = mapListings.find(l => l.id === listing.id);
       if (listingWithCoords) {
@@ -236,13 +236,16 @@ export function TransactionMapSelector({
           // Position where the popup will appear (below the marker)
           const popupCenterLat = markerLat - (popupHeightInLatDegrees / 2);
           
-          // Set map center to show the popup in the center of the view
+          // Set map center to show the popup in the center of the view with smooth animation
           const newCenter = {
             lat: popupCenterLat,
             lng: markerLng
           };
           
-          mapInstance.setCenter(newCenter);
+          mapInstance.panTo(newCenter, {
+            duration: 800,
+            easing: (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+          });
         }
       }
     }
