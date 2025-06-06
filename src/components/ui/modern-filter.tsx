@@ -95,8 +95,9 @@ export function ModernFilter({
               </div>
               
               <div className="max-h-64 overflow-y-auto p-1">
-                {section.options.map((option) => {
+                {section.options.map((option, index) => {
                   const isSelected = section.selectedValues.includes(option.value);
+                  const prevOptionSelected = index > 0 && section.selectedValues.includes(section.options[index - 1].value);
                   return (
                     <div
                       key={option.value}
@@ -105,7 +106,8 @@ export function ModernFilter({
                         "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors",
                         isSelected 
                           ? "bg-blue-50 text-blue-700" 
-                          : "hover:bg-gray-50 text-gray-700"
+                          : "hover:bg-gray-50 text-gray-700",
+                        isSelected && prevOptionSelected && "mt-2"
                       )}
                     >
                       <div className="flex items-center gap-4">
