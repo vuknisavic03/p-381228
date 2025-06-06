@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Search, Filter, ChevronDown, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -95,21 +95,38 @@ export function ModernFilter({
               </div>
               
               <div className="max-h-64 overflow-y-auto p-1">
-                {section.options.map((option) => (
-                  <DropdownMenuCheckboxItem
-                    key={option.value}
-                    checked={section.selectedValues.includes(option.value)}
-                    onCheckedChange={() => section.onToggle(option.value)}
-                    className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-gray-50 rounded-md mx-1"
-                  >
-                    <span className="text-sm text-gray-700">{option.label}</span>
-                    {option.count !== undefined && (
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full ml-2">
-                        {option.count}
-                      </span>
-                    )}
-                  </DropdownMenuCheckboxItem>
-                ))}
+                {section.options.map((option) => {
+                  const isSelected = section.selectedValues.includes(option.value);
+                  return (
+                    <div
+                      key={option.value}
+                      onClick={() => section.onToggle(option.value)}
+                      className={cn(
+                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors",
+                        isSelected 
+                          ? "bg-blue-50 text-blue-700" 
+                          : "hover:bg-gray-50 text-gray-700"
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        {isSelected && (
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                        )}
+                        <span className="text-sm">{option.label}</span>
+                      </div>
+                      {option.count !== undefined && (
+                        <span className={cn(
+                          "text-xs px-2 py-0.5 rounded-full ml-2",
+                          isSelected 
+                            ? "bg-blue-100 text-blue-700" 
+                            : "bg-gray-100 text-gray-500"
+                        )}>
+                          {option.count}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
                 {section.options.length === 0 && (
                   <div className="px-3 py-2 text-sm text-gray-500 text-center">
                     No options available
