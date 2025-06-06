@@ -108,7 +108,7 @@ export function ModernFilter({
                           : "hover:bg-gray-50 text-gray-700"
                       )}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                         {isSelected && (
                           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                         )}
