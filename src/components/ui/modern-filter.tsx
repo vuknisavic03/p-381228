@@ -94,34 +94,39 @@ export function ModernFilter({
                 </DropdownMenuLabel>
               </div>
               
-              <div className="max-h-64 overflow-y-auto p-1">
-                {section.options.map((option, index) => {
+              <div className="max-h-64 overflow-y-auto p-2">
+                {section.options.map((option) => {
                   const isSelected = section.selectedValues.includes(option.value);
-                  const prevOptionSelected = index > 0 && section.selectedValues.includes(section.options[index - 1].value);
                   return (
                     <div
                       key={option.value}
                       onClick={() => section.onToggle(option.value)}
                       className={cn(
-                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors",
+                        "flex items-center justify-between px-3 py-2.5 cursor-pointer rounded-md transition-all duration-200 group",
                         isSelected 
-                          ? "bg-blue-50 text-blue-700" 
-                          : "hover:bg-gray-50 text-gray-700",
-                        isSelected && prevOptionSelected && "mt-2"
+                          ? "bg-blue-50 text-blue-700 border border-blue-200" 
+                          : "hover:bg-gray-50 text-gray-700 border border-transparent"
                       )}
                     >
-                      <div className="flex items-center gap-4">
-                        {isSelected && (
-                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                        )}
-                        <span className="text-sm">{option.label}</span>
+                      <div className="flex items-center gap-3">
+                        <div className={cn(
+                          "flex items-center justify-center w-4 h-4 rounded border-2 transition-all duration-200",
+                          isSelected 
+                            ? "bg-blue-600 border-blue-600" 
+                            : "border-gray-300 group-hover:border-gray-400"
+                        )}>
+                          {isSelected && (
+                            <Check className="h-2.5 w-2.5 text-white" />
+                          )}
+                        </div>
+                        <span className="text-sm font-medium">{option.label}</span>
                       </div>
                       {option.count !== undefined && (
                         <span className={cn(
-                          "text-xs px-2 py-0.5 rounded-full ml-2",
+                          "text-xs px-2 py-1 rounded-full font-medium transition-colors",
                           isSelected 
                             ? "bg-blue-100 text-blue-700" 
-                            : "bg-gray-100 text-gray-500"
+                            : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
                         )}>
                           {option.count}
                         </span>
@@ -130,7 +135,7 @@ export function ModernFilter({
                   );
                 })}
                 {section.options.length === 0 && (
-                  <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                  <div className="px-3 py-4 text-sm text-gray-500 text-center">
                     No options available
                   </div>
                 )}
