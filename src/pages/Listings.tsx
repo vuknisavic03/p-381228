@@ -97,7 +97,7 @@ export default function Listings() {
       <div className="h-screen flex flex-col bg-gray-50">
         <PageHeader
           onAddClick={() => setIsAddFormOpen(true)}
-          addButtonText="Add Listing"
+          addButtonText="Add New Listing"
         >
           <Tabs 
             value={viewMode} 

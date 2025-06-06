@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -230,8 +229,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
       {/* Header */}
       <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
         <div>
-          <h1 className="text-2xl font-medium text-gray-900">Edit Property</h1>
-          <p className="text-sm text-gray-500 mt-1">Update the details of your property listing</p>
+          <h1 className="text-2xl font-medium text-gray-900">Edit Listing</h1>
+          <p className="text-sm text-gray-500 mt-1">Update the details of your listing</p>
         </div>
         <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
           <X className="h-4 w-4" />
@@ -246,7 +245,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-medium text-gray-900 mb-2">Location</h2>
-              <p className="text-sm text-gray-600">Update the location details of your property</p>
+              <p className="text-sm text-gray-600">Update the location details of your listing</p>
             </div>
             
             <div className="space-y-4">
@@ -304,8 +303,8 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           {/* Property Type Section */}
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-medium text-gray-900 mb-2">Property Type</h2>
-              <p className="text-sm text-gray-600">Update the type and structure of your property</p>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">Listing Type</h2>
+              <p className="text-sm text-gray-600">Update the type and structure of your listing</p>
             </div>
 
             {/* Units Mode Toggle */}
@@ -366,7 +365,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             <div className="space-y-6">
               <div>
                 <h2 className="text-lg font-medium text-gray-900 mb-2">Details</h2>
-                <p className="text-sm text-gray-600">Configure the specific details of your property</p>
+                <p className="text-sm text-gray-600">Configure the specific details of your listing</p>
               </div>
 
               {/* Units Manager */}
@@ -537,7 +536,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-medium text-gray-900 mb-2">Notes</h2>
-              <p className="text-sm text-gray-600">Update any additional information about this property</p>
+              <p className="text-sm text-gray-600">Update any additional information about this listing</p>
             </div>
             
             <div>
@@ -562,7 +561,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             disabled={!isFormValid}
             className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Update Property
+            Update Listing
           </Button>
           <Button 
             variant="outline" 

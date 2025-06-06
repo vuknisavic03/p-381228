@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -222,8 +221,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
         <div>
-          <h1 className="text-2xl font-medium text-gray-900">Add New Property</h1>
-          <p className="text-sm text-gray-500 mt-1">Create a new property listing for your portfolio</p>
+          <h1 className="text-2xl font-medium text-gray-900">Add New Listing</h1>
+          <p className="text-sm text-gray-500 mt-1">Create a new listing for your portfolio</p>
         </div>
         <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
           <X className="h-4 w-4" />
@@ -238,7 +237,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-medium text-gray-900 mb-2">Location</h2>
-              <p className="text-sm text-gray-600">Where is your property located?</p>
+              <p className="text-sm text-gray-600">Where is your listing located?</p>
             </div>
             
             <div className="space-y-4">
@@ -298,8 +297,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           {/* Property Type Section */}
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-medium text-gray-900 mb-2">Property Type</h2>
-              <p className="text-sm text-gray-600">What type of property is this?</p>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">Listing Type</h2>
+              <p className="text-sm text-gray-600">What type of listing is this?</p>
             </div>
 
             {/* Units Mode Toggle */}
@@ -363,7 +362,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
               <div className="space-y-6">
                 <div>
                   <h2 className="text-lg font-medium text-gray-900 mb-2">Details</h2>
-                  <p className="text-sm text-gray-600">Configure the specific details of your property</p>
+                  <p className="text-sm text-gray-600">Configure the specific details of your listing</p>
                 </div>
 
                 {/* Units Manager */}
@@ -541,7 +540,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-medium text-gray-900 mb-2">Notes</h2>
-              <p className="text-sm text-gray-600">Add any additional information about this property</p>
+              <p className="text-sm text-gray-600">Add any additional information about this listing</p>
             </div>
             
             <div>
@@ -566,7 +565,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
             disabled={!isFormValid}
             className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Add Property
+            Add New Listing
           </Button>
           <Button 
             variant="outline" 
