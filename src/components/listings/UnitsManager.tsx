@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Trash2, Plus, Users, UserX, Building, Edit3, User, Building2 } from "lucide-react";
+import { Trash2, Plus, Users, UserX, Building, Edit3, User, Building2, ChevronLeft, ChevronRight } from "lucide-react";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 
 interface Unit {
@@ -177,7 +177,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
           {/* Unit Carousel Slider */}
           <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-            <div className="max-w-2xl">
+            <div className="max-w-2xl relative">
               <Carousel className="w-full">
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {units.map((unit) => (
@@ -205,8 +205,14 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="left-2" />
-                <CarouselNext className="right-2" />
+                
+                {/* Custom positioned arrows */}
+                <CarouselPrevious className="-left-8 top-1/2 -translate-y-1/2 h-7 w-7 border-gray-200 bg-white hover:bg-gray-50 shadow-sm">
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                </CarouselPrevious>
+                <CarouselNext className="-right-8 top-1/2 -translate-y-1/2 h-7 w-7 border-gray-200 bg-white hover:bg-gray-50 shadow-sm">
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </CarouselNext>
               </Carousel>
             </div>
           </div>
