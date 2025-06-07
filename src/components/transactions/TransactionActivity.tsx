@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
@@ -190,6 +189,19 @@ const mockTransactions: Transaction[] = [
   }
 ];
 
+// Mock properties and tenants for global search
+const mockProperties = [
+  { id: '1', name: 'Downtown Apartments', address: '123 Main St', type: 'residential_rental' },
+  { id: '2', name: 'Office Complex', address: '456 Business Ave', type: 'commercial_rental' },
+  { id: '3', name: 'Luxury Condos', address: '789 Elite Blvd', type: 'residential_rental' },
+];
+
+const mockTenants = [
+  { id: '1', name: 'Alexander Whitmore', type: 'individual', email: 'alex@email.com' },
+  { id: '2', name: 'Sarah Johnson', type: 'individual', email: 'sarah@email.com' },
+  { id: '3', name: 'Watson Enterprises', type: 'company', email: 'contact@watson.com' },
+];
+
 export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
@@ -342,6 +354,9 @@ export function TransactionActivity() {
         clearFilters={clearFilters}
         transactionType={transactionType}
         setTransactionType={setTransactionType}
+        properties={mockProperties}
+        transactions={mockTransactions}
+        tenants={mockTenants}
       />
       
       <div className="flex-1 overflow-auto">
