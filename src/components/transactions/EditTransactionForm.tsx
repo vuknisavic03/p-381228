@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
@@ -152,7 +153,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-6 scale-[103%] origin-top">
+      <div className="px-6 py-4 space-y-6 scale-[98%] origin-top">
         <TransactionFields 
           mockListings={listings}
           initialValues={fields}
@@ -161,7 +162,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
         />
         
         {showNotesSection && (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 scale-[103%] origin-top">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 scale-[98%] origin-top">
             <div className="flex items-center gap-3 mb-5">
               <FileText className="h-4 w-4 text-black" />
               <h3 className="text-base font-medium text-gray-900">Additional Information</h3>
