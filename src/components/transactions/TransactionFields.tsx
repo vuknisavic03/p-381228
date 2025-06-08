@@ -1,5 +1,6 @@
 
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar as CalendarIcon, MapPin } from "lucide-react";
@@ -64,8 +65,8 @@ export function TransactionFields({
     ? PROPERTY_CATEGORIES.find(cat => cat.type === selectedListing.type) 
     : undefined;
 
-  // Get appropriate categories based on transaction type and listing type
-  const getCategoriesForSelection = () => {
+  // Memoize categories to prevent unnecessary re-renders that cause lag
+  const transactionCategories = useMemo(() => {
     if (fields.listingType === "general") {
       // Return general categories
       return fields.transactionType === "revenue" 
@@ -78,9 +79,7 @@ export function TransactionFields({
         : selectedPropertyCategory.expenseCategories;
     }
     return []; // Fallback empty array
-  };
-  
-  const transactionCategories = getCategoriesForSelection();
+  }, [fields.listingType, fields.transactionType, selectedPropertyCategory]);
 
   const handleListingSelect = (listing: Listing) => {
     console.log("Listing selected from map:", listing);
@@ -288,10 +287,14 @@ export function TransactionFields({
                 <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                   <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-60 overflow-y-auto bg-white border border-gray-200 shadow-lg">
                   {transactionCategories.length > 0 ? (
                     transactionCategories.map(cat => (
-                      <SelectItem key={cat.value} value={cat.value}>
+                      <SelectItem 
+                        key={cat.value} 
+                        value={cat.value}
+                        className="py-2.5 px-3 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer"
+                      >
                         {cat.label}
                       </SelectItem>
                     ))
@@ -363,7 +366,7 @@ export function TransactionFields({
                   <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border border-gray-200 shadow-lg">
                     <SelectItem value="card">Credit Card</SelectItem>
                     <SelectItem value="bank">Bank Transfer</SelectItem>
                     <SelectItem value="cash">Cash</SelectItem>
@@ -379,3 +382,4 @@ export function TransactionFields({
     </div>
   );
 }
+
