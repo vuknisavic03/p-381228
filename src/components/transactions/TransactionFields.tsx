@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin, Mail, Phone, UserX, Building } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, Mail, Phone, UserX, Building, CreditCard, DollarSign } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Separator } from "@/components/ui/separator";
-import { Card } from "@/components/ui/card";
 import { 
   Listing, 
   TransactionFieldsData, 
@@ -96,12 +95,12 @@ export function TransactionFields({
     selectedListing.tenant.name.trim() !== "";
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Transaction Type Section */}
-      <Card className="p-6 border border-gray-100 shadow-sm">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+            <Building className="h-5 w-5 text-blue-500" />
             <h3 className="text-lg font-medium text-gray-900">Transaction Type</h3>
           </div>
           <ListingTypeToggle
@@ -258,15 +257,15 @@ export function TransactionFields({
             </div>
           </div>
         )}
-      </Card>
+      </div>
       
       {(selectedListing || fields.listingType === "general") && (
         <>
           {/* Transaction Details Section */}
-          <Card className="p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <DollarSign className="h-5 w-5 text-green-500" />
                 <h3 className="text-lg font-medium text-gray-900">Transaction Details</h3>
               </div>
               <TransactionTypeToggle
@@ -301,12 +300,12 @@ export function TransactionFields({
                 </SelectContent>
               </Select>
             </div>
-          </Card>
+          </div>
           
           {/* Payment Details Section */}
-          <Card className="p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+              <CreditCard className="h-5 w-5 text-orange-500" />
               <h3 className="text-lg font-medium text-gray-900">Payment Details</h3>
             </div>
             
@@ -371,7 +370,7 @@ export function TransactionFields({
                 </Select>
               </div>
             </div>
-          </Card>
+          </div>
         </>
       )}
     </div>
