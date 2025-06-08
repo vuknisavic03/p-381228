@@ -224,25 +224,25 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header with action buttons */}
-      <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div>
-          <h1 className="text-2xl font-medium text-gray-900">Add New Listing</h1>
-          <p className="text-sm text-gray-500 mt-1">Create a new listing for your portfolio</p>
+          <h1 className="text-lg font-medium text-gray-900">Add New Listing</h1>
+          <p className="text-xs text-gray-500 mt-0.5">Create a new listing for your portfolio</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Button 
             onClick={handleSubmit} 
             disabled={!isFormValid}
             size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 h-8"
           >
-            Add New Listing
+            Add Listing
           </Button>
           <Button 
             variant="outline" 
             onClick={onClose} 
             size="sm"
-            className="bg-white border-gray-200 hover:bg-gray-50"
+            className="bg-white border-gray-200 hover:bg-gray-50 text-xs px-3 py-1.5 h-8"
           >
             Cancel
           </Button>
@@ -250,19 +250,19 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-8 py-6">
-        <div className="w-[98%] max-w-none space-y-6">
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="w-[98%] max-w-none space-y-4">
           
           {/* Location Section */}
-          <Card className="p-6 border border-gray-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <MapPin className="h-5 w-5 text-gray-500" />
-              <h2 className="text-lg font-medium text-gray-900">Location</h2>
+          <Card className="p-4 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <MapPin className="h-4 w-4 text-gray-500" />
+              <h2 className="text-sm font-medium text-gray-900">Location</h2>
             </div>
-            <p className="text-sm text-gray-600 mb-6">Where is your listing located?</p>
+            <p className="text-xs text-gray-600 mb-4">Where is your listing located?</p>
             
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <LocationAutofill
                     value={formData.city}
@@ -270,7 +270,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                     placeholder="e.g., Belgrade"
                     label="City"
                     type="city"
-                    className="h-11"
+                    className="h-9 text-sm"
                     onLocationSelect={handleLocationSelect}
                   />
                 </div>
@@ -281,7 +281,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                     placeholder="e.g., Serbia"
                     label="Country"
                     type="country"
-                    className="h-11"
+                    className="h-9 text-sm"
                     onLocationSelect={handleLocationSelect}
                   />
                 </div>
@@ -294,37 +294,37 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   placeholder="e.g., Knez Mihailova 42"
                   label="Full Address"
                   type="address"
-                  className="h-11"
+                  className="h-9 text-sm"
                   onLocationSelect={handleLocationSelect}
                 />
               </div>
               
               <div>
-                <Label htmlFor="postalCode" className="text-sm font-medium text-gray-700 mb-2 block">Postal Code</Label>
+                <Label htmlFor="postalCode" className="text-xs font-medium text-gray-700 mb-1.5 block">Postal Code</Label>
                 <Input
                   id="postalCode"
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
                   placeholder="e.g., 11000"
-                  className="h-11"
+                  className="h-9 text-sm"
                 />
               </div>
             </div>
           </Card>
 
           {/* Property Type Section */}
-          <Card className="p-6 border border-gray-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <Building className="h-5 w-5 text-gray-500" />
-              <h2 className="text-lg font-medium text-gray-900">Listing Type</h2>
+          <Card className="p-4 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <Building className="h-4 w-4 text-gray-500" />
+              <h2 className="text-sm font-medium text-gray-900">Listing Type</h2>
             </div>
-            <p className="text-sm text-gray-600 mb-6">What type of listing is this?</p>
+            <p className="text-xs text-gray-600 mb-4">What type of listing is this?</p>
 
             {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-6">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4">
               <div>
-                <p className="font-medium text-gray-900 text-sm">Property Structure</p>
+                <p className="font-medium text-gray-900 text-xs">Property Structure</p>
                 <p className="text-xs text-gray-500">Does this property have multiple units?</p>
               </div>
               <Button
@@ -332,18 +332,18 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 variant={useUnitsMode ? "default" : "outline"}
                 size="sm"
                 onClick={() => setUseUnitsMode(!useUnitsMode)}
-                className="text-xs"
+                className="text-xs px-2 py-1 h-7"
               >
                 {useUnitsMode ? "Multiple Units" : "Single Unit"}
               </Button>
             </div>
 
             {/* Property Type Selection */}
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {propertyTypes.map((type) => (
                 <div
                   key={type.value}
-                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                  className={`p-3 border rounded-lg cursor-pointer transition-all ${
                     formData.type === type.value
                       ? "border-blue-200 bg-blue-50"
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
@@ -353,20 +353,20 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                     setUnits([]);
                   }}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2">
                     {React.cloneElement(getPropertyTypeIcon(type.value), { 
-                      className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
+                      className: `h-4 w-4 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
                     })}
                     <div className="flex-1">
-                      <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
+                      <h4 className={`font-medium text-xs ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
                         {type.label}
                       </h4>
-                      <p className={`text-xs mt-1 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
+                      <p className={`text-xs mt-0.5 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
                         {type.description}
                       </p>
                     </div>
                     {formData.type === type.value && (
-                      <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5" />
+                      <CheckCircle className="h-3 w-3 text-blue-600 mt-0.5" />
                     )}
                   </div>
                 </div>
@@ -376,12 +376,12 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
           {/* Details Section */}
           {formData.type && (
-            <Card className="p-6 border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <Settings className="h-5 w-5 text-gray-500" />
-                <h2 className="text-lg font-medium text-gray-900">Details</h2>
+            <Card className="p-4 border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <Settings className="h-4 w-4 text-gray-500" />
+                <h2 className="text-sm font-medium text-gray-900">Details</h2>
               </div>
-              <p className="text-sm text-gray-600 mb-6">Configure the specific details of your listing</p>
+              <p className="text-xs text-gray-600 mb-4">Configure the specific details of your listing</p>
 
               {/* Units Manager */}
               {useUnitsMode ? (
@@ -391,31 +391,31 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   onUnitsChange={setUnits}
                 />
               ) : (
-                <div className="mb-6">
-                  <Label className="text-sm font-medium text-gray-700 mb-3 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-3">
+                <div className="mb-4">
+                  <Label className="text-xs font-medium text-gray-700 mb-2 block">Specific Category</Label>
+                  <div className="grid grid-cols-1 gap-2">
                     {getAvailableCategories().map((cat) => (
                       <div
                         key={cat.value}
-                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           formData.category === cat.value
                             ? "border-blue-200 bg-blue-50"
                             : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                         }`}
                         onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
                       >
-                        <div className="flex items-start gap-3">
-                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
+                        <div className="flex items-start gap-2">
+                          <cat.Icon className={`h-4 w-4 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
                           <div className="flex-1">
-                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
+                            <h4 className={`font-medium text-xs ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
                               {cat.label}
                             </h4>
-                            <p className={`text-xs mt-1 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
+                            <p className={`text-xs mt-0.5 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
                               {cat.description}
                             </p>
                           </div>
                           {formData.category === cat.value && (
-                            <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5" />
+                            <CheckCircle className="h-3 w-3 text-blue-600 mt-0.5" />
                           )}
                         </div>
                       </div>
@@ -426,31 +426,31 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
               {/* Occupancy and Tenant Info for Single Unit */}
               {!useUnitsMode && shouldShowTenantInfo() && formData.category && (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <Separator />
                   
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div>
-                      <Label className="text-sm font-medium text-gray-700 mb-3 block">Occupancy Status</Label>
-                      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-3">
+                      <Label className="text-xs font-medium text-gray-700 mb-2 block">Occupancy Status</Label>
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2">
                           {formData.occupancyStatus === "occupied" ? (
                             <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
-                                <Users className="h-4 w-4 text-blue-600" />
+                              <div className="flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full">
+                                <Users className="h-3 w-3 text-blue-600" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900 text-sm">Occupied</p>
+                                <p className="font-medium text-gray-900 text-xs">Occupied</p>
                                 <p className="text-xs text-gray-500">Property has tenants</p>
                               </div>
                             </>
                           ) : (
                             <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
-                                <UserX className="h-4 w-4 text-gray-600" />
+                              <div className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full">
+                                <UserX className="h-3 w-3 text-gray-600" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900 text-sm">Vacant</p>
+                                <p className="font-medium text-gray-900 text-xs">Vacant</p>
                                 <p className="text-xs text-gray-500">Property is available</p>
                               </div>
                             </>
@@ -461,7 +461,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                           variant="outline" 
                           size="sm" 
                           onClick={toggleOccupancyStatus}
-                          className="text-xs"
+                          className="text-xs px-2 py-1 h-7"
                         >
                           Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
                         </Button>
@@ -470,16 +470,16 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
                     {/* Tenant Information */}
                     {formData.occupancyStatus === "occupied" && (
-                      <div className="space-y-4">
+                      <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <Label className="text-sm font-medium text-gray-700">Tenant Information</Label>
+                          <Label className="text-xs font-medium text-gray-700">Tenant Information</Label>
                           
                           {/* Tenant Type Toggle - Smaller and More Elegant */}
                           <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
                             <button
                               type="button"
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                              className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                              className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
                                 formData.tenantType === "individual"
                                   ? "bg-white text-gray-700 shadow-sm border border-gray-200"
                                   : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
@@ -491,7 +491,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                             <button
                               type="button"
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
-                              className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
+                              className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
                                 formData.tenantType === "company"
                                   ? "bg-white text-gray-700 shadow-sm border border-gray-200"
                                   : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
@@ -503,9 +503,9 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                           </div>
                         </div>
                         
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <div>
-                            <Label htmlFor="tenantName" className="text-sm font-medium text-gray-700 mb-2 block">
+                            <Label htmlFor="tenantName" className="text-xs font-medium text-gray-700 mb-1.5 block">
                               {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                             </Label>
                             <Input
@@ -514,31 +514,31 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                               value={formData.tenantName}
                               onChange={handleChange}
                               placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                              className="h-11"
+                              className="h-9 text-sm"
                             />
                           </div>
                           
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <Label htmlFor="tenantPhone" className="text-sm font-medium text-gray-700 mb-2 block">Phone</Label>
+                              <Label htmlFor="tenantPhone" className="text-xs font-medium text-gray-700 mb-1.5 block">Phone</Label>
                               <Input
                                 id="tenantPhone"
                                 name="tenantPhone"
                                 value={formData.tenantPhone}
                                 onChange={handleChange}
                                 placeholder="Phone number"
-                                className="h-11"
+                                className="h-9 text-sm"
                               />
                             </div>
                             <div>
-                              <Label htmlFor="tenantEmail" className="text-sm font-medium text-gray-700 mb-2 block">Email</Label>
+                              <Label htmlFor="tenantEmail" className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
                               <Input
                                 id="tenantEmail"
                                 name="tenantEmail"
                                 value={formData.tenantEmail}
                                 onChange={handleChange}
                                 placeholder="Email address"
-                                className="h-11"
+                                className="h-9 text-sm"
                               />
                             </div>
                           </div>
@@ -552,12 +552,12 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           )}
 
           {/* Notes Section */}
-          <Card className="p-6 border border-gray-100 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <MessageSquare className="h-5 w-5 text-gray-500" />
-              <h2 className="text-lg font-medium text-gray-900">Notes</h2>
+          <Card className="p-4 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <MessageSquare className="h-4 w-4 text-gray-500" />
+              <h2 className="text-sm font-medium text-gray-900">Notes</h2>
             </div>
-            <p className="text-sm text-gray-600 mb-6">Add any additional information about this listing</p>
+            <p className="text-xs text-gray-600 mb-4">Add any additional information about this listing</p>
             
             <div>
               <Textarea
@@ -566,7 +566,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                 value={formData.notes}
                 onChange={handleChange}
                 placeholder="Add any additional notes, special features, maintenance requirements, or important details..."
-                className="min-h-[120px] resize-none"
+                className="min-h-[80px] resize-none text-sm"
               />
             </div>
           </Card>
