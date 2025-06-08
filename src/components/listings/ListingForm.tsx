@@ -569,26 +569,6 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </Card>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="border-t border-gray-100 px-8 py-4">
-        <div className="flex gap-3">
-          <Button 
-            onClick={handleSubmit} 
-            disabled={!isFormValid}
-            className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Add New Listing
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
-            className="flex-1 h-11"
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

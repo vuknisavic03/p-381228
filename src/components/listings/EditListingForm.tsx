@@ -36,6 +36,7 @@ import { Card } from "@/components/ui/card";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
+import { LocationAutofill } from "./LocationAutofill";
 
 interface Unit {
   id: string;
@@ -134,6 +135,15 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
+    }));
+  };
+
+    const handleLocationSelect = (locationData: { city?: string; country?: string; address?: string }) => {
+    setFormData(prev => ({
+      ...prev,
+      ...(locationData.city && { city: locationData.city }),
+      ...(locationData.country && { country: locationData.country }),
+      ...(locationData.address && { address: locationData.address })
     }));
   };
 
@@ -270,38 +280,38 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-2 block">City</Label>
-                  <Input
-                    id="city"
-                    name="city"
+                   <LocationAutofill
                     value={formData.city}
-                    onChange={handleChange}
+                    onChange={(value) => setFormData(prev => ({ ...prev, city: value }))}
                     placeholder="e.g., Belgrade"
+                    label="City"
+                    type="city"
                     className="h-11"
+                    onLocationSelect={handleLocationSelect}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-2 block">Country</Label>
-                  <Input
-                    id="country"
-                    name="country"
+                   <LocationAutofill
                     value={formData.country}
-                    onChange={handleChange}
+                    onChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
                     placeholder="e.g., Serbia"
+                    label="Country"
+                    type="country"
                     className="h-11"
+                    onLocationSelect={handleLocationSelect}
                   />
                 </div>
               </div>
               
               <div>
-                <Label htmlFor="address" className="text-sm font-medium text-gray-700 mb-2 block">Full Address</Label>
-                <Input
-                  id="address"
-                  name="address"
+                 <LocationAutofill
                   value={formData.address}
-                  onChange={handleChange}
+                  onChange={(value) => setFormData(prev => ({ ...prev, address: value }))}
                   placeholder="e.g., Knez Mihailova 42"
+                  label="Full Address"
+                  type="address"
                   className="h-11"
+                  onLocationSelect={handleLocationSelect}
                 />
               </div>
               
@@ -576,26 +586,6 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
               />
             </div>
           </Card>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="border-t border-gray-100 px-8 py-4">
-        <div className="flex gap-3">
-          <Button 
-            onClick={handleSubmit} 
-            disabled={!isFormValid}
-            className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Update Listing
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
-            className="flex-1 h-11"
-          >
-            Cancel
-          </Button>
         </div>
       </div>
     </div>
