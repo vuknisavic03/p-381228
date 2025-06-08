@@ -149,34 +149,31 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
   const selectedUnit = units.find(unit => unit.id === selectedUnitId);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {units.length > 0 ? (
-        <div className="space-y-6">
+        <div className="space-y-3">
           {/* Header */}
-          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-10 h-10 bg-gray-50 rounded-lg">
-                  <Building className="h-5 w-5 text-blue-500" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-700">Property Units</h3>
-                  <p className="text-sm text-gray-400">Manage units and tenant information</p>
-                </div>
+          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Building className="h-4 w-4 text-gray-500" />
+              <div>
+                <h3 className="text-sm font-medium text-gray-900">Property Units</h3>
+                <p className="text-xs text-gray-500">Manage units and tenant information</p>
               </div>
-              <Button
-                onClick={addUnit}
-                size="sm"
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-sm border border-gray-200"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Unit
-              </Button>
             </div>
+            <Button
+              onClick={addUnit}
+              size="sm"
+              variant="outline"
+              className="text-xs px-2 py-1 h-7"
+            >
+              <Plus className="h-3 w-3 mr-1" />
+              Add Unit
+            </Button>
           </div>
 
           {/* Unit Carousel Slider */}
-          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+          <div className="bg-gray-50 rounded-lg p-3">
             <div className="max-w-2xl relative">
               <Carousel className="w-full">
                 <CarouselContent className="-ml-2 md:-ml-4">
@@ -184,17 +181,17 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                     <CarouselItem key={unit.id} className="pl-2 md:pl-4 basis-1/3 md:basis-1/4">
                       <div 
                         onClick={() => setSelectedUnitId(unit.id)}
-                        className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                        className={`p-2 border rounded-lg cursor-pointer transition-all ${
                           selectedUnitId === unit.id 
                             ? 'border-blue-500 bg-blue-50' 
                             : 'border-gray-200 hover:border-gray-300 bg-white'
                         }`}
                       >
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-1">
                           <div className={`w-2 h-2 rounded-full ${
                             unit.occupancyStatus === "occupied" ? "bg-green-400" : "bg-gray-300"
                           }`} />
-                          <span className="text-sm font-medium text-gray-700 truncate">
+                          <span className="text-xs font-medium text-gray-700 truncate">
                             {unit.unitNumber}
                           </span>
                         </div>
@@ -206,12 +203,11 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   ))}
                 </CarouselContent>
                 
-                {/* Custom positioned arrows */}
-                <CarouselPrevious className="-left-8 top-1/2 -translate-y-1/2 h-7 w-7 border-gray-200 bg-white hover:bg-gray-50 shadow-sm">
-                  <ChevronLeft className="h-3.5 w-3.5" />
+                <CarouselPrevious className="-left-6 top-1/2 -translate-y-1/2 h-6 w-6 border-gray-200 bg-white hover:bg-gray-50">
+                  <ChevronLeft className="h-3 w-3" />
                 </CarouselPrevious>
-                <CarouselNext className="-right-8 top-1/2 -translate-y-1/2 h-7 w-7 border-gray-200 bg-white hover:bg-gray-50 shadow-sm">
-                  <ChevronRight className="h-3.5 w-3.5" />
+                <CarouselNext className="-right-6 top-1/2 -translate-y-1/2 h-6 w-6 border-gray-200 bg-white hover:bg-gray-50">
+                  <ChevronRight className="h-3 w-3" />
                 </CarouselNext>
               </Carousel>
             </div>
@@ -219,33 +215,30 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
           {/* Selected Unit Details */}
           {selectedUnit && (
-            <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-6">
+            <div className="bg-gray-50 rounded-lg p-3 space-y-3">
               {/* Unit Actions */}
               <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <h4 className="text-base font-semibold text-gray-600">Unit Details</h4>
-                </div>
+                <h4 className="text-sm font-medium text-gray-900">Unit Details</h4>
                 {units.length > 1 && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => removeUnit(selectedUnit.id)}
-                    className="h-9 w-9 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                    className="h-7 w-7 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 )}
               </div>
 
               {/* Unit Basic Information */}
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor={`unitNumber-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">Unit Name</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor={`unitNumber-${selectedUnit.id}`} className="text-xs font-medium text-gray-700">Unit Name</Label>
                   {editingUnitId === selectedUnit.id ? (
                     <Input
                       defaultValue={selectedUnit.unitNumber}
-                      className="h-10 border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200"
+                      className="h-9 text-sm"
                       placeholder="Enter unit name"
                       autoFocus
                       onBlur={(e) => handleUnitNameSubmit(selectedUnit.id, e.target.value)}
@@ -254,21 +247,21 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                   ) : (
                     <div 
                       onClick={() => setEditingUnitId(selectedUnit.id)}
-                      className="px-3 py-2.5 text-sm bg-gray-25 border border-gray-100 rounded-lg cursor-pointer transition-all hover:border-gray-200 hover:bg-gray-50 flex items-center justify-between group h-10"
+                      className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:border-gray-300 hover:bg-gray-50 flex items-center justify-between group h-9"
                     >
-                      <span className="text-gray-700 font-medium">{selectedUnit.unitNumber}</span>
+                      <span className="text-gray-700">{selectedUnit.unitNumber}</span>
                       <Edit3 className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-500">Property Category</Label>
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-gray-700">Property Category</Label>
                   <Select
                     value={selectedUnit.category}
                     onValueChange={(value) => updateUnit(selectedUnit.id, { category: value })}
                   >
-                    <SelectTrigger className="h-10 border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200">
+                    <SelectTrigger className="h-9 text-sm">
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -284,32 +277,29 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
               {/* Occupancy Status */}
               {shouldShowOccupancyStatus() && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <h4 className="text-base font-semibold text-gray-600">Occupancy Status</h4>
-                  </div>
+                <div className="space-y-2">
+                  <h4 className="text-xs font-medium text-gray-700">Occupancy Status</h4>
                   
-                  <div className="flex items-center justify-between p-4 bg-gray-25 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                    <div className="flex items-center gap-2">
                       {selectedUnit.occupancyStatus === "occupied" ? (
                         <>
-                          <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg">
-                            <Users className="h-5 w-5 text-green-500" />
+                          <div className="flex items-center justify-center w-6 h-6 bg-green-100 rounded-full">
+                            <Users className="h-3 w-3 text-green-600" />
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-600">Occupied</p>
-                            <p className="text-sm text-gray-400">This unit has tenants</p>
+                            <p className="text-xs font-medium text-gray-900">Occupied</p>
+                            <p className="text-xs text-gray-500">Unit has tenants</p>
                           </div>
                         </>
                       ) : (
                         <>
-                          <div className="flex items-center justify-center w-10 h-10 bg-gray-75 rounded-lg">
-                            <UserX className="h-5 w-5 text-gray-400" />
+                          <div className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full">
+                            <UserX className="h-3 w-3 text-gray-600" />
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-600">Vacant</p>
-                            <p className="text-sm text-gray-400">This unit is available</p>
+                            <p className="text-xs font-medium text-gray-900">Vacant</p>
+                            <p className="text-xs text-gray-500">Unit is available</p>
                           </div>
                         </>
                       )}
@@ -319,7 +309,7 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
                       variant="outline" 
                       size="sm" 
                       onClick={() => toggleOccupancyStatus(selectedUnit.id)}
-                      className="text-sm border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600"
+                      className="text-xs px-2 py-1 h-7"
                     >
                       Switch to {selectedUnit.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
                     </Button>
@@ -329,77 +319,73 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
 
               {/* Tenant Information */}
               {shouldShowTenantInfo() && selectedUnit.occupancyStatus === "occupied" && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                    <h4 className="text-base font-semibold text-gray-600">Tenant Information</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-medium text-gray-700">Tenant Information</h4>
+                    
+                    {/* Tenant Type Toggle */}
+                    <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                      <button
+                        type="button"
+                        onClick={() => updateUnitTenant(selectedUnit.id, { type: "individual" })}
+                        className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
+                          selectedUnit.tenant?.type === "individual"
+                            ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                        }`}
+                      >
+                        <User className="h-3 w-3" />
+                        Individual
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateUnitTenant(selectedUnit.id, { type: "company" })}
+                        className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
+                          selectedUnit.tenant?.type === "company"
+                            ? "bg-white text-gray-700 shadow-sm border border-gray-200"
+                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                        }`}
+                      >
+                        <Building2 className="h-3 w-3" />
+                        Company
+                      </button>
+                    </div>
                   </div>
                   
-                  <div className="bg-gray-25 border border-gray-100 rounded-xl p-5 space-y-4">
-                    {/* Name Field with Tenant Type Toggle */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor={`tenantName-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">
-                          {selectedUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
-                        </Label>
-                        
-                        {/* Tenant Type Toggle */}
-                        <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
-                          <button
-                            type="button"
-                            onClick={() => updateUnitTenant(selectedUnit.id, { type: "individual" })}
-                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
-                              selectedUnit.tenant?.type === "individual"
-                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                            }`}
-                          >
-                            <User className="h-3 w-3" />
-                            Individual
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => updateUnitTenant(selectedUnit.id, { type: "company" })}
-                            className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1.5 ${
-                              selectedUnit.tenant?.type === "company"
-                                ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                            }`}
-                          >
-                            <Building2 className="h-3 w-3" />
-                            Company
-                          </button>
-                        </div>
-                      </div>
+                  <div className="bg-white border border-gray-200 rounded-lg p-3 space-y-3">
+                    <div>
+                      <Label htmlFor={`tenantName-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">
+                        {selectedUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
+                      </Label>
                       <Input
                         id={`tenantName-${selectedUnit.id}`}
                         value={selectedUnit.tenant?.name || ""}
                         onChange={(e) => updateUnitTenant(selectedUnit.id, { name: e.target.value })}
                         placeholder={selectedUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                        className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                        className="h-9 text-sm"
                       />
                     </div>
                     
                     {/* Contact Information */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor={`tenantPhone-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">Phone Number</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor={`tenantPhone-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">Phone</Label>
                         <Input
                           id={`tenantPhone-${selectedUnit.id}`}
                           value={selectedUnit.tenant?.phone || ""}
                           onChange={(e) => updateUnitTenant(selectedUnit.id, { phone: e.target.value })}
-                          placeholder="Enter phone number"
-                          className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                          placeholder="Phone number"
+                          className="h-9 text-sm"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor={`tenantEmail-${selectedUnit.id}`} className="text-sm font-medium text-gray-500">Email Address</Label>
+                      <div>
+                        <Label htmlFor={`tenantEmail-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
                         <Input
                           id={`tenantEmail-${selectedUnit.id}`}
                           value={selectedUnit.tenant?.email || ""}
                           onChange={(e) => updateUnitTenant(selectedUnit.id, { email: e.target.value })}
-                          placeholder="Enter email address"
-                          className="bg-white border-gray-100 focus:border-gray-300 focus:ring-1 focus:ring-gray-200 h-10"
+                          placeholder="Email address"
+                          className="h-9 text-sm"
                         />
                       </div>
                     </div>
@@ -411,19 +397,21 @@ export function UnitsManager({ propertyType, units, onUnitsChange }: UnitsManage
         </div>
       ) : (
         /* Empty State */
-        <div className="text-center py-16 bg-white border border-gray-100 rounded-xl">
-          <div className="flex items-center justify-center w-16 h-16 bg-gray-50 rounded-2xl mx-auto mb-4">
-            <Building className="h-8 w-8 text-gray-300" />
+        <div className="text-center py-8 bg-gray-50 border border-gray-200 rounded-lg">
+          <div className="flex items-center justify-center w-12 h-12 bg-white rounded-lg mx-auto mb-3 shadow-sm">
+            <Building className="h-6 w-6 text-gray-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-600 mb-2">No units configured</h3>
-          <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">
+          <h3 className="text-sm font-medium text-gray-900 mb-1">No units configured</h3>
+          <p className="text-xs text-gray-500 mb-4 max-w-sm mx-auto">
             Start by adding units to manage this property effectively
           </p>
           <Button
             onClick={addUnit}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg shadow-sm border border-gray-200"
+            size="sm"
+            variant="outline"
+            className="text-xs px-3 py-1.5 h-8"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-3 w-3 mr-1" />
             Add Your First Unit
           </Button>
         </div>
