@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -116,31 +117,33 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-8 scale-[98%] origin-top">
-        <TransactionFields 
-          mockListings={listings}
-          initialValues={fields}
-          onChange={setFields}
-        />
-        
-        {showNotesSection && (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 scale-[98%] origin-top">
-            <div className="flex items-center gap-3 mb-5">
-              <FileText className="h-4 w-4 text-black" />
-              <h3 className="text-base font-medium text-gray-900">Additional Information</h3>
+      <div className="px-6 py-4 space-y-8">
+        <div className="w-[98%] max-w-none">
+          <TransactionFields 
+            mockListings={listings}
+            initialValues={fields}
+            onChange={setFields}
+          />
+          
+          {showNotesSection && (
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mt-8">
+              <div className="flex items-center gap-3 mb-5">
+                <FileText className="h-4 w-4 text-black" />
+                <h3 className="text-base font-medium text-gray-900">Additional Information</h3>
+              </div>
+              
+              <div>
+                <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Notes</div>
+                <Textarea
+                  placeholder="Add any additional details about this transaction"
+                  value={fields.notes}
+                  onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
+                  className="min-h-[120px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
+                />
+              </div>
             </div>
-            
-            <div>
-              <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Notes</div>
-              <Textarea
-                placeholder="Add any additional details about this transaction"
-                value={fields.notes}
-                onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                className="min-h-[120px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
