@@ -54,16 +54,16 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden max-w-6xl">
       <Table>
         <TableHeader>
           <TableRow className="border-b bg-gray-50/80">
-            <TableHead className="font-semibold text-gray-800 text-sm">Description</TableHead>
-            <TableHead className="font-semibold text-gray-800 text-sm">Amount</TableHead>
-            <TableHead className="font-semibold text-gray-800 text-sm">Date</TableHead>
-            <TableHead className="font-semibold text-gray-800 text-sm">Category</TableHead>
-            <TableHead className="font-semibold text-gray-800 text-sm">Payment Method</TableHead>
-            <TableHead className="w-12"></TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm w-[35%]">Description</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm w-[15%]">Amount</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm w-[15%]">Date</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm w-[15%]">Category</TableHead>
+            <TableHead className="font-semibold text-gray-800 text-sm w-[15%]">Payment Method</TableHead>
+            <TableHead className="w-[5%]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -74,7 +74,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               onClick={() => handleRowClick(tx)}
               data-transaction-id={tx.id}
             >
-              <TableCell className="max-w-[300px] py-4">
+              <TableCell className="py-4 w-[35%]">
                 <div className="space-y-1">
                   <div className="font-medium text-gray-900 truncate text-sm">{tx.from}</div>
                   {tx.notes && (
@@ -83,16 +83,16 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 </div>
               </TableCell>
               
-              <TableCell className="py-4">
-                <span className={`text-sm ${
+              <TableCell className="py-4 w-[15%]">
+                <span className={`text-sm font-medium ${
                   tx.type === "revenue" ? "text-green-500" : "text-red-400"
                 }`}>
                   {formatAmount(tx.amount, tx.type)}
                 </span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <span className="text-gray-700 font-medium text-sm">
+              <TableCell className="py-4 w-[15%]">
+                <span className="text-gray-700 text-sm">
                   {tx.date.toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -101,17 +101,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 </span>
               </TableCell>
               
-              <TableCell className="py-4">
-                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium px-2.5 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+              <TableCell className="py-4 w-[15%]">
+                <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
                   {tx.category}
                 </Badge>
               </TableCell>
               
-              <TableCell className="py-4">
-                <span className="text-gray-600 text-sm">{tx.paymentMethod}</span>
+              <TableCell className="py-4 w-[15%]">
+                <span className="text-gray-600 text-sm truncate">{tx.paymentMethod}</span>
               </TableCell>
               
-              <TableCell className="text-right py-4">
+              <TableCell className="text-right py-4 w-[5%]">
                 <Button
                   variant="ghost"
                   size="icon"
