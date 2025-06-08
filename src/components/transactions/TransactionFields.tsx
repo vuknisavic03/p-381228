@@ -1,9 +1,8 @@
 
-
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, Mail, Phone, UserX, Building } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -11,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 import { 
   Listing, 
   TransactionFieldsData, 
@@ -24,7 +24,6 @@ import { UnitSelector } from "./UnitSelector";
 import { formatPropertyType, getPropertyTypeIcon } from "@/utils/propertyTypeUtils";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
-import { Mail, Phone, UserX } from "lucide-react";
 
 // Helper function to capitalize tenant type
 const capitalizeTenantType = (type: string) => {
@@ -97,13 +96,13 @@ export function TransactionFields({
     selectedListing.tenant.name.trim() !== "";
   
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* Transaction Type Section */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <Card className="p-6 border border-gray-100 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-            <h3 className="text-base font-semibold text-gray-900">Transaction Type</h3>
+            <h3 className="text-lg font-medium text-gray-900">Transaction Type</h3>
           </div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
@@ -112,7 +111,7 @@ export function TransactionFields({
         </div>
         
         {fields.listingType === "listing" ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className="space-y-6">
             <div className="text-xs font-medium text-gray-500 mb-3 uppercase tracking-wide">Property Selection</div>
             
             <div className="flex gap-3 mb-5">
@@ -249,28 +248,26 @@ export function TransactionFields({
             )}
           </div>
         ) : (
-          <div className="bg-white border border-purple-200 rounded-xl p-6 shadow-sm">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+          <div className="flex items-center gap-3 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+            <div>
               <div className="font-semibold text-purple-700">General Transaction</div>
+              <p className="text-sm text-purple-600">
+                Applies to your entire portfolio, not a specific property.
+              </p>
             </div>
-            <p className="text-sm text-gray-600">
-              Applies to your entire portfolio, not a specific property.
-            </p>
           </div>
         )}
-      </div>
+      </Card>
       
       {(selectedListing || fields.listingType === "general") && (
         <>
-          <Separator className="my-10 border-gray-200" />
-          
           {/* Transaction Details Section */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+          <Card className="p-6 border border-gray-100 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <h3 className="text-base font-semibold text-gray-900">Transaction Details</h3>
+                <h3 className="text-lg font-medium text-gray-900">Transaction Details</h3>
               </div>
               <TransactionTypeToggle
                 value={fields.transactionType}
@@ -278,7 +275,7 @@ export function TransactionFields({
               />
             </div>
             
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div>
               <div className="text-xs font-medium text-gray-500 mb-3 uppercase tracking-wide">Category</div>
               <Select 
                 value={fields.category} 
@@ -304,18 +301,16 @@ export function TransactionFields({
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          
-          <Separator className="my-10 border-gray-200" />
+          </Card>
           
           {/* Payment Details Section */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
+          <Card className="p-6 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
               <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-              <h3 className="text-base font-semibold text-gray-900">Payment Details</h3>
+              <h3 className="text-lg font-medium text-gray-900">Payment Details</h3>
             </div>
             
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-6">
+            <div className="space-y-6">
               {/* Amount */}
               <div>
                 <div className="text-xs font-medium text-gray-500 mb-3 uppercase tracking-wide">Amount</div>
@@ -376,10 +371,9 @@ export function TransactionFields({
                 </Select>
               </div>
             </div>
-          </div>
+          </Card>
         </>
       )}
     </div>
   );
 }
-
