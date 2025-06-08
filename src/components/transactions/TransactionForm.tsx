@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -80,11 +79,6 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       <div className="h-full overflow-auto bg-white">
         <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
           <h2 className="text-xl font-medium text-gray-900">Add Transaction</h2>
-          {onClose && (
-            <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
-              <X className="h-4 w-4" />
-            </Button>
-          )}
         </div>
         <div className="px-6 py-8 flex items-center justify-center">
           <div className="text-center">
@@ -98,14 +92,27 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="h-full overflow-auto bg-white">
-      {/* Header with close button */}
+      {/* Header with action buttons */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
         <h2 className="text-xl font-medium text-gray-900">Add Transaction</h2>
-        {onClose && (
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
-            <X className="h-4 w-4" />
+        <div className="flex gap-3">
+          <Button 
+            onClick={handleConfirm}
+            disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Add transaction
           </Button>
-        )}
+          {onClose && (
+            <Button 
+              variant="outline" 
+              onClick={onClose} 
+              className="bg-white border-gray-200 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Form content */}
@@ -134,26 +141,6 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
             </div>
           </div>
         )}
-
-        {/* Action Buttons */}
-        <div className="pt-4 flex gap-3 sticky bottom-0 bg-white border-t border-gray-100 py-4 -mx-6 px-6 mt-8">
-          <Button 
-            onClick={handleConfirm}
-            disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Add transaction
-          </Button>
-          {onClose && (
-            <Button 
-              variant="outline" 
-              onClick={onClose} 
-              className="flex-1 bg-white border-gray-200 hover:bg-gray-50"
-            >
-              Cancel
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   );
