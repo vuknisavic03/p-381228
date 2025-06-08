@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -251,6 +252,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           <Button 
             onClick={handleSubmit} 
             disabled={!isFormValid}
+            size="sm"
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Update Listing
@@ -258,6 +260,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           <Button 
             variant="outline" 
             onClick={onClose} 
+            size="sm"
             className="bg-white border-gray-200 hover:bg-gray-50"
           >
             Cancel
@@ -267,7 +270,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-8 py-6">
-        <div className="max-w-2xl space-y-6">
+        <div className="w-[98%] max-w-none space-y-6">
           
           {/* Location Section */}
           <Card className="p-6 border border-gray-100 shadow-sm">
