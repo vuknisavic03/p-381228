@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,40 +24,6 @@ import { formatPropertyType, getPropertyTypeIcon } from "@/utils/propertyTypeUti
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionMapSelector } from "./TransactionMapSelector";
 import { Mail, Phone, UserX } from "lucide-react";
-
-// Category mapping from ListingForm - this ensures consistency
-const typeToCategoryMap = {
-  residential_rental: [
-    { value: "single_family", label: "Single-family Home" },
-    { value: "multi_family", label: "Multi-family" },
-    { value: "apartment_condo", label: "Apartment/Condo" },
-  ],
-  commercial_rental: [
-    { value: "office", label: "Office Space" },
-    { value: "retail", label: "Retail Store" },
-    { value: "medical", label: "Medical/Professional" },
-  ],
-  industrial: [
-    { value: "warehouse", label: "Warehouse" },
-    { value: "distribution", label: "Distribution Facility" },
-    { value: "manufacturing", label: "Manufacturing" },
-  ],
-  hospitality: [
-    { value: "hotel", label: "Hotel" },
-    { value: "motel", label: "Motel" },
-    { value: "bed_breakfast", label: "Bed & Breakfast" },
-  ],
-  vacation_rental: [
-    { value: "short_term", label: "Short-term Rental" },
-    { value: "serviced_apartment", label: "Serviced Apartment" },
-    { value: "holiday_home", label: "Holiday Home" },
-  ],
-  mixed_use: [
-    { value: "residential_commercial", label: "Residential-Commercial" },
-    { value: "live_work", label: "Live-Work Space" },
-    { value: "multi_purpose", label: "Multi-Purpose" },
-  ],
-};
 
 // Helper function to capitalize tenant type
 const capitalizeTenantType = (type: string) => {
@@ -104,19 +71,11 @@ export function TransactionFields({
       return fields.transactionType === "revenue" 
         ? GENERAL_CATEGORIES.revenue 
         : GENERAL_CATEGORIES.expense;
-    } else if (selectedListing) {
-      // Get categories based on the property type from the listing form mapping
-      const propertyTypeCategories = typeToCategoryMap[selectedListing.type as keyof typeof typeToCategoryMap];
-      if (propertyTypeCategories) {
-        // For transactions, we use the property subcategories as transaction categories
-        return propertyTypeCategories;
-      }
-      // Fallback to the property categories system if available
-      return selectedPropertyCategory ? (
-        fields.transactionType === "revenue"
-          ? selectedPropertyCategory.revenueCategories
-          : selectedPropertyCategory.expenseCategories
-      ) : [];
+    } else if (selectedPropertyCategory) {
+      // Use the proper transaction categories from PROPERTY_CATEGORIES
+      return fields.transactionType === "revenue"
+        ? selectedPropertyCategory.revenueCategories
+        : selectedPropertyCategory.expenseCategories;
     }
     return []; // Fallback empty array
   };
@@ -139,9 +98,9 @@ export function TransactionFields({
     selectedListing.tenant.name.trim() !== "";
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Transaction Type Section */}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-blue-500"></div>
@@ -305,10 +264,10 @@ export function TransactionFields({
       
       {(selectedListing || fields.listingType === "general") && (
         <>
-          <Separator className="my-8" />
+          <Separator className="my-10 border-gray-200" />
           
           {/* Transaction Details Section */}
-          <div className="space-y-5">
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
@@ -344,10 +303,10 @@ export function TransactionFields({
             </div>
           </div>
           
-          <Separator className="my-8" />
+          <Separator className="my-10 border-gray-200" />
           
           {/* Payment Details Section */}
-          <div className="space-y-5">
+          <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-orange-500"></div>
               <h3 className="text-base font-semibold text-gray-900">Payment Details</h3>
