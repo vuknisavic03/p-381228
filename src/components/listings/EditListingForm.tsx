@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,6 +76,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
   const [units, setUnits] = useState<Unit[]>(listing.units || []);
   const [useUnitsMode, setUseUnitsMode] = useState(listing.units && listing.units.length > 0);
+  const [isFormReady, setIsFormReady] = useState(false);
 
   // Ensure type and category are properly set when component mounts
   useEffect(() => {
@@ -88,6 +88,9 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }));
     setUnits(listing.units || []);
     setUseUnitsMode(listing.units && listing.units.length > 0);
+    // Delay form ready state to prevent auto-expansion
+    const timer = setTimeout(() => setIsFormReady(true), 100);
+    return () => clearTimeout(timer);
   }, [listing]);
 
   const propertyTypes: { value: PropertyType; label: string; description: string }[] = [
@@ -139,7 +142,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }));
   };
 
-    const handleLocationSelect = (locationData: { city?: string; country?: string; address?: string }) => {
+  const handleLocationSelect = (locationData: { city?: string; country?: string; address?: string }) => {
     setFormData(prev => ({
       ...prev,
       ...(locationData.city && { city: locationData.city }),
@@ -240,6 +243,26 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
 
+  // Don't render form until ready to prevent auto-expansion
+  if (!isFormReady) {
+    return (
+      <div className="flex flex-col h-full bg-white">
+        <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+          <div>
+            <h1 className="text-2xl font-medium text-gray-900">Edit Listing</h1>
+            <p className="text-sm text-gray-500 mt-1">Update the details of your listing</p>
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header with action buttons */}
@@ -283,38 +306,38 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                   <LocationAutofill
+                  <Label htmlFor="city" className="text-sm font-medium text-gray-700 mb-2 block">City</Label>
+                  <Input
+                    id="city"
+                    name="city"
                     value={formData.city}
-                    onChange={(value) => setFormData(prev => ({ ...prev, city: value }))}
+                    onChange={handleChange}
                     placeholder="e.g., Belgrade"
-                    label="City"
-                    type="city"
                     className="h-11"
-                    onLocationSelect={handleLocationSelect}
                   />
                 </div>
                 <div>
-                   <LocationAutofill
+                  <Label htmlFor="country" className="text-sm font-medium text-gray-700 mb-2 block">Country</Label>
+                  <Input
+                    id="country"
+                    name="country"
                     value={formData.country}
-                    onChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
+                    onChange={handleChange}
                     placeholder="e.g., Serbia"
-                    label="Country"
-                    type="country"
                     className="h-11"
-                    onLocationSelect={handleLocationSelect}
                   />
                 </div>
               </div>
               
               <div>
-                 <LocationAutofill
+                <Label htmlFor="address" className="text-sm font-medium text-gray-700 mb-2 block">Full Address</Label>
+                <Input
+                  id="address"
+                  name="address"
                   value={formData.address}
-                  onChange={(value) => setFormData(prev => ({ ...prev, address: value }))}
+                  onChange={handleChange}
                   placeholder="e.g., Knez Mihailova 42"
-                  label="Full Address"
-                  type="address"
                   className="h-11"
-                  onLocationSelect={handleLocationSelect}
                 />
               </div>
               
