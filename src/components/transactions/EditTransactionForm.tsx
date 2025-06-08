@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SheetClose } from "@/components/ui/sheet";
@@ -178,7 +179,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
             </div>
             
             <div>
-              <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Notes</div>
+              <div className="text-sm font-medium text-gray-700 mb-2">Notes</div>
               <Textarea
                 placeholder="Add any additional details about this transaction"
                 value={fields.notes}

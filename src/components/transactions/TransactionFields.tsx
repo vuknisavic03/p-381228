@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -112,7 +111,7 @@ export function TransactionFields({
         
         {fields.listingType === "listing" ? (
           <div className="space-y-5">
-            <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Property Selection</div>
+            <div className="text-sm font-medium text-gray-700 mb-2">Property selection</div>
             
             <div className="flex gap-2 mb-4">
               <div className="flex-1">
@@ -169,7 +168,7 @@ export function TransactionFields({
                   <Separator className="my-3" />
                   
                   <div>
-                    <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Tenant Information</div>
+                    <div className="text-sm font-medium text-gray-700 mb-2">Tenant information</div>
                     {hasTenant ? (
                       <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
                         <div className="flex-1">
@@ -209,7 +208,7 @@ export function TransactionFields({
                   <>
                     <Separator className="my-4" />
                     <div>
-                      <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Unit Selection</div>
+                      <div className="text-sm font-medium text-gray-700 mb-2">Unit selection</div>
                       
                       <div className="mb-3">
                         <Button
@@ -276,7 +275,7 @@ export function TransactionFields({
             </div>
             
             <div>
-              <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Category</div>
+              <div className="text-sm font-medium text-gray-700 mb-2">Category</div>
               <Select 
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
@@ -313,7 +312,7 @@ export function TransactionFields({
             <div className="space-y-4">
               {/* Amount */}
               <div>
-                <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Amount</div>
+                <div className="text-sm font-medium text-gray-700 mb-2">Amount</div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-xs">$</span>
                   <Input
@@ -328,7 +327,7 @@ export function TransactionFields({
 
               {/* Date */}
               <div>
-                <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Date</div>
+                <div className="text-sm font-medium text-gray-700 mb-2">Date</div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -356,7 +355,7 @@ export function TransactionFields({
 
               {/* Payment Method */}
               <div>
-                <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Payment Method</div>
+                <div className="text-sm font-medium text-gray-700 mb-2">Payment method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
                   <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-xs focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                     <SelectValue placeholder="Select payment method" />
