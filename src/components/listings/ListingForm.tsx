@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,6 @@ import {
   Building,
   Warehouse,
   Hotel,
-  X,
   Bed,
   Users,
   UserX,
@@ -224,15 +222,28 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
   return (
     <div className="flex flex-col h-full bg-white">
-      {/* Header */}
+      {/* Header with action buttons */}
       <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
         <div>
           <h1 className="text-2xl font-medium text-gray-900">Add New Listing</h1>
           <p className="text-sm text-gray-500 mt-1">Create a new listing for your portfolio</p>
         </div>
-        <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full hover:bg-gray-100">
-          <X className="h-4 w-4" />
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={!isFormValid}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Add New Listing
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className="bg-white border-gray-200 hover:bg-gray-50"
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
 
       {/* Content */}
