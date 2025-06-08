@@ -95,7 +95,7 @@ export function TransactionFields({
     selectedListing.tenant.name.trim() !== "";
   
   return (
-    <div className="space-y-5 scale-90 origin-top">
+    <div className="space-y-5 scale-105 origin-top">
       {/* Transaction Type Section */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <div className="flex items-center justify-between mb-5">
