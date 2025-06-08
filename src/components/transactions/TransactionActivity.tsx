@@ -177,7 +177,7 @@ export function TransactionActivity() {
       <Sheet open={isEditFormOpen} onOpenChange={setIsEditFormOpen}>
         <SheetContent
           side="right"
-          className="w-[600px] sm:w-[700px] lg:w-[900px] xl:w-[1200px] 2xl:w-[1400px] p-0 border-l shadow-2xl bg-white"
+          className="w-[600px] sm:w-[700px] lg:w-[900px] xl:w-[1000px] p-0 border-l shadow-2xl bg-white"
         >
           {editingTransaction && (
             <EditTransactionForm
