@@ -129,9 +129,9 @@ export function TransactionFields({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-9 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    className="h-10 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   >
-                    <MapPin className="h-3 w-3" />
+                    <MapPin className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
@@ -216,7 +216,7 @@ export function TransactionFields({
                           variant={!fields.selectedUnitId ? "default" : "outline"}
                           size="sm"
                           className={cn(
-                            "w-full justify-start text-left h-9 font-normal border-gray-200 text-sm",
+                            "w-full justify-start text-left h-10 font-normal border-gray-200 text-sm",
                             !fields.selectedUnitId 
                               ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" 
                               : "bg-white text-gray-700 hover:bg-gray-50"
@@ -280,7 +280,7 @@ export function TransactionFields({
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
               >
-                <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-xs focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
+                <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                   <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                 </SelectTrigger>
                 <SelectContent className="max-h-60 overflow-y-auto bg-white border border-gray-200 shadow-lg">
@@ -289,7 +289,7 @@ export function TransactionFields({
                       <SelectItem 
                         key={cat.value} 
                         value={cat.value}
-                        className="py-2 px-3 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer text-xs"
+                        className="py-2 px-3 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer text-sm"
                       >
                         {cat.label}
                       </SelectItem>
@@ -314,13 +314,13 @@ export function TransactionFields({
               <div>
                 <div className="text-xs font-medium text-gray-700 mb-2">Amount</div>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-xs">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm">$</span>
                   <Input
                     type="number"
                     placeholder="0.00"
                     value={fields.amount}
                     onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
-                    className="pl-7 h-9 border-gray-200 bg-white text-xs focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg"
+                    className="pl-7 h-10 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg"
                   />
                 </div>
               </div>
@@ -333,11 +333,11 @@ export function TransactionFields({
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left h-9 font-normal border-gray-200 bg-white text-xs focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-lg",
+                        "w-full justify-start text-left h-10 font-normal border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-lg",
                         !fields.date && "text-gray-400"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-3 w-3 text-gray-400" />
+                      <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
                       {fields.date ? format(fields.date, "PPP") : "Select date"}
                     </Button>
                   </PopoverTrigger>
@@ -357,15 +357,15 @@ export function TransactionFields({
               <div>
                 <div className="text-xs font-medium text-gray-700 mb-2">Payment method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
-                  <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-xs focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
+                  <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                    <SelectItem value="card" className="text-xs">Credit Card</SelectItem>
-                    <SelectItem value="bank" className="text-xs">Bank Transfer</SelectItem>
-                    <SelectItem value="cash" className="text-xs">Cash</SelectItem>
-                    <SelectItem value="check" className="text-xs">Check</SelectItem>
-                    <SelectItem value="crypto" className="text-xs">Cryptocurrency</SelectItem>
+                    <SelectItem value="card" className="text-sm">Credit Card</SelectItem>
+                    <SelectItem value="bank" className="text-sm">Bank Transfer</SelectItem>
+                    <SelectItem value="cash" className="text-sm">Cash</SelectItem>
+                    <SelectItem value="check" className="text-sm">Check</SelectItem>
+                    <SelectItem value="crypto" className="text-sm">Cryptocurrency</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
