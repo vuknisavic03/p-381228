@@ -100,19 +100,19 @@ export function TransactionFields({
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Building className="h-4 w-4 text-gray-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Transaction Type</h2>
+            <Building className="h-5 w-5 text-gray-500" />
+            <h2 className="text-xl font-medium text-gray-900">Transaction Type</h2>
           </div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
             onChange={type => setFields(f => ({ ...f, listingType: type }))}
           />
         </div>
-        <p className="text-base text-gray-600 mb-6">What type of transaction is this?</p>
+        <p className="text-gray-600 mb-6">What type of transaction is this?</p>
         
         {fields.listingType === "listing" ? (
           <div className="space-y-6">
-            <div className="text-base font-medium text-gray-700 mb-3">Property selection</div>
+            <div className="text-gray-700 font-medium mb-3">Property selection</div>
             
             <div className="flex gap-3 mb-4">
               <div className="flex-1">
@@ -169,7 +169,7 @@ export function TransactionFields({
                   <Separator className="my-3" />
                   
                   <div>
-                    <div className="text-sm font-medium text-gray-700 mb-3">Tenant information</div>
+                    <div className="text-gray-700 font-medium mb-3">Tenant information</div>
                     {hasTenant ? (
                       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                         <div className="flex-1">
@@ -209,7 +209,7 @@ export function TransactionFields({
                   <>
                     <Separator className="my-4" />
                     <div>
-                      <div className="text-sm font-medium text-gray-700 mb-3">Unit selection</div>
+                      <div className="text-gray-700 font-medium mb-3">Unit selection</div>
                       
                       <div className="mb-3">
                         <Button
@@ -235,7 +235,7 @@ export function TransactionFields({
                         </Button>
                       </div>
                       
-                      <div className="text-sm font-medium text-gray-500 mb-3 ml-1">Or select specific unit:</div>
+                      <div className="text-sm text-gray-500 mb-3 ml-1">Or select specific unit:</div>
                       <UnitSelector
                         units={selectedListing.units}
                         selectedUnitId={fields.selectedUnitId || ""}
@@ -266,18 +266,18 @@ export function TransactionFields({
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-gray-500" />
-                <h2 className="text-lg font-semibold text-gray-900">Transaction Details</h2>
+                <DollarSign className="h-5 w-5 text-gray-500" />
+                <h2 className="text-xl font-medium text-gray-900">Transaction Details</h2>
               </div>
               <TransactionTypeToggle
                 value={fields.transactionType}
                 onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
               />
             </div>
-            <p className="text-base text-gray-600 mb-6">Configure the specific details of your transaction</p>
+            <p className="text-gray-600 mb-6">Configure the specific details of your transaction</p>
             
             <div>
-              <div className="text-base font-medium text-gray-700 mb-3">Category</div>
+              <div className="text-gray-700 font-medium mb-3">Category</div>
               <Select 
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
@@ -307,15 +307,15 @@ export function TransactionFields({
           {/* Payment Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-4 w-4 text-gray-500" />
-              <h2 className="text-lg font-semibold text-gray-900">Payment Details</h2>
+              <CreditCard className="h-5 w-5 text-gray-500" />
+              <h2 className="text-xl font-medium text-gray-900">Payment Details</h2>
             </div>
-            <p className="text-base text-gray-600 mb-6">Add any additional information about this transaction</p>
+            <p className="text-gray-600 mb-6">Add any additional information about this transaction</p>
             
             <div className="space-y-6">
               {/* Amount */}
               <div>
-                <div className="text-base font-medium text-gray-700 mb-3">Amount</div>
+                <div className="text-gray-700 font-medium mb-3">Amount</div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
                   <Input
@@ -330,7 +330,7 @@ export function TransactionFields({
 
               {/* Date */}
               <div>
-                <div className="text-base font-medium text-gray-700 mb-3">Date</div>
+                <div className="text-gray-700 font-medium mb-3">Date</div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -358,7 +358,7 @@ export function TransactionFields({
 
               {/* Payment Method */}
               <div>
-                <div className="text-base font-medium text-gray-700 mb-3">Payment method</div>
+                <div className="text-gray-700 font-medium mb-3">Payment method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
                   <SelectTrigger className="w-full border-gray-200 bg-white h-10 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                     <SelectValue placeholder="Select payment method" />
