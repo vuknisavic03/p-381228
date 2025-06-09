@@ -126,14 +126,15 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           />
           
           {showNotesSection && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mt-8">
-              <div className="flex items-center gap-3 mb-5">
-                <FileText className="h-4 w-4 text-black" />
-                <h3 className="text-base font-medium text-gray-900">Additional Information</h3>
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mt-8">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="h-4 w-4 text-gray-500" />
+                <h2 className="text-sm font-medium text-gray-900">Additional Information</h2>
               </div>
+              <p className="text-xs text-gray-600 mb-4">Add any additional details about this transaction</p>
               
               <div>
-                <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Notes</div>
+                <div className="text-xs font-medium text-gray-700 mb-1.5 block">Notes</div>
                 <Textarea
                   placeholder="Add any additional details about this transaction"
                   value={fields.notes}
