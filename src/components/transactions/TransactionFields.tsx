@@ -95,25 +95,26 @@ export function TransactionFields({
     selectedListing.tenant.name.trim() !== "";
   
   return (
-    <div className="space-y-4 scale-[98%] origin-top">
+    <div className="w-[98%] max-w-none space-y-4">
       {/* Transaction Type Section */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Building className="h-4 w-4 text-gray-500" />
-            <h3 className="text-sm font-medium text-gray-900">Transaction Type</h3>
+            <h2 className="text-sm font-medium text-gray-900">Transaction Type</h2>
           </div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
             onChange={type => setFields(f => ({ ...f, listingType: type }))}
           />
         </div>
+        <p className="text-xs text-gray-600 mb-4">What type of transaction is this?</p>
         
         {fields.listingType === "listing" ? (
           <div className="space-y-4">
             <div className="text-xs font-medium text-gray-700 mb-2">Property selection</div>
             
-            <div className="flex gap-2 mb-3">
+            <div className="flex gap-3 mb-3">
               <div className="flex-1">
                 <ListingSelector
                   listings={mockListings}
@@ -129,7 +130,7 @@ export function TransactionFields({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-10 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    className="h-9 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 text-sm"
                   >
                     <MapPin className="h-4 w-4" />
                   </Button>
@@ -216,7 +217,7 @@ export function TransactionFields({
                           variant={!fields.selectedUnitId ? "default" : "outline"}
                           size="sm"
                           className={cn(
-                            "w-full justify-start text-left h-10 font-normal border-gray-200 text-sm",
+                            "w-full justify-start text-left h-9 font-normal border-gray-200 text-sm",
                             !fields.selectedUnitId 
                               ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" 
                               : "bg-white text-gray-700 hover:bg-gray-50"
@@ -263,16 +264,17 @@ export function TransactionFields({
         <>
           {/* Transaction Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-gray-500" />
-                <h3 className="text-sm font-medium text-gray-900">Transaction Details</h3>
+                <h2 className="text-sm font-medium text-gray-900">Transaction Details</h2>
               </div>
               <TransactionTypeToggle
                 value={fields.transactionType}
                 onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
               />
             </div>
+            <p className="text-xs text-gray-600 mb-4">Configure the specific details of your transaction</p>
             
             <div>
               <div className="text-xs font-medium text-gray-700 mb-2">Category</div>
@@ -280,7 +282,7 @@ export function TransactionFields({
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
               >
-                <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
+                <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                   <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                 </SelectTrigger>
                 <SelectContent className="max-h-60 overflow-y-auto bg-white border border-gray-200 shadow-lg">
@@ -304,15 +306,16 @@ export function TransactionFields({
           
           {/* Payment Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-3">
               <CreditCard className="h-4 w-4 text-gray-500" />
-              <h3 className="text-sm font-medium text-gray-900">Payment Details</h3>
+              <h2 className="text-sm font-medium text-gray-900">Payment Details</h2>
             </div>
+            <p className="text-xs text-gray-600 mb-4">Add any additional information about this transaction</p>
             
             <div className="space-y-3">
               {/* Amount */}
               <div>
-                <div className="text-xs font-medium text-gray-700 mb-2">Amount</div>
+                <div className="text-xs font-medium text-gray-700 mb-1.5">Amount</div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm">$</span>
                   <Input
@@ -320,20 +323,20 @@ export function TransactionFields({
                     placeholder="0.00"
                     value={fields.amount}
                     onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
-                    className="pl-7 h-10 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg"
+                    className="pl-7 h-9 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg"
                   />
                 </div>
               </div>
 
               {/* Date */}
               <div>
-                <div className="text-xs font-medium text-gray-700 mb-2">Date</div>
+                <div className="text-xs font-medium text-gray-700 mb-1.5">Date</div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left h-10 font-normal border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-lg",
+                        "w-full justify-start text-left h-9 font-normal border-gray-200 bg-white text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-lg",
                         !fields.date && "text-gray-400"
                       )}
                     >
@@ -355,9 +358,9 @@ export function TransactionFields({
 
               {/* Payment Method */}
               <div>
-                <div className="text-xs font-medium text-gray-700 mb-2">Payment method</div>
+                <div className="text-xs font-medium text-gray-700 mb-1.5">Payment method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
-                  <SelectTrigger className="w-full border-gray-200 bg-white h-10 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
+                  <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-sm focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-gray-200 shadow-lg">
