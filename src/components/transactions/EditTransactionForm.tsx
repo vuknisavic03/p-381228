@@ -122,8 +122,8 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       <div className="h-full overflow-auto bg-white">
         <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
-            <p className="text-sm text-gray-500">Transaction #{transaction.id}</p>
+            <h2 className="text-lg font-medium text-gray-900">Edit Transaction</h2>
+            <p className="text-xs text-gray-500">Transaction #{transaction.id}</p>
           </div>
         </div>
         <div className="px-6 py-8 flex items-center justify-center">
@@ -141,21 +141,23 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       {/* Header with action buttons */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
-          <p className="text-sm text-gray-500">Transaction #{transaction.id} • {transaction.type === 'revenue' ? 'Revenue' : 'Expense'}</p>
+          <h2 className="text-lg font-medium text-gray-900">Edit Transaction</h2>
+          <p className="text-xs text-gray-500">Transaction #{transaction.id} • {transaction.type === 'revenue' ? 'Revenue' : 'Expense'}</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Button 
             onClick={handleUpdate}
             disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 h-8"
           >
             Save changes
           </Button>
           <Button 
             variant="outline" 
             onClick={onClose} 
-            className="bg-white border-gray-200 hover:bg-gray-50"
+            size="sm"
+            className="bg-white border-gray-200 hover:bg-gray-50 text-xs px-3 py-1.5 h-8"
           >
             Cancel
           </Button>
@@ -163,7 +165,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-6 scale-[98%] origin-top">
+      <div className="px-6 py-4 space-y-4 scale-[98%] origin-top">
         <TransactionFields 
           mockListings={listings}
           initialValues={fields}
@@ -172,19 +174,19 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
         />
         
         {showNotesSection && (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 scale-[98%] origin-top">
-            <div className="flex items-center gap-3 mb-5">
-              <FileText className="h-4 w-4 text-black" />
-              <h3 className="text-base font-medium text-gray-900">Additional Information</h3>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 scale-[98%] origin-top">
+            <div className="flex items-center gap-2 mb-4">
+              <FileText className="h-4 w-4 text-gray-500" />
+              <h3 className="text-sm font-medium text-gray-900">Additional Information</h3>
             </div>
             
             <div>
-              <div className="text-sm font-medium text-gray-700 mb-2">Notes</div>
+              <div className="text-xs font-medium text-gray-700 mb-2">Notes</div>
               <Textarea
                 placeholder="Add any additional details about this transaction"
                 value={fields.notes}
                 onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                className="min-h-[120px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
+                className="min-h-[80px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
               />
             </div>
           </div>

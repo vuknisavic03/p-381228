@@ -95,13 +95,13 @@ export function TransactionFields({
     selectedListing.tenant.name.trim() !== "";
   
   return (
-    <div className="space-y-5 scale-[98%] origin-top">
+    <div className="space-y-4 scale-[98%] origin-top">
       {/* Transaction Type Section */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <Building className="h-4 w-4 text-black" />
-            <h3 className="text-base font-medium text-gray-900">Transaction Type</h3>
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Building className="h-4 w-4 text-gray-500" />
+            <h3 className="text-sm font-medium text-gray-900">Transaction Type</h3>
           </div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
@@ -110,10 +110,10 @@ export function TransactionFields({
         </div>
         
         {fields.listingType === "listing" ? (
-          <div className="space-y-5">
-            <div className="text-sm font-medium text-gray-700 mb-2">Property selection</div>
+          <div className="space-y-4">
+            <div className="text-xs font-medium text-gray-700 mb-2">Property selection</div>
             
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-3">
               <div className="flex-1">
                 <ListingSelector
                   listings={mockListings}
@@ -148,11 +148,11 @@ export function TransactionFields({
             {/* Selected Property Info - Shown directly below property selector */}
             {selectedListing && (
               <>
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 mb-4">
-                  <div className="flex justify-between items-start mb-3">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 mb-3">
+                  <div className="flex justify-between items-start mb-2">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 text-sm">{selectedListing.name}</h4>
-                      <div className="flex items-center text-gray-600 gap-1.5 mt-1">
+                      <h4 className="font-medium text-gray-900 text-sm">{selectedListing.name}</h4>
+                      <div className="flex items-center text-gray-600 gap-1.5 mt-0.5">
                         <MapPin className="h-3 w-3 text-gray-400" />
                         <span className="text-xs">{selectedListing.address}</span>
                       </div>
@@ -165,14 +165,14 @@ export function TransactionFields({
                     </div>
                   </div>
                   
-                  <Separator className="my-3" />
+                  <Separator className="my-2" />
                   
                   <div>
-                    <div className="text-sm font-medium text-gray-700 mb-2">Tenant information</div>
+                    <div className="text-xs font-medium text-gray-700 mb-2">Tenant information</div>
                     {hasTenant ? (
                       <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
                         <div className="flex-1">
-                          <div className="font-semibold text-gray-900 text-sm">{selectedListing.tenant.name}</div>
+                          <div className="font-medium text-gray-900 text-sm">{selectedListing.tenant.name}</div>
                           <div className="text-xs text-gray-600 mt-0.5">{capitalizeTenantType(selectedListing.tenant.type)}</div>
                         </div>
                         <div className="space-y-1">
@@ -206,11 +206,11 @@ export function TransactionFields({
 
                 {hasMultipleUnits && (
                   <>
-                    <Separator className="my-4" />
+                    <Separator className="my-3" />
                     <div>
-                      <div className="text-sm font-medium text-gray-700 mb-2">Unit selection</div>
+                      <div className="text-xs font-medium text-gray-700 mb-2">Unit selection</div>
                       
-                      <div className="mb-3">
+                      <div className="mb-2">
                         <Button
                           type="button"
                           variant={!fields.selectedUnitId ? "default" : "outline"}
@@ -250,7 +250,7 @@ export function TransactionFields({
           <div className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
             <div className="w-2 h-2 rounded-full bg-purple-500"></div>
             <div>
-              <div className="font-semibold text-purple-700 text-sm">General Transaction</div>
+              <div className="font-medium text-purple-700 text-sm">General Transaction</div>
               <p className="text-xs text-purple-600">
                 Applies to your entire portfolio, not a specific property.
               </p>
@@ -262,11 +262,11 @@ export function TransactionFields({
       {(selectedListing || fields.listingType === "general") && (
         <>
           {/* Transaction Details Section */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
-                <DollarSign className="h-4 w-4 text-black" />
-                <h3 className="text-base font-medium text-gray-900">Transaction Details</h3>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4 text-gray-500" />
+                <h3 className="text-sm font-medium text-gray-900">Transaction Details</h3>
               </div>
               <TransactionTypeToggle
                 value={fields.transactionType}
@@ -275,7 +275,7 @@ export function TransactionFields({
             </div>
             
             <div>
-              <div className="text-sm font-medium text-gray-700 mb-2">Category</div>
+              <div className="text-xs font-medium text-gray-700 mb-2">Category</div>
               <Select 
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
@@ -303,16 +303,16 @@ export function TransactionFields({
           </div>
           
           {/* Payment Details Section */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-            <div className="flex items-center gap-3 mb-5">
-              <CreditCard className="h-4 w-4 text-black" />
-              <h3 className="text-base font-medium text-gray-900">Payment Details</h3>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <CreditCard className="h-4 w-4 text-gray-500" />
+              <h3 className="text-sm font-medium text-gray-900">Payment Details</h3>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Amount */}
               <div>
-                <div className="text-sm font-medium text-gray-700 mb-2">Amount</div>
+                <div className="text-xs font-medium text-gray-700 mb-2">Amount</div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-xs">$</span>
                   <Input
@@ -327,7 +327,7 @@ export function TransactionFields({
 
               {/* Date */}
               <div>
-                <div className="text-sm font-medium text-gray-700 mb-2">Date</div>
+                <div className="text-xs font-medium text-gray-700 mb-2">Date</div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -355,7 +355,7 @@ export function TransactionFields({
 
               {/* Payment Method */}
               <div>
-                <div className="text-sm font-medium text-gray-700 mb-2">Payment method</div>
+                <div className="text-xs font-medium text-gray-700 mb-2">Payment method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
                   <SelectTrigger className="w-full border-gray-200 bg-white h-9 text-xs focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
                     <SelectValue placeholder="Select payment method" />
