@@ -98,69 +98,71 @@ export function TransactionFields({
     <div className="w-full max-w-none space-y-6">
       {/* Transaction Type Section */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Building className="h-5 w-5 text-gray-500" />
-            <h2 className="text-xl font-medium text-gray-900">Transaction Type</h2>
+            <Building className="h-4 w-4 text-gray-500" />
+            <h2 className="text-sm font-medium text-gray-900">Transaction Type</h2>
           </div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
             onChange={type => setFields(f => ({ ...f, listingType: type }))}
           />
         </div>
-        <p className="text-gray-600 mb-6">What type of transaction is this?</p>
+        <p className="text-xs text-gray-600 mb-4">What type of transaction is this?</p>
         
         {fields.listingType === "listing" ? (
-          <div className="space-y-6">
-            <div className="text-gray-700 font-medium mb-3">Property selection</div>
-            
-            <div className="flex gap-3 mb-4">
-              <div className="flex-1">
-                <ListingSelector
-                  listings={mockListings}
-                  selectedValue={fields.selectedListingId}
-                  onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
-                  placeholder="Select property from list"
-                />
-              </div>
-
-              {/* Small map button on the right */}
-              <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-10 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                  >
-                    <MapPin className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
-                  <TransactionMapSelector
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs font-medium text-gray-700 mb-1.5 block">Property selection</label>
+              
+              <div className="flex gap-3 mb-4">
+                <div className="flex-1">
+                  <ListingSelector
                     listings={mockListings}
-                    selectedListingId={fields.selectedListingId}
-                    onListingSelect={handleListingSelect}
-                    onClose={() => setIsMapOpen(false)}
+                    selectedValue={fields.selectedListingId}
+                    onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
+                    placeholder="Select property from list"
                   />
-                </DialogContent>
-              </Dialog>
+                </div>
+
+                {/* Small map button on the right */}
+                <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 text-xs"
+                    >
+                      <MapPin className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
+                    <TransactionMapSelector
+                      listings={mockListings}
+                      selectedListingId={fields.selectedListingId}
+                      onListingSelect={handleListingSelect}
+                      onClose={() => setIsMapOpen(false)}
+                    />
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
 
             {/* Selected Property Info - Shown directly below property selector */}
             {selectedListing && (
               <>
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 mb-4">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
-                      <h4 className="font-medium text-gray-900">{selectedListing.name}</h4>
-                      <div className="flex items-center text-gray-600 gap-1.5 mt-1">
-                        <MapPin className="h-3.5 w-3.5 text-gray-400" />
-                        <span className="text-sm">{selectedListing.address}</span>
+                      <h4 className="font-medium text-xs text-gray-900">{selectedListing.name}</h4>
+                      <div className="flex items-center text-gray-600 gap-1.5 mt-0.5">
+                        <MapPin className="h-3 w-3 text-gray-400" />
+                        <span className="text-xs">{selectedListing.address}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200">
-                      {getPropertyTypeIcon(selectedListing.type)}
-                      <span className="text-sm font-medium text-gray-700">
+                      {getPropertyTypeIcon(selectedListing.type, "h-3 w-3")}
+                      <span className="text-xs font-medium text-gray-700">
                         {formatPropertyType(selectedListing.type)}
                       </span>
                     </div>
@@ -169,23 +171,23 @@ export function TransactionFields({
                   <Separator className="my-3" />
                   
                   <div>
-                    <div className="text-gray-700 font-medium mb-3">Tenant information</div>
+                    <label className="text-xs font-medium text-gray-700 mb-2 block">Tenant information</label>
                     {hasTenant ? (
                       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900">{selectedListing.tenant.name}</div>
-                          <div className="text-sm text-gray-600 mt-0.5">{capitalizeTenantType(selectedListing.tenant.type)}</div>
+                          <div className="font-medium text-xs text-gray-900">{selectedListing.tenant.name}</div>
+                          <div className="text-xs text-gray-500 mt-0.5">{capitalizeTenantType(selectedListing.tenant.type)}</div>
                         </div>
                         <div className="space-y-1.5">
                           {selectedListing.tenant.email && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Mail className="h-3.5 w-3.5 text-gray-400" /> 
+                            <div className="flex items-center gap-2 text-xs text-gray-600">
+                              <Mail className="h-3 w-3 text-gray-400" /> 
                               <span>{selectedListing.tenant.email}</span>
                             </div>
                           )}
                           {selectedListing.tenant.phone && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <Phone className="h-3.5 w-3.5 text-gray-400" /> 
+                            <div className="flex items-center gap-2 text-xs text-gray-600">
+                              <Phone className="h-3 w-3 text-gray-400" /> 
                               <span>{selectedListing.tenant.phone}</span>
                             </div>
                           )}
@@ -193,12 +195,12 @@ export function TransactionFields({
                       </div>
                     ) : (
                       <div className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-gray-200">
-                        <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
-                          <UserX className="h-4 w-4 text-gray-400" />
+                        <div className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full">
+                          <UserX className="h-3 w-3 text-gray-400" />
                         </div>
                         <div className="flex-1">
-                          <div className="font-medium text-gray-600">No Tenant Assigned</div>
-                          <div className="text-sm text-gray-500">This property is currently vacant</div>
+                          <div className="font-medium text-xs text-gray-600">No Tenant Assigned</div>
+                          <div className="text-xs text-gray-500">This property is currently vacant</div>
                         </div>
                       </div>
                     )}
@@ -209,7 +211,7 @@ export function TransactionFields({
                   <>
                     <Separator className="my-4" />
                     <div>
-                      <div className="text-gray-700 font-medium mb-3">Unit selection</div>
+                      <label className="text-xs font-medium text-gray-700 mb-2 block">Unit selection</label>
                       
                       <div className="mb-3">
                         <Button
@@ -217,7 +219,7 @@ export function TransactionFields({
                           variant={!fields.selectedUnitId ? "default" : "outline"}
                           size="sm"
                           className={cn(
-                            "w-full justify-start text-left h-10 font-normal border-gray-200",
+                            "w-full justify-start text-left h-9 font-normal border-gray-200 text-xs px-3 py-1.5",
                             !fields.selectedUnitId 
                               ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" 
                               : "bg-white text-gray-700 hover:bg-gray-50"
@@ -230,12 +232,12 @@ export function TransactionFields({
                               !fields.selectedUnitId ? "bg-blue-500" : "bg-gray-300"
                             )} />
                             <span className="font-medium">Whole Property</span>
-                            <span className="text-sm text-gray-500 ml-auto">All units included</span>
+                            <span className="text-xs text-gray-500 ml-auto">All units included</span>
                           </div>
                         </Button>
                       </div>
                       
-                      <div className="text-sm text-gray-500 mb-3 ml-1">Or select specific unit:</div>
+                      <div className="text-xs text-gray-500 mb-3 ml-1">Or select specific unit:</div>
                       <UnitSelector
                         units={selectedListing.units}
                         selectedUnitId={fields.selectedUnitId || ""}
@@ -251,8 +253,8 @@ export function TransactionFields({
           <div className="flex items-center gap-3 p-4 bg-purple-50 border border-purple-200 rounded-lg">
             <div className="w-2 h-2 rounded-full bg-purple-500"></div>
             <div>
-              <div className="font-medium text-purple-700">General Transaction</div>
-              <p className="text-sm text-purple-600">
+              <div className="font-medium text-xs text-purple-700">General Transaction</div>
+              <p className="text-xs text-purple-600">
                 Applies to your entire portfolio, not a specific property.
               </p>
             </div>
@@ -264,25 +266,25 @@ export function TransactionFields({
         <>
           {/* Transaction Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5 text-gray-500" />
-                <h2 className="text-xl font-medium text-gray-900">Transaction Details</h2>
+                <DollarSign className="h-4 w-4 text-gray-500" />
+                <h2 className="text-sm font-medium text-gray-900">Transaction Details</h2>
               </div>
               <TransactionTypeToggle
                 value={fields.transactionType}
                 onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
               />
             </div>
-            <p className="text-gray-600 mb-6">Configure the specific details of your transaction</p>
+            <p className="text-xs text-gray-600 mb-4">Configure the specific details of your transaction</p>
             
             <div>
-              <div className="text-gray-700 font-medium mb-3">Category</div>
+              <label className="text-xs font-medium text-gray-700 mb-1.5 block">Category</label>
               <Select 
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
               >
-                <SelectTrigger className="w-full border-gray-200 bg-white h-10 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
+                <SelectTrigger className="w-full border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg text-sm">
                   <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                 </SelectTrigger>
                 <SelectContent className="max-h-60 overflow-y-auto bg-white border border-gray-200 shadow-lg">
@@ -291,7 +293,7 @@ export function TransactionFields({
                       <SelectItem 
                         key={cat.value} 
                         value={cat.value}
-                        className="py-2 px-3 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer"
+                        className="py-2 px-3 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer text-sm"
                       >
                         {cat.label}
                       </SelectItem>
@@ -306,37 +308,37 @@ export function TransactionFields({
           
           {/* Payment Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-5 w-5 text-gray-500" />
-              <h2 className="text-xl font-medium text-gray-900">Payment Details</h2>
+            <div className="flex items-center gap-2 mb-2">
+              <CreditCard className="h-4 w-4 text-gray-500" />
+              <h2 className="text-sm font-medium text-gray-900">Payment Details</h2>
             </div>
-            <p className="text-gray-600 mb-6">Add any additional information about this transaction</p>
+            <p className="text-xs text-gray-600 mb-4">Add any additional information about this transaction</p>
             
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Amount */}
               <div>
-                <div className="text-gray-700 font-medium mb-3">Amount</div>
+                <label className="text-xs font-medium text-gray-700 mb-1.5 block">Amount</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm">$</span>
                   <Input
                     type="number"
                     placeholder="0.00"
                     value={fields.amount}
                     onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
-                    className="pl-7 h-10 border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg"
+                    className="pl-7 h-9 border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg text-sm placeholder:text-gray-400"
                   />
                 </div>
               </div>
 
               {/* Date */}
               <div>
-                <div className="text-gray-700 font-medium mb-3">Date</div>
+                <label className="text-xs font-medium text-gray-700 mb-1.5 block">Date</label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left h-10 font-normal border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-lg",
+                        "w-full justify-start text-left h-9 font-normal border-gray-200 bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-300 rounded-lg text-sm",
                         !fields.date && "text-gray-400"
                       )}
                     >
@@ -358,17 +360,17 @@ export function TransactionFields({
 
               {/* Payment Method */}
               <div>
-                <div className="text-gray-700 font-medium mb-3">Payment method</div>
+                <label className="text-xs font-medium text-gray-700 mb-1.5 block">Payment method</label>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
-                  <SelectTrigger className="w-full border-gray-200 bg-white h-10 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg">
+                  <SelectTrigger className="w-full border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg text-sm">
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-gray-200 shadow-lg">
-                    <SelectItem value="card">Credit Card</SelectItem>
-                    <SelectItem value="bank">Bank Transfer</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="check">Check</SelectItem>
-                    <SelectItem value="crypto">Cryptocurrency</SelectItem>
+                    <SelectItem value="card" className="text-sm">Credit Card</SelectItem>
+                    <SelectItem value="bank" className="text-sm">Bank Transfer</SelectItem>
+                    <SelectItem value="cash" className="text-sm">Cash</SelectItem>
+                    <SelectItem value="check" className="text-sm">Check</SelectItem>
+                    <SelectItem value="crypto" className="text-sm">Cryptocurrency</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
