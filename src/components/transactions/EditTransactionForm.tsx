@@ -128,19 +128,19 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     <div className="h-full overflow-auto bg-white">
       {/* Header with action buttons */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+        <h2 className="text-lg font-medium text-gray-900">Edit Transaction</h2>
         <div className="flex gap-3">
           <Button 
             onClick={handleUpdate}
             disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="text-xs px-3 py-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white"
           >
             Save changes
           </Button>
           <Button 
             variant="outline" 
             onClick={onClose} 
-            className="bg-white border-gray-200 hover:bg-gray-50"
+            className="text-xs px-3 py-1.5 h-8 bg-white border-gray-200 hover:bg-gray-50"
           >
             Cancel
           </Button>
