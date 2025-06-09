@@ -1,10 +1,7 @@
-
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { SheetClose } from "@/components/ui/sheet";
-import { X, FileText } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { X, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
@@ -31,9 +28,6 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     listingType: transaction.listingType || "listing",
   });
   const { toast } = useToast();
-
-  // Log which transaction is being edited
-  console.log('EditTransactionForm - Editing transaction ID:', transaction.id, 'Full transaction:', transaction);
 
   // Fetch real listings data on component mount
   useEffect(() => {
@@ -77,7 +71,6 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
 
   // Keep fields in sync with prop if transaction changes
   useEffect(() => {
-    console.log("Transaction data changed in EditForm, new transaction ID:", transaction.id, "Full transaction:", transaction);
     setFields({
       selectedListingId: transaction.selectedListingId || "",
       selectedUnitId: transaction.selectedUnitId || "",
@@ -105,8 +98,6 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       listingType: fields.listingType,
     };
     
-    console.log('Updating transaction ID:', transaction.id, 'with data:', updatedTransaction);
-    
     toast({
       title: "Transaction Updated",
       description: `Transaction #${transaction.id} has been saved successfully.`,
@@ -121,10 +112,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     return (
       <div className="h-full overflow-auto bg-white">
         <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-medium text-gray-900">Edit Transaction</h2>
-            <p className="text-xs text-gray-500">Transaction #{transaction.id}</p>
-          </div>
+          <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
         </div>
         <div className="px-6 py-8 flex items-center justify-center">
           <div className="text-center">
@@ -140,24 +128,19 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     <div className="h-full overflow-auto bg-white">
       {/* Header with action buttons */}
       <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-medium text-gray-900">Edit Transaction</h2>
-          <p className="text-xs text-gray-500">Transaction #{transaction.id} • {transaction.type === 'revenue' ? 'Revenue' : 'Expense'}</p>
-        </div>
-        <div className="flex gap-2">
+        <h2 className="text-xl font-medium text-gray-900">Edit Transaction</h2>
+        <div className="flex gap-3">
           <Button 
             onClick={handleUpdate}
             disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 h-8"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Save changes
           </Button>
           <Button 
             variant="outline" 
             onClick={onClose} 
-            size="sm"
-            className="bg-white border-gray-200 hover:bg-gray-50 text-xs px-3 py-1.5 h-8"
+            className="bg-white border-gray-200 hover:bg-gray-50"
           >
             Cancel
           </Button>
@@ -165,32 +148,34 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-4 scale-[98%] origin-top">
-        <TransactionFields 
-          mockListings={listings}
-          initialValues={fields}
-          onChange={setFields}
-          editMode={true}
-        />
-        
-        {showNotesSection && (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 scale-[98%] origin-top">
-            <div className="flex items-center gap-2 mb-4">
-              <FileText className="h-4 w-4 text-gray-500" />
-              <h3 className="text-sm font-medium text-gray-900">Additional Information</h3>
+      <div className="px-6 py-4 space-y-8">
+        <div className="w-[98%] max-w-none">
+          <TransactionFields 
+            mockListings={listings}
+            initialValues={fields}
+            onChange={setFields}
+            editMode={true}
+          />
+          
+          {showNotesSection && (
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mt-8">
+              <div className="flex items-center gap-3 mb-5">
+                <FileText className="h-4 w-4 text-black" />
+                <h3 className="text-base font-medium text-gray-900">Additional Information</h3>
+              </div>
+              
+              <div>
+                <div className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Notes</div>
+                <Textarea
+                  placeholder="Add any additional details about this transaction"
+                  value={fields.notes}
+                  onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
+                  className="min-h-[120px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
+                />
+              </div>
             </div>
-            
-            <div>
-              <div className="text-xs font-medium text-gray-700 mb-2">Notes</div>
-              <Textarea
-                placeholder="Add any additional details about this transaction"
-                value={fields.notes}
-                onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                className="min-h-[80px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
