@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -98,7 +97,7 @@ export function TransactionFields({
     <div className="w-full max-w-none space-y-6">
       {/* Transaction Type Section */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Building className="h-4 w-4 text-gray-500" />
             <h2 className="text-sm font-medium text-gray-900">Transaction Type</h2>
@@ -111,47 +110,45 @@ export function TransactionFields({
         <p className="text-xs text-gray-600 mb-4">What type of transaction is this?</p>
         
         {fields.listingType === "listing" ? (
-          <div className="space-y-4">
-            <div>
-              <label className="text-xs font-medium text-gray-700 mb-1.5 block">Property selection</label>
-              
-              <div className="flex gap-3 mb-4">
-                <div className="flex-1">
-                  <ListingSelector
-                    listings={mockListings}
-                    selectedValue={fields.selectedListingId}
-                    onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
-                    placeholder="Select property from list"
-                  />
-                </div>
-
-                {/* Small map button on the right */}
-                <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-9 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 text-xs"
-                    >
-                      <MapPin className="h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
-                    <TransactionMapSelector
-                      listings={mockListings}
-                      selectedListingId={fields.selectedListingId}
-                      onListingSelect={handleListingSelect}
-                      onClose={() => setIsMapOpen(false)}
-                    />
-                  </DialogContent>
-                </Dialog>
+          <div className="space-y-6">
+            <div className="text-xs font-medium text-gray-700 mb-2 block">Property selection</div>
+            
+            <div className="flex gap-3 mb-4">
+              <div className="flex-1">
+                <ListingSelector
+                  listings={mockListings}
+                  selectedValue={fields.selectedListingId}
+                  onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
+                  placeholder="Select property from list"
+                />
               </div>
+
+              {/* Small map button on the right */}
+              <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-9 px-3 border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-50 text-xs"
+                  >
+                    <MapPin className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
+                  <TransactionMapSelector
+                    listings={mockListings}
+                    selectedListingId={fields.selectedListingId}
+                    onListingSelect={handleListingSelect}
+                    onClose={() => setIsMapOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Selected Property Info - Shown directly below property selector */}
             {selectedListing && (
               <>
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 mb-4">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
                       <h4 className="font-medium text-xs text-gray-900">{selectedListing.name}</h4>
@@ -161,7 +158,7 @@ export function TransactionFields({
                       </div>
                     </div>
                     <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200">
-                      {getPropertyTypeIcon(selectedListing.type, "h-3 w-3")}
+                      <span className="h-3 w-3">{getPropertyTypeIcon(selectedListing.type)}</span>
                       <span className="text-xs font-medium text-gray-700">
                         {formatPropertyType(selectedListing.type)}
                       </span>
@@ -171,7 +168,7 @@ export function TransactionFields({
                   <Separator className="my-3" />
                   
                   <div>
-                    <label className="text-xs font-medium text-gray-700 mb-2 block">Tenant information</label>
+                    <div className="text-xs font-medium text-gray-700 mb-2 block">Tenant information</div>
                     {hasTenant ? (
                       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                         <div className="flex-1">
@@ -211,7 +208,7 @@ export function TransactionFields({
                   <>
                     <Separator className="my-4" />
                     <div>
-                      <label className="text-xs font-medium text-gray-700 mb-2 block">Unit selection</label>
+                      <div className="text-xs font-medium text-gray-700 mb-2 block">Unit selection</div>
                       
                       <div className="mb-3">
                         <Button
@@ -219,7 +216,7 @@ export function TransactionFields({
                           variant={!fields.selectedUnitId ? "default" : "outline"}
                           size="sm"
                           className={cn(
-                            "w-full justify-start text-left h-9 font-normal border-gray-200 text-xs px-3 py-1.5",
+                            "w-full justify-start text-left h-9 font-normal border-gray-200 text-xs",
                             !fields.selectedUnitId 
                               ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" 
                               : "bg-white text-gray-700 hover:bg-gray-50"
@@ -266,7 +263,7 @@ export function TransactionFields({
         <>
           {/* Transaction Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-gray-500" />
                 <h2 className="text-sm font-medium text-gray-900">Transaction Details</h2>
@@ -279,7 +276,7 @@ export function TransactionFields({
             <p className="text-xs text-gray-600 mb-4">Configure the specific details of your transaction</p>
             
             <div>
-              <label className="text-xs font-medium text-gray-700 mb-1.5 block">Category</label>
+              <div className="text-xs font-medium text-gray-700 mb-1.5 block">Category</div>
               <Select 
                 value={fields.category} 
                 onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
@@ -308,16 +305,16 @@ export function TransactionFields({
           
           {/* Payment Details Section */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-4">
               <CreditCard className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Payment Details</h2>
             </div>
             <p className="text-xs text-gray-600 mb-4">Add any additional information about this transaction</p>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Amount */}
               <div>
-                <label className="text-xs font-medium text-gray-700 mb-1.5 block">Amount</label>
+                <div className="text-xs font-medium text-gray-700 mb-1.5 block">Amount</div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm">$</span>
                   <Input
@@ -332,7 +329,7 @@ export function TransactionFields({
 
               {/* Date */}
               <div>
-                <label className="text-xs font-medium text-gray-700 mb-1.5 block">Date</label>
+                <div className="text-xs font-medium text-gray-700 mb-1.5 block">Date</div>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -360,7 +357,7 @@ export function TransactionFields({
 
               {/* Payment Method */}
               <div>
-                <label className="text-xs font-medium text-gray-700 mb-1.5 block">Payment method</label>
+                <div className="text-xs font-medium text-gray-700 mb-1.5 block">Payment method</div>
                 <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
                   <SelectTrigger className="w-full border-gray-200 bg-white h-9 focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-gray-900 rounded-lg text-sm">
                     <SelectValue placeholder="Select payment method" />
