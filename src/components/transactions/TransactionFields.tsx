@@ -108,7 +108,7 @@ export function TransactionFields({
             onChange={type => setFields(f => ({ ...f, listingType: type }))}
           />
         </div>
-        <p className="text-sm text-gray-600 mb-6">What type of transaction is this?</p>
+        <p className="text-sm text-gray-500 mb-6">What type of transaction is this?</p>
         
         {fields.listingType === "listing" ? (
           <div className="space-y-6">
@@ -274,7 +274,7 @@ export function TransactionFields({
                 onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
               />
             </div>
-            <p className="text-sm text-gray-600 mb-6">Configure the specific details of your transaction</p>
+            <p className="text-sm text-gray-500 mb-6">Configure the specific details of your transaction</p>
             
             <div>
               <div className="text-sm font-medium text-gray-700 mb-3">Category</div>
@@ -310,7 +310,7 @@ export function TransactionFields({
               <CreditCard className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Payment Details</h2>
             </div>
-            <p className="text-sm text-gray-600 mb-6">Add any additional information about this transaction</p>
+            <p className="text-sm text-gray-500 mb-6">Add any additional information about this transaction</p>
             
             <div className="space-y-6">
               {/* Amount */}
