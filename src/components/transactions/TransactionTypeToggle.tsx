@@ -16,14 +16,14 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs",
+      "flex rounded-lg border border-gray-200 bg-white p-0.5 shadow-sm",
       className
     )}>
       <button
         type="button"
-        className={`px-3 py-1 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1.5
+        className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-1.5
           ${value === "revenue"
-            ? "bg-emerald-50 text-emerald-600 shadow-sm"
+            ? "bg-emerald-50 text-emerald-600 shadow-sm border border-emerald-200"
             : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
           }`}
         style={{
@@ -37,9 +37,9 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
       </button>
       <button
         type="button"
-        className={`ml-1 px-3 py-1 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1.5
+        className={`ml-0.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-1.5
           ${value === "expense"
-            ? "bg-red-50 text-red-600 shadow-sm"
+            ? "bg-red-50 text-red-600 shadow-sm border border-red-200"
             : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
           }`}
         style={{
