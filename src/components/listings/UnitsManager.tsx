@@ -308,7 +308,7 @@ export function UnitsManager({
                     </div>
                   </div>
                   
-                  <div className="bg-white border border-gray-200 rounded-lg p-3 space-y-3">
+                  <div className="bg-gray-50 p-3 space-y-3">
                     <div>
                       <Label htmlFor={`tenantName-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">
                         {selectedUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
