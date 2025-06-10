@@ -134,7 +134,7 @@ export function useGoogleMapsApi() {
     // iOS-specific checks
     if (deviceInfo.isIOS) {
       // Check iOS version for compatibility
-      const iosVersion = userAgent.match(/OS (\d+)_/);
+      const iosVersion = navigator.userAgent.match(/OS (\d+)_/);
       if (iosVersion && parseInt(iosVersion[1]) < 12) {
         console.warn('Google Maps: Old iOS version detected');
         toast({
