@@ -16,39 +16,39 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex rounded-lg border border-gray-200 bg-white p-0.5 shadow-sm",
+      "flex rounded-xl border border-gray-200 bg-gray-50 p-1 shadow-sm",
       className
     )}>
       <button
         type="button"
-        className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-1.5
+        className={`px-4 py-2 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-2
           ${value === "revenue"
-            ? "bg-gray-100 text-gray-800 shadow-sm border border-gray-300"
-            : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+            ? "bg-white text-gray-800 shadow-md border border-gray-200"
+            : "bg-transparent text-gray-600 hover:text-gray-800 hover:bg-white/50"
           }`}
         style={{
-          minWidth: 80,
+          minWidth: 90,
         }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
       >
-        <TrendingUp className="h-3 w-3" />
+        <TrendingUp className="h-3.5 w-3.5" />
         Revenue
       </button>
       <button
         type="button"
-        className={`ml-0.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-1.5
+        className={`ml-1 px-4 py-2 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-2
           ${value === "expense"
-            ? "bg-gray-100 text-gray-800 shadow-sm border border-gray-300"
-            : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+            ? "bg-white text-gray-800 shadow-md border border-gray-200"
+            : "bg-transparent text-gray-600 hover:text-gray-800 hover:bg-white/50"
           }`}
         style={{
-          minWidth: 80,
+          minWidth: 90,
         }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
       >
-        <TrendingDown className="h-3 w-3" />
+        <TrendingDown className="h-3.5 w-3.5" />
         Expense
       </button>
     </div>
