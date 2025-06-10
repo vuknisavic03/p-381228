@@ -16,18 +16,18 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex rounded-xl border border-gray-200 bg-gray-50 p-1 shadow-sm",
+      "flex rounded-lg border border-gray-200 bg-gray-50 p-1",
       className
     )}>
       <button
         type="button"
-        className={`px-4 py-2 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-2
+        className={`px-3 py-2 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2
           ${value === "revenue"
-            ? "bg-white text-gray-800 shadow-md border border-gray-200"
-            : "bg-transparent text-gray-600 hover:text-gray-800 hover:bg-white/50"
+            ? "bg-white text-gray-800"
+            : "bg-transparent text-gray-600 hover:text-gray-800 hover:bg-white/70"
           }`}
         style={{
-          minWidth: 90,
+          minWidth: 85,
         }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
@@ -37,13 +37,13 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
       </button>
       <button
         type="button"
-        className={`ml-1 px-4 py-2 text-xs font-medium rounded-lg transition-all duration-200 flex items-center gap-2
+        className={`ml-1 px-3 py-2 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2
           ${value === "expense"
-            ? "bg-white text-gray-800 shadow-md border border-gray-200"
-            : "bg-transparent text-gray-600 hover:text-gray-800 hover:bg-white/50"
+            ? "bg-white text-gray-800"
+            : "bg-transparent text-gray-600 hover:text-gray-800 hover:bg-white/70"
           }`}
         style={{
-          minWidth: 90,
+          minWidth: 85,
         }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
