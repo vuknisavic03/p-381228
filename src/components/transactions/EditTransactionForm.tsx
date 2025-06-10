@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -149,7 +148,7 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-8">
+      <div className="px-6 py-4 space-y-8 bg-gray-50">
         <div className="w-[98%] max-w-none">
           <TransactionFields 
             mockListings={listings}
