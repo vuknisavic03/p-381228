@@ -115,6 +115,7 @@ export function TransactionFormFields({ mockListings, initialValues, onChange, e
               <TransactionTypeToggle
                 value={fields.transactionType}
                 onChange={type => setFields(f => ({ ...f, transactionType: type }))}
+                size="small"
               />
             </div>
           </div>
