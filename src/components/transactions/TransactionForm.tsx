@@ -100,7 +100,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           <Button 
             onClick={handleConfirm}
             disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="text-xs px-3 py-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white"
+            className="text-sm px-4 py-2 h-9 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm border border-blue-600 hover:border-blue-700 transition-colors"
           >
             Add transaction
           </Button>
@@ -108,7 +108,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
             <Button 
               variant="outline" 
               onClick={onClose} 
-              className="text-xs px-3 py-1.5 h-8 bg-white border-gray-200 hover:bg-gray-50"
+              className="text-sm px-4 py-2 h-9 bg-white border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-md shadow-sm transition-colors"
             >
               Cancel
             </Button>
