@@ -220,7 +220,7 @@ export function UnitsManager({
           </div>
 
           {/* Selected Unit Details */}
-          {selectedUnit && <div className="rounded-lg p-3 space-y-3 bg-white">
+          {selectedUnit && <div className="rounded-lg border border-gray-200 p-3 space-y-3 bg-white">
               {/* Unit Actions */}
               <div className="flex justify-between items-center">
                 <h4 className="text-sm font-medium text-gray-900">Unit Details</h4>
