@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Map, CheckCircle2, AlertTriangle, Key, Info, ExternalLink } from 'lucide-react';
+import { Map, CheckCircle2, AlertTriangle, Key, Info, ExternalLink, Smartphone, Monitor } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getGoogleMapsApiKey, isValidGoogleMapsApiKey } from "@/utils/googleMapsUtils";
 
@@ -13,11 +13,20 @@ interface GoogleMapsApiInputProps {
   onApiKeySubmit: (apiKey: string) => void;
 }
 
+// Device detection
+const getDeviceType = () => {
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  return { isMobile, isIOS, isAndroid };
+};
+
 export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) {
   const [apiKey, setApiKey] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showCustomKeyInput, setShowCustomKeyInput] = useState<boolean>(false);
   const [showSetupInstructions, setShowSetupInstructions] = useState<boolean>(false);
+  const [deviceType] = useState(getDeviceType());
   const { toast } = useToast();
   
   const handleActivateMap = () => {
@@ -27,13 +36,16 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       const keyToUse = showCustomKeyInput ? apiKey : getGoogleMapsApiKey();
       
       console.log("Activating map with key:", keyToUse ? "***provided***" : "none");
+      console.log("Device type:", deviceType);
       
       if (isValidGoogleMapsApiKey(keyToUse)) {
         onApiKeySubmit(keyToUse);
         
         toast({
           title: "Map Activated",
-          description: "Google Maps has been activated successfully."
+          description: deviceType.isMobile 
+            ? "Google Maps has been activated for mobile viewing."
+            : "Google Maps has been activated successfully."
         });
       } else {
         toast({
@@ -46,7 +58,9 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
       console.error("Error activating map:", error);
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: deviceType.isMobile 
+          ? "Maps activation failed. Please check your network connection."
+          : "Something went wrong. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -77,7 +91,14 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
             <Map className="h-8 w-8 text-primary" />
           </div>
         </div>
-        <CardTitle className="text-center">Google Maps Integration</CardTitle>
+        <CardTitle className="text-center flex items-center justify-center gap-2">
+          Google Maps Integration
+          {deviceType.isMobile ? (
+            <Smartphone className="h-5 w-5 text-gray-500" />
+          ) : (
+            <Monitor className="h-5 w-5 text-gray-500" />
+          )}
+        </CardTitle>
       </CardHeader>
       
       <CardContent className="space-y-4">
@@ -85,8 +106,22 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
           <AlertTriangle className="h-4 w-4 text-red-500" />
           <AlertDescription className="text-sm text-red-600">
             <strong>API Not Activated Error:</strong> The Google Maps JavaScript API and Places API need to be enabled for your API key.
+            {deviceType.isMobile && (
+              <div className="mt-2 text-xs">
+                <strong>Mobile Note:</strong> Ensure you have a stable internet connection and JavaScript enabled.
+              </div>
+            )}
           </AlertDescription>
         </Alert>
+
+        {deviceType.isMobile && (
+          <Alert className="bg-blue-50 border-blue-200">
+            <Smartphone className="h-4 w-4 text-blue-500" />
+            <AlertDescription className="text-sm text-blue-600">
+              <strong>Mobile Device Detected:</strong> Maps may load slower on mobile devices. Please ensure you have a stable internet connection.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="space-y-3">
           <Button 
@@ -147,6 +182,11 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
                   </a>
                 </li>
                 <li>Configure API key restrictions (recommended for security)</li>
+                {deviceType.isMobile && (
+                  <li className="text-orange-700">
+                    <strong>Mobile:</strong> Ensure your API key allows requests from this domain
+                  </li>
+                )}
               </ol>
             </div>
           )}
@@ -161,7 +201,13 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
             <Alert className="bg-amber-50 border-amber-200">
               <Info className="h-4 w-4 text-amber-500" />
               <AlertDescription className="text-sm text-amber-600">
-                <strong>Note:</strong> Our demo API key has restrictions and may not work. For production use, please set up your own API key with the required APIs enabled.
+                <strong>Note:</strong> Our demo API key has restrictions and may not work on all devices. 
+                For production use, please set up your own API key with the required APIs enabled.
+                {deviceType.isMobile && (
+                  <div className="mt-1">
+                    <strong>Mobile users:</strong> The demo key may be more restricted on mobile devices.
+                  </div>
+                )}
               </AlertDescription>
             </Alert>
             
@@ -190,6 +236,9 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
               <div className="text-xs text-gray-500 space-y-1">
                 <p>• This key must have <strong>Maps JavaScript API</strong> and <strong>Places API</strong> enabled</p>
                 <p>• Make sure to configure proper API restrictions for security</p>
+                {deviceType.isMobile && (
+                  <p className="text-orange-600">• <strong>Mobile:</strong> Ensure the key allows requests from this domain</p>
+                )}
               </div>
             </div>
             
@@ -215,7 +264,7 @@ export function GoogleMapsApiInput({ onApiKeySubmit }: GoogleMapsApiInputProps) 
           {isLoading ? (
             <>
               <AlertTriangle className="h-4 w-4 animate-pulse" />
-              Activating Map...
+              {deviceType.isMobile ? "Loading Maps..." : "Activating Map..."}
             </>
           ) : (
             <>
