@@ -290,11 +290,11 @@ export function ListingForm({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 bg-[#f2f2f2]/20">
+      <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50">
         <div className="w-[98%] max-w-none space-y-4">
           
           {/* Location Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm">
+          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
             <div className="flex items-center gap-2 mb-3">
               <MapPin className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Location</h2>
@@ -332,7 +332,7 @@ export function ListingForm({
           </Card>
 
           {/* Property Type Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm">
+          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
             <div className="flex items-center gap-2 mb-3">
               <Building className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Listing Type</h2>
@@ -379,7 +379,7 @@ export function ListingForm({
           </Card>
 
           {/* Details Section */}
-          {formData.type && <Card className="p-4 border border-gray-100 shadow-sm">
+          {formData.type && <Card className="p-4 border border-gray-100 shadow-sm bg-white">
               <div className="flex items-center gap-2 mb-3">
                 <Settings className="h-4 w-4 text-gray-500" />
                 <h2 className="text-sm font-medium text-gray-900">Details</h2>
@@ -492,7 +492,7 @@ export function ListingForm({
             </Card>}
 
           {/* Notes Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm">
+          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
             <div className="flex items-center gap-2 mb-3">
               <MessageSquare className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Notes</h2>

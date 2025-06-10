@@ -117,7 +117,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-8">
+      <div className="px-6 py-4 space-y-8 bg-gray-50">
         <div className="w-[98%] max-w-none">
           <TransactionFields 
             mockListings={listings}
