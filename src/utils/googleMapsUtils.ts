@@ -5,6 +5,9 @@ export const GOOGLE_MAPS_LIBRARIES: ["places", "geometry"] = ["places", "geometr
 // Storage key constant for consistency
 export const GOOGLE_MAPS_KEY_STORAGE = "googleMapsApiKey";
 
+// Default API key
+const DEFAULT_API_KEY = "AIzaSyB5gv4_7U1ZpVNNPW53qXTYxdTLOUVN4cQ";
+
 // Function to get API key that can be used across the app
 export function getGoogleMapsApiKey(): string {
   try {
@@ -16,6 +19,12 @@ export function getGoogleMapsApiKey(): string {
     }
   } catch (error) {
     console.warn("Could not access localStorage:", error);
+  }
+  
+  // Use default API key if no stored key
+  if (DEFAULT_API_KEY) {
+    console.log("Using default API key");
+    return DEFAULT_API_KEY;
   }
   
   console.log("No API key available");
