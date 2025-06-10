@@ -16,15 +16,15 @@ export const ListingTypeToggle: React.FC<ListingTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "inline-flex bg-gray-50 rounded-lg p-0.5 border border-gray-200",
+      "flex bg-gray-100 rounded-md p-1",
       className
     )}>
       <button
         type="button"
-        className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-150 flex items-center gap-2.5 min-w-[100px] justify-center
+        className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 flex items-center gap-2
           ${value === "listing"
-            ? "bg-white text-gray-900 shadow-sm border border-gray-200/50"
-            : "bg-transparent text-gray-500 hover:text-gray-700"
+            ? "bg-white text-gray-900 shadow-sm"
+            : "bg-transparent text-gray-600 hover:text-gray-900"
           }`}
         onClick={() => onChange("listing")}
       >
@@ -33,10 +33,10 @@ export const ListingTypeToggle: React.FC<ListingTypeToggleProps> = ({
       </button>
       <button
         type="button"
-        className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-150 flex items-center gap-2.5 min-w-[100px] justify-center
+        className={`px-3 py-1.5 text-sm font-medium rounded transition-all duration-200 flex items-center gap-2
           ${value === "general"
-            ? "bg-white text-gray-900 shadow-sm border border-gray-200/50"
-            : "bg-transparent text-gray-500 hover:text-gray-700"
+            ? "bg-white text-gray-900 shadow-sm"
+            : "bg-transparent text-gray-600 hover:text-gray-900"
           }`}
         onClick={() => onChange("general")}
       >
