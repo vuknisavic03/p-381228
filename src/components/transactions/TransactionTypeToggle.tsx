@@ -7,57 +7,48 @@ interface TransactionTypeToggleProps {
   value: "revenue" | "expense";
   onChange: (value: "revenue" | "expense") => void;
   className?: string;
-  size?: "default" | "small";
 }
 
 export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
   value,
   onChange,
   className,
-  size = "default",
 }) => {
-  const isSmall = size === "small";
-  
   return (
     <div className={cn(
-      "inline-flex items-center bg-gray-100 rounded-full p-1",
+      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs",
       className
     )}>
       <button
         type="button"
-        className={cn(
-          "relative flex items-center gap-2 font-medium transition-all duration-200 rounded-full",
-          isSmall ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
-          value === "revenue"
-            ? "bg-white text-gray-900 shadow-sm"
-            : "text-gray-600 hover:text-gray-800 hover:bg-white/60"
-        )}
-        onClick={() => onChange("revenue")}
+        className={`px-3 py-1 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1.5
+          ${value === "revenue"
+            ? "bg-emerald-50 text-emerald-600 shadow-sm"
+            : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          }`}
+        style={{
+          minWidth: 80,
+        }}
         aria-pressed={value === "revenue"}
+        onClick={() => onChange("revenue")}
       >
-        <TrendingUp className={cn(
-          "transition-transform duration-200",
-          isSmall ? "h-3.5 w-3.5" : "h-4 w-4"
-        )} />
+        <TrendingUp className="h-3 w-3" />
         Revenue
       </button>
-      
       <button
         type="button"
-        className={cn(
-          "relative flex items-center gap-2 font-medium transition-all duration-200 rounded-full",
-          isSmall ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
-          value === "expense"
-            ? "bg-white text-gray-900 shadow-sm"
-            : "text-gray-600 hover:text-gray-800 hover:bg-white/60"
-        )}
-        onClick={() => onChange("expense")}
+        className={`ml-1 px-3 py-1 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1.5
+          ${value === "expense"
+            ? "bg-red-50 text-red-600 shadow-sm"
+            : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          }`}
+        style={{
+          minWidth: 80,
+        }}
         aria-pressed={value === "expense"}
+        onClick={() => onChange("expense")}
       >
-        <TrendingDown className={cn(
-          "transition-transform duration-200",
-          isSmall ? "h-3.5 w-3.5" : "h-4 w-4"
-        )} />
+        <TrendingDown className="h-3 w-3" />
         Expense
       </button>
     </div>
