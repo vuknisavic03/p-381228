@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -222,9 +221,9 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-gray-50">
       {/* Header with action buttons */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
         <div>
           <h1 className="text-lg font-medium text-gray-900">Add New Listing</h1>
           <p className="text-xs text-gray-500 mt-0.5">Create a new listing for your portfolio</p>
@@ -254,7 +253,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
         <div className="w-[98%] max-w-none space-y-4">
           
           {/* Location Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm">
+          <Card className="p-4 border border-gray-200 shadow-sm bg-gray-50">
             <div className="flex items-center gap-2 mb-3">
               <MapPin className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Location</h2>
@@ -314,7 +313,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           </Card>
 
           {/* Property Type Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm">
+          <Card className="p-4 border border-gray-200 shadow-sm bg-gray-50">
             <div className="flex items-center gap-2 mb-3">
               <Building className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Listing Type</h2>
@@ -322,7 +321,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
             <p className="text-xs text-gray-600 mb-4">What type of listing is this?</p>
 
             {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4">
+            <div className="flex items-center justify-between p-3 bg-white rounded-lg mb-4 border border-gray-200">
               <div>
                 <p className="font-medium text-gray-900 text-xs">Property Structure</p>
                 <p className="text-xs text-gray-500">Does this property have multiple units?</p>
@@ -346,7 +345,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   className={`p-3 border rounded-lg cursor-pointer transition-all ${
                     formData.type === type.value
                       ? "border-blue-200 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
                   }`}
                   onClick={() => {
                     setFormData(prev => ({ ...prev, type: type.value, category: "" }));
@@ -376,7 +375,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
 
           {/* Details Section */}
           {formData.type && (
-            <Card className="p-4 border border-gray-100 shadow-sm">
+            <Card className="p-4 border border-gray-200 shadow-sm bg-gray-50">
               <div className="flex items-center gap-2 mb-3">
                 <Settings className="h-4 w-4 text-gray-500" />
                 <h2 className="text-sm font-medium text-gray-900">Details</h2>
@@ -400,7 +399,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           formData.category === cat.value
                             ? "border-blue-200 bg-blue-50"
-                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            : "border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50"
                         }`}
                         onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
                       >
@@ -432,7 +431,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                   <div className="space-y-3">
                     <div>
                       <Label className="text-xs font-medium text-gray-700 mb-2 block">Occupancy Status</Label>
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
                         <div className="flex items-center gap-2">
                           {formData.occupancyStatus === "occupied" ? (
                             <>
@@ -475,14 +474,14 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                           <Label className="text-xs font-medium text-gray-700">Tenant Information</Label>
                           
                           {/* Tenant Type Toggle - Smaller and More Elegant */}
-                          <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                          <div className="flex bg-white border border-gray-200 rounded-md p-0.5">
                             <button
                               type="button"
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
                               className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
                                 formData.tenantType === "individual"
-                                  ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                  ? "bg-gray-100 text-gray-700 shadow-sm border border-gray-200"
+                                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                               }`}
                             >
                               <Users className="h-3 w-3" />
@@ -493,8 +492,8 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
                               className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
                                 formData.tenantType === "company"
-                                  ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                  ? "bg-gray-100 text-gray-700 shadow-sm border border-gray-200"
+                                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                               }`}
                             >
                               <Building2 className="h-3 w-3" />
@@ -552,7 +551,7 @@ export function ListingForm({ onClose, onListingAdded }: ListingFormProps) {
           )}
 
           {/* Notes Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm">
+          <Card className="p-4 border border-gray-200 shadow-sm bg-gray-50">
             <div className="flex items-center gap-2 mb-3">
               <MessageSquare className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Notes</h2>
