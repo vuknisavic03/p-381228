@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
 import { CreateWorkspaceDialog } from '@/components/workspace/CreateWorkspaceDialog';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useAuth } from '@clerk/clerk-react';
 import { 
   AreaChart, 
   Area, 
@@ -30,114 +31,6 @@ interface Workspace {
     commission: number;
   }[];
 }
-
-const workspaces: Workspace[] = [
-  { 
-    name: "Kevin's Workspace", 
-    owner: "Kevin Anderson", 
-    initials: "KA",
-    revenueData: [
-      { month: "Jan", value: 31 },
-      { month: "Feb", value: 40 },
-      { month: "Mar", value: 28 },
-      { month: "Apr", value: 51 },
-      { month: "May", value: 42 },
-      { month: "Jun", value: 61 }
-    ],
-    commissionData: [
-      { month: "Jan", commission: 3.1 },
-      { month: "Feb", commission: 4.0 },
-      { month: "Mar", commission: 2.8 },
-      { month: "Apr", commission: 5.1 },
-      { month: "May", commission: 4.2 },
-      { month: "Jun", commission: 6.1 }
-    ]
-  },
-  { 
-    name: "Lucas's Workspace", 
-    owner: "Lucas Everett", 
-    initials: "LE",
-    revenueData: [
-      { month: "Jan", value: 25 },
-      { month: "Feb", value: 35 },
-      { month: "Mar", value: 45 },
-      { month: "Apr", value: 30 },
-      { month: "May", value: 55 },
-      { month: "Jun", value: 48 }
-    ],
-    commissionData: [
-      { month: "Jan", commission: 2.5 },
-      { month: "Feb", commission: 3.5 },
-      { month: "Mar", commission: 4.5 },
-      { month: "Apr", commission: 3.0 },
-      { month: "May", commission: 5.5 },
-      { month: "Jun", commission: 4.8 }
-    ]
-  },
-  { 
-    name: "Mia's Workspace", 
-    owner: "Mia Holloway", 
-    initials: "MH",
-    revenueData: [
-      { month: "Jan", value: 40 },
-      { month: "Feb", value: 30 },
-      { month: "Mar", value: 50 },
-      { month: "Apr", value: 45 },
-      { month: "May", value: 35 },
-      { month: "Jun", value: 55 }
-    ],
-    commissionData: [
-      { month: "Jan", commission: 4.0 },
-      { month: "Feb", commission: 3.0 },
-      { month: "Mar", commission: 5.0 },
-      { month: "Apr", commission: 4.5 },
-      { month: "May", commission: 3.5 },
-      { month: "Jun", commission: 5.5 }
-    ]
-  },
-  { 
-    name: "Nathan's Workspace", 
-    owner: "Nathan Caldwell", 
-    initials: "NC",
-    revenueData: [
-      { month: "Jan", value: 38 },
-      { month: "Feb", value: 42 },
-      { month: "Mar", value: 35 },
-      { month: "Apr", value: 60 },
-      { month: "May", value: 48 },
-      { month: "Jun", value: 52 }
-    ],
-    commissionData: [
-      { month: "Jan", commission: 3.8 },
-      { month: "Feb", commission: 4.2 },
-      { month: "Mar", commission: 3.5 },
-      { month: "Apr", commission: 6.0 },
-      { month: "May", commission: 4.8 },
-      { month: "Jun", commission: 5.2 }
-    ]
-  },
-  { 
-    name: "Sophia's Workspace", 
-    owner: "Sophia Riggins", 
-    initials: "SR",
-    revenueData: [
-      { month: "Jan", value: 45 },
-      { month: "Feb", value: 52 },
-      { month: "Mar", value: 40 },
-      { month: "Apr", value: 38 },
-      { month: "May", value: 65 },
-      { month: "Jun", value: 50 }
-    ],
-    commissionData: [
-      { month: "Jan", commission: 4.5 },
-      { month: "Feb", commission: 5.2 },
-      { month: "Mar", commission: 4.0 },
-      { month: "Apr", commission: 3.8 },
-      { month: "May", commission: 6.5 },
-      { month: "Jun", commission: 5.0 }
-    ]
-  },
-];
 
 // New yearly commission data for the main chart
 const yearlyCommissionData = [
@@ -167,6 +60,7 @@ const monthlyCommissionData = [
 ];
 
 export default function WorkspacePicker() {
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeChartType, setActiveChartType] = useState<'revenue' | 'commission'>('revenue');
@@ -245,7 +139,8 @@ export default function WorkspacePicker() {
         <div className="w-full mx-auto p-2 md:px-4">
           <div className="mb-5">            
             <div className="flex gap-3 mt-4">
-              <Button
+              {/* PROPERTY REVENUE BUTTON */}
+              <Button           
                 onClick={() => setActiveChartType('revenue')}
                 variant={activeChartType === 'revenue' ? 'outline' : 'outline'}
                 className={`gap-2 py-1.5 px-3 rounded-md border border-[#F5F5F6] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
@@ -258,7 +153,8 @@ export default function WorkspacePicker() {
                   Property Revenue
                 </span>
               </Button>
-              <Button
+              {/* MANAGER COMMISSION BUTTON */}
+              <Button           
                 onClick={() => setActiveChartType('commission')}
                 variant={activeChartType === 'commission' ? 'outline' : 'outline'}
                 className={`gap-2 py-1.5 px-3 rounded-md border border-[#F5F5F6] bg-white hover:bg-[#F9F9FA] hover:text-[#1A1A1A] hover:border-[#DADBE0] ${
@@ -274,6 +170,7 @@ export default function WorkspacePicker() {
             </div>
           </div>
           
+          {/* REVENUE FROM CLIENTS GRAPH */}
           {activeChartType === 'revenue' ? (
             <div className="grid grid-cols-2 gap-4 px-1">
               {workspaces.map((workspace, index) => (
@@ -352,9 +249,10 @@ export default function WorkspacePicker() {
                   </CardContent>
                 </Card>
               ))}
-            </div>
+            </div>      
           ) : (
             <div className="px-1 h-[calc(100vh-120px)]">
+              {/* MANAGER COMMISSION GRAPH */}
               <Card 
                 className="overflow-hidden border border-[#F5F5F6] rounded-lg shadow-sm hover:shadow-md transition-all bg-white h-full"
               >

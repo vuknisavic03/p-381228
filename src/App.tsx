@@ -12,6 +12,9 @@ import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
 import Vision from "./pages/Vision";
+import { SignedIn, SignedOut, SignInButton, SignUp, UserButton } from '@clerk/clerk-react';
+import SignUpPage from "./pages/SignUpPage";
+
 
 const queryClient = new QueryClient();
 
@@ -22,9 +25,18 @@ const App = () => {
         <TooltipProvider>
           <ToastProvider>
             <Toaster />
+            {/*<header>
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </header>*/}
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/vision" element={<Vision />} />
+              <Route path="/sign-up" element={<SignUpPage />} />
               <Route path="/workspace" element={<WorkspacePicker />} />
               <Route path="/dashboard" element={<Overview />} />
               <Route path="/listings" element={<Listings />} />
