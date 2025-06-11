@@ -1,16 +1,23 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ListingForm } from "@/components/listings/ListingForm";
 import { ListingList } from "@/components/listings/ListingList";
+import { ListingMap } from "@/components/listings/ListingMap";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { List as ListIcon, MapPin } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatePresence, motion } from "framer-motion";
+import { EditListingForm } from "@/components/listings/EditListingForm";
+import { useToast } from "@/hooks/use-toast";
+import { fetchListings } from "@/services/listingsService";
 
 export default function Listings() {
   const location = useLocation();
+  const { toast } = useToast();
   const workspaceData = location.state?.workspace || {
     name: "Kevin's Workspace", 
     owner: "Kevin Anderson", 
@@ -18,6 +25,68 @@ export default function Listings() {
   };
   
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "map">("map");
+  const [selectedListing, setSelectedListing] = useState<any | null>(null);
+  const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
+  const [sharedListingData, setSharedListingData] = useState<any[]>([]);
+  const [isLoadingListings, setIsLoadingListings] = useState(true);
+
+  // Fetch listings when component mounts
+  useEffect(() => {
+    const loadListings = async () => {
+      try {
+        setIsLoadingListings(true);
+        const listings = await fetchListings();
+        setSharedListingData(listings);
+      } catch (error) {
+        console.error("Error loading listings:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load listings",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoadingListings(false);
+      }
+    };
+
+    loadListings();
+  }, [toast]);
+
+  // Handle listing selection from map view or list view
+  const handleListingClick = (listing: any) => {
+    setSelectedListing(listing);
+    setIsEditSheetOpen(true);
+  };
+
+  // Handle tab change
+  const handleViewModeChange = (value: string) => {
+    setViewMode(value as "list" | "map");
+  };
+
+  // Handle API key submission from map component
+  const handleApiKeySubmit = (apiKey: string) => {
+    console.log("API key received in Listings page");
+    toast({
+      title: "API Key Updated",
+      description: "Your Google Maps API key has been saved."
+    });
+  };
+
+  // Handle when a new listing is added
+  const handleListingAdded = () => {
+    setIsAddFormOpen(false);
+    // Refresh listings
+    const loadListings = async () => {
+      try {
+        const listings = await fetchListings();
+        setSharedListingData(listings);
+      } catch (error) {
+        console.error("Error reloading listings:", error);
+      }
+    };
+    loadListings();
+  };
 
   return (
     <DashboardLayout
@@ -25,34 +94,102 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col">
-        {/* Fixed header section - consistent with other pages */}
-        <div className="px-6 py-4 flex justify-between items-center bg-white">
-          <div className="flex items-center">
-            <h1 className="text-xl font-semibold">Listings</h1>
-          </div>
-          <Button 
-            onClick={() => setIsAddFormOpen(true)}
-            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 h-9"
+      <div className="h-screen flex flex-col bg-gray-50">
+        <PageHeader
+          onAddClick={() => setIsAddFormOpen(true)}
+          addButtonText="Add New Listing"
+        >
+          <Tabs 
+            value={viewMode} 
+            onValueChange={handleViewModeChange}
           >
-            <PlusCircle className="h-4 w-4" />
-            Add Listing
-          </Button>
+            <TabsList className="bg-white border border-gray-200 p-1 h-10">
+              <TabsTrigger 
+                value="map" 
+                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+              >
+                <MapPin className="h-4 w-4" />
+                Map
+              </TabsTrigger>
+              <TabsTrigger 
+                value="list" 
+                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+              >
+                <ListIcon className="h-4 w-4" />
+                List
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </PageHeader>
+        
+        <div className="flex-1 relative overflow-hidden bg-white">
+          <AnimatePresence mode="wait">
+            {viewMode === "map" ? (
+              <motion.div
+                key="map"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute inset-0"
+              >
+                <ListingMap 
+                  listings={sharedListingData}
+                  onListingClick={handleListingClick}
+                  onApiKeySubmit={handleApiKeySubmit}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="list"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute inset-0"
+              >
+                <ListingList 
+                  onListingClick={handleListingClick}
+                  listings={sharedListingData}
+                  isLoading={isLoadingListings}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         
-        {/* Horizontal separator line */}
-        <Separator className="w-full border-[#E4E5EA]" />
-        
-        <div className="flex-1 overflow-y-auto bg-white p-4">
-          <ListingList />
-        </div>
-        
+        {/* Add Listing Sheet - Made much wider */}
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent 
             side="right" 
-            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl bg-white"
+            className="w-[800px] sm:w-[900px] max-w-[90vw] p-0 border-l shadow-2xl bg-white"
           >
-            <ListingForm onClose={() => setIsAddFormOpen(false)} />
+            <ListingForm 
+              onClose={() => setIsAddFormOpen(false)} 
+              onListingAdded={handleListingAdded}
+            />
+          </SheetContent>
+        </Sheet>
+        
+        {/* Edit Listing Sheet - Made much wider */}
+        <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
+          <SheetContent 
+            side="right" 
+            className="w-[800px] sm:w-[900px] max-w-[90vw] p-0 border-l shadow-2xl transition-transform duration-300"
+          >
+            {selectedListing && (
+              <EditListingForm
+                listing={selectedListing}
+                onClose={() => setIsEditSheetOpen(false)}
+                onUpdate={(updatedListing) => {
+                  const updatedListings = sharedListingData.map(l => 
+                    l.id === updatedListing.id ? updatedListing : l
+                  );
+                  setSharedListingData(updatedListings);
+                  setIsEditSheetOpen(false);
+                }}
+              />
+            )}
           </SheetContent>
         </Sheet>
       </div>

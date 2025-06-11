@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,7 +33,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,4 +101,112 @@
     font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
     letter-spacing: 0.01em;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.chart-card {
+  animation: scaleIn 0.5s ease-out;
+}
+
+/* Google Maps InfoWindow customization */
+.gm-style-iw {
+  padding: 0 !important;
+}
+
+.gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.gm-style-iw-c {
+  border-radius: 12px !important;
+  padding: 0 !important;
+}
+
+.gm-ui-hover-effect {
+  top: 0 !important;
+  right: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Map marker bounce animation */
+@keyframes markerBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.marker-bounce {
+  animation: markerBounce 0.5s ease-in-out;
+}
+
+/* Map view transitions */
+.map-fade-enter {
+  opacity: 0;
+}
+
+.map-fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.map-fade-exit {
+  opacity: 1;
+}
+
+.map-fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Hide Google Maps branding and attribution */
+.gm-style a[href^="https://maps.google.com/maps"],
+.gm-style a[href^="https://www.google.com/maps"],
+.gm-style .gmnoprint,
+.gm-style [title="Google"],
+.gm-style-cc,
+.gm-bundled-control,
+.gm-fullscreen-control {
+  display: none !important;
+}
+
+/* Hide Google logo and terms */
+.gm-style .gm-style-cc,
+.gm-style .gmnoprint {
+  display: none !important;
+}
+
+/* Additional hiding for any remaining Google elements */
+[title*="Google"],
+[alt*="Google"],
+a[href*="google.com/maps"] {
+  display: none !important;
 }

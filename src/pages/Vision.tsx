@@ -37,7 +37,7 @@ export default function Vision() {
           </div>
           <h1 className="text-3xl font-semibold mb-4">Vision Coming Soon</h1>
           <p className="text-gray-600 max-w-md mx-auto mb-8">
-            We're working on something special. Check back later for our vision of the future of property management.
+            We're Working on Something Special. Check back later for our vision of the future of property management.
           </p>
           <Link to="/">
             <Button>

@@ -1,77 +1,198 @@
-
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Phone, Mail, Loader2, ListFilter } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { MapPin, Phone, Mail, Loader2, Users, UserX } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditListingForm } from "./EditListingForm";
 import { Button } from "@/components/ui/button";
-import { FilterPopover } from "@/components/ui/filter-popover";
-import { FilterTags } from "@/components/ui/filter-tags";
 import { useToast } from "@/hooks/use-toast";
+import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
+import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
 
-// Mock listings data
-const mockListings = [
+// Category mapping from ListingForm - this ensures consistency
+const typeToCategoryMap = {
+  residential_rental: [
+    { value: "single_family", label: "Single-family Home" },
+    { value: "multi_family", label: "Multi-family" },
+    { value: "apartment_condo", label: "Apartment/Condo" },
+  ],
+  commercial_rental: [
+    { value: "office", label: "Office Space" },
+    { value: "retail", label: "Retail Store" },
+    { value: "medical", label: "Medical/Professional" },
+  ],
+  industrial: [
+    { value: "warehouse", label: "Warehouse" },
+    { value: "distribution", label: "Distribution Facility" },
+    { value: "manufacturing", label: "Manufacturing" },
+  ],
+  hospitality: [
+    { value: "hotel", label: "Hotel" },
+    { value: "motel", label: "Motel" },
+    { value: "bed_breakfast", label: "Bed & Breakfast" },
+  ],
+  vacation_rental: [
+    { value: "short_term", label: "Short-term Rental" },
+    { value: "serviced_apartment", label: "Serviced Apartment" },
+    { value: "holiday_home", label: "Holiday Home" },
+  ],
+  mixed_use: [
+    { value: "residential_commercial", label: "Residential-Commercial" },
+    { value: "live_work", label: "Live-Work Space" },
+    { value: "multi_purpose", label: "Multi-Purpose" },
+  ],
+};
+
+// Helper function to get category label
+const getCategoryLabel = (type: string, category: string) => {
+  const typeCategories = typeToCategoryMap[type as keyof typeof typeToCategoryMap];
+  if (!typeCategories) return category;
+  
+  const foundCategory = typeCategories.find(cat => cat.value === category);
+  return foundCategory ? foundCategory.label : category;
+};
+
+// Helper function to get all available categories for filtering
+const getAllAvailableCategories = (listings: any[]) => {
+  const categoriesSet = new Set<string>();
+  listings.forEach(listing => {
+    if (listing.category) {
+      categoriesSet.add(listing.category);
+    }
+  });
+  return Array.from(categoriesSet);
+};
+
+// Belgrade test listings for accuracy testing
+const initialListings = [
   {
     id: 1,
-    address: "Belgrade, Dunavska 12",
+    address: "Knez Mihailova 42",
     city: "Belgrade",
     country: "Serbia",
-    type: "Commercial",
-    category: "Retail",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "retail",
     tenant: {
-      name: "Alexander Whitmore",
-      phone: "000-000-0000",
-      email: "alex@example.com"
-    }
+      name: "Fashion Store Belgrade",
+      phone: "+381 11 123 4567",
+      email: "info@fashion.rs",
+      type: "company"
+    },
+    notes: "Main pedestrian street"
   },
   {
     id: 2,
-    address: "New York, 5th Avenue",
-    city: "New York",
-    country: "USA",
-    type: "Residential",
-    category: "Apartment",
+    address: "Terazije 23",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "office",
     tenant: {
-      name: "Sarah Johnson",
-      phone: "111-222-3333",
-      email: "sarah@example.com"
-    }
+      name: "Business Center",
+      phone: "+381 11 234 5678",
+      email: "office@terazije.rs",
+      type: "company"
+    },
+    notes: "Central Belgrade square"
   },
   {
     id: 3,
-    address: "London, Baker Street 221B",
-    city: "London",
-    country: "UK",
-    type: "Commercial",
-    category: "Office",
+    address: "Kalemegdan Park 1",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "hospitality",
+    category: "hotel",
     tenant: {
-      name: "John Watson",
-      phone: "444-555-6666",
-      email: "watson@example.com"
-    }
+      name: "Kalemegdan Restaurant",
+      phone: "+381 11 345 6789",
+      email: "info@kalemegdan.rs",
+      type: "company"
+    },
+    notes: "Historic fortress area"
   },
   {
     id: 4,
-    address: "Paris, Champs-Élysées",
-    city: "Paris",
-    country: "France",
-    type: "Commercial",
-    category: "Retail",
+    address: "Skadarlija 29",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "hospitality",
+    category: "bed_breakfast",
     tenant: {
-      name: "Marie Dubois",
-      phone: "777-888-9999",
-      email: "marie@example.com"
-    }
+      name: "Traditional Serbian Restaurant",
+      phone: "+381 11 456 7890",
+      email: "contact@skadarlija.rs",
+      type: "company"
+    },
+    notes: "Bohemian quarter"
   },
   {
     id: 5,
-    address: "Tokyo, Shibuya Crossing",
-    city: "Tokyo",
-    country: "Japan",
-    type: "Commercial",
-    category: "Restaurant",
-    tenant: null
+    address: "Makedonska 22",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "residential_rental",
+    category: "apartment_condo",
+    tenant: {
+      name: "Marko Petrović",
+      phone: "+381 11 567 8901",
+      email: "marko@email.rs",
+      type: "individual"
+    },
+    notes: "City center apartment"
+  },
+  {
+    id: 6,
+    address: "Bulevar Kralja Aleksandra 73",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "office",
+    tenant: {
+      name: "Tech Company Serbia",
+      phone: "+381 11 678 9012",
+      email: "info@tech.rs",
+      type: "company"
+    },
+    notes: "Main boulevard"
+  },
+  {
+    id: 7,
+    address: "Nemanjina 4",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "commercial_rental",
+    category: "retail",
+    tenant: {
+      name: "Shopping Mall Unit",
+      phone: "+381 11 789 0123",
+      email: "shop@nemanjina.rs",
+      type: "company"
+    },
+    notes: "Near train station"
+  },
+  {
+    id: 8,
+    address: "Svetogorska 15",
+    city: "Belgrade",
+    country: "Serbia",
+    postalCode: "11000",
+    type: "residential_rental",
+    category: "single_family",
+    tenant: {
+      name: "Ana Jovanović",
+      phone: "+381 11 890 1234",
+      email: "ana@email.rs",
+      type: "individual"
+    },
+    notes: "Residential area"
   }
 ];
 
@@ -82,15 +203,19 @@ interface FilterState {
   countries: string[];
 }
 
-export function ListingList() {
-  const [listings, setListings] = useState<any[]>(mockListings);
+interface ListingListProps {
+  onListingClick?: (listing: any) => void;
+  listings: any[];
+  isLoading: boolean;
+}
+
+export function ListingList({ onListingClick, listings, isLoading }: ListingListProps) {
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedListing, setSelectedListing] = useState<any | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   
-  // Enhanced filter state
   const [filters, setFilters] = useState<FilterState>({
     types: [],
     categories: [],
@@ -98,40 +223,21 @@ export function ListingList() {
     countries: []
   });
 
-  // Collect available property attributes from data
-  const propertyTypes = Array.from(new Set(mockListings.map(l => l.type)));
-  const categories = Array.from(new Set(mockListings.map(l => l.category)));
-  const countries = Array.from(new Set(mockListings.map(l => l.country)));
-  
-  // Define occupancy statuses based on tenant presence
-  const occupancyStatuses = ["Occupied", "Vacant"];
-
-  const fetchListings = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch("http://localhost:5000/listings");
-      const data = await res.json();
-      if (data && data.length > 0) {
-        setListings(data);
-      }
-    } catch (error) {
-      console.error("Error fetching listings:", error);
-      // Keep using mock data on error
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchListings();
-  }, []);
+  const propertyTypes = ["residential_rental", "commercial_rental", "hospitality", "vacation_rental", "mixed_use", "industrial"];
+  const categories = getAllAvailableCategories(listings);
+  const countries = Array.from(new Set(listings.map(l => l.country).filter(Boolean)));
+  const occupancyStatuses = ["occupied", "vacant"];
 
   const handleListingClick = (listing: any) => {
     setSelectedListing(listing);
-    setIsEditSheetOpen(true);
+    
+    if (onListingClick) {
+      onListingClick(listing);
+    } else {
+      setIsEditSheetOpen(true);
+    }
   };
 
-  // Function to toggle a value in a filter array
   const toggleFilter = (category: keyof FilterState, value: string) => {
     setFilters(prev => {
       const updated = { ...prev };
@@ -144,7 +250,6 @@ export function ListingList() {
     });
   };
 
-  // Clear all filters
   const clearFilters = () => {
     setFilters({
       types: [],
@@ -153,221 +258,238 @@ export function ListingList() {
       countries: []
     });
     toast({
-      title: "Filters cleared",
+      title: "Filters Cleared",
       description: "All filters have been reset",
       duration: 3000,
     });
   };
 
-  // Build filter groups for FilterPopover component
-  const filterGroups = [
+  // Calculate counts for each filter option
+  const getOptionCounts = (filterKey: keyof FilterState, options: string[]) => {
+    return options.map(option => {
+      let count = 0;
+      if (filterKey === 'types') {
+        count = listings.filter(l => l.type === option).length;
+      } else if (filterKey === 'categories') {
+        count = listings.filter(l => l.category === option).length;
+      } else if (filterKey === 'countries') {
+        count = listings.filter(l => l.country === option).length;
+      } else if (filterKey === 'occupancy') {
+        count = listings.filter(l => l.occupancyStatus === option || (!l.occupancyStatus && option === 'occupied' && l.tenant) || (!l.occupancyStatus && option === 'vacant' && !l.tenant)).length;
+      }
+      return { value: option, label: option, count };
+    });
+  };
+
+  const filterSections: FilterSection[] = [
     {
+      id: "types",
       title: "Property Type",
-      options: propertyTypes,
+      options: getOptionCounts('types', propertyTypes).map(item => ({
+        ...item,
+        label: formatPropertyType(item.value as PropertyType)
+      })),
       selectedValues: filters.types,
       onToggle: (value: string) => toggleFilter("types", value),
     },
     {
+      id: "categories",
       title: "Category",
-      options: categories,
+      options: getOptionCounts('categories', categories).map(item => ({
+        ...item,
+        label: getCategoryLabel(
+          listings.find(l => l.category === item.value)?.type || '',
+          item.value
+        )
+      })),
       selectedValues: filters.categories,
       onToggle: (value: string) => toggleFilter("categories", value),
     },
     {
+      id: "occupancy",
       title: "Occupancy Status",
-      options: occupancyStatuses,
+      options: getOptionCounts('occupancy', occupancyStatuses).map(item => ({
+        ...item,
+        label: item.value.charAt(0).toUpperCase() + item.value.slice(1)
+      })),
       selectedValues: filters.occupancy,
       onToggle: (value: string) => toggleFilter("occupancy", value),
     },
     {
+      id: "countries",
       title: "Country",
-      options: countries,
+      options: getOptionCounts('countries', countries),
       selectedValues: filters.countries,
       onToggle: (value: string) => toggleFilter("countries", value),
     },
   ];
 
-  // Get total active filter count
   const activeFilterCount = 
     filters.types.length + 
     filters.categories.length + 
     filters.occupancy.length + 
     filters.countries.length;
 
-  // Prepare filter tags
-  const filterTags = [
-    ...filters.types.map(type => ({
-      category: "Type",
-      value: type,
-      onRemove: () => toggleFilter("types", type)
-    })),
-    ...filters.categories.map(category => ({
-      category: "Category",
-      value: category,
-      onRemove: () => toggleFilter("categories", category)
-    })),
-    ...filters.occupancy.map(status => ({
-      category: "Occupancy",
-      value: status,
-      onRemove: () => toggleFilter("occupancy", status)
-    })),
-    ...filters.countries.map(country => ({
-      category: "Country",
-      value: country,
-      onRemove: () => toggleFilter("countries", country)
-    })),
-  ];
-
-  // Filter listings based on search and filters
   const filteredListings = listings.filter(listing => {
-    // Text search
     const matchesSearch = listing.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.tenant?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       String(listing.id).includes(searchTerm);
     
-    // Filter by property type
     const matchesType = filters.types.length === 0 || 
       filters.types.includes(listing.type);
     
-    // Filter by category  
     const matchesCategory = filters.categories.length === 0 || 
       filters.categories.includes(listing.category);
     
-    // Filter by country
     const matchesCountry = filters.countries.length === 0 || 
       filters.countries.includes(listing.country);
     
-    // Filter by occupancy status
-    const matchesOccupancy = filters.occupancy.length === 0 || (
-      (filters.occupancy.includes("Occupied") && listing.tenant) ||
-      (filters.occupancy.includes("Vacant") && !listing.tenant)
-    );
+    const listingOccupancy = listing.occupancyStatus || (listing.tenant ? 'occupied' : 'vacant');
+    const matchesOccupancy = filters.occupancy.length === 0 || 
+      filters.occupancy.includes(listingOccupancy);
 
     return matchesSearch && matchesType && matchesCategory && matchesCountry && matchesOccupancy;
   });
 
   return (
-    <div className="h-full">
-      <div className="p-4 border-b">
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Search by address, tenant or ID..." 
-              className="pl-8 h-9 transition-all duration-200 focus:ring-2 focus:ring-primary/20" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <FilterPopover 
-            groups={filterGroups}
-            selectedCount={activeFilterCount}
-            onReset={clearFilters}
-            trigger={
-              <Button variant="outline" className="flex items-center gap-2 h-9">
-                <ListFilter className="h-4 w-4" />
-                <span>Filter</span>
-                {activeFilterCount > 0 && (
-                  <span className="flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs w-5 h-5 ml-1">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
-            }
-          />
-        </div>
-        
-        {/* Show active filter tags */}
-        <FilterTags tags={filterTags} onClearAll={clearFilters} />
+    <div className="h-full flex flex-col">
+      {/* Modern Filter Header */}
+      <div className="p-4 border-b bg-white">
+        <ModernFilter
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          searchPlaceholder="Search by Address, Tenant or ID..."
+          filterSections={filterSections}
+          activeFilterCount={activeFilterCount}
+          onClearFilters={clearFilters}
+        />
       </div>
 
-      <div className="flex-1 p-4 overflow-auto">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
-            <Loader2 className="h-6 w-6 animate-spin mr-2" />
-            <span>Loading listings...</span>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {filteredListings.length > 0 ? (
-              filteredListings.map((listing) => (
-                <Card 
-                  key={listing.id} 
-                  className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
-                  onClick={() => handleListingClick(listing)}
-                >
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between p-4 pb-2">
-                      <div className="flex items-center gap-6 text-sm">
-                        <span className="text-[#9EA3AD] font-medium">#{listing.id}</span>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-primary/80" />
-                          <span className="font-medium">{listing.address}</span>
+      {/* Scrollable content area */}
+      <ScrollArea className="flex-1">
+        <div className="p-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              <Loader2 className="h-6 w-6 animate-spin mr-2" />
+              <span>Loading Listings...</span>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {filteredListings.length > 0 ? (
+                filteredListings.map((listing) => {
+                  // For hospitality and vacation rental, don't show occupancy status
+                  const shouldShowOccupancy = listing.type !== 'hospitality' && listing.type !== 'vacation_rental';
+                  const occupancyStatus = shouldShowOccupancy ? (listing.occupancyStatus || (listing.tenant ? 'occupied' : 'vacant')) : null;
+                  
+                  return (
+                    <Card 
+                      key={listing.id} 
+                      className="p-1 hover:bg-gray-50/50 cursor-pointer transition-all duration-200 hover:shadow-sm"
+                      onClick={() => handleListingClick(listing)}
+                    >
+                      <div className="flex flex-col">
+                        <div className="flex items-center justify-between p-4 pb-2">
+                          <div className="flex items-center gap-6 text-sm">
+                            <span className="text-[#9EA3AD] font-medium">#{listing.id}</span>
+                            <div className="flex items-center gap-2">
+                              <MapPin className="h-4 w-4 text-primary/80" />
+                              <span className="font-medium">{listing.address}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {shouldShowOccupancy && (
+                              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                                occupancyStatus === 'occupied' 
+                                  ? 'bg-green-50 text-green-700 border border-green-200'
+                                  : 'bg-orange-50 text-orange-700 border border-orange-200'
+                              }`}>
+                                {occupancyStatus === 'occupied' ? (
+                                  <Users className="h-3 w-3" />
+                                ) : (
+                                  <UserX className="h-3 w-3" />
+                                )}
+                                <span>{occupancyStatus === 'occupied' ? 'Occupied' : 'Vacant'}</span>
+                              </div>
+                            )}
+                            <PropertyTypeDisplay 
+                              type={listing.type as PropertyType} 
+                              className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="h-px bg-[#E4E5EA] mx-4" />
+                        
+                        <div className="flex items-center justify-between p-4 pt-2">
+                          <div className="flex items-center gap-8 text-sm">
+                            {/* Only show tenant info for non-hospitality/vacation rental properties */}
+                            {shouldShowOccupancy ? (
+                              <span className="text-[#9EA3AD] font-medium">
+                                {listing.tenant?.name || 'No Tenant'}
+                              </span>
+                            ) : (
+                              <span className="text-[#9EA3AD] font-medium">—</span>
+                            )}
+                            <div className="flex items-center gap-8">
+                              {shouldShowOccupancy && listing.tenant?.phone && (
+                                <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
+                                  <Phone className="h-4 w-4 text-[#9EA3AD]" />
+                                  <span>{listing.tenant.phone}</span>
+                                </div>
+                              )}
+                              {shouldShowOccupancy && listing.tenant?.email && (
+                                <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
+                                  <Mail className="h-4 w-4 text-[#9EA3AD]" />
+                                  <span>{listing.tenant.email}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
+                            {getCategoryLabel(listing.type, listing.category)}
+                          </span>
                         </div>
                       </div>
-                      <span className="px-2.5 py-1 bg-primary/5 text-primary/80 text-sm rounded-full font-medium">
-                        {listing.type}
-                      </span>
-                    </div>
-                    
-                    <div className="h-px bg-[#E4E5EA] mx-4" />
-                    
-                    <div className="flex items-center justify-between p-4 pt-2">
-                      <div className="flex items-center gap-8 text-sm">
-                        <span className="text-[#9EA3AD] font-medium">{listing.tenant?.name || 'No tenant'}</span>
-                        <div className="flex items-center gap-8">
-                          {listing.tenant?.phone && (
-                            <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
-                              <Phone className="h-4 w-4 text-[#9EA3AD]" />
-                              <span>{listing.tenant.phone}</span>
-                            </div>
-                          )}
-                          {listing.tenant?.email && (
-                            <div className="flex items-center gap-2 transition-all duration-200 hover:text-primary">
-                              <Mail className="h-4 w-4 text-[#9EA3AD]" />
-                              <span>{listing.tenant.email}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <span className="px-2.5 py-1 bg-secondary/50 text-secondary-foreground/80 text-sm rounded-full font-medium">
-                        {listing.category}
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              ))
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                {searchTerm || activeFilterCount > 0 
-                  ? 'No listings found matching your filters' 
-                  : 'No listings available'}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
-        <SheetContent 
-          side="right" 
-          className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
-        >
-          {selectedListing && (
-            <EditListingForm 
-              listing={selectedListing} 
-              onClose={() => setIsEditSheetOpen(false)}
-              onUpdate={(updatedListing) => {
-                setListings(listings.map(l => 
-                  l.id === updatedListing.id ? updatedListing : l
-                ));
-                setIsEditSheetOpen(false);
-              }}
-            />
+                    </Card>
+                  );
+                })
+              ) : (
+                <div className="text-center py-12">
+                  <MapPin className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Properties Found</h3>
+                  <p className="text-gray-500 mb-4">
+                    {searchTerm || activeFilterCount > 0 
+                      ? 'No listings match your current filters' 
+                      : 'Start by adding your first property listing with accurate address coordinates'}
+                  </p>
+                  <Button variant="outline" onClick={() => window.location.reload()}>
+                    Refresh Listings
+                  </Button>
+                </div>
+              )}
+            </div>
           )}
-        </SheetContent>
-      </Sheet>
+        </div>
+      </ScrollArea>
+
+      {!onListingClick && (
+        <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
+          <SheetContent 
+            side="right" 
+            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
+          >
+            {selectedListing && (
+              <EditListingForm 
+                listing={selectedListing} 
+                onClose={() => setIsEditSheetOpen(false)}
+                onUpdate={(updatedListing) => {
+                  setIsEditSheetOpen(false);
+                }}
+              />
+            )}
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   );
 }
