@@ -13,16 +13,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Building2, Eye, Home, UserRound } from "lucide-react";
-import { SignInButton, SignedOut, SignedIn, UserButton } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
 
 export default function Index() {
-  const navigate = useNavigate();
-
-  const handleGetStarted = () => {
-    navigate("/sign-up"); // ili "/signup" ako ti je ruta tako definisana
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Header */}
@@ -32,7 +24,7 @@ export default function Index() {
             {/* Logo */}
             <div>
               <Link to="/" className="flex items-center">
-                <span className="text-xl font-medium text-gray-900">Square</span>
+                <span className="text-xl font-medium text-gray-900">PropertyHub</span>
               </Link>
             </div>
             
@@ -113,15 +105,10 @@ export default function Index() {
             
             {/* Right side buttons */}
             <div className="flex items-center gap-4">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <Button variant="ghost" className="hidden sm:flex">
-                      Sign In
-                  </Button>
-                </SignInButton>
-              </SignedOut>
-
-              <Button onClick={handleGetStarted}>
+              <Button variant="ghost" className="hidden sm:flex">
+                Sign In
+              </Button>
+              <Button>
                 Get Started
               </Button>
             </div>
@@ -136,10 +123,10 @@ export default function Index() {
             Manage your property portfolio with ease
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Whether you're an individual owner or a property manager, Square provides tools to streamline your real estate operations.
+            Whether you're an individual owner or a property manager, PropertyHub provides tools to streamline your real estate operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="w-full sm:w-auto" onClick={handleGetStarted}>
+            <Button size="lg" className="w-full sm:w-auto">
               Get Started Now
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
@@ -285,7 +272,7 @@ export default function Index() {
         <div className="container mx-auto max-w-4xl bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-8 sm:p-10 text-center">
           <h2 className="text-3xl font-semibold mb-4">Ready to simplify your property management?</h2>
           <p className="text-lg text-gray-600 mb-6">Join thousands of property owners and managers who are already using PropertyHub.</p>
-          <Button size="lg" onClick={handleGetStarted}>
+          <Button size="lg">
             Get Started for Free
           </Button>
         </div>
@@ -335,7 +322,7 @@ export default function Index() {
           </div>
           
           <div className="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-            <p>&copy; 2025 Square. All rights reserved.</p>
+            <p>&copy; 2025 PropertyHub. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { useClerk } from "@clerk/clerk-react";
 
 interface WorkspaceNavProps {
   workspaceName?: string;
@@ -23,7 +22,6 @@ export function WorkspaceNav({
   userInitials = "K",
   owner = "Kevin Anderson" 
 }: WorkspaceNavProps) {
-  const { signOut } = useClerk();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -54,11 +52,9 @@ export function WorkspaceNav({
     console.log("Support clicked");
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     console.log("Logout clicked");
-
-    await signOut();        // Clerk logout
-    navigate("/");          // Redirect na landing page
+    navigate('/');
   };
 
   // Add function to handle clicking on the workspace button
