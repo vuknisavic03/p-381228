@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   AreaChart,
@@ -106,8 +107,8 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
               margin={{
                 top: 20,
                 right: 5,
-                bottom: 10,
-                left: 20,
+                bottom: 5,
+                left: 15,
               }}
             >
               <defs>
