@@ -176,8 +176,8 @@ export function ChartCard({
             margin={{
               top: 15,
               right: 5,
-              bottom: 5,
-              left: 15,
+              bottom: 10,
+              left: 20,
             }}
           >
             <defs>

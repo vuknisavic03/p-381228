@@ -302,7 +302,7 @@ export default function WorkspacePicker() {
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
-                          margin={{ top: 5, right: 5, left: 10, bottom: 5 }}
+                          margin={{ top: 5, right: 5, left: 15, bottom: 10 }}
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
