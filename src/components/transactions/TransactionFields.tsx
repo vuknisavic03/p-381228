@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -111,8 +112,6 @@ export function TransactionFields({
         
         {fields.listingType === "listing" ? (
           <div className="space-y-6">
-            <div className="text-xs font-medium text-gray-700 mb-2 block">Property selection</div>
-            
             <div className="flex gap-3 mb-4">
               <div className="flex-1">
                 <ListingSelector
