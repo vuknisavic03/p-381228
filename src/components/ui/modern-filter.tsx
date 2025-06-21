@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -85,18 +86,6 @@ export function ModernFilter({
         )}
       </div>
 
-      {/* Clear Filters Button */}
-      {activeFilterCount > 0 && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onClearFilters}
-          className="text-gray-600 hover:text-gray-800 border-gray-200"
-        >
-          Clear ({activeFilterCount})
-        </Button>
-      )}
-
       {/* Filter Sections as Individual Dropdowns */}
       <div className="flex items-center gap-2">
         {filterSections.map((section) => (
@@ -110,11 +99,6 @@ export function ModernFilter({
                 )}
               >
                 <span className="text-sm font-medium">{section.title}</span>
-                {section.selectedValues.length > 0 && (
-                  <span className="bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] h-[18px] flex items-center justify-center">
-                    {section.selectedValues.length}
-                  </span>
-                )}
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
