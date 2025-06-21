@@ -74,6 +74,7 @@ export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [listings, setListings] = useState<any[]>([]);
   const [selectedListings, setSelectedListings] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   // Load listings on component mount
   useEffect(() => {
@@ -88,23 +89,37 @@ export function TransactionActivity() {
     loadListings();
   }, []);
 
-  // Create filter options from listings and their units
+  // Create better organized filter options from listings and their units
   const createListingFilterOptions = () => {
-    const options: Array<{ value: string; label: string }> = [];
+    const options: Array<{ value: string; label: string; count?: number; isUnit?: boolean; parentListing?: string }> = [];
     
     listings.forEach(listing => {
+      // Count transactions for this listing
+      const listingTransactionCount = transactions.filter(t => 
+        t.selectedListingId === listing.id
+      ).length;
+
       // Add the main listing
       options.push({
         value: listing.id,
-        label: listing.name
+        label: listing.name,
+        count: listingTransactionCount,
+        isUnit: false
       });
       
       // Add individual units if they exist
       if (listing.units && listing.units.length > 0) {
         listing.units.forEach((unit: any) => {
+          const unitTransactionCount = transactions.filter(t => 
+            t.selectedListingId === listing.id && t.unitId === unit.id
+          ).length;
+
           options.push({
             value: `${listing.id}-${unit.id}`,
-            label: `${listing.name} - ${unit.unitNumber}`
+            label: unit.unitNumber,
+            count: unitTransactionCount,
+            isUnit: true,
+            parentListing: listing.name
           });
         });
       }
@@ -123,25 +138,41 @@ export function TransactionActivity() {
     });
   };
 
+  const handleCategoryFilterToggle = (value: string) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(value)) {
+        return prev.filter(v => v !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
+  };
+
+  // Get unique categories from transactions
+  const getAvailableCategories = () => {
+    const categories = [...new Set(transactions.map(t => t.category))];
+    return categories.map(category => {
+      const count = transactions.filter(t => t.category === category).length;
+      return {
+        value: category.toLowerCase(),
+        label: category,
+        count
+      };
+    });
+  };
+
   const filterSections = [
     {
       id: 'category',
       title: 'Category',
-      options: [
-        { value: 'rent', label: 'Rent' },
-        { value: 'maintenance', label: 'Maintenance' },
-        { value: 'deposit', label: 'Deposit' },
-        { value: 'insurance', label: 'Insurance' },
-      ],
-      selectedValues: [],
-      onToggle: (value: string) => {
-        console.log('Category filter toggled:', value);
-      },
+      options: getAvailableCategories(),
+      selectedValues: selectedCategories,
+      onToggle: handleCategoryFilterToggle,
       multiSelect: true,
     },
     {
       id: 'listings',
-      title: 'Listings & Units',
+      title: 'Properties & Units',
       options: createListingFilterOptions(),
       selectedValues: selectedListings,
       onToggle: handleListingFilterToggle,
@@ -179,6 +210,7 @@ export function TransactionActivity() {
   const clearFilters = () => {
     setSearch("");
     setSelectedListings([]);
+    setSelectedCategories([]);
     setFilteredTransactions(transactions);
   };
 
@@ -194,6 +226,13 @@ export function TransactionActivity() {
         t.from.toLowerCase().includes(search.toLowerCase()) ||
         t.category.toLowerCase().includes(search.toLowerCase()) ||
         t.notes?.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    
+    // Filter by selected categories
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(t => 
+        selectedCategories.includes(t.category.toLowerCase())
       );
     }
     
@@ -214,9 +253,9 @@ export function TransactionActivity() {
     }
     
     setFilteredTransactions(filtered);
-  }, [transactions, search, transactionType, selectedListings]);
+  }, [transactions, search, transactionType, selectedListings, selectedCategories]);
 
-  const activeFilterCount = selectedListings.length;
+  const activeFilterCount = selectedListings.length + selectedCategories.length;
 
   return (
     <div className="h-full flex flex-col">
