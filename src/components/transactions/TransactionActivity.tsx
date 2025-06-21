@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { TransactionTable } from "./TransactionTable";
 import { TransactionFilterBar } from "./TransactionFilterBar";
@@ -110,14 +109,12 @@ export function TransactionActivity() {
       // Add individual units if they exist
       if (listing.units && listing.units.length > 0) {
         listing.units.forEach((unit: any) => {
-          const unitTransactionCount = transactions.filter(t => 
-            t.selectedListingId === listing.id && t.unitId === unit.id
-          ).length;
-
+          // For now, we'll show units but they'll filter by the parent listing
+          // since transactions don't have unitId property yet
           options.push({
             value: `${listing.id}-${unit.id}`,
             label: unit.unitNumber,
-            count: unitTransactionCount,
+            count: 0, // No unit-specific transactions yet
             isUnit: true,
             parentListing: listing.name
           });
@@ -243,7 +240,7 @@ export function TransactionActivity() {
         return selectedListings.some(selectedValue => {
           // Handle both listing ID and listing-unit ID formats
           if (selectedValue.includes('-')) {
-            const [listingId, unitId] = selectedValue.split('-');
+            const [listingId] = selectedValue.split('-');
             return t.selectedListingId === listingId;
           } else {
             return t.selectedListingId === selectedValue;
