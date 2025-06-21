@@ -4,6 +4,7 @@ import { TransactionTable } from "./TransactionTable";
 import { TransactionFilterBar } from "./TransactionFilterBar";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditTransactionForm } from "./EditTransactionForm";
+import { fetchListings } from "@/services/listingsService";
 
 // Mock data for demonstration
 const mockTransactions = [
@@ -71,8 +72,57 @@ export function TransactionActivity() {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
+  const [listings, setListings] = useState<any[]>([]);
+  const [selectedListings, setSelectedListings] = useState<string[]>([]);
 
-  // Mock filter sections for the new TransactionFilterBar
+  // Load listings on component mount
+  useEffect(() => {
+    const loadListings = async () => {
+      try {
+        const listingsData = await fetchListings();
+        setListings(listingsData);
+      } catch (error) {
+        console.error('Error loading listings:', error);
+      }
+    };
+    loadListings();
+  }, []);
+
+  // Create filter options from listings and their units
+  const createListingFilterOptions = () => {
+    const options: Array<{ value: string; label: string }> = [];
+    
+    listings.forEach(listing => {
+      // Add the main listing
+      options.push({
+        value: listing.id,
+        label: listing.name
+      });
+      
+      // Add individual units if they exist
+      if (listing.units && listing.units.length > 0) {
+        listing.units.forEach((unit: any) => {
+          options.push({
+            value: `${listing.id}-${unit.id}`,
+            label: `${listing.name} - ${unit.unitNumber}`
+          });
+        });
+      }
+    });
+    
+    return options;
+  };
+
+  const handleListingFilterToggle = (value: string) => {
+    setSelectedListings(prev => {
+      if (prev.includes(value)) {
+        return prev.filter(v => v !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
+  };
+
   const filterSections = [
     {
       id: 'category',
@@ -90,18 +140,11 @@ export function TransactionActivity() {
       multiSelect: true,
     },
     {
-      id: 'payment',
-      title: 'Payment Method',
-      options: [
-        { value: 'bank_transfer', label: 'Bank Transfer' },
-        { value: 'credit_card', label: 'Credit Card' },
-        { value: 'check', label: 'Check' },
-        { value: 'cash', label: 'Cash' },
-      ],
-      selectedValues: [],
-      onToggle: (value: string) => {
-        console.log('Payment method filter toggled:', value);
-      },
+      id: 'listings',
+      title: 'Listings & Units',
+      options: createListingFilterOptions(),
+      selectedValues: selectedListings,
+      onToggle: handleListingFilterToggle,
       multiSelect: true,
     }
   ];
@@ -135,6 +178,7 @@ export function TransactionActivity() {
 
   const clearFilters = () => {
     setSearch("");
+    setSelectedListings([]);
     setFilteredTransactions(transactions);
   };
 
@@ -153,8 +197,26 @@ export function TransactionActivity() {
       );
     }
     
+    // Filter by selected listings/units
+    if (selectedListings.length > 0) {
+      filtered = filtered.filter(t => {
+        // Check if transaction's listing is in selected listings
+        return selectedListings.some(selectedValue => {
+          // Handle both listing ID and listing-unit ID formats
+          if (selectedValue.includes('-')) {
+            const [listingId, unitId] = selectedValue.split('-');
+            return t.selectedListingId === listingId;
+          } else {
+            return t.selectedListingId === selectedValue;
+          }
+        });
+      });
+    }
+    
     setFilteredTransactions(filtered);
-  }, [transactions, search, transactionType]);
+  }, [transactions, search, transactionType, selectedListings]);
+
+  const activeFilterCount = selectedListings.length;
 
   return (
     <div className="h-full flex flex-col">
@@ -162,7 +224,7 @@ export function TransactionActivity() {
         search={search}
         setSearch={setSearch}
         filterSections={filterSections}
-        activeFilterCount={0}
+        activeFilterCount={activeFilterCount}
         clearFilters={clearFilters}
         transactionType={transactionType}
         setTransactionType={setTransactionType}
