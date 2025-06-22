@@ -108,7 +108,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 top: 20,
                 right: 15,
                 bottom: 5,
-                left: 5,
+                left: 0,
               }}
             >
               <defs>
@@ -135,7 +135,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={35}
+                width={50}
                 padding={{ top: 10 }}
                 allowDecimals={false}
                 domain={['auto', 'auto']}

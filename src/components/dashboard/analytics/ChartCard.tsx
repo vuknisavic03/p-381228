@@ -177,7 +177,7 @@ export function ChartCard({
               top: 15,
               right: 15,
               bottom: 5,
-              left: 5,
+              left: 0,
             }}
           >
             <defs>
@@ -210,7 +210,7 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
-              width={35}
+              width={50}
               tickFormatter={(value) => `$${value}k`}
               padding={{ top: 10 }}
               allowDecimals={false}
