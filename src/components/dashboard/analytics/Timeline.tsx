@@ -105,10 +105,10 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
             <AreaChart
               data={cleanData}
               margin={{
-                top: 25,
-                right: 15,
-                bottom: 30,
-                left: 60,
+                top: 10,
+                right: 5,
+                bottom: 15,
+                left: 35,
               }}
             >
               <defs>
@@ -127,16 +127,16 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 tick={{ fill: '#6b7280', fontSize: 12 }} 
                 tickLine={false} 
                 axisLine={{ strokeWidth: 1, stroke: '#e5e7eb' }}
-                dy={8}
-                padding={{ left: 10, right: 10 }}
+                dy={5}
+                padding={{ left: 5, right: 5 }}
               />
               <YAxis 
                 tick={{ fill: '#6b7280', fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={55}
-                padding={{ top: 10 }}
+                width={30}
+                padding={{ top: 5 }}
                 allowDecimals={false}
                 domain={['auto', 'auto']}
               />
