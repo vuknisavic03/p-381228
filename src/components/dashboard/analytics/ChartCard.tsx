@@ -174,10 +174,10 @@ export function ChartCard({
           <AreaChart
             data={chartData as ChartDataPoint[]}
             margin={{
-              top: 15,
-              right: 5,
-              bottom: 10,
-              left: 20,
+              top: 25,
+              right: 15,
+              bottom: 30,
+              left: 60,
             }}
           >
             <defs>
@@ -210,7 +210,7 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
-              width={45}
+              width={55}
               tickFormatter={(value) => `$${value}k`}
               padding={{ top: 10 }}
               allowDecimals={false}

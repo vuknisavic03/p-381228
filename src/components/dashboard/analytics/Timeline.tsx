@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   AreaChart,
@@ -104,10 +105,10 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
             <AreaChart
               data={cleanData}
               margin={{
-                top: 20,
-                right: 5,
-                bottom: 10,
-                left: 20,
+                top: 25,
+                right: 15,
+                bottom: 30,
+                left: 60,
               }}
             >
               <defs>
@@ -134,7 +135,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
-                width={50}
+                width={55}
                 padding={{ top: 10 }}
                 allowDecimals={false}
                 domain={['auto', 'auto']}
