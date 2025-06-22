@@ -174,10 +174,10 @@ export function ChartCard({
           <AreaChart
             data={chartData as ChartDataPoint[]}
             margin={{
-              top: 25,
-              right: 15,
-              bottom: 25,
-              left: 5,
+              top: 15,
+              right: 5,
+              bottom: 10,
+              left: 20,
             }}
           >
             <defs>
@@ -198,7 +198,7 @@ export function ChartCard({
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
               dy={8}
-              padding={{ left: 20, right: 20 }}
+              padding={{ left: 10, right: 10 }}
               tickFormatter={(value) => {
                 if (value instanceof Date) {
                   return value.toLocaleDateString();
@@ -210,9 +210,9 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
-              width={65}
+              width={45}
               tickFormatter={(value) => `$${value}k`}
-              padding={{ top: 20, bottom: 20 }}
+              padding={{ top: 10 }}
               allowDecimals={false}
               domain={['auto', 'auto']}
             />
