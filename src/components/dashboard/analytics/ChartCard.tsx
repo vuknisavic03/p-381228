@@ -175,9 +175,9 @@ export function ChartCard({
             data={chartData as ChartDataPoint[]}
             margin={{
               top: 15,
-              right: 5,
-              bottom: 10,
-              left: 20,
+              right: 15,
+              bottom: 5,
+              left: 5,
             }}
           >
             <defs>
@@ -198,7 +198,7 @@ export function ChartCard({
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
               dy={8}
-              padding={{ left: 10, right: 10 }}
+              padding={{ left: 5, right: 5 }}
               tickFormatter={(value) => {
                 if (value instanceof Date) {
                   return value.toLocaleDateString();
@@ -210,7 +210,7 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
-              width={45}
+              width={35}
               tickFormatter={(value) => `$${value}k`}
               padding={{ top: 10 }}
               allowDecimals={false}
