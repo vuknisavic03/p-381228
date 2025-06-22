@@ -100,7 +100,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="h-[220px]">
+        <div className="h-[180px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={cleanData}

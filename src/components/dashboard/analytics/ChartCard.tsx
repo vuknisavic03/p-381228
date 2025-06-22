@@ -122,7 +122,7 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center h-full">
-          <div className="w-full h-[200px] mb-2">
+          <div className="w-full h-[160px] mb-2">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
@@ -169,7 +169,7 @@ export function ChartCard({
     }
 
     return (
-      <div className="h-[220px]">
+      <div className="h-[180px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}
