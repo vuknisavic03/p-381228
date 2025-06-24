@@ -11,14 +11,8 @@ import {
   TooltipProps
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { ChartDataPoint } from "@/services/analyticsService";
+import { TimelineDataPoint } from "@/services/analyticsService";
 import { DateRange } from "react-day-picker";
-
-interface TimelineDataPoint {
-  month: string;
-  revenue: number;
-  profit: number;
-}
 
 interface TimelineProps {
   data: TimelineDataPoint[];

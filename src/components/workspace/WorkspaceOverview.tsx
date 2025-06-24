@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Header } from "@/components/dashboard/Header";
-import { PortfolioOverview } from "@/components/portfolio/PortfolioOverview";
+import { AnalyticsGrid } from "@/components/dashboard/analytics/AnalyticsGrid";
 import { ViewType } from "@/components/overview/ViewSelector";
 import { ListingsTable } from "@/components/overview/ListingsTable";
 import { UnitsTable } from "@/components/overview/UnitsTable";
@@ -49,7 +49,7 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
       case 'portfolio':
         return (
           <div className="space-y-8">
-            <PortfolioOverview dateRange={dateRange} periodLabel={periodLabel} />
+            <AnalyticsGrid dateRange={dateRange} periodLabel={periodLabel} />
           </div>
         );
       case 'listings':
