@@ -59,7 +59,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
           <CompactTimeline
             title={periodLabel || "This month"}
             icon={LineChart}
-            value={isLoading ? "Loading..." : "Performance"}
+            value={isLoading ? "Loading..." : "Revenue vs Expenses"}
             change={isLoading ? { value: 0, positive: true } : { value: 12, positive: true }}
             data={isLoading ? [] : data?.timeline || []}
             isLoading={isLoading}
