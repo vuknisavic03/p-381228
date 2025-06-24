@@ -241,7 +241,6 @@ export function ChartCard({
                 dataKey="value" 
                 radius={[4, 4, 0, 0]}
                 name="Value"
-                fill={(entry) => entry?.type === 'revenue' ? '#16a34a' : '#dc2626'}
               >
                 {(chartData as CategoryDataPoint[]).map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.type === 'revenue' ? '#16a34a' : '#dc2626'} />
