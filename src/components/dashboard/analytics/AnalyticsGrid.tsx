@@ -31,6 +31,19 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <ChartCard
+            title="Profit"
+            icon={TrendingUp}
+            color="bg-gray-100"
+            value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.profit}
+            chartData={isLoading ? [] : data?.profit || []}
+            chartType="area"
+            isLoading={isLoading}
+            legendLabel="Profit"
+          />
+        </div>
+        <div className="col-span-1">
+          <ChartCard
             title="Income vs Expenses Ratio"
             icon={PieChart}
             color="bg-gray-100"
@@ -44,28 +57,15 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Revenue Categories"
-            icon={TrendingUp}
-            color="bg-gray-100"
-            value={isLoading ? "Loading..." : "6 Categories"}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.categories}
-            chartData={isLoading ? [] : data?.categories || []}
-            chartType="categories"
-            isLoading={isLoading}
-            legendLabel="Categories"
-          />
-        </div>
-        <div className="col-span-1">
-          <ChartCard
-            title="Expense Categories"
+            title="Categories Analytics"
             icon={LineChart}
             color="bg-gray-100"
-            value={isLoading ? "Loading..." : "4 Categories"}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.expenses}
-            chartData={isLoading ? [] : data?.expenses || []}
-            chartType="expenses"
+            value={isLoading ? "Loading..." : "10 Categories"}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.categories}
+            chartData={isLoading ? [] : { categories: data?.categories || [], expenses: data?.expenses || [] }}
+            chartType="combined-categories"
             isLoading={isLoading}
-            legendLabel="Expenses"
+            legendLabel="Categories"
           />
         </div>
       </div>

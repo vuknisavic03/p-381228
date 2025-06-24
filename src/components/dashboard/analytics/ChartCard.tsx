@@ -1,3 +1,4 @@
+
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,8 +28,8 @@ interface ChartCardProps {
     value: number;
     positive: boolean;
   };
-  chartData: ChartDataPoint[] | DonutDataPoint[] | CategoryDataPoint[] | ExpenseDataPoint[];
-  chartType: "area" | "donut" | "spline" | "categories" | "expenses";
+  chartData: ChartDataPoint[] | DonutDataPoint[] | CategoryDataPoint[] | ExpenseDataPoint[] | { categories: CategoryDataPoint[]; expenses: ExpenseDataPoint[] };
+  chartType: "area" | "donut" | "spline" | "categories" | "expenses" | "combined-categories";
   isLoading?: boolean;
   legendLabel?: string;
 }
@@ -49,11 +50,11 @@ export function ChartCard({
     switch (title) {
       case "Revenue":
         return "#2563eb"; // Blue
+      case "Profit":
+        return "#16a34a"; // Green
       case "Income vs Expenses Ratio":
         return "#9333ea"; // Purple
-      case "Revenue Categories":
-        return "#16a34a"; // Green
-      case "Expense Categories":
+      case "Categories Analytics":
         return "#dc2626"; // Red
       default:
         return "#6b7280"; // Gray
@@ -77,7 +78,7 @@ export function ChartCard({
         );
       }
 
-      if (chartType === "categories") {
+      if (chartType === "categories" || chartType === "combined-categories") {
         return (
           <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-lg">
             <p className="font-medium text-gray-900 mb-1 text-sm">{payload[0].payload.name}</p>
@@ -196,6 +197,84 @@ export function ChartCard({
                 <span className="text-gray-700">{entry.name}: <span className="font-medium">{entry.value}%</span></span>
               </div>
             ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (chartType === "combined-categories") {
+      const data = chartData as { categories: CategoryDataPoint[]; expenses: ExpenseDataPoint[] };
+      const combinedData = [
+        ...data.categories.map(item => ({ ...item, category: 'Revenue' })),
+        ...data.expenses.map(item => ({ ...item, type: 'expense', category: 'Expense' }))
+      ];
+
+      return (
+        <div className="h-[180px]">
+          <div className="mb-4 flex justify-between items-center">
+            <div className="text-sm font-medium text-gray-700">Revenue Categories</div>
+            <div className="text-sm font-medium text-gray-700">Expense Categories</div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 h-[140px]">
+            {/* Revenue Categories */}
+            <div className="h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data.categories}
+                  margin={{ top: 10, right: 5, bottom: 5, left: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" opacity={0.5} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                    tickLine={false}
+                    tick={{ fill: '#6b7280', fontSize: 8 }}
+                    angle={-45}
+                    textAnchor="end"
+                    height={40}
+                  />
+                  <YAxis 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#6b7280', fontSize: 10 }}
+                    width={30}
+                    tickFormatter={(value) => `$${value}k`}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="value" radius={[2, 2, 0, 0]} fill="#16a34a" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            
+            {/* Expense Categories */}
+            <div className="h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data.expenses}
+                  margin={{ top: 10, right: 5, bottom: 5, left: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" opacity={0.5} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                    tickLine={false}
+                    tick={{ fill: '#6b7280', fontSize: 8 }}
+                    angle={-45}
+                    textAnchor="end"
+                    height={40}
+                  />
+                  <YAxis 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#6b7280', fontSize: 10 }}
+                    width={30}
+                    tickFormatter={(value) => `$${value}k`}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="value" radius={[2, 2, 0, 0]} fill="#dc2626" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       );
