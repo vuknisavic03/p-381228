@@ -23,6 +23,12 @@ export interface TimelineEvent {
   description: string;
 }
 
+export interface TimelineDataPoint {
+  month: string;
+  revenue: number;
+  profit: number;
+}
+
 export interface ExpenseDataPoint {
   name: string;
   value: number;
@@ -36,7 +42,7 @@ export interface AnalyticsData {
   income: DonutDataPoint[];
   categories: CategoryDataPoint[];
   expenses: ExpenseDataPoint[];
-  timeline: TimelineEvent[];
+  timeline: TimelineDataPoint[];
   totals: {
     revenue: number;
     profit: number;
@@ -93,11 +99,14 @@ const mockExpenses: ExpenseDataPoint[] = [
   { name: "Insurance", value: 23, percentage: 18, description: "Property and liability insurance premiums" },
 ];
 
-// Mock data for timeline
-const mockTimeline: TimelineEvent[] = [
-  { date: "2024-01-15", title: "New Property Added", description: "Acquired a new apartment complex in downtown." },
-  { date: "2024-02-28", title: "Successful Renovation", description: "Completed renovations on main street property." },
-  { date: "2024-03-10", title: "Increased Rental Rates", description: "Adjusted rental rates based on market analysis." }
+// Mock data for timeline chart (combines revenue and profit over time)
+const mockTimelineData: TimelineDataPoint[] = [
+  { month: "Jan", revenue: 35000, profit: 12000 },
+  { month: "Feb", revenue: 42000, profit: 15000 },
+  { month: "Mar", revenue: 38000, profit: 13000 },
+  { month: "Apr", revenue: 55000, profit: 18000 },
+  { month: "May", revenue: 48000, profit: 16000 },
+  { month: "Jun", revenue: 62000, profit: 22000 }
 ];
 
 export function useAnalyticsData(dateRange?: DateRange) {
@@ -113,7 +122,7 @@ export function useAnalyticsData(dateRange?: DateRange) {
         income: mockIncome,
         categories: mockCategories,
         expenses: mockExpenses,
-        timeline: mockTimeline,
+        timeline: mockTimelineData,
         totals: {
           revenue: 245000,
           profit: 89000,
