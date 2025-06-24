@@ -16,7 +16,7 @@ import {
   BarChart,
   Bar
 } from "recharts";
-import { ChartDataPoint, DonutDataPoint, CategoryDataPoint } from "@/services/analyticsService";
+import { ChartDataPoint, DonutDataPoint, CategoryDataPoint, ExpenseDataPoint } from "@/services/analyticsService";
 
 interface ChartCardProps {
   title: string;
@@ -27,8 +27,8 @@ interface ChartCardProps {
     value: number;
     positive: boolean;
   };
-  chartData: ChartDataPoint[] | DonutDataPoint[] | CategoryDataPoint[];
-  chartType: "area" | "donut" | "spline" | "categories";
+  chartData: ChartDataPoint[] | DonutDataPoint[] | CategoryDataPoint[] | ExpenseDataPoint[];
+  chartType: "area" | "donut" | "spline" | "categories" | "expenses";
   isLoading?: boolean;
   legendLabel?: string;
 }
@@ -49,12 +49,12 @@ export function ChartCard({
     switch (title) {
       case "Revenue":
         return "#2563eb"; // Blue
-      case "Profit":
-        return "#16a34a"; // Green
-      case "Income":
+      case "Income vs Expenses Ratio":
         return "#9333ea"; // Purple
-      case "Top Categories":
-        return "#ea580c"; // Orange
+      case "Revenue Categories":
+        return "#16a34a"; // Green
+      case "Expense Categories":
+        return "#dc2626"; // Red
       default:
         return "#6b7280"; // Gray
     }
@@ -94,6 +94,20 @@ export function ChartCard({
           </div>
         );
       }
+
+      if (chartType === "expenses") {
+        const expenseData = payload[0].payload as ExpenseDataPoint;
+        return (
+          <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-lg max-w-xs">
+            <p className="font-medium text-gray-900 mb-1 text-sm">{expenseData.name}</p>
+            <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm mb-1">
+              <span className="text-sm font-medium">Amount: </span>
+              <span style={{ color: colorValue }}>${payload[0].value}k ({expenseData.percentage}%)</span>
+            </p>
+            <p className="text-xs text-gray-600 leading-relaxed">{expenseData.description}</p>
+          </div>
+        );
+      }
       
       const safeLabel = typeof label === 'string' ? label : String(label);
       
@@ -103,7 +117,7 @@ export function ChartCard({
           <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
             <span className="text-sm font-medium">{title}: </span>
             <span style={{ color: colorValue }}>
-              {title === "Income" ? `${payload[0].value}%` : `$${payload[0].value.toLocaleString()}`}
+              {title === "Income vs Expenses Ratio" ? `${payload[0].value}%` : `$${payload[0].value.toLocaleString()}`}
             </span>
           </p>
         </div>
@@ -245,6 +259,67 @@ export function ChartCard({
                   <Cell key={`cell-${index}`} fill={entry.type === 'revenue' ? '#16a34a' : '#dc2626'} />
                 ))}
               </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      );
+    }
+
+    if (chartType === "expenses") {
+      return (
+        <div className="h-[180px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={chartData as ExpenseDataPoint[]}
+              margin={{
+                top: 15,
+                right: 15,
+                bottom: 5,
+                left: 0,
+              }}
+            >
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                vertical={false} 
+                stroke="#e5e7eb" 
+                opacity={0.5} 
+              />
+              <XAxis 
+                dataKey="name" 
+                axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                tickLine={false}
+                tick={{ fill: '#6b7280', fontSize: 10 }}
+                dy={8}
+                padding={{ left: 5, right: 5 }}
+                interval={0}
+                angle={-45}
+                textAnchor="end"
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                width={50}
+                tickFormatter={(value) => `$${value}k`}
+                padding={{ top: 10 }}
+                allowDecimals={false}
+                domain={['auto', 'auto']}
+              />
+              <Tooltip 
+                content={<CustomTooltip />} 
+                cursor={{ 
+                  fill: "rgba(229, 231, 235, 0.1)", 
+                  stroke: "#e5e7eb",
+                  strokeWidth: 1,
+                  opacity: 0.9
+                }} 
+              />
+              <Bar 
+                dataKey="value" 
+                radius={[4, 4, 0, 0]}
+                name="Value"
+                fill="#dc2626"
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
