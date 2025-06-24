@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -154,13 +153,16 @@ export function ChartCard({
 
   const renderChart = () => {
     if (chartType === "donut") {
+      // Ensure we're working with an array for donut charts
+      const donutData = Array.isArray(chartData) ? chartData as DonutDataPoint[] : [];
+      
       return (
         <div className="flex flex-col items-center h-full">
           <div className="w-full h-[160px] mb-2">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
-                  data={chartData as DonutDataPoint[]}
+                  data={donutData}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -175,7 +177,7 @@ export function ChartCard({
                   animationBegin={300}
                   animationEasing="ease-out"
                 >
-                  {chartData.map((entry, index) => (
+                  {donutData.map((entry, index) => (
                     <Cell 
                       key={`cell-${index}`} 
                       fill={index === 0 ? colorValue : "#f3f4f6"} 
@@ -188,7 +190,7 @@ export function ChartCard({
             </ResponsiveContainer>
           </div>
           <div className="flex flex-wrap justify-center gap-3 mt-1 px-2 text-sm">
-            {(chartData as DonutDataPoint[]).map((entry, index) => (
+            {donutData.map((entry, index) => (
               <div key={index} className="flex items-center gap-2">
                 <div 
                   className="w-3 h-3 rounded-full"
