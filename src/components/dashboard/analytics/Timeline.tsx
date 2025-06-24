@@ -11,11 +11,11 @@ import {
   TooltipProps
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { TimelineDataPoint } from "@/services/analyticsService";
+import { TimelineEvent } from "@/services/analyticsService";
 import { DateRange } from "react-day-picker";
 
 interface TimelineProps {
-  data: TimelineDataPoint[];
+  data: TimelineEvent[];
   isLoading?: boolean;
   periodLabel?: string;
   dateRange?: DateRange;
