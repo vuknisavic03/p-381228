@@ -3,7 +3,6 @@ import { BarChart, TrendingUp, LineChart, PieChart } from "lucide-react";
 import { ChartCard } from "./ChartCard";
 import { CompactTimeline } from "./CompactTimeline";
 import { useAnalyticsData } from "@/services/analyticsService";
-import { Timeline } from "./Timeline";
 import { DateRange } from "react-day-picker";
 
 interface AnalyticsGridProps {
@@ -58,9 +57,9 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <CompactTimeline
-            title="Performance"
+            title={periodLabel || "This month"}
             icon={LineChart}
-            value={isLoading ? "Loading..." : "Timeline"}
+            value={isLoading ? "Loading..." : "Performance"}
             change={isLoading ? { value: 0, positive: true } : { value: 12, positive: true }}
             data={isLoading ? [] : data?.timeline || []}
             isLoading={isLoading}
@@ -68,16 +67,6 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
           />
         </div>
       </div>
-
-      {!isLoading && data?.timeline && (
-        <div style={{ animationDelay: "200ms" }}>
-          <Timeline 
-            data={data.timeline || []} 
-            periodLabel={periodLabel || data.periodLabel}
-            dateRange={dateRange}
-          />
-        </div>
-      )}
     </div>
   );
 }
