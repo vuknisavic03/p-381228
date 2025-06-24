@@ -9,7 +9,8 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  TooltipProps
+  TooltipProps,
+  Legend
 } from 'recharts';
 import { RevenueDataPoint } from '../../../services/portfolioService';
 
@@ -39,6 +40,23 @@ export function RevenueChart({ data, periodLabel }: RevenueChartProps) {
     return null;
   };
 
+  const CustomLegend = (props: any) => {
+    const { payload } = props;
+    return (
+      <div className="flex justify-center gap-6 mt-4">
+        {payload?.map((entry: any, index: number) => (
+          <div key={index} className="flex items-center gap-2">
+            <div 
+              className="w-3 h-3 rounded-full" 
+              style={{ backgroundColor: entry.color }}
+            />
+            <span className="text-sm font-medium text-gray-700">{entry.value}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Card className="border border-gray-200">
       <CardHeader>
@@ -49,15 +67,18 @@ export function RevenueChart({ data, periodLabel }: RevenueChartProps) {
       <CardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data || []}>
+            <AreaChart 
+              data={data || []}
+              margin={{ top: 20, right: 30, left: 20, bottom: 40 }}
+            >
               <defs>
                 <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.02} />
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.02} />
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
@@ -73,15 +94,16 @@ export function RevenueChart({ data, periodLabel }: RevenueChartProps) {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `$${value / 1000}k`}
+                tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
               />
               <Tooltip content={<CustomTooltip />} />
+              <Legend content={<CustomLegend />} />
               <Area
                 type="monotone"
                 dataKey="revenue"
                 stroke="#3b82f6"
                 fill="url(#revenueGradient)"
-                strokeWidth={2}
+                strokeWidth={3}
                 name="Revenue"
               />
               <Area
@@ -89,7 +111,7 @@ export function RevenueChart({ data, periodLabel }: RevenueChartProps) {
                 dataKey="profit"
                 stroke="#10b981"
                 fill="url(#profitGradient)"
-                strokeWidth={2}
+                strokeWidth={3}
                 name="Profit"
               />
             </AreaChart>

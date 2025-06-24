@@ -42,30 +42,31 @@ export function ExpenseBreakdown({ data }: ExpenseBreakdownProps) {
       <CardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data || []} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <BarChart data={data || []} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={true} vertical={false} />
               <XAxis 
-                type="number"
-                stroke="#6b7280"
-                fontSize={12}
-                tickLine={false}
-                axisLine={{ stroke: '#e5e7eb' }}
-                tickFormatter={(value) => `$${value / 1000}k`}
-              />
-              <YAxis 
-                type="category"
                 dataKey="category"
                 stroke="#6b7280"
                 fontSize={12}
                 tickLine={false}
+                axisLine={{ stroke: '#e5e7eb' }}
+                angle={-45}
+                textAnchor="end"
+                height={80}
+              />
+              <YAxis 
+                stroke="#6b7280"
+                fontSize={12}
+                tickLine={false}
                 axisLine={false}
-                width={100}
+                tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
               />
               <Tooltip content={<CustomTooltip />} />
               <Bar 
                 dataKey="amount" 
                 fill="#f59e0b"
-                radius={[0, 4, 4, 0]}
+                radius={[4, 4, 0, 0]}
+                name="Amount"
               />
             </BarChart>
           </ResponsiveContainer>
