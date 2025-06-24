@@ -22,10 +22,10 @@ export function OccupancyChart({ data }: OccupancyChartProps) {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-white p-4 border border-gray-200 shadow-lg rounded-xl">
-          <p className="font-semibold text-gray-900 mb-2">{data.name}</p>
+        <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-lg">
+          <p className="font-medium text-gray-900 mb-1">{data.name}</p>
           <p className="text-sm text-gray-600">
-            <span className="font-bold">{data.value}</span> units ({data.percentage}%)
+            <span className="font-semibold">{data.value}</span> units ({data.percentage}%)
           </p>
         </div>
       );
@@ -34,22 +34,23 @@ export function OccupancyChart({ data }: OccupancyChartProps) {
   };
 
   return (
-    <Card className="border-0 shadow-sm bg-white rounded-2xl">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-gray-900">
+    <Card className="border-0 shadow-sm bg-white rounded-xl">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg font-semibold text-gray-900">
           Unit Occupancy Status
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-6 pt-0">
-        <div className="flex items-center h-[320px]">
-          <div className="w-3/5 h-full">
+      <CardContent className="p-4 pt-0">
+        <div className="h-[280px] flex items-center">
+          <div className="w-1/2 h-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={data || []}
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  innerRadius={40}
+                  outerRadius={80}
                   dataKey="value"
                   stroke="none"
                 >
@@ -61,19 +62,19 @@ export function OccupancyChart({ data }: OccupancyChartProps) {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="w-2/5 pl-6">
-            <div className="space-y-4">
+          <div className="w-1/2 pl-4">
+            <div className="space-y-3">
               {(data || []).map((entry, index) => (
                 <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <div 
-                      className="w-4 h-4 rounded-full" 
+                      className="w-3 h-3 rounded-full flex-shrink-0" 
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
                     <span className="text-sm font-medium text-gray-700">{entry.name}</span>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold text-gray-900">{entry.value}</div>
+                    <div className="text-base font-semibold text-gray-900">{entry.value}</div>
                     <div className="text-xs text-gray-500">{entry.percentage}%</div>
                   </div>
                 </div>
