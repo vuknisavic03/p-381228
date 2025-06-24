@@ -18,15 +18,15 @@ export function PortfolioOverview({ dateRange, periodLabel }: PortfolioOverviewP
 
   if (isLoading) {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="space-y-8 animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-32 bg-gray-100 rounded-lg"></div>
+            <div key={i} className="h-32 bg-gray-100 rounded-2xl"></div>
           ))}
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-80 bg-gray-100 rounded-lg"></div>
+            <div key={i} className="h-[400px] bg-gray-100 rounded-2xl"></div>
           ))}
         </div>
       </div>
@@ -34,10 +34,10 @@ export function PortfolioOverview({ dateRange, periodLabel }: PortfolioOverviewP
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <MetricsCards data={data?.metrics} />
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <RevenueChart 
           data={data?.revenueData} 
           periodLabel={periodLabel} 
