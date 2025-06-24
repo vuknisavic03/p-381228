@@ -1,5 +1,5 @@
 
-import { BarChart, TrendingUp, LineChart, CircleDollarSign } from "lucide-react";
+import { BarChart, TrendingUp, LineChart, PieChart } from "lucide-react";
 import { ChartCard } from "./ChartCard";
 import { useAnalyticsData } from "@/services/analyticsService";
 import { Timeline } from "./Timeline";
@@ -45,7 +45,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         <div className="col-span-1">
           <ChartCard
             title="Income"
-            icon={CircleDollarSign}
+            icon={PieChart}
             color="bg-gray-100"
             value={isLoading ? "Loading..." : `${data?.totals.income}%`}
             change={isLoading ? { value: 0, positive: true } : data?.changes?.income}
@@ -57,15 +57,15 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Peak Profit"
+            title="Top Categories"
             icon={LineChart}
             color="bg-gray-100"
-            value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.peakProfit}
-            chartData={isLoading ? [] : data?.peakProfit || []}
-            chartType="area"
+            value={isLoading ? "Loading..." : "6 Categories"}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.categories}
+            chartData={isLoading ? [] : data?.categories || []}
+            chartType="categories"
             isLoading={isLoading}
-            legendLabel="Peak Profit"
+            legendLabel="Categories"
           />
         </div>
       </div>

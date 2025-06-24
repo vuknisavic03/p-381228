@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
 import { 
@@ -28,6 +29,12 @@ export interface ChartDataPoint {
 export interface DonutDataPoint {
   name: string;
   value: number;
+}
+
+export interface CategoryDataPoint {
+  name: string;
+  value: number;
+  type: 'revenue' | 'expense';
 }
 
 export interface TimelineDataPoint {
@@ -135,11 +142,15 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
     value: getRandomValue(10, 55)
   }));
   
-  // Generate peak profit data - ensure month is a string
-  const peakProfit = timePoints.map((point: Date) => ({
-    month: formatter(point),
-    value: getRandomValue(15, 100)
-  }));
+  // Generate categories data - top 3 revenue and top 3 expense categories
+  const categories = [
+    { name: "Rent", value: getRandomValue(40, 60), type: 'revenue' as const },
+    { name: "Utilities", value: getRandomValue(30, 45), type: 'revenue' as const },
+    { name: "Services", value: getRandomValue(20, 35), type: 'revenue' as const },
+    { name: "Maintenance", value: getRandomValue(15, 25), type: 'expense' as const },
+    { name: "Insurance", value: getRandomValue(10, 20), type: 'expense' as const },
+    { name: "Taxes", value: getRandomValue(8, 18), type: 'expense' as const }
+  ];
   
   // Generate timeline data - ensure month is a string ONLY
   const timeline = timePoints.map((point: Date) => ({
@@ -154,7 +165,6 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   
   const revenueTotal = calculateTotal(revenue) * 1000;
   const profitTotal = calculateTotal(profit) * 1000;
-  const peakProfitTotal = Math.max(...peakProfit.map(item => item.value)) * 1000;
   
   // Generate income percentage
   const incomeValue = getRandomValue(55, 75);
@@ -184,20 +194,20 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
       { name: "Income", value: incomeValue },
       { name: "Expenses", value: 100 - incomeValue },
     ],
-    peakProfit,
+    categories,
     timeline,
     periodLabel,
     totals: {
       revenue: revenueTotal,
       profit: profitTotal,
       income: incomeValue,
-      peakProfit: peakProfitTotal
+      categories: 6
     },
     changes: {
       revenue: { value: getRandomValue(5, 15), positive: Math.random() > 0.3 },
       profit: { value: getRandomValue(3, 10), positive: Math.random() > 0.3 },
       income: { value: getRandomValue(1, 5), positive: Math.random() > 0.3 },
-      peakProfit: { value: getRandomValue(1, 8), positive: Math.random() > 0.3 }
+      categories: { value: getRandomValue(2, 8), positive: Math.random() > 0.5 }
     }
   };
 };
