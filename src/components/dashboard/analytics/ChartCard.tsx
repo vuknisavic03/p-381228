@@ -104,16 +104,9 @@ export function ChartCard({
     return null;
   };
 
-  // Determine the minimum height based on chart type and title
-  const getMinHeight = () => {
-    if (title === "Profit") return "min-h-[600px]"; // Much taller for Profit chart
-    if (chartType === "donut") return "min-h-[280px]";
-    return "min-h-[280px]";
-  };
-
   if (isLoading) {
     return (
-      <Card className={`p-5 border border-gray-200 h-full ${getMinHeight()} bg-white`}>
+      <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white">
         <CardHeader className="p-0 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
@@ -215,11 +208,8 @@ export function ChartCard({
       );
     }
 
-    // Determine chart height based on title
-    const chartHeight = title === "Profit" ? "h-[520px]" : "h-[220px]";
-
     return (
-      <div className={chartHeight}>
+      <div className="h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}
@@ -301,7 +291,7 @@ export function ChartCard({
   };
 
   return (
-    <Card className={`p-5 border border-gray-200 h-full ${getMinHeight()} bg-white flex flex-col`}>
+    <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
       <CardHeader className="p-0 pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
