@@ -44,28 +44,28 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Income"
+            title="Analytics"
             icon={CircleDollarSign}
             color="bg-gray-100"
-            value={isLoading ? "Loading..." : `${data?.totals.income}%`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.income}
-            chartData={isLoading ? [] : data?.income || []}
+            value={isLoading ? "Loading..." : `${data?.totals.analytics}%`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.analytics}
+            chartData={isLoading ? [] : data?.analytics || []}
             chartType="donut"
             isLoading={isLoading}
-            legendLabel="Income"
+            legendLabel="Analytics"
           />
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Peak Profit"
+            title="Expenses"
             icon={LineChart}
             color="bg-gray-100"
-            value={isLoading ? "Loading..." : `$${data?.totals.peakProfit.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.peakProfit}
-            chartData={isLoading ? [] : data?.peakProfit || []}
+            value={isLoading ? "Loading..." : `$${data?.totals.expenses.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.expenses}
+            chartData={isLoading ? [] : data?.expenses || []}
             chartType="area"
             isLoading={isLoading}
-            legendLabel="Peak Profit"
+            legendLabel="Expenses"
           />
         </div>
       </div>

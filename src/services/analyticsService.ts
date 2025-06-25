@@ -34,6 +34,7 @@ export interface TimelineDataPoint {
   month: string;
   revenue: number;
   profit: number;
+  expenses: number;
 }
 
 // Generate data points for a specific date range
@@ -135,17 +136,18 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
     value: getRandomValue(10, 55)
   }));
   
-  // Generate peak profit data - ensure month is a string
-  const peakProfit = timePoints.map((point: Date) => ({
+  // Generate expenses data - ensure month is a string
+  const expenses = timePoints.map((point: Date) => ({
     month: formatter(point),
-    value: getRandomValue(15, 100)
+    value: getRandomValue(15, 80)
   }));
   
-  // Generate timeline data - ensure month is a string ONLY
+  // Generate timeline data with expenses - ensure month is a string ONLY
   const timeline = timePoints.map((point: Date) => ({
     month: formatter(point), // Only the formatted string, no Date object
     revenue: getRandomValue(20000, 110000),
-    profit: getRandomValue(10000, 55000)
+    profit: getRandomValue(10000, 55000),
+    expenses: getRandomValue(8000, 50000)
   }));
   
   // Calculate totals based on the generated data
@@ -154,10 +156,10 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   
   const revenueTotal = calculateTotal(revenue) * 1000;
   const profitTotal = calculateTotal(profit) * 1000;
-  const peakProfitTotal = Math.max(...peakProfit.map(item => item.value)) * 1000;
+  const expensesTotal = calculateTotal(expenses) * 1000;
   
-  // Generate income percentage
-  const incomeValue = getRandomValue(55, 75);
+  // Generate analytics percentage (formerly income)
+  const analyticsValue = getRandomValue(55, 75);
   
   // Generate time period label for display
   const periodLabel = (() => {
@@ -180,24 +182,24 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   return {
     revenue,
     profit,
-    income: [
-      { name: "Income", value: incomeValue },
-      { name: "Expenses", value: 100 - incomeValue },
+    analytics: [
+      { name: "Analytics", value: analyticsValue },
+      { name: "Other", value: 100 - analyticsValue },
     ],
-    peakProfit,
+    expenses,
     timeline,
     periodLabel,
     totals: {
       revenue: revenueTotal,
       profit: profitTotal,
-      income: incomeValue,
-      peakProfit: peakProfitTotal
+      analytics: analyticsValue,
+      expenses: expensesTotal
     },
     changes: {
       revenue: { value: getRandomValue(5, 15), positive: Math.random() > 0.3 },
       profit: { value: getRandomValue(3, 10), positive: Math.random() > 0.3 },
-      income: { value: getRandomValue(1, 5), positive: Math.random() > 0.3 },
-      peakProfit: { value: getRandomValue(1, 8), positive: Math.random() > 0.3 }
+      analytics: { value: getRandomValue(1, 5), positive: Math.random() > 0.3 },
+      expenses: { value: getRandomValue(1, 8), positive: Math.random() > 0.3 }
     }
   };
 };

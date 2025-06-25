@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   AreaChart,
@@ -119,6 +120,10 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                   <stop offset="5%" stopColor="#16a34a" stopOpacity={0.1} />
                   <stop offset="95%" stopColor="#16a34a" stopOpacity={0.01} />
                 </linearGradient>
+                <linearGradient id="colorExpenses" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#dc2626" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#dc2626" stopOpacity={0.01} />
+                </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
               <XAxis 
@@ -172,6 +177,19 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 name="Profit"
                 animationDuration={1200}
                 animationBegin={600}
+                animationEasing="ease-out"
+              />
+              <Area
+                type="monotone"
+                dataKey="expenses"
+                stroke="#dc2626"
+                fillOpacity={1}
+                fill="url(#colorExpenses)"
+                strokeWidth={2}
+                activeDot={{ r: 4, fill: "#dc2626", strokeWidth: 0 }}
+                name="Expenses"
+                animationDuration={1200}
+                animationBegin={900}
                 animationEasing="ease-out"
               />
             </AreaChart>

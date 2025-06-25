@@ -50,10 +50,10 @@ export function ChartCard({
         return "#2563eb"; // Blue
       case "Profit":
         return "#16a34a"; // Green
-      case "Income":
+      case "Analytics":
         return "#9333ea"; // Purple
-      case "Peak Profit":
-        return "#ea580c"; // Orange
+      case "Expenses":
+        return "#dc2626"; // Red
       default:
         return "#6b7280"; // Gray
     }
@@ -84,7 +84,7 @@ export function ChartCard({
           <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
             <span className="text-sm font-medium">{title}: </span>
             <span style={{ color: colorValue }}>
-              {title === "Income" ? `${payload[0].value}%` : `$${payload[0].value.toLocaleString()}`}
+              {title === "Analytics" ? `${payload[0].value}%` : `$${payload[0].value.toLocaleString()}`}
             </span>
           </p>
         </div>
