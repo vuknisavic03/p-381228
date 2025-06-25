@@ -15,7 +15,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
   
   return (
     <div className="flex flex-col w-full space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="col-span-1">
           <ChartCard
             title="Revenue"
@@ -42,20 +42,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             legendLabel="Expenses"
           />
         </div>
-        <div className="col-span-1">
-          <ChartCard
-            title="Analytics"
-            icon={CircleDollarSign}
-            color="bg-gray-100"
-            value={isLoading ? "Loading..." : `${data?.totals.analytics}%`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.analytics}
-            chartData={isLoading ? [] : data?.analytics || []}
-            chartType="donut"
-            isLoading={isLoading}
-            legendLabel="Analytics"
-          />
-        </div>
-        <div className="col-span-1">
+        <div className="col-span-1 sm:col-span-2 lg:col-span-1 lg:row-span-2">
           <ChartCard
             title="Profit"
             icon={TrendingUp}
@@ -66,6 +53,19 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             chartType="spline"
             isLoading={isLoading}
             legendLabel="Profit"
+          />
+        </div>
+        <div className="col-span-1 sm:col-span-2 lg:col-span-2">
+          <ChartCard
+            title="Analytics"
+            icon={CircleDollarSign}
+            color="bg-gray-100"
+            value={isLoading ? "Loading..." : `${data?.totals.analytics}%`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.analytics}
+            chartData={isLoading ? [] : data?.analytics || []}
+            chartType="donut"
+            isLoading={isLoading}
+            legendLabel="Analytics"
           />
         </div>
       </div>
