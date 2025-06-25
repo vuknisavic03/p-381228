@@ -158,8 +158,24 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   const profitTotal = calculateTotal(profit) * 1000;
   const expensesTotal = calculateTotal(expenses) * 1000;
   
-  // Generate analytics percentage (formerly income)
-  const analyticsValue = getRandomValue(55, 75);
+  // Generate analytics data with top 2 revenue and top 2 expenses categories
+  const topRevenueCategories = [
+    { name: "Property Sales", value: getRandomValue(35, 45) },
+    { name: "Rental Income", value: getRandomValue(25, 35) }
+  ];
+  
+  const topExpensesCategories = [
+    { name: "Maintenance", value: getRandomValue(15, 25) },
+    { name: "Marketing", value: getRandomValue(10, 20) }
+  ];
+  
+  const analytics = [
+    ...topRevenueCategories,
+    ...topExpensesCategories
+  ];
+  
+  // Calculate analytics percentage (sum of all categories should be around 100)
+  const analyticsValue = analytics.reduce((sum, item) => sum + item.value, 0);
   
   // Generate time period label for display
   const periodLabel = (() => {
@@ -182,10 +198,7 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   return {
     revenue,
     profit,
-    analytics: [
-      { name: "Analytics", value: analyticsValue },
-      { name: "Other", value: 100 - analyticsValue },
-    ],
+    analytics,
     expenses,
     timeline,
     periodLabel,

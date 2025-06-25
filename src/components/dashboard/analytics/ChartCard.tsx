@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,6 +60,17 @@ export function ChartCard({
 
   const colorValue = getNotionColor();
 
+  // Color mapping for analytics categories
+  const getCategoryColor = (name: string, index: number) => {
+    const colors = {
+      "Property Sales": "#2563eb", // Blue
+      "Rental Income": "#3b82f6", // Light Blue
+      "Maintenance": "#dc2626", // Red
+      "Marketing": "#ef4444" // Light Red
+    };
+    return colors[name] || ["#9333ea", "#a855f7", "#c084fc", "#d8b4fe"][index];
+  };
+
   // Custom tooltip component for better visualization
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
@@ -70,7 +80,7 @@ export function ChartCard({
             <p className="font-medium text-gray-900 mb-1 text-sm">{payload[0].name}</p>
             <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
               <span className="text-sm font-medium">Value: </span>
-              <span style={{ color: colorValue }}>{`${payload[0].value}%`}</span>
+              <span style={{ color: getCategoryColor(payload[0].name, 0) }}>{`${payload[0].value}%`}</span>
             </p>
           </div>
         );
@@ -122,7 +132,7 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center h-full">
-          <div className="w-full h-[200px] mb-2">
+          <div className="w-full h-[160px] mb-3">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
@@ -144,7 +154,7 @@ export function ChartCard({
                   {chartData.map((entry, index) => (
                     <Cell 
                       key={`cell-${index}`} 
-                      fill={index === 0 ? colorValue : "#f3f4f6"} 
+                      fill={getCategoryColor(entry.name, index)} 
                       stroke="none"
                     />
                   ))}
@@ -153,14 +163,35 @@ export function ChartCard({
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap justify-center gap-3 mt-1 px-2 text-sm">
-            {(chartData as DonutDataPoint[]).map((entry, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: index === 0 ? colorValue : "#f3f4f6" }} 
-                />
-                <span className="text-gray-700">{entry.name}: <span className="font-medium">{entry.value}%</span></span>
+          <div className="flex flex-col gap-2 mt-1 px-2 text-xs w-full">
+            <div className="flex justify-between items-center text-gray-600 font-medium border-b border-gray-200 pb-1">
+              <span>Top Revenue Categories</span>
+            </div>
+            {(chartData as DonutDataPoint[]).slice(0, 2).map((entry, index) => (
+              <div key={index} className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: getCategoryColor(entry.name, index) }} 
+                  />
+                  <span className="text-gray-700">{entry.name}</span>
+                </div>
+                <span className="font-medium text-gray-900">{entry.value}%</span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center text-gray-600 font-medium border-b border-gray-200 pb-1 mt-2">
+              <span>Top Expense Categories</span>
+            </div>
+            {(chartData as DonutDataPoint[]).slice(2, 4).map((entry, index) => (
+              <div key={index + 2} className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: getCategoryColor(entry.name, index + 2) }} 
+                  />
+                  <span className="text-gray-700">{entry.name}</span>
+                </div>
+                <span className="font-medium text-gray-900">{entry.value}%</span>
               </div>
             ))}
           </div>
