@@ -15,8 +15,8 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
   
   return (
     <div className="flex flex-col w-full space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-        <div className="col-span-1">
+      <div className="space-y-6">
+        <div>
           <ChartCard
             title="Revenue"
             icon={BarChart}
@@ -29,7 +29,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             legendLabel="Revenue"
           />
         </div>
-        <div className="col-span-1">
+        <div>
           <ChartCard
             title="Expenses"
             icon={LineChart}
@@ -42,7 +42,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             legendLabel="Expenses"
           />
         </div>
-        <div className="col-span-1">
+        <div>
           <ChartCard
             title="Analytics"
             icon={CircleDollarSign}
@@ -55,7 +55,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             legendLabel="Analytics"
           />
         </div>
-        <div className="col-span-1">
+        <div>
           <ChartCard
             title="Profit"
             icon={TrendingUp}
@@ -68,17 +68,18 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             legendLabel="Profit"
           />
         </div>
-      </div>
-
-      {!isLoading && data?.timeline && (
-        <div style={{ animationDelay: "200ms" }}>
-          <Timeline 
-            data={data.timeline || []} 
-            periodLabel={periodLabel || data.periodLabel}
-            dateRange={dateRange}
-          />
+        <div>
+          {!isLoading && data?.timeline && (
+            <div style={{ animationDelay: "200ms" }}>
+              <Timeline 
+                data={data.timeline || []} 
+                periodLabel={periodLabel || data.periodLabel}
+                dateRange={dateRange}
+              />
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
