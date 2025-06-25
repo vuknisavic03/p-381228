@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +29,7 @@ interface ChartCardProps {
   chartType: "area" | "donut" | "spline";
   isLoading?: boolean;
   legendLabel?: string;
+  isLargeChart?: boolean;
 }
 
 export function ChartCard({
@@ -41,7 +41,8 @@ export function ChartCard({
   chartData,
   chartType,
   isLoading = false,
-  legendLabel
+  legendLabel,
+  isLargeChart = false
 }: ChartCardProps) {
   // Notion-inspired color mapping
   const getNotionColor = () => {
@@ -106,7 +107,7 @@ export function ChartCard({
 
   if (isLoading) {
     return (
-      <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white">
+      <Card className={`p-5 border border-gray-200 h-full ${isLargeChart ? 'min-h-[400px]' : 'min-h-[280px]'} bg-white`}>
         <CardHeader className="p-0 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
@@ -123,7 +124,7 @@ export function ChartCard({
         </div>
         
         <div className="mt-4 flex-grow">
-          <div className="h-[200px] bg-gray-50 animate-pulse rounded-lg"></div>
+          <div className={`${isLargeChart ? 'h-[320px]' : 'h-[200px]'} bg-gray-50 animate-pulse rounded-lg`}></div>
         </div>
       </Card>
     );
@@ -209,7 +210,7 @@ export function ChartCard({
     }
 
     return (
-      <div className="h-[220px]">
+      <div className={isLargeChart ? "h-[340px]" : "h-[220px]"}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}
@@ -291,7 +292,7 @@ export function ChartCard({
   };
 
   return (
-    <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
+    <Card className={`p-5 border border-gray-200 h-full ${isLargeChart ? 'min-h-[400px]' : 'min-h-[280px]'} bg-white flex flex-col`}>
       <CardHeader className="p-0 pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>

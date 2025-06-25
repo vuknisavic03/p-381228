@@ -15,7 +15,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
   
   return (
     <div className="flex flex-col w-full space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="col-span-1">
           <ChartCard
             title="Revenue"
@@ -55,7 +55,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             legendLabel="Analytics"
           />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 sm:col-span-2 lg:col-span-3">
           <ChartCard
             title="Profit"
             icon={TrendingUp}
@@ -66,6 +66,7 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
             chartType="spline"
             isLoading={isLoading}
             legendLabel="Profit"
+            isLargeChart={true}
           />
         </div>
       </div>
