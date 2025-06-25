@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   AreaChart,
@@ -100,15 +99,15 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="h-[180px]">
+        <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={cleanData}
               margin={{
                 top: 20,
-                right: 15,
-                bottom: 5,
-                left: 0,
+                right: 5,
+                bottom: 10,
+                left: 20,
               }}
             >
               <defs>
@@ -128,7 +127,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 tickLine={false} 
                 axisLine={{ strokeWidth: 1, stroke: '#e5e7eb' }}
                 dy={8}
-                padding={{ left: 5, right: 5 }}
+                padding={{ left: 10, right: 10 }}
               />
               <YAxis 
                 tick={{ fill: '#6b7280', fontSize: 12 }}

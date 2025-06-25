@@ -13,11 +13,9 @@ import {
   TooltipProps,
   XAxis,
   YAxis,
-  CartesianGrid,
-  BarChart,
-  Bar
+  CartesianGrid
 } from "recharts";
-import { ChartDataPoint, DonutDataPoint, CategoryDataPoint } from "@/services/analyticsService";
+import { ChartDataPoint, DonutDataPoint } from "@/services/analyticsService";
 
 interface ChartCardProps {
   title: string;
@@ -28,8 +26,8 @@ interface ChartCardProps {
     value: number;
     positive: boolean;
   };
-  chartData: ChartDataPoint[] | DonutDataPoint[] | CategoryDataPoint[];
-  chartType: "area" | "donut" | "spline" | "categories";
+  chartData: ChartDataPoint[] | DonutDataPoint[];
+  chartType: "area" | "donut" | "spline";
   isLoading?: boolean;
   legendLabel?: string;
 }
@@ -54,7 +52,7 @@ export function ChartCard({
         return "#16a34a"; // Green
       case "Income":
         return "#9333ea"; // Purple
-      case "Top Categories":
+      case "Peak Profit":
         return "#ea580c"; // Orange
       default:
         return "#6b7280"; // Gray
@@ -73,24 +71,6 @@ export function ChartCard({
             <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
               <span className="text-sm font-medium">Value: </span>
               <span style={{ color: colorValue }}>{`${payload[0].value}%`}</span>
-            </p>
-          </div>
-        );
-      }
-
-      if (chartType === "categories") {
-        return (
-          <div className="bg-white p-3 border border-gray-200 shadow-lg rounded-lg">
-            <p className="font-medium text-gray-900 mb-1 text-sm">{payload[0].payload.name}</p>
-            <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
-              <span 
-                className="w-2 h-2 rounded-full mr-1" 
-                style={{ backgroundColor: payload[0].payload.type === 'revenue' ? '#16a34a' : '#dc2626' }}
-              />
-              <span className="text-sm font-medium">
-                {payload[0].payload.type === 'revenue' ? 'Revenue' : 'Expense'}: 
-              </span>
-              <span>${payload[0].value}k</span>
             </p>
           </div>
         );
@@ -142,7 +122,7 @@ export function ChartCard({
     if (chartType === "donut") {
       return (
         <div className="flex flex-col items-center h-full">
-          <div className="w-full h-[160px] mb-2">
+          <div className="w-full h-[200px] mb-2">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
@@ -188,80 +168,16 @@ export function ChartCard({
       );
     }
 
-    if (chartType === "categories") {
-      return (
-        <div className="h-[180px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData as CategoryDataPoint[]}
-              margin={{
-                top: 15,
-                right: 15,
-                bottom: 5,
-                left: 0,
-              }}
-            >
-              <CartesianGrid 
-                strokeDasharray="3 3" 
-                vertical={false} 
-                stroke="#e5e7eb" 
-                opacity={0.5} 
-              />
-              <XAxis 
-                dataKey="name" 
-                axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
-                tickLine={false}
-                tick={{ fill: '#6b7280', fontSize: 10 }}
-                dy={8}
-                padding={{ left: 5, right: 5 }}
-                interval={0}
-                angle={-45}
-                textAnchor="end"
-              />
-              <YAxis 
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: '#6b7280', fontSize: 12 }}
-                width={50}
-                tickFormatter={(value) => `$${value}k`}
-                padding={{ top: 10 }}
-                allowDecimals={false}
-                domain={['auto', 'auto']}
-              />
-              <Tooltip 
-                content={<CustomTooltip />} 
-                cursor={{ 
-                  fill: "rgba(229, 231, 235, 0.1)", 
-                  stroke: "#e5e7eb",
-                  strokeWidth: 1,
-                  opacity: 0.9
-                }} 
-              />
-              <Bar 
-                dataKey="value" 
-                radius={[4, 4, 0, 0]}
-                name="Value"
-              >
-                {(chartData as CategoryDataPoint[]).map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.type === 'revenue' ? '#16a34a' : '#dc2626'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      );
-    }
-
     return (
-      <div className="h-[180px]">
+      <div className="h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData as ChartDataPoint[]}
             margin={{
               top: 15,
-              right: 15,
-              bottom: 5,
-              left: 0,
+              right: 5,
+              bottom: 10,
+              left: 20,
             }}
           >
             <defs>
@@ -282,7 +198,7 @@ export function ChartCard({
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
               dy={8}
-              padding={{ left: 5, right: 5 }}
+              padding={{ left: 10, right: 10 }}
               tickFormatter={(value) => {
                 if (value instanceof Date) {
                   return value.toLocaleDateString();
@@ -294,7 +210,7 @@ export function ChartCard({
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#6b7280', fontSize: 12 }}
-              width={50}
+              width={45}
               tickFormatter={(value) => `$${value}k`}
               padding={{ top: 10 }}
               allowDecimals={false}

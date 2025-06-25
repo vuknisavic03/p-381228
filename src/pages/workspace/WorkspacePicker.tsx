@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Plus, BarChart, TrendingUp } from 'lucide-react';
@@ -297,11 +298,11 @@ export default function WorkspacePicker() {
                       </div>
                     </div>
                     
-                    <div className="h-32 mt-2 pt-3 border-t border-gray-200">
+                    <div className="h-36 mt-2 pt-3 border-t border-gray-200">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
-                          margin={{ top: 5, right: 15, left: 0, bottom: 10 }}
+                          margin={{ top: 5, right: 5, left: 15, bottom: 10 }}
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
@@ -321,7 +322,7 @@ export default function WorkspacePicker() {
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: '#6b7280', fontSize: 10 }}
-                            width={50}
+                            width={35}
                             tickFormatter={(value) => `$${value}k`}
                             padding={{ top: 5 }}
                             domain={['auto', 'auto']}
@@ -372,7 +373,7 @@ export default function WorkspacePicker() {
                     <ResponsiveContainer width="100%" height="95%">
                       <RechartsBarChart
                         data={monthlyCommissionData}
-                        margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
                         <XAxis 
@@ -387,7 +388,7 @@ export default function WorkspacePicker() {
                           tickLine={false}
                           tick={{ fill: '#6b7280', fontSize: 12 }}
                           tickFormatter={(value) => `$${value}k`}
-                          width={50}
+                          width={45}
                           padding={{ top: 10 }}
                           domain={['auto', 'auto']}
                         />

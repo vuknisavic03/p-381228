@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { TransactionTable } from "./TransactionTable";
 import { TransactionFilterBar } from "./TransactionFilterBar";
@@ -73,7 +74,6 @@ export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [listings, setListings] = useState<any[]>([]);
   const [selectedListings, setSelectedListings] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   // Load listings on component mount
   useEffect(() => {
@@ -88,35 +88,23 @@ export function TransactionActivity() {
     loadListings();
   }, []);
 
-  // Create better organized filter options from listings and their units
+  // Create filter options from listings and their units
   const createListingFilterOptions = () => {
-    const options: Array<{ value: string; label: string; count?: number; isUnit?: boolean; parentListing?: string }> = [];
+    const options: Array<{ value: string; label: string }> = [];
     
     listings.forEach(listing => {
-      // Count transactions for this listing
-      const listingTransactionCount = transactions.filter(t => 
-        t.selectedListingId === listing.id
-      ).length;
-
       // Add the main listing
       options.push({
         value: listing.id,
-        label: listing.name,
-        count: listingTransactionCount,
-        isUnit: false
+        label: listing.name
       });
       
       // Add individual units if they exist
       if (listing.units && listing.units.length > 0) {
         listing.units.forEach((unit: any) => {
-          // For now, we'll show units but they'll filter by the parent listing
-          // since transactions don't have unitId property yet
           options.push({
             value: `${listing.id}-${unit.id}`,
-            label: unit.unitNumber,
-            count: 0, // No unit-specific transactions yet
-            isUnit: true,
-            parentListing: listing.name
+            label: `${listing.name} - ${unit.unitNumber}`
           });
         });
       }
@@ -135,41 +123,25 @@ export function TransactionActivity() {
     });
   };
 
-  const handleCategoryFilterToggle = (value: string) => {
-    setSelectedCategories(prev => {
-      if (prev.includes(value)) {
-        return prev.filter(v => v !== value);
-      } else {
-        return [...prev, value];
-      }
-    });
-  };
-
-  // Get unique categories from transactions
-  const getAvailableCategories = () => {
-    const categories = [...new Set(transactions.map(t => t.category))];
-    return categories.map(category => {
-      const count = transactions.filter(t => t.category === category).length;
-      return {
-        value: category.toLowerCase(),
-        label: category,
-        count
-      };
-    });
-  };
-
   const filterSections = [
     {
       id: 'category',
       title: 'Category',
-      options: getAvailableCategories(),
-      selectedValues: selectedCategories,
-      onToggle: handleCategoryFilterToggle,
+      options: [
+        { value: 'rent', label: 'Rent' },
+        { value: 'maintenance', label: 'Maintenance' },
+        { value: 'deposit', label: 'Deposit' },
+        { value: 'insurance', label: 'Insurance' },
+      ],
+      selectedValues: [],
+      onToggle: (value: string) => {
+        console.log('Category filter toggled:', value);
+      },
       multiSelect: true,
     },
     {
       id: 'listings',
-      title: 'Properties & Units',
+      title: 'Listings & Units',
       options: createListingFilterOptions(),
       selectedValues: selectedListings,
       onToggle: handleListingFilterToggle,
@@ -207,7 +179,6 @@ export function TransactionActivity() {
   const clearFilters = () => {
     setSearch("");
     setSelectedListings([]);
-    setSelectedCategories([]);
     setFilteredTransactions(transactions);
   };
 
@@ -226,13 +197,6 @@ export function TransactionActivity() {
       );
     }
     
-    // Filter by selected categories
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(t => 
-        selectedCategories.includes(t.category.toLowerCase())
-      );
-    }
-    
     // Filter by selected listings/units
     if (selectedListings.length > 0) {
       filtered = filtered.filter(t => {
@@ -240,7 +204,7 @@ export function TransactionActivity() {
         return selectedListings.some(selectedValue => {
           // Handle both listing ID and listing-unit ID formats
           if (selectedValue.includes('-')) {
-            const [listingId] = selectedValue.split('-');
+            const [listingId, unitId] = selectedValue.split('-');
             return t.selectedListingId === listingId;
           } else {
             return t.selectedListingId === selectedValue;
@@ -250,9 +214,9 @@ export function TransactionActivity() {
     }
     
     setFilteredTransactions(filtered);
-  }, [transactions, search, transactionType, selectedListings, selectedCategories]);
+  }, [transactions, search, transactionType, selectedListings]);
 
-  const activeFilterCount = selectedListings.length + selectedCategories.length;
+  const activeFilterCount = selectedListings.length;
 
   return (
     <div className="h-full flex flex-col">

@@ -4,15 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Search, Filter, ChevronDown, Check, X, Building2, Home } from "lucide-react";
+import { Search, Filter, ChevronDown, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface FilterOption {
   value: string;
   label: string;
   count?: number;
-  isUnit?: boolean;
-  parentListing?: string;
 }
 
 export interface FilterSection {
@@ -43,25 +41,6 @@ export function ModernFilter({
   onClearFilters,
   className
 }: ModernFilterProps) {
-  const [filterSearch, setFilterSearch] = useState<{[key: string]: string}>({});
-
-  const handleFilterSearch = (sectionId: string, value: string) => {
-    setFilterSearch(prev => ({
-      ...prev,
-      [sectionId]: value
-    }));
-  };
-
-  const getFilteredOptions = (section: FilterSection) => {
-    const searchTerm = filterSearch[section.id]?.toLowerCase() || '';
-    if (!searchTerm) return section.options;
-    
-    return section.options.filter(option => 
-      option.label.toLowerCase().includes(searchTerm) ||
-      (option.parentListing && option.parentListing.toLowerCase().includes(searchTerm))
-    );
-  };
-
   return (
     <div className={cn("flex items-center gap-3", className)}>
       {/* Search Input */}
@@ -103,36 +82,21 @@ export function ModernFilter({
               </Button>
             </DropdownMenuTrigger>
             
-            <DropdownMenuContent align="start" className="w-80 p-0 shadow-lg border bg-white z-50 rounded-lg">
+            <DropdownMenuContent align="start" className="w-64 p-0 shadow-lg border bg-white z-50 rounded-lg">
               <div className="px-4 py-3 border-b bg-gray-50 rounded-t-lg">
-                <DropdownMenuLabel className="text-sm font-semibold text-gray-900 p-0 mb-2">
+                <DropdownMenuLabel className="text-sm font-semibold text-gray-900 p-0">
                   {section.title}
                 </DropdownMenuLabel>
-                
-                {/* Search within filter */}
-                <div className="relative">
-                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder={`Search ${section.title.toLowerCase()}...`}
-                    value={filterSearch[section.id] || ''}
-                    onChange={(e) => handleFilterSearch(section.id, e.target.value)}
-                    className="pl-7 h-8 text-xs border-gray-200 bg-white"
-                  />
-                </div>
               </div>
               
               <div className="max-h-64 overflow-y-auto p-1">
-                {getFilteredOptions(section).map((option) => {
+                {section.options.map((option) => {
                   const isSelected = section.selectedValues.includes(option.value);
                   return (
                     <div
                       key={option.value}
                       onClick={() => section.onToggle(option.value)}
-                      className={cn(
-                        "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors hover:bg-gray-50 text-gray-700",
-                        option.isUnit && "ml-6 border-l-2 border-gray-200 pl-4"
-                      )}
+                      className="flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors hover:bg-gray-50 text-gray-700"
                     >
                       <div className="flex items-center gap-3 flex-1">
                         <div className="w-4 h-4 flex items-center justify-center">
@@ -140,34 +104,19 @@ export function ModernFilter({
                             <Check className="h-3 w-3 text-blue-600" />
                           )}
                         </div>
-                        
-                        <div className="flex items-center gap-2">
-                          {option.isUnit ? (
-                            <Home className="h-3 w-3 text-gray-400" />
-                          ) : (
-                            <Building2 className="h-3 w-3 text-gray-500" />
-                          )}
-                          
-                          <div className="flex flex-col">
-                            <span className="text-sm">{option.label}</span>
-                            {option.isUnit && option.parentListing && (
-                              <span className="text-xs text-gray-400">{option.parentListing}</span>
-                            )}
-                          </div>
-                        </div>
+                        <span className="text-sm">{option.label}</span>
                       </div>
-                      
-                      {option.count !== undefined && option.count > 0 && (
-                        <span className="text-xs px-2 py-0.5 rounded-full ml-2 bg-gray-100 text-gray-600 font-medium">
+                      {option.count !== undefined && (
+                        <span className="text-xs px-2 py-0.5 rounded-full ml-2 bg-gray-100 text-gray-500">
                           {option.count}
                         </span>
                       )}
                     </div>
                   );
                 })}
-                {getFilteredOptions(section).length === 0 && (
+                {section.options.length === 0 && (
                   <div className="px-3 py-2 text-sm text-gray-500 text-center">
-                    No options found
+                    No options available
                   </div>
                 )}
               </div>
