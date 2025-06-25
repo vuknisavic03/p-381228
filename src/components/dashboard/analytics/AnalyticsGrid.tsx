@@ -31,15 +31,15 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Profit"
-            icon={TrendingUp}
+            title="Expenses"
+            icon={LineChart}
             color="bg-gray-100"
-            value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.profit}
-            chartData={isLoading ? [] : data?.profit || []}
-            chartType="spline"
+            value={isLoading ? "Loading..." : `$${data?.totals.expenses.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.expenses}
+            chartData={isLoading ? [] : data?.expenses || []}
+            chartType="area"
             isLoading={isLoading}
-            legendLabel="Profit"
+            legendLabel="Expenses"
           />
         </div>
         <div className="col-span-1">
@@ -57,15 +57,15 @@ export function AnalyticsGrid({ dateRange, periodLabel }: AnalyticsGridProps) {
         </div>
         <div className="col-span-1">
           <ChartCard
-            title="Expenses"
-            icon={LineChart}
+            title="Profit"
+            icon={TrendingUp}
             color="bg-gray-100"
-            value={isLoading ? "Loading..." : `$${data?.totals.expenses.toLocaleString()}`}
-            change={isLoading ? { value: 0, positive: true } : data?.changes?.expenses}
-            chartData={isLoading ? [] : data?.expenses || []}
-            chartType="area"
+            value={isLoading ? "Loading..." : `$${data?.totals.profit.toLocaleString()}`}
+            change={isLoading ? { value: 0, positive: true } : data?.changes?.profit}
+            chartData={isLoading ? [] : data?.profit || []}
+            chartType="spline"
             isLoading={isLoading}
-            legendLabel="Expenses"
+            legendLabel="Profit"
           />
         </div>
       </div>
