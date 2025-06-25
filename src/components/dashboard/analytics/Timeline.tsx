@@ -106,9 +106,9 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
               data={cleanData}
               margin={{
                 top: 20,
-                right: 5,
-                bottom: 10,
-                left: 20,
+                right: 10,
+                bottom: 20,
+                left: 5,
               }}
             >
               <defs>
@@ -132,7 +132,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 tickLine={false} 
                 axisLine={{ strokeWidth: 1, stroke: '#e5e7eb' }}
                 dy={8}
-                padding={{ left: 10, right: 10 }}
+                padding={{ left: 18, right: 10 }}
               />
               <YAxis 
                 tick={{ fill: '#6b7280', fontSize: 12 }}
@@ -140,6 +140,7 @@ export function Timeline({ data, isLoading = false, periodLabel = "Performance T
                 axisLine={false}
                 tickFormatter={(value) => `$${value/1000}k`}
                 width={50}
+                dx={-8}
                 padding={{ top: 10 }}
                 allowDecimals={false}
                 domain={['auto', 'auto']}

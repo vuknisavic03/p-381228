@@ -302,7 +302,7 @@ export default function WorkspacePicker() {
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                           data={workspace.revenueData}
-                          margin={{ top: 5, right: 5, left: 15, bottom: 10 }}
+                          margin={{ top: 5, right: 5, left: 8, bottom: 8 }}
                         >
                           <defs>
                             <linearGradient id={`colorRevenue${index}`} x1="0" y1="0" x2="0" y2="1">
@@ -315,6 +315,7 @@ export default function WorkspacePicker() {
                             dataKey="month" 
                             axisLine={false}
                             tickLine={false}
+                            dy={8}
                             tick={{ fill: '#6b7280', fontSize: 10 }}
                             padding={{ left: 10, right: 10 }}
                           />
@@ -323,6 +324,7 @@ export default function WorkspacePicker() {
                             tickLine={false}
                             tick={{ fill: '#6b7280', fontSize: 10 }}
                             width={35}
+                            dx={-8}
                             tickFormatter={(value) => `$${value}k`}
                             padding={{ top: 5 }}
                             domain={['auto', 'auto']}
