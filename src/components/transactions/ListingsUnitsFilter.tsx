@@ -116,7 +116,6 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                           checked={isSelected}
                           onChange={() => {}} // Handled by parent click
                           className="pointer-events-none"
-                          size="sm"
                         />
                         
                         <div className="flex items-center gap-2 flex-1">
