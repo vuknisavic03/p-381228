@@ -1,9 +1,10 @@
 
 import React from "react";
-import { Building, MapPin, Users, UserX } from "lucide-react";
+import { Building, MapPin, Users, UserX, ChevronRight, ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
 
 interface Unit {
   id: string;
@@ -30,6 +31,8 @@ interface ListingsUnitsFilterProps {
 }
 
 export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: ListingsUnitsFilterProps) {
+  const [expandedListings, setExpandedListings] = useState<Set<string>>(new Set());
+
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -46,118 +49,154 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
     return selectedValues.some(value => value.startsWith(`${listingId}-`));
   };
 
+  const toggleExpanded = (listingId: string) => {
+    const newExpanded = new Set(expandedListings);
+    if (newExpanded.has(listingId)) {
+      newExpanded.delete(listingId);
+    } else {
+      newExpanded.add(listingId);
+    }
+    setExpandedListings(newExpanded);
+  };
+
+  const isExpanded = (listingId: string) => expandedListings.has(listingId);
+
   return (
-    <div className="space-y-3 max-h-80 overflow-y-auto">
+    <div className="space-y-2 max-h-80 overflow-y-auto">
       {listings.map((listing) => {
         const hasUnits = listing.units && listing.units.length > 0;
         const listingSelected = isListingSelected(listing.id);
         const unitsSelected = hasUnitsSelected(listing.id);
+        const expanded = isExpanded(listing.id);
         
         return (
-          <div key={listing.id} className="space-y-2">
+          <div key={listing.id} className="space-y-1">
             {/* Main Listing */}
-            <Card className={cn(
-              "p-3 cursor-pointer transition-colors hover:bg-gray-50",
-              (listingSelected || unitsSelected) && "bg-blue-50 border-blue-200"
+            <div className={cn(
+              "border rounded-lg transition-all duration-200 hover:shadow-sm",
+              (listingSelected || unitsSelected) 
+                ? "bg-blue-50 border-blue-200 shadow-sm" 
+                : "bg-white border-gray-200 hover:border-gray-300"
             )}>
-              <div 
-                className="flex items-center gap-3"
-                onClick={() => onToggle(listing.id)}
-              >
-                <Checkbox 
-                  checked={listingSelected}
-                  onChange={() => {}} // Handled by parent click
-                  className="pointer-events-none"
-                />
-                
-                <div className="flex items-center gap-2 flex-1">
-                  <Building className="h-4 w-4 text-gray-500" />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 text-sm truncate">
-                      {listing.name}
-                    </div>
-                    {listing.address && (
-                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
-                        <MapPin className="h-3 w-3" />
-                        <span className="truncate">{listing.address}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {hasUnits && (
-                  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
-                    {listing.units.length} units
-                  </span>
-                )}
-              </div>
-            </Card>
-
-            {/* Units */}
-            {hasUnits && (
-              <div className="ml-4 space-y-1">
-                {listing.units.map((unit) => {
-                  const unitValue = `${listing.id}-${unit.id}`;
-                  const isSelected = isUnitSelected(listing.id, unit.id);
-                  
-                  return (
-                    <Card 
-                      key={unit.id}
-                      className={cn(
-                        "p-2.5 cursor-pointer transition-colors hover:bg-gray-50 border-l-2",
-                        isSelected 
-                          ? "bg-blue-50 border-blue-200 border-l-blue-400" 
-                          : "border-gray-200 border-l-gray-300"
-                      )}
-                      onClick={() => onToggle(unitValue)}
+              <div className="p-3">
+                <div className="flex items-center gap-3">
+                  {hasUnits && (
+                    <button
+                      onClick={() => toggleExpanded(listing.id)}
+                      className="p-1 hover:bg-gray-100 rounded transition-colors"
                     >
-                      <div className="flex items-center gap-3">
-                        <Checkbox 
-                          checked={isSelected}
-                          onChange={() => {}} // Handled by parent click
-                          className="pointer-events-none"
-                        />
-                        
-                        <div className="flex items-center gap-2 flex-1">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-gray-900 text-sm">
-                                {unit.unitNumber}
-                              </span>
-                              <span className={cn(
-                                "px-1.5 py-0.5 text-xs font-medium rounded-full",
-                                unit.occupancyStatus === "occupied"
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-gray-100 text-gray-600"
-                              )}>
-                                {capitalizeFirstLetter(unit.occupancyStatus)}
-                              </span>
-                            </div>
+                      {expanded ? (
+                        <ChevronDown className="h-4 w-4 text-gray-500" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-gray-500" />
+                      )}
+                    </button>
+                  )}
+                  
+                  <div 
+                    className="flex items-center gap-3 flex-1 cursor-pointer"
+                    onClick={() => onToggle(listing.id)}
+                  >
+                    <Checkbox 
+                      checked={listingSelected}
+                      onChange={() => {}} // Handled by parent click
+                      className="pointer-events-none"
+                    />
+                    
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <Building className="h-4 w-4 text-gray-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-900 text-sm truncate">
+                          {listing.name}
+                        </div>
+                        {listing.address && (
+                          <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                            <MapPin className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate">{listing.address}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {hasUnits && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full font-medium">
+                        {listing.units.length} unit{listing.units.length !== 1 ? 's' : ''}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Units - Only show when expanded */}
+              {hasUnits && expanded && (
+                <div className="border-t border-gray-100 bg-gray-50/50">
+                  <div className="p-2 space-y-1">
+                    {listing.units.map((unit) => {
+                      const unitValue = `${listing.id}-${unit.id}`;
+                      const isSelected = isUnitSelected(listing.id, unit.id);
+                      
+                      return (
+                        <div 
+                          key={unit.id}
+                          className={cn(
+                            "p-2.5 rounded-md cursor-pointer transition-all duration-150 border",
+                            isSelected 
+                              ? "bg-blue-50 border-blue-200 shadow-sm" 
+                              : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                          )}
+                          onClick={() => onToggle(unitValue)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Checkbox 
+                              checked={isSelected}
+                              onChange={() => {}} // Handled by parent click
+                              className="pointer-events-none"
+                            />
                             
-                            {unit.tenant ? (
-                              <div className="flex items-center gap-1 mt-1">
-                                <Users className="h-3 w-3 text-gray-400" />
-                                <span className="text-xs text-gray-600 truncate">
-                                  {unit.tenant.name}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium text-gray-900 text-sm">
+                                  {unit.unitNumber}
                                 </span>
-                                <span className="text-xs text-gray-400">
-                                  ({capitalizeFirstLetter(unit.tenant.type)})
+                                <span className={cn(
+                                  "px-2 py-0.5 text-xs font-medium rounded-full",
+                                  unit.occupancyStatus === "occupied"
+                                    ? "bg-green-100 text-green-700 border border-green-200"
+                                    : "bg-gray-100 text-gray-600 border border-gray-200"
+                                )}>
+                                  {capitalizeFirstLetter(unit.occupancyStatus)}
                                 </span>
                               </div>
-                            ) : (
-                              <div className="flex items-center gap-1 mt-1">
-                                <UserX className="h-3 w-3 text-gray-400" />
-                                <span className="text-xs text-gray-500">No tenant</span>
+                              
+                              <div className="flex items-center gap-1">
+                                {unit.tenant ? (
+                                  <>
+                                    <Users className="h-3 w-3 text-gray-400" />
+                                    <span className="text-xs text-gray-600 truncate">
+                                      {unit.tenant.name}
+                                    </span>
+                                    <span className="text-xs text-gray-400">
+                                      ({capitalizeFirstLetter(unit.tenant.type)})
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <UserX className="h-3 w-3 text-gray-400" />
+                                    <span className="text-xs text-gray-500">No tenant</span>
+                                  </>
+                                )}
                               </div>
-                            )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         );
       })}
