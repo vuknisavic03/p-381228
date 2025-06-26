@@ -12,7 +12,7 @@ const mockTransactions = [
     id: 1,
     date: new Date("2024-01-15"),
     type: "revenue" as const,
-    category: "Rent",
+    category: "rent",
     amount: 2500,
     paymentMethod: "Bank Transfer",
     from: "Sunset Villa - John Doe",
@@ -23,7 +23,7 @@ const mockTransactions = [
     id: 2, 
     date: new Date("2024-01-20"),
     type: "expense" as const,
-    category: "Maintenance",
+    category: "maintenance",
     amount: 350,
     paymentMethod: "Credit Card",
     from: "Downtown Loft - Plumbing Repair",
@@ -34,7 +34,7 @@ const mockTransactions = [
     id: 3,
     date: new Date("2024-01-25"), 
     type: "revenue" as const,
-    category: "Deposit",
+    category: "deposit",
     amount: 1200,
     paymentMethod: "Check",
     from: "Garden Apartments - Mike Johnson",
@@ -45,7 +45,7 @@ const mockTransactions = [
     id: 4,
     date: new Date("2024-02-01"),
     type: "expense" as const, 
-    category: "Insurance",
+    category: "insurance",
     amount: 800,
     paymentMethod: "Bank Transfer",
     from: "Beachfront Condo - Insurance Premium",
@@ -56,7 +56,7 @@ const mockTransactions = [
     id: 5,
     date: new Date("2024-02-05"),
     type: "revenue" as const,
-    category: "Rent", 
+    category: "rent", 
     amount: 1800,
     paymentMethod: "Cash",
     from: "Mountain Cabin - David Brown",
@@ -74,6 +74,7 @@ export function TransactionActivity() {
   const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
   const [listings, setListings] = useState<any[]>([]);
   const [selectedListings, setSelectedListings] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   // Load listings on component mount
   useEffect(() => {
@@ -123,20 +124,36 @@ export function TransactionActivity() {
     });
   };
 
+  const handleCategoryFilterToggle = (value: string) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(value)) {
+        return prev.filter(v => v !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
+  };
+
+  // Get unique categories from transactions with counts
+  const getCategoryOptions = () => {
+    const categories = Array.from(new Set(transactions.map(t => t.category)));
+    return categories.map(category => {
+      const count = transactions.filter(t => t.category === category && t.type === transactionType).length;
+      return {
+        value: category,
+        label: category.charAt(0).toUpperCase() + category.slice(1),
+        count
+      };
+    });
+  };
+
   const filterSections = [
     {
       id: 'category',
       title: 'Category',
-      options: [
-        { value: 'rent', label: 'Rent' },
-        { value: 'maintenance', label: 'Maintenance' },
-        { value: 'deposit', label: 'Deposit' },
-        { value: 'insurance', label: 'Insurance' },
-      ],
-      selectedValues: [],
-      onToggle: (value: string) => {
-        console.log('Category filter toggled:', value);
-      },
+      options: getCategoryOptions(),
+      selectedValues: selectedCategories,
+      onToggle: handleCategoryFilterToggle,
       multiSelect: true,
     },
     {
@@ -180,6 +197,7 @@ export function TransactionActivity() {
   const clearFilters = () => {
     setSearch("");
     setSelectedListings([]);
+    setSelectedCategories([]);
     setFilteredTransactions(transactions);
   };
 
@@ -196,6 +214,11 @@ export function TransactionActivity() {
         t.category.toLowerCase().includes(search.toLowerCase()) ||
         t.notes?.toLowerCase().includes(search.toLowerCase())
       );
+    }
+    
+    // Filter by selected categories
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(t => selectedCategories.includes(t.category));
     }
     
     // Filter by selected listings/units
@@ -215,9 +238,9 @@ export function TransactionActivity() {
     }
     
     setFilteredTransactions(filtered);
-  }, [transactions, search, transactionType, selectedListings]);
+  }, [transactions, search, transactionType, selectedListings, selectedCategories]);
 
-  const activeFilterCount = selectedListings.length;
+  const activeFilterCount = selectedListings.length + selectedCategories.length;
 
   return (
     <div className="h-full flex flex-col">
