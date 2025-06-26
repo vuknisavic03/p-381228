@@ -141,11 +141,12 @@ export function TransactionActivity() {
     },
     {
       id: 'listings',
-      title: 'Listings & Units',
+      title: 'Properties & Units',
       options: createListingFilterOptions(),
       selectedValues: selectedListings,
       onToggle: handleListingFilterToggle,
       multiSelect: true,
+      listings: listings, // Pass the actual listings data
     }
   ];
 
