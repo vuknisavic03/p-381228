@@ -62,7 +62,7 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
   const isExpanded = (listingId: string) => expandedListings.has(listingId);
 
   return (
-    <div className="space-y-2 max-h-80 overflow-y-auto">
+    <div className="space-y-2 max-h-80 overflow-y-auto w-full">
       {listings.map((listing) => {
         const hasUnits = listing.units && listing.units.length > 0;
         const listingSelected = isListingSelected(listing.id);
@@ -75,36 +75,36 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
             <div className={cn(
               "border rounded-lg transition-all duration-200 hover:shadow-sm",
               (listingSelected || unitsSelected) 
-                ? "bg-blue-50 border-blue-200 shadow-sm" 
-                : "bg-white border-gray-200 hover:border-gray-300"
+                ? "bg-blue-50/70 border-blue-200/60 shadow-sm" 
+                : "bg-white border-gray-200/60 hover:border-gray-300/80"
             )}>
               <div className="p-3">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                   {hasUnits && (
                     <button
                       onClick={() => toggleExpanded(listing.id)}
-                      className="p-1 hover:bg-gray-100 rounded transition-colors"
+                      className="p-0.5 hover:bg-gray-100/70 rounded transition-colors flex-shrink-0"
                     >
                       {expanded ? (
-                        <ChevronDown className="h-4 w-4 text-gray-500" />
+                        <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
                       ) : (
-                        <ChevronRight className="h-4 w-4 text-gray-500" />
+                        <ChevronRight className="h-3.5 w-3.5 text-gray-500" />
                       )}
                     </button>
                   )}
                   
                   <div 
-                    className="flex items-center gap-3 flex-1 cursor-pointer"
+                    className="flex items-center gap-2.5 flex-1 cursor-pointer min-w-0"
                     onClick={() => onToggle(listing.id)}
                   >
                     <Checkbox 
                       checked={listingSelected}
                       onChange={() => {}} // Handled by parent click
-                      className="pointer-events-none"
+                      className="pointer-events-none border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                     />
                     
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <Building className="h-4 w-4 text-gray-600 flex-shrink-0" />
+                      <Building className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-gray-900 text-sm truncate">
                           {listing.name}
@@ -120,8 +120,8 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                   </div>
                   
                   {hasUnits && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full font-medium">
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <span className="text-xs px-2 py-0.5 bg-gray-100/70 text-gray-600 rounded-full font-medium">
                         {listing.units.length} unit{listing.units.length !== 1 ? 's' : ''}
                       </span>
                     </div>
@@ -131,7 +131,7 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
 
               {/* Units - Only show when expanded */}
               {hasUnits && expanded && (
-                <div className="border-t border-gray-100 bg-gray-50/50">
+                <div className="border-t border-gray-100/70 bg-gray-50/30">
                   <div className="p-2 space-y-1">
                     {listing.units.map((unit) => {
                       const unitValue = `${listing.id}-${unit.id}`;
@@ -141,18 +141,18 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                         <div 
                           key={unit.id}
                           className={cn(
-                            "p-2.5 rounded-md cursor-pointer transition-all duration-150 border",
+                            "p-2.5 rounded-md cursor-pointer transition-all duration-150 border ml-4",
                             isSelected 
-                              ? "bg-blue-50 border-blue-200 shadow-sm" 
-                              : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                              ? "bg-blue-50/70 border-blue-200/60 shadow-sm" 
+                              : "bg-white border-gray-200/60 hover:border-gray-300/80 hover:shadow-sm"
                           )}
                           onClick={() => onToggle(unitValue)}
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2.5">
                             <Checkbox 
                               checked={isSelected}
                               onChange={() => {}} // Handled by parent click
-                              className="pointer-events-none"
+                              className="pointer-events-none border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                             />
                             
                             <div className="flex-1 min-w-0">
@@ -163,8 +163,8 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                                 <span className={cn(
                                   "px-2 py-0.5 text-xs font-medium rounded-full",
                                   unit.occupancyStatus === "occupied"
-                                    ? "bg-green-100 text-green-700 border border-green-200"
-                                    : "bg-gray-100 text-gray-600 border border-gray-200"
+                                    ? "bg-green-100/70 text-green-700 border border-green-200/60"
+                                    : "bg-gray-100/70 text-gray-600 border border-gray-200/60"
                                 )}>
                                   {capitalizeFirstLetter(unit.occupancyStatus)}
                                 </span>
