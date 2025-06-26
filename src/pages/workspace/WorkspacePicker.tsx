@@ -326,7 +326,7 @@ export default function WorkspacePicker() {
                             width={35}
                             dx={-8}
                             tickFormatter={(value) => `$${value}k`}
-                            padding={{ top: 5 }}
+                            padding={{ top: 10 }}
                             domain={['auto', 'auto']}
                           />
                           <Tooltip 
@@ -382,6 +382,7 @@ export default function WorkspacePicker() {
                           dataKey="month" 
                           axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
                           tickLine={false}
+                          dy={8}
                           tick={{ fill: '#6b7280', fontSize: 12 }}
                           padding={{ left: 10, right: 10 }}
                         />
@@ -391,7 +392,7 @@ export default function WorkspacePicker() {
                           tick={{ fill: '#6b7280', fontSize: 12 }}
                           tickFormatter={(value) => `$${value}k`}
                           width={45}
-                          padding={{ top: 10 }}
+                          padding={{ top: 16 }}
                           domain={['auto', 'auto']}
                         />
                         <Tooltip 
