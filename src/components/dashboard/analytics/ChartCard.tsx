@@ -61,15 +61,16 @@ export function ChartCard({
 
   const colorValue = getNotionColor();
 
-  // Enhanced color mapping for analytics categories with more distinct colors
+  // Enhanced color mapping for revenue categories with more distinct colors
   const getCategoryColor = (name: string, index: number) => {
     const colors = {
       "Property Sales": "#2563eb", // Blue
       "Rental Income": "#06b6d4", // Cyan
-      "Maintenance": "#dc2626", // Red
-      "Marketing": "#f59e0b" // Amber
+      "Property Management": "#16a34a", // Green
+      "Real Estate Consulting": "#f59e0b", // Amber
+      "Investment Returns": "#9333ea" // Purple
     };
-    return colors[name] || ["#9333ea", "#8b5cf6", "#a78bfa", "#c4b5fd"][index];
+    return colors[name] || ["#dc2626", "#8b5cf6", "#a78bfa", "#c4b5fd", "#e879f9"][index];
   };
 
   // Custom tooltip component for better visualization
@@ -95,7 +96,7 @@ export function ChartCard({
           <p className="font-semibold text-gray-900 flex items-center gap-1 text-sm">
             <span className="text-sm font-medium">{title}: </span>
             <span style={{ color: colorValue }}>
-              {title === "Analytics" ? `${payload[0].value}%` : `$${payload[0].value.toLocaleString()}`}
+              {title === "Analytics" ? `${payload[0].value.toLocaleString()}%` : `$${payload[0].value.toLocaleString()}`}
             </span>
           </p>
         </div>
@@ -172,30 +173,12 @@ export function ChartCard({
               <div className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-1">
                 Top Revenue Categories
               </div>
-              {(chartData as DonutDataPoint[]).slice(0, 2).map((entry, index) => (
+              {(chartData as DonutDataPoint[]).map((entry, index) => (
                 <div key={index} className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <div 
                       className="w-3 h-3 rounded-full flex-shrink-0"
                       style={{ backgroundColor: getCategoryColor(entry.name, index) }} 
-                    />
-                    <span className="text-sm text-gray-700 truncate">{entry.name}</span>
-                  </div>
-                  <span className="text-sm font-semibold text-gray-900 flex-shrink-0">{entry.value}%</span>
-                </div>
-              ))}
-            </div>
-            
-            <div className="space-y-3 mt-4">
-              <div className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-1">
-                Top Expense Categories
-              </div>
-              {(chartData as DonutDataPoint[]).slice(2, 4).map((entry, index) => (
-                <div key={index + 2} className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div 
-                      className="w-3 h-3 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: getCategoryColor(entry.name, index + 2) }} 
                     />
                     <span className="text-sm text-gray-700 truncate">{entry.name}</span>
                   </div>
