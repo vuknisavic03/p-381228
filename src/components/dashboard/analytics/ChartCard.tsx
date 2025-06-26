@@ -278,21 +278,22 @@ export function ChartCard({
     <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
       <CardHeader className="p-0 pb-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
-            <span className="text-2xl font-bold text-gray-900">{value}</span>
-            <span className={`text-sm ${change.positive ? 'text-green-600' : 'text-red-600'}`}>
-              {change.positive ? '+' : '-'}{Math.abs(change.value)}%
-            </span>
-          </div>
+          <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
           <div className="bg-gray-100 text-gray-600 p-2 rounded-lg">
             <Icon size={18} />
           </div>
         </div>
       </CardHeader>
-      
-      
-      
+
+      <div className="mt-2">
+        <div className="flex items-baseline space-x-2">
+          <span className="text-3xl font-bold text-gray-900">{value}</span>
+          <span className={`text-sm ${change.positive ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+            {change.positive ? '+' : '-'}{Math.abs(change.value)}%
+          </span>
+        </div>
+      </div>
+
       <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
         {renderChart()}
       </div>
