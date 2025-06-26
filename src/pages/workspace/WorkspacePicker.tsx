@@ -371,11 +371,11 @@ export default function WorkspacePicker() {
                     </div>
                   </div>
                   
-                  <div className="h-[calc(100%-70px)] pt-3 border-t border-gray-200">
+                  <div className="h-[calc(100%-70px)] border-t border-gray-200">
                     <ResponsiveContainer width="100%" height="95%">
                       <RechartsBarChart
                         data={monthlyCommissionData}
-                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 0 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
                         <XAxis 
