@@ -274,6 +274,18 @@ export function ChartCard({
     );
   };
 
+  // Analytics card gets special treatment - no title section
+  if (title === "Analytics") {
+    return (
+      <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
+        <div className="flex-grow">
+          {renderChart()}
+        </div>
+      </Card>
+    );
+  }
+
+  // All other cards get the full header with title, value, and change
   return (
     <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
       <CardHeader className="p-0 pb-3">
@@ -285,7 +297,16 @@ export function ChartCard({
         </div>
       </CardHeader>
 
-      <div className="mt-5 flex-grow">
+      <div className="mt-2">
+        <div className="flex items-baseline space-x-2">
+          <span className="text-3xl font-bold text-gray-900">{value}</span>
+          <span className={`text-sm ${change.positive ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+            {change.positive ? '+' : '-'}{Math.abs(change.value)}%
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
         {renderChart()}
       </div>
     </Card>
