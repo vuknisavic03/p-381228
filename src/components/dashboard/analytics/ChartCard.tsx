@@ -1,4 +1,3 @@
-
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -170,9 +169,6 @@ export function ChartCard({
           {/* Legend on the right */}
           <div className="w-[40%] flex flex-col justify-center gap-3">
             <div className="space-y-3">
-              <div className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-1">
-                Top Expenses Categories
-              </div>
               {(chartData as DonutDataPoint[]).map((entry, index) => (
                 <div key={index} className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
@@ -274,11 +270,20 @@ export function ChartCard({
     );
   };
 
-  // Analytics card gets special treatment - no title section
+  // Analytics card gets special treatment - title but no value/change section
   if (title === "Analytics") {
     return (
       <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
-        <div className="flex-grow">
+        <CardHeader className="p-0 pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg font-medium text-gray-900">Top Expenses Categories</CardTitle>
+            <div className="bg-gray-100 text-gray-600 p-2 rounded-lg">
+              <Icon size={18} />
+            </div>
+          </div>
+        </CardHeader>
+
+        <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
           {renderChart()}
         </div>
       </Card>
