@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { DateRange } from "react-day-picker";
 import { 
@@ -158,16 +159,16 @@ const fetchAnalyticsData = async (dateRange: DateRange | undefined) => {
   const profitTotal = calculateTotal(profit) * 1000;
   const expensesTotal = calculateTotal(expenses) * 1000;
   
-  // Generate analytics data with top 5 revenue categories only
-  const topRevenueCategories = [
-    { name: "Property Sales", value: getRandomValue(25, 35) },
-    { name: "Rental Income", value: getRandomValue(20, 30) },
-    { name: "Property Management", value: getRandomValue(15, 25) },
-    { name: "Real Estate Consulting", value: getRandomValue(10, 20) },
-    { name: "Investment Returns", value: getRandomValue(5, 15) }
+  // Generate analytics data with top 5 expense categories
+  const topExpenseCategories = [
+    { name: "Property Maintenance", value: getRandomValue(25, 35) },
+    { name: "Marketing & Advertising", value: getRandomValue(20, 30) },
+    { name: "Utilities & Services", value: getRandomValue(15, 25) },
+    { name: "Insurance & Legal", value: getRandomValue(10, 20) },
+    { name: "Office & Administration", value: getRandomValue(5, 15) }
   ];
   
-  const analytics = topRevenueCategories;
+  const analytics = topExpenseCategories;
   
   // Calculate analytics percentage (sum of all categories should be around 100)
   const analyticsValue = analytics.reduce((sum, item) => sum + item.value, 0);

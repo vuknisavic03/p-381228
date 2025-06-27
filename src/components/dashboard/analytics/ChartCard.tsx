@@ -61,16 +61,16 @@ export function ChartCard({
 
   const colorValue = getNotionColor();
 
-  // Enhanced color mapping for revenue categories with more distinct colors
+  // Enhanced color mapping for expense categories with more distinct colors
   const getCategoryColor = (name: string, index: number) => {
     const colors = {
-      "Property Sales": "#2563eb", // Blue
-      "Rental Income": "#06b6d4", // Cyan
-      "Property Management": "#16a34a", // Green
-      "Real Estate Consulting": "#f59e0b", // Amber
-      "Investment Returns": "#9333ea" // Purple
+      "Property Maintenance": "#dc2626", // Red
+      "Marketing & Advertising": "#f59e0b", // Amber
+      "Utilities & Services": "#0ea5e9", // Sky
+      "Insurance & Legal": "#8b5cf6", // Purple
+      "Office & Administration": "#059669" // Emerald
     };
-    return colors[name] || ["#dc2626", "#8b5cf6", "#a78bfa", "#c4b5fd", "#e879f9"][index];
+    return colors[name] || ["#dc2626", "#f59e0b", "#0ea5e9", "#8b5cf6", "#059669"][index];
   };
 
   // Custom tooltip component for better visualization
@@ -133,9 +133,9 @@ export function ChartCard({
   const renderChart = () => {
     if (chartType === "donut") {
       return (
-        <div className="flex items-center h-full gap-6">
-          {/* Chart on the left */}
-          <div className="w-[60%] h-[180px]">
+        <div className="flex items-center justify-center h-full gap-6">
+          {/* Chart centered */}
+          <div className="w-[60%] h-[200px] flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
@@ -171,7 +171,7 @@ export function ChartCard({
           <div className="w-[40%] flex flex-col justify-center gap-3">
             <div className="space-y-3">
               <div className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-1">
-                Top Revenue Categories
+                Top Expenses Categories
               </div>
               {(chartData as DonutDataPoint[]).map((entry, index) => (
                 <div key={index} className="flex items-center justify-between gap-3">
@@ -285,16 +285,7 @@ export function ChartCard({
         </div>
       </CardHeader>
 
-      <div className="mt-2">
-        <div className="flex items-baseline space-x-2">
-          <span className="text-3xl font-bold text-gray-900">{value}</span>
-          <span className={`text-sm ${change.positive ? 'text-green-600' : 'text-red-600'} flex items-center`}>
-            {change.positive ? '+' : '-'}{Math.abs(change.value)}%
-          </span>
-        </div>
-      </div>
-
-      <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
+      <div className="mt-5 flex-grow">
         {renderChart()}
       </div>
     </Card>
