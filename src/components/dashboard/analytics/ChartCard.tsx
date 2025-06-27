@@ -136,7 +136,7 @@ export function ChartCard({
           {/* Chart - increased width and moved more to left */}
           <div className="w-[65%] h-[200px] flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+              <PieChart margin={{ top: 0, right: 24,bottom: 0, left: 0 }}>
                 <Pie
                   data={chartData as DonutDataPoint[]}
                   cx="50%"
@@ -167,7 +167,7 @@ export function ChartCard({
           </div>
           
           {/* Legend on the right - decreased width */}
-          <div className="w-[35%] flex flex-col justify-center gap-3">
+          <div className="w-[35%] flex flex-col justify-center gap-3 mr-10">
             <div className="space-y-3">
               {(chartData as DonutDataPoint[]).map((entry, index) => (
                 <div key={index} className="flex items-center justify-between gap-3">
