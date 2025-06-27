@@ -132,9 +132,9 @@ export function ChartCard({
   const renderChart = () => {
     if (chartType === "donut") {
       return (
-        <div className="flex items-center justify-center h-full gap-6">
-          {/* Chart centered */}
-          <div className="w-[60%] h-[200px] flex items-center justify-center">
+        <div className="flex items-center justify-center h-full gap-4">
+          {/* Chart - increased width and moved more to left */}
+          <div className="w-[65%] h-[200px] flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                 <Pie
@@ -166,8 +166,8 @@ export function ChartCard({
             </ResponsiveContainer>
           </div>
           
-          {/* Legend on the right */}
-          <div className="w-[40%] flex flex-col justify-center gap-3">
+          {/* Legend on the right - decreased width */}
+          <div className="w-[35%] flex flex-col justify-center gap-3">
             <div className="space-y-3">
               {(chartData as DonutDataPoint[]).map((entry, index) => (
                 <div key={index} className="flex items-center justify-between gap-3">
