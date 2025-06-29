@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +42,10 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   const capitalizeCategory = (category: string) => {
-    return category.charAt(0).toUpperCase() + category.slice(1);
+    return category
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   const handleRowClick = (transaction: Transaction) => {
