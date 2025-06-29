@@ -42,6 +42,10 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     return "secondary";
   };
 
+  const capitalizeCategory = (category: string) => {
+    return category.charAt(0).toUpperCase() + category.slice(1);
+  };
+
   const handleRowClick = (transaction: Transaction) => {
     console.log('Row clicked, transaction ID:', transaction.id, 'transaction:', transaction);
     onEdit(transaction);
@@ -104,7 +108,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 
                 <TableCell className="py-4 w-[15%]">
                   <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
-                    {tx.category}
+                    {capitalizeCategory(tx.category)}
                   </Badge>
                 </TableCell>
                 
