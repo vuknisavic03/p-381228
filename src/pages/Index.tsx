@@ -72,8 +72,12 @@ export default function Index() {
               <div className="absolute inset-4 bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-br-2xl blur-lg"></div>
               <img 
                 className="absolute left-[35px] top-[34px] w-[1029px] h-[579px] rounded-tl-2xl rounded-br-2xl object-cover" 
-                src="/images/1.svg" 
+                src="/images/1.svg?v=1" 
                 alt="Dashboard preview" 
+                onError={(e) => {
+                  console.log('Failed to load image 1.svg');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
           </div>
@@ -100,8 +104,12 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="/images/2.svg" 
+                src="/images/2.svg?v=1" 
                 alt="Listings map" 
+                onError={(e) => {
+                  console.log('Failed to load image 2.svg');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
           </div>
@@ -128,8 +136,12 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="/images/3.svg" 
+                src="/images/3.svg?v=1" 
                 alt="Transactions dashboard" 
+                onError={(e) => {
+                  console.log('Failed to load image 3.svg');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
           </div>
@@ -156,8 +168,12 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="/images/4.svg" 
+                src="/images/4.svg?v=1" 
                 alt="Workspaces interface" 
+                onError={(e) => {
+                  console.log('Failed to load image 4.svg');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
           </div>
