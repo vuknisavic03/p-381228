@@ -72,7 +72,7 @@ export default function Index() {
               <div className="absolute inset-4 bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-br-2xl blur-lg"></div>
               <img 
                 className="absolute left-[35px] top-[34px] w-[1029px] h-[579px] rounded-tl-2xl rounded-br-2xl object-cover" 
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1029&h=579&fit=crop" 
+                src="/images/1.svg" 
                 alt="Dashboard preview" 
               />
             </div>
@@ -100,7 +100,7 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1022&h=492&fit=crop" 
+                src="/images/2.svg" 
                 alt="Listings map" 
               />
             </div>
@@ -128,7 +128,7 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1022&h=492&fit=crop" 
+                src="/images/3.svg" 
                 alt="Transactions dashboard" 
               />
             </div>
@@ -156,7 +156,7 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=1022&h=492&fit=crop" 
+                src="/images/4.svg" 
                 alt="Workspaces interface" 
               />
             </div>
