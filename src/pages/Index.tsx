@@ -4,6 +4,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+// Import images as modules
+import dashboard from "/images/1.svg";
+import listings from "/images/2.svg";
+import transactions from "/images/3.svg";
+import workspaces from "/images/4.svg";
+
 export default function Index() {
   return (
     <div className="min-h-screen bg-white overflow-hidden">
@@ -64,7 +70,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* First Feature Section */}
+      {/* Dashboard Feature Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <div className="relative max-w-[1064px] mx-auto">
@@ -72,12 +78,8 @@ export default function Index() {
               <div className="absolute inset-4 bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-br-2xl blur-lg"></div>
               <img 
                 className="absolute left-[35px] top-[34px] w-[1029px] h-[579px] rounded-tl-2xl rounded-br-2xl object-cover" 
-                src="/images/1.svg" 
+                src={dashboard}
                 alt="Dashboard preview" 
-                onError={(e) => {
-                  console.log('Failed to load image 1.svg');
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
           </div>
@@ -104,12 +106,8 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="/images/2.svg" 
+                src={listings}
                 alt="Listings map" 
-                onError={(e) => {
-                  console.log('Failed to load image 2.svg');
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
           </div>
@@ -136,12 +134,8 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="/images/3.svg" 
+                src={transactions}
                 alt="Transactions dashboard" 
-                onError={(e) => {
-                  console.log('Failed to load image 3.svg');
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
           </div>
@@ -168,12 +162,8 @@ export default function Index() {
               <div className="absolute left-[14px] top-[10px] w-[1036px] h-[503px] bg-gradient-to-br from-gray-400/10 to-gray-400/10 rounded-tl-2xl rounded-tr-2xl blur-lg"></div>
               <img 
                 className="absolute left-[21px] top-[21px] w-[1022px] h-[492px] rounded-tl-2xl rounded-tr-2xl object-cover" 
-                src="/images/4.svg" 
+                src={workspaces}
                 alt="Workspaces interface" 
-                onError={(e) => {
-                  console.log('Failed to load image 4.svg');
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
           </div>
