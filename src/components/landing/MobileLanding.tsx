@@ -1,164 +1,149 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-// Import images as modules
-import dashboard from "/images/1.svg";
-import listings from "/images/2.svg";
-import transactions from "/images/3.svg";
-import workspaces from "/images/4.svg";
+import { Mail, Search, Inbox, Calendar, Tag } from "lucide-react";
 
 export default function MobileLanding() {
   return (
     <div className="min-h-screen bg-white">
       {/* Mobile Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white/90 backdrop-blur-md border-b border-gray-200">
-        <div className="px-4 h-full flex items-center justify-between">
-          <img 
-            className="w-8 h-8" 
-            src="https://placehold.co/32x32" 
-            alt="Logo" 
-          />
-          
-          <div className="flex items-center gap-2">
-            <Link 
-              to="/vision" 
-              className="text-black text-sm font-semibold hover:text-gray-600"
-            >
-              Vision
-            </Link>
-            <Button 
-              variant="secondary" 
-              size="sm"
-              className="bg-gray-100 text-black font-bold hover:bg-gray-200 text-xs px-3"
-            >
-              Sign up
-            </Button>
+      <header className="px-4 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
+              <span className="text-white font-bold text-xs">N</span>
+            </div>
+            <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Mail</span>
           </div>
+          
+          <Button className="bg-black text-white text-xs px-3 py-2 rounded-md hover:bg-gray-800">
+            Get free
+          </Button>
         </div>
       </header>
 
       {/* Mobile Hero Section */}
-      <section className="pt-20 pb-8 px-4">
+      <section className="px-4 py-12">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-stone-900 leading-tight mb-4">
-            Break free from the old way
-          </h1>
-          <p className="text-lg font-medium text-stone-900 leading-relaxed mb-8">
-            Personalized to your work and beautifully designed.
-          </p>
-          
-          {/* Mobile Email Signup */}
-          <div className="max-w-sm mx-auto">
-            <div className="flex flex-col gap-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-              <Input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="border-gray-300 text-sm"
-              />
-              <Button className="bg-black text-white font-medium hover:bg-gray-800 w-full">
-                Get Started
-              </Button>
+          {/* Paper plane icon */}
+          <div className="mb-6 flex justify-center">
+            <div className="w-12 h-12 flex items-center justify-center">
+              <Mail className="w-8 h-8 text-black" strokeWidth={1.5} />
             </div>
           </div>
+          
+          <h1 className="text-3xl font-bold text-black leading-tight mb-4">
+            The inbox that thinks like you
+          </h1>
+          
+          <p className="text-base text-gray-600 mb-8 leading-relaxed">
+            Meet Notion Mail, the inbox that organizes itself, drafts emails, and schedules meetings any way you'd like.
+          </p>
+          
+          <Button className="bg-black text-white text-sm px-6 py-3 rounded-md hover:bg-gray-800 mb-12 w-full max-w-xs">
+            Get Notion Mail free
+          </Button>
         </div>
       </section>
 
-      {/* Mobile Dashboard Preview */}
-      <section className="py-8 px-4">
-        <div className="bg-gradient-to-br from-neutral-50 to-slate-200 rounded-xl p-3 mx-auto max-w-sm">
-          <img 
-            className="w-full h-48 rounded-lg object-cover" 
-            src={dashboard}
-            alt="Dashboard preview" 
-          />
-        </div>
-      </section>
-
-      {/* Mobile Features */}
-      <section className="py-8 px-4 space-y-12">
-        {/* Listings */}
-        <div className="text-center">
-          <span className="inline-block bg-gray-100 rounded px-3 py-1 text-gray-500 text-sm font-medium mb-4">
-            Listings
-          </span>
-          <h2 className="text-2xl font-bold text-stone-900 leading-tight mb-3">
-            Map your listings with precision
-          </h2>
-          <p className="text-sm text-stone-700 mb-6 px-2">
-            Visualize all your property or business listings on an interactive map.
-          </p>
-          <div className="bg-gradient-to-br from-neutral-50 to-slate-200 rounded-xl p-3 max-w-sm mx-auto">
-            <img 
-              className="w-full h-48 rounded-lg object-cover" 
-              src={listings}
-              alt="Listings map" 
-            />
+      {/* Mobile Email Interface Mockup */}
+      <section className="px-4 pb-12">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          {/* Top bar */}
+          <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 text-xs font-medium">D</span>
+              </div>
+              <span className="text-xs font-medium">Doru</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Search className="w-3 h-3 text-gray-400" />
+              <span className="text-xs text-gray-600">Search</span>
+            </div>
           </div>
-        </div>
 
-        {/* Transactions */}
-        <div className="text-center">
-          <span className="inline-block bg-gray-100 rounded px-3 py-1 text-gray-500 text-sm font-medium mb-4">
-            Transactions
-          </span>
-          <h2 className="text-2xl font-bold text-stone-900 leading-tight mb-3">
-            Track all transactions
-          </h2>
-          <p className="text-sm text-stone-700 mb-6 px-2">
-            Get real-time visibility into all your transactions in one dashboard.
-          </p>
-          <div className="bg-gradient-to-br from-neutral-50 to-slate-200 rounded-xl p-3 max-w-sm mx-auto">
-            <img 
-              className="w-full h-48 rounded-lg object-cover" 
-              src={transactions}
-              alt="Transactions dashboard" 
-            />
+          {/* Header */}
+          <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-red-100 rounded flex items-center justify-center">
+                <Inbox className="w-3 h-3 text-red-600" />
+              </div>
+              <span className="text-xs font-medium">Inbox</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Tag className="w-3 h-3 text-gray-400" />
+              <span className="text-xs text-gray-600">Auto Label</span>
+            </div>
           </div>
-        </div>
 
-        {/* Workspaces */}
-        <div className="text-center">
-          <span className="inline-block bg-gray-100 rounded px-3 py-1 text-gray-500 text-sm font-medium mb-4">
-            Workspaces
-          </span>
-          <h2 className="text-2xl font-bold text-stone-900 leading-tight mb-3">
-            Built for teams
-          </h2>
-          <p className="text-sm text-stone-700 mb-6 px-2">
-            Switch effortlessly between workspaces and see performance across them all.
-          </p>
-          <div className="bg-gradient-to-br from-neutral-50 to-slate-200 rounded-xl p-3 max-w-sm mx-auto">
-            <img 
-              className="w-full h-48 rounded-lg object-cover" 
-              src={workspaces}
-              alt="Workspaces interface" 
-            />
+          {/* Email Items */}
+          <div className="divide-y divide-gray-100">
+            {[
+              { from: "Andrew, Jason", subject: "Next steps", tag: "Hiring", color: "purple" },
+              { from: "Jack Steadman", subject: "Can't find log out button", tag: "Support", color: "pink" },
+              { from: "Bud, Stephanie", subject: "Product design role", tag: "Hiring", color: "purple" },
+              { from: "Natalie", subject: "Dark mode looks off", tag: "Support", color: "pink" },
+              { from: "Kosta B", subject: "Technical interview", tag: "Hiring", color: "purple" },
+            ].map((email, index) => (
+              <div key={index} className="px-3 py-2 hover:bg-gray-50">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-gray-900 truncate">{email.from}</div>
+                    <div className="text-xs text-gray-600 truncate">{email.subject}</div>
+                  </div>
+                  {email.tag && (
+                    <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
+                      email.color === 'purple' ? 'bg-purple-100 text-purple-700' :
+                      email.color === 'pink' ? 'bg-pink-100 text-pink-700' : ''
+                    }`}>
+                      {email.tag}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Mobile CTA */}
-      <section className="py-8 px-4 text-center">
-        <h2 className="text-3xl font-bold text-stone-900 leading-tight mb-2">
-          Built for you
-        </h2>
-        <p className="text-2xl font-bold text-gray-400 mb-8">
-          Use for free
-        </p>
-        <Button className="bg-black text-white font-medium hover:bg-gray-800 w-full max-w-sm">
-          Get Started Today
-        </Button>
+      {/* Mobile Testimonials */}
+      <section className="px-4 py-12 bg-gray-50">
+        <div className="space-y-6">
+          {[
+            {
+              quote: "Notion Mail is finally bringing innovation to something that stayed stagnant for decades.",
+              author: "Deniz Birlikci",
+              handle: "@denizbirlikci"
+            },
+            {
+              quote: "Notion Mail let me create a system so customized to the way I work, my relationships, and my tone of voice that there's no way I could go back.",
+              author: "Camille Ricketts",
+              handle: "@camillericketts"
+            },
+            {
+              quote: "OK: Notion Mail is pretty sick.",
+              author: "Aleks",
+              handle: "@aleksliving"
+            }
+          ].map((testimonial, index) => (
+            <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <blockquote className="text-gray-900 mb-3 text-sm">
+                "{testimonial.quote}"
+              </blockquote>
+              <div>
+                <div className="font-medium text-gray-900 text-sm">{testimonial.author}</div>
+                <div className="text-gray-500 text-xs">{testimonial.handle}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Mobile Footer */}
-      <footer className="border-t border-neutral-300 py-6 px-4">
-        <div className="text-center space-y-3">
-          <div className="text-zinc-900 text-sm font-medium">
-            Privacy Policy
-          </div>
-          <div className="text-zinc-900 text-sm font-medium">
+      <footer className="px-4 py-6">
+        <div className="text-center">
+          <div className="text-gray-600 text-sm">
             © 2025 SquareLabs
           </div>
         </div>
