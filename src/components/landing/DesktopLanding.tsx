@@ -14,8 +14,7 @@ export default function DesktopLanding() {
               <span className="text-white font-bold text-sm">S</span>
             </div>
             <nav className="flex items-center gap-6">
-              <span className="text-gray-600 text-sm">Accounting</span>
-              <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Vision</span>
+              <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
             </nav>
           </div>
           
@@ -38,11 +37,11 @@ export default function DesktopLanding() {
           </div>
           
           <h1 className="text-6xl font-bold text-black leading-tight mb-6 max-w-4xl mx-auto">
-            The accounting that thinks like you
+            Break free from the old way
           </h1>
           
           <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Meet Square Accounting, the platform that organizes itself, tracks finances, and generates insights any way you'd like.
+            Personalized to your work and beautifully designed. An accounting solution that makes your life simpler.
           </p>
           
           <Button className="bg-black text-white text-base px-6 py-3 rounded-md hover:bg-gray-800 mb-16">
@@ -51,8 +50,15 @@ export default function DesktopLanding() {
         </div>
       </section>
 
-      {/* Overview Dashboard Interface */}
+      {/* Financial Overview Section */}
       <section className="px-4 pb-20">
+        <div className="container mx-auto text-center mb-16">
+          <h2 className="text-4xl font-bold text-black mb-6">Good evening, Kevin</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, 
+            identify gaps, and gain confidence.
+          </p>
+        </div>
         <div className="container mx-auto">
           <div className="max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-16">
             <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
@@ -154,8 +160,15 @@ export default function DesktopLanding() {
         </div>
       </section>
 
-      {/* Listings Management Interface */}
+      {/* Property Management Section */}
       <section className="px-4 pb-20">
+        <div className="container mx-auto text-center mb-16">
+          <h2 className="text-4xl font-bold text-black mb-6">Map your listings with precision</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Visualize all your property or business listings on an interactive map. Manage availability, get 
+            insights, and plan with confidence.
+          </p>
+        </div>
         <div className="container mx-auto">
           <div className="max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-16">
             <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
@@ -204,8 +217,15 @@ export default function DesktopLanding() {
         </div>
       </section>
 
-      {/* Transactions Interface */}
+      {/* Transaction Tracking Section */}
       <section className="px-4 pb-20">
+        <div className="container mx-auto text-center mb-16">
+          <h2 className="text-4xl font-bold text-black mb-6">A place to get all transactions tracked</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, 
+            identify gaps, and gain confidence.
+          </p>
+        </div>
         <div className="container mx-auto">
           <div className="max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-16">
             <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
@@ -257,10 +277,39 @@ export default function DesktopLanding() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Final CTA Section */}
+      <section className="px-4 py-20">
+        <div className="container mx-auto text-center">
+          <h2 className="text-5xl font-bold text-black mb-6">Solution that is built for you</h2>
+          <p className="text-2xl text-gray-600 mb-12">Use for free</p>
+          
+          <div className="max-w-md mx-auto">
+            <div className="flex gap-2 mb-6">
+              <input 
+                type="email" 
+                placeholder="Email" 
+                className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black"
+              />
+              <Button className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800">
+                Sign up
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Workspaces Section */}
       <section className="px-4 py-16 bg-gray-50">
+        <div className="container mx-auto text-center mb-16">
+          <h2 className="text-4xl font-bold text-black mb-6">Workspaces built for managers and individuals</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Seamlessly collaborate between workspaces. Keep data organized and set performance across 
+            teams all.
+          </p>
+        </div>
+        
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
             {[
               {
                 quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",

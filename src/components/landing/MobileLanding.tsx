@@ -14,7 +14,7 @@ export default function MobileLanding() {
               <span className="text-white font-bold text-xs">S</span>
             </div>
             <span className="text-gray-600 text-sm">Accounting</span>
-            <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Vision</span>
+            <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Vision</Link>
           </div>
           
           <Button className="bg-black text-white text-xs px-3 py-2 rounded-md hover:bg-gray-800">
@@ -33,11 +33,11 @@ export default function MobileLanding() {
           </div>
           
           <h1 className="text-3xl font-bold text-black leading-tight mb-4">
-            The accounting that thinks like you
+            Break free from the old way
           </h1>
           
           <p className="text-base text-gray-600 mb-8 leading-relaxed">
-            Meet Square Accounting, the platform that organizes itself, tracks finances, and generates insights any way you'd like.
+            Personalized to your work and beautifully designed. An accounting solution that makes your life simpler.
           </p>
           
           <Button className="bg-black text-white text-sm px-6 py-3 rounded-md hover:bg-gray-800 mb-12 w-full max-w-xs">
@@ -46,8 +46,14 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile Overview Interface */}
-      <section className="px-4 pb-12">
+      {/* Mobile Overview Section */}
+      <section className="px-4 pb-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-black mb-3">Good evening, Kevin</h2>
+          <p className="text-sm text-gray-600">
+            Get real-time visibility into all your transactions in one powerful dashboard.
+          </p>
+        </div>
         <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -108,8 +114,14 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile Listings Interface */}
-      <section className="px-4 pb-12">
+      {/* Mobile Listings Section */}
+      <section className="px-4 pb-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-black mb-3">Map your listings with precision</h2>
+          <p className="text-sm text-gray-600">
+            Visualize all your property or business listings on an interactive map.
+          </p>
+        </div>
         <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -149,8 +161,14 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile Transactions Interface */}
-      <section className="px-4 pb-12">
+      {/* Mobile Transactions Section */}
+      <section className="px-4 pb-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-black mb-3">All transactions tracked</h2>
+          <p className="text-sm text-gray-600">
+            Get real-time visibility into all your transactions in one powerful dashboard.
+          </p>
+        </div>
         <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -194,11 +212,37 @@ export default function MobileLanding() {
             ))}
           </div>
         </div>
+        
+        {/* Mobile CTA */}
+        <div className="px-4 text-center">
+          <h2 className="text-3xl font-bold text-black mb-4">Solution that is built for you</h2>
+          <p className="text-lg text-gray-600 mb-8">Use for free</p>
+          
+          <div className="max-w-sm mx-auto">
+            <div className="flex flex-col gap-3 mb-6">
+              <input 
+                type="email" 
+                placeholder="Email" 
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black text-sm"
+              />
+              <Button className="bg-black text-white w-full py-3 rounded-lg hover:bg-gray-800 text-sm">
+                Sign up
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Mobile Testimonials */}
+      {/* Mobile Workspaces Section */}
       <section className="px-4 py-12 bg-gray-50">
-        <div className="space-y-6">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-black mb-3">Workspaces built for teams</h2>
+          <p className="text-sm text-gray-600">
+            Seamlessly collaborate between workspaces and keep data organized.
+          </p>
+        </div>
+        
+        <div className="space-y-6 mb-12">
           {[
             {
               quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
