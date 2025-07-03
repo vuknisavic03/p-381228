@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Mail, Search, Inbox, Calendar, Tag, BarChart3, TrendingUp } from "lucide-react";
+import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp } from "lucide-react";
 
 export default function MobileLanding() {
   return (
@@ -13,7 +13,8 @@ export default function MobileLanding() {
             <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
               <span className="text-white font-bold text-xs">S</span>
             </div>
-            <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Analytics</span>
+            <span className="text-gray-600 text-sm">Accounting</span>
+            <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Vision</span>
           </div>
           
           <Button className="bg-black text-white text-xs px-3 py-2 rounded-md hover:bg-gray-800">
@@ -25,7 +26,6 @@ export default function MobileLanding() {
       {/* Mobile Hero Section */}
       <section className="px-4 py-12">
         <div className="text-center">
-          {/* Analytics icon */}
           <div className="mb-6 flex justify-center">
             <div className="w-12 h-12 flex items-center justify-center">
               <BarChart3 className="w-8 h-8 text-black" strokeWidth={1.5} />
@@ -33,11 +33,11 @@ export default function MobileLanding() {
           </div>
           
           <h1 className="text-3xl font-bold text-black leading-tight mb-4">
-            The dashboard that thinks like you
+            The accounting that thinks like you
           </h1>
           
           <p className="text-base text-gray-600 mb-8 leading-relaxed">
-            Meet Square Analytics, the dashboard that organizes itself, tracks metrics, and generates insights any way you'd like.
+            Meet Square Accounting, the platform that organizes itself, tracks finances, and generates insights any way you'd like.
           </p>
           
           <Button className="bg-black text-white text-sm px-6 py-3 rounded-md hover:bg-gray-800 mb-12 w-full max-w-xs">
@@ -46,16 +46,15 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile Dashboard Interface Mockup */}
+      {/* Mobile Overview Interface */}
       <section className="px-4 pb-12">
-        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
-          {/* Top bar */}
+        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                 <span className="text-blue-600 text-xs font-medium">S</span>
               </div>
-              <span className="text-xs font-medium">Square</span>
+              <span className="text-xs font-medium">Financial Overview</span>
             </div>
             <div className="flex items-center gap-2">
               <Search className="w-3 h-3 text-gray-400" />
@@ -63,7 +62,6 @@ export default function MobileLanding() {
             </div>
           </div>
 
-          {/* Header */}
           <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center">
@@ -73,34 +71,124 @@ export default function MobileLanding() {
             </div>
             <div className="flex items-center gap-1">
               <Tag className="w-3 h-3 text-gray-400" />
-              <span className="text-xs text-gray-600">Auto Filter</span>
+              <span className="text-xs text-gray-600">Auto Categorize</span>
             </div>
           </div>
 
-          {/* Metric Items */}
           <div className="divide-y divide-gray-100">
             {[
-              { metric: "Revenue Growth", value: "+23.5%", tag: "Sales", color: "purple" },
-              { metric: "Customer Acquisition", value: "+156 users", tag: "Marketing", color: "pink" },
-              { metric: "Conversion Rate", value: "3.2%", tag: "Sales", color: "purple" },
-              { metric: "Monthly Recurring Revenue", value: "$45,230", tag: "Sales", color: "purple" },
-              { metric: "Monthly Active Users", value: "12,450", tag: "Product", color: "blue" },
+              { metric: "Total Revenue", value: "$125,430", change: "+12.5%", tag: "Revenue", color: "green" },
+              { metric: "Total Expenses", value: "$89,210", change: "-3.2%", tag: "Expenses", color: "red" },
+              { metric: "Net Profit", value: "$36,220", change: "+18.7%", tag: "Profit", color: "purple" },
+              { metric: "Cash Flow", value: "$42,100", change: "+5.4%", tag: "Cash", color: "blue" },
+              { metric: "Accounts Receivable", value: "$28,900", change: "+2.1%", tag: "AR", color: "orange" },
             ].map((metric, index) => (
               <div key={index} className="px-3 py-2 hover:bg-gray-50">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium text-gray-900 truncate">{metric.metric}</div>
-                    <div className="text-xs text-gray-600 truncate">{metric.value}</div>
-                  </div>
-                  {metric.tag && (
-                    <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
-                      metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
-                      metric.color === 'pink' ? 'bg-pink-100 text-pink-700' :
-                      metric.color === 'blue' ? 'bg-blue-100 text-blue-700' : ''
-                    }`}>
-                      {metric.tag}
+                    <div className="text-xs text-gray-600 truncate flex gap-2">
+                      <span>{metric.value}</span>
+                      <span className={metric.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}>{metric.change}</span>
                     </div>
-                  )}
+                  </div>
+                  <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
+                    metric.color === 'green' ? 'bg-green-100 text-green-700' :
+                    metric.color === 'red' ? 'bg-red-100 text-red-700' :
+                    metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
+                    metric.color === 'blue' ? 'bg-blue-100 text-blue-700' :
+                    metric.color === 'orange' ? 'bg-orange-100 text-orange-700' : ''
+                  }`}>
+                    {metric.tag}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile Listings Interface */}
+      <section className="px-4 pb-12">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
+          <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                <Building2 className="w-3 h-3 text-green-600" />
+              </div>
+              <span className="text-xs font-medium">Property Listings</span>
+            </div>
+            <Button className="bg-green-600 text-white text-xs px-2 py-1 rounded hover:bg-green-700">
+              Add
+            </Button>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {[
+              { property: "Sunset Apartments", units: "24 units", revenue: "$48K/mo", occupancy: "92%", status: "Active", color: "green" },
+              { property: "Downtown Office", units: "12 units", revenue: "$72K/mo", occupancy: "88%", status: "Active", color: "green" },
+              { property: "Riverside Condos", units: "36 units", revenue: "$54K/mo", occupancy: "95%", status: "Active", color: "green" },
+              { property: "Market Retail", units: "8 units", revenue: "$32K/mo", occupancy: "75%", status: "Maintenance", color: "yellow" },
+            ].map((property, index) => (
+              <div key={index} className="px-3 py-2 hover:bg-gray-50">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-gray-900 truncate">{property.property}</div>
+                    <div className="text-xs text-gray-600 truncate">{property.units} • {property.revenue} • {property.occupancy}</div>
+                  </div>
+                  <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
+                    property.color === 'green' ? 'bg-green-100 text-green-700' :
+                    property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
+                  }`}>
+                    {property.status}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile Transactions Interface */}
+      <section className="px-4 pb-12">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
+          <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                <CreditCard className="w-3 h-3 text-purple-600" />
+              </div>
+              <span className="text-xs font-medium">Recent Transactions</span>
+            </div>
+            <Button className="bg-purple-600 text-white text-xs px-2 py-1 rounded hover:bg-purple-700">
+              Add
+            </Button>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {[
+              { description: "Rent Payment - Apt #12", amount: "+$2,400", date: "Jan 15", category: "Income", color: "green" },
+              { description: "HVAC Repair", amount: "-$850", date: "Jan 14", category: "Maintenance", color: "red" },
+              { description: "Rent - Office #304", amount: "+$6,200", date: "Jan 14", category: "Income", color: "green" },
+              { description: "Property Insurance", amount: "-$1,200", date: "Jan 12", category: "Insurance", color: "red" },
+              { description: "Security Deposit", amount: "-$2,000", date: "Jan 10", category: "Deposit", color: "red" },
+            ].map((transaction, index) => (
+              <div key={index} className="px-3 py-2 hover:bg-gray-50">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-gray-900 truncate">{transaction.description}</div>
+                    <div className="text-xs text-gray-600 truncate flex gap-2">
+                      <span>{transaction.date}</span>
+                      <span className={transaction.amount.startsWith('+') ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
+                        {transaction.amount}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
+                    transaction.color === 'green' ? 'bg-green-100 text-green-700' :
+                    transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
+                  }`}>
+                    {transaction.category}
+                  </div>
                 </div>
               </div>
             ))}
@@ -113,17 +201,17 @@ export default function MobileLanding() {
         <div className="space-y-6">
           {[
             {
-              quote: "Square Analytics is finally bringing innovation to something that stayed stagnant for decades.",
+              quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
               author: "Sarah Chen",
               handle: "@sarahchen"
             },
             {
-              quote: "Square let me create a system so customized to the way I work, my metrics, and my business goals that there's no way I could go back.",
+              quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
               author: "Marcus Johnson",
               handle: "@marcusjohnson"
             },
             {
-              quote: "OK: Square Analytics is pretty sick.",
+              quote: "OK: Square Accounting is pretty sick.",
               author: "Alex Rivera",
               handle: "@alexrivera"
             }
