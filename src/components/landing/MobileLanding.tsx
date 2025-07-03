@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Mail, Search, Inbox, Calendar, Tag } from "lucide-react";
+import { Mail, Search, Inbox, Calendar, Tag, BarChart3, TrendingUp } from "lucide-react";
 
 export default function MobileLanding() {
   return (
@@ -11,9 +11,9 @@ export default function MobileLanding() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
-              <span className="text-white font-bold text-xs">N</span>
+              <span className="text-white font-bold text-xs">S</span>
             </div>
-            <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Mail</span>
+            <span className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Analytics</span>
           </div>
           
           <Button className="bg-black text-white text-xs px-3 py-2 rounded-md hover:bg-gray-800">
@@ -25,37 +25,37 @@ export default function MobileLanding() {
       {/* Mobile Hero Section */}
       <section className="px-4 py-12">
         <div className="text-center">
-          {/* Paper plane icon */}
+          {/* Analytics icon */}
           <div className="mb-6 flex justify-center">
             <div className="w-12 h-12 flex items-center justify-center">
-              <Mail className="w-8 h-8 text-black" strokeWidth={1.5} />
+              <BarChart3 className="w-8 h-8 text-black" strokeWidth={1.5} />
             </div>
           </div>
           
           <h1 className="text-3xl font-bold text-black leading-tight mb-4">
-            The inbox that thinks like you
+            The dashboard that thinks like you
           </h1>
           
           <p className="text-base text-gray-600 mb-8 leading-relaxed">
-            Meet Notion Mail, the inbox that organizes itself, drafts emails, and schedules meetings any way you'd like.
+            Meet Square Analytics, the dashboard that organizes itself, tracks metrics, and generates insights any way you'd like.
           </p>
           
           <Button className="bg-black text-white text-sm px-6 py-3 rounded-md hover:bg-gray-800 mb-12 w-full max-w-xs">
-            Get Notion Mail free
+            Get Square free
           </Button>
         </div>
       </section>
 
-      {/* Mobile Email Interface Mockup */}
+      {/* Mobile Dashboard Interface Mockup */}
       <section className="px-4 pb-12">
         <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
           {/* Top bar */}
           <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 text-xs font-medium">D</span>
+                <span className="text-blue-600 text-xs font-medium">S</span>
               </div>
-              <span className="text-xs font-medium">Doru</span>
+              <span className="text-xs font-medium">Square</span>
             </div>
             <div className="flex items-center gap-2">
               <Search className="w-3 h-3 text-gray-400" />
@@ -66,38 +66,39 @@ export default function MobileLanding() {
           {/* Header */}
           <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-red-100 rounded flex items-center justify-center">
-                <Inbox className="w-3 h-3 text-red-600" />
+              <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center">
+                <BarChart3 className="w-3 h-3 text-blue-600" />
               </div>
-              <span className="text-xs font-medium">Inbox</span>
+              <span className="text-xs font-medium">Dashboard</span>
             </div>
             <div className="flex items-center gap-1">
               <Tag className="w-3 h-3 text-gray-400" />
-              <span className="text-xs text-gray-600">Auto Label</span>
+              <span className="text-xs text-gray-600">Auto Filter</span>
             </div>
           </div>
 
-          {/* Email Items */}
+          {/* Metric Items */}
           <div className="divide-y divide-gray-100">
             {[
-              { from: "Andrew, Jason", subject: "Next steps", tag: "Hiring", color: "purple" },
-              { from: "Jack Steadman", subject: "Can't find log out button", tag: "Support", color: "pink" },
-              { from: "Bud, Stephanie", subject: "Product design role", tag: "Hiring", color: "purple" },
-              { from: "Natalie", subject: "Dark mode looks off", tag: "Support", color: "pink" },
-              { from: "Kosta B", subject: "Technical interview", tag: "Hiring", color: "purple" },
-            ].map((email, index) => (
+              { metric: "Revenue Growth", value: "+23.5%", tag: "Sales", color: "purple" },
+              { metric: "Customer Acquisition", value: "+156 users", tag: "Marketing", color: "pink" },
+              { metric: "Conversion Rate", value: "3.2%", tag: "Sales", color: "purple" },
+              { metric: "Monthly Recurring Revenue", value: "$45,230", tag: "Sales", color: "purple" },
+              { metric: "Monthly Active Users", value: "12,450", tag: "Product", color: "blue" },
+            ].map((metric, index) => (
               <div key={index} className="px-3 py-2 hover:bg-gray-50">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-gray-900 truncate">{email.from}</div>
-                    <div className="text-xs text-gray-600 truncate">{email.subject}</div>
+                    <div className="text-xs font-medium text-gray-900 truncate">{metric.metric}</div>
+                    <div className="text-xs text-gray-600 truncate">{metric.value}</div>
                   </div>
-                  {email.tag && (
+                  {metric.tag && (
                     <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
-                      email.color === 'purple' ? 'bg-purple-100 text-purple-700' :
-                      email.color === 'pink' ? 'bg-pink-100 text-pink-700' : ''
+                      metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
+                      metric.color === 'pink' ? 'bg-pink-100 text-pink-700' :
+                      metric.color === 'blue' ? 'bg-blue-100 text-blue-700' : ''
                     }`}>
-                      {email.tag}
+                      {metric.tag}
                     </div>
                   )}
                 </div>
@@ -112,19 +113,19 @@ export default function MobileLanding() {
         <div className="space-y-6">
           {[
             {
-              quote: "Notion Mail is finally bringing innovation to something that stayed stagnant for decades.",
-              author: "Deniz Birlikci",
-              handle: "@denizbirlikci"
+              quote: "Square Analytics is finally bringing innovation to something that stayed stagnant for decades.",
+              author: "Sarah Chen",
+              handle: "@sarahchen"
             },
             {
-              quote: "Notion Mail let me create a system so customized to the way I work, my relationships, and my tone of voice that there's no way I could go back.",
-              author: "Camille Ricketts",
-              handle: "@camillericketts"
+              quote: "Square let me create a system so customized to the way I work, my metrics, and my business goals that there's no way I could go back.",
+              author: "Marcus Johnson",
+              handle: "@marcusjohnson"
             },
             {
-              quote: "OK: Notion Mail is pretty sick.",
-              author: "Aleks",
-              handle: "@aleksliving"
+              quote: "OK: Square Analytics is pretty sick.",
+              author: "Alex Rivera",
+              handle: "@alexrivera"
             }
           ].map((testimonial, index) => (
             <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
