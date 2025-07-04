@@ -53,116 +53,124 @@ export default function DesktopLanding() {
 
       {/* Financial Overview Section */}
       <section className="px-4 pb-20">
-        <div className="container mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold text-black mb-6">Real-time Financial Dashboard</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Monitor your business performance with live metrics. Track revenue, expenses, and profitability 
-            with automated categorization and intelligent insights.
-          </p>
-        </div>
         <div className="container mx-auto">
-          <div className="max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-16">
-            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 text-sm font-medium">S</span>
+          <div className="max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                  <span className="text-gray-900 text-lg font-bold">S</span>
                 </div>
-                <span className="text-sm font-medium">Square Accounting</span>
+                <div>
+                  <div className="text-white font-semibold">Square Accounting</div>
+                  <div className="text-gray-300 text-sm">Financial Dashboard</div>
+                </div>
               </div>
               <div className="flex items-center gap-4">
-                <Search className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-600">Search</span>
+                <div className="hidden sm:flex items-center gap-2 text-gray-300">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-sm">Live</span>
+                </div>
+                <Search className="w-5 h-5 text-gray-400" />
               </div>
             </div>
 
-            <div className="flex min-h-[500px]">
-              <div className="w-64 bg-gray-50 border-r border-gray-200 p-4">
-                 <div className="space-y-1">
-                   <div className="text-sm font-medium text-gray-900 mb-3">Financial Overview</div>
-                   <div className="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded text-sm">
-                     <BarChart3 className="w-4 h-4" />
-                     <span>Dashboard</span>
-                   </div>
-                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
-                     <TrendingUp className="w-4 h-4" />
-                     <span>Analytics</span>
-                   </div>
-                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
-                     <DollarSign className="w-4 h-4" />
-                     <span>Revenue Tracking</span>
-                   </div>
-                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
-                     <Receipt className="w-4 h-4" />
-                     <span>Expense Management</span>
-                   </div>
-                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
-                     <PieChart className="w-4 h-4" />
-                     <span>Profit Analysis</span>
-                   </div>
-                 </div>
+            <div className="flex">
+              <div className="w-72 bg-gradient-to-b from-gray-50 to-gray-100 border-r border-gray-200 p-6">
+                <div className="space-y-6">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900 mb-4">Financial Overview</div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3 px-3 py-2.5 bg-blue-50 text-blue-700 rounded-lg border border-blue-200 shadow-sm">
+                        <BarChart3 className="w-4 h-4" />
+                        <span className="font-medium">Dashboard</span>
+                      </div>
+                      <div className="flex items-center gap-3 px-3 py-2 text-gray-600 rounded-lg hover:bg-white hover:shadow-sm transition-all cursor-pointer">
+                        <TrendingUp className="w-4 h-4" />
+                        <span>Analytics</span>
+                      </div>
+                      <div className="flex items-center gap-3 px-3 py-2 text-gray-600 rounded-lg hover:bg-white hover:shadow-sm transition-all cursor-pointer">
+                        <DollarSign className="w-4 h-4" />
+                        <span>Revenue Tracking</span>
+                      </div>
+                      <div className="flex items-center gap-3 px-3 py-2 text-gray-600 rounded-lg hover:bg-white hover:shadow-sm transition-all cursor-pointer">
+                        <Receipt className="w-4 h-4" />
+                        <span>Expense Management</span>
+                      </div>
+                    </div>
+                  </div>
 
-                 <div className="mt-6">
-                   <div className="text-sm font-medium text-gray-900 mb-3">Quick Actions</div>
-                   <div className="space-y-1">
-                     <div className="px-2 py-1.5 text-gray-600 text-sm hover:bg-gray-50 cursor-pointer flex items-center gap-2">
-                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                       Add Transaction
-                     </div>
-                     <div className="px-2 py-1.5 text-gray-600 text-sm hover:bg-gray-50 cursor-pointer flex items-center gap-2">
-                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                       Generate Report
-                     </div>
-                     <div className="px-2 py-1.5 text-gray-600 text-sm hover:bg-gray-50 cursor-pointer flex items-center gap-2">
-                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                       Export Data
-                     </div>
-                   </div>
-                 </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900 mb-4">Quick Actions</div>
+                    <div className="space-y-2">
+                      <div className="px-3 py-2 text-gray-600 hover:bg-white rounded-lg transition-all cursor-pointer flex items-center gap-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm">Add Transaction</span>
+                      </div>
+                      <div className="px-3 py-2 text-gray-600 hover:bg-white rounded-lg transition-all cursor-pointer flex items-center gap-3">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm">Generate Report</span>
+                      </div>
+                      <div className="px-3 py-2 text-gray-600 hover:bg-white rounded-lg transition-all cursor-pointer flex items-center gap-3">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <span className="text-sm">Export Data</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex-1">
-                <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center">
-                      <BarChart3 className="w-4 h-4 text-blue-600" />
+              <div className="flex-1 bg-white">
+                <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-white to-gray-50">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <BarChart3 className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900">Financial Overview</div>
+                        <div className="text-sm text-gray-500">Real-time metrics</div>
+                      </div>
                     </div>
-                    <span className="text-sm font-medium">Financial Overview</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Tag className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">Auto Categorize</span>
+                    <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg">
+                      <Tag className="w-4 h-4 text-gray-500" />
+                      <span className="text-sm text-gray-600">Auto Categorize</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="divide-y divide-gray-100">
-                  {[
-                    { metric: "Total Revenue", value: "$125,430", change: "+12.5%", tag: "Revenue", color: "green" },
-                    { metric: "Total Expenses", value: "$89,210", change: "-3.2%", tag: "Expenses", color: "red" },
-                    { metric: "Net Profit", value: "$36,220", change: "+18.7%", tag: "Profit", color: "purple" },
-                    { metric: "Cash Flow", value: "$42,100", change: "+5.4%", tag: "Cash", color: "blue" },
-                    { metric: "Accounts Receivable", value: "$28,900", change: "+2.1%", tag: "AR", color: "orange" },
-                    { metric: "Accounts Payable", value: "$15,600", change: "-8.3%", tag: "AP", color: "pink" },
-                  ].map((metric, index) => (
-                    <div key={index} className="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-                      <div className="flex-1">
+                <div className="p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {[
+                      { metric: "Total Revenue", value: "$125,430", change: "+12.5%", tag: "Revenue", color: "green" },
+                      { metric: "Total Expenses", value: "$89,210", change: "-3.2%", tag: "Expenses", color: "red" },
+                      { metric: "Net Profit", value: "$36,220", change: "+18.7%", tag: "Profit", color: "purple" },
+                      { metric: "Cash Flow", value: "$42,100", change: "+5.4%", tag: "Cash", color: "blue" },
+                      { metric: "Accounts Receivable", value: "$28,900", change: "+2.1%", tag: "AR", color: "orange" },
+                      { metric: "Accounts Payable", value: "$15,600", change: "-8.3%", tag: "AP", color: "pink" },
+                    ].map((metric, index) => (
+                      <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-200">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-sm font-medium text-gray-900">{metric.metric}</div>
+                          <div className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                            metric.color === 'green' ? 'bg-green-100 text-green-700' :
+                            metric.color === 'red' ? 'bg-red-100 text-red-700' :
+                            metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
+                            metric.color === 'blue' ? 'bg-blue-100 text-blue-700' :
+                            metric.color === 'orange' ? 'bg-orange-100 text-orange-700' :
+                            metric.color === 'pink' ? 'bg-pink-100 text-pink-700' : ''
+                          }`}>
+                            {metric.tag}
+                          </div>
+                        </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-medium text-gray-900 min-w-0 flex-shrink-0">{metric.metric}</span>
-                          <span className="text-sm text-gray-600">{metric.value}</span>
-                          <span className={`text-xs ${metric.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>{metric.change}</span>
+                          <span className="text-2xl font-bold text-gray-900">{metric.value}</span>
+                          <span className={`text-sm font-semibold ${metric.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                            {metric.change}
+                          </span>
                         </div>
                       </div>
-                      <div className={`text-xs px-2 py-1 rounded-full ${
-                        metric.color === 'green' ? 'bg-green-100 text-green-700' :
-                        metric.color === 'red' ? 'bg-red-100 text-red-700' :
-                        metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
-                        metric.color === 'blue' ? 'bg-blue-100 text-blue-700' :
-                        metric.color === 'orange' ? 'bg-orange-100 text-orange-700' :
-                        metric.color === 'pink' ? 'bg-pink-100 text-pink-700' : ''
-                      }`}>
-                        {metric.tag}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,9 +180,9 @@ export default function DesktopLanding() {
 
       {/* Property Management Section */}
       <section className="px-4 pb-20">
-        <div className="container mx-auto text-center mb-16">
+        <div className="container mx-auto mb-16">
           <h2 className="text-4xl font-bold text-black mb-6">Map your listings with precision</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl">
             Visualize all your property or business listings on an interactive map. Manage availability, get 
             insights, and plan with confidence.
           </p>
@@ -256,9 +264,9 @@ export default function DesktopLanding() {
 
       {/* Transaction Tracking Section */}
       <section className="px-4 pb-20">
-        <div className="container mx-auto text-center mb-16">
+        <div className="container mx-auto mb-16">
           <h2 className="text-4xl font-bold text-black mb-6">A place to get all transactions tracked</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl">
             Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, 
             identify gaps, and gain confidence.
           </p>
