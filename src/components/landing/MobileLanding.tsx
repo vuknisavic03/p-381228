@@ -121,49 +121,62 @@ export default function MobileLanding() {
             Visualize all your property or business listings on an interactive map.
           </p>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+        <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-green-700 to-green-600 px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                <Building2 className="w-3 h-3 text-green-600" />
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                <Building2 className="w-4 h-4 text-green-600" />
               </div>
-              <span className="text-xs font-medium">Property Listings</span>
+              <div>
+                <div className="text-white font-semibold text-sm">Property Management</div>
+                <div className="text-green-100 text-xs">Portfolio & Analytics</div>
+              </div>
             </div>
-            <Button className="bg-green-600 text-white text-xs px-2 py-1 rounded hover:bg-green-700">
+            <Button className="bg-white text-green-700 text-xs px-3 py-1 rounded-lg hover:bg-green-50 font-medium">
               Add
             </Button>
           </div>
 
-          <div className="p-3 space-y-3">
-            <div className="bg-gray-50 p-2 rounded">
-              <div className="text-xs font-medium text-gray-700 mb-2">Portfolio Overview</div>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="bg-white p-2 rounded text-center">
+          <div className="p-4 space-y-4">
+            <div className="bg-gradient-to-r from-green-50 to-green-100 p-3 rounded-lg border border-green-200">
+              <div className="text-sm font-medium text-green-800 mb-3">Portfolio Overview</div>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-white p-2 rounded text-center shadow-sm">
                   <div className="text-xs text-gray-600">Properties</div>
-                  <div className="text-sm font-bold text-green-600">98</div>
+                  <div className="text-lg font-bold text-green-600">98</div>
                 </div>
-                <div className="bg-white p-2 rounded text-center">
+                <div className="bg-white p-2 rounded text-center shadow-sm">
                   <div className="text-xs text-gray-600">Occupancy</div>
-                  <div className="text-sm font-bold text-blue-600">91.8%</div>
+                  <div className="text-lg font-bold text-blue-600">91.8%</div>
+                </div>
+                <div className="bg-white p-2 rounded text-center shadow-sm">
+                  <div className="text-xs text-gray-600">Revenue</div>
+                  <div className="text-lg font-bold text-purple-600">$206K</div>
                 </div>
               </div>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-gray-900">Active Properties</h4>
               {[
                 { property: "Sunset Apartments", units: "24 units", revenue: "$48K/mo", occupancy: "92%", status: "Active", color: "green" },
                 { property: "Downtown Office", units: "12 units", revenue: "$72K/mo", occupancy: "88%", status: "Active", color: "green" },
                 { property: "Riverside Condos", units: "36 units", revenue: "$54K/mo", occupancy: "95%", status: "Active", color: "green" },
               ].map((property, index) => (
-                <div key={index} className="bg-white p-2 rounded border border-gray-100 hover:shadow-sm">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-medium text-gray-900 truncate">{property.property}</div>
-                      <div className="text-xs text-gray-600 truncate">{property.units} • {property.revenue}</div>
+                <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-3 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-4 h-4 text-green-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold text-gray-900 truncate">{property.property}</div>
+                        <div className="text-xs text-gray-600">{property.units} • {property.revenue}</div>
+                      </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-gray-600">{property.occupancy}</div>
-                      <div className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      <div className="text-sm font-bold text-gray-900">{property.occupancy}</div>
+                      <div className={`text-xs px-2 py-1 rounded-full font-medium ${
                         property.color === 'green' ? 'bg-green-100 text-green-700' :
                         property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
                       }`}>
@@ -186,55 +199,71 @@ export default function MobileLanding() {
             Get real-time visibility into all your transactions in one powerful dashboard.
           </p>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
-          <div className="bg-gray-50 px-3 py-2 border-b border-gray-200 flex items-center justify-between">
+        <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-purple-700 to-purple-600 px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                <CreditCard className="w-3 h-3 text-purple-600" />
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                <CreditCard className="w-4 h-4 text-purple-600" />
               </div>
-              <span className="text-xs font-medium">Recent Transactions</span>
+              <div>
+                <div className="text-white font-semibold text-sm">Transaction Management</div>
+                <div className="text-purple-100 text-xs">Real-time Activity</div>
+              </div>
             </div>
-            <Button className="bg-purple-600 text-white text-xs px-2 py-1 rounded hover:bg-purple-700">
+            <Button className="bg-white text-purple-700 text-xs px-3 py-1 rounded-lg hover:bg-purple-50 font-medium">
               Add
             </Button>
           </div>
 
-          <div className="p-3 space-y-3">
-            <div className="bg-gray-50 p-2 rounded">
-              <div className="text-xs font-medium text-gray-700 mb-2">Quick Stats</div>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="bg-white p-2 rounded text-center">
-                  <div className="text-xs text-gray-600">This Month</div>
-                  <div className="text-sm font-bold text-green-600">+$12.7K</div>
+          <div className="p-4 space-y-4">
+            <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-lg border border-purple-200">
+              <div className="text-sm font-medium text-purple-800 mb-3">Monthly Summary</div>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-white p-2 rounded text-center shadow-sm">
+                  <div className="text-xs text-gray-600">Net Income</div>
+                  <div className="text-lg font-bold text-green-600">+$12.7K</div>
                 </div>
-                <div className="bg-white p-2 rounded text-center">
+                <div className="bg-white p-2 rounded text-center shadow-sm">
                   <div className="text-xs text-gray-600">Transactions</div>
-                  <div className="text-sm font-bold text-blue-600">247</div>
+                  <div className="text-lg font-bold text-blue-600">247</div>
+                </div>
+                <div className="bg-white p-2 rounded text-center shadow-sm">
+                  <div className="text-xs text-gray-600">Income</div>
+                  <div className="text-lg font-bold text-purple-600">$18.4K</div>
                 </div>
               </div>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-gray-900">Recent Activity</h4>
               {[
                 { description: "Rent Payment - Apt #12", amount: "+$2,400", date: "Jan 15", category: "Income", color: "green" },
                 { description: "HVAC Repair", amount: "-$850", date: "Jan 14", category: "Maintenance", color: "red" },
                 { description: "Rent - Office #304", amount: "+$6,200", date: "Jan 14", category: "Income", color: "green" },
                 { description: "Property Insurance", amount: "-$1,200", date: "Jan 12", category: "Insurance", color: "red" },
               ].map((transaction, index) => (
-                <div key={index} className="bg-white p-2 rounded border border-gray-100 hover:shadow-sm">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-start gap-2 flex-1 min-w-0">
-                      <div className={`w-2 h-2 rounded-full mt-1 flex-shrink-0 ${transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs font-medium text-gray-900 truncate">{transaction.description}</div>
+                <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-3 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                        transaction.color === 'green' ? 'bg-green-100' : 'bg-red-100'
+                      }`}>
+                        <div className={`w-3 h-3 rounded-full ${
+                          transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'
+                        }`}></div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold text-gray-900 truncate">{transaction.description}</div>
                         <div className="text-xs text-gray-600">{transaction.date}</div>
                       </div>
                     </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className={`text-xs font-medium ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className="text-right">
+                      <div className={`text-sm font-bold ${
+                        transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
+                      }`}>
                         {transaction.amount}
                       </div>
-                      <div className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      <div className={`text-xs px-2 py-1 rounded-full font-medium ${
                         transaction.color === 'green' ? 'bg-green-100 text-green-700' :
                         transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
                       }`}>

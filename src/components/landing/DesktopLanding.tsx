@@ -188,71 +188,114 @@ export default function DesktopLanding() {
           </p>
         </div>
         <div className="container mx-auto">
-          <div className="max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-16">
-            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  <Building2 className="w-4 h-4 text-green-600" />
+          <div className="max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                  <Building2 className="w-5 h-5 text-green-600" />
                 </div>
-                <span className="text-sm font-medium">Property Listings</span>
+                <div>
+                  <div className="text-white font-semibold">Property Management</div>
+                  <div className="text-green-100 text-sm">Interactive Map & Portfolio</div>
+                </div>
               </div>
               <div className="flex items-center gap-4">
-                <Button className="bg-green-600 text-white text-xs px-3 py-1 rounded hover:bg-green-700">
+                <div className="hidden sm:flex items-center gap-2 text-green-100">
+                  <div className="w-2 h-2 bg-green-300 rounded-full"></div>
+                  <span className="text-sm">98 Properties</span>
+                </div>
+                <Button className="bg-white text-green-700 text-sm px-4 py-2 rounded-lg hover:bg-green-50 font-medium">
                   Add Property
                 </Button>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 border border-gray-200 rounded-lg">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-900">Property Portfolio</h4>
-                  {[
-                    { property: "Sunset Apartments", units: "24 units", revenue: "$48,000/mo", occupancy: "92%", status: "Active", color: "green" },
-                    { property: "Downtown Office Complex", units: "12 units", revenue: "$72,000/mo", occupancy: "88%", status: "Active", color: "green" },
-                    { property: "Riverside Condos", units: "36 units", revenue: "$54,000/mo", occupancy: "95%", status: "Active", color: "green" },
-                  ].map((property, index) => (
-                    <div key={index} className="bg-white p-3 rounded border border-gray-200 hover:shadow-sm transition-shadow">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-900">{property.property}</div>
-                          <div className="text-xs text-gray-500 flex gap-2">
-                            <span>{property.units}</span>
-                            <span>•</span>
-                            <span>{property.revenue}</span>
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-lg font-semibold text-gray-900">Portfolio Overview</h4>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>91.8% Avg Occupancy</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      { property: "Sunset Apartments", units: "24 units", revenue: "$48,000/mo", occupancy: "92%", status: "Active", color: "green" },
+                      { property: "Downtown Office Complex", units: "12 units", revenue: "$72,000/mo", occupancy: "88%", status: "Active", color: "green" },
+                      { property: "Riverside Condos", units: "36 units", revenue: "$54,000/mo", occupancy: "95%", status: "Active", color: "green" },
+                      { property: "Market Street Retail", units: "8 units", revenue: "$32,000/mo", occupancy: "75%", status: "Maintenance", color: "yellow" },
+                    ].map((property, index) => (
+                      <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                              <Building2 className="w-6 h-6 text-green-600" />
+                            </div>
+                            <div>
+                              <div className="font-semibold text-gray-900">{property.property}</div>
+                              <div className="text-sm text-gray-500 flex items-center gap-3">
+                                <span>{property.units}</span>
+                                <span>•</span>
+                                <span className="font-medium text-gray-700">{property.revenue}</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm text-gray-600">{property.occupancy}</div>
-                          <div className={`text-xs px-2 py-1 rounded-full inline-block ${
-                            property.color === 'green' ? 'bg-green-100 text-green-700' :
-                            property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
-                          }`}>
-                            {property.status}
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-gray-900 mb-1">{property.occupancy}</div>
+                            <div className={`text-sm px-3 py-1 rounded-full font-medium ${
+                              property.color === 'green' ? 'bg-green-100 text-green-700' :
+                              property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
+                            }`}>
+                              {property.status}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
                 
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-900">Interactive Map View</h4>
-                  <div className="bg-white border border-gray-200 rounded p-6 h-48 flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      <Building2 className="w-8 h-8 mx-auto mb-2" />
-                      <div className="text-sm">Interactive property map</div>
-                      <div className="text-xs">Click properties for details</div>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Portfolio Analytics</h4>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6">
+                      <div className="text-center mb-4">
+                        <Building2 className="w-12 h-12 mx-auto mb-3 text-green-600" />
+                        <div className="text-sm text-green-700 mb-1">Interactive Map View</div>
+                        <div className="text-xs text-green-600">Click properties for details</div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-white p-3 rounded-lg text-center shadow-sm">
+                          <div className="text-xs font-medium text-gray-600 mb-1">Total Properties</div>
+                          <div className="text-2xl font-bold text-green-600">98</div>
+                        </div>
+                        <div className="bg-white p-3 rounded-lg text-center shadow-sm">
+                          <div className="text-xs font-medium text-gray-600 mb-1">Monthly Revenue</div>
+                          <div className="text-2xl font-bold text-blue-600">$206K</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="bg-white p-2 rounded border text-center">
-                      <div className="font-medium text-gray-900">Total Properties</div>
-                      <div className="text-lg font-bold text-green-600">98</div>
-                    </div>
-                    <div className="bg-white p-2 rounded border text-center">
-                      <div className="font-medium text-gray-900">Avg Occupancy</div>
-                      <div className="text-lg font-bold text-blue-600">91.8%</div>
+                  
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Quick Filters</h4>
+                    <div className="space-y-3">
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                        <div className="text-sm font-medium text-gray-900 mb-2">Property Type</div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Residential</span>
+                          <span className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">Commercial</span>
+                        </div>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                        <div className="text-sm font-medium text-gray-900 mb-2">Status</div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Active</span>
+                          <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Maintenance</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -272,26 +315,39 @@ export default function DesktopLanding() {
           </p>
         </div>
         <div className="container mx-auto">
-          <div className="max-w-6xl mx-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-16">
-            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                  <CreditCard className="w-4 h-4 text-purple-600" />
+          <div className="max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-700 to-purple-600 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                  <CreditCard className="w-5 h-5 text-purple-600" />
                 </div>
-                <span className="text-sm font-medium">Recent Transactions</span>
+                <div>
+                  <div className="text-white font-semibold">Transaction Management</div>
+                  <div className="text-purple-100 text-sm">Real-time Activity & Analytics</div>
+                </div>
               </div>
               <div className="flex items-center gap-4">
-                <Button className="bg-purple-600 text-white text-xs px-3 py-1 rounded hover:bg-purple-700">
+                <div className="hidden sm:flex items-center gap-2 text-purple-100">
+                  <div className="w-2 h-2 bg-purple-300 rounded-full"></div>
+                  <span className="text-sm">247 This Month</span>
+                </div>
+                <Button className="bg-white text-purple-700 text-sm px-4 py-2 rounded-lg hover:bg-purple-50 font-medium">
                   Add Transaction
                 </Button>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 border border-gray-200 rounded-lg">
+            <div className="p-6">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-3">
-                  <h4 className="text-sm font-medium text-gray-900">Recent Activity</h4>
-                  <div className="space-y-2">
+                <div className="lg:col-span-2 space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-lg font-semibold text-gray-900">Recent Activity</h4>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>+$12.7K This Month</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
                     {[
                       { description: "Rent Payment - Sunset Apt #12", amount: "+$2,400", date: "Jan 15, 2025", category: "Income", color: "green" },
                       { description: "Maintenance - HVAC Repair", amount: "-$850", date: "Jan 14, 2025", category: "Maintenance", color: "red" },
@@ -299,22 +355,28 @@ export default function DesktopLanding() {
                       { description: "Property Insurance", amount: "-$1,200", date: "Jan 12, 2025", category: "Insurance", color: "red" },
                       { description: "Rent Payment - Riverside #8A", amount: "+$1,800", date: "Jan 12, 2025", category: "Income", color: "green" },
                     ].map((transaction, index) => (
-                      <div key={index} className="bg-white p-3 rounded border border-gray-200 hover:shadow-sm transition-shadow">
+                      <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-200">
                         <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3">
-                              <div className={`w-2 h-2 rounded-full ${transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                              <div className="min-w-0 flex-1">
-                                <div className="text-sm font-medium text-gray-900">{transaction.description}</div>
-                                <div className="text-xs text-gray-500">{transaction.date}</div>
-                              </div>
+                          <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                              transaction.color === 'green' ? 'bg-green-100' : 'bg-red-100'
+                            }`}>
+                              <div className={`w-3 h-3 rounded-full ${
+                                transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'
+                              }`}></div>
+                            </div>
+                            <div>
+                              <div className="font-semibold text-gray-900">{transaction.description}</div>
+                              <div className="text-sm text-gray-500">{transaction.date}</div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className={`text-sm font-medium ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                            <div className={`text-xl font-bold mb-1 ${
+                              transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
+                            }`}>
                               {transaction.amount}
                             </div>
-                            <div className={`text-xs px-2 py-1 rounded-full ${
+                            <div className={`text-sm px-3 py-1 rounded-full font-medium ${
                               transaction.color === 'green' ? 'bg-green-100 text-green-700' :
                               transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
                             }`}>
@@ -327,23 +389,45 @@ export default function DesktopLanding() {
                   </div>
                 </div>
                 
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-900">Transaction Filters</h4>
-                  <div className="space-y-2">
-                    <div className="bg-white p-3 rounded border border-gray-200">
-                      <div className="text-xs text-gray-600 mb-1">Date Range</div>
-                      <div className="text-sm font-medium">Last 30 days</div>
-                    </div>
-                    <div className="bg-white p-3 rounded border border-gray-200">
-                      <div className="text-xs text-gray-600 mb-1">Categories</div>
-                      <div className="flex flex-wrap gap-1">
-                        <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded">Income</span>
-                        <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded">Expenses</span>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Transaction Analytics</h4>
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6">
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="bg-white p-4 rounded-lg shadow-sm">
+                          <div className="text-sm font-medium text-gray-600 mb-2">This Month</div>
+                          <div className="text-3xl font-bold text-green-600 mb-1">+$12,750</div>
+                          <div className="text-xs text-gray-500">Net Income</div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="bg-white p-3 rounded-lg text-center shadow-sm">
+                            <div className="text-xs font-medium text-gray-600 mb-1">Income</div>
+                            <div className="text-lg font-bold text-green-600">$18.4K</div>
+                          </div>
+                          <div className="bg-white p-3 rounded-lg text-center shadow-sm">
+                            <div className="text-xs font-medium text-gray-600 mb-1">Expenses</div>
+                            <div className="text-lg font-bold text-red-600">$5.7K</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-white p-3 rounded border border-gray-200">
-                      <div className="text-xs text-gray-600 mb-1">Total This Month</div>
-                      <div className="text-lg font-bold text-green-600">+$12,750</div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Smart Filters</h4>
+                    <div className="space-y-3">
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                        <div className="text-sm font-medium text-gray-900 mb-2">Date Range</div>
+                        <div className="text-sm text-gray-600">Last 30 days</div>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+                        <div className="text-sm font-medium text-gray-900 mb-2">Categories</div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Income</span>
+                          <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">Expenses</span>
+                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Maintenance</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
