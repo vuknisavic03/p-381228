@@ -14,6 +14,7 @@ export default function DesktopLanding() {
               <span className="text-white font-bold text-sm">S</span>
             </div>
             <nav className="flex items-center gap-6">
+              <Link to="/" className="text-black text-sm font-medium">Accounting</Link>
               <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
             </nav>
           </div>
@@ -53,10 +54,10 @@ export default function DesktopLanding() {
       {/* Financial Overview Section */}
       <section className="px-4 pb-20">
         <div className="container mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold text-black mb-6">Good evening, Kevin</h2>
+          <h2 className="text-4xl font-bold text-black mb-6">Real-time Financial Dashboard</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, 
-            identify gaps, and gain confidence.
+            Monitor your business performance with live metrics. Track revenue, expenses, and profitability 
+            with automated categorization and intelligent insights.
           </p>
         </div>
         <div className="container mx-auto">
@@ -76,38 +77,47 @@ export default function DesktopLanding() {
 
             <div className="flex min-h-[500px]">
               <div className="w-64 bg-gray-50 border-r border-gray-200 p-4">
-                <div className="space-y-1">
-                  <div className="text-sm font-medium text-gray-900 mb-3">Overview</div>
-                  <div className="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded text-sm">
-                    <BarChart3 className="w-4 h-4" />
-                    <span>Dashboard</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm">
-                    <TrendingUp className="w-4 h-4" />
-                    <span>Analytics</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm">
-                    <div className="w-4 h-4 bg-green-100 rounded-sm"></div>
-                    <span>Revenue</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm">
-                    <div className="w-4 h-4 bg-red-100 rounded-sm"></div>
-                    <span>Expenses</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm">
-                    <div className="w-4 h-4 bg-purple-100 rounded-sm"></div>
-                    <span>Profit</span>
-                  </div>
-                </div>
+                 <div className="space-y-1">
+                   <div className="text-sm font-medium text-gray-900 mb-3">Financial Overview</div>
+                   <div className="flex items-center gap-2 px-2 py-1.5 bg-blue-50 text-blue-600 rounded text-sm">
+                     <BarChart3 className="w-4 h-4" />
+                     <span>Dashboard</span>
+                   </div>
+                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
+                     <TrendingUp className="w-4 h-4" />
+                     <span>Analytics</span>
+                   </div>
+                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
+                     <DollarSign className="w-4 h-4" />
+                     <span>Revenue Tracking</span>
+                   </div>
+                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
+                     <Receipt className="w-4 h-4" />
+                     <span>Expense Management</span>
+                   </div>
+                   <div className="flex items-center gap-2 px-2 py-1.5 text-gray-600 rounded text-sm hover:bg-gray-50 cursor-pointer">
+                     <PieChart className="w-4 h-4" />
+                     <span>Profit Analysis</span>
+                   </div>
+                 </div>
 
-                <div className="mt-6">
-                  <div className="text-sm font-medium text-gray-900 mb-3">Quick Actions</div>
-                  <div className="space-y-1">
-                    <div className="px-2 py-1.5 text-gray-600 text-sm">New Transaction</div>
-                    <div className="px-2 py-1.5 text-gray-600 text-sm">Generate Report</div>
-                    <div className="px-2 py-1.5 text-gray-600 text-sm">Export Data</div>
-                  </div>
-                </div>
+                 <div className="mt-6">
+                   <div className="text-sm font-medium text-gray-900 mb-3">Quick Actions</div>
+                   <div className="space-y-1">
+                     <div className="px-2 py-1.5 text-gray-600 text-sm hover:bg-gray-50 cursor-pointer flex items-center gap-2">
+                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                       Add Transaction
+                     </div>
+                     <div className="px-2 py-1.5 text-gray-600 text-sm hover:bg-gray-50 cursor-pointer flex items-center gap-2">
+                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                       Generate Report
+                     </div>
+                     <div className="px-2 py-1.5 text-gray-600 text-sm hover:bg-gray-50 cursor-pointer flex items-center gap-2">
+                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                       Export Data
+                     </div>
+                   </div>
+                 </div>
               </div>
 
               <div className="flex-1">
@@ -185,33 +195,60 @@ export default function DesktopLanding() {
               </div>
             </div>
 
-            <div className="divide-y divide-gray-100">
-              {[
-                { property: "Sunset Apartments", units: "24 units", revenue: "$48,000/mo", occupancy: "92%", status: "Active", color: "green" },
-                { property: "Downtown Office Complex", units: "12 units", revenue: "$72,000/mo", occupancy: "88%", status: "Active", color: "green" },
-                { property: "Riverside Condos", units: "36 units", revenue: "$54,000/mo", occupancy: "95%", status: "Active", color: "green" },
-                { property: "Market Street Retail", units: "8 units", revenue: "$32,000/mo", occupancy: "75%", status: "Maintenance", color: "yellow" },
-                { property: "Oak Hill Townhomes", units: "18 units", revenue: "$36,000/mo", occupancy: "100%", status: "Active", color: "green" },
-              ].map((property, index) => (
-                <div key={index} className="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4">
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium text-gray-900">{property.property}</div>
-                        <div className="text-xs text-gray-500">{property.units}</div>
+            <div className="bg-gray-50 p-4 border border-gray-200 rounded-lg">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="text-sm font-medium text-gray-900">Property Portfolio</h4>
+                  {[
+                    { property: "Sunset Apartments", units: "24 units", revenue: "$48,000/mo", occupancy: "92%", status: "Active", color: "green" },
+                    { property: "Downtown Office Complex", units: "12 units", revenue: "$72,000/mo", occupancy: "88%", status: "Active", color: "green" },
+                    { property: "Riverside Condos", units: "36 units", revenue: "$54,000/mo", occupancy: "95%", status: "Active", color: "green" },
+                  ].map((property, index) => (
+                    <div key={index} className="bg-white p-3 rounded border border-gray-200 hover:shadow-sm transition-shadow">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-gray-900">{property.property}</div>
+                          <div className="text-xs text-gray-500 flex gap-2">
+                            <span>{property.units}</span>
+                            <span>•</span>
+                            <span>{property.revenue}</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm text-gray-600">{property.occupancy}</div>
+                          <div className={`text-xs px-2 py-1 rounded-full inline-block ${
+                            property.color === 'green' ? 'bg-green-100 text-green-700' :
+                            property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
+                          }`}>
+                            {property.status}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">{property.revenue}</div>
-                      <div className="text-sm text-gray-600">Occupancy: {property.occupancy}</div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="space-y-4">
+                  <h4 className="text-sm font-medium text-gray-900">Interactive Map View</h4>
+                  <div className="bg-white border border-gray-200 rounded p-6 h-48 flex items-center justify-center">
+                    <div className="text-center text-gray-500">
+                      <Building2 className="w-8 h-8 mx-auto mb-2" />
+                      <div className="text-sm">Interactive property map</div>
+                      <div className="text-xs">Click properties for details</div>
                     </div>
                   </div>
-                  <div className={`text-xs px-2 py-1 rounded-full ${
-                    property.color === 'green' ? 'bg-green-100 text-green-700' :
-                    property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
-                  }`}>
-                    {property.status}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="bg-white p-2 rounded border text-center">
+                      <div className="font-medium text-gray-900">Total Properties</div>
+                      <div className="text-lg font-bold text-green-600">98</div>
+                    </div>
+                    <div className="bg-white p-2 rounded border text-center">
+                      <div className="font-medium text-gray-900">Avg Occupancy</div>
+                      <div className="text-lg font-bold text-blue-600">91.8%</div>
+                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
@@ -242,36 +279,67 @@ export default function DesktopLanding() {
               </div>
             </div>
 
-            <div className="divide-y divide-gray-100">
-              {[
-                { description: "Rent Payment - Sunset Apt #12", amount: "+$2,400", date: "Jan 15, 2025", category: "Income", color: "green" },
-                { description: "Maintenance - HVAC Repair", amount: "-$850", date: "Jan 14, 2025", category: "Maintenance", color: "red" },
-                { description: "Rent Payment - Downtown #304", amount: "+$6,200", date: "Jan 14, 2025", category: "Income", color: "green" },
-                { description: "Property Insurance", amount: "-$1,200", date: "Jan 12, 2025", category: "Insurance", color: "red" },
-                { description: "Rent Payment - Riverside #8A", amount: "+$1,800", date: "Jan 12, 2025", category: "Income", color: "green" },
-                { description: "Landscaping Services", amount: "-$450", date: "Jan 11, 2025", category: "Maintenance", color: "red" },
-                { description: "Security Deposit Return", amount: "-$2,000", date: "Jan 10, 2025", category: "Deposit", color: "red" },
-              ].map((transaction, index) => (
-                <div key={index} className="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4">
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium text-gray-900">{transaction.description}</div>
-                        <div className="text-xs text-gray-500">{transaction.date}</div>
+            <div className="bg-gray-50 p-4 border border-gray-200 rounded-lg">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-3">
+                  <h4 className="text-sm font-medium text-gray-900">Recent Activity</h4>
+                  <div className="space-y-2">
+                    {[
+                      { description: "Rent Payment - Sunset Apt #12", amount: "+$2,400", date: "Jan 15, 2025", category: "Income", color: "green" },
+                      { description: "Maintenance - HVAC Repair", amount: "-$850", date: "Jan 14, 2025", category: "Maintenance", color: "red" },
+                      { description: "Rent Payment - Downtown #304", amount: "+$6,200", date: "Jan 14, 2025", category: "Income", color: "green" },
+                      { description: "Property Insurance", amount: "-$1,200", date: "Jan 12, 2025", category: "Insurance", color: "red" },
+                      { description: "Rent Payment - Riverside #8A", amount: "+$1,800", date: "Jan 12, 2025", category: "Income", color: "green" },
+                    ].map((transaction, index) => (
+                      <div key={index} className="bg-white p-3 rounded border border-gray-200 hover:shadow-sm transition-shadow">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-2 h-2 rounded-full ${transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-sm font-medium text-gray-900">{transaction.description}</div>
+                                <div className="text-xs text-gray-500">{transaction.date}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-sm font-medium ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                              {transaction.amount}
+                            </div>
+                            <div className={`text-xs px-2 py-1 rounded-full ${
+                              transaction.color === 'green' ? 'bg-green-100 text-green-700' :
+                              transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
+                            }`}>
+                              {transaction.category}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className={`text-sm font-medium ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                        {transaction.amount}
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`text-xs px-2 py-1 rounded-full ${
-                    transaction.color === 'green' ? 'bg-green-100 text-green-700' :
-                    transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
-                  }`}>
-                    {transaction.category}
+                    ))}
                   </div>
                 </div>
-              ))}
+                
+                <div className="space-y-4">
+                  <h4 className="text-sm font-medium text-gray-900">Transaction Filters</h4>
+                  <div className="space-y-2">
+                    <div className="bg-white p-3 rounded border border-gray-200">
+                      <div className="text-xs text-gray-600 mb-1">Date Range</div>
+                      <div className="text-sm font-medium">Last 30 days</div>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-gray-200">
+                      <div className="text-xs text-gray-600 mb-1">Categories</div>
+                      <div className="flex flex-wrap gap-1">
+                        <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded">Income</span>
+                        <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded">Expenses</span>
+                      </div>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-gray-200">
+                      <div className="text-xs text-gray-600 mb-1">Total This Month</div>
+                      <div className="text-lg font-bold text-green-600">+$12,750</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ export default function MobileLanding() {
             <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
               <span className="text-white font-bold text-xs">S</span>
             </div>
-            <span className="text-gray-600 text-sm">Accounting</span>
+            <Link to="/" className="text-gray-600 text-sm">Accounting</Link>
             <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded">Vision</Link>
           </div>
           
@@ -49,9 +49,9 @@ export default function MobileLanding() {
       {/* Mobile Overview Section */}
       <section className="px-4 pb-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-black mb-3">Good evening, Kevin</h2>
+          <h2 className="text-2xl font-bold text-black mb-3">Real-time Financial Dashboard</h2>
           <p className="text-sm text-gray-600">
-            Get real-time visibility into all your transactions in one powerful dashboard.
+            Monitor your business performance with live metrics and automated categorization.
           </p>
         </div>
         <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden mb-8">
@@ -135,28 +135,46 @@ export default function MobileLanding() {
             </Button>
           </div>
 
-          <div className="divide-y divide-gray-100">
-            {[
-              { property: "Sunset Apartments", units: "24 units", revenue: "$48K/mo", occupancy: "92%", status: "Active", color: "green" },
-              { property: "Downtown Office", units: "12 units", revenue: "$72K/mo", occupancy: "88%", status: "Active", color: "green" },
-              { property: "Riverside Condos", units: "36 units", revenue: "$54K/mo", occupancy: "95%", status: "Active", color: "green" },
-              { property: "Market Retail", units: "8 units", revenue: "$32K/mo", occupancy: "75%", status: "Maintenance", color: "yellow" },
-            ].map((property, index) => (
-              <div key={index} className="px-3 py-2 hover:bg-gray-50">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-gray-900 truncate">{property.property}</div>
-                    <div className="text-xs text-gray-600 truncate">{property.units} • {property.revenue} • {property.occupancy}</div>
-                  </div>
-                  <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
-                    property.color === 'green' ? 'bg-green-100 text-green-700' :
-                    property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
-                  }`}>
-                    {property.status}
-                  </div>
+          <div className="p-3 space-y-3">
+            <div className="bg-gray-50 p-2 rounded">
+              <div className="text-xs font-medium text-gray-700 mb-2">Portfolio Overview</div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-white p-2 rounded text-center">
+                  <div className="text-xs text-gray-600">Properties</div>
+                  <div className="text-sm font-bold text-green-600">98</div>
+                </div>
+                <div className="bg-white p-2 rounded text-center">
+                  <div className="text-xs text-gray-600">Occupancy</div>
+                  <div className="text-sm font-bold text-blue-600">91.8%</div>
                 </div>
               </div>
-            ))}
+            </div>
+            
+            <div className="space-y-2">
+              {[
+                { property: "Sunset Apartments", units: "24 units", revenue: "$48K/mo", occupancy: "92%", status: "Active", color: "green" },
+                { property: "Downtown Office", units: "12 units", revenue: "$72K/mo", occupancy: "88%", status: "Active", color: "green" },
+                { property: "Riverside Condos", units: "36 units", revenue: "$54K/mo", occupancy: "95%", status: "Active", color: "green" },
+              ].map((property, index) => (
+                <div key={index} className="bg-white p-2 rounded border border-gray-100 hover:shadow-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-medium text-gray-900 truncate">{property.property}</div>
+                      <div className="text-xs text-gray-600 truncate">{property.units} • {property.revenue}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs text-gray-600">{property.occupancy}</div>
+                      <div className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        property.color === 'green' ? 'bg-green-100 text-green-700' :
+                        property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
+                      }`}>
+                        {property.status}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -182,34 +200,52 @@ export default function MobileLanding() {
             </Button>
           </div>
 
-          <div className="divide-y divide-gray-100">
-            {[
-              { description: "Rent Payment - Apt #12", amount: "+$2,400", date: "Jan 15", category: "Income", color: "green" },
-              { description: "HVAC Repair", amount: "-$850", date: "Jan 14", category: "Maintenance", color: "red" },
-              { description: "Rent - Office #304", amount: "+$6,200", date: "Jan 14", category: "Income", color: "green" },
-              { description: "Property Insurance", amount: "-$1,200", date: "Jan 12", category: "Insurance", color: "red" },
-              { description: "Security Deposit", amount: "-$2,000", date: "Jan 10", category: "Deposit", color: "red" },
-            ].map((transaction, index) => (
-              <div key={index} className="px-3 py-2 hover:bg-gray-50">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-gray-900 truncate">{transaction.description}</div>
-                    <div className="text-xs text-gray-600 truncate flex gap-2">
-                      <span>{transaction.date}</span>
-                      <span className={transaction.amount.startsWith('+') ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                        {transaction.amount}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={`text-xs px-1.5 py-0.5 rounded-full flex-shrink-0 ${
-                    transaction.color === 'green' ? 'bg-green-100 text-green-700' :
-                    transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
-                  }`}>
-                    {transaction.category}
-                  </div>
+          <div className="p-3 space-y-3">
+            <div className="bg-gray-50 p-2 rounded">
+              <div className="text-xs font-medium text-gray-700 mb-2">Quick Stats</div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-white p-2 rounded text-center">
+                  <div className="text-xs text-gray-600">This Month</div>
+                  <div className="text-sm font-bold text-green-600">+$12.7K</div>
+                </div>
+                <div className="bg-white p-2 rounded text-center">
+                  <div className="text-xs text-gray-600">Transactions</div>
+                  <div className="text-sm font-bold text-blue-600">247</div>
                 </div>
               </div>
-            ))}
+            </div>
+            
+            <div className="space-y-2">
+              {[
+                { description: "Rent Payment - Apt #12", amount: "+$2,400", date: "Jan 15", category: "Income", color: "green" },
+                { description: "HVAC Repair", amount: "-$850", date: "Jan 14", category: "Maintenance", color: "red" },
+                { description: "Rent - Office #304", amount: "+$6,200", date: "Jan 14", category: "Income", color: "green" },
+                { description: "Property Insurance", amount: "-$1,200", date: "Jan 12", category: "Insurance", color: "red" },
+              ].map((transaction, index) => (
+                <div key={index} className="bg-white p-2 rounded border border-gray-100 hover:shadow-sm">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2 flex-1 min-w-0">
+                      <div className={`w-2 h-2 rounded-full mt-1 flex-shrink-0 ${transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-medium text-gray-900 truncate">{transaction.description}</div>
+                        <div className="text-xs text-gray-600">{transaction.date}</div>
+                      </div>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <div className={`text-xs font-medium ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                        {transaction.amount}
+                      </div>
+                      <div className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        transaction.color === 'green' ? 'bg-green-100 text-green-700' :
+                        transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
+                      }`}>
+                        {transaction.category}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         
