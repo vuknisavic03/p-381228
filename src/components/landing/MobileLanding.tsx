@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target, Calendar } from "lucide-react";
+import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
 
 export default function MobileLanding() {
   return (
@@ -200,7 +201,7 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Auto-Categorization Feature */}
+      {/* Interactive Auto-Categorization Demo */}
       <section className="px-4 pb-8">
         <div className="mb-6">
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
@@ -211,65 +212,8 @@ export default function MobileLanding() {
             Tell Square AI what types of transactions are important to track, and it'll automatically label and sort them as they arrive.
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Tag className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-semibold text-gray-900">Transaction Feed</span>
-              </div>
-              <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Auto-categorizing</div>
-            </div>
-          </div>
-          <div className="p-4">
-            <div className="space-y-3">
-              {[
-                { 
-                  from: "Wells Fargo Business", 
-                  desc: "Rent Payment - Unit 4B", 
-                  amount: "+$2,400", 
-                  category: "Rent Income",
-                  time: "2 min ago",
-                  color: "bg-green-500"
-                },
-                { 
-                  from: "ServiceMaster", 
-                  desc: "HVAC Emergency Repair", 
-                  amount: "-$850", 
-                  category: "Maintenance",
-                  time: "1 hour ago",
-                  color: "bg-red-500"
-                },
-                { 
-                  from: "State Farm Insurance", 
-                  desc: "Property Insurance Premium", 
-                  amount: "-$1,200", 
-                  category: "Insurance",
-                  time: "3 hours ago",
-                  color: "bg-blue-500"
-                },
-              ].map((item, index) => (
-                <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className={`w-2 h-2 rounded-full ${item.color}`}></div>
-                      <span className="text-sm font-medium text-gray-900">{item.from}</span>
-                      <span className="text-xs text-gray-500">{item.time}</span>
-                    </div>
-                    <div className="text-xs text-gray-700 ml-4">{item.desc}</div>
-                    <div className="flex items-center gap-2 mt-1 ml-4">
-                      <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{item.category}</span>
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Auto-tagged</span>
-                    </div>
-                  </div>
-                  <div className={`text-sm font-semibold ${item.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                    {item.amount}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        
+        <InteractiveCategorizationDemo />
       </section>
 
       {/* Real-time Metrics Feature */}
