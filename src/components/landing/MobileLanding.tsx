@@ -260,13 +260,13 @@ export default function MobileLanding() {
                         <div className="text-gray-700">{transaction.date}</div>
                         <div className="flex items-center gap-2">
                           <div className="inline-flex items-center gap-1">
-                            <div className={`w-2 h-2 rounded-full ${
+                            <div className={`w-1.5 h-1.5 rounded-full ${
                               transaction.category === 'Rent' ? 'bg-green-500' :
                               transaction.category === 'Maintenance' ? 'bg-red-500' :
                               transaction.category === 'Insurance' ? 'bg-blue-500' :
                               'bg-gray-400'
                             }`}></div>
-                            <span className="font-medium px-1.5 py-0.5 bg-gray-50 text-gray-700 rounded text-xs">
+                            <span className="font-medium px-1 py-0.5 bg-gray-50 text-gray-700 rounded text-xs">
                               {transaction.category}
                             </span>
                           </div>
