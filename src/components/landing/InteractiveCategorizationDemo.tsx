@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Tag, Zap, Filter, ChevronDown, Users } from 'lucide-react';
+import { Tag, Zap, Filter, ChevronDown, Users, Building2, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const mockTransactions = [
   {
@@ -11,7 +14,7 @@ const mockTransactions = [
     category: null,
     time: "Just now",
     rawCategory: "Rent Income",
-    color: "bg-green-500"
+    color: "text-green-500"
   },
   {
     id: 2,
@@ -21,7 +24,7 @@ const mockTransactions = [
     category: null,
     time: "2 min ago",
     rawCategory: "Maintenance",
-    color: "bg-red-500"
+    color: "text-red-500"
   },
   {
     id: 3,
@@ -31,7 +34,7 @@ const mockTransactions = [
     category: null,
     time: "5 min ago",
     rawCategory: "Insurance",
-    color: "bg-blue-500"
+    color: "text-blue-500"
   },
   {
     id: 4,
@@ -41,29 +44,27 @@ const mockTransactions = [
     category: null,
     time: "8 min ago",
     rawCategory: "Utilities",
-    color: "bg-orange-500"
+    color: "text-orange-500"
   }
 ];
 
-const categories = [
-  { name: "Rent Income", color: "bg-green-500", count: 0 },
-  { name: "Maintenance", color: "bg-red-500", count: 0 },
-  { name: "Insurance", color: "bg-blue-500", count: 0 },
-  { name: "Utilities", color: "bg-orange-500", count: 0 }
+const categoryStats = [
+  { name: "Rent Income", value: "$7,200", trend: "+12%", icon: DollarSign, color: "text-green-600" },
+  { name: "Maintenance", value: "$2,150", trend: "-8%", icon: Building2, color: "text-red-600" },
+  { name: "Insurance", value: "$3,600", trend: "0%", icon: Users, color: "text-blue-600" },
+  { name: "Utilities", value: "$960", trend: "+5%", icon: Zap, color: "text-orange-600" }
 ];
 
 export default function InteractiveCategorizationDemo() {
   const [transactions, setTransactions] = useState(mockTransactions);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedView, setSelectedView] = useState('All Transactions');
-  const [showFilters, setShowFilters] = useState(false);
-
-  const views = ['All Transactions', 'Inbox', 'Rent Income', 'Maintenance', 'Insurance', 'Utilities'];
+  const [showStats, setShowStats] = useState(false);
 
   const startAutoCategorization = () => {
     setIsProcessing(true);
     setCurrentIndex(0);
+    setShowStats(false);
     
     // Reset all transactions
     setTransactions(mockTransactions.map(t => ({ ...t, category: null })));
@@ -83,6 +84,7 @@ export default function InteractiveCategorizationDemo() {
           
           if (nextIndex === mockTransactions.length) {
             setIsProcessing(false);
+            setTimeout(() => setShowStats(true), 500);
             clearInterval(interval);
           }
           
@@ -93,189 +95,152 @@ export default function InteractiveCategorizationDemo() {
     }, 1200);
   };
 
-  const filteredTransactions = selectedView === 'All Transactions' || selectedView === 'Inbox'
-    ? transactions
-    : transactions.filter(t => t.category === selectedView);
-
-  const getCategoryCounts = () => {
-    return categories.map(cat => ({
-      ...cat,
-      count: transactions.filter(t => t.category === cat.name).length
-    }));
-  };
+  const categorizedCount = transactions.filter(t => t.category).length;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-      {/* Header */}
-      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-6 h-6 bg-gray-900 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-xs">S</span>
+    <div className="space-y-6">
+      {/* Control Panel */}
+      <Card className="shadow-sm border-gray-200">
+        <CardHeader className="border-b border-gray-100 bg-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <CardTitle className="flex items-center gap-2 text-gray-900 font-semibold">
+                <Tag className="w-5 h-5 text-blue-600" />
+                Smart Transaction Categorization
+              </CardTitle>
+              <Badge variant="secondary" className="bg-gray-100 text-gray-700 font-medium">
+                {categorizedCount}/{transactions.length} Categorized
+              </Badge>
             </div>
-            <span className="text-sm font-semibold text-gray-900">Square</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
+            
             <Button 
-              size="sm" 
-              variant="outline" 
               onClick={startAutoCategorization}
               disabled={isProcessing}
-              className="text-xs h-7 px-3"
+              className="bg-black text-white hover:bg-gray-800"
             >
               {isProcessing ? (
                 <>
-                  <Zap className="w-3 h-3 mr-1 animate-pulse" />
+                  <Zap className="w-4 h-4 mr-2 animate-pulse" />
                   Auto-categorizing...
                 </>
               ) : (
                 <>
-                  <Zap className="w-3 h-3 mr-1" />
-                  Try Auto-Label
+                  <Zap className="w-4 h-4 mr-2" />
+                  Try Smart Categorization
                 </>
               )}
             </Button>
           </div>
-        </div>
-      </div>
+        </CardHeader>
+      </Card>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-48 bg-gray-50 border-r border-gray-200">
-          <div className="p-3">
-            <div className="text-xs font-medium text-gray-500 mb-2">Views</div>
-            
-            <div className="space-y-1">
-              {views.map((view, index) => {
-                const isActive = selectedView === view;
-                const count = view === 'All Transactions' || view === 'Inbox' 
-                  ? transactions.length 
-                  : transactions.filter(t => t.category === view).length;
-                
-                return (
-                  <button
-                    key={view}
-                    onClick={() => setSelectedView(view)}
-                    className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors ${
-                      isActive 
-                        ? 'bg-blue-100 text-blue-700 font-medium' 
-                        : 'text-gray-600 hover:bg-gray-100'
+      {/* Transaction Feed */}
+      <Card className="shadow-sm border-gray-200 overflow-hidden">
+        <CardHeader className="border-b border-gray-100 bg-white">
+          <CardTitle className="flex items-center gap-2 text-gray-900 font-semibold">
+            Live Transaction Feed
+            {isProcessing && (
+              <Badge className="bg-green-100 text-green-700 animate-pulse">
+                Processing
+              </Badge>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-hidden rounded-b-xl">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
+                  <TableHead className="font-semibold text-gray-800">Source</TableHead>
+                  <TableHead className="font-semibold text-gray-800">Description</TableHead>
+                  <TableHead className="font-semibold text-gray-800">Category</TableHead>
+                  <TableHead className="font-semibold text-gray-800 text-right">Amount</TableHead>
+                  <TableHead className="font-semibold text-gray-800">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((transaction, index) => (
+                  <TableRow 
+                    key={transaction.id} 
+                    className={`hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0 transition-all duration-300 ${
+                      !transaction.category ? 'bg-yellow-50/30' : ''
                     }`}
                   >
-                    <div className="flex items-center gap-2">
-                      {index === 0 && <Tag className="w-3 h-3" />}
-                      {index === 1 && <div className="w-2 h-2 bg-red-500 rounded-full"></div>}
-                      {index > 1 && (
-                        <div className={`w-2 h-2 rounded-full ${
-                          categories.find(c => c.name === view)?.color || 'bg-gray-400'
-                        }`}></div>
-                      )}
-                      <span>{view}</span>
-                    </div>
-                    {count > 0 && (
-                      <span className="text-xs text-gray-500">{count}</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1">
-          {/* Content Header */}
-          <div className="px-4 py-3 border-b border-gray-200 bg-white">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Tag className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-semibold text-gray-900">{selectedView}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                {isProcessing && (
-                  <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium animate-pulse">
-                    Auto-categorizing
-                  </div>
-                )}
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-900"
-                >
-                  <Filter className="w-3 h-3" />
-                  Filter
-                  <ChevronDown className={`w-3 h-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Filter Bar */}
-          {showFilters && (
-            <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
-              <div className="flex gap-2 text-xs">
-                <div className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">All Categories</div>
-                <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full">This Month</div>
-                <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Property: All</div>
-              </div>
-            </div>
-          )}
-
-          {/* Transaction List */}
-          <div className="p-4">
-            <div className="space-y-2">
-              {filteredTransactions.map((transaction, index) => (
-                <div 
-                  key={transaction.id} 
-                  className={`p-3 rounded-lg transition-all duration-300 ${
-                    transaction.category 
-                      ? 'bg-gray-50 hover:bg-gray-100' 
-                      : 'bg-white border border-dashed border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${
-                        transaction.category 
-                          ? transaction.color 
-                          : 'bg-gray-300 animate-pulse'
-                      }`}></div>
-                      <span className="text-sm font-medium text-gray-900">{transaction.from}</span>
-                      <span className="text-xs text-gray-500">{transaction.time}</span>
-                    </div>
-                    <span className={`text-sm font-semibold ${
-                      transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {transaction.amount}
-                    </span>
-                  </div>
-                  
-                  <div className="text-xs text-gray-700 mb-2 ml-4">
-                    {transaction.desc}
-                  </div>
-                  
-                  <div className="flex items-center gap-2 ml-4">
-                    {transaction.category ? (
-                      <>
-                        <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                    <TableCell className="py-4">
+                      <div className="font-semibold text-gray-900">{transaction.from}</div>
+                      <div className="text-xs text-gray-500">{transaction.time}</div>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <span className="text-sm text-gray-700">{transaction.desc}</span>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      {transaction.category ? (
+                        <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-medium">
                           {transaction.category}
-                        </span>
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                          Auto-labeled
-                        </span>
-                      </>
-                    ) : (
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full animate-pulse">
-                        Analyzing...
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="border-dashed animate-pulse">
+                          Analyzing...
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right py-4">
+                      <span className={transaction.amount.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                        {transaction.amount}
                       </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      {transaction.category ? (
+                        <Badge className="bg-green-100 text-green-700">
+                          Auto-labeled
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="border-orange-200 text-orange-600">
+                          Pending
+                        </Badge>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Category Analytics */}
+      {showStats && (
+        <div className="animate-fade-in">
+          <Card className="shadow-sm border-gray-200">
+            <CardHeader className="border-b border-gray-100 bg-white">
+              <CardTitle className="text-gray-900 font-semibold">Category Analytics</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {categoryStats.map((stat) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div key={stat.name} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center justify-between mb-2">
+                        <Icon className={`h-5 w-5 ${stat.color}`} />
+                        <span className={`text-xs font-medium ${stat.color}`}>
+                          {stat.trend}
+                        </span>
+                      </div>
+                      <div className="text-lg font-bold text-gray-900 mb-1">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        {stat.name}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+      )}
     </div>
   );
 }
