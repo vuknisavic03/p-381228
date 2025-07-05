@@ -7,21 +7,21 @@ export default function DesktopLanding() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="px-4 py-4">
+      <header className="px-4 py-4 border-b border-gray-100">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-8">
             <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
               <span className="text-white font-bold text-sm">S</span>
             </div>
             <nav className="flex items-center gap-6">
-              <Link to="/" className="text-black text-sm font-medium">Accounting</Link>
-              <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
+              <Link to="/" className="text-gray-600 text-sm">Accounting</Link>
+              <Link to="/vision" className="text-blue-600 text-sm font-medium">Vision</Link>
             </nav>
           </div>
           
           <div className="flex items-center gap-4">
             <button className="text-gray-600 text-sm">Log in</button>
-            <Button className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800">
+            <Button className="bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800">
               Get Square free
             </Button>
           </div>
@@ -31,36 +31,23 @@ export default function DesktopLanding() {
       {/* Hero Section */}
       <section className="px-4 py-20">
         <div className="container mx-auto text-center">
-          <div className="mb-8 flex justify-center">
-            <div className="w-16 h-16 flex items-center justify-center">
-              <BarChart3 className="w-12 h-12 text-black" strokeWidth={1.5} />
+          <div className="mb-12 flex justify-center">
+            <div className="w-20 h-20 flex items-center justify-center">
+              <Building2 className="w-16 h-16 text-black" strokeWidth={1.5} />
             </div>
           </div>
           
-          
-          <h1 className="text-6xl font-bold text-black leading-tight mb-6 max-w-4xl mx-auto">
-            Manage your entire <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">property portfolio</span> in one dashboard
+          <h1 className="text-6xl font-bold text-black leading-tight mb-8 max-w-4xl mx-auto">
+            The dashboard that thinks like you
           </h1>
           
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Track revenue, expenses, and profitability across all properties. Automated categorization, real-time insights, and powerful analytics built for property managers.
+          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Meet Square Accounting, the dashboard that organizes itself, tracks revenue, and manages expenses any way you'd like.
           </p>
           
-          <div className="flex justify-center gap-8 mb-12">
-            <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-cyan-50 px-4 py-2 rounded-full border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Real-time Analytics</span>
-            </div>
-            <div className="flex items-center gap-3 bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-2 rounded-full border border-purple-100 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="w-2 h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Automated Categorization</span>
-            </div>
-          </div>
-          
           <div className="flex justify-center mb-16">
-            <Button className="bg-gradient-to-r from-gray-900 to-black text-white text-base px-8 py-4 rounded-lg hover:from-black hover:to-gray-900 flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300">
-              <span>Watch Demo</span>
-              <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-pulse shadow-sm"></div>
+            <Button className="bg-black text-white text-lg px-8 py-4 rounded-lg hover:bg-gray-800 transition-colors">
+              Get Square free
             </Button>
           </div>
         </div>
@@ -69,8 +56,8 @@ export default function DesktopLanding() {
       {/* Financial Overview Section */}
       <section className="px-4 pb-20">
         <div className="container mx-auto">
-          <div className="max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-gray-900 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
                   <span className="text-gray-900 text-lg font-bold">S</span>
@@ -197,18 +184,14 @@ export default function DesktopLanding() {
       <section className="px-4 pb-20">
         <div className="container mx-auto mb-16">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              Live Property Data
-            </div>
-            <h2 className="text-4xl font-bold text-black mb-6">Portfolio Overview at a Glance</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Monitor all your properties in real-time. Track performance, identify opportunities, and make data-driven decisions with our intelligent portfolio dashboard.
+            <h2 className="text-5xl font-bold text-black mb-6">Organize your properties</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Group properties by type, filter by performance, and track everything in one view.
             </p>
           </div>
         </div>
         <div className="container mx-auto">
-            <div className="max-w-7xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+            <div className="max-w-7xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
             <div className="border-b border-gray-100 bg-white px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -280,19 +263,15 @@ export default function DesktopLanding() {
       <section className="px-4 pb-20">
         <div className="container mx-auto mb-16">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Target className="w-3 h-3" />
-              Smart Categorization
-            </div>
-            <h2 className="text-4xl font-bold text-black mb-6">Every Transaction Automatically Organized</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              AI-powered transaction categorization saves hours of manual work. Get instant insights into cash flow patterns and identify profit opportunities across your portfolio.
+            <h2 className="text-5xl font-bold text-black mb-6">Filter out noise</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Auto-categorize transactions, group by property, and focus on what matters.
             </p>
           </div>
         </div>
         {/* Transaction Tracking Section */}
         <div className="container mx-auto">
-          <div className="max-w-7xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-16">
+          <div className="max-w-7xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden mb-16">
             <div className="border-b border-gray-100 bg-white px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -373,18 +352,11 @@ export default function DesktopLanding() {
       </section>
 
 
-      {/* Workspaces Section */}
-      <section className="px-4 py-16 bg-gray-50">
-        <div className="container mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold text-black mb-6">Workspaces built for managers and individuals</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Seamlessly collaborate between workspaces. Keep data organized and set performance across 
-            teams all.
-          </p>
-        </div>
-        
+      {/* Testimonials Section */}
+      <section className="px-4 py-16">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
+        
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
             {[
               {
                 quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
@@ -417,7 +389,7 @@ export default function DesktopLanding() {
                 handle: "@roberttaylor"
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div key={index} className="bg-white p-6 rounded-xl border border-gray-100">
                 <blockquote className="text-gray-900 mb-4">
                   "{testimonial.quote}"
                 </blockquote>
