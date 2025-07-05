@@ -52,7 +52,7 @@ export default function MobileLanding() {
           
           <div className="flex justify-center">
             <div className="bg-gray-50 rounded-2xl p-6">
-              <img src="/lovable-uploads/7e062404-a117-443c-a163-5655942ab9f9.png" alt="Dashboard Preview" className="max-w-full h-auto" />
+              <img src="/images/1.svg" alt="Dashboard Preview" className="max-w-full h-auto" />
             </div>
           </div>
         </div>
