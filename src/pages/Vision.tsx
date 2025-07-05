@@ -1,49 +1,37 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Eye } from "lucide-react";
 
 export default function Vision() {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-gray-100">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center">
-                <span className="text-xl font-medium text-gray-900">PropertyHub</span>
-              </Link>
+      <header className="px-4 py-4 border-b border-gray-200">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
+              <span className="text-white font-bold text-sm">S</span>
             </div>
-            
-            <div className="flex items-center">
-              <Link to="/">
-                <Button variant="ghost" className="gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Home
-                </Button>
-              </Link>
-            </div>
+            <nav className="flex items-center gap-6">
+              <Link to="/" className="text-black text-sm font-medium">Accounting</Link>
+              <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
+            </nav>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button className="text-gray-600 text-sm">Log in</button>
+            <Button className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800">
+              Get Square free
+            </Button>
           </div>
         </div>
       </header>
 
-      {/* Empty Content Area (for future design) */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center p-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
-            <Eye className="h-10 w-10 text-gray-500" />
-          </div>
-          <h1 className="text-3xl font-semibold mb-4">Vision Coming Soon</h1>
-          <p className="text-gray-600 max-w-md mx-auto mb-8">
-            We're Working on Something Special. Check back later for our vision of the future of property management.
-          </p>
-          <Link to="/">
-            <Button>
-              Return to Homepage
-            </Button>
-          </Link>
+      {/* Content */}
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Vision</h1>
+          <p className="text-lg text-gray-600">Coming soon...</p>
         </div>
       </div>
     </div>
