@@ -113,6 +113,7 @@ export default function MobileLanding() {
                 { metric: "Net Profit", value: "$36,220", change: "+18.7%", tag: "Profit", color: "purple" },
                 { metric: "Cash Flow", value: "$42,100", change: "+5.4%", tag: "Cash", color: "blue" },
                 { metric: "Accounts Receivable", value: "$28,900", change: "+2.1%", tag: "AR", color: "orange" },
+                { metric: "Accounts Payable", value: "$15,600", change: "-8.3%", tag: "AP", color: "pink" },
               ].map((metric, index) => (
                 <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-3 rounded-lg border border-gray-200 hover:shadow-md transition-all">
                   <div className="flex items-center justify-between mb-2">
@@ -122,7 +123,8 @@ export default function MobileLanding() {
                       metric.color === 'red' ? 'bg-red-100 text-red-700' :
                       metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
                       metric.color === 'blue' ? 'bg-blue-100 text-blue-700' :
-                      metric.color === 'orange' ? 'bg-orange-100 text-orange-700' : ''
+                      metric.color === 'orange' ? 'bg-orange-100 text-orange-700' :
+                      metric.color === 'pink' ? 'bg-pink-100 text-pink-700' : ''
                     }`}>
                       {metric.tag}
                     </div>
