@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp } from "lucide-react";
+import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target } from "lucide-react";
 
 export default function MobileLanding() {
   return (
@@ -26,6 +26,10 @@ export default function MobileLanding() {
       {/* Mobile Hero Section */}
       <section className="px-4 py-12">
         <div className="text-center">
+          <div className="mb-4 inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium">
+            ✨ Trusted by 10,000+ Property Managers
+          </div>
+          
           <div className="mb-6 flex justify-center">
             <div className="w-12 h-12 flex items-center justify-center">
               <BarChart3 className="w-8 h-8 text-black" strokeWidth={1.5} />
@@ -33,16 +37,34 @@ export default function MobileLanding() {
           </div>
           
           <h1 className="text-3xl font-bold text-black leading-tight mb-4">
-            Break free from the old way
+            Manage your entire <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">property portfolio</span> in one dashboard
           </h1>
           
-          <p className="text-base text-gray-600 mb-8 leading-relaxed">
-            Personalized to your work and beautifully designed. An accounting solution that makes your life simpler.
+          <p className="text-base text-gray-600 mb-6 leading-relaxed">
+            Track revenue, expenses, and profitability across all properties. Automated categorization and real-time insights built for property managers.
           </p>
           
-          <Button className="bg-black text-white text-sm px-6 py-3 rounded-md hover:bg-gray-800 mb-12 w-full max-w-xs">
-            Get Square free
-          </Button>
+          <div className="flex flex-col gap-2 mb-8 text-sm">
+            <div className="flex items-center justify-center gap-2 text-green-600">
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+              <span>+47% Average ROI Increase</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 text-blue-600">
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+              <span>5 Hours Saved Weekly</span>
+            </div>
+          </div>
+          
+          <div className="flex flex-col gap-3 mb-12 max-w-xs mx-auto">
+            <Button className="bg-black text-white text-sm px-6 py-3 rounded-lg hover:bg-gray-800 w-full flex items-center justify-center gap-2">
+              <span>Start Free Trial</span>
+              <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
+            </Button>
+            <Button variant="outline" className="text-gray-600 border-gray-300 text-sm px-6 py-3 rounded-lg hover:bg-gray-50 w-full flex items-center justify-center gap-2">
+              <span>Watch Demo</span>
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -115,18 +137,28 @@ export default function MobileLanding() {
 
       {/* Mobile Listings Section */}
       <section className="px-4 pb-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-black mb-3">Map your listings with precision</h2>
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-medium mb-4">
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+            Live Property Data
+          </div>
+          <h2 className="text-2xl font-bold text-black mb-3">Portfolio Overview at a Glance</h2>
           <p className="text-sm text-gray-600">
-            Visualize all your property or business listings on an interactive map.
+            Monitor all your properties in real-time. Track performance and identify opportunities with intelligent insights.
           </p>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
           <div className="border-b border-gray-100 bg-white px-4 py-3">
-            <div className="flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-gray-400" />
-              <span className="font-semibold text-gray-900 text-sm">Listings Overview</span>
-              <div className="bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded text-xs">24 Properties</div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Building2 className="h-4 w-4 text-gray-600" />
+                <span className="font-semibold text-gray-900 text-sm">Portfolio Performance</span>
+                <div className="bg-blue-50 text-blue-700 font-medium px-2 py-1 rounded-full text-xs">24</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="bg-green-50 text-green-700 font-medium px-2 py-1 rounded-full text-xs">↑ 12%</div>
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+              </div>
             </div>
           </div>
 
@@ -169,15 +201,32 @@ export default function MobileLanding() {
 
       {/* Mobile Transactions Section */}
       <section className="px-4 pb-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-black mb-3">All transactions tracked</h2>
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full text-xs font-medium mb-4">
+            <Target className="w-3 h-3" />
+            Smart Categorization
+          </div>
+          <h2 className="text-2xl font-bold text-black mb-3">Every Transaction Automatically Organized</h2>
           <p className="text-sm text-gray-600">
-            Get real-time visibility into all your transactions in one powerful dashboard.
+            AI-powered categorization saves hours of manual work. Get instant insights into cash flow patterns across your portfolio.
           </p>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
+          <div className="border-b border-gray-100 bg-white px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CreditCard className="h-4 w-4 text-gray-600" />
+                <span className="font-semibold text-gray-900 text-sm">Transaction Stream</span>
+                <div className="bg-gray-50 text-gray-700 font-medium px-2 py-1 rounded-full text-xs">Live</div>
+              </div>
+              <div className="bg-green-50 text-green-700 font-medium px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                <div className="w-1 h-1 bg-green-500 rounded-full"></div>
+                Auto
+              </div>
+            </div>
+          </div>
           <div className="p-4">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-xl overflow-hidden">
               <div className="space-y-3 p-4">
                 {[
                   { from: "Rent Payment - Apt #12", notes: "Monthly rent collection", amount: 2400, date: "Jan 15", category: "Rent", type: "revenue", method: "Bank Transfer" },
@@ -212,23 +261,48 @@ export default function MobileLanding() {
             </div>
           </div>
         </div>
-        
-        {/* Mobile CTA */}
-        <div className="px-4 text-center">
-          <h2 className="text-3xl font-bold text-black mb-4">Solution that is built for you</h2>
-          <p className="text-lg text-gray-600 mb-8">Use for free</p>
+      </section>
+
+      {/* Mobile ROI Section */}
+      <section className="px-4 py-8 bg-gradient-to-b from-blue-50 to-white">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium mb-6">
+            <TrendingUp className="w-3 h-3" />
+            Proven Results
+          </div>
+          <h2 className="text-3xl font-bold text-black mb-4">See Your ROI in <span className="text-blue-600">30 Days</span></h2>
+          <p className="text-base text-gray-600 mb-8">
+            Property managers using Square see an average 47% increase in portfolio ROI within the first month.
+          </p>
+          
+          <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto mb-8">
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-xl font-bold text-green-600 mb-1">47%</div>
+              <div className="text-xs text-gray-600">ROI Increase</div>
+            </div>
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-xl font-bold text-blue-600 mb-1">5hrs</div>
+              <div className="text-xs text-gray-600">Time Saved</div>
+            </div>
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-xl font-bold text-purple-600 mb-1">99.9%</div>
+              <div className="text-xs text-gray-600">Accuracy</div>
+            </div>
+          </div>
           
           <div className="max-w-sm mx-auto">
-            <div className="flex flex-col gap-3 mb-6">
+            <div className="flex flex-col gap-3 mb-4">
               <input 
                 type="email" 
-                placeholder="Email" 
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black text-sm"
+                placeholder="Enter your email" 
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm"
               />
-              <Button className="bg-black text-white w-full py-3 rounded-lg hover:bg-gray-800 text-sm">
-                Sign up
+              <Button className="bg-black text-white w-full py-3 rounded-lg hover:bg-gray-800 text-sm flex items-center justify-center gap-2">
+                <span>Start Free Trial</span>
+                <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
               </Button>
             </div>
+            <p className="text-xs text-gray-500">No credit card required • Setup in 2 minutes</p>
           </div>
         </div>
       </section>

@@ -37,17 +37,45 @@ export default function DesktopLanding() {
             </div>
           </div>
           
+          <div className="mb-4 flex justify-center">
+            <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+              ✨ Trusted by 10,000+ Property Managers
+            </div>
+          </div>
+          
           <h1 className="text-6xl font-bold text-black leading-tight mb-6 max-w-4xl mx-auto">
-            Break free from the old way
+            Manage your entire <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">property portfolio</span> in one dashboard
           </h1>
           
-          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Personalized to your work and beautifully designed. An accounting solution that makes your life simpler.
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Track revenue, expenses, and profitability across all properties. Automated categorization, real-time insights, and powerful analytics built for property managers.
           </p>
           
-          <Button className="bg-black text-white text-base px-6 py-3 rounded-md hover:bg-gray-800 mb-16">
-            Get Square free
-          </Button>
+          <div className="flex justify-center gap-6 mb-12">
+            <div className="flex items-center gap-2 text-green-600">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-sm font-medium">+47% Average ROI Increase</span>
+            </div>
+            <div className="flex items-center gap-2 text-blue-600">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm font-medium">5 Hours Saved Weekly</span>
+            </div>
+            <div className="flex items-center gap-2 text-purple-600">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span className="text-sm font-medium">99.9% Accuracy</span>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <Button className="bg-black text-white text-base px-8 py-4 rounded-lg hover:bg-gray-800 flex items-center gap-2">
+              <span>Start Free Trial</span>
+              <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
+            </Button>
+            <Button variant="outline" className="text-gray-600 border-gray-300 text-base px-8 py-4 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+              <span>Watch Demo</span>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -181,20 +209,30 @@ export default function DesktopLanding() {
       {/* Property Management Section */}
       <section className="px-4 pb-20">
         <div className="container mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-black mb-6">Map your listings with precision</h2>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Visualize all your property or business listings on an interactive map. Manage availability, get 
-            insights, and plan with confidence.
-          </p>
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              Live Property Data
+            </div>
+            <h2 className="text-4xl font-bold text-black mb-6">Portfolio Overview at a Glance</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Monitor all your properties in real-time. Track performance, identify opportunities, and make data-driven decisions with our intelligent portfolio dashboard.
+            </p>
+          </div>
         </div>
         <div className="container mx-auto">
-          <div className="max-w-7xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+            <div className="max-w-7xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
             <div className="border-b border-gray-100 bg-white px-6 py-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-gray-400" />
-                  <span className="font-semibold text-gray-900">Listings Overview</span>
-                  <div className="bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded text-xs">24 Properties</div>
+                <div className="flex items-center gap-4">
+                  <Building2 className="h-5 w-5 text-gray-600" />
+                  <span className="font-semibold text-gray-900">Portfolio Performance</span>
+                  <div className="bg-blue-50 text-blue-700 font-medium px-3 py-1 rounded-full text-xs">24 Properties</div>
+                  <div className="bg-green-50 text-green-700 font-medium px-3 py-1 rounded-full text-xs">↑ 12% Growth</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-xs text-gray-500">Last updated: 2 min ago</div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 </div>
               </div>
             </div>
@@ -254,16 +292,38 @@ export default function DesktopLanding() {
       {/* Transaction Tracking Section */}
       <section className="px-4 pb-20">
         <div className="container mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-black mb-6">A place to get all transactions tracked</h2>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, 
-            identify gaps, and gain confidence.
-          </p>
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Target className="w-3 h-3" />
+              Smart Categorization
+            </div>
+            <h2 className="text-4xl font-bold text-black mb-6">Every Transaction Automatically Organized</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              AI-powered transaction categorization saves hours of manual work. Get instant insights into cash flow patterns and identify profit opportunities across your portfolio.
+            </p>
+          </div>
         </div>
         {/* Transaction Tracking Section */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-16">
-          <div className="p-6">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="container mx-auto">
+          <div className="max-w-7xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-16">
+            <div className="border-b border-gray-100 bg-white px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <CreditCard className="h-5 w-5 text-gray-600" />
+                  <span className="font-semibold text-gray-900">Transaction Stream</span>
+                  <div className="bg-gray-50 text-gray-700 font-medium px-3 py-1 rounded-full text-xs">Real-time</div>
+                  <div className="bg-green-50 text-green-700 font-medium px-3 py-1 rounded-full text-xs flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    Auto-categorized
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button className="text-xs text-gray-500 hover:text-gray-700">Export</button>
+                  <button className="text-xs text-gray-500 hover:text-gray-700">Filter</button>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl overflow-hidden">
               <table className="w-full">
                 <thead>
                   <tr className="border-b bg-gray-50/80">
@@ -316,23 +376,46 @@ export default function DesktopLanding() {
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="px-4 py-20">
+      {/* ROI Section */}
+      <section className="px-4 py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="container mx-auto text-center">
-          <h2 className="text-5xl font-bold text-black mb-6">Solution that is built for you</h2>
-          <p className="text-2xl text-gray-600 mb-12">Use for free</p>
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
+            <TrendingUp className="w-4 h-4" />
+            Proven Results
+          </div>
+          <h2 className="text-5xl font-bold text-black mb-6">See Your ROI in <span className="text-blue-600">30 Days</span></h2>
+          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+            Property managers using Square see an average 47% increase in portfolio ROI within the first month. Join thousands who've transformed their business.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+              <div className="text-3xl font-bold text-green-600 mb-2">47%</div>
+              <div className="text-gray-600">Average ROI Increase</div>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+              <div className="text-3xl font-bold text-blue-600 mb-2">5hrs</div>
+              <div className="text-gray-600">Time Saved Weekly</div>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+              <div className="text-3xl font-bold text-purple-600 mb-2">99.9%</div>
+              <div className="text-gray-600">Data Accuracy</div>
+            </div>
+          </div>
           
           <div className="max-w-md mx-auto">
             <div className="flex gap-2 mb-6">
               <input 
                 type="email" 
-                placeholder="Email" 
-                className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black"
+                placeholder="Enter your email" 
+                className="flex-1 px-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
-              <Button className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800">
-                Sign up
+              <Button className="bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 flex items-center gap-2">
+                Start Free Trial
+                <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
               </Button>
             </div>
+            <p className="text-sm text-gray-500">No credit card required • Setup in 2 minutes</p>
           </div>
         </div>
       </section>
