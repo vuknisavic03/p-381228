@@ -46,25 +46,21 @@ export default function DesktopLanding() {
             Track revenue, expenses, and profitability across all properties. Automated categorization, real-time insights, and powerful analytics built for property managers.
           </p>
           
-          <div className="flex justify-center gap-6 mb-12">
-            <div className="flex items-center gap-2 text-blue-600">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-sm font-medium">Real-time Analytics</span>
+          <div className="flex justify-center gap-8 mb-12">
+            <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-cyan-50 px-4 py-2 rounded-full border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Real-time Analytics</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-              <span className="text-sm font-medium">Automated Categorization</span>
+            <div className="flex items-center gap-3 bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-2 rounded-full border border-purple-100 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="w-2 h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Automated Categorization</span>
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button className="bg-black text-white text-base px-8 py-4 rounded-lg hover:bg-gray-800 flex items-center gap-2">
-              <span>Start Free Trial</span>
-              <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
-            </Button>
-            <Button variant="outline" className="text-gray-600 border-gray-300 text-base px-8 py-4 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+          <div className="flex justify-center mb-16">
+            <Button className="bg-gradient-to-r from-gray-900 to-black text-white text-base px-8 py-4 rounded-lg hover:from-black hover:to-gray-900 flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300">
               <span>Watch Demo</span>
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-pulse shadow-sm"></div>
             </Button>
           </div>
         </div>
