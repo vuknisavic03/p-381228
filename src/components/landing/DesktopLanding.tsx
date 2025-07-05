@@ -347,8 +347,17 @@ export default function DesktopLanding() {
                         <span className="text-gray-700 text-sm">{transaction.date}</span>
                       </td>
                       <td className="py-4 px-4 w-[15%]">
-                        <div className="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                          {transaction.category}
+                        <div className="flex items-center gap-2">
+                          <div className={`w-1.5 h-1.5 rounded-full ${
+                            transaction.category === 'Rent' ? 'bg-green-500' :
+                            transaction.category === 'Maintenance' ? 'bg-red-500' :
+                            transaction.category === 'Insurance' ? 'bg-blue-500' :
+                            transaction.category === 'Fees' ? 'bg-purple-500' :
+                            'bg-gray-400'
+                          }`}></div>
+                          <span className="text-xs font-medium px-1 py-0.5 bg-gray-50 text-gray-700 rounded">
+                            {transaction.category}
+                          </span>
                         </div>
                       </td>
                       <td className="py-4 px-4 w-[15%]">
