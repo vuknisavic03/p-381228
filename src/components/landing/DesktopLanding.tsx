@@ -54,12 +54,12 @@ export default function DesktopLanding() {
           </div>
           
           <div className="flex justify-center">
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-2 shadow-lg overflow-hidden">
-              <div className="w-[800px] h-[450px] relative overflow-hidden rounded-xl">
+            <div className="bg-white rounded-2xl p-4 shadow-xl border border-gray-200 overflow-hidden">
+              <div className="w-[900px] h-[500px] relative">
                 <img 
                   src={dashboard} 
                   alt="Dashboard Preview" 
-                  className="absolute top-0 left-0 w-full h-full object-cover object-top-left scale-110" 
+                  className="w-full h-full object-contain rounded-lg" 
                 />
               </div>
             </div>
