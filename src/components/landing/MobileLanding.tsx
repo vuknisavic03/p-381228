@@ -53,11 +53,12 @@ export default function MobileLanding() {
           
           <div className="flex justify-center">
             <div className="bg-white rounded-2xl p-3 shadow-xl border border-gray-200 overflow-hidden">
-              <div className="w-full max-w-[380px] h-[220px] relative">
+              <div className="w-full max-w-[480px] h-[320px] relative">
                 <img 
                   src={dashboard} 
                   alt="Dashboard Preview" 
-                  className="w-full h-full object-contain rounded-lg" 
+                  className="w-full h-full object-cover rounded-lg" 
+                  style={{ imageRendering: 'crisp-edges' }}
                 />
               </div>
             </div>
