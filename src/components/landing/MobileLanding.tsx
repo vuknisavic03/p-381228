@@ -143,9 +143,15 @@ export default function MobileLanding() {
       {/* Mobile Listings Section */}
       <section className="px-4 pb-8">
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-medium mb-4">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-            Live Property Data
+          <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500/10 via-green-500/10 to-emerald-500/10 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-emerald-200/50 shadow-lg mx-auto group hover:shadow-xl transition-all duration-500 mb-4">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/5 to-green-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative flex items-center justify-center gap-3">
+              <div className="w-2 h-2 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full animate-pulse shadow-sm"></div>
+              <span className="text-sm font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">Live Property Data</span>
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
+                <Building2 className="w-3 h-3 text-emerald-600" />
+              </div>
+            </div>
           </div>
           <h2 className="text-2xl font-bold text-black mb-3">Portfolio Overview at a Glance</h2>
           <p className="text-sm text-gray-600">
