@@ -65,59 +65,70 @@ export default function DesktopLanding() {
               Tell Square AI what types of transactions are important to track, and it'll automatically label and sort them as they arrive.
             </p>
           </div>
-          <div className="max-w-4xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            <div className="p-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <div className="mb-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Tag className="w-6 h-6 text-blue-600" />
-                      <h3 className="text-xl font-semibold text-gray-900">Smart Categories</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {['Rent', 'Maintenance', 'Insurance', 'Utilities', 'Legal', 'Marketing'].map((category, index) => (
-                        <div key={index} className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-full">
-                          <div className={`w-3 h-3 rounded-full ${
-                            category === 'Rent' ? 'bg-green-500' :
-                            category === 'Maintenance' ? 'bg-red-500' :
-                            category === 'Insurance' ? 'bg-blue-500' :
-                            category === 'Utilities' ? 'bg-orange-500' :
-                            category === 'Legal' ? 'bg-purple-500' : 'bg-pink-500'
-                          }`}></div>
-                          <span className="text-sm font-medium text-gray-700">{category}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Tag className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Transaction Feed</h3>
                 </div>
-                <div>
-                  <div className="space-y-3">
-                    {[
-                      { desc: "HVAC Repair - Building A", amount: "-$850", category: "Maintenance", auto: true },
-                      { desc: "Rent Collection - Apt #12", amount: "+$2,400", category: "Rent", auto: true },
-                      { desc: "Property Insurance Premium", amount: "-$1,200", category: "Insurance", auto: true },
-                      { desc: "Utility Bill - Electric", amount: "-$320", category: "Utilities", auto: true },
-                    ].map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-900">{item.desc}</div>
-                          <div className="flex items-center gap-2 mt-1">
-                            <div className={`w-2 h-2 rounded-full ${
-                              item.category === 'Rent' ? 'bg-green-500' :
-                              item.category === 'Maintenance' ? 'bg-red-500' :
-                              item.category === 'Insurance' ? 'bg-blue-500' : 'bg-orange-500'
-                            }`}></div>
-                            <span className="text-xs text-gray-600">{item.category}</span>
-                            {item.auto && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Auto-categorized</span>}
-                          </div>
-                        </div>
-                        <div className={`text-sm font-semibold ${item.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                          {item.amount}
-                        </div>
+                <div className="text-sm bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-medium">Auto-categorizing</div>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {[
+                  { 
+                    from: "Wells Fargo Business", 
+                    desc: "Monthly Rent Collection - Unit 4B", 
+                    amount: "+$2,400", 
+                    category: "Rent Income",
+                    time: "2 minutes ago",
+                    color: "bg-green-500"
+                  },
+                  { 
+                    from: "ServiceMaster Commercial", 
+                    desc: "Emergency HVAC System Repair", 
+                    amount: "-$850", 
+                    category: "Maintenance",
+                    time: "1 hour ago",
+                    color: "bg-red-500"
+                  },
+                  { 
+                    from: "State Farm Insurance", 
+                    desc: "Property Insurance Premium Q1", 
+                    amount: "-$1,200", 
+                    category: "Insurance",
+                    time: "3 hours ago",
+                    color: "bg-blue-500"
+                  },
+                  { 
+                    from: "ConEd Business", 
+                    desc: "Utility Bill - January", 
+                    amount: "-$320", 
+                    category: "Utilities",
+                    time: "5 hours ago",
+                    color: "bg-orange-500"
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors border border-gray-100">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                        <span className="text-sm font-semibold text-gray-900">{item.from}</span>
+                        <span className="text-xs text-gray-500">{item.time}</span>
                       </div>
-                    ))}
+                      <div className="text-sm text-gray-700 ml-6 mb-2">{item.desc}</div>
+                      <div className="flex items-center gap-2 ml-6">
+                        <span className="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">{item.category}</span>
+                        <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Auto-categorized</span>
+                      </div>
+                    </div>
+                    <div className={`text-lg font-semibold ${item.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                      {item.amount}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -136,39 +147,71 @@ export default function DesktopLanding() {
               See your portfolio performance in real-time with metrics that refresh automatically as transactions come in.
             </p>
           </div>
-          <div className="max-w-5xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            <div className="bg-gray-900 px-6 py-4 flex items-center justify-between">
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-gray-900 px-6 py-4 flex items-center justify-between border-b border-gray-700">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <span className="text-gray-900 text-sm font-bold">S</span>
                 </div>
                 <div>
                   <div className="text-white font-semibold">Live Dashboard</div>
-                  <div className="text-gray-300 text-sm">Real-time updates</div>
+                  <div className="text-gray-300 text-sm">Real-time portfolio metrics</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-green-400 text-sm">Live</span>
+                <span className="text-green-400 text-sm font-medium">Live Updates</span>
               </div>
             </div>
             <div className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 {[
-                  { metric: "Total Revenue", value: "$125,430", change: "+12.5%", trend: "up", color: "green" },
-                  { metric: "Net Profit", value: "$36,220", change: "+18.7%", trend: "up", color: "blue" },
-                  { metric: "Monthly Growth", value: "15.3%", change: "+2.1%", trend: "up", color: "purple" },
+                  { 
+                    metric: "Total Revenue", 
+                    value: "$125,430", 
+                    change: "+12.5%", 
+                    trend: "up", 
+                    subtext: "vs last month",
+                    color: "green" 
+                  },
+                  { 
+                    metric: "Net Profit", 
+                    value: "$36,220", 
+                    change: "+18.7%", 
+                    trend: "up", 
+                    subtext: "after all expenses",
+                    color: "blue" 
+                  },
+                  { 
+                    metric: "Monthly Growth", 
+                    value: "15.3%", 
+                    change: "+2.1%", 
+                    trend: "up", 
+                    subtext: "portfolio expansion",
+                    color: "purple" 
+                  },
                 ].map((item, index) => (
-                  <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200">
+                  <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="text-sm font-medium text-gray-600 mb-2">{item.metric}</div>
                     <div className="text-3xl font-bold text-gray-900 mb-2">{item.value}</div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mb-1">
                       <TrendingUp className="w-4 h-4 text-green-600" />
                       <span className="text-sm font-semibold text-green-600">{item.change}</span>
-                      <span className="text-xs text-gray-500">vs last month</span>
                     </div>
+                    <div className="text-xs text-gray-500">{item.subtext}</div>
                   </div>
                 ))}
+              </div>
+              
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-200">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-semibold text-gray-700">Overall Portfolio Health</span>
+                  </div>
+                  <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">Excellent Performance</span>
+                </div>
+                <div className="text-sm text-gray-600">All 3 properties performing above target • Revenue up 15.3% this quarter</div>
               </div>
             </div>
           </div>
@@ -187,47 +230,76 @@ export default function DesktopLanding() {
               Group properties by type, filter by performance, and focus on what matters most to your business.
             </p>
           </div>
-          <div className="max-w-4xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            <div className="p-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <div className="mb-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Building2 className="w-6 h-6 text-blue-600" />
-                      <h3 className="text-xl font-semibold text-gray-900">Property Views</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
-                        <div key={index} className={`px-3 py-2 rounded-full text-sm font-medium ${
-                          index === 0 ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-600'
-                        }`}>
-                          {view}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Building2 className="w-6 h-6 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Portfolio Manager</h3>
                 </div>
-                <div>
-                  <div className="space-y-3">
-                    {[
-                      { name: "Sunset Apartments", type: "Apartment", profit: "+$36,000", status: "High Performance", growth: "+15%" },
-                      { name: "Downtown Office Complex", type: "Office", profit: "+$54,000", status: "Excellent", growth: "+22%" },
-                      { name: "Riverside Condos", type: "Condo", profit: "+$39,000", status: "Strong", growth: "+8%" },
-                    ].map((property, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                        <div className="flex-1">
+                <div className="text-sm bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-medium">3 active properties</div>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="flex flex-wrap gap-3 mb-6">
+                {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
+                  <div key={index} className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    index === 0 ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {view}
+                  </div>
+                ))}
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    name: "Sunset Apartments", 
+                    type: "Residential • 24 units", 
+                    profit: "+$36,000", 
+                    status: "High Performance",
+                    occupancy: "96%",
+                    location: "Brooklyn, NY",
+                    color: "bg-green-500"
+                  },
+                  { 
+                    name: "Downtown Office Plaza", 
+                    type: "Commercial • 12 suites", 
+                    profit: "+$54,000", 
+                    status: "Excellent",
+                    occupancy: "100%",
+                    location: "Manhattan, NY",
+                    color: "bg-blue-500"
+                  },
+                  { 
+                    name: "Riverside Condos", 
+                    type: "Residential • 18 units", 
+                    profit: "+$29,000", 
+                    status: "Strong",
+                    occupancy: "89%",
+                    location: "Queens, NY",
+                    color: "bg-purple-500"
+                  },
+                ].map((property, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full ${property.color}`}></div>
+                        <div>
                           <div className="text-sm font-semibold text-gray-900">{property.name}</div>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-xs text-gray-600">{property.type}</span>
-                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">{property.status}</span>
-                            <span className="text-xs text-green-600 font-medium">{property.growth}</span>
-                          </div>
+                          <div className="text-xs text-gray-600">{property.location}</div>
                         </div>
-                        <div className="text-sm font-semibold text-green-600">{property.profit}</div>
                       </div>
-                    ))}
+                      <div className="text-lg font-semibold text-green-600">{property.profit}</div>
+                    </div>
+                    <div className="text-sm text-gray-700 mb-3">{property.type}</div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{property.status}</span>
+                      <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{property.occupancy} occupied</span>
+                      <span className="text-xs text-gray-500">Last updated: 2 hours ago</span>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -246,63 +318,80 @@ export default function DesktopLanding() {
               Filter transactions by property, category, amount, or any combination—whatever helps you focus on what matters.
             </p>
           </div>
-          <div className="max-w-5xl mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-            <div className="p-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <div className="mb-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Target className="w-6 h-6 text-purple-600" />
-                      <h3 className="text-xl font-semibold text-gray-900">Filter Options</h3>
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Target className="w-6 h-6 text-purple-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Smart Transaction Filters</h3>
+                </div>
+                <div className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium">2 filters active</div>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="flex gap-3 mb-6">
+                <div className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Sunset Apartments
+                </div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">Maintenance</div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">$500+</div>
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    desc: "Emergency HVAC System Repair", 
+                    amount: "-$850", 
+                    vendor: "ServiceMaster Commercial",
+                    date: "January 15, 2025",
+                    category: "Maintenance",
+                    property: "Sunset Apartments",
+                    urgent: true
+                  },
+                  { 
+                    desc: "Plumbing Emergency Response", 
+                    amount: "-$650", 
+                    vendor: "Quick Fix Plumbing LLC",
+                    date: "January 12, 2025",
+                    category: "Maintenance",
+                    property: "Sunset Apartments",
+                    urgent: false
+                  },
+                  { 
+                    desc: "Monthly Rent Collection - Unit 4B", 
+                    amount: "+$2,400", 
+                    vendor: "Tenant Payment Portal",
+                    date: "January 1, 2025",
+                    category: "Rent Income",
+                    property: "Sunset Apartments",
+                    urgent: false
+                  },
+                ].map((transaction, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        {transaction.urgent && <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>}
+                        <span className="text-sm font-semibold text-gray-900">{transaction.desc}</span>
+                      </div>
+                      <span className={`text-lg font-semibold ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                        {transaction.amount}
+                      </span>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <div className="bg-purple-50 text-purple-700 px-3 py-2 rounded-full text-sm font-medium flex items-center gap-2">
-                          <Building2 className="w-4 h-4" />
-                          Property
-                        </div>
-                        <span className="text-gray-400">→</span>
-                        <span className="text-sm text-gray-600">Sunset Apartments</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="bg-gray-100 text-gray-600 px-3 py-2 rounded-full text-sm font-medium">Category</div>
-                        <span className="text-gray-400">→</span>
-                        <span className="text-sm text-gray-600">Maintenance</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="bg-gray-100 text-gray-600 px-3 py-2 rounded-full text-sm font-medium">Amount</div>
-                        <span className="text-gray-400">→</span>
-                        <span className="text-sm text-gray-600">$500+</span>
-                      </div>
+                    <div className="text-sm text-gray-600 mb-3">{transaction.vendor} • {transaction.date}</div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                        transaction.category === 'Rent Income' 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {transaction.category}
+                      </span>
+                      <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{transaction.property}</span>
+                      {transaction.urgent && <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full font-medium">Urgent</span>}
                     </div>
                   </div>
-                </div>
-                <div>
-                  <div className="space-y-3">
-                    {[
-                      { desc: "Sunset Apartments - HVAC Repair", amount: "-$850", category: "Maintenance", property: "Sunset Apartments" },
-                      { desc: "Sunset Apartments - Rent Collection", amount: "+$2,400", category: "Rent", property: "Sunset Apartments" },
-                      { desc: "Sunset Apartments - Plumbing Fix", amount: "-$650", category: "Maintenance", property: "Sunset Apartments" },
-                    ].map((transaction, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-900">{transaction.desc}</div>
-                          <div className="flex items-center gap-2 mt-1">
-                            <div className={`w-2 h-2 rounded-full ${
-                              transaction.category === 'Rent' ? 'bg-green-500' : 'bg-red-500'
-                            }`}></div>
-                            <span className="text-xs text-gray-600">{transaction.category}</span>
-                            <span className="text-xs text-gray-500">•</span>
-                            <span className="text-xs text-gray-600">{transaction.property}</span>
-                          </div>
-                        </div>
-                        <div className={`text-sm font-semibold ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                          {transaction.amount}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
