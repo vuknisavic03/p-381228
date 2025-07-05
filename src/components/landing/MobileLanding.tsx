@@ -121,72 +121,48 @@ export default function MobileLanding() {
             Visualize all your property or business listings on an interactive map.
           </p>
         </div>
-        <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-green-700 to-green-600 px-4 py-3 flex items-center justify-between">
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
+          <div className="border-b border-gray-100 bg-white px-4 py-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                <Building2 className="w-4 h-4 text-green-600" />
-              </div>
-              <div>
-                <div className="text-white font-semibold text-sm">Property Management</div>
-                <div className="text-green-100 text-xs">Portfolio & Analytics</div>
-              </div>
+              <Building2 className="h-4 w-4 text-gray-400" />
+              <span className="font-semibold text-gray-900 text-sm">Listings Overview</span>
+              <div className="bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded text-xs">24 Properties</div>
             </div>
-            <Button className="bg-white text-green-700 text-xs px-3 py-1 rounded-lg hover:bg-green-50 font-medium">
-              Add
-            </Button>
           </div>
 
-          <div className="p-4 space-y-4">
-            <div className="bg-gradient-to-r from-green-50 to-green-100 p-3 rounded-lg border border-green-200">
-              <div className="text-sm font-medium text-green-800 mb-3">Portfolio Overview</div>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-white p-2 rounded text-center shadow-sm">
-                  <div className="text-xs text-gray-600">Properties</div>
-                  <div className="text-lg font-bold text-green-600">98</div>
-                </div>
-                <div className="bg-white p-2 rounded text-center shadow-sm">
-                  <div className="text-xs text-gray-600">Occupancy</div>
-                  <div className="text-lg font-bold text-blue-600">91.8%</div>
-                </div>
-                <div className="bg-white p-2 rounded text-center shadow-sm">
-                  <div className="text-xs text-gray-600">Revenue</div>
-                  <div className="text-lg font-bold text-purple-600">$206K</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-3">
-              <h4 className="text-sm font-semibold text-gray-900">Active Properties</h4>
-              {[
-                { property: "Sunset Apartments", units: "24 units", revenue: "$48K/mo", occupancy: "92%", status: "Active", color: "green" },
-                { property: "Downtown Office", units: "12 units", revenue: "$72K/mo", occupancy: "88%", status: "Active", color: "green" },
-                { property: "Riverside Condos", units: "36 units", revenue: "$54K/mo", occupancy: "95%", status: "Active", color: "green" },
-              ].map((property, index) => (
-                <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-3 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+          <div className="p-4 space-y-3">
+            {[
+              { property: "Sunset Apartments", type: "Apartment", tenants: "Multiple Tenants", revenue: 48000, expenses: 12000, profit: 36000 },
+              { property: "Downtown Office", type: "Office", tenants: "Multiple Tenants", revenue: 72000, expenses: 18000, profit: 54000 },
+              { property: "Riverside Condos", type: "Condo", tenants: "Multiple Tenants", revenue: 54000, expenses: 15000, profit: 39000 },
+            ].map((property, index) => (
+              <div key={index} className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-all">
+                <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-4 h-4 text-green-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-gray-900 truncate">{property.property}</div>
-                        <div className="text-xs text-gray-600">{property.units} • {property.revenue}</div>
-                      </div>
+                    <div className="font-semibold text-gray-900 text-sm">{property.property}</div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400 text-xs">🏢</span>
+                      <span className="text-xs font-medium text-gray-700">{property.type}</span>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-bold text-gray-900">{property.occupancy}</div>
-                      <div className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        property.color === 'green' ? 'bg-green-100 text-green-700' :
-                        property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
-                      }`}>
-                        {property.status}
-                      </div>
+                  </div>
+                  <div className="text-xs text-gray-600">{property.tenants}</div>
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                      <div className="text-gray-500">Revenue</div>
+                      <div className="font-medium text-green-500">+${property.revenue.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-500">Expenses</div>
+                      <div className="font-medium text-red-400">-${property.expenses.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-500">Profit</div>
+                      <div className="font-medium text-green-500">+${property.profit.toLocaleString()}</div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -199,80 +175,40 @@ export default function MobileLanding() {
             Get real-time visibility into all your transactions in one powerful dashboard.
           </p>
         </div>
-        <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-lg overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-purple-700 to-purple-600 px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                <CreditCard className="w-4 h-4 text-purple-600" />
-              </div>
-              <div>
-                <div className="text-white font-semibold text-sm">Transaction Management</div>
-                <div className="text-purple-100 text-xs">Real-time Activity</div>
-              </div>
-            </div>
-            <Button className="bg-white text-purple-700 text-xs px-3 py-1 rounded-lg hover:bg-purple-50 font-medium">
-              Add
-            </Button>
-          </div>
-
-          <div className="p-4 space-y-4">
-            <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-lg border border-purple-200">
-              <div className="text-sm font-medium text-purple-800 mb-3">Monthly Summary</div>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-white p-2 rounded text-center shadow-sm">
-                  <div className="text-xs text-gray-600">Net Income</div>
-                  <div className="text-lg font-bold text-green-600">+$12.7K</div>
-                </div>
-                <div className="bg-white p-2 rounded text-center shadow-sm">
-                  <div className="text-xs text-gray-600">Transactions</div>
-                  <div className="text-lg font-bold text-blue-600">247</div>
-                </div>
-                <div className="bg-white p-2 rounded text-center shadow-sm">
-                  <div className="text-xs text-gray-600">Income</div>
-                  <div className="text-lg font-bold text-purple-600">$18.4K</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-3">
-              <h4 className="text-sm font-semibold text-gray-900">Recent Activity</h4>
-              {[
-                { description: "Rent Payment - Apt #12", amount: "+$2,400", date: "Jan 15", category: "Income", color: "green" },
-                { description: "HVAC Repair", amount: "-$850", date: "Jan 14", category: "Maintenance", color: "red" },
-                { description: "Rent - Office #304", amount: "+$6,200", date: "Jan 14", category: "Income", color: "green" },
-                { description: "Property Insurance", amount: "-$1,200", date: "Jan 12", category: "Insurance", color: "red" },
-              ].map((transaction, index) => (
-                <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-3 rounded-lg border border-gray-200 hover:shadow-md transition-all">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        transaction.color === 'green' ? 'bg-green-100' : 'bg-red-100'
-                      }`}>
-                        <div className={`w-3 h-3 rounded-full ${
-                          transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'
-                        }`}></div>
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
+          <div className="p-4">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="space-y-3 p-4">
+                {[
+                  { from: "Rent Payment - Apt #12", notes: "Monthly rent collection", amount: 2400, date: "Jan 15", category: "Rent", type: "revenue", method: "Bank Transfer" },
+                  { from: "HVAC Repair", notes: "Emergency repair service", amount: 850, date: "Jan 14", category: "Maintenance", type: "expense", method: "Credit Card" },
+                  { from: "Office Rent - Suite 304", notes: "Commercial lease payment", amount: 6200, date: "Jan 14", category: "Rent", type: "revenue", method: "ACH" },
+                  { from: "Property Insurance", notes: "Annual insurance premium", amount: 1200, date: "Jan 12", category: "Insurance", type: "expense", method: "Check" },
+                ].map((transaction, index) => (
+                  <div key={index} className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-all">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="font-medium text-gray-900 text-sm truncate flex-1">{transaction.from}</div>
+                        <div className={`text-sm font-medium ${
+                          transaction.type === "revenue" ? "text-green-500" : "text-red-400"
+                        }`}>
+                          {transaction.type === "revenue" ? "+" : "-"}${transaction.amount.toLocaleString()}
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-gray-900 truncate">{transaction.description}</div>
-                        <div className="text-xs text-gray-600">{transaction.date}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className={`text-sm font-bold ${
-                        transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {transaction.amount}
-                      </div>
-                      <div className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        transaction.color === 'green' ? 'bg-green-100 text-green-700' :
-                        transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
-                      }`}>
-                        {transaction.category}
+                      <div className="text-xs text-gray-500 leading-relaxed">{transaction.notes}</div>
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="text-gray-700">{transaction.date}</div>
+                        <div className="flex items-center gap-2">
+                          <div className="font-medium px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                            {transaction.category}
+                          </div>
+                          <div className="text-gray-600">{transaction.method}</div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

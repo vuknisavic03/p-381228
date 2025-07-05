@@ -188,117 +188,63 @@ export default function DesktopLanding() {
           </p>
         </div>
         <div className="container mx-auto">
-          <div className="max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
-            <div className="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                  <Building2 className="w-5 h-5 text-green-600" />
+          <div className="max-w-7xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+            <div className="border-b border-gray-100 bg-white px-6 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-gray-400" />
+                  <span className="font-semibold text-gray-900">Listings Overview</span>
+                  <div className="bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded text-xs">24 Properties</div>
                 </div>
-                <div>
-                  <div className="text-white font-semibold">Property Management</div>
-                  <div className="text-green-100 text-sm">Interactive Map & Portfolio</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="hidden sm:flex items-center gap-2 text-green-100">
-                  <div className="w-2 h-2 bg-green-300 rounded-full"></div>
-                  <span className="text-sm">98 Properties</span>
-                </div>
-                <Button className="bg-white text-green-700 text-sm px-4 py-2 rounded-lg hover:bg-green-50 font-medium">
-                  Add Property
-                </Button>
               </div>
             </div>
 
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg font-semibold text-gray-900">Portfolio Overview</h4>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span>91.8% Avg Occupancy</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
+            <div className="p-0">
+              <div className="overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-gray-50/80">
+                      <th className="font-semibold text-gray-800 text-left py-3 px-6">Property</th>
+                      <th className="font-semibold text-gray-800 text-left py-3 px-4">Type</th>
+                      <th className="font-semibold text-gray-800 text-left py-3 px-4">Tenants</th>
+                      <th className="font-semibold text-gray-800 text-right py-3 px-4">Revenue</th>
+                      <th className="font-semibold text-gray-800 text-right py-3 px-4">Expenses</th>
+                      <th className="font-semibold text-gray-800 text-right py-3 px-6">Net Profit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {[
-                      { property: "Sunset Apartments", units: "24 units", revenue: "$48,000/mo", occupancy: "92%", status: "Active", color: "green" },
-                      { property: "Downtown Office Complex", units: "12 units", revenue: "$72,000/mo", occupancy: "88%", status: "Active", color: "green" },
-                      { property: "Riverside Condos", units: "36 units", revenue: "$54,000/mo", occupancy: "95%", status: "Active", color: "green" },
-                      { property: "Market Street Retail", units: "8 units", revenue: "$32,000/mo", occupancy: "75%", status: "Maintenance", color: "yellow" },
+                      { property: "Sunset Apartments", type: "Apartment", tenants: "Multiple Tenants", revenue: 48000, expenses: 12000, profit: 36000 },
+                      { property: "Downtown Office Complex", type: "Office", tenants: "Multiple Tenants", revenue: 72000, expenses: 18000, profit: 54000 },
+                      { property: "Riverside Condos", type: "Condo", tenants: "Multiple Tenants", revenue: 54000, expenses: 15000, profit: 39000 },
+                      { property: "Metro Plaza", type: "Mixed Use", tenants: "Multiple Tenants", revenue: 36000, expenses: 10000, profit: 26000 },
                     ].map((property, index) => (
-                      <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                              <Building2 className="w-6 h-6 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-gray-900">{property.property}</div>
-                              <div className="text-sm text-gray-500 flex items-center gap-3">
-                                <span>{property.units}</span>
-                                <span>•</span>
-                                <span className="font-medium text-gray-700">{property.revenue}</span>
-                              </div>
-                            </div>
+                      <tr key={index} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
+                        <td className="py-4 px-6">
+                          <div className="font-semibold text-gray-900">{property.property}</div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400">🏢</span>
+                            <span className="text-sm font-medium text-gray-700">{property.type}</span>
                           </div>
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-gray-900 mb-1">{property.occupancy}</div>
-                            <div className={`text-sm px-3 py-1 rounded-full font-medium ${
-                              property.color === 'green' ? 'bg-green-100 text-green-700' :
-                              property.color === 'yellow' ? 'bg-yellow-100 text-yellow-700' : ''
-                            }`}>
-                              {property.status}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <span className="text-gray-900 font-medium">{property.tenants}</span>
+                        </td>
+                        <td className="text-right py-4 px-4">
+                          <span className="text-green-500">+${property.revenue.toLocaleString()}</span>
+                        </td>
+                        <td className="text-right py-4 px-4">
+                          <span className="text-red-400">-${property.expenses.toLocaleString()}</span>
+                        </td>
+                        <td className="text-right py-4 px-6">
+                          <span className="text-green-500">+${property.profit.toLocaleString()}</span>
+                        </td>
+                      </tr>
                     ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Portfolio Analytics</h4>
-                    <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6">
-                      <div className="text-center mb-4">
-                        <Building2 className="w-12 h-12 mx-auto mb-3 text-green-600" />
-                        <div className="text-sm text-green-700 mb-1">Interactive Map View</div>
-                        <div className="text-xs text-green-600">Click properties for details</div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-white p-3 rounded-lg text-center shadow-sm">
-                          <div className="text-xs font-medium text-gray-600 mb-1">Total Properties</div>
-                          <div className="text-2xl font-bold text-green-600">98</div>
-                        </div>
-                        <div className="bg-white p-3 rounded-lg text-center shadow-sm">
-                          <div className="text-xs font-medium text-gray-600 mb-1">Monthly Revenue</div>
-                          <div className="text-2xl font-bold text-blue-600">$206K</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Quick Filters</h4>
-                    <div className="space-y-3">
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
-                        <div className="text-sm font-medium text-gray-900 mb-2">Property Type</div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Residential</span>
-                          <span className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">Commercial</span>
-                        </div>
-                      </div>
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
-                        <div className="text-sm font-medium text-gray-900 mb-2">Status</div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Active</span>
-                          <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Maintenance</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -314,124 +260,57 @@ export default function DesktopLanding() {
             identify gaps, and gain confidence.
           </p>
         </div>
-        <div className="container mx-auto">
-          <div className="max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-700 to-purple-600 px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                  <CreditCard className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <div className="text-white font-semibold">Transaction Management</div>
-                  <div className="text-purple-100 text-sm">Real-time Activity & Analytics</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="hidden sm:flex items-center gap-2 text-purple-100">
-                  <div className="w-2 h-2 bg-purple-300 rounded-full"></div>
-                  <span className="text-sm">247 This Month</span>
-                </div>
-                <Button className="bg-white text-purple-700 text-sm px-4 py-2 rounded-lg hover:bg-purple-50 font-medium">
-                  Add Transaction
-                </Button>
-              </div>
-            </div>
-
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg font-semibold text-gray-900">Recent Activity</h4>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span>+$12.7K This Month</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      { description: "Rent Payment - Sunset Apt #12", amount: "+$2,400", date: "Jan 15, 2025", category: "Income", color: "green" },
-                      { description: "Maintenance - HVAC Repair", amount: "-$850", date: "Jan 14, 2025", category: "Maintenance", color: "red" },
-                      { description: "Rent Payment - Downtown #304", amount: "+$6,200", date: "Jan 14, 2025", category: "Income", color: "green" },
-                      { description: "Property Insurance", amount: "-$1,200", date: "Jan 12, 2025", category: "Insurance", color: "red" },
-                      { description: "Rent Payment - Riverside #8A", amount: "+$1,800", date: "Jan 12, 2025", category: "Income", color: "green" },
-                    ].map((transaction, index) => (
-                      <div key={index} className="bg-gradient-to-r from-white to-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                              transaction.color === 'green' ? 'bg-green-100' : 'bg-red-100'
-                            }`}>
-                              <div className={`w-3 h-3 rounded-full ${
-                                transaction.color === 'green' ? 'bg-green-500' : 'bg-red-500'
-                              }`}></div>
-                            </div>
-                            <div>
-                              <div className="font-semibold text-gray-900">{transaction.description}</div>
-                              <div className="text-sm text-gray-500">{transaction.date}</div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className={`text-xl font-bold mb-1 ${
-                              transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                            }`}>
-                              {transaction.amount}
-                            </div>
-                            <div className={`text-sm px-3 py-1 rounded-full font-medium ${
-                              transaction.color === 'green' ? 'bg-green-100 text-green-700' :
-                              transaction.color === 'red' ? 'bg-red-100 text-red-700' : ''
-                            }`}>
-                              {transaction.category}
-                            </div>
-                          </div>
+        {/* Transaction Tracking Section */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-16">
+          <div className="p-6">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b bg-gray-50/80">
+                    <th className="font-semibold text-gray-800 text-left py-3 px-6 w-[35%]">Description</th>
+                    <th className="font-semibold text-gray-800 text-left py-3 px-4 w-[15%]">Amount</th>
+                    <th className="font-semibold text-gray-800 text-left py-3 px-4 w-[15%]">Date</th>
+                    <th className="font-semibold text-gray-800 text-left py-3 px-4 w-[15%]">Category</th>
+                    <th className="font-semibold text-gray-800 text-left py-3 px-4 w-[15%]">Payment Method</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { from: "Rent Payment - Apt #12", notes: "Monthly rent collection", amount: 2400, date: "Jan 15, 2024", category: "Rent", type: "revenue", method: "Bank Transfer" },
+                    { from: "HVAC Repair - Building A", notes: "Emergency repair service", amount: 850, date: "Jan 14, 2024", category: "Maintenance", type: "expense", method: "Credit Card" },
+                    { from: "Office Rent - Suite 304", notes: "Commercial lease payment", amount: 6200, date: "Jan 14, 2024", category: "Rent", type: "revenue", method: "ACH" },
+                    { from: "Property Insurance", notes: "Annual insurance premium", amount: 1200, date: "Jan 12, 2024", category: "Insurance", type: "expense", method: "Check" },
+                    { from: "Parking Fees", notes: "Monthly parking revenue", amount: 450, date: "Jan 11, 2024", category: "Fees", type: "revenue", method: "Cash" },
+                  ].map((transaction, index) => (
+                    <tr key={index} className="hover:bg-gray-50/70 border-b border-gray-100 last:border-b-0">
+                      <td className="py-4 px-6 w-[35%]">
+                        <div className="space-y-1">
+                          <div className="font-medium text-gray-900 text-sm">{transaction.from}</div>
+                          <div className="text-xs text-gray-500 leading-relaxed">{transaction.notes}</div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Transaction Analytics</h4>
-                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6">
-                      <div className="grid grid-cols-1 gap-4">
-                        <div className="bg-white p-4 rounded-lg shadow-sm">
-                          <div className="text-sm font-medium text-gray-600 mb-2">This Month</div>
-                          <div className="text-3xl font-bold text-green-600 mb-1">+$12,750</div>
-                          <div className="text-xs text-gray-500">Net Income</div>
+                      </td>
+                      <td className="py-4 px-4 w-[15%]">
+                        <span className={`text-sm font-medium ${
+                          transaction.type === "revenue" ? "text-green-500" : "text-red-400"
+                        }`}>
+                          {transaction.type === "revenue" ? "+" : "-"}${transaction.amount.toLocaleString()}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 w-[15%]">
+                        <span className="text-gray-700 text-sm">{transaction.date}</span>
+                      </td>
+                      <td className="py-4 px-4 w-[15%]">
+                        <div className="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                          {transaction.category}
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="bg-white p-3 rounded-lg text-center shadow-sm">
-                            <div className="text-xs font-medium text-gray-600 mb-1">Income</div>
-                            <div className="text-lg font-bold text-green-600">$18.4K</div>
-                          </div>
-                          <div className="bg-white p-3 rounded-lg text-center shadow-sm">
-                            <div className="text-xs font-medium text-gray-600 mb-1">Expenses</div>
-                            <div className="text-lg font-bold text-red-600">$5.7K</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Smart Filters</h4>
-                    <div className="space-y-3">
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
-                        <div className="text-sm font-medium text-gray-900 mb-2">Date Range</div>
-                        <div className="text-sm text-gray-600">Last 30 days</div>
-                      </div>
-                      <div className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
-                        <div className="text-sm font-medium text-gray-900 mb-2">Categories</div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Income</span>
-                          <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">Expenses</span>
-                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Maintenance</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                      </td>
+                      <td className="py-4 px-4 w-[15%]">
+                        <span className="text-gray-600 text-sm">{transaction.method}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
