@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
-import DashboardPreview from "./DashboardPreview";
 
 export default function DesktopLanding() {
   return (
@@ -51,11 +50,6 @@ export default function DesktopLanding() {
             <Button className="bg-black text-white text-lg px-8 py-4 rounded-lg hover:bg-gray-800 transition-colors">
               Get Square free
             </Button>
-          </div>
-          
-          {/* Dashboard Preview */}
-          <div className="flex justify-center">
-            <DashboardPreview />
           </div>
         </div>
       </section>
