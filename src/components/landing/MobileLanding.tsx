@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target, Calendar } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
+import DashboardPreview from "./DashboardPreview";
 
 export default function MobileLanding() {
   return (
@@ -48,6 +49,11 @@ export default function MobileLanding() {
             <Button className="bg-black text-white text-base px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
               Get Square free
             </Button>
+          </div>
+          
+          {/* Dashboard Preview */}
+          <div className="px-4">
+            <DashboardPreview />
           </div>
         </div>
       </section>
