@@ -51,51 +51,52 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile Dashboard Demo Section */}
-      <section className="px-4 pb-12">
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden mb-4">
-          <div className="bg-gray-900 px-3 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-white rounded flex items-center justify-center">
-                <span className="text-gray-900 font-bold text-xs">S</span>
+      {/* Auto-Categorization Feature */}
+      <section className="px-4 pb-8">
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-black mb-2">Smart categorization does the work for you</h2>
+          <p className="text-sm text-gray-600">
+            Tell Square AI what types of transactions are important to track, and it'll automatically label and sort them as they arrive.
+          </p>
+        </div>
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+          <div className="p-4">
+            <div className="mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Tag className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-gray-900">Smart Categories</span>
               </div>
-              <div>
-                <div className="text-white font-medium text-sm">Square Accounting</div>
-                <div className="text-gray-300 text-xs">Dashboard</div>
+              <div className="flex flex-wrap gap-2">
+                {['Rent', 'Maintenance', 'Insurance', 'Utilities'].map((category, index) => (
+                  <div key={index} className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-full">
+                    <div className={`w-2 h-2 rounded-full ${
+                      category === 'Rent' ? 'bg-green-500' :
+                      category === 'Maintenance' ? 'bg-red-500' :
+                      category === 'Insurance' ? 'bg-blue-500' : 'bg-orange-500'
+                    }`}></div>
+                    <span className="text-xs font-medium text-gray-700">{category}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-              <Search className="w-4 h-4 text-gray-400" />
-            </div>
-          </div>
-
-          <div className="px-3 py-2 border-b border-gray-100 bg-gray-50">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-3.5 h-3.5 text-gray-600" />
-              <span className="text-sm font-medium">Financial Overview</span>
-              <div className="ml-auto flex items-center gap-1">
-                <Tag className="w-2.5 h-2.5 text-gray-400" />
-                <span className="text-xs text-gray-500">Auto</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-3">
-            <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-2">
               {[
-                { metric: "Revenue", value: "$125K", change: "+12.5%" },
-                { metric: "Expenses", value: "$89K", change: "-3.2%" },
-                { metric: "Profit", value: "$36K", change: "+18.7%" },
-                { metric: "Cash Flow", value: "$42K", change: "+5.4%" },
-                { metric: "Receivable", value: "$29K", change: "+2.1%" },
-                { metric: "Payable", value: "$16K", change: "-8.3%" },
-              ].map((metric, index) => (
-                <div key={index} className="bg-white p-2 rounded-lg border border-gray-100">
-                  <div className="text-xs font-medium text-gray-700 mb-1 truncate">{metric.metric}</div>
-                  <div className="text-sm font-bold text-gray-900">{metric.value}</div>
-                  <div className={`text-xs font-medium ${metric.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                    {metric.change}
+                { desc: "HVAC Repair", amount: "-$850", category: "Maintenance", auto: true },
+                { desc: "Rent Collection", amount: "+$2,400", category: "Rent", auto: true },
+              ].map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                  <div className="flex-1">
+                    <div className="text-xs font-medium text-gray-900 truncate">{item.desc}</div>
+                    <div className="flex items-center gap-1 mt-1">
+                      <div className={`w-1.5 h-1.5 rounded-full ${
+                        item.category === 'Rent' ? 'bg-green-500' : 'bg-red-500'
+                      }`}></div>
+                      <span className="text-xs text-gray-600">{item.category}</span>
+                      {item.auto && <span className="text-xs bg-blue-100 text-blue-700 px-1 rounded">Auto</span>}
+                    </div>
+                  </div>
+                  <div className={`text-xs font-medium ${item.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                    {item.amount}
                   </div>
                 </div>
               ))}
@@ -104,123 +105,120 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile Listings Section */}
-      <section className="px-4 pb-12">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-black mb-3">Organize your properties</h2>
-          <p className="text-sm text-gray-600 px-4">
-            Group properties by type, filter by performance, and track everything in one view.
+      {/* Real-time Metrics Feature */}
+      <section className="px-4 pb-8">
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-black mb-2">Live metrics that update themselves</h2>
+          <p className="text-sm text-gray-600">
+            See your portfolio performance in real-time with metrics that refresh automatically.
           </p>
         </div>
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden mb-8">
-          <div className="border-b border-gray-100 bg-white px-4 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-gray-600" />
-                <span className="font-semibold text-gray-900 text-sm">Portfolio Performance</span>
-                <div className="bg-blue-50 text-blue-700 font-medium px-2 py-1 rounded-full text-xs">24</div>
-              </div>
-              <div className="bg-green-50 text-green-700 font-medium px-2 py-1 rounded-full text-xs">↑ 12%</div>
-            </div>
-          </div>
-
-          <div className="p-3 space-y-2.5">
-            {[
-              { property: "Sunset Apartments", type: "Apartment", tenants: "Multiple Tenants", revenue: 48000, expenses: 12000, profit: 36000 },
-              { property: "Downtown Office", type: "Office", tenants: "Multiple Tenants", revenue: 72000, expenses: 18000, profit: 54000 },
-              { property: "Riverside Condos", type: "Condo", tenants: "Multiple Tenants", revenue: 54000, expenses: 15000, profit: 39000 },
-            ].map((property, index) => (
-              <div key={index} className="bg-white p-2.5 rounded-lg border border-gray-200 hover:shadow-sm transition-all">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="font-semibold text-gray-900 text-xs">{property.property}</div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-gray-400 text-xs">🏢</span>
-                      <span className="text-xs font-medium text-gray-700">{property.type}</span>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-600">{property.tenants}</div>
-                  <div className="grid grid-cols-3 gap-1.5 text-xs">
-                    <div>
-                      <div className="text-gray-500 text-xs">Revenue</div>
-                      <div className="font-medium text-green-500">+${property.revenue.toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-gray-500 text-xs">Expenses</div>
-                      <div className="font-medium text-red-400">-${property.expenses.toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-gray-500 text-xs">Profit</div>
-                      <div className="font-medium text-green-500">+${property.profit.toLocaleString()}</div>
-                    </div>
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+          <div className="p-4">
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              {[
+                { metric: "Revenue", value: "$125K", change: "+12.5%", trend: "up" },
+                { metric: "Profit", value: "$36K", change: "+18.7%", trend: "up" },
+              ].map((item, index) => (
+                <div key={index} className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-xs font-medium text-gray-700 mb-1">{item.metric}</div>
+                  <div className="text-lg font-bold text-gray-900">{item.value}</div>
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="w-3 h-3 text-green-600" />
+                    <span className="text-xs font-medium text-green-600">{item.change}</span>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="flex items-center justify-center gap-2 py-2 bg-green-50 rounded-lg">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-xs font-medium text-green-700">Live updates</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Mobile Transactions Section */}
-      <section className="px-4 pb-12">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-black mb-3">Filter out noise</h2>
-          <p className="text-sm text-gray-600 px-4">
-            Auto-categorize transactions, group by property, and focus on what matters.
+      {/* Property Organization Feature */}
+      <section className="px-4 pb-8">
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-black mb-2">Split your portfolio into custom views</h2>
+          <p className="text-sm text-gray-600">
+            Group properties by type, filter by performance, and focus on what matters most.
           </p>
         </div>
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden mb-8">
-          <div className="border-b border-gray-100 bg-white px-4 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4 text-gray-600" />
-                <span className="font-semibold text-gray-900 text-sm">Transaction Stream</span>
-                <div className="bg-gray-50 text-gray-700 font-medium px-2 py-1 rounded-full text-xs">Live</div>
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+          <div className="p-4">
+            <div className="mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Building2 className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-gray-900">Property Views</span>
               </div>
-              <div className="bg-green-50 text-green-700 font-medium px-2 py-1 rounded-full text-xs">Auto</div>
+              <div className="flex gap-2 text-xs">
+                <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full font-medium">All Properties</div>
+                <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Apartments</div>
+                <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Office</div>
+              </div>
             </div>
-          </div>
-          <div className="p-3">
-            <div className="bg-white rounded-xl overflow-hidden">
-              <div className="space-y-2.5 p-3">
-                {[
-                  { from: "Rent Payment - Apt #12", notes: "Monthly rent collection", amount: 2400, date: "Jan 15", category: "Rent", type: "revenue", method: "Bank Transfer" },
-                  { from: "HVAC Repair", notes: "Emergency repair service", amount: 850, date: "Jan 14", category: "Maintenance", type: "expense", method: "Credit Card" },
-                  { from: "Office Rent - Suite 304", notes: "Commercial lease payment", amount: 6200, date: "Jan 14", category: "Rent", type: "revenue", method: "ACH" },
-                  { from: "Property Insurance", notes: "Annual insurance premium", amount: 1200, date: "Jan 12", category: "Insurance", type: "expense", method: "Check" },
-                ].map((transaction, index) => (
-                  <div key={index} className="bg-white p-2.5 rounded-lg border border-gray-200 hover:shadow-sm transition-all">
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <div className="font-medium text-gray-900 text-xs truncate flex-1">{transaction.from}</div>
-                        <div className={`text-xs font-medium ${
-                          transaction.type === "revenue" ? "text-green-500" : "text-red-400"
-                        }`}>
-                          {transaction.type === "revenue" ? "+" : "-"}${transaction.amount.toLocaleString()}
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500 leading-relaxed">{transaction.notes}</div>
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="text-gray-700">{transaction.date}</div>
-                        <div className="flex items-center gap-2">
-                          <div className="inline-flex items-center gap-1">
-                            <div className={`w-1.5 h-1.5 rounded-full ${
-                              transaction.category === 'Rent' ? 'bg-green-500' :
-                              transaction.category === 'Maintenance' ? 'bg-red-500' :
-                              transaction.category === 'Insurance' ? 'bg-blue-500' :
-                              'bg-gray-400'
-                            }`}></div>
-                            <span className="font-medium px-1 py-0.5 bg-gray-50 text-gray-700 rounded text-xs">
-                              {transaction.category}
-                            </span>
-                          </div>
-                          <div className="text-gray-600">{transaction.method}</div>
-                        </div>
-                      </div>
+            <div className="space-y-2">
+              {[
+                { name: "Sunset Apartments", type: "Apartment", profit: "+$36K", status: "High Performance" },
+                { name: "Downtown Office", type: "Office", profit: "+$54K", status: "Excellent" },
+              ].map((property, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                  <div className="flex-1">
+                    <div className="text-xs font-medium text-gray-900 truncate">{property.name}</div>
+                    <div className="flex items-center gap-1 mt-1">
+                      <span className="text-xs text-gray-600">{property.type}</span>
+                      <span className="text-xs bg-green-100 text-green-700 px-1 rounded">{property.status}</span>
                     </div>
                   </div>
-                ))}
+                  <div className="text-xs font-medium text-green-600">{property.profit}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Transaction Filtering Feature */}
+      <section className="px-4 pb-8">
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-black mb-2">Group and filter by what you need</h2>
+          <p className="text-sm text-gray-600">
+            Filter transactions by property, category, or amount—whatever helps you focus.
+          </p>
+        </div>
+        <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+          <div className="p-4">
+            <div className="mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Target className="w-4 h-4 text-purple-600" />
+                <span className="text-sm font-medium text-gray-900">Filter by</span>
               </div>
+              <div className="flex gap-2 text-xs">
+                <div className="bg-purple-50 text-purple-700 px-2 py-1 rounded-full font-medium flex items-center gap-1">
+                  <Building2 className="w-3 h-3" />
+                  Property
+                </div>
+                <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Category</div>
+                <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Amount</div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              {[
+                { desc: "Sunset Apt - HVAC", amount: "-$850", property: "Sunset Apartments" },
+                { desc: "Sunset Apt - Rent", amount: "+$2,400", property: "Sunset Apartments" },
+              ].map((transaction, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                  <div className="flex-1">
+                    <div className="text-xs font-medium text-gray-900 truncate">{transaction.desc}</div>
+                    <div className="text-xs text-gray-600 mt-1">{transaction.property}</div>
+                  </div>
+                  <div className={`text-xs font-medium ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                    {transaction.amount}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
