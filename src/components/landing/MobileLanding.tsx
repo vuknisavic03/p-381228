@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target } from "lucide-react";
+import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target, Calendar } from "lucide-react";
 
 export default function MobileLanding() {
   return (
@@ -47,6 +47,155 @@ export default function MobileLanding() {
             <Button className="bg-black text-white text-base px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
               Get Square free
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Core Features Overview */}
+      <section className="px-4 py-12 bg-gray-50">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-black mb-4">Everything you need to manage properties</h2>
+          <p className="text-base text-gray-600 max-w-2xl mx-auto">
+            From live analytics to calendar scheduling, Square gives you complete control over your real estate portfolio
+          </p>
+        </div>
+
+        {/* Live Analytics Dashboard Preview */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg mb-8 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-blue-600" />
+                </div>
+                <span className="text-white font-medium text-sm">Live Analytics</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-green-200 text-xs">Real-time</span>
+              </div>
+            </div>
+          </div>
+          <div className="p-4">
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-xl border border-green-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <DollarSign className="w-4 h-4 text-green-600" />
+                  <span className="text-xs font-medium text-green-800">Total Revenue</span>
+                </div>
+                <div className="text-lg font-bold text-green-900">$125,430</div>
+                <div className="text-xs text-green-600">+12.5% this month</div>
+              </div>
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-3 rounded-xl border border-blue-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Building2 className="w-4 h-4 text-blue-600" />
+                  <span className="text-xs font-medium text-blue-800">Properties</span>
+                </div>
+                <div className="text-lg font-bold text-blue-900">8 Active</div>
+                <div className="text-xs text-blue-600">94% occupied</div>
+              </div>
+            </div>
+            
+            {/* Mini Chart Visualization */}
+            <div className="bg-gray-50 rounded-lg p-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium text-gray-700">Revenue Trend</span>
+                <span className="text-xs text-gray-500">Last 6 months</span>
+              </div>
+              <div className="flex items-end gap-1 h-12">
+                {[65, 78, 82, 95, 88, 100].map((height, index) => (
+                  <div
+                    key={index}
+                    className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-sm flex-1"
+                    style={{ height: `${height}%` }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Calendar & Scheduling */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg mb-8 overflow-hidden">
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 border-b border-orange-100 p-4">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-orange-600" />
+              <span className="text-sm font-semibold text-gray-900">Smart Calendar</span>
+            </div>
+          </div>
+          <div className="p-4">
+            <div className="text-xs text-gray-600 mb-3">Schedule maintenance, track rent dates, set reminders</div>
+            <div className="grid grid-cols-7 gap-1 mb-3">
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                <div key={index} className="text-center text-xs font-medium text-gray-500 py-1">
+                  {day}
+                </div>
+              ))}
+              {Array.from({ length: 35 }, (_, i) => {
+                const day = ((i + 1) % 31) + 1;
+                const hasEvent = [5, 12, 18, 25, 28].includes(day);
+                return (
+                  <div
+                    key={i}
+                    className={`text-center text-xs py-1 rounded ${
+                      hasEvent 
+                        ? 'bg-blue-100 text-blue-700 font-medium' 
+                        : day > 31 ? 'text-gray-300' : 'text-gray-700'
+                    }`}
+                  >
+                    {day > 31 ? '' : day}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-2 text-xs">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-gray-600">Rent Due</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <span className="text-gray-600">Maintenance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Portfolio & Units Management */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-purple-100 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-purple-600" />
+                <span className="text-sm font-semibold text-gray-900">Portfolio Management</span>
+              </div>
+              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">8 properties</span>
+            </div>
+          </div>
+          <div className="p-4">
+            <div className="space-y-3">
+              {[
+                { name: "Sunset Apartments", units: "24 units", occupied: "23/24", revenue: "+$36,000", color: "bg-green-500" },
+                { name: "Downtown Office", units: "12 suites", occupied: "12/12", revenue: "+$54,000", color: "bg-blue-500" },
+                { name: "Riverside Condos", units: "18 units", occupied: "16/18", revenue: "+$29,000", color: "bg-purple-500" }
+              ].map((property, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${property.color}`}></div>
+                      <span className="text-sm font-medium text-gray-900">{property.name}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-green-600">{property.revenue}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-600">{property.units}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{property.occupied} occupied</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
