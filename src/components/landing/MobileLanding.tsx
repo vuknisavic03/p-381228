@@ -74,66 +74,50 @@ export default function MobileLanding() {
       </section>
 
       {/* Mobile Overview Section */}
-      <section className="px-4 pb-6">
-        <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-4 py-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center shadow-sm">
+      <section className="px-4 pb-4">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-4">
+          <div className="bg-gray-900 px-3 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <div className="w-4 h-4 bg-white rounded flex items-center justify-center">
                 <span className="text-gray-900 font-bold text-xs">S</span>
               </div>
               <div>
-                <div className="text-white font-semibold text-xs">Square Accounting</div>
-                <div className="text-gray-300 text-xs">Financial Dashboard</div>
+                <div className="text-white font-medium text-xs">Square Accounting</div>
+                <div className="text-gray-300 text-xs">Dashboard</div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-              <Search className="w-3.5 h-3.5 text-gray-400" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-1 h-1 bg-green-400 rounded-full"></div>
+              <Search className="w-3 h-3 text-gray-400" />
             </div>
           </div>
 
-          <div className="px-4 py-2.5 border-b border-gray-200 bg-gradient-to-r from-white to-gray-50">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-2.5 h-2.5 text-blue-600" />
-              </div>
-              <span className="text-xs font-semibold">Financial Overview</span>
+          <div className="px-3 py-1.5 border-b border-gray-100 bg-gray-50">
+            <div className="flex items-center gap-1.5">
+              <BarChart3 className="w-3 h-3 text-gray-600" />
+              <span className="text-xs font-medium">Financial Overview</span>
               <div className="ml-auto flex items-center gap-1">
-                <Tag className="w-2.5 h-2.5 text-gray-400" />
-                <span className="text-xs text-gray-600">Auto</span>
+                <Tag className="w-2 h-2 text-gray-400" />
+                <span className="text-xs text-gray-500">Auto</span>
               </div>
             </div>
           </div>
 
-          <div className="p-3">
-            <div className="grid grid-cols-2 gap-2">
+          <div className="p-2">
+            <div className="grid grid-cols-3 gap-1.5">
               {[
-                { metric: "Total Revenue", value: "$125,430", change: "+12.5%", tag: "Revenue", color: "green" },
-                { metric: "Total Expenses", value: "$89,210", change: "-3.2%", tag: "Expenses", color: "red" },
-                { metric: "Net Profit", value: "$36,220", change: "+18.7%", tag: "Profit", color: "purple" },
-                { metric: "Cash Flow", value: "$42,100", change: "+5.4%", tag: "Cash", color: "blue" },
-                { metric: "Accounts Receivable", value: "$28,900", change: "+2.1%", tag: "AR", color: "orange" },
-                { metric: "Accounts Payable", value: "$15,600", change: "-8.3%", tag: "AP", color: "pink" },
+                { metric: "Revenue", value: "$125K", change: "+12.5%", color: "green" },
+                { metric: "Expenses", value: "$89K", change: "-3.2%", color: "red" },
+                { metric: "Profit", value: "$36K", change: "+18.7%", color: "purple" },
+                { metric: "Cash Flow", value: "$42K", change: "+5.4%", color: "blue" },
+                { metric: "Receivable", value: "$29K", change: "+2.1%", color: "orange" },
+                { metric: "Payable", value: "$16K", change: "-8.3%", color: "pink" },
               ].map((metric, index) => (
-                <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-2.5 rounded-lg border border-gray-200 hover:shadow-sm transition-all">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="text-xs font-medium text-gray-900 truncate pr-1">{metric.metric}</div>
-                    <div className={`text-xs px-1 py-0.5 rounded-full font-medium ${
-                      metric.color === 'green' ? 'bg-green-100 text-green-700' :
-                      metric.color === 'red' ? 'bg-red-100 text-red-700' :
-                      metric.color === 'purple' ? 'bg-purple-100 text-purple-700' :
-                      metric.color === 'blue' ? 'bg-blue-100 text-blue-700' :
-                      metric.color === 'orange' ? 'bg-orange-100 text-orange-700' :
-                      metric.color === 'pink' ? 'bg-pink-100 text-pink-700' : ''
-                    }`}>
-                      {metric.tag}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="text-sm font-bold text-gray-900">{metric.value}</div>
-                    <div className={`text-xs font-semibold ${metric.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                      {metric.change}
-                    </div>
+                <div key={index} className="bg-white p-1.5 rounded border border-gray-100">
+                  <div className="text-xs font-medium text-gray-700 mb-0.5 truncate">{metric.metric}</div>
+                  <div className="text-sm font-bold text-gray-900 mb-0.5">{metric.value}</div>
+                  <div className={`text-xs font-medium ${metric.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                    {metric.change}
                   </div>
                 </div>
               ))}
