@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
+import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
 
 export default function DesktopLanding() {
   return (
@@ -283,72 +284,8 @@ export default function DesktopLanding() {
               Tell Square AI what types of transactions are important to track, and it'll automatically label and sort them as they arrive.
             </p>
           </div>
-          <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Tag className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Transaction Feed</h3>
-                </div>
-                <div className="text-sm bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-medium">Auto-categorizing</div>
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {[
-                  { 
-                    from: "Wells Fargo Business", 
-                    desc: "Monthly Rent Collection - Unit 4B", 
-                    amount: "+$2,400", 
-                    category: "Rent Income",
-                    time: "2 minutes ago",
-                    color: "bg-green-500"
-                  },
-                  { 
-                    from: "ServiceMaster Commercial", 
-                    desc: "Emergency HVAC System Repair", 
-                    amount: "-$850", 
-                    category: "Maintenance",
-                    time: "1 hour ago",
-                    color: "bg-red-500"
-                  },
-                  { 
-                    from: "State Farm Insurance", 
-                    desc: "Property Insurance Premium Q1", 
-                    amount: "-$1,200", 
-                    category: "Insurance",
-                    time: "3 hours ago",
-                    color: "bg-blue-500"
-                  },
-                  { 
-                    from: "ConEd Business", 
-                    desc: "Utility Bill - January", 
-                    amount: "-$320", 
-                    category: "Utilities",
-                    time: "5 hours ago",
-                    color: "bg-orange-500"
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors border border-gray-100">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-                        <span className="text-sm font-semibold text-gray-900">{item.from}</span>
-                        <span className="text-xs text-gray-500">{item.time}</span>
-                      </div>
-                      <div className="text-sm text-gray-700 ml-6 mb-2">{item.desc}</div>
-                      <div className="flex items-center gap-2 ml-6">
-                        <span className="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">{item.category}</span>
-                        <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Auto-categorized</span>
-                      </div>
-                    </div>
-                    <div className={`text-lg font-semibold ${item.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                      {item.amount}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="max-w-6xl mx-auto">
+            <InteractiveCategorizationDemo />
           </div>
         </div>
       </section>
