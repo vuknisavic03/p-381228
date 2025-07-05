@@ -56,9 +56,12 @@ export default function DesktopLanding() {
       {/* Smart Categorization Feature */}
       <section className="px-4 pb-16">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Organization
+            </div>
             <h2 className="text-4xl font-bold text-black mb-4">Smart categorization does the work for you</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl">
               Tell Square AI what types of transactions are important to track, and it'll automatically label and sort them as they arrive.
             </p>
           </div>
@@ -124,9 +127,12 @@ export default function DesktopLanding() {
       {/* Real-time Dashboard Feature */}
       <section className="px-4 pb-16">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Analytics
+            </div>
             <h2 className="text-4xl font-bold text-black mb-4">Live metrics that update themselves</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl">
               See your portfolio performance in real-time with metrics that refresh automatically as transactions come in.
             </p>
           </div>
@@ -172,9 +178,12 @@ export default function DesktopLanding() {
       {/* Property Organization Feature */}
       <section className="px-4 pb-16">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Views
+            </div>
             <h2 className="text-4xl font-bold text-black mb-4">Split your portfolio into custom views</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl">
               Group properties by type, filter by performance, and focus on what matters most to your business.
             </p>
           </div>
@@ -228,9 +237,12 @@ export default function DesktopLanding() {
       {/* Transaction Filtering Feature */}
       <section className="px-4 pb-16">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Filtering
+            </div>
             <h2 className="text-4xl font-bold text-black mb-4">Group and filter by what you need</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl">
               Filter transactions by property, category, amount, or any combination—whatever helps you focus on what matters.
             </p>
           </div>

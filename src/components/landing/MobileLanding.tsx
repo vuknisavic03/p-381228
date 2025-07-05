@@ -54,6 +54,9 @@ export default function MobileLanding() {
       {/* Auto-Categorization Feature */}
       <section className="px-4 pb-8">
         <div className="mb-6">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Organization
+          </div>
           <h2 className="text-xl font-bold text-black mb-2">Smart categorization does the work for you</h2>
           <p className="text-sm text-gray-600">
             Tell Square AI what types of transactions are important to track, and it'll automatically label and sort them as they arrive.
@@ -108,6 +111,9 @@ export default function MobileLanding() {
       {/* Real-time Metrics Feature */}
       <section className="px-4 pb-8">
         <div className="mb-6">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Analytics
+          </div>
           <h2 className="text-xl font-bold text-black mb-2">Live metrics that update themselves</h2>
           <p className="text-sm text-gray-600">
             See your portfolio performance in real-time with metrics that refresh automatically.
@@ -141,6 +147,9 @@ export default function MobileLanding() {
       {/* Property Organization Feature */}
       <section className="px-4 pb-8">
         <div className="mb-6">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Views
+          </div>
           <h2 className="text-xl font-bold text-black mb-2">Split your portfolio into custom views</h2>
           <p className="text-sm text-gray-600">
             Group properties by type, filter by performance, and focus on what matters most.
@@ -183,6 +192,9 @@ export default function MobileLanding() {
       {/* Transaction Filtering Feature */}
       <section className="px-4 pb-8">
         <div className="mb-6">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Filtering
+          </div>
           <h2 className="text-xl font-bold text-black mb-2">Group and filter by what you need</h2>
           <p className="text-sm text-gray-600">
             Filter transactions by property, category, or amount—whatever helps you focus.
