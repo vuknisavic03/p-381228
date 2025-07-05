@@ -236,9 +236,9 @@ export default function MobileLanding() {
               </div>
             </div>
           </div>
-          <div className="p-2">
+          <div className="p-4">
             <div className="bg-white rounded-xl overflow-hidden">
-              <div className="space-y-3 p-2">
+              <div className="space-y-3 p-4">
                 {[
                   { from: "Rent Payment - Apt #12", notes: "Monthly rent collection", amount: 2400, date: "Jan 15", category: "Rent", type: "revenue", method: "Bank Transfer" },
                   { from: "HVAC Repair", notes: "Emergency repair service", amount: 850, date: "Jan 14", category: "Maintenance", type: "expense", method: "Credit Card" },
@@ -259,7 +259,7 @@ export default function MobileLanding() {
                       <div className="flex items-center justify-between text-xs">
                         <div className="text-gray-700">{transaction.date}</div>
                         <div className="flex items-center gap-2">
-                          <div className="font-medium px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                          <div className="font-medium px-1 py-0.5 bg-gray-100 text-gray-700 rounded text-xs">
                             {transaction.category}
                           </div>
                           <div className="text-gray-600">{transaction.method}</div>
