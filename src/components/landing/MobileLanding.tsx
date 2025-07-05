@@ -236,9 +236,9 @@ export default function MobileLanding() {
               </div>
             </div>
           </div>
-          <div className="p-4">
+          <div className="p-2">
             <div className="bg-white rounded-xl overflow-hidden">
-              <div className="space-y-3 p-4">
+              <div className="space-y-3 p-2">
                 {[
                   { from: "Rent Payment - Apt #12", notes: "Monthly rent collection", amount: 2400, date: "Jan 15", category: "Rent", type: "revenue", method: "Bank Transfer" },
                   { from: "HVAC Repair", notes: "Emergency repair service", amount: 850, date: "Jan 14", category: "Maintenance", type: "expense", method: "Credit Card" },
