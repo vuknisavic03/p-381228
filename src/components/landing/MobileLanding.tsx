@@ -49,6 +49,12 @@ export default function MobileLanding() {
               Get Square free
             </Button>
           </div>
+          
+          <div className="flex justify-center">
+            <div className="bg-gray-50 rounded-2xl p-6">
+              <img src="/images/1.svg" alt="Dashboard Preview" className="max-w-full h-auto" />
+            </div>
+          </div>
         </div>
       </section>
 
