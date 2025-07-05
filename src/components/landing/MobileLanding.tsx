@@ -26,9 +26,6 @@ export default function MobileLanding() {
       {/* Mobile Hero Section */}
       <section className="px-4 py-12">
         <div className="text-center">
-          <div className="mb-4 inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium">
-            ✨ Trusted by 10,000+ Property Managers
-          </div>
           
           <div className="mb-6 flex justify-center">
             <div className="w-12 h-12 flex items-center justify-center">
@@ -45,13 +42,13 @@ export default function MobileLanding() {
           </p>
           
           <div className="flex flex-col gap-2 mb-8 text-sm">
-            <div className="flex items-center justify-center gap-2 text-green-600">
-              <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-              <span>+47% Average ROI Increase</span>
-            </div>
             <div className="flex items-center justify-center gap-2 text-blue-600">
               <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-              <span>5 Hours Saved Weekly</span>
+              <span>Real-time Analytics</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 text-gray-600">
+              <div className="w-1.5 h-1.5 bg-gray-500 rounded-full"></div>
+              <span>Automated Categorization</span>
             </div>
           </div>
           
@@ -263,49 +260,6 @@ export default function MobileLanding() {
         </div>
       </section>
 
-      {/* Mobile ROI Section */}
-      <section className="px-4 py-8 bg-gradient-to-b from-blue-50 to-white">
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium mb-6">
-            <TrendingUp className="w-3 h-3" />
-            Proven Results
-          </div>
-          <h2 className="text-3xl font-bold text-black mb-4">See Your ROI in <span className="text-blue-600">30 Days</span></h2>
-          <p className="text-base text-gray-600 mb-8">
-            Property managers using Square see an average 47% increase in portfolio ROI within the first month.
-          </p>
-          
-          <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto mb-8">
-            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-              <div className="text-xl font-bold text-green-600 mb-1">47%</div>
-              <div className="text-xs text-gray-600">ROI Increase</div>
-            </div>
-            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-              <div className="text-xl font-bold text-blue-600 mb-1">5hrs</div>
-              <div className="text-xs text-gray-600">Time Saved</div>
-            </div>
-            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-              <div className="text-xl font-bold text-purple-600 mb-1">99.9%</div>
-              <div className="text-xs text-gray-600">Accuracy</div>
-            </div>
-          </div>
-          
-          <div className="max-w-sm mx-auto">
-            <div className="flex flex-col gap-3 mb-4">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm"
-              />
-              <Button className="bg-black text-white w-full py-3 rounded-lg hover:bg-gray-800 text-sm flex items-center justify-center gap-2">
-                <span>Start Free Trial</span>
-                <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500">No credit card required • Setup in 2 minutes</p>
-          </div>
-        </div>
-      </section>
 
       {/* Mobile Workspaces Section */}
       <section className="px-4 py-12 bg-gray-50">

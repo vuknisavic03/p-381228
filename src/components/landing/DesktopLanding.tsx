@@ -37,11 +37,6 @@ export default function DesktopLanding() {
             </div>
           </div>
           
-          <div className="mb-4 flex justify-center">
-            <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
-              ✨ Trusted by 10,000+ Property Managers
-            </div>
-          </div>
           
           <h1 className="text-6xl font-bold text-black leading-tight mb-6 max-w-4xl mx-auto">
             Manage your entire <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">property portfolio</span> in one dashboard
@@ -52,17 +47,13 @@ export default function DesktopLanding() {
           </p>
           
           <div className="flex justify-center gap-6 mb-12">
-            <div className="flex items-center gap-2 text-green-600">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm font-medium">+47% Average ROI Increase</span>
-            </div>
             <div className="flex items-center gap-2 text-blue-600">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-sm font-medium">5 Hours Saved Weekly</span>
+              <span className="text-sm font-medium">Real-time Analytics</span>
             </div>
-            <div className="flex items-center gap-2 text-purple-600">
-              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-              <span className="text-sm font-medium">99.9% Accuracy</span>
+            <div className="flex items-center gap-2 text-gray-600">
+              <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+              <span className="text-sm font-medium">Automated Categorization</span>
             </div>
           </div>
           
@@ -376,49 +367,6 @@ export default function DesktopLanding() {
         </div>
       </section>
 
-      {/* ROI Section */}
-      <section className="px-4 py-20 bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
-            <TrendingUp className="w-4 h-4" />
-            Proven Results
-          </div>
-          <h2 className="text-5xl font-bold text-black mb-6">See Your ROI in <span className="text-blue-600">30 Days</span></h2>
-          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            Property managers using Square see an average 47% increase in portfolio ROI within the first month. Join thousands who've transformed their business.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-              <div className="text-3xl font-bold text-green-600 mb-2">47%</div>
-              <div className="text-gray-600">Average ROI Increase</div>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-              <div className="text-3xl font-bold text-blue-600 mb-2">5hrs</div>
-              <div className="text-gray-600">Time Saved Weekly</div>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-              <div className="text-3xl font-bold text-purple-600 mb-2">99.9%</div>
-              <div className="text-gray-600">Data Accuracy</div>
-            </div>
-          </div>
-          
-          <div className="max-w-md mx-auto">
-            <div className="flex gap-2 mb-6">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="flex-1 px-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-              />
-              <Button className="bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 flex items-center gap-2">
-                Start Free Trial
-                <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">14 days</span>
-              </Button>
-            </div>
-            <p className="text-sm text-gray-500">No credit card required • Setup in 2 minutes</p>
-          </div>
-        </div>
-      </section>
 
       {/* Workspaces Section */}
       <section className="px-4 py-16 bg-gray-50">
