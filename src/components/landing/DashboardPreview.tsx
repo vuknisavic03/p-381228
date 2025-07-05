@@ -1,24 +1,234 @@
 import React from "react";
+import { format } from "date-fns";
+import { BarChart, TrendingUp, LineChart, CircleDollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
+import {
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  CartesianGrid
+} from "recharts";
 
 export default function DashboardPreview() {
-  const expenseCategories = [
-    { name: "Property Maintenance", percentage: 34, color: "#ef4444" },
-    { name: "Marketing & Advertising", percentage: 26, color: "#f97316" },
-    { name: "Utilities & Services", percentage: 21, color: "#3b82f6" },
-    { name: "Insurance & Legal", percentage: 19, color: "#8b5cf6" },
-    { name: "Office & Administration", percentage: 8, color: "#10b981" },
+  const currentHour = new Date().getHours();
+  let greeting = "Good morning";
+  
+  if (currentHour >= 12 && currentHour < 17) {
+    greeting = "Good afternoon";
+  } else if (currentHour >= 17) {
+    greeting = "Good evening";
+  }
+
+  // Mock data matching the real overview
+  const chartData = [
+    { month: "Jan", value: 45 },
+    { month: "Feb", value: 52 },
+    { month: "Mar", value: 48 },
+    { month: "Apr", value: 61 },
+    { month: "May", value: 55 },
+    { month: "Jun", value: 67 }
   ];
+
+  const expenseCategories = [
+    { name: "Property Maintenance", value: 34 },
+    { name: "Marketing & Advertising", value: 26 },
+    { name: "Utilities & Services", value: 21 },
+    { name: "Insurance & Legal", value: 19 },
+    { name: "Office & Administration", value: 8 }
+  ];
+
+  const timelineData = [
+    { month: "Jan", revenue: 45000, profit: 28000, expenses: 17000 },
+    { month: "Feb", revenue: 52000, profit: 31000, expenses: 21000 },
+    { month: "Mar", revenue: 48000, profit: 29000, expenses: 19000 },
+    { month: "Apr", revenue: 61000, profit: 35000, expenses: 26000 },
+    { month: "May", revenue: 55000, profit: 32000, expenses: 23000 },
+    { month: "Jun", revenue: 67000, profit: 38000, expenses: 29000 }
+  ];
+
+  const getCategoryColor = (index: number) => {
+    const colors = ["#dc2626", "#f59e0b", "#0ea5e9", "#8b5cf6", "#059669"];
+    return colors[index];
+  };
+
+  const getNotionColor = (title: string) => {
+    switch (title) {
+      case "Revenue":
+        return "#2563eb";
+      case "Profit":
+        return "#16a34a";
+      case "Analytics":
+        return "#9333ea";
+      case "Expenses":
+        return "#dc2626";
+      default:
+        return "#6b7280";
+    }
+  };
+
+  const ChartCard = ({ title, icon: Icon, value, change, chartData, chartType }: any) => {
+    const colorValue = getNotionColor(title);
+
+    if (title === "Analytics") {
+      return (
+        <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
+          <CardHeader className="p-0 pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-medium text-gray-900">Top Expenses Categories</CardTitle>
+              <div className="bg-gray-100 text-gray-600 p-2 rounded-lg">
+                <Icon size={18} />
+              </div>
+            </div>
+          </CardHeader>
+          <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
+            <div className="flex items-center justify-center h-full gap-4">
+              <div className="w-[65%] h-[200px] flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart margin={{ top: 0, right: 24, bottom: 0, left: 0 }}>
+                    <Pie
+                      data={expenseCategories}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius="85%"
+                      innerRadius="65%"
+                      fill="#8884d8"
+                      dataKey="value"
+                      startAngle={90}
+                      endAngle={-270}
+                      stroke="none"
+                    >
+                      {expenseCategories.map((entry, index) => (
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={getCategoryColor(index)} 
+                          stroke="none"
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="w-[35%] flex flex-col justify-center gap-3 mr-10">
+                <div className="space-y-3">
+                  {expenseCategories.map((entry, index) => (
+                    <div key={index} className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div 
+                          className="w-3 h-3 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: getCategoryColor(index) }} 
+                        />
+                        <span className="text-sm text-gray-700 truncate">{entry.name}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-gray-900 flex-shrink-0">{entry.value}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      );
+    }
+
+    return (
+      <Card className="p-5 border border-gray-200 h-full min-h-[280px] bg-white flex flex-col">
+        <CardHeader className="p-0 pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg font-medium text-gray-900">{title}</CardTitle>
+            <div className="bg-gray-100 text-gray-600 p-2 rounded-lg">
+              <Icon size={18} />
+            </div>
+          </div>
+        </CardHeader>
+        <div className="mt-2">
+          <div className="flex items-baseline space-x-2">
+            <span className="text-3xl font-bold text-gray-900">{value}</span>
+            <span className={`text-sm ${change.positive ? 'text-green-600' : 'text-red-600'} flex items-center`}>
+              {change.positive ? '+' : '-'}{Math.abs(change.value)}%
+            </span>
+          </div>
+        </div>
+        <div className="mt-5 flex-grow border-t border-gray-200 pt-4">
+          <div className="h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={chartData}
+                margin={{
+                  top: 10,
+                  right: 5,
+                  bottom: 10,
+                  left: 5,
+                }}
+              >
+                <defs>
+                  <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={colorValue} stopOpacity={0.1} />
+                    <stop offset="95%" stopColor={colorValue} stopOpacity={0.01} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid 
+                  strokeDasharray="3 3" 
+                  vertical={false} 
+                  stroke="#e5e7eb" 
+                  opacity={0.5} 
+                />
+                <XAxis 
+                  dataKey="month" 
+                  axisLine={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+                  tickLine={false}
+                  tick={{ fill: '#6b7280', fontSize: 12 }}
+                  dy={8}
+                  padding={{ left: 18, right: 10 }}
+                />
+                <YAxis 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#6b7280', fontSize: 12 }}
+                  width={45}
+                  dx={-8}
+                  tickFormatter={(value) => `$${value}k`}
+                  padding={{ top: 10 }}
+                  allowDecimals={false}
+                  domain={['auto', 'auto']}
+                />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke={colorValue}
+                  fillOpacity={1}
+                  fill={`url(#color${title.replace(/\s+/g, '')})`}
+                  strokeWidth={2}
+                  name={title}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </Card>
+    );
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden">
-      {/* Dashboard Header */}
-      <div className="bg-white px-6 py-4 border-b border-gray-100">
-        <div className="flex items-center justify-between">
+      {/* Header matching the real overview */}
+      <div className="flex-none px-6 pt-6 pb-3">
+        <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-xl font-semibold text-gray-900">Good evening, Kevin</h3>
-            <p className="text-gray-500 text-sm">Today, Jul 05</p>
+            <h1 className="text-[32px] md:text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
+              {greeting}, Kevin
+            </h1>
+            <p className="text-[24px] md:text-[28px] text-[#9EA3AD] font-medium leading-none">
+              Today, {format(new Date(), "MMM dd")}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg">Portfolio</div>
@@ -27,234 +237,135 @@ export default function DashboardPreview() {
         </div>
       </div>
 
-      {/* Dashboard Content */}
-      <div className="p-6 space-y-6">
-        {/* Top Row - Revenue, Expenses, Profit */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Revenue Card */}
-          <Card className="bg-white">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Revenue</CardTitle>
-                <BarChart3 className="w-4 h-4 text-gray-400" />
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-3">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-gray-900">$336,000</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingDown className="w-3 h-3 text-red-500" />
-                    <span className="text-sm text-red-500 font-medium">-11%</span>
-                  </div>
+      {/* Analytics Grid - 2x2 layout */}
+      <div className="px-6 pb-6">
+        <div className="flex flex-col w-full space-y-6">
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+              <ChartCard
+                title="Revenue"
+                icon={BarChart}
+                value="$336,000"
+                change={{ value: 11, positive: false }}
+                chartData={chartData}
+                chartType="area"
+              />
+              <ChartCard
+                title="Expenses"
+                icon={LineChart}
+                value="$229,000"
+                change={{ value: 5, positive: true }}
+                chartData={chartData}
+                chartType="area"
+              />
+              <ChartCard
+                title="Analytics"
+                icon={CircleDollarSign}
+                value="87%"
+                change={{ value: 3, positive: true }}
+                chartData={expenseCategories}
+                chartType="donut"
+              />
+              <ChartCard
+                title="Profit"
+                icon={TrendingUp}
+                value="$151,000"
+                change={{ value: 9, positive: true }}
+                chartData={chartData}
+                chartType="spline"
+              />
+            </div>
+            
+            {/* Timeline */}
+            <Card className="border border-gray-200 p-5 bg-white h-[280px]">
+              <CardHeader className="p-0 pb-3">
+                <CardTitle className="text-lg font-medium text-gray-900">
+                  This month
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="h-[220px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={timelineData}
+                      margin={{
+                        top: 20,
+                        right: 10,
+                        bottom: 20,
+                        left: 5,
+                      }}
+                    >
+                      <defs>
+                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#2563eb" stopOpacity={0.1} />
+                          <stop offset="95%" stopColor="#2563eb" stopOpacity={0.01} />
+                        </linearGradient>
+                        <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#16a34a" stopOpacity={0.1} />
+                          <stop offset="95%" stopColor="#16a34a" stopOpacity={0.01} />
+                        </linearGradient>
+                        <linearGradient id="colorExpenses" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#dc2626" stopOpacity={0.1} />
+                          <stop offset="95%" stopColor="#dc2626" stopOpacity={0.01} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.5} stroke="#e5e7eb" />
+                      <XAxis 
+                        dataKey="month" 
+                        tick={{ fill: '#6b7280', fontSize: 12 }} 
+                        tickLine={false} 
+                        axisLine={{ strokeWidth: 1, stroke: '#e5e7eb' }}
+                        dy={8}
+                        padding={{ left: 18, right: 10 }}
+                      />
+                      <YAxis 
+                        tick={{ fill: '#6b7280', fontSize: 12 }}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `$${value/1000}k`}
+                        width={50}
+                        dx={-8}
+                        padding={{ top: 10 }}
+                        allowDecimals={false}
+                        domain={['auto', 'auto']}
+                      />
+                      <Tooltip />
+                      <Area
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="#2563eb"
+                        fillOpacity={1}
+                        fill="url(#colorRevenue)"
+                        strokeWidth={2}
+                        activeDot={{ r: 4, fill: "#2563eb", strokeWidth: 0 }}
+                        name="Revenue"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="profit"
+                        stroke="#16a34a"
+                        fillOpacity={1}
+                        fill="url(#colorProfit)"
+                        strokeWidth={2}
+                        activeDot={{ r: 4, fill: "#16a34a", strokeWidth: 0 }}
+                        name="Profit"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="expenses"
+                        stroke="#dc2626"
+                        fillOpacity={1}
+                        fill="url(#colorExpenses)"
+                        strokeWidth={2}
+                        activeDot={{ r: 4, fill: "#dc2626", strokeWidth: 0 }}
+                        name="Expenses"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
-                {/* Simple line chart representation */}
-                <div className="h-20 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg flex items-end p-2">
-                  <svg className="w-full h-full" viewBox="0 0 200 60">
-                    <path
-                      d="M10,50 Q30,40 50,35 T90,25 T130,30 T170,45 T190,20"
-                      stroke="#3b82f6"
-                      strokeWidth="2"
-                      fill="none"
-                    />
-                    <path
-                      d="M10,50 Q30,40 50,35 T90,25 T130,30 T170,45 T190,20 L190,60 L10,60 Z"
-                      fill="url(#blueGradient)"
-                      opacity="0.1"
-                    />
-                    <defs>
-                      <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#3b82f6" />
-                        <stop offset="100%" stopColor="transparent" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Expenses Card */}
-          <Card className="bg-white">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Expenses</CardTitle>
-                <TrendingUp className="w-4 h-4 text-gray-400" />
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-3">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-gray-900">$229,000</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-sm text-green-500 font-medium">+5%</span>
-                  </div>
-                </div>
-                <div className="h-20 bg-gradient-to-r from-red-50 to-red-100 rounded-lg flex items-end p-2">
-                  <svg className="w-full h-full" viewBox="0 0 200 60">
-                    <path
-                      d="M10,40 Q30,20 50,15 T90,35 T130,25 T170,35 T190,40"
-                      stroke="#ef4444"
-                      strokeWidth="2"
-                      fill="none"
-                    />
-                    <path
-                      d="M10,40 Q30,20 50,15 T90,35 T130,25 T170,35 T190,40 L190,60 L10,60 Z"
-                      fill="url(#redGradient)"
-                      opacity="0.1"
-                    />
-                    <defs>
-                      <linearGradient id="redGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#ef4444" />
-                        <stop offset="100%" stopColor="transparent" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Profit Card */}
-          <Card className="bg-white">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Profit</CardTitle>
-                <div className="w-4 h-4 flex items-center justify-center">
-                  <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none">
-                    <path d="M1 11L11 1M11 1H3M11 1V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-3">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-gray-900">$151,000</span>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-sm text-green-500 font-medium">+9%</span>
-                  </div>
-                </div>
-                <div className="h-20 bg-gradient-to-r from-green-50 to-green-100 rounded-lg flex items-end p-2">
-                  <svg className="w-full h-full" viewBox="0 0 200 60">
-                    <path
-                      d="M10,45 Q30,35 50,30 T90,20 T130,35 T170,25 T190,15"
-                      stroke="#10b981"
-                      strokeWidth="2"
-                      fill="none"
-                    />
-                    <path
-                      d="M10,45 Q30,35 50,30 T90,20 T130,35 T170,25 T190,15 L190,60 L10,60 Z"
-                      fill="url(#greenGradient)"
-                      opacity="0.1"
-                    />
-                    <defs>
-                      <linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#10b981" />
-                        <stop offset="100%" stopColor="transparent" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Bottom Row - Expenses Categories */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-white">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-semibold text-gray-900">Top Expenses Categories</CardTitle>
-                <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
-                  <span className="text-xs text-gray-500">$</span>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="flex items-center gap-6">
-                {/* Donut Chart */}
-                <div className="relative w-32 h-32">
-                  <svg className="w-full h-full" viewBox="0 0 100 100">
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke="#ef4444"
-                      strokeWidth="12"
-                      strokeDasharray="85.3 250.3"
-                      strokeDashoffset="0"
-                      transform="rotate(-90 50 50)"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke="#f97316"
-                      strokeWidth="12"
-                      strokeDasharray="65.3 250.3"
-                      strokeDashoffset="-85.3"
-                      transform="rotate(-90 50 50)"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke="#3b82f6"
-                      strokeWidth="12"
-                      strokeDasharray="52.7 250.3"
-                      strokeDashoffset="-150.6"
-                      transform="rotate(-90 50 50)"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke="#8b5cf6"
-                      strokeWidth="12"
-                      strokeDasharray="47.7 250.3"
-                      strokeDashoffset="-203.3"
-                      transform="rotate(-90 50 50)"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke="#10b981"
-                      strokeWidth="12"
-                      strokeDasharray="20.1 250.3"
-                      strokeDashoffset="-251"
-                      transform="rotate(-90 50 50)"
-                    />
-                  </svg>
-                </div>
-                
-                {/* Legend */}
-                <div className="flex-1 space-y-2">
-                  {expenseCategories.map((category, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: category.color }}
-                        ></div>
-                        <span className="text-sm text-gray-700">{category.name}</span>
-                      </div>
-                      <span className="text-sm font-medium text-gray-900">{category.percentage}%</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
