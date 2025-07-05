@@ -41,14 +41,26 @@ export default function MobileLanding() {
             Track revenue, expenses, and profitability across all properties. Automated categorization and real-time insights built for property managers.
           </p>
           
-          <div className="flex flex-col gap-3 mb-8">
-            <div className="flex items-center justify-center gap-3 bg-gradient-to-r from-blue-50 to-cyan-50 px-3 py-2 rounded-full border border-blue-100 shadow-sm mx-auto">
-              <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Real-time Analytics</span>
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="relative overflow-hidden bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 backdrop-blur-sm px-4 py-3 rounded-2xl border border-blue-200/50 shadow-lg mx-auto group hover:shadow-xl transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-cyan-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative flex items-center justify-center gap-3">
+                <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-pulse shadow-sm"></div>
+                <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Real-time Analytics</span>
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center">
+                  <BarChart3 className="w-3 h-3 text-blue-600" />
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-3 bg-gradient-to-r from-purple-50 to-pink-50 px-3 py-2 rounded-full border border-purple-100 shadow-sm mx-auto">
-              <div className="w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Automated Categorization</span>
+            <div className="relative overflow-hidden bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 backdrop-blur-sm px-4 py-3 rounded-2xl border border-purple-200/50 shadow-lg mx-auto group hover:shadow-xl transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/5 to-pink-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative flex items-center justify-center gap-3">
+                <div className="w-2 h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse shadow-sm"></div>
+                <span className="text-sm font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Automated Categorization</span>
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                  <Target className="w-3 h-3 text-purple-600" />
+                </div>
+              </div>
             </div>
           </div>
           
