@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
-import dashboard from "/images/1.svg";
+import DashboardPreview from "./DashboardPreview";
 
 export default function DesktopLanding() {
   return (
@@ -55,12 +55,8 @@ export default function DesktopLanding() {
           
           <div className="flex justify-center">
             <div className="bg-white rounded-2xl p-4 shadow-xl border border-gray-200 overflow-hidden">
-              <div className="w-[900px] h-[500px] relative">
-                <img 
-                  src={dashboard} 
-                  alt="Dashboard Preview" 
-                  className="w-full h-full object-contain rounded-lg" 
-                />
+              <div className="w-[900px] h-[500px]">
+                <DashboardPreview className="w-full h-full rounded-lg" />
               </div>
             </div>
           </div>

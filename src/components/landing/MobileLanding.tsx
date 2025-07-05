@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target, Calendar } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
-import dashboard from "/images/1.svg";
+import DashboardPreview from "./DashboardPreview";
 
 export default function MobileLanding() {
   return (
@@ -53,13 +53,8 @@ export default function MobileLanding() {
           
           <div className="flex justify-center">
             <div className="bg-white rounded-2xl p-3 shadow-xl border border-gray-200 overflow-hidden">
-              <div className="w-full max-w-[480px] h-[320px] relative">
-                <img 
-                  src={dashboard} 
-                  alt="Dashboard Preview" 
-                  className="w-full h-full object-cover rounded-lg" 
-                  style={{ imageRendering: 'crisp-edges' }}
-                />
+              <div className="w-full max-w-[480px] h-[320px]">
+                <DashboardPreview className="w-full h-full rounded-lg" />
               </div>
             </div>
           </div>
