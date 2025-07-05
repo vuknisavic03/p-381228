@@ -109,7 +109,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 </TableCell>
                 
                 <TableCell className="py-4 w-[15%]">
-                  <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+                  <Badge variant={getCategoryBadgeVariant(tx.category)} className="text-xs font-medium px-1 py-0.5 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
                     {capitalizeCategory(tx.category)}
                   </Badge>
                 </TableCell>
