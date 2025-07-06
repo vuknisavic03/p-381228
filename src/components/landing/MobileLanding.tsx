@@ -358,32 +358,62 @@ export default function MobileLanding() {
       </section>
 
       {/* Mobile Testimonials Section */}
-      <section className="px-4 py-12">
-        <div className="space-y-4 mb-8">
+      <section className="px-4 py-16 bg-gradient-to-b from-white to-gray-50">
+        <div className="text-center mb-10">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Testimonials
+          </div>
+          <h2 className="text-2xl font-bold text-black mb-3">What people are saying</h2>
+          <p className="text-sm text-gray-600 px-4">
+            Join thousands who've transformed their workflow with Square.
+          </p>
+        </div>
+        
+        <div className="space-y-6 mb-8">
           {[
             {
               quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
               author: "Sarah Chen",
-              handle: "@sarahchen"
+              handle: "@sarahchen",
+              rating: 5,
+              role: "Property Manager"
             },
             {
               quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
               author: "Marcus Johnson",
-              handle: "@marcusjohnson"
+              handle: "@marcusjohnson",
+              rating: 5,
+              role: "Real Estate Investor"
             },
             {
               quote: "OK: Square Accounting is pretty sick.",
               author: "Alex Rivera",
-              handle: "@alexrivera"
+              handle: "@alexrivera",
+              rating: 5,
+              role: "Portfolio Manager"
             }
           ].map((testimonial, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg border border-gray-100">
-              <blockquote className="text-gray-900 mb-3 text-sm">
+            <div key={index} className="bg-white p-6 rounded-2xl border border-gray-200 shadow-lg">
+              <div className="flex items-center gap-1 mb-3">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <div key={i} className="w-3 h-3 text-yellow-400 fill-current">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  </div>
+                ))}
+              </div>
+              <blockquote className="text-gray-900 mb-4 text-sm leading-relaxed font-medium">
                 "{testimonial.quote}"
               </blockquote>
-              <div>
-                <div className="font-medium text-gray-900 text-sm">{testimonial.author}</div>
-                <div className="text-gray-500 text-sm">{testimonial.handle}</div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-xs">{testimonial.author.charAt(0)}</span>
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900 text-sm">{testimonial.author}</div>
+                  <div className="text-xs text-gray-500">{testimonial.role} • {testimonial.handle}</div>
+                </div>
               </div>
             </div>
           ))}
