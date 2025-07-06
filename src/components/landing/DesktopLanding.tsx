@@ -134,7 +134,7 @@ export default function DesktopLanding() {
               Visualize all your property or business listings on an interactive map. Manage availability, get insights, and plan with confidence.
             </p>
           </div>
-          <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
