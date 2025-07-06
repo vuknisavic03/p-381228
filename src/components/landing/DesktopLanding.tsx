@@ -70,7 +70,7 @@ export default function DesktopLanding() {
               </div>
             </div>
             <div className="p-8">
-              <div className="text-center mb-6">
+              <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">See how Square organizes your finances automatically</h3>
                 <p className="text-sm text-gray-600">Every transaction gets categorized, every property gets tracked, every metric gets updated—without you lifting a finger.</p>
               </div>
@@ -99,11 +99,11 @@ export default function DesktopLanding() {
                     icon: "🚀"
                   },
                 ].map((item, index) => (
-                  <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow text-center">
+                  <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="text-2xl mb-2">{item.icon}</div>
                     <div className="text-sm font-medium text-gray-600 mb-2">{item.metric}</div>
                     <div className="text-3xl font-bold text-gray-900 mb-2">{item.value}</div>
-                    <div className="flex items-center justify-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1">
                       <TrendingUp className="w-4 h-4 text-green-600" />
                       <span className="text-sm font-semibold text-green-600">{item.change}</span>
                     </div>
@@ -112,8 +112,8 @@ export default function DesktopLanding() {
                 ))}
               </div>
               
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-200 text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-200">
+                <div className="flex items-center gap-2 mb-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-sm font-semibold text-gray-700">Overall Portfolio Health</span>
                   <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">Excellent Performance</span>
