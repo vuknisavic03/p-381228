@@ -56,7 +56,10 @@ export default function MobileLanding() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-white" />
-                  <span className="text-sm font-semibold text-white">Live Dashboard</span>
+                  <div>
+                    <div className="text-sm font-semibold text-white">Live Dashboard</div>
+                    <div className="text-xs text-gray-300">Auto-categorizes • Tracks • Updates</div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -65,27 +68,33 @@ export default function MobileLanding() {
               </div>
             </div>
             <div className="p-4">
+              <div className="text-center mb-4">
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Square organizes your finances automatically</h3>
+                <p className="text-xs text-gray-600">Every transaction categorized, every property tracked—without lifting a finger.</p>
+              </div>
+              
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {[
                   { 
                     metric: "Monthly Revenue", 
                     value: "$125,430", 
-                    change: "+12.5%", 
-                    trend: "up",
-                    subtext: "vs last month"
+                    change: "+12.5%",
+                    subtext: "vs last month",
+                    icon: "💰"
                   },
                   { 
                     metric: "Net Profit", 
                     value: "$36,220", 
-                    change: "+18.7%", 
-                    trend: "up",
-                    subtext: "after expenses"
+                    change: "+18.7%",
+                    subtext: "after expenses",
+                    icon: "📈"
                   },
                 ].map((item, index) => (
-                  <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-3 rounded-xl border border-gray-100">
+                  <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-3 rounded-xl border border-gray-100 text-center">
+                    <div className="text-lg mb-1">{item.icon}</div>
                     <div className="text-xs font-medium text-gray-600 mb-1">{item.metric}</div>
                     <div className="text-lg font-bold text-gray-900 mb-1">{item.value}</div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-center gap-1">
                       <TrendingUp className="w-3 h-3 text-green-600" />
                       <span className="text-xs font-semibold text-green-600">{item.change}</span>
                     </div>
@@ -93,15 +102,14 @@ export default function MobileLanding() {
                   </div>
                 ))}
               </div>
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-100">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs font-semibold text-gray-700">Portfolio Health</span>
-                  </div>
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-100 text-center">
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs font-semibold text-gray-700">Portfolio Health</span>
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Excellent</span>
                 </div>
-                <div className="text-xs text-gray-600 mt-1">All properties performing above target</div>
+                <div className="text-xs text-gray-600">All properties performing above target</div>
+                <div className="text-xs text-gray-500 mt-1">✨ Automatic tracking</div>
               </div>
             </div>
           </div>
