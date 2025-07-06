@@ -359,12 +359,19 @@ export default function MobileLanding() {
 
       {/* Mobile Testimonials Section */}
       <section className="px-4 py-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-black mb-4">What people are saying</h2>
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-black mb-2">What people are saying</h2>
+          <p className="text-sm text-gray-500">Swipe to see more reviews</p>
         </div>
         
-        <div className="relative overflow-hidden -mx-4">
-          <div className="flex gap-4 animate-scroll">
+        <div className="relative overflow-hidden -mx-2">
+          <div 
+            className="flex gap-3 animate-scroll-mobile"
+            style={{ 
+              touchAction: 'pan-x',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
             {[
               {
                 quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
@@ -398,17 +405,24 @@ export default function MobileLanding() {
                 handle: "@alexrivera"
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg border border-gray-100 min-w-[280px] flex-shrink-0 mx-2">
-                <blockquote className="text-gray-900 mb-3 text-sm">
+              <div key={index} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm min-w-[300px] max-w-[300px] flex-shrink-0 mx-1">
+                <blockquote className="text-gray-900 mb-4 text-base leading-relaxed font-medium">
                   "{testimonial.quote}"
                 </blockquote>
-                <div>
-                  <div className="font-medium text-gray-900 text-sm">{testimonial.author}</div>
+                <div className="border-t border-gray-100 pt-3">
+                  <div className="font-semibold text-gray-900 text-sm">{testimonial.author}</div>
                   <div className="text-gray-500 text-sm">{testimonial.handle}</div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+        
+        {/* Mobile scroll indicators */}
+        <div className="flex justify-center mt-4 gap-1">
+          <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+          <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
         </div>
       </section>
 
