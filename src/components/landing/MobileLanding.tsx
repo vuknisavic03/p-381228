@@ -37,7 +37,7 @@ export default function MobileLanding() {
             </div>
           </div>
           
-          <h1 className="text-3xl font-bold text-black leading-tight mb-4">
+          <h1 className="text-2xl font-bold text-black leading-tight mb-4">
             The dashboard that thinks like you
           </h1>
           
@@ -56,9 +56,9 @@ export default function MobileLanding() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-white" />
-                  <div>
-                    <div className="text-sm font-semibold text-white">Live Dashboard</div>
-                    <div className="text-xs text-gray-300">Auto-categorizes • Tracks • Updates</div>
+                  <div className="text-left">
+                    <div className="text-sm font-semibold text-white text-left">Live Dashboard</div>
+                    <div className="text-xs text-gray-300 text-left">Auto-categorizes • Tracks • Updates</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">

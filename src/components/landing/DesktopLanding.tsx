@@ -39,7 +39,7 @@ export default function DesktopLanding() {
             </div>
           </div>
           
-          <h1 className="text-6xl font-bold text-black leading-tight mb-8 max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold text-black leading-tight mb-8 max-w-4xl mx-auto">
             The dashboard that thinks like you
           </h1>
           
@@ -59,9 +59,9 @@ export default function DesktopLanding() {
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <span className="text-gray-900 text-sm font-bold">S</span>
                 </div>
-                <div>
-                  <div className="text-white font-semibold">Live Dashboard</div>
-                  <div className="text-gray-300 text-sm">Auto-categorizes transactions • Tracks every property • Updates in real-time</div>
+                <div className="text-left">
+                  <div className="text-white font-semibold text-left">Live Dashboard</div>
+                  <div className="text-gray-300 text-sm text-left">Auto-categorizes transactions • Tracks every property • Updates in real-time</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
