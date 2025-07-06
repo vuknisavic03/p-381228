@@ -44,7 +44,7 @@ export default function DesktopLanding() {
           </h1>
           
           <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Personalized to your work and beautifully designed.<br />
+            Personalized to your work.<br />
             Solution that makes your life simpler.
           </p>
           
