@@ -71,8 +71,8 @@ export default function DesktopLanding() {
             </div>
             <div className="p-8">
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">See how Square organizes your finances automatically</h3>
-                <p className="text-sm text-gray-600">Every transaction gets categorized, every property gets tracked, every metric gets updated—without you lifting a finger.</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 text-left">See how Square organizes your finances automatically</h3>
+                <p className="text-sm text-gray-600 text-left">Every transaction gets categorized, every property gets tracked, every metric gets updated—without you lifting a finger.</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -81,33 +81,29 @@ export default function DesktopLanding() {
                     metric: "Total Revenue", 
                     value: "$125,430", 
                     change: "+12.5%", 
-                    subtext: "vs last month",
-                    icon: "💰"
+                    subtext: "vs last month"
                   },
                   { 
                     metric: "Net Profit", 
                     value: "$36,220", 
                     change: "+18.7%", 
-                    subtext: "after all expenses",
-                    icon: "📈"
+                    subtext: "after all expenses"
                   },
                   { 
                     metric: "Monthly Growth", 
                     value: "15.3%", 
                     change: "+2.1%", 
-                    subtext: "portfolio expansion",
-                    icon: "🚀"
+                    subtext: "portfolio expansion"
                   },
                 ].map((item, index) => (
                   <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
-                    <div className="text-2xl mb-2">{item.icon}</div>
-                    <div className="text-sm font-medium text-gray-600 mb-2">{item.metric}</div>
-                    <div className="text-3xl font-bold text-gray-900 mb-2">{item.value}</div>
+                    <div className="text-sm font-medium text-gray-600 mb-2 text-left">{item.metric}</div>
+                    <div className="text-3xl font-bold text-gray-900 mb-2 text-left">{item.value}</div>
                     <div className="flex items-center gap-2 mb-1">
                       <TrendingUp className="w-4 h-4 text-green-600" />
                       <span className="text-sm font-semibold text-green-600">{item.change}</span>
                     </div>
-                    <div className="text-xs text-gray-500">{item.subtext}</div>
+                    <div className="text-xs text-gray-500 text-left">{item.subtext}</div>
                   </div>
                 ))}
               </div>
@@ -118,8 +114,8 @@ export default function DesktopLanding() {
                   <span className="text-sm font-semibold text-gray-700">Overall Portfolio Health</span>
                   <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">Excellent Performance</span>
                 </div>
-                <div className="text-sm text-gray-600">All 3 properties performing above target • Revenue up 15.3% this quarter</div>
-                <div className="text-xs text-gray-500 mt-2">✨ Square automatically tracks performance across all your properties</div>
+                <div className="text-sm text-gray-600 text-left">All 3 properties performing above target • Revenue up 15.3% this quarter</div>
+                <div className="text-xs text-gray-500 mt-2 text-left">✨ Square automatically tracks performance across all your properties</div>
               </div>
             </div>
           </div>
