@@ -9,11 +9,10 @@ export default function Vision() {
       <header className="px-4 py-3 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 md:gap-6">
-            <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded flex items-center justify-center">
+            <Link to="/" className="w-7 h-7 md:w-8 md:h-8 bg-black rounded flex items-center justify-center hover:bg-gray-800 transition-colors">
               <span className="text-white font-bold text-sm">S</span>
-            </div>
+            </Link>
             <nav className="flex items-center gap-2 md:gap-6">
-              <Link to="/" className="text-black text-sm font-medium">Accounting</Link>
               <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
             </nav>
           </div>
