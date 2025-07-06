@@ -51,82 +51,58 @@ export default function MobileLanding() {
             </Button>
           </div>
           
-          <div className="flex justify-center">
-            <div className="bg-white rounded-2xl p-3 shadow-xl border border-gray-200 overflow-hidden">
-              <div className="w-full max-w-[380px] h-[220px] relative">
-                <img 
-                  src={dashboard} 
-                  alt="Dashboard Preview" 
-                  className="w-full h-full object-contain rounded-lg" 
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Real-time Metrics Feature */}
-      <section className="px-4 pb-8">
-        <div className="mb-6">
-          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
-            Analytics
-          </div>
-          <h2 className="text-xl font-bold text-black mb-2">Live metrics that update themselves</h2>
-          <p className="text-sm text-gray-600">
-            See your portfolio performance in real-time with metrics that refresh automatically.
-          </p>
-        </div>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="bg-gray-900 px-4 py-3 border-b border-gray-700">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-white" />
-                <span className="text-sm font-semibold text-white">Live Dashboard</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-green-400 font-medium">Live</span>
-              </div>
-            </div>
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {[
-                { 
-                  metric: "Monthly Revenue", 
-                  value: "$125,430", 
-                  change: "+12.5%", 
-                  trend: "up",
-                  subtext: "vs last month"
-                },
-                { 
-                  metric: "Net Profit", 
-                  value: "$36,220", 
-                  change: "+18.7%", 
-                  trend: "up",
-                  subtext: "after expenses"
-                },
-              ].map((item, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-3 rounded-xl border border-gray-100">
-                  <div className="text-xs font-medium text-gray-600 mb-1">{item.metric}</div>
-                  <div className="text-lg font-bold text-gray-900 mb-1">{item.value}</div>
-                  <div className="flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3 text-green-600" />
-                    <span className="text-xs font-semibold text-green-600">{item.change}</span>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">{item.subtext}</div>
-                </div>
-              ))}
-            </div>
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-100">
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+            <div className="bg-gray-900 px-4 py-3 border-b border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs font-semibold text-gray-700">Portfolio Health</span>
+                  <BarChart3 className="w-4 h-4 text-white" />
+                  <span className="text-sm font-semibold text-white">Live Dashboard</span>
                 </div>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Excellent</span>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-green-400 font-medium">Live</span>
+                </div>
               </div>
-              <div className="text-xs text-gray-600 mt-1">All properties performing above target</div>
+            </div>
+            <div className="p-4">
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {[
+                  { 
+                    metric: "Monthly Revenue", 
+                    value: "$125,430", 
+                    change: "+12.5%", 
+                    trend: "up",
+                    subtext: "vs last month"
+                  },
+                  { 
+                    metric: "Net Profit", 
+                    value: "$36,220", 
+                    change: "+18.7%", 
+                    trend: "up",
+                    subtext: "after expenses"
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-3 rounded-xl border border-gray-100">
+                    <div className="text-xs font-medium text-gray-600 mb-1">{item.metric}</div>
+                    <div className="text-lg font-bold text-gray-900 mb-1">{item.value}</div>
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 text-green-600" />
+                      <span className="text-xs font-semibold text-green-600">{item.change}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">{item.subtext}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs font-semibold text-gray-700">Portfolio Health</span>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Excellent</span>
+                </div>
+                <div className="text-xs text-gray-600 mt-1">All properties performing above target</div>
+              </div>
             </div>
           </div>
         </div>
