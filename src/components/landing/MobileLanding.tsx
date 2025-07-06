@@ -12,11 +12,10 @@ export default function MobileLanding() {
       <header className="px-4 py-3 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="w-7 h-7 bg-black rounded flex items-center justify-center">
+            <Link to="/" className="w-7 h-7 bg-black rounded flex items-center justify-center hover:bg-gray-800 transition-colors">
               <span className="text-white font-bold text-sm">S</span>
-            </div>
+            </Link>
             <nav className="flex items-center gap-4">
-              <Link to="/" className="text-gray-600 text-sm">Accounting</Link>
               <Link to="/vision" className="text-blue-600 text-sm font-medium">Vision</Link>
             </nav>
           </div>
