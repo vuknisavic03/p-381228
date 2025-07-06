@@ -215,11 +215,11 @@ export default function DesktopLanding() {
         <div className="container mx-auto">
           <div className="mb-12">
             <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              Filtering
+              Transactions
             </div>
-            <h2 className="text-4xl font-bold text-black mb-4">Group and filter by what you need</h2>
+            <h2 className="text-4xl font-bold text-black mb-4">A place to get all transactions tracked</h2>
             <p className="text-lg text-gray-600 max-w-2xl">
-              Filter transactions by property, category, amount, or any combination—whatever helps you focus on what matters.
+              Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, identify gaps, and grow confidently.
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
