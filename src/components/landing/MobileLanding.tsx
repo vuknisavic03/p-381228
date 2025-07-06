@@ -358,7 +358,7 @@ export default function MobileLanding() {
       </section>
 
       {/* Mobile Testimonials Section */}
-      <section className="px-4 py-12">
+      <section className="px-4 py-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-black mb-4">What people are saying</h2>
         </div>
