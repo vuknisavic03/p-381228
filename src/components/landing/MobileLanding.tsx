@@ -115,7 +115,7 @@ export default function MobileLanding() {
       </section>
 
       {/* Property Organization Feature */}
-      <section className="px-4 pb-12">
+      <section className="px-4 pb-14">
         <div className="mb-6">
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Listings
@@ -189,7 +189,7 @@ export default function MobileLanding() {
       </section>
 
       {/* Transaction Filtering Feature */}
-      <section className="px-4 pb-12">
+      <section className="px-4 pb-14">
         <div className="mb-6">
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Transactions
@@ -267,7 +267,7 @@ export default function MobileLanding() {
       </section>
 
       {/* Workspace Manager Feature */}
-      <section className="px-4 pb-12">
+      <section className="px-4 pb-14">
         <div className="mb-6">
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Workspaces
