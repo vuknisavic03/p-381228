@@ -17,20 +17,6 @@ export default function Vision() {
               <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
             </nav>
           </div>
-          
-          <div className="flex items-center">
-            <div className="hidden md:flex items-center gap-4">
-              <button className="text-gray-600 text-sm">Log in</button>
-              <Button className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800">
-                Get Square free
-              </Button>
-            </div>
-            <div className="md:hidden">
-              <Button className="bg-black text-white text-sm px-3 py-2 rounded-md hover:bg-gray-800">
-                Get Square free
-              </Button>
-            </div>
-          </div>
         </div>
       </header>
 
