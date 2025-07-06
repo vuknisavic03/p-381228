@@ -265,6 +265,96 @@ export default function MobileLanding() {
         </div>
       </section>
 
+      {/* Workspace Manager Feature */}
+      <section className="px-4 pb-8">
+        <div className="mb-6">
+          <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Workspaces
+          </div>
+          <h2 className="text-xl font-bold text-black mb-2">Workspaces built for managers and individuals</h2>
+          <p className="text-sm text-gray-600">
+            Switch effortlessly between workspaces. Keep data organized and see performance across them all.
+          </p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-4 py-3 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-orange-600" />
+                <span className="text-sm font-semibold text-gray-900">Workspace Manager</span>
+              </div>
+              <div className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">3 active</div>
+            </div>
+          </div>
+          <div className="p-4">
+            <div className="flex gap-2 text-xs mb-4">
+              <div className="bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+                <Building2 className="w-3 h-3" />
+                Personal Portfolio
+              </div>
+              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Company</div>
+            </div>
+            <div className="space-y-3">
+              {[
+                { 
+                  workspace: "Personal Portfolio", 
+                  properties: "12 properties", 
+                  revenue: "$89,400", 
+                  change: "+15.2%",
+                  status: "Growing",
+                  color: "bg-green-500"
+                },
+                { 
+                  workspace: "Downtown Commercial", 
+                  properties: "8 buildings", 
+                  revenue: "$156,800", 
+                  change: "+22.1%",
+                  status: "Excellent",
+                  color: "bg-blue-500"
+                },
+                { 
+                  workspace: "Residential Mgmt", 
+                  properties: "24 units", 
+                  revenue: "$74,200", 
+                  change: "+8.9%",
+                  status: "Stable",
+                  color: "bg-purple-500"
+                },
+              ].map((workspace, index) => (
+                <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${workspace.color}`}></div>
+                      <span className="text-sm font-semibold text-gray-900">{workspace.workspace}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-green-600">{workspace.revenue}</span>
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">{workspace.properties}</div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{workspace.status}</span>
+                      <div className="flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3 text-green-600" />
+                        <span className="text-xs font-semibold text-green-600">{workspace.change}</span>
+                      </div>
+                    </div>
+                    <button className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">Switch</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 bg-gradient-to-r from-orange-50 to-yellow-50 p-3 rounded-lg border border-orange-100">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <span className="text-xs font-semibold text-gray-700">Cross-Workspace</span>
+                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">All performing well</span>
+              </div>
+              <div className="text-xs text-gray-600 text-left">Total: $320,400 • Avg growth: +15.4%</div>
+              <div className="text-xs text-gray-500 mt-1 text-left">✨ Unified analytics across workspaces</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Mobile Testimonials Section */}
       <section className="px-4 py-12">

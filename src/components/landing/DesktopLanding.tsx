@@ -302,6 +302,111 @@ export default function DesktopLanding() {
         </div>
       </section>
 
+      {/* Workspace Manager Feature */}
+      <section className="px-4 pb-16">
+        <div className="container mx-auto">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Workspaces
+            </div>
+            <h2 className="text-4xl font-bold text-black mb-4">Workspaces built for managers and individuals</h2>
+            <p className="text-lg text-gray-600 max-w-2xl">
+              Switch effortlessly between workspaces. Keep data organized and see performance across them all.
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Building2 className="w-6 h-6 text-orange-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Workspace Manager</h3>
+                </div>
+                <div className="text-sm bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full font-medium">3 active workspaces</div>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="flex gap-3 mb-6">
+                <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Personal Portfolio
+                </div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">Company Assets</div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">Client Projects</div>
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    workspace: "Personal Portfolio", 
+                    properties: "12 properties", 
+                    revenue: "$89,400", 
+                    change: "+15.2%",
+                    status: "Growing",
+                    lastUpdate: "2 minutes ago",
+                    color: "bg-green-500"
+                  },
+                  { 
+                    workspace: "Downtown Commercial", 
+                    properties: "8 office buildings", 
+                    revenue: "$156,800", 
+                    change: "+22.1%",
+                    status: "Excellent",
+                    lastUpdate: "5 minutes ago",
+                    color: "bg-blue-500"
+                  },
+                  { 
+                    workspace: "Residential Management Co.", 
+                    properties: "24 apartment units", 
+                    revenue: "$74,200", 
+                    change: "+8.9%",
+                    status: "Stable",
+                    lastUpdate: "12 minutes ago",
+                    color: "bg-purple-500"
+                  },
+                ].map((workspace, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full ${workspace.color}`}></div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">{workspace.workspace}</div>
+                          <div className="text-xs text-gray-600">{workspace.properties}</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-semibold text-gray-900">{workspace.revenue}</div>
+                        <div className="flex items-center gap-1">
+                          <TrendingUp className="w-3 h-3 text-green-600" />
+                          <span className="text-xs font-semibold text-green-600">{workspace.change}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{workspace.status}</span>
+                        <span className="text-xs text-gray-500">Updated {workspace.lastUpdate}</span>
+                      </div>
+                      <button className="text-xs bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium hover:bg-orange-200 transition-colors">
+                        Switch to workspace
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-xl border border-orange-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm font-semibold text-gray-700">Cross-Workspace Insights</span>
+                  <span className="text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium">All workspaces performing well</span>
+                </div>
+                <div className="text-sm text-gray-600 text-left">Total portfolio value: $320,400 • Average growth: +15.4% this quarter</div>
+                <div className="text-xs text-gray-500 mt-2 text-left">✨ Switch between workspaces instantly while keeping unified analytics</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Testimonials Section */}
       <section className="px-4 py-16">
