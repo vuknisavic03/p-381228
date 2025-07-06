@@ -9,18 +9,18 @@ export default function MobileLanding() {
   return (
     <div className="min-h-screen bg-white">
       {/* Mobile Header */}
-      <header className="px-4 py-3 border-b border-gray-100">
-        <div className="flex items-center justify-between">
+      <header className="px-4 py-3 border-b border-gray-100 h-16 flex items-center">
+        <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-6">
             <Link to="/" className="w-7 h-7 bg-black rounded flex items-center justify-center hover:bg-gray-800 transition-colors">
               <span className="text-white font-bold text-sm">S</span>
             </Link>
             <nav className="flex items-center gap-4">
-              <Link to="/vision" className="text-blue-600 text-sm font-medium">Vision</Link>
+              <Link to="/vision" className="text-blue-600 text-sm font-medium bg-blue-100 px-3 py-1.5 rounded hover:bg-blue-200 transition-colors">Vision</Link>
             </nav>
           </div>
           
-          <Button className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800">
+          <Button className="bg-black text-white text-sm px-3 py-1.5 rounded hover:bg-gray-800 transition-colors">
             Get Square free
           </Button>
         </div>
