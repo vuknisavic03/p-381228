@@ -38,7 +38,7 @@ export default function MobileLanding() {
           </div>
           
           <h1 className="text-2xl font-bold text-black leading-tight mb-4">
-            Break free from the old way.
+            Break free from the old way
           </h1>
           
           <p className="text-base text-gray-600 mb-8 leading-relaxed px-4 max-w-md mx-auto">
