@@ -1,9 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Search, Tag, DollarSign, Building2, CreditCard, TrendingUp, Target, Calendar } from "lucide-react";
-import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
-import dashboard from "/images/1.svg";
+import { BarChart3, Building2, TrendingUp, Target } from "lucide-react";
 
 export default function MobileLanding() {
   return (
