@@ -41,7 +41,7 @@ export default function MobileLanding() {
             Break free from the old way
           </h1>
           
-          <p className="text-base text-gray-600 mb-8 leading-relaxed px-4 max-w-md mx-auto">
+          <p className="text-sm text-gray-600 mb-8 leading-relaxed px-4 max-w-md mx-auto">
             Personalized to your work and beautifully designed.<br />
             Solution that makes your life simpler.
           </p>
