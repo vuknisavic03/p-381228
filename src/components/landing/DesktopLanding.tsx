@@ -127,11 +127,11 @@ export default function DesktopLanding() {
         <div className="container mx-auto">
           <div className="mb-12">
             <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              Views
+              Listings
             </div>
-            <h2 className="text-4xl font-bold text-black mb-4">Split your portfolio into custom views</h2>
+            <h2 className="text-4xl font-bold text-black mb-4">Map your listings with precision</h2>
             <p className="text-lg text-gray-600 max-w-2xl">
-              Group properties by type, filter by performance, and focus on what matters most to your business.
+              Visualize all your property or business listings on an interactive map. Manage availability, get insights, and plan with confidence.
             </p>
           </div>
           <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
@@ -227,7 +227,7 @@ export default function DesktopLanding() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Target className="w-6 h-6 text-purple-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Smart Transaction Filters</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Transactions</h3>
                 </div>
                 <div className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium">2 filters active</div>
               </div>

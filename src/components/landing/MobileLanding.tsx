@@ -117,11 +117,11 @@ export default function MobileLanding() {
       <section className="px-4 pb-8">
         <div className="mb-6">
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
-            Views
+            Listings
           </div>
-          <h2 className="text-xl font-bold text-black mb-2">Split your portfolio into custom views</h2>
+          <h2 className="text-xl font-bold text-black mb-2">Map your listings with precision</h2>
           <p className="text-sm text-gray-600">
-            Group properties by type, filter by performance, and focus on what matters most.
+            Visualize all your property or business listings on an interactive map. Manage availability, get insights, and plan with confidence.
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
@@ -203,7 +203,7 @@ export default function MobileLanding() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Target className="w-4 h-4 text-purple-600" />
-                <span className="text-sm font-semibold text-gray-900">Smart Filters</span>
+                <span className="text-sm font-semibold text-gray-900">Transactions</span>
               </div>
               <div className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium">2 active</div>
             </div>
