@@ -364,11 +364,11 @@ export default function MobileLanding() {
           <p className="text-sm text-gray-500">Swipe to see more reviews</p>
         </div>
         
-        <div className="relative overflow-hidden -mx-2">
+        <div className="relative">
           <div 
-            className="flex gap-3 animate-scroll-mobile"
+            className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4"
             style={{ 
-              touchAction: 'pan-x',
+              scrollBehavior: 'smooth',
               WebkitOverflowScrolling: 'touch'
             }}
           >
@@ -388,24 +388,18 @@ export default function MobileLanding() {
                 author: "Alex Rivera",
                 handle: "@alexrivera"
               },
-              // Duplicate for seamless loop
               {
-                quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
-                author: "Sarah Chen",
-                handle: "@sarahchen"
+                quote: "The automated categorization saves me hours every week. Game changer for property managers.",
+                author: "David Park",
+                handle: "@davidpark"
               },
               {
-                quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
-                author: "Marcus Johnson",
-                handle: "@marcusjohnson"
-              },
-              {
-                quote: "OK: Square Accounting is pretty sick.",
-                author: "Alex Rivera",
-                handle: "@alexrivera"
+                quote: "Finally, an accounting tool that actually understands real estate workflows.",
+                author: "Lisa Zhang",
+                handle: "@lisazhang"
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm min-w-[300px] max-w-[300px] flex-shrink-0 mx-1">
+              <div key={index} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm min-w-[290px] max-w-[290px] flex-shrink-0 snap-start">
                 <blockquote className="text-gray-900 mb-4 text-base leading-relaxed font-medium">
                   "{testimonial.quote}"
                 </blockquote>
@@ -420,7 +414,9 @@ export default function MobileLanding() {
         
         {/* Mobile scroll indicators */}
         <div className="flex justify-center mt-4 gap-1">
-          <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+          <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+          <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
           <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
           <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
         </div>

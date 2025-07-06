@@ -243,3 +243,13 @@ a[href*="google.com/maps"] {
 .animate-scroll-mobile:hover {
   animation-play-state: paused;
 }
+
+/* Hide scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
