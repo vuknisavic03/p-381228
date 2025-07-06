@@ -6,21 +6,21 @@ export default function Vision() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="px-4 py-4 border-b border-gray-200">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
+      <header className="px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 md:gap-6">
+            <div className="w-7 h-7 md:w-8 md:h-8 bg-black rounded flex items-center justify-center">
               <span className="text-white font-bold text-sm">S</span>
             </div>
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-3 md:gap-6">
               <Link to="/" className="text-black text-sm font-medium">Accounting</Link>
               <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition-colors">Vision</Link>
             </nav>
           </div>
           
-          <div className="flex items-center gap-4">
-            <button className="text-gray-600 text-sm">Log in</button>
-            <Button className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800">
+          <div className="flex items-center gap-2 md:gap-4">
+            <button className="text-gray-600 text-sm hidden md:block">Log in</button>
+            <Button className="bg-black text-white text-sm px-3 md:px-4 py-2 rounded-md hover:bg-gray-800">
               Get Square free
             </Button>
           </div>
