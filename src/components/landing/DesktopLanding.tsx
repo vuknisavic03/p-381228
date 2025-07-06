@@ -40,11 +40,11 @@ export default function DesktopLanding() {
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-black leading-tight mb-8 max-w-4xl mx-auto">
-            The dashboard that thinks like you
+            Break free from the old way.
           </h1>
           
           <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Meet Square Accounting, the dashboard that organizes itself, tracks revenue, and manages expenses any way you'd like.
+            Personalized to your work and beautifully designed. Solution that makes your life simpler.
           </p>
           
           <div className="flex justify-center mb-16">

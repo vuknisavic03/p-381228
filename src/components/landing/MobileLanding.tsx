@@ -38,11 +38,11 @@ export default function MobileLanding() {
           </div>
           
           <h1 className="text-2xl font-bold text-black leading-tight mb-4">
-            The dashboard that thinks like you
+            Break free from the old way.
           </h1>
           
           <p className="text-base text-gray-600 mb-8 leading-relaxed px-4 max-w-md mx-auto">
-            Meet Square Accounting, the dashboard that organizes itself, tracks revenue, and manages expenses any way you'd like.
+            Personalized to your work and beautifully designed. Solution that makes your life simpler.
           </p>
           
           <div className="flex justify-center mb-12">
