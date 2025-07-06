@@ -410,87 +410,73 @@ export default function DesktopLanding() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="px-4 py-16 bg-gradient-to-b from-white to-gray-50">
+      <section className="px-4 py-16">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              Testimonials
-            </div>
             <h2 className="text-4xl font-bold text-black mb-4">What people are saying</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join thousands of property managers who've transformed their workflow with Square.
-            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
-            {[
-              {
-                quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
-                author: "Sarah Chen",
-                handle: "@sarahchen",
-                rating: 5,
-                role: "Property Manager"
-              },
-              {
-                quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
-                author: "Marcus Johnson",
-                handle: "@marcusjohnson",
-                rating: 5,
-                role: "Real Estate Investor"
-              },
-              {
-                quote: "OK: Square Accounting is pretty sick.",
-                author: "Alex Rivera",
-                handle: "@alexrivera",
-                rating: 5,
-                role: "Portfolio Manager"
-              },
-              {
-                quote: "They really cooked with Square. Especially the AI auto-categorization. Maybe organized books can finally be achieved.",
-                author: "David Kim",
-                handle: "@davidkimdata",
-                rating: 5,
-                role: "Data Analyst"
-              },
-              {
-                quote: "Using @Square is like building filtered views for your finances, but the properties are elements from your transactions. So excited to set this up.",
-                author: "Emily Watson",
-                handle: "@emilywatson",
-                rating: 5,
-                role: "Business Owner"
-              },
-              {
-                quote: "Square Accounting is finally bringing innovation to property management accounting.",
-                author: "Robert Taylor",
-                handle: "@roberttaylor",
-                rating: 5,
-                role: "Financial Advisor"
-              }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-8 rounded-2xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <div key={i} className="w-4 h-4 text-yellow-400 fill-current">
-                      <svg viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    </div>
-                  ))}
-                </div>
-                <blockquote className="text-gray-900 text-lg leading-relaxed mb-6 font-medium">
-                  "{testimonial.quote}"
-                </blockquote>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm">{testimonial.author.charAt(0)}</span>
-                  </div>
+          <div className="relative overflow-hidden">
+            <div className="flex gap-6 animate-scroll">
+              {[
+                {
+                  quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
+                  author: "Sarah Chen",
+                  handle: "@sarahchen"
+                },
+                {
+                  quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
+                  author: "Marcus Johnson",
+                  handle: "@marcusjohnson"
+                },
+                {
+                  quote: "OK: Square Accounting is pretty sick.",
+                  author: "Alex Rivera",
+                  handle: "@alexrivera"
+                },
+                {
+                  quote: "They really cooked with Square. Especially the AI auto-categorization. Maybe organized books can finally be achieved.",
+                  author: "David Kim",
+                  handle: "@davidkimdata"
+                },
+                {
+                  quote: "Using @Square is like building filtered views for your finances, but the properties are elements from your transactions. So excited to set this up.",
+                  author: "Emily Watson",
+                  handle: "@emilywatson"
+                },
+                {
+                  quote: "Square Accounting is finally bringing innovation to property management accounting.",
+                  author: "Robert Taylor",
+                  handle: "@roberttaylor"
+                },
+                // Duplicate for seamless loop
+                {
+                  quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
+                  author: "Sarah Chen",
+                  handle: "@sarahchen"
+                },
+                {
+                  quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
+                  author: "Marcus Johnson",
+                  handle: "@marcusjohnson"
+                },
+                {
+                  quote: "OK: Square Accounting is pretty sick.",
+                  author: "Alex Rivera",
+                  handle: "@alexrivera"
+                }
+              ].map((testimonial, index) => (
+                <div key={index} className="bg-white p-6 rounded-xl border border-gray-100 min-w-[350px] flex-shrink-0">
+                  <blockquote className="text-gray-900 mb-4">
+                    "{testimonial.quote}"
+                  </blockquote>
                   <div>
-                    <div className="font-semibold text-gray-900">{testimonial.author}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role} • {testimonial.handle}</div>
+                    <div className="font-medium text-gray-900">{testimonial.author}</div>
+                    <div className="text-gray-500 text-sm">{testimonial.handle}</div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
