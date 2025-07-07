@@ -20,7 +20,7 @@ export default function UserTypeDialog({ open, onOpenChange }: UserTypeDialogPro
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center mb-1">
-            Welcome to Square
+            Make your account
           </DialogTitle>
           <p className="text-gray-600 text-center text-sm">
             Choose your role to get started
