@@ -56,7 +56,7 @@ export default function MobileLanding() {
                     <BarChart3 className="w-4 h-4 text-gray-700" />
                     <div className="text-left">
                       <div className="text-sm font-semibold text-gray-900 text-left">Live Dashboard</div>
-                      <div className="text-xs text-gray-600 text-left">Auto-categorizes • Tracks • Updates</div>
+                      <div className="text-xs text-gray-600 text-left">Transactions categorization • Tracks • Updates</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -119,15 +119,6 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-gray-700" />
-                <span className="text-sm font-semibold text-gray-900">Portfolio Manager</span>
-              </div>
-              <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">3 properties</div>
-            </div>
-          </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium">All Properties</div>

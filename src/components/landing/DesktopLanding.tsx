@@ -62,7 +62,7 @@ export default function DesktopLanding() {
                 </div>
                 <div className="text-left">
                   <div className="text-gray-900 font-semibold text-left">Live Dashboard</div>
-                  <div className="text-gray-600 text-sm text-left">Auto-categorizes transactions • Tracks every property • Updates in real-time</div>
+                  <div className="text-gray-600 text-sm text-left">Transactions categorization • Tracks every property • Updates in real-time</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -132,15 +132,6 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Building2 className="w-6 h-6 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">Portfolio Manager</h3>
-                </div>
-                <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">3 active properties</div>
-              </div>
-            </div>
             <div className="p-6">
               <div className="flex flex-wrap gap-3 mb-6">
                 {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
