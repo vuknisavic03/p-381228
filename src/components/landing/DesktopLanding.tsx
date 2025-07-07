@@ -60,10 +60,10 @@ export default function DesktopLanding() {
                 <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
                   <span className="text-white text-sm font-bold">S</span>
                 </div>
-                <div className="text-left">
-                  <div className="text-gray-900 font-semibold text-left">Live Dashboard</div>
-                  <div className="text-gray-600 text-sm text-left">Auto-categorizes transactions • Tracks every property • Updates in real-time</div>
-                </div>
+                  <div className="text-left">
+                    <div className="text-gray-900 font-semibold text-left">Live Dashboard</div>
+                    <div className="text-gray-600 text-sm text-left">Transactions categorization • Tracks every property • Updates in real-time</div>
+                  </div>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -136,7 +136,6 @@ export default function DesktopLanding() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Building2 className="w-6 h-6 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">Portfolio Manager</h3>
                 </div>
                 <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">3 active properties</div>
               </div>
@@ -224,7 +223,6 @@ export default function DesktopLanding() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Target className="w-6 h-6 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">Transactions</h3>
                 </div>
                 <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">2 filters active</div>
               </div>
@@ -316,7 +314,6 @@ export default function DesktopLanding() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Building2 className="w-6 h-6 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">Workspace Manager</h3>
                 </div>
                 <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">3 active workspaces</div>
               </div>
