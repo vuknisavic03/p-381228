@@ -297,7 +297,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
         <div className="w-[98%] max-w-none space-y-8">
           
           {/* Location Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
+          <div className="bg-form-background rounded-lg border border-border p-5">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-muted rounded-lg">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
@@ -361,7 +361,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
 
           {/* Property Type Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
+          <Card className="p-4 border border-gray-100 shadow-sm bg-form-background">
             <div className="flex items-center gap-2 mb-3">
               <Building className="h-4 w-4 text-gray-500" />
               <h2 className="text-sm font-medium text-gray-900">Listing Type</h2>
@@ -423,7 +423,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
 
           {/* Details Section */}
           {formData.type && (
-            <Card className="p-4 border border-gray-100 shadow-sm bg-white">
+            <Card className="p-4 border border-gray-100 shadow-sm bg-form-background">
               <div className="flex items-center gap-2 mb-3">
                 <Settings className="h-4 w-4 text-gray-500" />
                 <h2 className="text-sm font-medium text-gray-900">Details</h2>

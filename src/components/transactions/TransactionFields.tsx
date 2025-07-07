@@ -96,7 +96,7 @@ export function TransactionFields({
   return (
     <div className="w-full max-w-none space-y-5">
       {/* Transaction Type Section */}
-      <div className="bg-card rounded-lg border border-border p-5">
+      <div className="bg-form-background rounded-lg border border-border p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-muted rounded-lg">
@@ -263,7 +263,7 @@ export function TransactionFields({
       {(selectedListing || fields.listingType === "general") && (
         <>
           {/* Transaction Details Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
+          <div className="bg-form-background rounded-lg border border-border p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-muted rounded-lg">
@@ -305,7 +305,7 @@ export function TransactionFields({
           </div>
           
           {/* Payment Details Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
+          <div className="bg-form-background rounded-lg border border-border p-5">
             <div className="flex items-center gap-3 mb-5">
               <div className="p-2 bg-muted rounded-lg">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
