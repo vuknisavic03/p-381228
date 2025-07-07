@@ -184,15 +184,6 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-gray-700" />
-                <span className="text-sm font-semibold text-gray-900">Transactions</span>
-              </div>
-              <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">2 active</div>
-            </div>
-          </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
@@ -262,15 +253,6 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-gray-700" />
-                <span className="text-sm font-semibold text-gray-900">Workspace Manager</span>
-              </div>
-              <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">3 active</div>
-            </div>
-          </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
