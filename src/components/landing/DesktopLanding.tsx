@@ -55,19 +55,19 @@ export default function DesktopLanding() {
           </div>
           
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gray-900 px-6 py-4 flex items-center justify-between border-b border-gray-700">
+            <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                  <span className="text-gray-900 text-sm font-bold">S</span>
+                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">S</span>
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-semibold text-left">Live Dashboard</div>
-                  <div className="text-gray-300 text-sm text-left">Auto-categorizes transactions • Tracks every property • Updates in real-time</div>
+                  <div className="text-gray-900 font-semibold text-left">Live Dashboard</div>
+                  <div className="text-gray-600 text-sm text-left">Auto-categorizes transactions • Tracks every property • Updates in real-time</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-green-400 text-sm font-medium">Live Updates</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-green-600 text-sm font-medium">Live Updates</span>
               </div>
             </div>
             <div className="p-8">
@@ -97,7 +97,7 @@ export default function DesktopLanding() {
                     subtext: "portfolio expansion"
                   },
                 ].map((item, index) => (
-                  <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                  <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="text-sm font-medium text-gray-600 mb-2 text-left">{item.metric}</div>
                     <div className="text-3xl font-bold text-gray-900 mb-2 text-left">{item.value}</div>
                     <div className="flex items-center gap-2 mb-1">
@@ -109,9 +109,9 @@ export default function DesktopLanding() {
                 ))}
               </div>
               
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-200">
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <span className="text-sm font-semibold text-gray-700">Overall Portfolio Health</span>
                   <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">Excellent Performance</span>
                 </div>
@@ -136,20 +136,20 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Building2 className="w-6 h-6 text-blue-600" />
+                  <Building2 className="w-6 h-6 text-gray-700" />
                   <h3 className="text-lg font-semibold text-gray-900">Portfolio Manager</h3>
                 </div>
-                <div className="text-sm bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-medium">3 active properties</div>
+                <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">3 active properties</div>
               </div>
             </div>
             <div className="p-6">
               <div className="flex flex-wrap gap-3 mb-6">
                 {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
                   <div key={index} className={`px-4 py-2 rounded-full text-sm font-medium ${
-                    index === 0 ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                    index === 0 ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-600'
                   }`}>
                     {view}
                   </div>
@@ -200,7 +200,7 @@ export default function DesktopLanding() {
                     <div className="text-sm text-gray-700 mb-3">{property.type}</div>
                     <div className="flex items-center gap-3">
                       <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{property.status}</span>
-                      <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{property.occupancy} occupied</span>
+                      <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">{property.occupancy} occupied</span>
                       <span className="text-xs text-gray-500">Last updated: 2 hours ago</span>
                     </div>
                   </div>
@@ -224,18 +224,18 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Target className="w-6 h-6 text-purple-600" />
+                  <Target className="w-6 h-6 text-gray-700" />
                   <h3 className="text-lg font-semibold text-gray-900">Transactions</h3>
                 </div>
-                <div className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium">2 filters active</div>
+                <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">2 filters active</div>
               </div>
             </div>
             <div className="p-6">
               <div className="flex gap-3 mb-6">
-                <div className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
                   <Building2 className="w-4 h-4" />
                   Sunset Apartments
                 </div>
@@ -292,7 +292,7 @@ export default function DesktopLanding() {
                       }`}>
                         {transaction.category}
                       </span>
-                      <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{transaction.property}</span>
+                      <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">{transaction.property}</span>
                       {transaction.urgent && <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full font-medium">Urgent</span>}
                     </div>
                   </div>
@@ -316,18 +316,18 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Building2 className="w-6 h-6 text-orange-600" />
+                  <Building2 className="w-6 h-6 text-gray-700" />
                   <h3 className="text-lg font-semibold text-gray-900">Workspace Manager</h3>
                 </div>
-                <div className="text-sm bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full font-medium">3 active workspaces</div>
+                <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">3 active workspaces</div>
               </div>
             </div>
             <div className="p-6">
               <div className="flex gap-3 mb-6">
-                <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
                   <Building2 className="w-4 h-4" />
                   Personal Portfolio
                 </div>
@@ -387,7 +387,7 @@ export default function DesktopLanding() {
                         <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{workspace.status}</span>
                         <span className="text-xs text-gray-500">Updated {workspace.lastUpdate}</span>
                       </div>
-                      <button className="text-xs bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium hover:bg-orange-200 transition-colors">
+                      <button className="text-xs bg-gray-200 text-gray-700 px-3 py-1 rounded-full font-medium hover:bg-gray-300 transition-colors">
                         Switch to workspace
                       </button>
                     </div>
@@ -395,11 +395,11 @@ export default function DesktopLanding() {
                 ))}
               </div>
               
-              <div className="mt-6 bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-xl border border-orange-200">
+              <div className="mt-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <span className="text-sm font-semibold text-gray-700">Cross-Workspace Insights</span>
-                  <span className="text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium">All workspaces performing well</span>
+                  <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">All workspaces performing well</span>
                 </div>
                 <div className="text-sm text-gray-600 text-left">Total portfolio value: $320,400 • Average growth: +15.4% this quarter</div>
                 <div className="text-xs text-gray-500 mt-2 text-left">✨ Switch between workspaces instantly while keeping unified analytics</div>
