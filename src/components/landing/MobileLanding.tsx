@@ -66,10 +66,6 @@ export default function MobileLanding() {
                 </div>
               </div>
             <div className="p-4">
-              <div className="mb-4">
-                <h3 className="text-sm font-semibold text-gray-900 mb-1 text-left">Square organizes your finances automatically</h3>
-                <p className="text-xs text-gray-600 text-left">Every transaction categorized, every property tracked—without lifting a finger.</p>
-              </div>
               
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {[

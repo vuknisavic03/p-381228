@@ -71,10 +71,6 @@ export default function DesktopLanding() {
               </div>
             </div>
             <div className="p-8">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 text-left">See how Square organizes your finances automatically</h3>
-                <p className="text-sm text-gray-600 text-left">Every transaction gets categorized, every property gets tracked, every metric gets updated—without you lifting a finger.</p>
-              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 {[
