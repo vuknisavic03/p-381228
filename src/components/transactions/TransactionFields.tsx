@@ -218,7 +218,7 @@ export function TransactionFields({
                         <div className="mb-3">
                           <Button
                             type="button"
-                            variant={!fields.selectedUnitId ? "default" : "outline"}
+                            variant={!fields.selectedUnitId ? "secondary" : "outline"}
                             size="sm"
                             className="w-full justify-start text-left h-10"
                             onClick={() => setFields(f => ({ ...f, selectedUnitId: "" }))}
