@@ -49,19 +49,19 @@ export default function MobileLanding() {
             </Button>
           </div>
           
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+            <div className="bg-gray-900 px-4 py-3 border-b border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-gray-600" />
+                  <BarChart3 className="w-4 h-4 text-white" />
                   <div className="text-left">
-                    <div className="text-sm font-semibold text-gray-900 text-left">Live Dashboard</div>
-                    <div className="text-xs text-gray-500 text-left">Auto-categorizes • Tracks • Updates</div>
+                    <div className="text-sm font-semibold text-white text-left">Live Dashboard</div>
+                    <div className="text-xs text-gray-300 text-left">Auto-categorizes • Tracks • Updates</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  <span className="text-xs text-gray-500 font-medium">Live</span>
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-green-400 font-medium">Live</span>
                 </div>
               </div>
             </div>
@@ -86,22 +86,22 @@ export default function MobileLanding() {
                     subtext: "after expenses"
                   },
                 ].map((item, index) => (
-                  <div key={index} className="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                  <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-3 rounded-xl border border-gray-100">
                     <div className="text-xs font-medium text-gray-600 mb-1 text-left">{item.metric}</div>
                     <div className="text-lg font-bold text-gray-900 mb-1 text-left">{item.value}</div>
                     <div className="flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3 text-gray-600" />
-                      <span className="text-xs font-semibold text-gray-700">{item.change}</span>
+                      <TrendingUp className="w-3 h-3 text-green-600" />
+                      <span className="text-xs font-semibold text-green-600">{item.change}</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1 text-left">{item.subtext}</div>
                   </div>
                 ))}
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-100">
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-xs font-semibold text-gray-700">Portfolio Health</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">Excellent</span>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Excellent</span>
                 </div>
                 <div className="text-xs text-gray-600 text-left">All properties performing above target</div>
                 <div className="text-xs text-gray-500 mt-1 text-left">✨ Automatic tracking</div>
@@ -122,19 +122,19 @@ export default function MobileLanding() {
             Visualize all your property or business listings on an interactive map. Manage availability, get insights, and plan with confidence.
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-gray-600" />
+                <Building2 className="w-4 h-4 text-blue-600" />
                 <span className="text-sm font-semibold text-gray-900">Portfolio Manager</span>
               </div>
-              <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">3 properties</div>
+              <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">3 properties</div>
             </div>
           </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
-              <div className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium">All Properties</div>
+              <div className="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-medium">All Properties</div>
               <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Apartments</div>
               <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Office</div>
             </div>
@@ -146,7 +146,7 @@ export default function MobileLanding() {
                   profit: "+$36,000", 
                   status: "High Performance",
                   occupancy: "96%",
-                  color: "bg-gray-400"
+                  color: "bg-green-500"
                 },
                 { 
                   name: "Downtown Office Plaza", 
@@ -154,7 +154,7 @@ export default function MobileLanding() {
                   profit: "+$54,000", 
                   status: "Excellent",
                   occupancy: "100%",
-                  color: "bg-gray-500"
+                  color: "bg-blue-500"
                 },
                 { 
                   name: "Riverside Condos", 
@@ -162,7 +162,7 @@ export default function MobileLanding() {
                   profit: "+$29,000", 
                   status: "Strong",
                   occupancy: "89%",
-                  color: "bg-gray-300"
+                  color: "bg-purple-500"
                 },
               ].map((property, index) => (
                 <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
@@ -171,12 +171,12 @@ export default function MobileLanding() {
                       <div className={`w-3 h-3 rounded-full ${property.color}`}></div>
                       <span className="text-sm font-semibold text-gray-900">{property.name}</span>
                     </div>
-                    <span className="text-sm font-semibold text-gray-700">{property.profit}</span>
+                    <span className="text-sm font-semibold text-green-600">{property.profit}</span>
                   </div>
                   <div className="text-xs text-gray-600 mb-2">{property.type}</div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">{property.status}</span>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{property.occupancy} occupied</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{property.status}</span>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{property.occupancy} occupied</span>
                   </div>
                 </div>
               ))}
@@ -196,19 +196,19 @@ export default function MobileLanding() {
             Get real-time visibility into all your transactions in one powerful dashboard. Analyze trends, identify gaps, and grow confidently.
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-gray-600" />
+                <Target className="w-4 h-4 text-purple-600" />
                 <span className="text-sm font-semibold text-gray-900">Transactions</span>
               </div>
-              <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">2 active</div>
+              <div className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium">2 active</div>
             </div>
           </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
-              <div className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+              <div className="bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
                 <Building2 className="w-3 h-3" />
                 Sunset Apartments
               </div>
@@ -241,16 +241,20 @@ export default function MobileLanding() {
                 <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium text-gray-900">{transaction.desc}</span>
-                    <span className={`text-sm font-semibold ${transaction.amount.startsWith('+') ? 'text-gray-700' : 'text-gray-700'}`}>
+                    <span className={`text-sm font-semibold ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
                       {transaction.amount}
                     </span>
                   </div>
                   <div className="text-xs text-gray-600 mb-2">{transaction.vendor} • {transaction.date}</div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      transaction.category === 'Rent' 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-red-100 text-red-700'
+                    }`}>
                       {transaction.category}
                     </span>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Sunset Apartments</span>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Sunset Apartments</span>
                   </div>
                 </div>
               ))}
@@ -270,19 +274,19 @@ export default function MobileLanding() {
             Switch effortlessly between workspaces. Keep data organized and see performance across them all.
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-4 py-3 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-gray-600" />
+                <Building2 className="w-4 h-4 text-orange-600" />
                 <span className="text-sm font-semibold text-gray-900">Workspace Manager</span>
               </div>
-              <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">3 active</div>
+              <div className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">3 active</div>
             </div>
           </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
-              <div className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
+              <div className="bg-orange-100 text-orange-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
                 <Building2 className="w-3 h-3" />
                 Personal Portfolio
               </div>
@@ -296,7 +300,7 @@ export default function MobileLanding() {
                   revenue: "$89,400", 
                   change: "+15.2%",
                   status: "Growing",
-                  color: "bg-gray-400"
+                  color: "bg-green-500"
                 },
                 { 
                   workspace: "Downtown Commercial", 
@@ -304,7 +308,7 @@ export default function MobileLanding() {
                   revenue: "$156,800", 
                   change: "+22.1%",
                   status: "Excellent",
-                  color: "bg-gray-500"
+                  color: "bg-blue-500"
                 },
                 { 
                   workspace: "Residential Mgmt", 
@@ -312,7 +316,7 @@ export default function MobileLanding() {
                   revenue: "$74,200", 
                   change: "+8.9%",
                   status: "Stable",
-                  color: "bg-gray-300"
+                  color: "bg-purple-500"
                 },
               ].map((workspace, index) => (
                 <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
@@ -321,27 +325,27 @@ export default function MobileLanding() {
                       <div className={`w-3 h-3 rounded-full ${workspace.color}`}></div>
                       <span className="text-sm font-semibold text-gray-900">{workspace.workspace}</span>
                     </div>
-                    <span className="text-sm font-semibold text-gray-700">{workspace.revenue}</span>
+                    <span className="text-sm font-semibold text-green-600">{workspace.revenue}</span>
                   </div>
                   <div className="text-xs text-gray-600 mb-2">{workspace.properties}</div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">{workspace.status}</span>
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{workspace.status}</span>
                       <div className="flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3 text-gray-600" />
-                        <span className="text-xs font-semibold text-gray-700">{workspace.change}</span>
+                        <TrendingUp className="w-3 h-3 text-green-600" />
+                        <span className="text-xs font-semibold text-green-600">{workspace.change}</span>
                       </div>
                     </div>
-                    <button className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">Switch</button>
+                    <button className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">Switch</button>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+            <div className="mt-4 bg-gradient-to-r from-orange-50 to-yellow-50 p-3 rounded-lg border border-orange-100">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
                 <span className="text-xs font-semibold text-gray-700">Cross-Workspace</span>
-                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">All performing well</span>
+                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">All performing well</span>
               </div>
               <div className="text-xs text-gray-600 text-left">Total: $320,400 • Avg growth: +15.4%</div>
               <div className="text-xs text-gray-500 mt-1 text-left">✨ Unified analytics across workspaces</div>
