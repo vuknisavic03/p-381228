@@ -292,8 +292,8 @@ export function ListingForm({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5">
-        <div className="w-[98%] max-w-none">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
+        <div className="w-[98%] max-w-none space-y-8">
           
           {/* Location Section */}
           <div className="bg-card rounded-lg border border-border p-5">
