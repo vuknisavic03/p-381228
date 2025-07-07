@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
+import UserTypeDialog from "./UserTypeDialog";
 import dashboard from "/images/1.svg";
 
 export default function DesktopLanding() {
+  const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -23,7 +26,10 @@ export default function DesktopLanding() {
           
           <div className="flex items-center gap-4">
             <button className="text-gray-600 text-sm">Log in</button>
-            <Button className="bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800">
+            <Button 
+              className="bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800"
+              onClick={() => setShowUserTypeDialog(true)}
+            >
               Get Square free
             </Button>
           </div>
@@ -49,7 +55,10 @@ export default function DesktopLanding() {
           </p>
           
           <div className="flex justify-center mb-16">
-            <Button className="bg-black text-white text-lg px-8 py-4 rounded-lg hover:bg-gray-800 transition-colors">
+            <Button 
+              className="bg-black text-white text-lg px-8 py-4 rounded-lg hover:bg-gray-800 transition-colors"
+              onClick={() => setShowUserTypeDialog(true)}
+            >
               Get Square free
             </Button>
           </div>
@@ -458,6 +467,11 @@ export default function DesktopLanding() {
           </div>
         </div>
       </footer>
+
+      <UserTypeDialog 
+        open={showUserTypeDialog} 
+        onOpenChange={setShowUserTypeDialog} 
+      />
     </div>
   );
 }

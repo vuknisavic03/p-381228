@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Building2, TrendingUp, Target } from "lucide-react";
+import UserTypeDialog from "./UserTypeDialog";
 
 export default function MobileLanding() {
+  const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Mobile Header */}
@@ -18,7 +21,10 @@ export default function MobileLanding() {
             </nav>
           </div>
           
-          <Button className="bg-black text-white text-sm px-3 py-1.5 rounded hover:bg-gray-800 transition-colors">
+          <Button 
+            className="bg-black text-white text-sm px-3 py-1.5 rounded hover:bg-gray-800 transition-colors"
+            onClick={() => setShowUserTypeDialog(true)}
+          >
             Get Square free
           </Button>
         </div>
@@ -44,7 +50,10 @@ export default function MobileLanding() {
           </p>
           
           <div className="flex justify-center mb-12">
-            <Button className="bg-black text-white text-base px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+            <Button 
+              className="bg-black text-white text-base px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              onClick={() => setShowUserTypeDialog(true)}
+            >
               Get Square free
             </Button>
           </div>
@@ -387,6 +396,11 @@ export default function MobileLanding() {
           </div>
         </div>
       </footer>
+
+      <UserTypeDialog 
+        open={showUserTypeDialog} 
+        onOpenChange={setShowUserTypeDialog} 
+      />
     </div>
   );
 }
