@@ -96,18 +96,22 @@ export function TransactionFields({
   return (
     <div className="w-full max-w-none space-y-6">
       {/* Transaction Type Section */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-card rounded-xl border border-border shadow-sm p-6 transition-all duration-200 hover:shadow-md">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Building className="h-4 w-4 text-gray-500" />
-            <h2 className="text-sm font-medium text-gray-900">Transaction Type</h2>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <Building className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">Transaction Type</h2>
+              <p className="text-xs text-muted-foreground">What type of transaction is this?</p>
+            </div>
           </div>
           <ListingTypeToggle
             value={fields.listingType || "listing"}
             onChange={type => setFields(f => ({ ...f, listingType: type }))}
           />
         </div>
-        <p className="text-xs text-gray-600 mb-4">What type of transaction is this?</p>
         
         {fields.listingType === "listing" ? (
           <div className="space-y-6">
@@ -148,18 +152,18 @@ export function TransactionFields({
             {/* Selected Property Info - Shown directly below property selector */}
             {selectedListing && (
               <>
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 mb-4">
+                <div className="rounded-lg border border-border bg-accent/30 p-4 mb-4">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
-                      <h4 className="font-medium text-xs text-gray-900">{selectedListing.name}</h4>
-                      <div className="flex items-center text-gray-600 gap-1.5 mt-0.5">
-                        <MapPin className="h-3 w-3 text-gray-400" />
+                      <h4 className="font-medium text-sm text-foreground">{selectedListing.name}</h4>
+                      <div className="flex items-center text-muted-foreground gap-1.5 mt-1">
+                        <MapPin className="h-3 w-3" />
                         <span className="text-xs">{selectedListing.address}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-2 bg-card px-3 py-1.5 rounded-lg border border-border shadow-sm">
                       <span className="h-3 w-3">{getPropertyTypeIcon(selectedListing.type)}</span>
-                      <span className="text-xs font-medium text-gray-700">
+                      <span className="text-xs font-medium text-foreground">
                         {formatPropertyType(selectedListing.type)}
                       </span>
                     </div>
@@ -262,18 +266,22 @@ export function TransactionFields({
       {(selectedListing || fields.listingType === "general") && (
         <>
           {/* Transaction Details Section */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <div className="bg-card rounded-xl border border-border shadow-sm p-6 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-gray-500" />
-                <h2 className="text-sm font-medium text-gray-900">Transaction Details</h2>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <DollarSign className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-semibold text-foreground">Transaction Details</h2>
+                  <p className="text-xs text-muted-foreground">Configure the specific details of your transaction</p>
+                </div>
               </div>
               <TransactionTypeToggle
                 value={fields.transactionType}
                 onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
               />
             </div>
-            <p className="text-xs text-gray-600 mb-4">Configure the specific details of your transaction</p>
             
             <div>
               <div className="text-xs font-medium text-gray-700 mb-1.5 block">Category</div>
@@ -304,12 +312,16 @@ export function TransactionFields({
           </div>
           
           {/* Payment Details Section */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Payment Details</h2>
+          <div className="bg-card rounded-xl border border-border shadow-sm p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <CreditCard className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-sm font-semibold text-foreground">Payment Details</h2>
+                <p className="text-xs text-muted-foreground">Add payment information and transaction timing</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">Add any additional information about this transaction</p>
             
             <div className="space-y-6">
               {/* Amount */}

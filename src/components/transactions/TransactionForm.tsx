@@ -92,32 +92,37 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   }
 
   return (
-    <div className="h-full overflow-auto bg-white">
+    <div className="h-full overflow-auto bg-background">
       {/* Header with action buttons */}
-      <div className="sticky top-0 z-10 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-lg font-medium text-gray-900">Add Transaction</h2>
-        <div className="flex gap-3">
-          <Button 
-            onClick={handleConfirm}
-            disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
-            className="text-sm px-4 py-2 h-9 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm border border-blue-600 hover:border-blue-700 transition-colors"
-          >
-            Add transaction
-          </Button>
-          {onClose && (
+      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-foreground">Add Transaction</h2>
+            <p className="text-sm text-muted-foreground mt-1">Create a new transaction record</p>
+          </div>
+          <div className="flex gap-3">
             <Button 
-              variant="outline" 
-              onClick={onClose} 
-              className="text-sm px-4 py-2 h-9 bg-white border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-md shadow-sm transition-colors"
+              onClick={handleConfirm}
+              disabled={fields.listingType === "listing" ? !fields.selectedListingId || !fields.category || !fields.amount : !fields.category || !fields.amount}
+              className="px-6 py-2 h-10 font-medium transition-all duration-200 shadow-sm hover:shadow-md"
             >
-              Cancel
+              Add transaction
             </Button>
-          )}
+            {onClose && (
+              <Button 
+                variant="outline" 
+                onClick={onClose} 
+                className="px-6 py-2 h-10 font-medium transition-all duration-200"
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-4 space-y-8 bg-gray-50">
+      <div className="px-6 py-6 space-y-6">
         <div className="w-[98%] max-w-none">
           <TransactionFields 
             mockListings={listings}
@@ -126,20 +131,24 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
           />
           
           {showNotesSection && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mt-8">
-              <div className="flex items-center gap-2 mb-4">
-                <FileText className="h-4 w-4 text-gray-500" />
-                <h2 className="text-sm font-medium text-gray-900">Additional Information</h2>
+            <div className="bg-card rounded-xl border border-border shadow-sm p-6 transition-all duration-200 hover:shadow-md">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-accent">
+                  <FileText className="h-4 w-4 text-accent-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">Additional Information</h3>
+                  <p className="text-xs text-muted-foreground">Add any additional details about this transaction</p>
+                </div>
               </div>
-              <p className="text-xs text-gray-600 mb-4">Add any additional details about this transaction</p>
               
-              <div>
-                <div className="text-xs font-medium text-gray-700 mb-1.5 block">Notes</div>
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-foreground">Notes</label>
                 <Textarea
-                  placeholder="Add any additional details about this transaction"
+                  placeholder="Add any additional details about this transaction..."
                   value={fields.notes}
                   onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                  className="min-h-[120px] bg-white border border-gray-200 resize-none focus:ring-2 focus:ring-gray-100 focus:border-gray-300 text-sm rounded-lg"
+                  className="min-h-[120px] resize-none transition-all duration-200 focus:ring-2 focus:ring-ring/20"
                 />
               </div>
             </div>
