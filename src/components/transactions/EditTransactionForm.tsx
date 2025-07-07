@@ -164,24 +164,24 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
           />
           
           {showNotesSection && (
-            <div className="bg-card rounded-xl border border-border shadow-sm p-6 transition-all duration-200 hover:shadow-md">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-accent">
-                  <FileText className="h-4 w-4 text-accent-foreground" />
+            <div className="bg-card rounded-lg border border-border p-5 mt-6">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-lg bg-muted">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-foreground">Additional Information</h3>
-                  <p className="text-xs text-muted-foreground">Add any additional details about this transaction</p>
+                  <h3 className="font-medium text-foreground">Additional Information</h3>
+                  <p className="text-sm text-muted-foreground">Add any additional details about this transaction</p>
                 </div>
               </div>
               
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-foreground">Notes</label>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">Notes</label>
                 <Textarea
                   placeholder="Add any additional details about this transaction..."
                   value={fields.notes}
                   onChange={(e) => setFields(f => ({ ...f, notes: e.target.value }))}
-                  className="min-h-[120px] resize-none transition-all duration-200 focus:ring-2 focus:ring-ring/20"
+                  className="min-h-[100px] resize-none"
                 />
               </div>
             </div>
