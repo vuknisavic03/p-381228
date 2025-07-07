@@ -296,7 +296,7 @@ export function ListingForm({
         <div className="w-[98%] max-w-none space-y-8">
           
           {/* Location Section */}
-          <div className="bg-form-background rounded-lg border border-border p-5">
+          <div className="bg-card rounded-lg border border-border p-5">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-muted rounded-lg">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
@@ -338,7 +338,7 @@ export function ListingForm({
           </div>
 
           {/* Property Type Section */}
-          <div className="bg-form-background rounded-lg border border-border p-5">
+          <div className="bg-card rounded-lg border border-border p-5">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-muted rounded-lg">
                 <Building className="h-4 w-4 text-muted-foreground" />
@@ -389,7 +389,7 @@ export function ListingForm({
           </div>
 
           {/* Details Section */}
-          {formData.type && <div className="bg-form-background rounded-lg border border-border p-5">
+          {formData.type && <div className="bg-card rounded-lg border border-border p-5">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-muted rounded-lg">
                   <Settings className="h-4 w-4 text-muted-foreground" />
