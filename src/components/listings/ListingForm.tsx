@@ -272,48 +272,54 @@ export function ListingForm({
     }
   };
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
-  return <div className="flex flex-col h-full bg-white">
+  return <div className="flex flex-col h-full bg-background">
       {/* Header with action buttons */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-        <div>
-          <h1 className="text-lg font-medium text-gray-900">Add New Listing</h1>
-          <p className="text-xs text-gray-500 mt-0.5">Create a new listing for your portfolio</p>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={handleSubmit} disabled={!isFormValid} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 h-8">
-            Add Listing
-          </Button>
-          <Button variant="outline" onClick={onClose} size="sm" className="bg-white border-gray-200 hover:bg-gray-50 text-xs px-3 py-1.5 h-8">
-            Cancel
-          </Button>
+      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Add New Listing</h1>
+            <p className="text-sm text-muted-foreground mt-1">Create a new listing for your portfolio</p>
+          </div>
+          <div className="flex gap-3">
+            <Button onClick={handleSubmit} disabled={!isFormValid} className="px-6 py-2 h-10 font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+              Add Listing
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6 py-2 h-10 font-medium transition-all duration-200">
+              Cancel
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50">
-        <div className="w-[98%] max-w-none space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5">
+        <div className="w-[98%] max-w-none">
           
           {/* Location Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <MapPin className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Location</h2>
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Location</h3>
+                <p className="text-sm text-muted-foreground">Where is your listing located?</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">Where is your listing located?</p>
             
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <LocationAutofill value={formData.city} onChange={value => setFormData(prev => ({
                   ...prev,
                   city: value
-                }))} placeholder="e.g., Belgrade" label="City" type="city" className="h-9 text-sm" onLocationSelect={handleLocationSelect} />
+                }))} placeholder="e.g., Belgrade" label="City" type="city" className="h-10" onLocationSelect={handleLocationSelect} />
                 </div>
                 <div>
                   <LocationAutofill value={formData.country} onChange={value => setFormData(prev => ({
                   ...prev,
                   country: value
-                }))} placeholder="e.g., Serbia" label="Country" type="country" className="h-9 text-sm" onLocationSelect={handleLocationSelect} />
+                }))} placeholder="e.g., Serbia" label="Country" type="country" className="h-10" onLocationSelect={handleLocationSelect} />
                 </div>
               </div>
               
@@ -321,38 +327,42 @@ export function ListingForm({
                 <LocationAutofill value={formData.address} onChange={value => setFormData(prev => ({
                 ...prev,
                 address: value
-              }))} placeholder="e.g., Knez Mihailova 42" label="Full Address" type="address" className="h-9 text-sm" onLocationSelect={handleLocationSelect} />
+              }))} placeholder="e.g., Knez Mihailova 42" label="Full Address" type="address" className="h-10" onLocationSelect={handleLocationSelect} />
               </div>
               
               <div>
-                <Label htmlFor="postalCode" className="text-xs font-medium text-gray-700 mb-1.5 block">Postal Code</Label>
-                <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 11000" className="h-9 text-sm" />
+                <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
+                <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 11000" className="h-10" />
               </div>
             </div>
-          </Card>
+          </div>
 
           {/* Property Type Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <Building className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Listing Type</h2>
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <Building className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Listing Type</h3>
+                <p className="text-sm text-muted-foreground">What type of listing is this?</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">What type of listing is this?</p>
 
             {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4">
+            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg mb-4">
               <div>
-                <p className="font-medium text-gray-900 text-xs">Property Structure</p>
-                <p className="text-xs text-gray-500">Does this property have multiple units?</p>
+                <p className="font-medium text-foreground text-sm">Property Structure</p>
+                <p className="text-sm text-muted-foreground">Does this property have multiple units?</p>
               </div>
-              <Button type="button" variant={useUnitsMode ? "default" : "outline"} size="sm" onClick={() => setUseUnitsMode(!useUnitsMode)} className="text-xs px-2 py-1 h-7">
+              <Button type="button" variant={useUnitsMode ? "default" : "outline"} size="sm" onClick={() => setUseUnitsMode(!useUnitsMode)} className="text-sm px-3 py-1.5 h-8">
                 {useUnitsMode ? "Multiple Units" : "Single Unit"}
               </Button>
             </div>
 
             {/* Property Type Selection */}
-            <div className="grid grid-cols-1 gap-2">
-              {propertyTypes.map(type => <div key={type.value} className={`p-3 border rounded-lg cursor-pointer transition-all ${formData.type === type.value ? "border-blue-200 bg-blue-50" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`} onClick={() => {
+            <div className="grid grid-cols-1 gap-3">
+              {propertyTypes.map(type => <div key={type.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.type === type.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => {
               setFormData(prev => ({
                 ...prev,
                 type: type.value,
@@ -360,51 +370,55 @@ export function ListingForm({
               }));
               setUnits([]);
             }}>
-                  <div className="flex items-start gap-2">
+                  <div className="flex items-start gap-3">
                     {React.cloneElement(getPropertyTypeIcon(type.value), {
-                  className: `h-4 w-4 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}`
+                  className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-primary" : "text-muted-foreground"}`
                 })}
                     <div className="flex-1">
-                      <h4 className={`font-medium text-xs ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
+                      <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-foreground" : "text-foreground"}`}>
                         {type.label}
                       </h4>
-                      <p className={`text-xs mt-0.5 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
+                      <p className={`text-sm mt-0.5 ${formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
                         {type.description}
                       </p>
                     </div>
-                    {formData.type === type.value && <CheckCircle className="h-3 w-3 text-blue-600 mt-0.5" />}
+                    {formData.type === type.value && <CheckCircle className="h-4 w-4 text-primary mt-0.5" />}
                   </div>
                 </div>)}
             </div>
-          </Card>
+          </div>
 
           {/* Details Section */}
-          {formData.type && <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-              <div className="flex items-center gap-2 mb-3">
-                <Settings className="h-4 w-4 text-gray-500" />
-                <h2 className="text-sm font-medium text-gray-900">Details</h2>
+          {formData.type && <div className="bg-card rounded-lg border border-border p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-muted rounded-lg">
+                  <Settings className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-foreground">Details</h3>
+                  <p className="text-sm text-muted-foreground">Configure the specific details of your listing</p>
+                </div>
               </div>
-              <p className="text-xs text-gray-600 mb-4">Configure the specific details of your listing</p>
 
               {/* Units Manager */}
               {useUnitsMode ? <UnitsManager propertyType={formData.type as PropertyType} units={units} onUnitsChange={setUnits} /> : <div className="mb-4">
-                  <Label className="text-xs font-medium text-gray-700 mb-2 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-2">
-                    {getAvailableCategories().map(cat => <div key={cat.value} className={`p-3 border rounded-lg cursor-pointer transition-all ${formData.category === cat.value ? "border-blue-200 bg-blue-50" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`} onClick={() => setFormData(prev => ({
+                  <Label className="text-sm font-medium text-foreground mb-2 block">Specific Category</Label>
+                  <div className="grid grid-cols-1 gap-3">
+                    {getAvailableCategories().map(cat => <div key={cat.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.category === cat.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => setFormData(prev => ({
                 ...prev,
                 category: cat.value
               }))}>
-                        <div className="flex items-start gap-2">
-                          <cat.Icon className={`h-4 w-4 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
+                        <div className="flex items-start gap-3">
+                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
                           <div className="flex-1">
-                            <h4 className={`font-medium text-xs ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
+                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
                               {cat.label}
                             </h4>
-                            <p className={`text-xs mt-0.5 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
+                            <p className={`text-sm mt-0.5 ${formData.category === cat.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
                               {cat.description}
                             </p>
                           </div>
-                          {formData.category === cat.value && <CheckCircle className="h-3 w-3 text-blue-600 mt-0.5" />}
+                          {formData.category === cat.value && <CheckCircle className="h-4 w-4 text-primary mt-0.5" />}
                         </div>
                       </div>)}
                   </div>
@@ -414,95 +428,99 @@ export function ListingForm({
               {!useUnitsMode && shouldShowTenantInfo() && formData.category && <div className="space-y-4">
                   <Separator />
                   
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div>
-                      <Label className="text-xs font-medium text-gray-700 mb-2 block">Occupancy Status</Label>
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2">
+                      <Label className="text-sm font-medium text-foreground mb-2 block">Occupancy Status</Label>
+                      <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                        <div className="flex items-center gap-3">
                           {formData.occupancyStatus === "occupied" ? <>
-                              <div className="flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full">
-                                <Users className="h-3 w-3 text-blue-600" />
+                              <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-full">
+                                <Users className="h-4 w-4 text-primary" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900 text-xs">Occupied</p>
-                                <p className="text-xs text-gray-500">Property has tenants</p>
+                                <p className="font-medium text-foreground text-sm">Occupied</p>
+                                <p className="text-sm text-muted-foreground">Property has tenants</p>
                               </div>
                             </> : <>
-                              <div className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full">
-                                <UserX className="h-3 w-3 text-gray-600" />
+                              <div className="flex items-center justify-center w-8 h-8 bg-muted rounded-full">
+                                <UserX className="h-4 w-4 text-muted-foreground" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900 text-xs">Vacant</p>
-                                <p className="text-xs text-gray-500">Property is available</p>
+                                <p className="font-medium text-foreground text-sm">Vacant</p>
+                                <p className="text-sm text-muted-foreground">Property is available</p>
                               </div>
                             </>}
                         </div>
-                        <Button type="button" variant="outline" size="sm" onClick={toggleOccupancyStatus} className="text-xs px-2 py-1 h-7">
+                        <Button type="button" variant="outline" size="sm" onClick={toggleOccupancyStatus} className="text-sm px-3 py-1.5 h-8">
                           Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
                         </Button>
                       </div>
                     </div>
 
                     {/* Tenant Information */}
-                    {formData.occupancyStatus === "occupied" && <div className="space-y-3">
+                    {formData.occupancyStatus === "occupied" && <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs font-medium text-gray-700">Tenant Information</Label>
+                          <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
                           
-                          {/* Tenant Type Toggle - Smaller and More Elegant */}
-                          <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                          {/* Tenant Type Toggle */}
+                          <div className="flex bg-muted border border-border rounded-lg p-1">
                             <button type="button" onClick={() => setFormData(prev => ({
                       ...prev,
                       tenantType: "individual"
-                    }))} className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${formData.tenantType === "individual" ? "bg-white text-gray-700 shadow-sm border border-gray-200" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`}>
+                    }))} className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${formData.tenantType === "individual" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"}`}>
                               <Users className="h-3 w-3" />
                               Individual
                             </button>
                             <button type="button" onClick={() => setFormData(prev => ({
                       ...prev,
                       tenantType: "company"
-                    }))} className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${formData.tenantType === "company" ? "bg-white text-gray-700 shadow-sm border border-gray-200" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`}>
+                    }))} className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${formData.tenantType === "company" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"}`}>
                               <Building2 className="h-3 w-3" />
                               Company
                             </button>
                           </div>
                         </div>
                         
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <div>
-                            <Label htmlFor="tenantName" className="text-xs font-medium text-gray-700 mb-1.5 block">
+                            <Label htmlFor="tenantName" className="text-sm font-medium text-foreground mb-1.5 block">
                               {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                             </Label>
-                            <Input id="tenantName" name="tenantName" value={formData.tenantName} onChange={handleChange} placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"} className="h-9 text-sm" />
+                            <Input id="tenantName" name="tenantName" value={formData.tenantName} onChange={handleChange} placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"} className="h-10" />
                           </div>
                           
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <Label htmlFor="tenantPhone" className="text-xs font-medium text-gray-700 mb-1.5 block">Phone</Label>
-                              <Input id="tenantPhone" name="tenantPhone" value={formData.tenantPhone} onChange={handleChange} placeholder="Phone number" className="h-9 text-sm" />
+                              <Label htmlFor="tenantPhone" className="text-sm font-medium text-foreground mb-1.5 block">Phone</Label>
+                              <Input id="tenantPhone" name="tenantPhone" value={formData.tenantPhone} onChange={handleChange} placeholder="Phone number" className="h-10" />
                             </div>
                             <div>
-                              <Label htmlFor="tenantEmail" className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
-                              <Input id="tenantEmail" name="tenantEmail" value={formData.tenantEmail} onChange={handleChange} placeholder="Email address" className="h-9 text-sm" />
+                              <Label htmlFor="tenantEmail" className="text-sm font-medium text-foreground mb-1.5 block">Email</Label>
+                              <Input id="tenantEmail" name="tenantEmail" value={formData.tenantEmail} onChange={handleChange} placeholder="Email address" className="h-10" />
                             </div>
                           </div>
                         </div>
                       </div>}
                   </div>
                 </div>}
-            </Card>}
+            </div>}
 
           {/* Notes Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <MessageSquare className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Notes</h2>
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Notes</h3>
+                <p className="text-sm text-muted-foreground">Add any additional information about this listing</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">Add any additional information about this listing</p>
             
             <div>
-              <Textarea id="notes" name="notes" value={formData.notes} onChange={handleChange} placeholder="Add any additional notes, special features, maintenance requirements, or important details..." className="min-h-[80px] resize-none text-sm" />
+              <Textarea id="notes" name="notes" value={formData.notes} onChange={handleChange} placeholder="Add any additional notes, special features, maintenance requirements, or important details..." className="min-h-[100px] resize-none" />
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>;

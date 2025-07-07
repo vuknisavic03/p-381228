@@ -265,96 +265,100 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
   }
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-background">
       {/* Header with action buttons */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-        <div>
-          <h1 className="text-lg font-medium text-gray-900">Edit Listing</h1>
-          <p className="text-xs text-gray-500 mt-0.5">Update the details of your listing</p>
-        </div>
-        <div className="flex gap-2">
-          <Button 
-            onClick={handleSubmit} 
-            disabled={!isFormValid}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 h-8"
-          >
-            Update Listing
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
-            size="sm"
-            className="bg-white border-gray-200 hover:bg-gray-50 text-xs px-3 py-1.5 h-8"
-          >
-            Cancel
-          </Button>
+      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Edit Listing</h1>
+            <p className="text-sm text-muted-foreground mt-1">Update the details of your listing</p>
+          </div>
+          <div className="flex gap-3">
+            <Button 
+              onClick={handleSubmit} 
+              disabled={!isFormValid}
+              className="px-6 py-2 h-10 font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              Update Listing
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={onClose} 
+              className="px-6 py-2 h-10 font-medium transition-all duration-200"
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50">
-        <div className="w-[98%] max-w-none space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5">
+        <div className="w-[98%] max-w-none">
           
           {/* Location Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <MapPin className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Location</h2>
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Location</h3>
+                <p className="text-sm text-muted-foreground">Update the location details of your listing</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">Update the location details of your listing</p>
             
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="city" className="text-xs font-medium text-gray-700 mb-1.5 block">City</Label>
+                  <Label htmlFor="city" className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
                   <Input
                     id="city"
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
                     placeholder="e.g., Belgrade"
-                    className="h-9 text-sm"
+                    className="h-10"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="country" className="text-xs font-medium text-gray-700 mb-1.5 block">Country</Label>
+                  <Label htmlFor="country" className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
                   <Input
                     id="country"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
                     placeholder="e.g., Serbia"
-                    className="h-9 text-sm"
+                    className="h-10"
                   />
                 </div>
               </div>
               
               <div>
-                <Label htmlFor="address" className="text-xs font-medium text-gray-700 mb-1.5 block">Full Address</Label>
+                <Label htmlFor="address" className="text-sm font-medium text-foreground mb-1.5 block">Full Address</Label>
                 <Input
                   id="address"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   placeholder="e.g., Knez Mihailova 42"
-                  className="h-9 text-sm"
+                  className="h-10"
                 />
               </div>
               
               <div>
-                <Label htmlFor="postalCode" className="text-xs font-medium text-gray-700 mb-1.5 block">Postal Code</Label>
+                <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
                 <Input
                   id="postalCode"
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
                   placeholder="e.g., 11000"
-                  className="h-9 text-sm"
+                  className="h-10"
                 />
               </div>
             </div>
-          </Card>
+          </div>
 
           {/* Property Type Section */}
           <Card className="p-4 border border-gray-100 shadow-sm bg-white">
