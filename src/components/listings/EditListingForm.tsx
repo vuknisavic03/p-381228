@@ -385,7 +385,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                 onClick={() => setUseUnitsMode(!useUnitsMode)}
                 className="text-sm px-3 py-1.5 h-8"
               >
-                {useUnitsMode ? "Multiple Units" : "Single Unit"}
+                {useUnitsMode ? "Yes" : "No"}
               </Button>
             </div>
 

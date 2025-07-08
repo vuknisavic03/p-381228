@@ -356,7 +356,7 @@ export function ListingForm({
                 <p className="text-sm text-muted-foreground">Does this property have multiple units?</p>
               </div>
               <Button type="button" variant={useUnitsMode ? "default" : "outline"} size="sm" onClick={() => setUseUnitsMode(!useUnitsMode)} className="text-sm px-3 py-1.5 h-8">
-                {useUnitsMode ? "Multiple Units" : "Single Unit"}
+                {useUnitsMode ? "Yes" : "No"}
               </Button>
             </div>
 
