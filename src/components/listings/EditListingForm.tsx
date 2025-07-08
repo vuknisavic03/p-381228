@@ -361,74 +361,82 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
           </div>
 
           {/* Property Type Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <Building className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Listing Type</h2>
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <Building className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Listing Type</h3>
+                <p className="text-sm text-muted-foreground">Update the type and structure of your listing</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">Update the type and structure of your listing</p>
 
             {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-4">
+            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg mb-4">
               <div>
-                <p className="font-medium text-gray-900 text-xs">Property Structure</p>
-                <p className="text-xs text-gray-500">Does this property have multiple units?</p>
+                <p className="font-medium text-foreground text-sm">Property Structure</p>
+                <p className="text-sm text-muted-foreground">Does this property have multiple units?</p>
               </div>
               <Button
                 type="button"
                 variant={useUnitsMode ? "default" : "outline"}
                 size="sm"
                 onClick={() => setUseUnitsMode(!useUnitsMode)}
-                className="text-xs px-2 py-1 h-7"
+                className="text-sm px-3 py-1.5 h-8"
               >
                 {useUnitsMode ? "Multiple Units" : "Single Unit"}
               </Button>
             </div>
 
             {/* Property Type Selection */}
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-3">
               {propertyTypes.map((type) => (
                 <div
                   key={type.value}
-                  className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
                     formData.type === type.value
-                      ? "border-blue-200 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/50 hover:bg-muted/30"
                   }`}
                   onClick={() => {
                     setFormData(prev => ({ ...prev, type: type.value, category: "" }));
                     setUnits([]);
                   }}
                 >
-                  <div className="flex items-start gap-2">
+                  <div className="flex items-start gap-3">
                     {React.cloneElement(getPropertyTypeIcon(type.value), { 
-                      className: `h-4 w-4 mt-0.5 ${formData.type === type.value ? "text-blue-600" : "text-gray-500"}` 
+                      className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-primary" : "text-muted-foreground"}` 
                     })}
                     <div className="flex-1">
-                      <h4 className={`font-medium text-xs ${formData.type === type.value ? "text-blue-900" : "text-gray-900"}`}>
+                      <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-foreground" : "text-foreground"}`}>
                         {type.label}
                       </h4>
-                      <p className={`text-xs mt-0.5 ${formData.type === type.value ? "text-blue-700" : "text-gray-500"}`}>
+                      <p className={`text-sm mt-0.5 ${formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
                         {type.description}
                       </p>
                     </div>
                     {formData.type === type.value && (
-                      <CheckCircle className="h-3 w-3 text-blue-600 mt-0.5" />
+                      <CheckCircle className="h-4 w-4 text-primary mt-0.5" />
                     )}
                   </div>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
 
           {/* Details Section */}
           {formData.type && (
-            <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-              <div className="flex items-center gap-2 mb-3">
-                <Settings className="h-4 w-4 text-gray-500" />
-                <h2 className="text-sm font-medium text-gray-900">Details</h2>
+            <div className="bg-card rounded-lg border border-border p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-muted rounded-lg">
+                  <Settings className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-foreground">Details</h3>
+                  <p className="text-sm text-muted-foreground">Configure the specific details of your listing</p>
+                </div>
               </div>
-              <p className="text-xs text-gray-600 mb-4">Configure the specific details of your listing</p>
 
               {/* Units Manager */}
               {useUnitsMode ? (
@@ -439,30 +447,30 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                 />
               ) : (
                 <div className="mb-4">
-                  <Label className="text-xs font-medium text-gray-700 mb-2 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-2">
+                  <Label className="text-sm font-medium text-foreground mb-2 block">Specific Category</Label>
+                  <div className="grid grid-cols-1 gap-3">
                     {getAvailableCategories().map((cat) => (
                       <div
                         key={cat.value}
-                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
                           formData.category === cat.value
-                            ? "border-blue-200 bg-blue-50"
-                            : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-primary/50 hover:bg-muted/30"
                         }`}
                         onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
                       >
-                        <div className="flex items-start gap-2">
-                          <cat.Icon className={`h-4 w-4 mt-0.5 ${formData.category === cat.value ? "text-blue-600" : "text-gray-500"}`} />
+                        <div className="flex items-start gap-3">
+                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
                           <div className="flex-1">
-                            <h4 className={`font-medium text-xs ${formData.category === cat.value ? "text-blue-900" : "text-gray-900"}`}>
+                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
                               {cat.label}
                             </h4>
-                            <p className={`text-xs mt-0.5 ${formData.category === cat.value ? "text-blue-700" : "text-gray-500"}`}>
+                            <p className={`text-sm mt-0.5 ${formData.category === cat.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
                               {cat.description}
                             </p>
                           </div>
                           {formData.category === cat.value && (
-                            <CheckCircle className="h-3 w-3 text-blue-600 mt-0.5" />
+                            <CheckCircle className="h-4 w-4 text-primary mt-0.5" />
                           )}
                         </div>
                       </div>
@@ -478,27 +486,27 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   
                   <div className="space-y-3">
                     <div>
-                      <Label className="text-xs font-medium text-gray-700 mb-2 block">Occupancy Status</Label>
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2">
+                      <Label className="text-sm font-medium text-foreground mb-2 block">Occupancy Status</Label>
+                      <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                        <div className="flex items-center gap-3">
                           {formData.occupancyStatus === "occupied" ? (
                             <>
-                              <div className="flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full">
-                                <Users className="h-3 w-3 text-blue-600" />
+                              <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-full">
+                                <Users className="h-4 w-4 text-primary" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900 text-xs">Occupied</p>
-                                <p className="text-xs text-gray-500">Property has tenants</p>
+                                <p className="font-medium text-foreground text-sm">Occupied</p>
+                                <p className="text-sm text-muted-foreground">Property has tenants</p>
                               </div>
                             </>
                           ) : (
                             <>
-                              <div className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full">
-                                <UserX className="h-3 w-3 text-gray-600" />
+                              <div className="flex items-center justify-center w-8 h-8 bg-muted rounded-full">
+                                <UserX className="h-4 w-4 text-muted-foreground" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900 text-xs">Vacant</p>
-                                <p className="text-xs text-gray-500">Property is available</p>
+                                <p className="font-medium text-foreground text-sm">Vacant</p>
+                                <p className="text-sm text-muted-foreground">Property is available</p>
                               </div>
                             </>
                           )}
@@ -508,7 +516,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                           variant="outline" 
                           size="sm" 
                           onClick={toggleOccupancyStatus}
-                          className="text-xs px-2 py-1 h-7"
+                          className="text-sm px-3 py-1.5 h-8"
                         >
                           Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
                         </Button>
@@ -519,40 +527,40 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                     {formData.occupancyStatus === "occupied" && (
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs font-medium text-gray-700">Tenant Information</Label>
+                          <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
                           
-                          {/* Tenant Type Toggle - Smaller and More Elegant */}
-                          <div className="flex bg-gray-50 border border-gray-100 rounded-md p-0.5">
+                          {/* Tenant Type Toggle */}
+                          <div className="flex bg-muted/30 border border-border rounded-md p-0.5">
                             <button
                               type="button"
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                              className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
+                              className={`px-3 py-1.5 text-sm font-medium rounded-sm transition-all flex items-center gap-1.5 ${
                                 formData.tenantType === "individual"
-                                  ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                  ? "bg-card text-foreground shadow-sm border border-border"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                               }`}
                             >
-                              <Users className="h-3 w-3" />
+                              <Users className="h-4 w-4" />
                               Individual
                             </button>
                             <button
                               type="button"
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
-                              className={`px-2 py-1 text-xs font-medium rounded-sm transition-all flex items-center gap-1 ${
+                              className={`px-3 py-1.5 text-sm font-medium rounded-sm transition-all flex items-center gap-1.5 ${
                                 formData.tenantType === "company"
-                                  ? "bg-white text-gray-700 shadow-sm border border-gray-200"
-                                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                                  ? "bg-card text-foreground shadow-sm border border-border"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                               }`}
                             >
-                              <Building2 className="h-3 w-3" />
+                              <Building2 className="h-4 w-4" />
                               Company
                             </button>
                           </div>
                         </div>
                         
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <div>
-                            <Label htmlFor="tenantName" className="text-xs font-medium text-gray-700 mb-1.5 block">
+                            <Label htmlFor="tenantName" className="text-sm font-medium text-foreground mb-1.5 block">
                               {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
                             </Label>
                             <Input
@@ -561,31 +569,31 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                               value={formData.tenantName}
                               onChange={handleChange}
                               placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"}
-                              className="h-9 text-sm"
+                              className="h-10"
                             />
                           </div>
                           
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <Label htmlFor="tenantPhone" className="text-xs font-medium text-gray-700 mb-1.5 block">Phone</Label>
+                              <Label htmlFor="tenantPhone" className="text-sm font-medium text-foreground mb-1.5 block">Phone</Label>
                               <Input
                                 id="tenantPhone"
                                 name="tenantPhone"
                                 value={formData.tenantPhone}
                                 onChange={handleChange}
                                 placeholder="Phone number"
-                                className="h-9 text-sm"
+                                className="h-10"
                               />
                             </div>
                             <div>
-                              <Label htmlFor="tenantEmail" className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
+                              <Label htmlFor="tenantEmail" className="text-sm font-medium text-foreground mb-1.5 block">Email</Label>
                               <Input
                                 id="tenantEmail"
                                 name="tenantEmail"
                                 value={formData.tenantEmail}
                                 onChange={handleChange}
                                 placeholder="Email address"
-                                className="h-9 text-sm"
+                                className="h-10"
                               />
                             </div>
                           </div>
@@ -595,16 +603,20 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                   </div>
                 </div>
               )}
-            </Card>
+            </div>
           )}
 
           {/* Notes Section */}
-          <Card className="p-4 border border-gray-100 shadow-sm bg-white">
-            <div className="flex items-center gap-2 mb-3">
-              <MessageSquare className="h-4 w-4 text-gray-500" />
-              <h2 className="text-sm font-medium text-gray-900">Notes</h2>
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Notes</h3>
+                <p className="text-sm text-muted-foreground">Update any additional information about this listing</p>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 mb-4">Update any additional information about this listing</p>
             
             <div>
               <Textarea
@@ -616,7 +628,7 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
                 className="min-h-[80px] resize-none text-sm"
               />
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
