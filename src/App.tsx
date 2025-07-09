@@ -12,6 +12,7 @@ import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
 import Vision from "./pages/Vision";
+import MobilePostRegistration from "./pages/MobilePostRegistration";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => {
               <Route path="/dashboard" element={<Overview />} />
               <Route path="/listings" element={<Listings />} />
               <Route path="/transactions" element={<Transactions />} />
+              <Route path="/mobile-welcome" element={<MobilePostRegistration />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
