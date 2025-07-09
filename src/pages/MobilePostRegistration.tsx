@@ -23,7 +23,9 @@ export default function MobilePostRegistration() {
             Welcome!
           </h1>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            Thank you for registering! Our platform is currently optimized for web browsers. 
+            Thank you for registering! Our platform is currently optimized for web browsers.
+          </p>
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Please visit us on a desktop or laptop computer for the full experience.
           </p>
         </div>
@@ -35,7 +37,7 @@ export default function MobilePostRegistration() {
             size="lg"
           >
             <LogOut className="w-4 h-4 mr-2" />
-            Return to Home
+            Logout
           </Button>
           
           <p className="text-xs text-muted-foreground">
