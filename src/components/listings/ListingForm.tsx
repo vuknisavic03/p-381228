@@ -295,134 +295,134 @@ export function ListingForm({
       <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
         <div className="w-[98%] max-w-none space-y-8">
           
-          {/* Location Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-muted rounded-lg">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <h3 className="font-medium text-foreground">Location</h3>
-                <p className="text-sm text-muted-foreground">Where is your listing located?</p>
-              </div>
-            </div>
+          {/* Location & Type */}
+          <div className="bg-card rounded-lg border border-border p-4">
+            <h3 className="font-medium text-foreground mb-3">Basic Information</h3>
             
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <LocationAutofill value={formData.city} onChange={value => setFormData(prev => ({
-                  ...prev,
-                  city: value
-                }))} placeholder="e.g., Belgrade" label="City" type="city" className="h-10" onLocationSelect={handleLocationSelect} />
-                </div>
-                <div>
-                  <LocationAutofill value={formData.country} onChange={value => setFormData(prev => ({
-                  ...prev,
-                  country: value
-                }))} placeholder="e.g., Serbia" label="Country" type="country" className="h-10" onLocationSelect={handleLocationSelect} />
-                </div>
+                <LocationAutofill 
+                  value={formData.city} 
+                  onChange={value => setFormData(prev => ({...prev, city: value}))} 
+                  placeholder="City" 
+                  label="City" 
+                  type="city" 
+                  className="h-10" 
+                  onLocationSelect={handleLocationSelect} 
+                />
+                <LocationAutofill 
+                  value={formData.country} 
+                  onChange={value => setFormData(prev => ({...prev, country: value}))} 
+                  placeholder="Country" 
+                  label="Country" 
+                  type="country" 
+                  className="h-10" 
+                  onLocationSelect={handleLocationSelect} 
+                />
               </div>
               
-              <div>
-                <LocationAutofill value={formData.address} onChange={value => setFormData(prev => ({
-                ...prev,
-                address: value
-              }))} placeholder="e.g., Knez Mihailova 42" label="Full Address" type="address" className="h-10" onLocationSelect={handleLocationSelect} />
-              </div>
-              
-              <div>
-                <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
-                <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 11000" className="h-10" />
-              </div>
+              <LocationAutofill 
+                value={formData.address} 
+                onChange={value => setFormData(prev => ({...prev, address: value}))} 
+                placeholder="Full Address" 
+                label="Address" 
+                type="address" 
+                className="h-10" 
+                onLocationSelect={handleLocationSelect} 
+              />
             </div>
           </div>
 
-          {/* Property Type Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-muted rounded-lg">
-                <Building className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <h3 className="font-medium text-foreground">Listing Type</h3>
-                <p className="text-sm text-muted-foreground">What type of listing is this?</p>
+          {/* Property Type */}
+          <div className="bg-card rounded-lg border border-border p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium text-foreground">Property Type</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Multiple units?</span>
+                <Button 
+                  type="button" 
+                  variant={useUnitsMode ? "default" : "outline"} 
+                  size="sm" 
+                  onClick={() => setUseUnitsMode(!useUnitsMode)} 
+                  className="text-xs px-2 py-1 h-7"
+                >
+                  {useUnitsMode ? "Yes" : "No"}
+                </Button>
               </div>
             </div>
 
-            {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg mb-4">
-              <div>
-                <p className="font-medium text-foreground text-sm">Property Structure</p>
-                <p className="text-sm text-muted-foreground">Does this property have multiple units?</p>
-              </div>
-              <Button type="button" variant={useUnitsMode ? "default" : "outline"} size="sm" onClick={() => setUseUnitsMode(!useUnitsMode)} className="text-sm px-3 py-1.5 h-8">
-                {useUnitsMode ? "Yes" : "No"}
-              </Button>
-            </div>
-
-            {/* Property Type Selection */}
-            <div className="grid grid-cols-1 gap-3">
-              {propertyTypes.map(type => <div key={type.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.type === type.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => {
-              setFormData(prev => ({
-                ...prev,
-                type: type.value,
-                category: ""
-              }));
-              setUnits([]);
-            }}>
-                  <div className="flex items-start gap-3">
+            <div className="grid grid-cols-2 gap-2">
+              {propertyTypes.map(type => (
+                <div 
+                  key={type.value} 
+                  className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                    formData.type === type.value 
+                      ? "border-primary bg-primary/5" 
+                      : "border-border hover:border-primary/50 hover:bg-muted/30"
+                  }`} 
+                  onClick={() => {
+                    setFormData(prev => ({...prev, type: type.value, category: ""}));
+                    setUnits([]);
+                  }}
+                >
+                  <div className="flex items-center gap-2">
                     {React.cloneElement(getPropertyTypeIcon(type.value), {
-                  className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-primary" : "text-muted-foreground"}`
-                })}
-                    <div className="flex-1">
-                      <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-foreground" : "text-foreground"}`}>
+                      className: `h-4 w-4 ${formData.type === type.value ? "text-primary" : "text-muted-foreground"}`
+                    })}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm text-foreground truncate">
                         {type.label}
                       </h4>
-                      <p className={`text-sm mt-0.5 ${formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
+                      <p className="text-xs text-muted-foreground truncate">
                         {type.description}
                       </p>
                     </div>
-                    {formData.type === type.value && <CheckCircle className="h-4 w-4 text-primary mt-0.5" />}
+                    {formData.type === type.value && <CheckCircle className="h-3 w-3 text-primary flex-shrink-0" />}
                   </div>
-                </div>)}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Details Section */}
-          {formData.type && <div className="bg-card rounded-lg border border-border p-5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-muted rounded-lg">
-                  <Settings className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">Details</h3>
-                  <p className="text-sm text-muted-foreground">Configure the specific details of your listing</p>
-                </div>
-              </div>
+          {/* Details */}
+          {formData.type && (
+            <div className="bg-card rounded-lg border border-border p-4">
+              <h3 className="font-medium text-foreground mb-3">Property Details</h3>
 
-              {/* Units Manager */}
-              {useUnitsMode ? <UnitsManager propertyType={formData.type as PropertyType} units={units} onUnitsChange={setUnits} /> : <div className="mb-4">
-                  <Label className="text-sm font-medium text-foreground mb-2 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-3">
-                    {getAvailableCategories().map(cat => <div key={cat.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.category === cat.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => setFormData(prev => ({
-                ...prev,
-                category: cat.value
-              }))}>
-                        <div className="flex items-start gap-3">
-                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
-                          <div className="flex-1">
-                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
-                              {cat.label}
-                            </h4>
-                            <p className={`text-sm mt-0.5 ${formData.category === cat.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
-                              {cat.description}
-                            </p>
-                          </div>
-                          {formData.category === cat.value && <CheckCircle className="h-4 w-4 text-primary mt-0.5" />}
+              {useUnitsMode ? (
+                <UnitsManager 
+                  propertyType={formData.type as PropertyType} 
+                  units={units} 
+                  onUnitsChange={setUnits} 
+                />
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  {getAvailableCategories().map(cat => (
+                    <div 
+                      key={cat.value} 
+                      className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                        formData.category === cat.value 
+                          ? "border-primary bg-primary/5" 
+                          : "border-border hover:border-primary/50 hover:bg-muted/30"
+                      }`} 
+                      onClick={() => setFormData(prev => ({...prev, category: cat.value}))}
+                    >
+                      <div className="flex items-center gap-2">
+                        <cat.Icon className={`h-4 w-4 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-sm text-foreground truncate">
+                            {cat.label}
+                          </h4>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {cat.description}
+                          </p>
                         </div>
-                      </div>)}
-                  </div>
-                </div>}
+                        {formData.category === cat.value && <CheckCircle className="h-3 w-3 text-primary flex-shrink-0" />}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Occupancy and Tenant Info for Single Unit */}
               {!useUnitsMode && shouldShowTenantInfo() && formData.category && <div className="space-y-4">
@@ -503,24 +503,8 @@ export function ListingForm({
                       </div>}
                   </div>
                 </div>}
-            </div>}
-
-          {/* Notes Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-muted rounded-lg">
-                <MessageSquare className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <h3 className="font-medium text-foreground">Notes</h3>
-                <p className="text-sm text-muted-foreground">Add any additional information about this listing</p>
-              </div>
             </div>
-            
-            <div>
-              <Textarea id="notes" name="notes" value={formData.notes} onChange={handleChange} placeholder="Add any additional notes, special features, maintenance requirements, or important details..." className="min-h-[100px] resize-none" />
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>;
