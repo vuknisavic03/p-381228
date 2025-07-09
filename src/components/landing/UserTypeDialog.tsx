@@ -17,7 +17,7 @@ export default function UserTypeDialog({ open, onOpenChange }: UserTypeDialogPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[90vw] max-w-sm mx-4 sm:max-w-sm">
+      <DialogContent className="w-[90vw] max-w-sm rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center mb-1">
             Make your account
