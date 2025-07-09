@@ -2,6 +2,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Building2, Users, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface UserTypeDialogProps {
   open: boolean;
@@ -9,10 +10,15 @@ interface UserTypeDialogProps {
 }
 
 export default function UserTypeDialog({ open, onOpenChange }: UserTypeDialogProps) {
+  const navigate = useNavigate();
+
   const handleUserTypeSelect = (type: 'owner' | 'manager') => {
-    // Here you can add navigation or other logic
-    console.log(`Selected user type: ${type}`);
     onOpenChange(false);
+    if (type === 'owner') {
+      navigate("/dashboard");
+    } else if (type === 'manager') {
+      navigate("/workspace");
+    }
   };
 
   return (
