@@ -23,7 +23,7 @@ export function WorkspaceNav({
   workspaceName = "Kevin's Space", 
   userInitials = "K",
   owner = "Kevin Anderson",
-  userType = "manager"
+  userType = "owner"
 }: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
