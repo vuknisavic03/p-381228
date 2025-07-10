@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart, Settings, Key, LifeBuoy, LogOut } from 'lucide-react';
+import { LayoutDashboard, List, BarChart, Settings, Key, LifeBuoy, LogOut, Plus } from 'lucide-react';
 import { 
   Sheet, 
   SheetContent, 
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { CreateWorkspaceDialog } from "@/components/workspace/CreateWorkspaceDialog";
 
 interface WorkspaceNavProps {
   workspaceName?: string;
@@ -24,6 +25,7 @@ export function WorkspaceNav({
 }: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   
   const isActive = (path: string) => location.pathname === path;
 
@@ -144,6 +146,20 @@ export function WorkspaceNav({
           <SheetContent className="w-[400px] bg-white p-6">
             <div className="text-xl font-semibold mb-6 text-gray-900">Settings</div>
             <div className="space-y-6">
+              {/* Create Workspace Section */}
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="font-medium mb-1 text-gray-900">Create Workspace</div>
+                <div className="text-sm text-gray-500 mb-3">Add a new workspace for clients</div>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex justify-between items-center bg-white border-gray-200 hover:bg-gray-50" 
+                  onClick={() => setIsCreateDialogOpen(true)}
+                >
+                  <span>Create Workspace</span>
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+              
               {/* Reset Password Section */}
               <div className="bg-gray-50 p-4 rounded-md">
                 <div className="font-medium mb-1 text-gray-900">Reset Password</div>
@@ -189,6 +205,11 @@ export function WorkspaceNav({
           </SheetContent>
         </Sheet>
       </div>
+      
+      <CreateWorkspaceDialog 
+        open={isCreateDialogOpen} 
+        onOpenChange={setIsCreateDialogOpen}
+      />
     </div>
   );
 }
