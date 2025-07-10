@@ -16,7 +16,7 @@ export default function DesktopLanding() {
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-8">
             <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
-              <span className="text-white font-bold text-sm">Square</span>
+              <span className="text-white font-bold text-sm">S</span>
             </div>
             <nav className="flex items-center gap-6">
               <Link to="/" className="text-gray-600 text-sm">Accounting</Link>
