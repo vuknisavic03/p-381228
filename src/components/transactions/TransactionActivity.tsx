@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TransactionTable } from "./TransactionTable";
+import { TransactionTableModern } from "./TransactionTableModern";
 import { TransactionFilterBar } from "./TransactionFilterBar";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EditTransactionForm } from "./EditTransactionForm";
@@ -363,7 +363,7 @@ export function TransactionActivity() {
         setTransactionType={setTransactionType}
       />
       <div className="flex-1 overflow-hidden">
-        <TransactionTable 
+        <TransactionTableModern 
           transactions={filteredTransactions}
           onEdit={handleEditTransaction}
         />
