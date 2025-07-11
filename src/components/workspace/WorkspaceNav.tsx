@@ -1,33 +1,29 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, List, BarChart, Settings } from 'lucide-react';
+import { LayoutDashboard, List, BarChart, Settings, Key, LifeBuoy, LogOut } from 'lucide-react';
 import { 
   Sheet, 
   SheetContent, 
   SheetTrigger 
 } from "@/components/ui/sheet";
-import { CreateWorkspaceDialog } from "@/components/workspace/CreateWorkspaceDialog";
-import { OwnerSettings } from "@/components/workspace/OwnerSettings";
-import { ManagerSettings } from "@/components/workspace/ManagerSettings";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 interface WorkspaceNavProps {
   workspaceName?: string;
   userInitials?: string;
   owner?: string;
-  userType?: 'owner' | 'manager';
 }
 
 export function WorkspaceNav({ 
   workspaceName = "Kevin's Space", 
   userInitials = "K",
-  owner = "Kevin Anderson",
-  userType = "owner"
+  owner = "Kevin Anderson" 
 }: WorkspaceNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   
   const isActive = (path: string) => location.pathname === path;
 
@@ -47,6 +43,19 @@ export function WorkspaceNav({
     });
   };
 
+  // Placeholder functions for the settings buttons
+  const handleResetPassword = () => {
+    console.log("Reset Password clicked");
+  };
+
+  const handleSupport = () => {
+    console.log("Support clicked");
+  };
+
+  const handleLogout = () => {
+    console.log("Logout clicked");
+    navigate('/');
+  };
 
   // Add function to handle clicking on the workspace button
   const handleWorkspaceClick = () => {
@@ -134,19 +143,52 @@ export function WorkspaceNav({
           </SheetTrigger>
           <SheetContent className="w-[400px] bg-white p-6">
             <div className="text-xl font-semibold mb-6 text-gray-900">Settings</div>
-            {userType === 'owner' ? (
-              <OwnerSettings onCreateWorkspace={() => setIsCreateDialogOpen(true)} />
-            ) : (
-              <ManagerSettings />
-            )}
+            <div className="space-y-6">
+              {/* Reset Password Section */}
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="font-medium mb-1 text-gray-900">Reset Password</div>
+                <div className="text-sm text-gray-500 mb-3">Change your account password</div>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex justify-between items-center bg-white border-gray-200 hover:bg-gray-50" 
+                  onClick={handleResetPassword}
+                >
+                  <span>Reset Password</span>
+                  <Key className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              {/* Support Section */}
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="font-medium mb-1 text-gray-900">Support</div>
+                <div className="text-sm text-gray-500 mb-3">Get help with your account</div>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex justify-between items-center bg-white border-gray-200 hover:bg-gray-50" 
+                  onClick={handleSupport}
+                >
+                  <span>Contact Support</span>
+                  <LifeBuoy className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              {/* Logout Section */}
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="font-medium mb-1 text-gray-900">Log Out</div>
+                <div className="text-sm text-gray-500 mb-3">Sign out from your account</div>
+                <Button 
+                  variant="outline"
+                  className="w-full flex justify-between items-center text-red-500 hover:text-red-600 hover:border-red-200 bg-white" 
+                  onClick={handleLogout}
+                >
+                  <span>Log Out</span>
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
           </SheetContent>
         </Sheet>
       </div>
-      
-      <CreateWorkspaceDialog 
-        open={isCreateDialogOpen} 
-        onOpenChange={setIsCreateDialogOpen}
-      />
     </div>
   );
 }
