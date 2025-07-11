@@ -24,7 +24,7 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
   setTransactionType,
 }) => {
   return (
-    <div className="border-b border-gray-200 bg-white shadow-sm">
+    <div className="border-b border-border bg-background shadow-sm">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between gap-6">
           <div className="flex-1">

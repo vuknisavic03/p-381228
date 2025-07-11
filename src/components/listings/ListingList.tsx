@@ -354,7 +354,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
   return (
     <div className="h-full flex flex-col">
       {/* Modern Filter Header */}
-      <div className="p-4 border-b bg-white">
+      <div className="p-4 border-b border-border bg-background shadow-sm">
         <ModernFilter
           searchValue={searchTerm}
           onSearchChange={setSearchTerm}

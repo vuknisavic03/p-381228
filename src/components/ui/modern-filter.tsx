@@ -47,20 +47,20 @@ export function ModernFilter({
     <div className={cn("flex items-center gap-3", className)}>
       {/* Search Input */}
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="text"
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
-          className="pl-10 h-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 bg-white rounded-lg shadow-sm"
+          className="pl-10 h-10 border-border focus:border-primary focus:ring-primary/20 bg-background rounded-lg shadow-sm transition-all duration-200"
         />
         {searchValue && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => onSearchChange('')}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-100 rounded-full"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted rounded-full transition-colors duration-200"
           >
             <X className="h-3 w-3" />
           </Button>
@@ -75,8 +75,8 @@ export function ModernFilter({
               <Button 
                 variant="outline" 
                 className={cn(
-                  "gap-2 h-10 border-gray-200 hover:bg-gray-50 bg-white rounded-lg shadow-sm transition-all duration-200",
-                  section.selectedValues.length > 0 && "border-blue-500 bg-blue-50 text-blue-700"
+                  "gap-2 h-10 border-border hover:bg-muted bg-background rounded-lg shadow-sm transition-all duration-200",
+                  section.selectedValues.length > 0 && "border-primary bg-primary/5 text-primary"
                 )}
               >
                 <span className="text-sm font-medium">{section.title}</span>
@@ -87,12 +87,12 @@ export function ModernFilter({
             <DropdownMenuContent 
               align="start" 
               className={cn(
-                "p-0 shadow-lg border bg-white z-50 rounded-lg",
+                "p-0 shadow-lg border bg-background z-50 rounded-lg",
                 section.id === 'listings' ? "w-96" : "w-80"
               )}
             >
-              <div className="px-4 py-3 border-b bg-gray-50/70 rounded-t-lg">
-                <DropdownMenuLabel className="text-sm font-semibold text-gray-900 p-0">
+              <div className="px-4 py-3 border-b bg-muted/50 rounded-t-lg">
+                <DropdownMenuLabel className="text-sm font-semibold text-foreground p-0">
                   {section.title}
                 </DropdownMenuLabel>
               </div>
@@ -114,18 +114,18 @@ export function ModernFilter({
                         <div
                           key={option.value}
                           onClick={() => section.onToggle(option.value)}
-                          className="flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors hover:bg-gray-50/70 text-gray-700"
+                          className="flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors hover:bg-muted/50 text-foreground"
                         >
                           <div className="flex items-center gap-3 flex-1">
                             <div className="w-4 h-4 flex items-center justify-center">
                               {isSelected && (
-                                <Check className="h-3 w-3 text-blue-600" />
+                                <Check className="h-3 w-3 text-primary" />
                               )}
                             </div>
                             <span className="text-sm">{option.label}</span>
                           </div>
                           {option.count !== undefined && (
-                            <span className="text-xs px-2 py-0.5 rounded-full ml-2 bg-gray-100/70 text-gray-500">
+                            <span className="text-xs px-2 py-0.5 rounded-full ml-2 bg-muted text-muted-foreground">
                               {option.count}
                             </span>
                           )}
@@ -133,7 +133,7 @@ export function ModernFilter({
                       );
                     })}
                     {section.options.length === 0 && (
-                      <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                      <div className="px-3 py-2 text-sm text-muted-foreground text-center">
                         No options available
                       </div>
                     )}
