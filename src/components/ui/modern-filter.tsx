@@ -76,7 +76,7 @@ export function ModernFilter({
                 variant="outline" 
                 className={cn(
                   "gap-2 h-10 border-border hover:bg-muted bg-background rounded-lg shadow-sm transition-all duration-200",
-                  section.selectedValues.length > 0 && "border-primary bg-primary/5 text-primary"
+                  section.selectedValues.length > 0 && "border-filter-selected-border bg-filter-selected-bg text-filter-selected-text"
                 )}
               >
                 <span className="text-sm font-medium">{section.title}</span>
