@@ -3,7 +3,7 @@ import React from "react";
 import { Building, MapPin, Users, UserX, ChevronRight, ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import { useState } from "react";
 
 interface Unit {
@@ -97,12 +97,6 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                     className="flex items-center gap-2.5 flex-1 cursor-pointer min-w-0"
                     onClick={() => onToggle(listing.id)}
                   >
-                    <Checkbox 
-                      checked={listingSelected}
-                      onChange={() => {}} // Handled by parent click
-                      className="pointer-events-none border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-                    />
-                    
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <Building className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
@@ -149,12 +143,6 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                           onClick={() => onToggle(unitValue)}
                         >
                           <div className="flex items-center gap-2.5">
-                            <Checkbox 
-                              checked={isSelected}
-                              onChange={() => {}} // Handled by parent click
-                              className="pointer-events-none border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-                            />
-                            
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="font-medium text-gray-900 text-sm">

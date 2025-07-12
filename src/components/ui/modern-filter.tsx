@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Search, Filter, ChevronDown, Check, X } from "lucide-react";
+import { Search, Filter, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ListingsUnitsFilter } from "@/components/transactions/ListingsUnitsFilter";
 
@@ -114,14 +114,14 @@ export function ModernFilter({
                         <div
                           key={option.value}
                           onClick={() => section.onToggle(option.value)}
-                          className="flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors hover:bg-muted/50 text-foreground"
+                          className={cn(
+                            "flex items-center justify-between px-3 py-2 cursor-pointer rounded-md mx-1 transition-colors hover:bg-muted/50 text-foreground border",
+                            isSelected 
+                              ? "border-primary bg-primary/5" 
+                              : "border-transparent"
+                          )}
                         >
                           <div className="flex items-center gap-3 flex-1">
-                            <div className="w-4 h-4 flex items-center justify-center">
-                              {isSelected && (
-                                <Check className="h-3 w-3 text-primary" />
-                              )}
-                            </div>
                             <span className="text-sm">{option.label}</span>
                           </div>
                           {option.count !== undefined && (
