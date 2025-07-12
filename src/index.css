@@ -35,6 +35,11 @@
 
     --radius: 0.75rem;
 
+    /* Light blue tokens for filter selections */
+    --filter-selected-bg: 206 100% 97%;
+    --filter-selected-border: 206 100% 85%;
+    --filter-selected-text: 206 100% 30%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;

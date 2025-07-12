@@ -73,12 +73,12 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
           <div key={listing.id} className="space-y-1">
             {/* Main Listing */}
             <div className={cn(
-              "border rounded-lg transition-all duration-200 hover:shadow-sm",
+              "border-2 rounded-lg transition-all duration-200 hover:shadow-sm mb-2",
               (listingSelected || unitsSelected) 
-                ? "bg-blue-50/70 border-blue-200/60 shadow-sm" 
-                : "bg-white border-gray-200/60 hover:border-gray-300/80"
+                ? "bg-filter-selected-bg border-filter-selected-border shadow-sm" 
+                : "bg-background border-border hover:border-muted-foreground"
             )}>
-              <div className="p-3">
+              <div className="p-4">
                 <div className="flex items-center gap-2.5">
                   {hasUnits && (
                     <button
@@ -125,8 +125,8 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
 
               {/* Units - Only show when expanded */}
               {hasUnits && expanded && (
-                <div className="border-t border-gray-100/70 bg-gray-50/30">
-                  <div className="p-2 space-y-1">
+                <div className="border-t border-border bg-muted/30">
+                  <div className="p-3 space-y-2">
                     {listing.units.map((unit) => {
                       const unitValue = `${listing.id}-${unit.id}`;
                       const isSelected = isUnitSelected(listing.id, unit.id);
@@ -135,10 +135,10 @@ export function ListingsUnitsFilter({ listings, selectedValues, onToggle }: List
                         <div 
                           key={unit.id}
                           className={cn(
-                            "p-2.5 rounded-md cursor-pointer transition-all duration-150 border ml-4",
+                            "p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 ml-4 mb-2",
                             isSelected 
-                              ? "bg-blue-50/70 border-blue-200/60 shadow-sm" 
-                              : "bg-white border-gray-200/60 hover:border-gray-300/80 hover:shadow-sm"
+                              ? "bg-filter-selected-bg border-filter-selected-border shadow-sm" 
+                              : "bg-background border-border hover:border-muted-foreground hover:shadow-sm"
                           )}
                           onClick={() => onToggle(unitValue)}
                         >
