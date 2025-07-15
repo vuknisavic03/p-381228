@@ -293,10 +293,10 @@ export function ListingForm({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
-        <div className="w-[98%] max-w-none space-y-8">
+        <div className="w-[98%] max-w-none space-y-7">
           
           {/* Location Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
+          <div className="bg-card rounded-lg border border-border border-l-4 border-l-primary/20 p-5 space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-muted rounded-lg">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
@@ -338,7 +338,7 @@ export function ListingForm({
           </div>
 
           {/* Property Type Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
+          <div className="bg-card rounded-lg border border-border border-l-4 border-l-accent/30 p-5 space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-muted rounded-lg">
                 <Building className="h-4 w-4 text-muted-foreground" />
@@ -389,7 +389,7 @@ export function ListingForm({
           </div>
 
           {/* Details Section */}
-          {formData.type && <div className="bg-card rounded-lg border border-border p-5">
+          {formData.type && <div className="bg-card rounded-lg border border-border border-l-4 border-l-success/30 p-5 space-y-4">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-muted rounded-lg">
                   <Settings className="h-4 w-4 text-muted-foreground" />
@@ -506,7 +506,7 @@ export function ListingForm({
             </div>}
 
           {/* Notes Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
+          <div className="bg-card rounded-lg border border-border border-l-4 border-l-muted/40 p-5 space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-muted rounded-lg">
                 <MessageSquare className="h-4 w-4 text-muted-foreground" />
