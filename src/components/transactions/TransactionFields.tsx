@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin, Mail, Phone, UserX, Building, CreditCard, DollarSign, CheckCircle } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, Mail, Phone, UserX, Building, CreditCard, DollarSign } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Separator } from "@/components/ui/separator";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { 
   Listing, 
   TransactionFieldsData, 
@@ -37,7 +36,6 @@ export function TransactionFields({
 }: TransactionFormFieldsProps) {
   const [fields, setFields] = useState<TransactionFieldsData>(initialValues);
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const [openSteps, setOpenSteps] = useState<Set<number>>(new Set([1])); // Start with step 1 open
   
   // Log initial values for debugging
   console.log("TransactionFields initialValues:", initialValues);
@@ -94,376 +92,294 @@ export function TransactionFields({
     selectedListing.tenant.name && 
     selectedListing.tenant.name !== "No Tenant" && 
     selectedListing.tenant.name.trim() !== "";
-
-  // Check completion of each step
-  const isStep1Complete = fields.listingType === "general" || (fields.listingType === "listing" && selectedListing);
-  const isStep2Complete = isStep1Complete && fields.transactionType && fields.category;
-  const isStep3Complete = isStep2Complete && fields.amount && fields.date && fields.payment;
-
-  // Auto-open next step when current is complete
-  useEffect(() => {
-    if (isStep1Complete && !openSteps.has(2)) {
-      setOpenSteps(prev => new Set([...prev, 2]));
-    }
-    if (isStep2Complete && !openSteps.has(3)) {
-      setOpenSteps(prev => new Set([...prev, 3]));
-    }
-  }, [isStep1Complete, isStep2Complete, openSteps]);
-
-  const toggleStep = (step: number) => {
-    setOpenSteps(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(step)) {
-        newSet.delete(step);
-      } else {
-        newSet.add(step);
-      }
-      return newSet;
-    });
-  };
-
-  const getProgressHeight = () => {
-    if (isStep3Complete) return "100%";
-    if (isStep2Complete) return "66%";
-    if (isStep1Complete) return "33%";
-    return "0%";
-  };
   
   return (
-    <div className="w-full max-w-none relative">
-      {/* Progress Line */}
-      <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-border z-0">
-        <div 
-          className="w-full bg-gradient-to-b from-blue-400 to-blue-500 transition-all duration-700 ease-out"
-          style={{ height: getProgressHeight() }}
-        />
-      </div>
-
-      <div className="space-y-6 relative z-10">
-        {/* Step 1: Transaction Type Section */}
-        <Collapsible open={openSteps.has(1)} onOpenChange={() => toggleStep(1)}>
-          <div className="bg-card rounded-lg border border-border relative">
-            <CollapsibleTrigger asChild>
-              <div className="p-5 cursor-pointer hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
-                      isStep1Complete ? "bg-blue-500 text-white" : "bg-muted text-muted-foreground"
-                    )}>
-                      {isStep1Complete ? <CheckCircle className="h-4 w-4" /> : <span className="text-sm font-medium">1</span>}
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-foreground">Transaction Type</h3>
-                      <p className="text-sm text-muted-foreground">What type of transaction is this?</p>
-                    </div>
-                  </div>
-                  <ListingTypeToggle
-                    value={fields.listingType || "listing"}
-                    onChange={type => setFields(f => ({ ...f, listingType: type }))}
+    <div className="w-full max-w-none space-y-5">
+      {/* Transaction Type Section */}
+      <div className="bg-card rounded-lg border border-border p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-muted rounded-lg">
+              <Building className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div>
+              <h3 className="font-medium text-foreground">Transaction Type</h3>
+              <p className="text-sm text-muted-foreground">What type of transaction is this?</p>
+            </div>
+          </div>
+          <ListingTypeToggle
+            value={fields.listingType || "listing"}
+            onChange={type => setFields(f => ({ ...f, listingType: type }))}
+          />
+        </div>
+        
+        {fields.listingType === "listing" ? (
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Property selection</label>
+              
+              <div className="flex gap-2 mb-4">
+                <div className="flex-1">
+                  <ListingSelector
+                    listings={mockListings}
+                    selectedValue={fields.selectedListingId}
+                    onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
+                    placeholder="Select property from list"
                   />
                 </div>
+
+                {/* Map button */}
+                <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-10 px-3"
+                    >
+                      <MapPin className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
+                    <TransactionMapSelector
+                      listings={mockListings}
+                      selectedListingId={fields.selectedListingId}
+                      onListingSelect={handleListingSelect}
+                      onClose={() => setIsMapOpen(false)}
+                    />
+                  </DialogContent>
+                </Dialog>
               </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="px-5 pb-5">
-                {fields.listingType === "listing" ? (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">Property selection</label>
-                      
-                      <div className="flex gap-2 mb-4">
-                        <div className="flex-1">
-                          <ListingSelector
-                            listings={mockListings}
-                            selectedValue={fields.selectedListingId}
-                            onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
-                            placeholder="Select property from list"
-                          />
+
+              {/* Selected Property Info */}
+              {selectedListing && (
+                <>
+                  <div className="rounded-lg border border-border bg-muted/30 p-4 mb-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-foreground">{selectedListing.name}</h4>
+                        <div className="flex items-center text-muted-foreground gap-1.5 mt-1">
+                          <MapPin className="h-3 w-3" />
+                          <span className="text-sm">{selectedListing.address}</span>
                         </div>
-
-                        {/* Map button */}
-                        <Dialog open={isMapOpen} onOpenChange={setIsMapOpen}>
-                          <DialogTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-10 px-3"
-                            >
-                              <MapPin className="h-4 w-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-6xl h-[80vh] p-0 bg-gray-900 border-0 rounded-xl overflow-hidden" hideCloseButton>
-                            <TransactionMapSelector
-                              listings={mockListings}
-                              selectedListingId={fields.selectedListingId}
-                              onListingSelect={handleListingSelect}
-                              onClose={() => setIsMapOpen(false)}
-                            />
-                          </DialogContent>
-                        </Dialog>
                       </div>
-
-                      {/* Selected Property Info */}
-                      {selectedListing && (
-                        <>
-                          <div className="rounded-lg border border-border bg-muted/30 p-4 mb-4">
-                            <div className="flex justify-between items-start mb-3">
-                              <div className="flex-1">
-                                <h4 className="font-medium text-foreground">{selectedListing.name}</h4>
-                                <div className="flex items-center text-muted-foreground gap-1.5 mt-1">
-                                  <MapPin className="h-3 w-3" />
-                                  <span className="text-sm">{selectedListing.address}</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2 bg-card px-3 py-1.5 rounded-lg border border-border">
-                                <span className="h-3 w-3">{getPropertyTypeIcon(selectedListing.type)}</span>
-                                <span className="text-sm font-medium text-foreground">
-                                  {formatPropertyType(selectedListing.type)}
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <Separator className="my-3" />
-                            
-                            <div>
-                              <label className="text-sm font-medium text-foreground mb-2 block">Tenant information</label>
-                              {hasTenant ? (
-                                <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
-                                  <div className="flex-1">
-                                    <div className="font-medium text-sm text-foreground">{selectedListing.tenant.name}</div>
-                                    <div className="text-sm text-muted-foreground mt-0.5">{capitalizeTenantType(selectedListing.tenant.type)}</div>
-                                  </div>
-                                  <div className="space-y-1.5">
-                                    {selectedListing.tenant.email && (
-                                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Mail className="h-3 w-3" /> 
-                                        <span>{selectedListing.tenant.email}</span>
-                                      </div>
-                                    )}
-                                    {selectedListing.tenant.phone && (
-                                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Phone className="h-3 w-3" /> 
-                                        <span>{selectedListing.tenant.phone}</span>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="flex items-center gap-3 px-4 py-3 bg-card rounded-lg border border-border">
-                                  <div className="flex items-center justify-center w-6 h-6 bg-muted rounded-full">
-                                    <UserX className="h-3 w-3 text-muted-foreground" />
-                                  </div>
-                                  <div className="flex-1">
-                                    <div className="font-medium text-sm text-foreground">No Tenant Assigned</div>
-                                    <div className="text-sm text-muted-foreground">This property is currently vacant</div>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+                      <div className="flex items-center gap-2 bg-card px-3 py-1.5 rounded-lg border border-border">
+                        <span className="h-3 w-3">{getPropertyTypeIcon(selectedListing.type)}</span>
+                        <span className="text-sm font-medium text-foreground">
+                          {formatPropertyType(selectedListing.type)}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <Separator className="my-3" />
+                    
+                    <div>
+                      <label className="text-sm font-medium text-foreground mb-2 block">Tenant information</label>
+                      {hasTenant ? (
+                        <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+                          <div className="flex-1">
+                            <div className="font-medium text-sm text-foreground">{selectedListing.tenant.name}</div>
+                            <div className="text-sm text-muted-foreground mt-0.5">{capitalizeTenantType(selectedListing.tenant.type)}</div>
                           </div>
-
-                          {hasMultipleUnits && (
-                            <>
-                              <Separator className="my-4" />
-                              <div>
-                                <label className="text-sm font-medium text-foreground mb-2 block">Unit selection</label>
-                                
-                                <div className="mb-3">
-                                  <Button
-                                    type="button"
-                                    variant={!fields.selectedUnitId ? "secondary" : "outline"}
-                                    size="sm"
-                                    className="w-full justify-start text-left h-10"
-                                    onClick={() => setFields(f => ({ ...f, selectedUnitId: "" }))}
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <div className={cn(
-                                        "w-2 h-2 rounded-full",
-                                        !fields.selectedUnitId ? "bg-primary" : "bg-muted-foreground"
-                                      )} />
-                                      <span className="font-medium">Whole Property</span>
-                                      <span className="text-sm text-muted-foreground ml-auto">All units included</span>
-                                    </div>
-                                  </Button>
-                                </div>
-                                
-                                <div className="text-sm text-muted-foreground mb-3 ml-1">Or select specific unit:</div>
-                                <UnitSelector
-                                  units={selectedListing.units}
-                                  selectedUnitId={fields.selectedUnitId || ""}
-                                  onUnitSelect={(unitId) => setFields(f => ({ ...f, selectedUnitId: unitId }))}
-                                />
+                          <div className="space-y-1.5">
+                            {selectedListing.tenant.email && (
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Mail className="h-3 w-3" /> 
+                                <span>{selectedListing.tenant.email}</span>
                               </div>
-                            </>
-                          )}
-                        </>
+                            )}
+                            {selectedListing.tenant.phone && (
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Phone className="h-3 w-3" /> 
+                                <span>{selectedListing.tenant.phone}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3 px-4 py-3 bg-card rounded-lg border border-border">
+                          <div className="flex items-center justify-center w-6 h-6 bg-muted rounded-full">
+                            <UserX className="h-3 w-3 text-muted-foreground" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium text-sm text-foreground">No Tenant Assigned</div>
+                            <div className="text-sm text-muted-foreground">This property is currently vacant</div>
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-3 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-                    <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <div>
-                      <div className="font-medium text-sm text-purple-700">General Transaction</div>
-                      <p className="text-sm text-purple-600">
-                        Applies to your entire portfolio, not a specific property.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </CollapsibleContent>
-          </div>
-        </Collapsible>
-        
-        {/* Step 2: Transaction Details Section */}
-        {(selectedListing || fields.listingType === "general") && (
-          <Collapsible open={openSteps.has(2)} onOpenChange={() => toggleStep(2)}>
-            <div className="bg-card rounded-lg border border-border relative">
-              <CollapsibleTrigger asChild>
-                <div className="p-5 cursor-pointer hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={cn(
-                        "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
-                        isStep2Complete ? "bg-blue-500 text-white" : isStep1Complete ? "bg-muted text-foreground" : "bg-muted/50 text-muted-foreground"
-                      )}>
-                        {isStep2Complete ? <CheckCircle className="h-4 w-4" /> : <span className="text-sm font-medium">2</span>}
-                      </div>
+
+                  {hasMultipleUnits && (
+                    <>
+                      <Separator className="my-4" />
                       <div>
-                        <h3 className="font-medium text-foreground">Transaction Details</h3>
-                        <p className="text-sm text-muted-foreground">Configure the specific details of your transaction</p>
-                      </div>
-                    </div>
-                    <TransactionTypeToggle
-                      value={fields.transactionType}
-                      onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
-                    />
-                  </div>
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-5 pb-5">
-                  <div>
-                    <label className="text-sm font-medium text-foreground mb-1.5 block">Category</label>
-                    <Select 
-                      value={fields.category} 
-                      onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
-                    >
-                      <SelectTrigger className="w-full h-10">
-                        <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-60 overflow-y-auto">
-                        {transactionCategories.length > 0 ? (
-                          transactionCategories.map(cat => (
-                            <SelectItem key={cat.value} value={cat.value}>
-                              {cat.label}
-                            </SelectItem>
-                          ))
-                        ) : (
-                          <SelectItem value="none" disabled>No categories available</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-        )}
-        
-        {/* Step 3: Payment Details Section */}
-        {(selectedListing || fields.listingType === "general") && (
-          <Collapsible open={openSteps.has(3)} onOpenChange={() => toggleStep(3)}>
-            <div className="bg-card rounded-lg border border-border relative">
-              <CollapsibleTrigger asChild>
-                <div className="p-5 cursor-pointer hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={cn(
-                        "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
-                        isStep3Complete ? "bg-blue-500 text-white" : isStep2Complete ? "bg-muted text-foreground" : "bg-muted/50 text-muted-foreground"
-                      )}>
-                        {isStep3Complete ? <CheckCircle className="h-4 w-4" /> : <span className="text-sm font-medium">3</span>}
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-foreground">Payment Details</h3>
-                        <p className="text-sm text-muted-foreground">Add payment information and transaction timing</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="px-5 pb-5">
-                  <div className="space-y-4">
-                    {/* Amount */}
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-1.5 block">Amount</label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">$</span>
-                        <Input
-                          type="number"
-                          placeholder="0.00"
-                          value={fields.amount}
-                          onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
-                          className="pl-7 h-10"
+                        <label className="text-sm font-medium text-foreground mb-2 block">Unit selection</label>
+                        
+                        <div className="mb-3">
+                          <Button
+                            type="button"
+                            variant={!fields.selectedUnitId ? "secondary" : "outline"}
+                            size="sm"
+                            className="w-full justify-start text-left h-10"
+                            onClick={() => setFields(f => ({ ...f, selectedUnitId: "" }))}
+                          >
+                            <div className="flex items-center gap-2">
+                              <div className={cn(
+                                "w-2 h-2 rounded-full",
+                                !fields.selectedUnitId ? "bg-primary" : "bg-muted-foreground"
+                              )} />
+                              <span className="font-medium">Whole Property</span>
+                              <span className="text-sm text-muted-foreground ml-auto">All units included</span>
+                            </div>
+                          </Button>
+                        </div>
+                        
+                        <div className="text-sm text-muted-foreground mb-3 ml-1">Or select specific unit:</div>
+                        <UnitSelector
+                          units={selectedListing.units}
+                          selectedUnitId={fields.selectedUnitId || ""}
+                          onUnitSelect={(unitId) => setFields(f => ({ ...f, selectedUnitId: unitId }))}
                         />
                       </div>
-                    </div>
-
-                    {/* Date */}
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-1.5 block">Date</label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left h-10 font-normal",
-                              !fields.date && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {fields.date ? format(fields.date, "PPP") : "Select date"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 z-50" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={fields.date}
-                            onSelect={d => setFields(f => ({ ...f, date: d }))}
-                            initialFocus
-                            className="rounded-md pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-
-                    {/* Payment Method */}
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-1.5 block">Payment method</label>
-                      <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
-                        <SelectTrigger className="w-full h-10">
-                          <SelectValue placeholder="Select payment method" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="card">Credit Card</SelectItem>
-                          <SelectItem value="bank">Bank Transfer</SelectItem>
-                          <SelectItem value="cash">Cash</SelectItem>
-                          <SelectItem value="check">Check</SelectItem>
-                          <SelectItem value="crypto">Cryptocurrency</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-              </CollapsibleContent>
+                    </>
+                  )}
+                </>
+              )}
             </div>
-          </Collapsible>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+            <div>
+              <div className="font-medium text-sm text-purple-700">General Transaction</div>
+              <p className="text-sm text-purple-600">
+                Applies to your entire portfolio, not a specific property.
+              </p>
+            </div>
+          </div>
         )}
       </div>
+      
+      {(selectedListing || fields.listingType === "general") && (
+        <>
+          {/* Transaction Details Section */}
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-muted rounded-lg">
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-foreground">Transaction Details</h3>
+                  <p className="text-sm text-muted-foreground">Configure the specific details of your transaction</p>
+                </div>
+              </div>
+              <TransactionTypeToggle
+                value={fields.transactionType}
+                onChange={type => setFields(f => ({ ...f, transactionType: type, category: "" }))}
+              />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Category</label>
+              <Select 
+                value={fields.category} 
+                onValueChange={cat => setFields(f => ({ ...f, category: cat }))}
+              >
+                <SelectTrigger className="w-full h-10">
+                  <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
+                </SelectTrigger>
+                <SelectContent className="max-h-60 overflow-y-auto">
+                  {transactionCategories.length > 0 ? (
+                    transactionCategories.map(cat => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="none" disabled>No categories available</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          {/* Payment Details Section */}
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="p-2 bg-muted rounded-lg">
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-medium text-foreground">Payment Details</h3>
+                <p className="text-sm text-muted-foreground">Add payment information and transaction timing</p>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Amount */}
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">Amount</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">$</span>
+                  <Input
+                    type="number"
+                    placeholder="0.00"
+                    value={fields.amount}
+                    onChange={(e) => setFields(f => ({ ...f, amount: e.target.value }))}
+                    className="pl-7 h-10"
+                  />
+                </div>
+              </div>
+
+              {/* Date */}
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left h-10 font-normal",
+                        !fields.date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {fields.date ? format(fields.date, "PPP") : "Select date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 z-50" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={fields.date}
+                      onSelect={d => setFields(f => ({ ...f, date: d }))}
+                      initialFocus
+                      className="rounded-md pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Payment Method */}
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">Payment method</label>
+                <Select value={fields.payment} onValueChange={pm => setFields(f => ({ ...f, payment: pm }))}>
+                  <SelectTrigger className="w-full h-10">
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="card">Credit Card</SelectItem>
+                    <SelectItem value="bank">Bank Transfer</SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="check">Check</SelectItem>
+                    <SelectItem value="crypto">Cryptocurrency</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
