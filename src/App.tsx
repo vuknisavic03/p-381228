@@ -1,18 +1,10 @@
 
-import { Toaster } from "@/components/ui/sonner";  // Use only one toaster implementation
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastProvider } from "@/hooks/use-toast";
-import WorkspacePicker from "./pages/workspace/WorkspacePicker";
-import { Overview } from "./components/dashboard/Overview";
-import Profile from "./pages/Profile";
-import Listings from "./pages/Listings";
-import Transactions from "./pages/Transactions";
-import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
-import Vision from "./pages/Vision";
-import MobilePostRegistration from "./pages/MobilePostRegistration";
 
 const queryClient = new QueryClient();
 
@@ -25,14 +17,7 @@ const App = () => {
             <Toaster />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/vision" element={<Vision />} />
-              <Route path="/workspace" element={<WorkspacePicker />} />
-              <Route path="/dashboard" element={<Overview />} />
-              <Route path="/listings" element={<Listings />} />
-              <Route path="/transactions" element={<Transactions />} />
-              <Route path="/mobile-welcome" element={<MobilePostRegistration />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Index />} />
             </Routes>
           </ToastProvider>
         </TooltipProvider>
