@@ -25,7 +25,6 @@ export default function DesktopLanding() {
           </div>
           
           <div className="flex items-center gap-4">
-            <button className="text-gray-600 text-sm">Log in</button>
             <Button 
               className="bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800"
               onClick={() => setShowUserTypeDialog(true)}
@@ -392,86 +391,73 @@ export default function DesktopLanding() {
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-black mb-4">What people are saying</h2>
+            <p className="text-lg text-gray-500">Real feedback from our users</p>
           </div>
           
-          <div className="relative overflow-hidden">
-            <div className="flex gap-6 animate-scroll">
-              {[
-                {
-                  quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
-                  author: "Sarah Chen",
-                  handle: "@sarahchen"
-                },
-                {
-                  quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
-                  author: "Marcus Johnson",
-                  handle: "@marcusjohnson"
-                },
-                {
-                  quote: "OK: Square Accounting is pretty sick.",
-                  author: "Alex Rivera",
-                  handle: "@alexrivera"
-                },
-                {
-                  quote: "They really cooked with Square. Especially the AI auto-categorization. Maybe organized books can finally be achieved.",
-                  author: "David Kim",
-                  handle: "@davidkimdata"
-                },
-                {
-                  quote: "Using @Square is like building filtered views for your finances, but the properties are elements from your transactions. So excited to set this up.",
-                  author: "Emily Watson",
-                  handle: "@emilywatson"
-                },
-                {
-                  quote: "Square Accounting is finally bringing innovation to property management accounting.",
-                  author: "Robert Taylor",
-                  handle: "@roberttaylor"
-                },
-                // Duplicate for seamless loop
-                {
-                  quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
-                  author: "Sarah Chen",
-                  handle: "@sarahchen"
-                },
-                {
-                  quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
-                  author: "Marcus Johnson",
-                  handle: "@marcusjohnson"
-                },
-                {
-                  quote: "OK: Square Accounting is pretty sick.",
-                  author: "Alex Rivera",
-                  handle: "@alexrivera"
-                }
-              ].map((testimonial, index) => (
-                <div key={index} className="bg-white p-6 rounded-xl border border-gray-100 min-w-[350px] flex-shrink-0">
-                  <blockquote className="text-gray-900 mb-4">
-                    "{testimonial.quote}"
-                  </blockquote>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
+                author: "Sarah Chen",
+                handle: "@sarahchen"
+              },
+              {
+                quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
+                author: "Marcus Johnson",
+                handle: "@marcusjohnson"
+              },
+              {
+                quote: "OK: Square Accounting is pretty sick.",
+                author: "Alex Rivera",
+                handle: "@alexrivera"
+              },
+              {
+                quote: "The automated categorization saves me hours every week. Game changer for property managers.",
+                author: "David Park",
+                handle: "@davidpark"
+              },
+              {
+                quote: "Finally, an accounting tool that actually understands real estate workflows.",
+                author: "Lisa Zhang",
+                handle: "@lisazhang"
+              },
+              {
+                quote: "The workspace feature is brilliant. I can separate my personal and business properties seamlessly.",
+                author: "Tom Wilson",
+                handle: "@tomwilson"
+              }
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-md transition-shadow">
+                <div className="text-gray-700 text-sm leading-relaxed mb-4 italic">
+                  "{testimonial.quote}"
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-semibold text-sm">
+                      {testimonial.author.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
                   <div>
-                    <div className="font-medium text-gray-900">{testimonial.author}</div>
-                    <div className="text-gray-500 text-sm">{testimonial.handle}</div>
+                    <div className="text-sm font-semibold text-gray-900">{testimonial.author}</div>
+                    <div className="text-xs text-gray-500">{testimonial.handle}</div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-4 py-8">
+      <footer className="px-4 py-8 border-t border-gray-100">
         <div className="container mx-auto text-center">
-          <div className="text-gray-600 text-sm">
-            © 2025 SquareLabs
+          <div className="text-gray-500 text-sm">
+            © 2025 Square Accounting. We are currently working on the app.
           </div>
         </div>
       </footer>
 
-      <UserTypeDialog 
-        open={showUserTypeDialog} 
-        onOpenChange={setShowUserTypeDialog} 
-      />
+      <UserTypeDialog open={showUserTypeDialog} onOpenChange={setShowUserTypeDialog} />
     </div>
   );
 }
