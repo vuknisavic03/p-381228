@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,8 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight, DollarSign, Search } from "lucide-react";
-import { TransactionCategorizationDialog } from "./TransactionCategorizationDialog";
+import { ChevronRight, DollarSign } from "lucide-react";
 
 type Transaction = {
   id: number;
@@ -33,10 +32,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   transactions,
   onEdit,
 }) => {
-  const [categorizationDialog, setCategorizationDialog] = useState<{
-    isOpen: boolean;
-    transaction: any | null;
-  }>({ isOpen: false, transaction: null });
   const formatAmount = (amount: number, type: "revenue" | "expense") => {
     const formattedAmount = amount.toLocaleString();
     return type === "revenue" ? `+$${formattedAmount}` : `-$${formattedAmount}`;
@@ -55,50 +50,13 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 
   const handleRowClick = (transaction: Transaction) => {
     console.log('Row clicked, transaction ID:', transaction.id, 'transaction:', transaction);
-    // For demonstration, show categorization dialog for Starbucks transactions
-    if (transaction.from?.toLowerCase().includes('starbucks')) {
-      setCategorizationDialog({
-        isOpen: true,
-        transaction: {
-          id: String(transaction.id),
-          date: transaction.date.toISOString().split('T')[0],
-          description: transaction.from,
-          amount: transaction.amount,
-          account: transaction.paymentMethod,
-          accountNumber: "2490",
-          type: "personal"
-        }
-      });
-    } else {
-      onEdit(transaction);
-    }
+    onEdit(transaction);
   };
 
   const handleButtonClick = (e: React.MouseEvent, transaction: Transaction) => {
     e.stopPropagation();
     console.log('Button clicked, transaction ID:', transaction.id, 'transaction:', transaction);
-    
-    // Show categorization dialog instead of edit for certain transactions
-    if (transaction.from?.toLowerCase().includes('starbucks')) {
-      setCategorizationDialog({
-        isOpen: true,
-        transaction: {
-          id: String(transaction.id),
-          date: transaction.date.toISOString().split('T')[0],
-          description: transaction.from,
-          amount: transaction.amount,
-          account: transaction.paymentMethod,
-          accountNumber: "2490",
-          type: "personal"
-        }
-      });
-    } else {
-      onEdit(transaction);
-    }
-  };
-
-  const handleCloseCategorizationDialog = () => {
-    setCategorizationDialog({ isOpen: false, transaction: null });
+    onEdit(transaction);
   };
 
   return (
@@ -183,13 +141,9 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     size="icon"
                     className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gray-100 hover:scale-105"
                     onClick={(e) => handleButtonClick(e, tx)}
-                    aria-label={`${tx.from?.toLowerCase().includes('starbucks') ? 'Categorize' : 'Edit'} transaction from ${tx.from}`}
+                    aria-label={`Edit transaction from ${tx.from}`}
                   >
-                    {tx.from?.toLowerCase().includes('starbucks') ? (
-                      <Search className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
-                    )}
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -209,12 +163,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           </div>
         )}
       </div>
-
-      <TransactionCategorizationDialog
-        isOpen={categorizationDialog.isOpen}
-        onClose={handleCloseCategorizationDialog}
-        transaction={categorizationDialog.transaction}
-      />
     </div>
   );
 };
