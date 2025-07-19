@@ -352,17 +352,19 @@ export function TransactionActivity() {
   const activeFilterCount = selectedListings.length + selectedCategories.length;
 
   return (
-    <div className="h-full flex flex-col">
-      <TransactionFilterBar 
-        search={search}
-        setSearch={setSearch}
-        filterSections={filterSections}
-        activeFilterCount={activeFilterCount}
-        clearFilters={clearFilters}
-        transactionType={transactionType}
-        setTransactionType={setTransactionType}
-      />
-      <div className="flex-1 overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="flex-none">
+        <TransactionFilterBar 
+          search={search}
+          setSearch={setSearch}
+          filterSections={filterSections}
+          activeFilterCount={activeFilterCount}
+          clearFilters={clearFilters}
+          transactionType={transactionType}
+          setTransactionType={setTransactionType}
+        />
+      </div>
+      <div className="flex-1 overflow-hidden h-0">
         <TransactionTable 
           transactions={filteredTransactions}
           onEdit={handleEditTransaction}

@@ -272,9 +272,9 @@ export function ListingForm({
     }
   };
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
-  return <div className="flex flex-col h-full bg-background">
+  return <div className="flex flex-col h-full bg-background overflow-hidden">
       {/* Header with action buttons */}
-      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+      <div className="flex-none sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold text-foreground">Add New Listing</h1>
