@@ -94,35 +94,37 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-screen flex flex-col bg-gray-50">
-        <PageHeader
-          onAddClick={() => setIsAddFormOpen(true)}
-          addButtonText="Add New Listing"
-        >
-          <Tabs 
-            value={viewMode} 
-            onValueChange={handleViewModeChange}
+      <div className="h-full flex flex-col bg-gray-50 overflow-hidden">
+        <div className="flex-none">
+          <PageHeader
+            onAddClick={() => setIsAddFormOpen(true)}
+            addButtonText="Add New Listing"
           >
-            <TabsList className="bg-white border border-gray-200 p-1 h-10">
-              <TabsTrigger 
-                value="map" 
-                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
-              >
-                <MapPin className="h-4 w-4" />
-                Map
-              </TabsTrigger>
-              <TabsTrigger 
-                value="list" 
-                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
-              >
-                <ListIcon className="h-4 w-4" />
-                List
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </PageHeader>
+            <Tabs 
+              value={viewMode} 
+              onValueChange={handleViewModeChange}
+            >
+              <TabsList className="bg-white border border-gray-200 p-1 h-10">
+                <TabsTrigger 
+                  value="map" 
+                  className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Map
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="list" 
+                  className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+                >
+                  <ListIcon className="h-4 w-4" />
+                  List
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </PageHeader>
+        </div>
         
-        <div className="flex-1 relative overflow-hidden bg-white">
+        <div className="flex-1 overflow-hidden bg-white h-0">
           <AnimatePresence mode="wait">
             {viewMode === "map" ? (
               <motion.div
@@ -131,7 +133,7 @@ export default function Listings() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="absolute inset-0"
+                className="h-full w-full"
               >
                 <ListingMap 
                   listings={sharedListingData}
@@ -146,7 +148,7 @@ export default function Listings() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="absolute inset-0"
+                className="h-full w-full"
               >
                 <ListingList 
                   onListingClick={handleListingClick}

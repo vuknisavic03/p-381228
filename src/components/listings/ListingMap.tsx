@@ -373,15 +373,15 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: 1,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#3b82f6",
-              scale: hoveredListing === listing.id ? 2.2 : 2.0,
+              scale: hoveredListing === listing.id ? 2.8 : 2.6,
               anchor: new google.maps.Point(12, 24),
               labelOrigin: new google.maps.Point(12, 9)
             }}
             label={{
               text: (index + 1).toString(),
               color: "#3b82f6",
-              fontSize: "13px",
-              fontWeight: "700"
+              fontSize: "14px",
+              fontWeight: "800"
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />
