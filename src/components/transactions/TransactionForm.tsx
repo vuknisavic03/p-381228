@@ -92,9 +92,9 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-background overflow-hidden">
+    <div className="h-full overflow-auto bg-background">
       {/* Header with action buttons */}
-      <div className="flex-none sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold text-foreground">Add Transaction</h2>
@@ -122,7 +122,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Form content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 h-0">
+      <div className="px-6 py-6 space-y-6">
         <div className="w-[98%] max-w-none">
           <TransactionFields 
             mockListings={listings}

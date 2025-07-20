@@ -352,9 +352,9 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
   });
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className="h-full flex flex-col">
       {/* Modern Filter Header */}
-      <div className="flex-none p-4 border-b border-border bg-background shadow-sm">
+      <div className="p-4 border-b border-border bg-background shadow-sm">
         <ModernFilter
           searchValue={searchTerm}
           onSearchChange={setSearchTerm}
@@ -366,7 +366,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
       </div>
 
       {/* Scrollable content area */}
-      <ScrollArea className="flex-1 h-0">
+      <ScrollArea className="flex-1">
         <div className="p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-full text-muted-foreground">

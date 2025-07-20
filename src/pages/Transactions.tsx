@@ -30,20 +30,18 @@ export default function Transactions() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-full flex flex-col bg-gray-50 overflow-hidden">
-        <div className="flex-none">
-          <PageHeader
-            onAddClick={() => setIsAddFormOpen(true)}
-            addButtonText="Add Transaction"
-          >
-            <DateRangeHeader 
-              dateRange={dateRange}
-              onDateRangeChange={setDateRange}
-            />
-          </PageHeader>
-        </div>
+      <div className="h-screen flex flex-col bg-gray-50">
+        <PageHeader
+          onAddClick={() => setIsAddFormOpen(true)}
+          addButtonText="Add Transaction"
+        >
+          <DateRangeHeader 
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
+          />
+        </PageHeader>
 
-        <div className="flex-1 overflow-hidden bg-white h-0">
+        <div className="flex-1 relative overflow-hidden bg-white">
           <TransactionActivity />
         </div>
 

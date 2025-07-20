@@ -48,7 +48,7 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
     switch (activeView) {
       case 'portfolio':
         return (
-          <div className="h-full">
+          <div className="space-y-8">
             <AnalyticsGrid dateRange={dateRange} periodLabel={periodLabel} />
           </div>
         );
@@ -84,8 +84,8 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
         />
       </div>
       
-      <div className="flex-1 overflow-hidden px-4 sm:px-6 lg:px-10 pb-8 pt-2 md:pt-4">
-        <div className="max-w-[1600px] mx-auto h-full">
+      <div className="flex-1 overflow-auto px-4 sm:px-6 lg:px-10 pb-8 pt-2 md:pt-4">
+        <div className="max-w-[1600px] mx-auto">
           {renderActiveView()}
         </div>
       </div>

@@ -60,9 +60,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="p-6">
-        <div className="bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
+    <div className="p-6">
+      <div className="bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="border-b border-gray-200/50 bg-gradient-to-r from-gray-50/80 to-gray-50/40">
@@ -163,7 +162,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             </p>
           </div>
         )}
-        </div>
       </div>
     </div>
   );
