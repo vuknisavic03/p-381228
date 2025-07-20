@@ -366,7 +366,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
       </div>
 
       {/* Scrollable content area */}
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 max-h-[calc(100vh-200px)]">
         <div className="p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-full text-muted-foreground">

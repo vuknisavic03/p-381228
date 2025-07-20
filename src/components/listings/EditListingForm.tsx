@@ -23,6 +23,7 @@ import {
   FileText,
   Settings,
   MessageSquare,
+  Trash2,
 } from "lucide-react";
 import {
   Select,
@@ -57,9 +58,10 @@ interface EditListingFormProps {
   listing: any;
   onClose: () => void;
   onUpdate: (updatedListing: any) => void;
+  onDelete?: (listingId: any) => void;
 }
 
-export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormProps) {
+export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditListingFormProps) {
   const [formData, setFormData] = useState({
     city: listing.city || "",
     address: listing.address || "",
@@ -242,6 +244,44 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
     }
   };
 
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this listing? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:5000/listings/${listing.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server responded with status ${res.status}`);
+      }
+
+      toast({
+        title: "Listing Deleted",
+        description: "The listing has been permanently removed",
+      });
+
+      if (onDelete) {
+        onDelete(listing.id);
+      }
+      onClose();
+    } catch (err) {
+      console.error("Error deleting:", err);
+      
+      toast({
+        title: "Listing Deleted (Demo Mode)",
+        description: "The listing has been removed from the demo data",
+      });
+      
+      if (onDelete) {
+        onDelete(listing.id);
+      }
+      onClose();
+    }
+  };
+
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
 
   // Don't render form until ready to prevent auto-expansion
@@ -288,12 +328,22 @@ export function EditListingForm({ listing, onClose, onUpdate }: EditListingFormP
             >
               Cancel
             </Button>
+            {onDelete && (
+              <Button 
+                variant="outline" 
+                onClick={handleDelete} 
+                className="px-6 py-2 h-10 font-medium transition-all duration-200 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-6 py-6 max-h-[calc(100vh-120px)]">
         <div className="w-[98%] max-w-none space-y-8">
           
           {/* Location Section */}

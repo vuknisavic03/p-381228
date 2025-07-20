@@ -122,7 +122,7 @@ export function TransactionForm({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 max-h-[calc(100vh-120px)]">
         <div className="w-[98%] max-w-none">
           <TransactionFields 
             mockListings={listings}

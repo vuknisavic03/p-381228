@@ -7,11 +7,14 @@ import { ChartToggleButtons } from '@/components/workspace/ChartToggleButtons';
 import { RevenueChartsGrid } from '@/components/workspace/RevenueChartsGrid';
 import { CommissionChart } from '@/components/workspace/CommissionChart';
 import { workspaces, Workspace } from '@/data/workspaceData';
+import { useToast } from '@/hooks/use-toast';
 
 export default function WorkspacePicker() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeChartType, setActiveChartType] = useState<'revenue' | 'commission'>('revenue');
+  const [filteredWorkspaces, setFilteredWorkspaces] = useState(workspaces);
 
   const handleWorkspaceSelect = (workspace: Workspace) => {
     // Pass the workspace data to the dashboard via state
@@ -34,12 +37,17 @@ export default function WorkspacePicker() {
     setActiveChartType(type);
   };
 
+  const handleRemoveClient = (workspace: Workspace) => {
+    setFilteredWorkspaces(prev => prev.filter(w => w.name !== workspace.name));
+  };
+
   return (
     <div className="h-screen flex overflow-hidden bg-white">
       <WorkspaceSidebar 
-        workspaces={workspaces}
+        workspaces={filteredWorkspaces}
         onWorkspaceSelect={handleWorkspaceSelect}
         onCreateWorkspace={handleCreateWorkspace}
+        onRemoveClient={handleRemoveClient}
       />
 
       <div className="flex-1 overflow-auto pb-6">
@@ -53,7 +61,7 @@ export default function WorkspacePicker() {
           
           {activeChartType === 'revenue' ? (
             <RevenueChartsGrid 
-              workspaces={workspaces}
+              workspaces={filteredWorkspaces}
               onWorkspaceSelect={handleWorkspaceSelect}
             />
           ) : (

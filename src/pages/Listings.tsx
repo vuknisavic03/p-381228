@@ -188,6 +188,15 @@ export default function Listings() {
                   setSharedListingData(updatedListings);
                   setIsEditSheetOpen(false);
                 }}
+                onDelete={(deletedListingId) => {
+                  const updatedListings = sharedListingData.filter(l => l.id !== deletedListingId);
+                  setSharedListingData(updatedListings);
+                  setIsEditSheetOpen(false);
+                  toast({
+                    title: "Listing Deleted",
+                    description: "The listing has been successfully removed.",
+                  });
+                }}
               />
             )}
           </SheetContent>

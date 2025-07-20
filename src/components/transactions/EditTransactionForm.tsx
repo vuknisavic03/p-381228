@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { X, FileText } from "lucide-react";
+import { X, FileText, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Listing, TransactionFieldsData } from "./TransactionFormTypes";
 import { TransactionFields } from "./TransactionFields";
@@ -12,9 +12,10 @@ interface EditTransactionFormProps {
   transaction: any;
   onClose: () => void;
   onUpdate: (updatedTransaction: any) => void;
+  onDelete?: (transactionId: any) => void;
 }
 
-export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTransactionFormProps) {
+export function EditTransactionForm({ transaction, onClose, onUpdate, onDelete }: EditTransactionFormProps) {
   const [listings, setListings] = useState<Listing[]>([]);
   const [isLoadingListings, setIsLoadingListings] = useState(true);
   const [fields, setFields] = useState<TransactionFieldsData>({
@@ -106,6 +107,22 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
     onUpdate(updatedTransaction);
   }
 
+  function handleDelete() {
+    if (!confirm('Are you sure you want to delete this transaction? This action cannot be undone.')) {
+      return;
+    }
+
+    toast({
+      title: "Transaction Deleted",
+      description: `Transaction #${transaction.id} has been permanently removed.`,
+    });
+    
+    if (onDelete) {
+      onDelete(transaction.id);
+    }
+    onClose();
+  }
+
   const selectedListing = listings.find(l => l.id === fields.selectedListingId);
   const showNotesSection = selectedListing || fields.listingType === "general";
 
@@ -149,12 +166,22 @@ export function EditTransactionForm({ transaction, onClose, onUpdate }: EditTran
             >
               Cancel
             </Button>
+            {onDelete && (
+              <Button 
+                variant="outline" 
+                onClick={handleDelete} 
+                className="px-6 py-2 h-10 font-medium transition-all duration-200 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
       {/* Form content */}
-      <div className="px-6 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 max-h-[calc(100vh-120px)]">
         <div className="w-[98%] max-w-none">
           <TransactionFields 
             mockListings={listings}
