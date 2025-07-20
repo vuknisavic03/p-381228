@@ -373,7 +373,7 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               fillOpacity: 1,
               strokeWeight: hoveredListing === listing.id ? 3 : 2,
               strokeColor: "#3b82f6",
-              scale: hoveredListing === listing.id ? 2.8 : 2.6,
+              scale: hoveredListing === listing.id ? 3.2 : 3,
               anchor: new google.maps.Point(12, 24),
               labelOrigin: new google.maps.Point(12, 9)
             }}

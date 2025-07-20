@@ -94,8 +94,9 @@ export default function Listings() {
       userInitials={workspaceData.initials}
       owner={workspaceData.owner}
     >
-      <div className="h-full flex flex-col bg-gray-50 overflow-hidden">
-        <div className="flex-none">
+      <div className="h-full flex flex-col bg-gray-50">
+        {/* Fixed Header */}
+        <div className="flex-none bg-white border-b border-gray-200 z-10">
           <PageHeader
             onAddClick={() => setIsAddFormOpen(true)}
             addButtonText="Add New Listing"
@@ -124,7 +125,8 @@ export default function Listings() {
           </PageHeader>
         </div>
         
-        <div className="flex-1 overflow-hidden bg-white h-0">
+        {/* Scrollable Content Area */}
+        <div className="flex-1 bg-white relative overflow-hidden">
           <AnimatePresence mode="wait">
             {viewMode === "map" ? (
               <motion.div
@@ -133,7 +135,7 @@ export default function Listings() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="h-full w-full"
+                className="absolute inset-0"
               >
                 <ListingMap 
                   listings={sharedListingData}
@@ -148,7 +150,7 @@ export default function Listings() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="h-full w-full"
+                className="absolute inset-0"
               >
                 <ListingList 
                   onListingClick={handleListingClick}
