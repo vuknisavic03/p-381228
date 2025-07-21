@@ -369,19 +369,12 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
             onMouseOut={() => setHoveredListing(null)}
             icon={{
               path: "M12 2c-3.9 0-7 3.1-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z",
-              fillColor: "#ffffff",
-              fillOpacity: 0.95,
+              fillColor: getMarkerColor(listing.type),
+              fillOpacity: hoveredListing === listing.id ? 0.95 : 0.85,
               strokeWeight: hoveredListing === listing.id ? 4 : 3,
-              strokeColor: getMarkerColor(listing.type),
-              scale: hoveredListing === listing.id ? 2.8 : 2.4,
+              strokeColor: "#ffffff",
+              scale: hoveredListing === listing.id ? 3.5 : 3.0,
               anchor: new google.maps.Point(12, 24),
-              labelOrigin: new google.maps.Point(12, 9)
-            }}
-            label={{
-              text: (index + 1).toString(),
-              color: getMarkerColor(listing.type),
-              fontSize: hoveredListing === listing.id ? "14px" : "13px",
-              fontWeight: "700"
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />
