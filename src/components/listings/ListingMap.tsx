@@ -371,17 +371,17 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z",
               fillColor: "#ffffff",
               fillOpacity: 1,
-              strokeWeight: hoveredListing === listing.id ? 4 : 3,
+              strokeWeight: hoveredListing === listing.id ? 5 : 4,
               strokeColor: getMarkerColor(listing.type),
-              scale: hoveredListing === listing.id ? 1.6 : 1.4,
+              scale: hoveredListing === listing.id ? 2.2 : 2.0,
               anchor: new google.maps.Point(12, 12),
               labelOrigin: new google.maps.Point(12, 12)
             }}
             label={{
               text: (index + 1).toString(),
               color: getMarkerColor(listing.type),
-              fontSize: hoveredListing === listing.id ? "14px" : "13px",
-              fontWeight: "800"
+              fontSize: hoveredListing === listing.id ? "16px" : "15px",
+              fontWeight: "900"
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />

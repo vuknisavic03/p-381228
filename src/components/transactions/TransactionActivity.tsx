@@ -282,6 +282,11 @@ export function TransactionActivity() {
     setIsEditFormOpen(true);
   };
 
+  const handleDeleteTransaction = (transaction: any) => {
+    console.log('TransactionActivity - Deleting transaction:', transaction);
+    setTransactions(prev => prev.filter(t => t.id !== transaction.id));
+  };
+
   const handleUpdateTransaction = (updatedTransaction: any) => {
     console.log('TransactionActivity - Updating transaction:', updatedTransaction);
     
@@ -366,6 +371,7 @@ export function TransactionActivity() {
         <TransactionTable 
           transactions={filteredTransactions}
           onEdit={handleEditTransaction}
+          onDelete={handleDeleteTransaction}
         />
       </div>
 
