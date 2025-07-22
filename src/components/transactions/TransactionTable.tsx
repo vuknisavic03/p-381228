@@ -109,7 +109,22 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               >
                 <TableCell className="py-5 px-6">
                   <div className="space-y-1.5">
-                    <div className="font-semibold text-gray-900 text-sm leading-tight">{tx.from}</div>
+                    <div className="font-semibold text-gray-900 text-sm leading-tight">
+                      {tx.selectedListingId ? 
+                        (() => {
+                          const listings = [
+                            { id: "1", address: "Knez Mihailova 42", tenant: "Fashion Store Belgrade" },
+                            { id: "2", address: "Terazije 23", tenant: "Business Center" },
+                            { id: "3", address: "Kalemegdan Park 1", tenant: "Kalemegdan Restaurant" },
+                            { id: "4", address: "Skadarlija 29", tenant: null },
+                            { id: "5", address: "Makedonska 22", tenant: "Marko Petrović" },
+                          ];
+                          const listing = listings.find(l => l.id === tx.selectedListingId);
+                          return listing ? listing.address : "Unknown Property";
+                        })()
+                        : "Portfolio Transaction"
+                      }
+                    </div>
                     {tx.notes && (
                       <div className="text-xs text-gray-500 leading-relaxed max-w-xs">{tx.notes}</div>
                     )}
