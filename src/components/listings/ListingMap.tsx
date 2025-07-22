@@ -371,9 +371,9 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
               path: google.maps.SymbolPath.CIRCLE,
               fillColor: getMarkerColor(listing.type),
               fillOpacity: hoveredListing === listing.id ? 0.9 : 0.7,
-              strokeWeight: hoveredListing === listing.id ? 3 : 2,
+              strokeWeight: hoveredListing === listing.id ? 4 : 3,
               strokeColor: "#ffffff",
-              scale: hoveredListing === listing.id ? 12 : 10,
+              scale: hoveredListing === listing.id ? 18 : 15,
             }}
             animation={selectedListing?.id === listing.id ? google.maps.Animation.BOUNCE : undefined}
           />

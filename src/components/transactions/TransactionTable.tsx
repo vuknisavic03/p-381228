@@ -151,14 +151,9 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                       tx.category.toLowerCase() === 'insurance' ? 'bg-purple-500' :
                       'bg-gray-400'
                     }`}></div>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md mb-1">
-                        {capitalizeCategory(tx.category)}
-                      </span>
-                      <span className="text-xs text-gray-600">
-                        {tx.selectedListingId && getListingDisplayText(tx.selectedListingId)}
-                      </span>
-                    </div>
+                    <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md">
+                      {getListingDisplayText(tx.selectedListingId)}
+                    </span>
                   </div>
                 </TableCell>
                 
