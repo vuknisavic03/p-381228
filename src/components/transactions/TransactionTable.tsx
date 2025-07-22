@@ -50,6 +50,22 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       .join(' ');
   };
 
+  const getListingDisplayText = (listingId: string) => {
+    // Mock data for now - in real app this would fetch from listings service
+    const listings = [
+      { id: "1", address: "Knez Mihailova 42", tenant: "Fashion Store Belgrade" },
+      { id: "2", address: "Terazije 23", tenant: "Business Center" },
+      { id: "3", address: "Kalemegdan Park 1", tenant: "Kalemegdan Restaurant" },
+      { id: "4", address: "Skadarlija 29", tenant: null },
+      { id: "5", address: "Makedonska 22", tenant: "Marko Petrović" },
+    ];
+    
+    const listing = listings.find(l => l.id === listingId);
+    if (!listing) return "Unknown Property";
+    
+    return listing.tenant ? `${listing.address} - ${listing.tenant}` : listing.address;
+  };
+
   const handleRowClick = (transaction: Transaction) => {
     console.log('Row clicked, transaction ID:', transaction.id, 'transaction:', transaction);
     onEdit(transaction);
@@ -135,9 +151,14 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                       tx.category.toLowerCase() === 'insurance' ? 'bg-purple-500' :
                       'bg-gray-400'
                     }`}></div>
-                    <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md">
-                      {capitalizeCategory(tx.category)}
-                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md mb-1">
+                        {capitalizeCategory(tx.category)}
+                      </span>
+                      <span className="text-xs text-gray-600">
+                        {tx.selectedListingId && getListingDisplayText(tx.selectedListingId)}
+                      </span>
+                    </div>
                   </div>
                 </TableCell>
                 

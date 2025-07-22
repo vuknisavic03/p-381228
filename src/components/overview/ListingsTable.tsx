@@ -44,7 +44,7 @@ export function ListingsTable({ listings, isLoading }: ListingsTableProps) {
           <Table>
             <TableHeader>
               <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
-                <TableHead className="font-semibold text-gray-800">Property</TableHead>
+                <TableHead className="font-semibold text-gray-800">Address</TableHead>
                 <TableHead className="font-semibold text-gray-800">Type</TableHead>
                 <TableHead className="font-semibold text-gray-800">Tenants</TableHead>
                 <TableHead className="font-semibold text-gray-800 text-right">Revenue</TableHead>
