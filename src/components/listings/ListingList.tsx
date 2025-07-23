@@ -366,7 +366,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
       </div>
 
       {/* Scrollable content area */}
-      <ScrollArea className="flex-1 max-h-[calc(100vh-200px)]">
+      <ScrollArea className="flex-1">
         <div className="p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -472,24 +472,6 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
         </div>
       </ScrollArea>
 
-      {!onListingClick && (
-        <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
-          <SheetContent 
-            side="right" 
-            className="w-[480px] sm:w-[540px] p-0 border-l shadow-2xl transition-transform duration-300"
-          >
-            {selectedListing && (
-              <EditListingForm 
-                listing={selectedListing} 
-                onClose={() => setIsEditSheetOpen(false)}
-                onUpdate={(updatedListing) => {
-                  setIsEditSheetOpen(false);
-                }}
-              />
-            )}
-          </SheetContent>
-        </Sheet>
-      )}
     </div>
   );
 }
