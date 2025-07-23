@@ -124,14 +124,13 @@ export const ListingTable: React.FC<ListingTableProps> = ({
                   
                   <TableCell className="py-5 px-4">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getPropertyTypeColor(listing.propertyType)}`}></div>
                       <span className="text-gray-600 text-sm font-medium">{listing.propertyType}</span>
                     </div>
                   </TableCell>
                   
                   <TableCell className="py-5 px-4">
                     <div className="text-gray-700 text-sm font-medium">
-                      {listing.units ? `${listing.units.length} unit${listing.units.length > 1 ? 's' : ''}` : '0 units'}
+                      {listing.units && listing.units.length > 0 ? `${listing.units.length} unit${listing.units.length > 1 ? 's' : ''}` : 'Single unit'}
                     </div>
                   </TableCell>
                   
