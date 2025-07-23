@@ -137,7 +137,7 @@ export const ListingTable: React.FC<ListingTableProps> = ({
                   
                   <TableCell className="py-5 px-4">
                     <div className="text-gray-600 text-sm font-medium">
-                      {listing.tenant || 'No tenant'}
+                      {listing.tenant?.name || 'No tenant'}
                     </div>
                   </TableCell>
                   
