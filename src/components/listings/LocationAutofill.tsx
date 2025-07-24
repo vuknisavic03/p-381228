@@ -46,7 +46,7 @@ export function LocationAutofill({
       case "city":
         return ["(cities)"];
       case "country":
-        return ["(regions)"];
+        return ["country"];
       default:
         return ["geocode"];
     }

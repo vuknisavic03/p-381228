@@ -16,42 +16,57 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex rounded-lg border border-border bg-background p-1",
+      "flex items-center rounded-xl bg-muted/40 p-1.5 backdrop-blur-sm border border-border/50",
       className
     )}>
       <button
         type="button"
         className={cn(
-          "px-2.5 py-1 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-1.5",
+          "relative px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 flex items-center gap-2.5 group",
+          "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-2 focus:ring-offset-background",
           value === "revenue"
-            ? "border-[0.5px] border-filter-selected-border bg-filter-selected-bg text-filter-selected-text shadow-sm"
-            : "border border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            ? "bg-background text-foreground shadow-sm border border-border/60 ring-1 ring-blue-500/20"
+            : "text-muted-foreground hover:text-foreground hover:bg-background/60"
         )}
         style={{
-          minWidth: 72,
+          minWidth: 88,
         }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
       >
-        <TrendingUp className="h-3.5 w-3.5" />
-        Revenue
+        <TrendingUp className={cn(
+          "h-4 w-4 transition-all duration-300",
+          value === "revenue" ? "text-green-600" : "group-hover:text-green-500"
+        )} />
+        <span className="font-medium">Revenue</span>
+        {value === "revenue" && (
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-green-500/5 to-blue-500/5 pointer-events-none" />
+        )}
       </button>
+      
       <button
         type="button"
         className={cn(
-          "ml-0.5 px-2.5 py-1 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-1.5",
+          "relative px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 flex items-center gap-2.5 group",
+          "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-2 focus:ring-offset-background",
           value === "expense"
-            ? "border-[0.5px] border-filter-selected-border bg-filter-selected-bg text-filter-selected-text shadow-sm"
-            : "border border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            ? "bg-background text-foreground shadow-sm border border-border/60 ring-1 ring-blue-500/20"
+            : "text-muted-foreground hover:text-foreground hover:bg-background/60"
         )}
         style={{
-          minWidth: 72,
+          minWidth: 88,
         }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
       >
-        <TrendingDown className="h-3.5 w-3.5" />
-        Expense
+        <TrendingDown className={cn(
+          "h-4 w-4 transition-all duration-300",
+          value === "expense" ? "text-red-600" : "group-hover:text-red-500"
+        )} />
+        <span className="font-medium">Expense</span>
+        {value === "expense" && (
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-red-500/5 to-orange-500/5 pointer-events-none" />
+        )}
       </button>
     </div>
   );
