@@ -179,21 +179,43 @@ export function TransactionActivityNew() {
     }));
   };
 
-  const getPropertyOptions = () => {
-    const properties = [
-      { id: "1", address: "Knez Mihailova 42" },
-      { id: "2", address: "Terazije 23" },
-      { id: "3", address: "Kalemegdan Park 1" },
-      { id: "4", address: "Skadarlija 29" },
-      { id: "5", address: "Makedonska 22" },
-      { id: "", address: "Portfolio" },
-    ];
-    
-    return properties.map(property => ({
-      value: property.id,
-      label: property.address
-    }));
-  };
+  // Mock listings data with units for hierarchical filter
+  const getMockListings = () => [
+    {
+      id: "1",
+      address: "Knez Mihailova 42",
+      units: [
+        { id: "1a", name: "Unit A", type: "Retail Space" },
+        { id: "1b", name: "Unit B", type: "Storage" }
+      ]
+    },
+    {
+      id: "2", 
+      address: "Terazije 23",
+      units: [
+        { id: "2a", name: "Office 1", type: "Office" },
+        { id: "2b", name: "Office 2", type: "Office" },
+        { id: "2c", name: "Conference Room", type: "Meeting Space" }
+      ]
+    },
+    {
+      id: "3",
+      address: "Kalemegdan Park 1",
+      // No units - single property
+    },
+    {
+      id: "4",
+      address: "Skadarlija 29",
+    },
+    {
+      id: "5",
+      address: "Makedonska 22",
+    },
+    {
+      id: "",
+      address: "Portfolio",
+    }
+  ];
 
   // Filter handlers
   const handleCategoryToggle = (category: string) => {
@@ -273,7 +295,7 @@ export function TransactionActivityNew() {
         categories={getCategoryOptions()}
         selectedCategories={selectedCategories}
         onCategoryToggle={handleCategoryToggle}
-        properties={getPropertyOptions()}
+        listings={getMockListings()}
         selectedProperties={selectedProperties}
         onPropertyToggle={handlePropertyToggle}
         transactionType={transactionType}

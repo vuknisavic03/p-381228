@@ -14,7 +14,7 @@ interface TransactionFiltersNewProps {
   categories: FilterOption[];
   selectedCategories: string[];
   onCategoryToggle: (category: string) => void;
-  properties: FilterOption[];
+  listings: any[]; // Add listings data
   selectedProperties: string[];
   onPropertyToggle: (property: string) => void;
   transactionType: 'revenue' | 'expense';
@@ -28,7 +28,7 @@ export function TransactionFiltersNew({
   categories,
   selectedCategories,
   onCategoryToggle,
-  properties,
+  listings,
   selectedProperties,
   onPropertyToggle,
   transactionType,
@@ -45,11 +45,12 @@ export function TransactionFiltersNew({
       onToggle: onCategoryToggle,
     },
     {
-      id: "properties",
+      id: "listings",
       title: "Properties", 
-      options: properties,
+      options: [], // Empty since we use custom component
       selectedValues: selectedProperties,
       onToggle: onPropertyToggle,
+      listings: listings, // Pass listings data for hierarchical filter
     },
   ];
 
