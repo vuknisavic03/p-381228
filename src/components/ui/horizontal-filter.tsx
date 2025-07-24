@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { ListingsUnitsFilter } from "@/components/ui/listings-units-filter";
 
 export interface FilterOption {
   value: string;
@@ -19,6 +20,7 @@ export interface FilterSection {
   options: FilterOption[];
   selectedValues: string[];
   onToggle: (value: string) => void;
+  listings?: any[]; // Add listings data for the special listings filter
 }
 
 interface HorizontalFilterProps {
@@ -89,7 +91,15 @@ export function HorizontalFilter({
             </PopoverTrigger>
             <PopoverContent className="w-72 p-0 shadow-lg border border-border/40" align="start">
               <div className="p-3 space-y-0.5 max-h-80 overflow-auto">
-                {section.options.map((option) => {
+                {/* Special handling for listings filter */}
+                {section.id === 'listings' && section.listings ? (
+                  <ListingsUnitsFilter
+                    listings={section.listings}
+                    selectedValues={section.selectedValues}
+                    onToggle={section.onToggle}
+                  />
+                ) : (
+                  section.options.map((option) => {
                   const isSelected = section.selectedValues.includes(option.value);
                   return (
                     <div
@@ -121,9 +131,10 @@ export function HorizontalFilter({
                         </Badge>
                       )}
                     </div>
-                  );
-                })}
-                {section.options.length === 0 && (
+                    );
+                  })
+                )}
+                {section.options.length === 0 && section.id !== 'listings' && (
                   <div className="px-3 py-4 text-sm text-muted-foreground text-center">
                     No options available
                   </div>
