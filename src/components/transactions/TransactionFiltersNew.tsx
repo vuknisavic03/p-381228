@@ -56,26 +56,30 @@ export function TransactionFiltersNew({
   const activeFiltersCount = selectedCategories.length + selectedProperties.length;
   
   return (
-    <div className="bg-background border-b border-border">
-      <div className="flex items-center gap-4 p-4">
+    <div className="bg-background border-b border-border/30">
+      <div className="flex items-center gap-6 px-6 py-4">
         {/* Transaction Type Toggle */}
-        <div className="flex bg-muted rounded-lg p-1">
-          <Button
-            variant={transactionType === 'revenue' ? 'default' : 'ghost'}
-            size="sm"
+        <div className="flex bg-muted/40 rounded-lg p-0.5 border border-border/30">
+          <button
             onClick={() => onTypeChange('revenue')}
-            className="h-9 text-sm px-4"
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+              transactionType === 'revenue'
+                ? 'bg-background text-foreground shadow-sm border border-border/50'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+            }`}
           >
             Revenue
-          </Button>
-          <Button
-            variant={transactionType === 'expense' ? 'default' : 'ghost'}
-            size="sm"
+          </button>
+          <button
             onClick={() => onTypeChange('expense')}
-            className="h-9 text-sm px-4"
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+              transactionType === 'expense'
+                ? 'bg-background text-foreground shadow-sm border border-border/50'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+            }`}
           >
             Expenses
-          </Button>
+          </button>
         </div>
 
         {/* Horizontal Filter */}
