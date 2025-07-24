@@ -95,8 +95,8 @@ export function ListingsUnitsFilter({
               <div className={cn(
                 "flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all cursor-pointer",
                 listingSelected 
-                  ? "bg-blue-50 border border-blue-200" 
-                  : "hover:bg-muted/30"
+                  ? "bg-muted/40 text-foreground" 
+                  : "hover:bg-muted/30 text-muted-foreground hover:text-foreground"
               )}>
                 {hasUnits && (
                   <Button
@@ -123,13 +123,13 @@ export function ListingsUnitsFilter({
                   <div className={cn(
                     "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
                     selectedValues.includes(`listing-${listing.id}`)
-                      ? "bg-blue-500 border-blue-500" 
+                      ? "bg-foreground border-foreground" 
                       : listingSelected
-                      ? "border-blue-300 bg-blue-50"
-                      : "border-muted-foreground/30 hover:border-blue-300"
+                      ? "border-muted-foreground/50 bg-muted/20"
+                      : "border-muted-foreground/30 hover:border-muted-foreground/50"
                   )}>
                     {selectedValues.includes(`listing-${listing.id}`) && (
-                      <div className="w-2 h-2 bg-white rounded-full" />
+                      <div className="w-2 h-2 bg-background rounded-full" />
                     )}
                   </div>
                   
@@ -158,18 +158,18 @@ export function ListingsUnitsFilter({
                       className={cn(
                         "flex items-center gap-2 px-3 py-2 rounded-md transition-all cursor-pointer",
                         isUnitSelected(unit.id)
-                          ? "bg-blue-50 border border-blue-200" 
+                          ? "bg-muted/40 border border-muted-foreground/20" 
                           : "hover:bg-muted/30"
                       )}
                     >
                       <div className={cn(
                         "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
                         isUnitSelected(unit.id)
-                          ? "bg-blue-500 border-blue-500" 
-                          : "border-muted-foreground/30 hover:border-blue-300"
+                          ? "bg-foreground border-foreground" 
+                          : "border-muted-foreground/30 hover:border-muted-foreground/50"
                       )}>
                         {isUnitSelected(unit.id) && (
-                          <div className="w-2 h-2 bg-white rounded-full" />
+                          <div className="w-2 h-2 bg-background rounded-full" />
                         )}
                       </div>
                       

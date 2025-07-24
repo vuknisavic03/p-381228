@@ -1,6 +1,7 @@
 import React from "react";
 import { HorizontalFilter, FilterSection } from "@/components/ui/horizontal-filter";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface FilterOption {
   value: string;
@@ -60,26 +61,34 @@ export function TransactionFiltersNew({
     <div className="bg-background border-b border-border/30">
       <div className="flex items-center gap-6 px-6 py-4">
         {/* Transaction Type Toggle */}
-        <div className="flex bg-muted/30 rounded-lg p-1 border border-border/30">
+        <div className="flex items-center bg-muted/20 rounded-xl p-1 border border-border/30">
           <button
             onClick={() => onTypeChange('revenue')}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+            className={cn(
+              "px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative",
               transactionType === 'revenue'
-                ? 'bg-emerald-500 text-white shadow-sm'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-            }`}
+                ? 'bg-background text-foreground shadow-sm border border-emerald-200/60 ring-1 ring-emerald-200/40'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+            )}
           >
-            Revenue
+            {transactionType === 'revenue' && (
+              <div className="absolute inset-0 bg-emerald-50/30 rounded-lg" />
+            )}
+            <span className="relative">Revenue</span>
           </button>
           <button
             onClick={() => onTypeChange('expense')}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+            className={cn(
+              "px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative",
               transactionType === 'expense'
-                ? 'bg-red-500 text-white shadow-sm'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-            }`}
+                ? 'bg-background text-foreground shadow-sm border border-red-200/60 ring-1 ring-red-200/40'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+            )}
           >
-            Expenses
+            {transactionType === 'expense' && (
+              <div className="absolute inset-0 bg-red-50/30 rounded-lg" />
+            )}
+            <span className="relative">Expenses</span>
           </button>
         </div>
 
