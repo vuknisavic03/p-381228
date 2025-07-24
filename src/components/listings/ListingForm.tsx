@@ -313,13 +313,13 @@ export function ListingForm({
                   <LocationAutofill value={formData.city} onChange={value => setFormData(prev => ({
                   ...prev,
                   city: value
-                }))} placeholder="e.g., Belgrade" label="City" type="city" className="h-10" onLocationSelect={handleLocationSelect} />
+                }))} placeholder="Location" label="City" type="city" className="h-10" onLocationSelect={handleLocationSelect} />
                 </div>
                 <div>
                   <LocationAutofill value={formData.country} onChange={value => setFormData(prev => ({
                   ...prev,
                   country: value
-                }))} placeholder="e.g., Serbia" label="Country" type="country" className="h-10" onLocationSelect={handleLocationSelect} />
+                }))} placeholder="Location" label="Country" type="country" className="h-10" onLocationSelect={handleLocationSelect} />
                 </div>
               </div>
               

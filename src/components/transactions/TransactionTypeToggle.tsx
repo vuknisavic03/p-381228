@@ -16,40 +16,40 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "inline-flex items-center rounded-lg bg-muted/50 p-1 border border-border/50",
+      "inline-flex items-center rounded-md bg-muted/30 p-0.5 border border-border/40",
       className
     )}>
       <button
         type="button"
         className={cn(
-          "relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-2",
-          "focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+          "px-2.5 py-1.5 text-xs font-medium rounded transition-all duration-200 flex items-center gap-1.5",
+          "focus:outline-none focus:ring-1 focus:ring-blue-500/30",
           value === "revenue"
-            ? "bg-background text-foreground shadow-sm border border-border"
-            : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+            ? "bg-background text-foreground shadow-sm border border-border/60"
+            : "text-muted-foreground hover:text-foreground hover:bg-background/50"
         )}
-        style={{ minWidth: 80 }}
+        style={{ minWidth: 68 }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
       >
-        <TrendingUp className="h-4 w-4" />
+        <TrendingUp className="h-3 w-3" />
         Revenue
       </button>
       
       <button
         type="button"
         className={cn(
-          "relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-2",
-          "focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+          "px-2.5 py-1.5 text-xs font-medium rounded transition-all duration-200 flex items-center gap-1.5",
+          "focus:outline-none focus:ring-1 focus:ring-blue-500/30",
           value === "expense"
-            ? "bg-background text-foreground shadow-sm border border-border"
-            : "text-muted-foreground hover:text-foreground hover:bg-background/60"
+            ? "bg-background text-foreground shadow-sm border border-border/60"
+            : "text-muted-foreground hover:text-foreground hover:bg-background/50"
         )}
-        style={{ minWidth: 80 }}
+        style={{ minWidth: 68 }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
       >
-        <TrendingDown className="h-4 w-4" />
+        <TrendingDown className="h-3 w-3" />
         Expense
       </button>
     </div>
