@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { PropertyTypeDisplay, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
-import { ModernFilter, FilterSection } from "@/components/ui/modern-filter";
+import { HorizontalFilter, FilterSection } from "@/components/ui/horizontal-filter";
 
 // Category mapping from ListingForm - this ensures consistency
 const typeToCategoryMap = {
@@ -353,17 +353,15 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
 
   return (
     <div className="h-full flex flex-col">
-      {/* Modern Filter Header */}
-      <div className="p-4 border-b border-border bg-background shadow-sm">
-        <ModernFilter
-          searchValue={searchTerm}
-          onSearchChange={setSearchTerm}
-          searchPlaceholder="Search by Address, Tenant or ID..."
-          filterSections={filterSections}
-          activeFilterCount={activeFilterCount}
-          onClearFilters={clearFilters}
-        />
-      </div>
+      {/* Horizontal Filter Header */}
+      <HorizontalFilter
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Search by Address, Tenant or ID..."
+        filterSections={filterSections}
+        activeFilterCount={activeFilterCount}
+        onClearFilters={clearFilters}
+      />
 
       {/* Scrollable content area */}
       <ScrollArea className="flex-1">
