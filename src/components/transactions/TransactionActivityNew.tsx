@@ -258,9 +258,21 @@ export function TransactionActivityNew() {
       filtered = filtered.filter(t => selectedCategories.includes(t.category));
     }
     
-    // Property filter
+    // Property filter - Fix this logic for hierarchical filter
     if (selectedProperties.length > 0) {
-      filtered = filtered.filter(t => selectedProperties.includes(t.selectedListingId));
+      filtered = filtered.filter(t => {
+        return selectedProperties.some(selected => {
+          if (selected.startsWith('listing-')) {
+            const listingId = selected.replace('listing-', '');
+            return t.selectedListingId === listingId;
+          } else if (selected.startsWith('unit-')) {
+            // For now, just match by listing since we don't have unit data in transactions
+            // In a real app, you'd have transaction.selectedUnitId
+            return false; // Or implement unit matching logic
+          }
+          return false;
+        });
+      });
     }
     
     setFilteredTransactions(filtered);

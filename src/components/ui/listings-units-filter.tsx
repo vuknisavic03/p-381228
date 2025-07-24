@@ -123,13 +123,13 @@ export function ListingsUnitsFilter({
                   <div className={cn(
                     "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
                     selectedValues.includes(`listing-${listing.id}`)
-                      ? "bg-foreground border-foreground" 
+                      ? "bg-blue-500 border-blue-500" 
                       : listingSelected
-                      ? "border-muted-foreground/50 bg-muted/20"
-                      : "border-muted-foreground/30 hover:border-muted-foreground/50"
+                      ? "border-blue-300 bg-blue-50/30"
+                      : "border-muted-foreground/30 hover:border-blue-300"
                   )}>
                     {selectedValues.includes(`listing-${listing.id}`) && (
-                      <div className="w-2 h-2 bg-background rounded-full" />
+                      <div className="w-2 h-2 bg-white rounded-full" />
                     )}
                   </div>
                   
@@ -165,11 +165,11 @@ export function ListingsUnitsFilter({
                       <div className={cn(
                         "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
                         isUnitSelected(unit.id)
-                          ? "bg-foreground border-foreground" 
-                          : "border-muted-foreground/30 hover:border-muted-foreground/50"
+                          ? "bg-blue-500 border-blue-500" 
+                          : "border-muted-foreground/30 hover:border-blue-300"
                       )}>
                         {isUnitSelected(unit.id) && (
-                          <div className="w-2 h-2 bg-background rounded-full" />
+                          <div className="w-2 h-2 bg-white rounded-full" />
                         )}
                       </div>
                       
