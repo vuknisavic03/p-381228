@@ -89,8 +89,8 @@ export function HorizontalFilter({
                 <ChevronDown className="h-3.5 w-3.5 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-72 p-0 shadow-lg border border-border/40" align="start">
-              <div className="p-3 space-y-0.5 max-h-80 overflow-auto">
+            <PopoverContent className={cn("p-0 shadow-lg border border-border/40", section.id === 'listings' ? "w-96" : "w-72")} align="start">
+              <div className={cn("space-y-0.5 max-h-80 overflow-auto", section.id === 'listings' ? "p-3" : "p-3")}>
                 {/* Special handling for listings filter */}
                 {section.id === 'listings' && section.listings ? (
                   <ListingsUnitsFilter
