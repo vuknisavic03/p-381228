@@ -389,8 +389,7 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
                     >
                       <div className="flex flex-col">
                         <div className="flex items-center justify-between p-4 pb-2">
-                          <div className="flex items-center gap-6 text-sm">
-                            <span className="text-[#9EA3AD] font-medium">#{listing.id}</span>
+                          <div className="flex items-center gap-2 text-sm">
                             <div className="flex items-center gap-2">
                               <MapPin className="h-4 w-4 text-primary/80" />
                               <span className="font-medium">{listing.address}</span>

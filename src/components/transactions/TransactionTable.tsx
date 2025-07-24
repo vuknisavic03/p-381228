@@ -50,20 +50,24 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       .join(' ');
   };
 
-  const getListingDisplayText = (listingId: string) => {
+  const getListingPropertyType = (listingId: string) => {
     // Mock data for now - in real app this would fetch from listings service
     const listings = [
-      { id: "1", address: "Knez Mihailova 42", tenant: "Fashion Store Belgrade" },
-      { id: "2", address: "Terazije 23", tenant: "Business Center" },
-      { id: "3", address: "Kalemegdan Park 1", tenant: "Kalemegdan Restaurant" },
-      { id: "4", address: "Skadarlija 29", tenant: null },
-      { id: "5", address: "Makedonska 22", tenant: "Marko Petrović" },
+      { id: "1", address: "Knez Mihailova 42", tenant: "Fashion Store Belgrade", type: "commercial_rental" },
+      { id: "2", address: "Terazije 23", tenant: "Business Center", type: "commercial_rental" },
+      { id: "3", address: "Kalemegdan Park 1", tenant: "Kalemegdan Restaurant", type: "hospitality" },
+      { id: "4", address: "Skadarlija 29", tenant: null, type: "hospitality" },
+      { id: "5", address: "Makedonska 22", tenant: "Marko Petrović", type: "residential_rental" },
     ];
     
     const listing = listings.find(l => l.id === listingId);
     if (!listing) return "Unknown Property";
     
-    return listing.tenant ? `${listing.address} - ${listing.tenant}` : listing.address;
+    // Format property type from snake_case to Title Case
+    return listing.type
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   const handleRowClick = (transaction: Transaction) => {
@@ -166,8 +170,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                         tx.category.toLowerCase() === 'insurance' ? 'bg-purple-500' :
                         'bg-gray-400'
                       }`}></div>
-                      <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md">
-                        {getListingDisplayText(tx.selectedListingId)}
+                       <span className="text-xs font-semibold text-gray-700 bg-gray-50 px-2 py-1 rounded-md">
+                        {getListingPropertyType(tx.selectedListingId)}
                       </span>
                     </div>
                   </TableCell>
