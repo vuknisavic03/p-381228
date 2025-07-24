@@ -88,10 +88,7 @@ export function HorizontalFilter({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-72 p-0 shadow-lg border border-border/40" align="start">
-              <div className="px-4 py-3 border-b border-border/30 bg-muted/20">
-                <h4 className="font-medium text-sm text-foreground">{section.title}</h4>
-              </div>
-              <div className="p-2 space-y-0.5 max-h-80 overflow-auto">
+              <div className="p-3 space-y-0.5 max-h-80 overflow-auto">
                 {section.options.map((option) => {
                   const isSelected = section.selectedValues.includes(option.value);
                   return (
@@ -107,13 +104,13 @@ export function HorizontalFilter({
                     >
                       <div className="flex items-center gap-3 flex-1">
                         <div className={cn(
-                          "w-4 h-4 rounded border flex items-center justify-center transition-all",
+                          "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
                           isSelected 
-                            ? "bg-foreground border-foreground" 
-                            : "border-muted-foreground/40 hover:border-muted-foreground/60"
+                            ? "bg-blue-500 border-blue-500" 
+                            : "border-muted-foreground/30 hover:border-blue-300"
                         )}>
                           {isSelected && (
-                            <div className="w-2 h-2 bg-background rounded-sm" />
+                            <div className="w-2 h-2 bg-white rounded-full" />
                           )}
                         </div>
                         <span className="text-sm">{option.label}</span>
