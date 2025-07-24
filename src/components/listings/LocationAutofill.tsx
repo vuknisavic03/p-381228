@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { MapPin, Loader2, AlertCircle } from "lucide-react";
+import { MapPin, Loader2, AlertCircle, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface LocationSuggestion {
   description: string;
   place_id: string;
   types: string[];
+  main_text: string;
+  secondary_text: string;
 }
 
 interface LocationAutofillProps {
@@ -39,176 +42,110 @@ export function LocationAutofill({
   const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
   const placesService = useRef<google.maps.places.PlacesService | null>(null);
 
-  const getPlaceTypes = () => {
+  const getSearchConfig = () => {
     switch (type) {
       case "address":
-        return ["address"];
+        return {
+          types: ["address"],
+          componentRestrictions: undefined
+        };
       case "city":
-        return ["(cities)"];
+        return {
+          types: ["(cities)"],
+          componentRestrictions: undefined
+        };
       case "country":
-        return ["country"];
+        return {
+          types: ["country"],
+          componentRestrictions: undefined
+        };
       default:
-        return ["geocode"];
+        return {
+          types: ["geocode"],
+          componentRestrictions: undefined
+        };
     }
   };
 
-  // Check for Google Maps API availability
+  // Initialize Google Maps API
   useEffect(() => {
-    const checkApiAvailability = () => {
-      console.log(`🔍 Checking Google Maps API availability for ${type}...`);
-      
-      if (typeof window === 'undefined') {
-        console.log("❌ Window is undefined");
-        setApiError("Browser environment not ready");
-        return false;
-      }
-      
-      if (!window.google) {
-        console.log("❌ window.google is not available");
-        setApiError("Google Maps API not loaded");
-        return false;
-      }
-      
-      if (!window.google.maps) {
-        console.log("❌ window.google.maps is not available");
-        setApiError("Google Maps core not loaded");
-        return false;
-      }
-      
-      if (!window.google.maps.places) {
-        console.log("❌ window.google.maps.places is not available");
-        setApiError("Google Places API not loaded");
-        return false;
-      }
-      
-      if (!window.google.maps.places.AutocompleteService) {
-        console.log("❌ AutocompleteService not available");
-        setApiError("Autocomplete service not available");
-        return false;
-      }
-      
-      console.log("✅ Google Maps API is fully available");
-      setApiError(null);
-      return true;
-    };
-
     const initializeServices = () => {
-      if (!checkApiAvailability()) {
-        // Retry after a delay
-        setTimeout(initializeServices, 1000);
+      if (typeof window === 'undefined' || !window.google?.maps?.places) {
+        setTimeout(initializeServices, 500);
         return;
       }
       
       try {
-        console.log(`🔧 Initializing LocationAutofill services for ${type}...`);
-        
         autocompleteService.current = new google.maps.places.AutocompleteService();
-        console.log("✅ AutocompleteService initialized");
-        
-        // Create a temporary div for PlacesService
         const mapDiv = document.createElement('div');
         const map = new google.maps.Map(mapDiv);
         placesService.current = new google.maps.places.PlacesService(map);
-        console.log("✅ PlacesService initialized");
-        
         setIsApiReady(true);
         setApiError(null);
       } catch (error) {
-        console.error("❌ Error initializing Google Maps services:", error);
-        setApiError("Failed to initialize Google Maps services");
-        // Retry after a delay
-        setTimeout(initializeServices, 2000);
+        console.error("Error initializing Google Maps:", error);
+        setApiError("Maps service unavailable");
+        setTimeout(initializeServices, 1000);
       }
     };
 
     initializeServices();
-  }, [type]);
+  }, []);
 
-  const parseLocationComponents = (placeDetails: google.maps.places.PlaceResult) => {
-    const components = placeDetails.address_components || [];
-    let city = '';
-    let country = '';
-    let address = '';
-
-    components.forEach(component => {
-      const types = component.types;
-      
-      if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-        city = component.long_name;
-      } else if (types.includes('country')) {
-        country = component.long_name;
-      } else if (types.includes('street_number') || types.includes('route')) {
-        if (address) {
-          address += ' ' + component.long_name;
-        } else {
-          address = component.long_name;
-        }
-      }
-    });
-
-    return { city, country, address };
+  const formatSuggestion = (prediction: google.maps.places.AutocompletePrediction): LocationSuggestion => {
+    const mainText = prediction.structured_formatting?.main_text || prediction.description;
+    const secondaryText = prediction.structured_formatting?.secondary_text || '';
+    
+    return {
+      description: prediction.description,
+      place_id: prediction.place_id,
+      types: prediction.types,
+      main_text: mainText,
+      secondary_text: secondaryText
+    };
   };
 
   const fetchSuggestions = async (query: string) => {
-    if (query.length < 2) {
+    if (query.length < 2 || !isApiReady || !autocompleteService.current) {
       setSuggestions([]);
       setShowSuggestions(false);
       return;
     }
 
-    if (!isApiReady || !autocompleteService.current) {
-      console.warn("❌ Google Places AutocompleteService not ready");
-      setApiError("Google Maps API not ready");
-      return;
-    }
-
-    console.log(`🔍 Fetching suggestions for "${query}" (type: ${type})`);
     setIsLoading(true);
     setApiError(null);
     
     try {
+      const config = getSearchConfig();
       const request: google.maps.places.AutocompletionRequest = {
         input: query,
-        types: getPlaceTypes()
+        ...config
       };
 
-      autocompleteService.current.getPlacePredictions(
-        request,
-        (predictions, status) => {
-          setIsLoading(false);
-          console.log(`📍 Received ${predictions?.length || 0} predictions with status: ${status}`);
-          
-          if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
-            const formattedSuggestions = predictions.map(prediction => ({
-              description: prediction.description,
-              place_id: prediction.place_id,
-              types: prediction.types
-            }));
-            setSuggestions(formattedSuggestions);
-            setShowSuggestions(true);
-            setApiError(null);
-          } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-            console.log('No results found');
-            setSuggestions([]);
-            setShowSuggestions(false);
-            setApiError(null);
-          } else {
-            console.warn('Places API error:', status);
-            setSuggestions([]);
-            setShowSuggestions(false);
-            setApiError(`Search failed: ${status}`);
+      autocompleteService.current.getPlacePredictions(request, (predictions, status) => {
+        setIsLoading(false);
+        
+        if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
+          const formattedSuggestions = predictions.slice(0, 6).map(formatSuggestion);
+          setSuggestions(formattedSuggestions);
+          setShowSuggestions(true);
+        } else {
+          setSuggestions([]);
+          setShowSuggestions(false);
+          if (status !== google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+            setApiError("Search failed");
           }
         }
-      );
+      });
     } catch (error) {
-      console.error('Error fetching suggestions:', error);
-      setSuggestions([]);
       setIsLoading(false);
+      setSuggestions([]);
       setShowSuggestions(false);
-      setApiError("Search failed");
+      setApiError("Search error");
     }
   };
 
+  // Debounced search
   useEffect(() => {
     if (!isApiReady) return;
     
@@ -222,8 +159,9 @@ export function LocationAutofill({
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [value, type, isApiReady]);
+  }, [value, isApiReady]);
 
+  // Click outside handler
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -236,65 +174,96 @@ export function LocationAutofill({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const extractLocationData = (suggestion: LocationSuggestion): Promise<{city?: string; country?: string; address?: string}> => {
+    return new Promise((resolve) => {
+      if (!placesService.current) {
+        resolve({});
+        return;
+      }
+
+      const request = {
+        placeId: suggestion.place_id,
+        fields: ['address_components', 'name', 'formatted_address']
+      };
+
+      placesService.current.getDetails(request, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && place?.address_components) {
+          let city = '';
+          let country = '';
+          let address = '';
+
+          place.address_components.forEach(component => {
+            const types = component.types;
+            
+            if (types.includes('locality')) {
+              city = component.long_name;
+            } else if (types.includes('administrative_area_level_1') && !city) {
+              city = component.long_name;
+            } else if (types.includes('country')) {
+              country = component.long_name;
+            } else if (types.includes('street_number') || types.includes('route')) {
+              address = address ? `${address} ${component.long_name}` : component.long_name;
+            }
+          });
+
+          // Fallback to place name or formatted address
+          if (!city && place.name) {
+            city = place.name;
+          }
+          if (!address && place.formatted_address) {
+            address = place.formatted_address;
+          }
+
+          resolve({ city, country, address });
+        } else {
+          resolve({});
+        }
+      });
+    });
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    console.log(`📝 Input changed to: "${newValue}"`);
     onChange(newValue);
-    setShowSuggestions(true);
     setSelectedIndex(-1);
     setApiError(null);
   };
 
   const handleInputFocus = () => {
-    console.log(`🎯 Input focused for ${type}`);
     if (suggestions.length > 0) {
       setShowSuggestions(true);
     }
   };
 
-  const handleSuggestionSelect = (suggestion: LocationSuggestion) => {
-    console.log(`✅ Selected suggestion: ${suggestion.description} (type: ${type})`);
-    
-    // For city type, we want to extract just the city name and auto-populate country
-    if (type === "city" && placesService.current && onLocationSelect) {
-      const request = {
-        placeId: suggestion.place_id,
-        fields: ['address_components', 'name']
-      };
-
-      placesService.current.getDetails(request, (place, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && place) {
-          const locationData = parseLocationComponents(place);
-          
-          // Set just the city name in the current field
-          const cityName = locationData.city || place.name || suggestion.description.split(',')[0];
-          onChange(cityName);
-          
-          // Notify parent to auto-populate other fields
-          onLocationSelect({
-            city: cityName,
-            country: locationData.country
-          });
-          
-          console.log(`🏙️ Auto-populated city: ${cityName}, country: ${locationData.country}`);
-        } else {
-          // Fallback: just use the first part of the description
-          const cityName = suggestion.description.split(',')[0];
-          onChange(cityName);
-          
-          // Try to extract country from description
-          const parts = suggestion.description.split(',').map(s => s.trim());
-          if (parts.length > 1 && onLocationSelect) {
-            onLocationSelect({
-              city: cityName,
-              country: parts[parts.length - 1]
-            });
-          }
-        }
-      });
+  const handleSuggestionSelect = async (suggestion: LocationSuggestion) => {
+    if (type === "city") {
+      // For city, just use the main text (city name)
+      onChange(suggestion.main_text);
+      
+      if (onLocationSelect) {
+        const locationData = await extractLocationData(suggestion);
+        onLocationSelect({
+          city: suggestion.main_text,
+          country: locationData.country
+        });
+      }
+    } else if (type === "country") {
+      // For country, use the main text
+      onChange(suggestion.main_text);
+      
+      if (onLocationSelect) {
+        onLocationSelect({
+          country: suggestion.main_text
+        });
+      }
     } else {
-      // For other types, just use the full description
+      // For address, use the full description
       onChange(suggestion.description);
+      
+      if (onLocationSelect) {
+        const locationData = await extractLocationData(suggestion);
+        onLocationSelect(locationData);
+      }
     }
     
     setShowSuggestions(false);
@@ -302,7 +271,7 @@ export function LocationAutofill({
     setSelectedIndex(-1);
   };
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
 
     switch (e.key) {
@@ -327,14 +296,23 @@ export function LocationAutofill({
         setSelectedIndex(-1);
         break;
     }
-  }
+  };
 
   return (
     <div ref={containerRef} className="relative">
-      <label className="block text-xs font-medium text-gray-500 mb-1.5 ml-0.5">
+      <label className="block text-sm font-medium text-muted-foreground mb-2">
         {label}
       </label>
+      
       <div className="relative">
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          ) : (
+            <Search className="h-4 w-4 text-muted-foreground" />
+          )}
+        </div>
+        
         <Input
           ref={inputRef}
           value={value}
@@ -342,28 +320,24 @@ export function LocationAutofill({
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className={className}
+          className={cn("pl-10 pr-10", className)}
         />
-        {isLoading && (
+        
+        {apiError && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-          </div>
-        )}
-        {apiError && !isLoading && (
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <AlertCircle className="h-4 w-4 text-red-400" />
+            <AlertCircle className="h-4 w-4 text-destructive" />
           </div>
         )}
       </div>
       
       {apiError && (
-        <div className="mt-1 text-xs text-red-600 ml-0.5">
+        <div className="mt-1 text-sm text-destructive">
           {apiError}
         </div>
       )}
       
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-60 overflow-hidden">
           <Command className="border-0">
             <CommandList>
               <CommandGroup>
@@ -371,20 +345,28 @@ export function LocationAutofill({
                   <CommandItem
                     key={suggestion.place_id}
                     onSelect={() => handleSuggestionSelect(suggestion)}
-                    className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-50 ${
-                      index === selectedIndex ? 'bg-blue-50' : ''
-                    }`}
+                    className={cn(
+                      "flex items-start gap-3 px-3 py-3 cursor-pointer transition-colors",
+                      index === selectedIndex && "bg-accent"
+                    )}
                   >
-                    <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                    <span className="text-sm text-gray-900 truncate">
-                      {suggestion.description}
-                    </span>
+                    <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm text-foreground truncate">
+                        {suggestion.main_text}
+                      </div>
+                      {suggestion.secondary_text && (
+                        <div className="text-xs text-muted-foreground truncate mt-0.5">
+                          {suggestion.secondary_text}
+                        </div>
+                      )}
+                    </div>
                   </CommandItem>
                 ))}
               </CommandGroup>
               {suggestions.length === 0 && (
-                <CommandEmpty className="py-3 text-center text-sm text-gray-500">
-                  No suggestions found.
+                <CommandEmpty className="py-4 text-center text-sm text-muted-foreground">
+                  No locations found
                 </CommandEmpty>
               )}
             </CommandList>
