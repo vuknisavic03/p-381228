@@ -321,8 +321,8 @@ export function ListingForm({
                       country: parts[1] || ''
                     }));
                   }} 
-                  placeholder="e.g., Belgrade, Serbia" 
-                  label="Region" 
+                  placeholder="Country, City" 
+                  label="Region"
                   type="address" 
                   className="h-10" 
                   onLocationSelect={handleLocationSelect} 
