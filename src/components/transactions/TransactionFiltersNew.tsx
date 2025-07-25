@@ -39,6 +39,16 @@ export function TransactionFiltersNew({
   
   const filterSections: FilterSection[] = [
     {
+      id: "type",
+      title: "Type",
+      options: [
+        { value: "revenue", label: "Revenue", count: 0 },
+        { value: "expense", label: "Expense", count: 0 }
+      ],
+      selectedValues: [transactionType],
+      onToggle: (value: string) => onTypeChange(value as 'revenue' | 'expense'),
+    },
+    {
       id: "categories",
       title: "Category",
       options: categories,
@@ -55,55 +65,20 @@ export function TransactionFiltersNew({
     },
   ];
 
-  const activeFiltersCount = selectedCategories.length + selectedProperties.length;
+  const activeFiltersCount = selectedCategories.length + selectedProperties.length + 1; // +1 for transaction type
   
   return (
     <div className="bg-background border-b border-border/30">
-      <div className="flex items-center gap-6 px-6 py-4">
-        {/* Transaction Type Toggle */}
-        <div className="flex items-center bg-muted/20 rounded-xl p-1 border border-border/30">
-          <button
-            onClick={() => onTypeChange('revenue')}
-            className={cn(
-              "px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative",
-              transactionType === 'revenue'
-                ? 'bg-background text-foreground shadow-sm border border-emerald-200/60 ring-1 ring-emerald-200/40'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-            )}
-          >
-            {transactionType === 'revenue' && (
-              <div className="absolute inset-0 bg-emerald-50/30 rounded-lg" />
-            )}
-            <span className="relative">Revenue</span>
-          </button>
-          <button
-            onClick={() => onTypeChange('expense')}
-            className={cn(
-              "px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 relative",
-              transactionType === 'expense'
-                ? 'bg-background text-foreground shadow-sm border border-red-200/60 ring-1 ring-red-200/40'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-            )}
-          >
-            {transactionType === 'expense' && (
-              <div className="absolute inset-0 bg-red-50/30 rounded-lg" />
-            )}
-            <span className="relative">Expenses</span>
-          </button>
-        </div>
-
-        {/* Horizontal Filter */}
-        <div className="flex-1">
-          <HorizontalFilter
-            searchValue={search}
-            onSearchChange={onSearchChange}
-            searchPlaceholder="Search transactions..."
-            filterSections={filterSections}
-            activeFilterCount={activeFiltersCount}
-            onClearFilters={onClearFilters}
-            className="border-0 p-0"
-          />
-        </div>
+      <div className="px-6 py-4">
+        <HorizontalFilter
+          searchValue={search}
+          onSearchChange={onSearchChange}
+          searchPlaceholder="Search transactions..."
+          filterSections={filterSections}
+          activeFilterCount={activeFiltersCount}
+          onClearFilters={onClearFilters}
+          className="border-0 p-0"
+        />
       </div>
     </div>
   );

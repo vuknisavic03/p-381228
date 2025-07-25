@@ -37,12 +37,6 @@ export const TransactionFilterBar: React.FC<TransactionFilterBarProps> = ({
             />
           </div>
 
-          <div className="flex items-center">
-            <TransactionTypeToggle 
-              value={transactionType} 
-              onChange={setTransactionType}
-            />
-          </div>
         </div>
       </div>
     </div>

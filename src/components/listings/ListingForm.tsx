@@ -37,6 +37,7 @@ export function ListingForm({
     city: "",
     address: "",
     country: "",
+    region: "",
     postalCode: "",
     type: "",
     category: "",
@@ -308,19 +309,24 @@ export function ListingForm({
             </div>
             
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <LocationAutofill value={formData.city} onChange={value => setFormData(prev => ({
-                  ...prev,
-                  city: value
-                }))} placeholder="Location" label="City" type="city" className="h-10" onLocationSelect={handleLocationSelect} />
-                </div>
-                <div>
-                  <LocationAutofill value={formData.country} onChange={value => setFormData(prev => ({
-                  ...prev,
-                  country: value
-                }))} placeholder="Location" label="Country" type="country" className="h-10" onLocationSelect={handleLocationSelect} />
-                </div>
+              <div>
+                <LocationAutofill 
+                  value={formData.region || `${formData.city}${formData.city && formData.country ? ', ' : ''}${formData.country}`} 
+                  onChange={value => {
+                    const parts = value.split(',').map(p => p.trim());
+                    setFormData(prev => ({
+                      ...prev,
+                      region: value,
+                      city: parts[0] || '',
+                      country: parts[1] || ''
+                    }));
+                  }} 
+                  placeholder="e.g., Belgrade, Serbia" 
+                  label="Region" 
+                  type="address" 
+                  className="h-10" 
+                  onLocationSelect={handleLocationSelect} 
+                />
               </div>
               
               <div>
