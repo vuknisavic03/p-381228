@@ -311,38 +311,18 @@ export function ListingForm({
             <div className="space-y-4">
               <div>
                 <LocationAutofill 
-                  value={formData.region || `${formData.city}${formData.city && formData.country ? ', ' : ''}${formData.country}`} 
-                  onChange={value => {
-                    const parts = value.split(',').map(p => p.trim());
-                    setFormData(prev => ({
-                      ...prev,
-                      region: value,
-                      city: parts[0] || '',
-                      country: parts[1] || ''
-                    }));
-                  }} 
-                  placeholder="Country, City" 
-                  label="Region"
+                  value={formData.address} 
+                  onChange={value => setFormData(prev => ({
+                    ...prev,
+                    address: value
+                  }))} 
+                  placeholder="Address" 
+                  label="Address" 
                   type="address" 
                   className="h-10" 
                   onLocationSelect={handleLocationSelect} 
                 />
               </div>
-              
-               <div>
-                 <LocationAutofill 
-                   value={formData.address} 
-                   onChange={value => setFormData(prev => ({
-                     ...prev,
-                     address: value
-                   }))} 
-                   placeholder="e.g., Knez Mihailova 42, Building A" 
-                   label="Full Address" 
-                   type="address" 
-                   className="h-10" 
-                   onLocationSelect={handleLocationSelect} 
-                 />
-               </div>
                
                <div>
                  <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
