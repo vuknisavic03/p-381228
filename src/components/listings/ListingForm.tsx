@@ -329,17 +329,25 @@ export function ListingForm({
                 />
               </div>
               
-              <div>
-                <LocationAutofill value={formData.address} onChange={value => setFormData(prev => ({
-                ...prev,
-                address: value
-              }))} placeholder="e.g., Knez Mihailova 42" label="Full Address" type="address" className="h-10" onLocationSelect={handleLocationSelect} />
-              </div>
-              
-              <div>
-                <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
-                <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 11000" className="h-10" />
-              </div>
+               <div>
+                 <LocationAutofill 
+                   value={formData.address} 
+                   onChange={value => setFormData(prev => ({
+                     ...prev,
+                     address: value
+                   }))} 
+                   placeholder="e.g., Knez Mihailova 42, Building A" 
+                   label="Full Address" 
+                   type="address" 
+                   className="h-10" 
+                   onLocationSelect={handleLocationSelect} 
+                 />
+               </div>
+               
+               <div>
+                 <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
+                 <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 11000" className="h-10" />
+               </div>
             </div>
           </div>
 
