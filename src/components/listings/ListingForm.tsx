@@ -396,16 +396,16 @@ export function ListingForm({
               </Button>
             </div>
 
-            {/* Property Type Selection - Compact Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+            {/* Property Type Selection - 2x3 Grid */}
+            <div className="grid grid-cols-2 gap-3">
               {propertyTypes.map(type => (
                 <div 
                   key={type.value} 
                   className={`relative p-4 border rounded-xl cursor-pointer transition-all duration-200 group hover:shadow-sm ${
                     formData.type === type.value 
-                      ? "border-primary bg-primary/10 shadow-sm" 
+                      ? "border-primary bg-muted/40 shadow-sm" 
                       : "border-border hover:border-primary/40 hover:bg-muted/20"
-                  }`} 
+                  }`}
                   onClick={() => {
                     setFormData(prev => ({
                       ...prev,
@@ -435,11 +435,11 @@ export function ListingForm({
                     }`}>
                       {type.label}
                     </h4>
-                    <p className={`text-xs leading-snug ${
-                      formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"
-                    }`}>
-                      {type.description}
-                    </p>
+                     <p className={`text-[11px] leading-tight ${
+                       formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"
+                     }`}>
+                       {type.description}
+                     </p>
                   </div>
                   
                   {/* Selection indicator */}
