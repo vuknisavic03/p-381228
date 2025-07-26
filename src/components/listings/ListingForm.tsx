@@ -528,29 +528,29 @@ export function ListingForm({
                           <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
                           
                           {/* Tenant Type Toggle */}
-                          <div className="flex bg-muted rounded-lg p-1">
+                          <div className="flex bg-muted rounded-md p-0.5">
                             <button 
                               type="button" 
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                              className={`flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-sm transition-all ${
                                 formData.tenantType === "individual" 
                                   ? "bg-card text-foreground shadow-sm" 
                                   : "text-muted-foreground hover:text-foreground"
                               }`}
                             >
-                              <Users className="h-3.5 w-3.5" />
+                              <Users className="h-3 w-3" />
                               Individual
                             </button>
                             <button 
                               type="button" 
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                              className={`flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-sm transition-all ${
                                 formData.tenantType === "company" 
                                   ? "bg-card text-foreground shadow-sm" 
                                   : "text-muted-foreground hover:text-foreground"
                               }`}
                             >
-                              <Building2 className="h-3.5 w-3.5" />
+                              <Building2 className="h-3 w-3" />
                               Company
                             </button>
                           </div>
