@@ -35,7 +35,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
-import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
 import { USLocationAutofill } from "./USLocationAutofill";

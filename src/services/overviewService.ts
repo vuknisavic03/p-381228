@@ -1,5 +1,5 @@
 import { fetchListings } from "./listingsService";
-import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from 'date-fns';
 

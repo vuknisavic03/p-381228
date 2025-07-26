@@ -1,1 +1,0 @@
-export { TransactionActivityNew as TransactionActivity } from "./TransactionActivityNew";

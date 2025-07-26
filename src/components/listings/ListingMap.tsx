@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 import { formatPropertyType, getPropertyTypeColorVar } from "@/utils/propertyTypeUtils";
 import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';

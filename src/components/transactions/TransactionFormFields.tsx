@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { TransactionTypeToggle } from "./TransactionTypeToggle";
 import { Card } from "@/components/ui/card";
 import { ListingSelector } from "./ListingSelector";
-import { PropertyType } from "./TransactionFormTypes"; 
+import { PropertyType } from "@/types/property"; 
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 
 // Update Listing interface to match the one in TransactionFormTypes.ts

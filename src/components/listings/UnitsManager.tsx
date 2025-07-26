@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Trash2, Plus, Users, UserX, Building, Edit3, User, Building2, ChevronLeft, ChevronRight } from "lucide-react";
-import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 interface Unit {
   id: string;
   unitNumber: string;

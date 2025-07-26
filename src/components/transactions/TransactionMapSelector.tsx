@@ -4,7 +4,7 @@ import { MapPin, Loader2, Map, Building2, User, AlertTriangle, Phone, Mail, Navi
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PropertyType } from "./TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 import { formatPropertyType } from "@/utils/propertyTypeUtils";
 import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';

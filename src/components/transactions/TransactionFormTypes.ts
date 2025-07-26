@@ -1,3 +1,5 @@
+import { PropertyType } from "@/types/property";
+
 export interface Tenant {
   name: string;
   type: string;
@@ -31,14 +33,6 @@ export interface Listing {
   occupancyStatus?: "occupied" | "vacant"; // Added occupancy status
   units?: Unit[]; // Added units for multi-unit properties
 }
-
-export type PropertyType = 
-  | "residential_rental" 
-  | "commercial_rental"
-  | "hospitality"
-  | "vacation_rental"
-  | "mixed_use"
-  | "industrial";
 
 export type PropertySubType =
   // Residential subtypes

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Home, Building, Hotel, Bed, Factory, Building2 } from "lucide-react";
-import { PropertyType } from "@/components/transactions/TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 
 // Function to format property type strings (convert from snake_case to Title Case)
 export const formatPropertyType = (propertyType: PropertyType): string => {

@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit2, Trash2, DollarSign } from "lucide-react";
-import { PropertyType } from "./TransactionFormTypes";
+import { PropertyType } from "@/types/property";
 import { getPropertyTypeColorVar } from "@/utils/propertyTypeUtils";
 
 interface Transaction {
