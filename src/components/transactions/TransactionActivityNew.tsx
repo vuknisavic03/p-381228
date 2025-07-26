@@ -322,7 +322,7 @@ export function TransactionActivityNew() {
         typeOptions={getTypeOptions()}
       />
       
-      <div className="flex-1 p-4 pb-8">
+      <div className="flex-1 p-4">
         <TransactionsTable
           transactions={filteredTransactions}
           onEdit={handleEditTransaction}

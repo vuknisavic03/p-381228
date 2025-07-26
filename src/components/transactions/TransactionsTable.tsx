@@ -120,7 +120,7 @@ export function TransactionsTable({
     <div className="flex-1 bg-card rounded-lg border overflow-hidden">
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh]">
         <table className="w-full table-fixed min-w-[800px]">{" "}
-          <thead className="bg-muted/50 sticky top-0 z-10">
+          <thead className="bg-background sticky top-0 z-10 border-b border-border">
             <tr className="border-b border-border/50">
               <th className="text-left py-4 px-6 font-medium text-sm text-muted-foreground w-[30%]">
                 Transaction
