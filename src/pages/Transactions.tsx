@@ -41,7 +41,7 @@ export default function Transactions() {
           />
         </PageHeader>
 
-        <div className="flex-1 relative overflow-hidden bg-white">
+        <div className="flex-1 bg-white">
           <TransactionActivity />
         </div>
 
