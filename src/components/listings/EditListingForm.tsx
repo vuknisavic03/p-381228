@@ -320,7 +320,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold text-foreground">Edit Listing</h1>
-            <p className="text-sm text-muted-foreground mt-1">Update the details of your listing</p>
+            <p className="text-sm text-muted-foreground mt-1">Create a new listing for your portfolio</p>
           </div>
           <div className="flex gap-3">
             <Button 
@@ -352,7 +352,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 max-h-[calc(100vh-120px)]">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
         <div className="w-[98%] max-w-none space-y-8">
           
           {/* Location Section */}
@@ -363,7 +363,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
               </div>
               <div>
                 <h3 className="font-medium text-foreground">Location</h3>
-                <p className="text-sm text-muted-foreground">Update the location details of your listing</p>
+                <p className="text-sm text-muted-foreground">Where is your listing located?</p>
               </div>
             </div>
             
@@ -440,7 +440,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
               </div>
               <div>
                 <h3 className="font-medium text-foreground">Listing Type</h3>
-                <p className="text-sm text-muted-foreground">Update the type and structure of your listing</p>
+                <p className="text-sm text-muted-foreground">What type of listing is this?</p>
               </div>
             </div>
 
@@ -699,7 +699,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
               </div>
               <div>
                 <h3 className="font-medium text-foreground">Notes</h3>
-                <p className="text-sm text-muted-foreground">Update any additional information about this listing</p>
+                <p className="text-sm text-muted-foreground">Add any additional information about this listing</p>
               </div>
             </div>
             
