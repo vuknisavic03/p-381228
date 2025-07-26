@@ -5,7 +5,6 @@ import { Plus } from "lucide-react";
 
 interface PageHeaderProps {
   title?: string;
-  lastEdited?: string;
   onAddClick: () => void;
   addButtonText: string;
   children?: React.ReactNode;
@@ -13,7 +12,6 @@ interface PageHeaderProps {
 
 export function PageHeader({ 
   title, 
-  lastEdited = "Edited just now", 
   onAddClick, 
   addButtonText,
   children 
@@ -23,7 +21,6 @@ export function PageHeader({
       <div className="px-6 py-4 flex items-center justify-between">
         <div className="flex items-center">
           {title && <h1 className="text-xl font-semibold text-gray-900 mr-4">{title}</h1>}
-          <span className="text-sm text-gray-500 font-medium">{lastEdited}</span>
         </div>
         <div className="flex items-center gap-3">
           {children}

@@ -103,17 +103,17 @@ export default function Listings() {
             value={viewMode} 
             onValueChange={handleViewModeChange}
           >
-            <TabsList className="bg-white border border-gray-200 p-1 h-10">
+            <TabsList className="bg-white border border-gray-200 p-1 h-10 shadow-sm">
               <TabsTrigger 
                 value="map" 
-                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+                className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-all duration-200 hover:bg-muted"
               >
                 <MapPin className="h-4 w-4" />
                 Map
               </TabsTrigger>
               <TabsTrigger 
                 value="list" 
-                className="gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-colors"
+                className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm text-sm px-4 py-1.5 h-8 rounded-md font-medium transition-all duration-200 hover:bg-muted"
               >
                 <ListIcon className="h-4 w-4" />
                 List
