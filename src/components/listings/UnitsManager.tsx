@@ -288,34 +288,36 @@ export function UnitsManager({
 
               {/* Tenant Information */}
               {shouldShowTenantInfo() && selectedUnit.occupancyStatus === "occupied" && <div className="space-y-3">
-                  <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
-                  
-                  {/* Tenant Type Toggle */}
-                  <div className="flex bg-muted rounded-lg p-1">
-                    <button 
-                      type="button" 
-                      onClick={() => updateUnitTenant(selectedUnit.id, { type: "individual" })}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
-                        selectedUnit.tenant?.type === "individual" 
-                          ? "bg-card text-foreground shadow-sm" 
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <User className="h-3.5 w-3.5" />
-                      Individual
-                    </button>
-                    <button 
-                      type="button" 
-                      onClick={() => updateUnitTenant(selectedUnit.id, { type: "company" })}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
-                        selectedUnit.tenant?.type === "company" 
-                          ? "bg-card text-foreground shadow-sm" 
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <Building2 className="h-3.5 w-3.5" />
-                      Company
-                    </button>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
+                    
+                    {/* Tenant Type Toggle */}
+                    <div className="flex bg-muted rounded-lg p-1">
+                      <button 
+                        type="button" 
+                        onClick={() => updateUnitTenant(selectedUnit.id, { type: "individual" })}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                          selectedUnit.tenant?.type === "individual" 
+                            ? "bg-card text-foreground shadow-sm" 
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <User className="h-3.5 w-3.5" />
+                        Individual
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => updateUnitTenant(selectedUnit.id, { type: "company" })}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                          selectedUnit.tenant?.type === "company" 
+                            ? "bg-card text-foreground shadow-sm" 
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <Building2 className="h-3.5 w-3.5" />
+                        Company
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="space-y-3">
