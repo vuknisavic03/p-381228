@@ -435,7 +435,7 @@ export function ListingForm({
                     }`}>
                       {type.label}
                     </h4>
-                     <p className={`text-[11px] leading-tight ${
+                     <p className={`text-xs leading-snug ${
                        formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"
                      }`}>
                        {type.description}
