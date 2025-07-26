@@ -160,7 +160,7 @@ export function TransactionActivityNew() {
   
   // Filter states
   const [search, setSearch] = useState("");
-  const [transactionType, setTransactionType] = useState<'revenue' | 'expense'>('revenue');
+  const [transactionType, setTransactionType] = useState<'revenue' | 'expense' | 'all'>('all');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
 
@@ -168,14 +168,14 @@ export function TransactionActivityNew() {
   const getCategoryOptions = () => {
     const categories = Array.from(new Set(
       transactions
-        .filter(t => t.type === transactionType)
+        .filter(t => transactionType === 'all' || t.type === transactionType)
         .map(t => t.category)
     ));
     
     return categories.map(category => ({
       value: category,
       label: category.charAt(0).toUpperCase() + category.slice(1).replace('_', ' '),
-      count: transactions.filter(t => t.category === category && t.type === transactionType).length
+      count: transactions.filter(t => t.category === category && (transactionType === 'all' || t.type === transactionType)).length
     }));
   };
 
@@ -242,7 +242,7 @@ export function TransactionActivityNew() {
 
   // Apply filters
   useEffect(() => {
-    let filtered = transactions.filter(t => t.type === transactionType);
+    let filtered = transactionType === 'all' ? transactions : transactions.filter(t => t.type === transactionType);
     
     // Search filter
     if (search) {

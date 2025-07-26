@@ -32,7 +32,7 @@ interface Listing {
 
 export interface TransactionFieldsData {
   selectedListingId: string;
-  transactionType: "revenue" | "expense";
+  transactionType: "revenue" | "expense" | "all";
   category: string;
   amount: string;
   date: Date | undefined;

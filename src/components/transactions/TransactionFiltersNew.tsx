@@ -18,8 +18,8 @@ interface TransactionFiltersNewProps {
   listings: any[]; // Add listings data
   selectedProperties: string[];
   onPropertyToggle: (property: string) => void;
-  transactionType: 'revenue' | 'expense';
-  onTypeChange: (type: 'revenue' | 'expense') => void;
+  transactionType: 'revenue' | 'expense' | 'all';
+  onTypeChange: (type: 'revenue' | 'expense' | 'all') => void;
   onClearFilters: () => void;
 }
 
@@ -42,11 +42,12 @@ export function TransactionFiltersNew({
       id: "type",
       title: "Type",
       options: [
+        { value: "all", label: "All", count: 0 },
         { value: "revenue", label: "Revenue", count: 0 },
         { value: "expense", label: "Expense", count: 0 }
       ],
       selectedValues: [transactionType],
-      onToggle: (value: string) => onTypeChange(value as 'revenue' | 'expense'),
+      onToggle: (value: string) => onTypeChange(value as 'revenue' | 'expense' | 'all'),
     },
     {
       id: "categories",
