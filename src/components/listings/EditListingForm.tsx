@@ -544,26 +544,19 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
                     {getAvailableCategories().map((cat) => (
                       <div
                         key={cat.value}
-                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           formData.category === cat.value
-                            ? "border-primary bg-primary/5"
+                            ? "border-primary bg-muted/40"
                             : "border-border hover:border-primary/50 hover:bg-muted/30"
                         }`}
                         onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
                       >
-                        <div className="flex items-start gap-3">
-                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
-                          <div className="flex-1">
-                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
-                              {cat.label}
-                            </h4>
-                            <p className={`text-sm mt-0.5 ${formData.category === cat.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
-                              {cat.description}
-                            </p>
-                          </div>
-                          {formData.category === cat.value && (
-                            <CheckCircle className="h-4 w-4 text-primary mt-0.5" />
-                          )}
+                        <div className="flex items-center gap-2">
+                          <cat.Icon className={`h-4 w-4 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
+                          <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
+                            {cat.label}
+                          </h4>
+                          {formData.category === cat.value && <CheckCircle className="h-3 w-3 text-primary ml-auto" />}
                         </div>
                       </div>
                     ))}
