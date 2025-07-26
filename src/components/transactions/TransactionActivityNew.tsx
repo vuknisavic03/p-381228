@@ -307,22 +307,24 @@ export function TransactionActivityNew() {
 
   return (
     <div className="h-full flex flex-col">
-      <TransactionFiltersNew
-        search={search}
-        onSearchChange={setSearch}
-        categories={getCategoryOptions()}
-        selectedCategories={selectedCategories}
-        onCategoryToggle={handleCategoryToggle}
-        listings={getMockListings()}
-        selectedProperties={selectedProperties}
-        onPropertyToggle={handlePropertyToggle}
-        transactionType={transactionType}
-        onTypeChange={setTransactionType}
-        onClearFilters={handleClearFilters}
-        typeOptions={getTypeOptions()}
-      />
+      <div className="flex-shrink-0">
+        <TransactionFiltersNew
+          search={search}
+          onSearchChange={setSearch}
+          categories={getCategoryOptions()}
+          selectedCategories={selectedCategories}
+          onCategoryToggle={handleCategoryToggle}
+          listings={getMockListings()}
+          selectedProperties={selectedProperties}
+          onPropertyToggle={handlePropertyToggle}
+          transactionType={transactionType}
+          onTypeChange={setTransactionType}
+          onClearFilters={handleClearFilters}
+          typeOptions={getTypeOptions()}
+        />
+      </div>
       
-      <div className="flex-1 p-4 overflow-hidden">
+      <div className="flex-1 min-h-0 p-4">
         <TransactionsTable
           transactions={filteredTransactions}
           onEdit={handleEditTransaction}
