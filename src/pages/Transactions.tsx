@@ -370,41 +370,46 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col bg-gray-50">
-        <PageHeader
-          onAddClick={() => setIsAddFormOpen(true)}
-          addButtonText="Add Transaction"
-        >
-          <DateRangeHeader 
-            dateRange={dateRange}
-            onDateRangeChange={setDateRange}
-          />
-        </PageHeader>
-
-        {/* Fixed filters section */}
-        <div className="flex-shrink-0 bg-white border-b">
-          <TransactionFiltersNew
-            search={search}
-            onSearchChange={setSearch}
-            categories={getCategoryOptions()}
-            selectedCategories={selectedCategories}
-            onCategoryToggle={handleCategoryToggle}
-            listings={getMockListings()}
-            selectedProperties={selectedProperties}
-            onPropertyToggle={handlePropertyToggle}
-            transactionType={transactionType}
-            onTypeChange={setTransactionType}
-            onClearFilters={handleClearFilters}
-            typeOptions={getTypeOptions()}
-          />
+        {/* Fixed header section - both date/button row and filters */}
+        <div className="flex-shrink-0 bg-white">
+          <PageHeader
+            onAddClick={() => setIsAddFormOpen(true)}
+            addButtonText="Add Transaction"
+          >
+            <DateRangeHeader 
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+            />
+          </PageHeader>
+          
+          {/* Filters section */}
+          <div className="border-b">
+            <TransactionFiltersNew
+              search={search}
+              onSearchChange={setSearch}
+              categories={getCategoryOptions()}
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
+              listings={getMockListings()}
+              selectedProperties={selectedProperties}
+              onPropertyToggle={handlePropertyToggle}
+              transactionType={transactionType}
+              onTypeChange={setTransactionType}
+              onClearFilters={handleClearFilters}
+              typeOptions={getTypeOptions()}
+            />
+          </div>
         </div>
 
         {/* Scrollable table section */}
-        <div className="flex-1 bg-white p-4">
-          <TransactionsTable
-            transactions={filteredTransactions}
-            onEdit={handleEditTransaction}
-            onDelete={handleDeleteTransaction}
-          />
+        <div className="flex-1 overflow-hidden bg-white">
+          <div className="h-full overflow-auto p-4">
+            <TransactionsTable
+              transactions={filteredTransactions}
+              onEdit={handleEditTransaction}
+              onDelete={handleDeleteTransaction}
+            />
+          </div>
         </div>
 
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
