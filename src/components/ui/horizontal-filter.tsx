@@ -81,11 +81,6 @@ export function HorizontalFilter({
                 )}
               >
                 <span className="text-sm font-medium">{section.title}</span>
-                {section.selectedValues.length > 0 && (
-                  <Badge variant="secondary" className="h-4 text-xs px-1.5 bg-muted text-muted-foreground border-0">
-                    {section.selectedValues.length}
-                  </Badge>
-                )}
                 <ChevronDown className="h-3.5 w-3.5 opacity-50" />
               </Button>
             </PopoverTrigger>
