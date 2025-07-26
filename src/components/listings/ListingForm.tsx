@@ -291,18 +291,18 @@ export function ListingForm({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-8">
-        <div className="w-full max-w-4xl mx-auto space-y-8">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
+        <div className="w-[98%] max-w-none space-y-8">
           
           {/* Location Section */}
-          <div className="bg-card rounded-xl border border-border p-8 shadow-sm transform scale-[0.85] origin-top">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <MapPin className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Location Information</h3>
-                <p className="text-sm text-muted-foreground mt-1">Provide the address details for your property</p>
+                <h3 className="font-medium text-foreground">Location</h3>
+                <p className="text-sm text-muted-foreground">Where is your listing located?</p>
               </div>
             </div>
             
@@ -365,26 +365,24 @@ export function ListingForm({
           </div>
 
           {/* Property Type Section */}
-          <div className="bg-card rounded-xl border border-border p-8 shadow-sm transform scale-[0.85] origin-top">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Building className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <Building className="h-4 w-4 text-muted-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Property Type</h3>
-                <p className="text-sm text-muted-foreground mt-1">Select the type and configuration of your property</p>
+                <h3 className="font-medium text-foreground">Listing Type</h3>
+                <p className="text-sm text-muted-foreground">What type of listing is this?</p>
               </div>
             </div>
 
             {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-6 bg-muted/30 rounded-xl mb-8">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <Building2 className="h-5 w-5 text-primary" />
-                </div>
+            <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg mb-5">
+              <div className="flex items-center gap-2">
+                <Building2 className="h-4 w-4 text-muted-foreground" />
                 <div>
-                  <p className="font-semibold text-foreground">Multiple Units Property</p>
-                  <p className="text-sm text-muted-foreground">Does this property have separate units to manage?</p>
+                  <p className="font-medium text-foreground text-sm">Multiple Units</p>
+                  <p className="text-xs text-muted-foreground">Property has separate units</p>
                 </div>
               </div>
               <Button 
@@ -392,14 +390,14 @@ export function ListingForm({
                 variant={useUnitsMode ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => setUseUnitsMode(!useUnitsMode)} 
-                className="text-sm px-4 py-2 h-9 min-w-[70px] font-medium"
+                className="text-xs px-3 py-1.5 h-7 min-w-[60px]"
               >
                 {useUnitsMode ? "Yes" : "No"}
               </Button>
             </div>
 
             {/* Property Type Selection - 2x3 Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {propertyTypes.map(type => (
                 <div 
                   key={type.value} 
@@ -456,14 +454,14 @@ export function ListingForm({
           </div>
 
           {/* Details Section */}
-          {formData.type && <div className="bg-card rounded-xl border border-border p-8 shadow-sm transform scale-[0.85] origin-top">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <Settings className="h-5 w-5 text-primary" />
+          {formData.type && <div className="bg-card rounded-lg border border-border p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-muted rounded-lg">
+                  <Settings className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground">Property Details</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Configure the specific details and occupancy of your property</p>
+                  <h3 className="font-medium text-foreground">Details</h3>
+                  <p className="text-sm text-muted-foreground">Configure the specific details of your listing</p>
                 </div>
               </div>
 
@@ -583,26 +581,19 @@ export function ListingForm({
             </div>}
 
           {/* Notes Section */}
-          <div className="bg-card rounded-xl border border-border p-8 shadow-sm transform scale-[0.85] origin-top">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <MessageSquare className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-muted rounded-lg">
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Additional Notes</h3>
-                <p className="text-sm text-muted-foreground mt-1">Add any additional information, special features, or important details</p>
+                <h3 className="font-medium text-foreground">Notes</h3>
+                <p className="text-sm text-muted-foreground">Add any additional information about this listing</p>
               </div>
             </div>
             
             <div>
-              <Textarea 
-                id="notes" 
-                name="notes" 
-                value={formData.notes} 
-                onChange={handleChange} 
-                placeholder="Add any additional notes, special features, maintenance requirements, tenant preferences, or other important details about this property..." 
-                className="min-h-[120px] resize-none"
-              />
+              <Textarea id="notes" name="notes" value={formData.notes} onChange={handleChange} placeholder="Add any additional notes, special features, maintenance requirements, or important details..." className="min-h-[100px] resize-none" />
             </div>
           </div>
         </div>

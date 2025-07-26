@@ -162,7 +162,7 @@ export default function Listings() {
         <Sheet open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
           <SheetContent 
             side="right" 
-            className="w-[1200px] sm:w-[1300px] max-w-[95vw] p-0 border-l shadow-2xl bg-white"
+            className="w-[800px] sm:w-[900px] max-w-[90vw] p-0 border-l shadow-2xl bg-white"
           >
             <ListingForm 
               onClose={() => setIsAddFormOpen(false)} 
@@ -175,7 +175,7 @@ export default function Listings() {
         <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
           <SheetContent 
             side="right" 
-            className="w-[1200px] sm:w-[1300px] max-w-[95vw] p-0 border-l shadow-2xl transition-transform duration-300"
+            className="w-[800px] sm:w-[900px] max-w-[90vw] p-0 border-l shadow-2xl transition-transform duration-300"
           >
             {selectedListing && (
               <EditListingForm
