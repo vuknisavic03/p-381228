@@ -12,7 +12,6 @@ import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
 import { USLocationAutofill } from "./USLocationAutofill";
-import { WorldLocationInput } from "./WorldLocationInput";
 interface Unit {
   id: string;
   unitNumber: string;
@@ -191,6 +190,7 @@ export function ListingForm({
     address?: string;
     formatted_address?: string;
   }) => {
+    // This function can be removed but keeping for compatibility
     setFormData(prev => ({
       ...prev,
       ...(locationData.city && { city: locationData.city }),
@@ -309,17 +309,14 @@ export function ListingForm({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <WorldLocationInput 
-                    value={formData.city} 
-                    onChange={value => setFormData(prev => ({
-                      ...prev,
-                      city: value
-                    }))} 
-                    placeholder="e.g., New York, London, Tokyo" 
-                    label="City" 
-                    type="city" 
-                    className="h-10" 
-                    onLocationSelect={handleLocationSelect} 
+                  <Label htmlFor="city" className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
+                  <Input
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    placeholder="e.g., New York, London, Tokyo"
+                    className="h-10"
                   />
                 </div>
                 <div>
@@ -336,17 +333,14 @@ export function ListingForm({
               </div>
               
               <div>
-                <WorldLocationInput 
-                  value={formData.address} 
-                  onChange={value => setFormData(prev => ({
-                    ...prev,
-                    address: value
-                  }))} 
-                  placeholder="e.g., 123 Main Street" 
-                  label="Street Address" 
-                  type="address" 
-                  className="h-10" 
-                  onLocationSelect={handleLocationSelect} 
+                <Label htmlFor="address" className="text-sm font-medium text-foreground mb-1.5 block">Street Address</Label>
+                <Input
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="e.g., 123 Main Street"
+                  className="h-10"
                 />
               </div>
                
