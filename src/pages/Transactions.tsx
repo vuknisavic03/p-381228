@@ -7,10 +7,11 @@ import { TransactionFiltersNew } from "@/components/transactions/TransactionFilt
 import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { EditTransactionForm } from "@/components/transactions/EditTransactionForm";
 import { DateRangeHeader } from "@/components/transactions/DateRangeHeader";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { DateRange } from "react-day-picker";
 import { startOfMonth, endOfMonth } from "date-fns";
+import { Plus } from "lucide-react";
 
 export default function Transactions() {
   const location = useLocation();
@@ -384,34 +385,44 @@ export default function Transactions() {
       owner={workspaceData.owner}
     >
       <div className="h-screen flex flex-col bg-gray-50">
-        {/* Fixed header section - both date/button row and filters */}
-        <div className="flex-shrink-0 bg-white">
-          <PageHeader
-            onAddClick={() => setIsAddFormOpen(true)}
-            addButtonText="Add Transaction"
-          >
-            <DateRangeHeader 
-              dateRange={dateRange}
-              onDateRangeChange={setDateRange}
-            />
-          </PageHeader>
-          
-          {/* Filters section */}
-          <div className="border-b">
-            <TransactionFiltersNew
-              search={search}
-              onSearchChange={setSearch}
-              categories={getCategoryOptions()}
-              selectedCategories={selectedCategories}
-              onCategoryToggle={handleCategoryToggle}
-              listings={getMockListings()}
-              selectedProperties={selectedProperties}
-              onPropertyToggle={handlePropertyToggle}
-              transactionType={transactionType}
-              onTypeChange={setTransactionType}
-              onClearFilters={handleClearFilters}
-              typeOptions={getTypeOptions()}
-            />
+        {/* Single horizontal header with filters, date range, and add button */}
+        <div className="flex-shrink-0 bg-white border-b">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between gap-4">
+              {/* Left side - Search and Filters */}
+              <div className="flex items-center gap-3 flex-1">
+                <TransactionFiltersNew
+                  search={search}
+                  onSearchChange={setSearch}
+                  categories={getCategoryOptions()}
+                  selectedCategories={selectedCategories}
+                  onCategoryToggle={handleCategoryToggle}
+                  listings={getMockListings()}
+                  selectedProperties={selectedProperties}
+                  onPropertyToggle={handlePropertyToggle}
+                  transactionType={transactionType}
+                  onTypeChange={setTransactionType}
+                  onClearFilters={handleClearFilters}
+                  typeOptions={getTypeOptions()}
+                  showInline={true}
+                />
+              </div>
+              
+              {/* Right side - Date Range and Add Button */}
+              <div className="flex items-center gap-3">
+                <DateRangeHeader 
+                  dateRange={dateRange}
+                  onDateRangeChange={setDateRange}
+                />
+                <Button
+                  onClick={() => setIsAddFormOpen(true)}
+                  className="flex items-center gap-2 h-10 px-4 py-2 rounded-lg font-medium transition-colors shadow-sm bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Transaction
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 

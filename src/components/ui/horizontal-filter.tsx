@@ -105,7 +105,14 @@ export function HorizontalFilter({
                           ? "bg-muted/40 text-foreground" 
                           : "hover:bg-muted/30 text-muted-foreground hover:text-foreground"
                       )}
-                      onClick={() => section.onToggle(option.value)}
+                      onClick={() => {
+                        // Allow deselection for all filters, including type filter
+                        if (section.id === 'type' && isSelected && option.value === 'all') {
+                          // Don't allow deselecting "all" if it's the only option
+                          return;
+                        }
+                        section.onToggle(option.value);
+                      }}
                     >
                       <div className="flex items-center gap-3 flex-1">
                         <div className={cn(

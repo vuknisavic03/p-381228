@@ -22,6 +22,7 @@ interface TransactionFiltersNewProps {
   onTypeChange: (type: 'revenue' | 'expense' | 'all') => void;
   onClearFilters: () => void;
   typeOptions?: FilterOption[];
+  showInline?: boolean; // Add prop to control inline layout
 }
 
 export function TransactionFiltersNew({
@@ -37,6 +38,7 @@ export function TransactionFiltersNew({
   onTypeChange,
   onClearFilters,
   typeOptions = [],
+  showInline = false,
 }: TransactionFiltersNewProps) {
   
   const filterSections: FilterSection[] = [
@@ -68,7 +70,23 @@ export function TransactionFiltersNew({
     },
   ];
 
-  const activeFiltersCount = selectedCategories.length + selectedProperties.length + 1; // +1 for transaction type
+  
+  const activeFiltersCount = selectedCategories.length + selectedProperties.length + (transactionType !== 'all' ? 1 : 0);
+  
+  // For inline mode, return just the horizontal filter without wrapper
+  if (showInline) {
+    return (
+      <HorizontalFilter
+        searchValue={search}
+        onSearchChange={onSearchChange}
+        searchPlaceholder="Search transactions..."
+        filterSections={filterSections}
+        activeFilterCount={activeFiltersCount}
+        onClearFilters={onClearFilters}
+        className="border-0 p-0"
+      />
+    );
+  }
   
   return (
     <div className="bg-background border-b border-border/30">
