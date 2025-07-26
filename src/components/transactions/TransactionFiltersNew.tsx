@@ -68,7 +68,7 @@ export function TransactionFiltersNew({
     },
   ];
 
-  
+  const activeFiltersCount = selectedCategories.length + selectedProperties.length + 1; // +1 for transaction type
   
   return (
     <div className="bg-background border-b border-border/30">
@@ -78,7 +78,7 @@ export function TransactionFiltersNew({
           onSearchChange={onSearchChange}
           searchPlaceholder="Search transactions..."
           filterSections={filterSections}
-          activeFilterCount={0}
+          activeFilterCount={activeFiltersCount}
           onClearFilters={onClearFilters}
           className="border-0 p-0"
         />
