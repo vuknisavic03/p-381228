@@ -307,7 +307,8 @@ export function TransactionActivityNew() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-shrink-0">
+      {/* Fixed filters section */}
+      <div className="flex-shrink-0 bg-background">
         <TransactionFiltersNew
           search={search}
           onSearchChange={setSearch}
@@ -324,7 +325,8 @@ export function TransactionActivityNew() {
         />
       </div>
       
-      <div className="flex-1 min-h-0 p-4">
+      {/* Scrollable table section */}
+      <div className="flex-1 overflow-hidden p-4">
         <TransactionsTable
           transactions={filteredTransactions}
           onEdit={handleEditTransaction}
