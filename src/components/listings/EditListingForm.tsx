@@ -540,7 +540,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
               ) : (
                 <div className="mb-4">
                   <Label className="text-sm font-medium text-foreground mb-2 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     {getAvailableCategories().map((cat) => (
                       <div
                         key={cat.value}

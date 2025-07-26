@@ -468,7 +468,7 @@ export function ListingForm({
               {/* Units Manager */}
               {useUnitsMode ? <UnitsManager propertyType={formData.type as PropertyType} units={units} onUnitsChange={setUnits} /> : <div className="mb-4">
                   <Label className="text-sm font-medium text-foreground mb-2 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     {getAvailableCategories().map(cat => <div key={cat.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.category === cat.value ? "border-primary bg-muted/40" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => setFormData(prev => ({
                 ...prev,
                 category: cat.value
