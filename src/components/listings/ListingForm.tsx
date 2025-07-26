@@ -273,7 +273,7 @@ export function ListingForm({
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
   return <div className="flex flex-col h-full bg-background">
       {/* Header with action buttons */}
-      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5 transform scale-[0.85] origin-top">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold text-foreground">Add New Listing</h1>
@@ -291,7 +291,7 @@ export function ListingForm({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-8">
+      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-8 transform scale-[0.85] origin-top">
         <div className="w-full max-w-4xl mx-auto space-y-8">
           
           {/* Location Section */}
