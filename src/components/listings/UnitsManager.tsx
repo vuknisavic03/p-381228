@@ -320,29 +320,44 @@ export function UnitsManager({
                     </div>
                   </div>
                   
-                  <div className="space-y-3">
-                    <div>
-                      <Label htmlFor={`tenantName-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">
+                  <div className="grid gap-4">
+                    {/* Name Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor={`tenantName-${selectedUnit.id}`} className="text-sm font-medium text-foreground">
                         {selectedUnit.tenant?.type === "individual" ? "Full Name" : "Company Name"}
                       </Label>
-                      <Input id={`tenantName-${selectedUnit.id}`} value={selectedUnit.tenant?.name || ""} onChange={e => updateUnitTenant(selectedUnit.id, {
-                name: e.target.value
-              })} placeholder={selectedUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"} className="h-9 text-sm" />
+                      <Input 
+                        id={`tenantName-${selectedUnit.id}`} 
+                        value={selectedUnit.tenant?.name || ""} 
+                        onChange={e => updateUnitTenant(selectedUnit.id, { name: e.target.value })} 
+                        placeholder={selectedUnit.tenant?.type === "individual" ? "Enter tenant's full name" : "Enter company name"} 
+                        className="h-10"
+                      />
                     </div>
                     
-                    {/* Contact Information */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor={`tenantPhone-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">Phone</Label>
-                        <Input id={`tenantPhone-${selectedUnit.id}`} value={selectedUnit.tenant?.phone || ""} onChange={e => updateUnitTenant(selectedUnit.id, {
-                  phone: e.target.value
-                })} placeholder="Phone number" className="h-9 text-sm" />
+                    {/* Contact Information Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor={`tenantEmail-${selectedUnit.id}`} className="text-sm font-medium text-foreground">Email</Label>
+                        <Input 
+                          id={`tenantEmail-${selectedUnit.id}`} 
+                          type="email"
+                          value={selectedUnit.tenant?.email || ""} 
+                          onChange={e => updateUnitTenant(selectedUnit.id, { email: e.target.value })} 
+                          placeholder="Enter email address" 
+                          className="h-10"
+                        />
                       </div>
-                      <div>
-                        <Label htmlFor={`tenantEmail-${selectedUnit.id}`} className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
-                        <Input id={`tenantEmail-${selectedUnit.id}`} value={selectedUnit.tenant?.email || ""} onChange={e => updateUnitTenant(selectedUnit.id, {
-                  email: e.target.value
-                })} placeholder="Email address" className="h-9 text-sm" />
+                      <div className="space-y-2">
+                        <Label htmlFor={`tenantPhone-${selectedUnit.id}`} className="text-sm font-medium text-foreground">Phone</Label>
+                        <Input 
+                          id={`tenantPhone-${selectedUnit.id}`} 
+                          type="tel"
+                          value={selectedUnit.tenant?.phone || ""} 
+                          onChange={e => updateUnitTenant(selectedUnit.id, { phone: e.target.value })} 
+                          placeholder="Enter phone number" 
+                          className="h-10"
+                        />
                       </div>
                     </div>
                   </div>
