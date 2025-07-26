@@ -390,7 +390,7 @@ export function ListingForm({
                 variant={useUnitsMode ? "default" : "outline"} 
                 size="sm" 
                 onClick={() => setUseUnitsMode(!useUnitsMode)} 
-                className="text-xs px-3 py-1.5 h-7 min-w-[60px]"
+                className="text-xs px-2 py-1 h-6 min-w-[50px]"
               >
                 {useUnitsMode ? "Yes" : "No"}
               </Button>
