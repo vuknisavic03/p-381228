@@ -179,6 +179,12 @@ export function TransactionActivityNew() {
     }));
   };
 
+  const getTypeOptions = () => [
+    { value: "all", label: "All", count: transactions.length },
+    { value: "revenue", label: "Revenue", count: transactions.filter(t => t.type === 'revenue').length },
+    { value: "expense", label: "Expense", count: transactions.filter(t => t.type === 'expense').length }
+  ];
+
   // Mock listings data with units for hierarchical filter
   const getMockListings = () => [
     {
@@ -313,6 +319,7 @@ export function TransactionActivityNew() {
         transactionType={transactionType}
         onTypeChange={setTransactionType}
         onClearFilters={handleClearFilters}
+        typeOptions={getTypeOptions()}
       />
       
       <div className="flex-1 p-4">

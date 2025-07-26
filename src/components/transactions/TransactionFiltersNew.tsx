@@ -21,6 +21,7 @@ interface TransactionFiltersNewProps {
   transactionType: 'revenue' | 'expense' | 'all';
   onTypeChange: (type: 'revenue' | 'expense' | 'all') => void;
   onClearFilters: () => void;
+  typeOptions?: FilterOption[];
 }
 
 export function TransactionFiltersNew({
@@ -35,13 +36,14 @@ export function TransactionFiltersNew({
   transactionType,
   onTypeChange,
   onClearFilters,
+  typeOptions = [],
 }: TransactionFiltersNewProps) {
   
   const filterSections: FilterSection[] = [
     {
       id: "type",
       title: "Type",
-      options: [
+      options: typeOptions.length > 0 ? typeOptions : [
         { value: "all", label: "All", count: 0 },
         { value: "revenue", label: "Revenue", count: 0 },
         { value: "expense", label: "Expense", count: 0 }
