@@ -91,8 +91,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   return (
     <div className="p-6">
       <div className="bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden">
-        <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-          <Table>
+        <div className="max-h-[calc(100vh-200px)] overflow-x-auto overflow-y-auto">
+          <Table className="min-w-full">{" "}
             <TableHeader className="sticky top-0 z-10 bg-white">
               <TableRow className="border-b border-gray-200/50 bg-gradient-to-r from-gray-50/80 to-gray-50/40">
                 <TableHead className="font-semibold text-gray-800 text-sm py-4 px-6">Transaction</TableHead>

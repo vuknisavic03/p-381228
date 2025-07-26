@@ -147,8 +147,8 @@ export default function InteractiveCategorizationDemo() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-hidden rounded-b-xl">
-            <Table>
+          <div className="overflow-x-auto overflow-y-auto max-h-[50vh]">
+            <Table className="min-w-full">{" "}
               <TableHeader>
                 <TableRow className="border-b bg-gray-50/80 hover:bg-gray-50/80">
                   <TableHead className="font-semibold text-gray-800">Source</TableHead>

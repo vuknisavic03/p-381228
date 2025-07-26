@@ -122,6 +122,31 @@
     @apply bg-background text-foreground text-sm font-normal;
     font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
     letter-spacing: 0.01em;
+    scroll-behavior: smooth;
+  }
+  
+  /* Enhance scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.3);
   }
 }
 
