@@ -528,41 +528,29 @@ export function ListingForm({
                           <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
                           
                           {/* Tenant Type Toggle */}
-                          <div className="flex items-center gap-2 bg-muted/30 border border-border rounded-lg p-1">
+                          <div className="flex bg-muted rounded-lg p-1">
                             <button 
                               type="button" 
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
                                 formData.tenantType === "individual" 
-                                  ? "bg-card text-foreground shadow-sm border border-border" 
-                                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                                  ? "bg-card text-foreground shadow-sm" 
+                                  : "text-muted-foreground hover:text-foreground"
                               }`}
                             >
-                              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                                formData.tenantType === "individual" ? "bg-primary/20" : "bg-transparent"
-                              }`}>
-                                <Users className={`h-3 w-3 ${
-                                  formData.tenantType === "individual" ? "text-primary" : "text-current"
-                                }`} />
-                              </div>
+                              <Users className="h-3.5 w-3.5" />
                               Individual
                             </button>
                             <button 
                               type="button" 
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
-                              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
                                 formData.tenantType === "company" 
-                                  ? "bg-card text-foreground shadow-sm border border-border" 
-                                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                                  ? "bg-card text-foreground shadow-sm" 
+                                  : "text-muted-foreground hover:text-foreground"
                               }`}
                             >
-                              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                                formData.tenantType === "company" ? "bg-primary/20" : "bg-transparent"
-                              }`}>
-                                <Building2 className={`h-3 w-3 ${
-                                  formData.tenantType === "company" ? "text-primary" : "text-current"
-                                }`} />
-                              </div>
+                              <Building2 className="h-3.5 w-3.5" />
                               Company
                             </button>
                           </div>
