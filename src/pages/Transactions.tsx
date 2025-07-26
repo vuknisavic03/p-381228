@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TransactionsTable } from "@/components/transactions/TransactionsTable";
 import { TransactionFiltersNew } from "@/components/transactions/TransactionFiltersNew";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
+import { EditTransactionForm } from "@/components/transactions/EditTransactionForm";
 import { DateRangeHeader } from "@/components/transactions/DateRangeHeader";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -20,6 +21,8 @@ export default function Transactions() {
   };
 
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<any>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: startOfMonth(new Date()),
     to: endOfMonth(new Date()),
@@ -228,7 +231,7 @@ export default function Transactions() {
     }
   ];
 
-  const [transactions] = useState(mockTransactions);
+  const [transactions, setTransactions] = useState(mockTransactions);
   const [filteredTransactions, setFilteredTransactions] = useState(mockTransactions);
   
   // Filter states
@@ -356,11 +359,22 @@ export default function Transactions() {
 
   // Transaction handlers
   const handleEditTransaction = (transaction: any) => {
-    console.log('Edit transaction:', transaction.id);
+    setEditingTransaction(transaction);
+    setIsEditFormOpen(true);
+  };
+
+  const handleUpdateTransaction = (updatedTransaction: any) => {
+    setTransactions(prev => 
+      prev.map(t => t.id === updatedTransaction.id ? updatedTransaction : t)
+    );
+    setIsEditFormOpen(false);
+    setEditingTransaction(null);
   };
 
   const handleDeleteTransaction = (transaction: any) => {
-    console.log('Delete transaction:', transaction.id);
+    if (confirm('Are you sure you want to delete this transaction?')) {
+      setTransactions(prev => prev.filter(t => t.id !== transaction.id));
+    }
   };
 
   return (
@@ -418,6 +432,22 @@ export default function Transactions() {
             className="w-[600px] sm:w-[700px] lg:w-[800px] p-0 border-l shadow-2xl bg-white"
           >
             <TransactionForm onClose={() => setIsAddFormOpen(false)} />
+          </SheetContent>
+        </Sheet>
+
+        <Sheet open={isEditFormOpen} onOpenChange={setIsEditFormOpen}>
+          <SheetContent
+            side="right"
+            className="w-[600px] sm:w-[700px] lg:w-[800px] p-0 border-l shadow-2xl bg-white"
+          >
+            {editingTransaction && (
+              <EditTransactionForm
+                transaction={editingTransaction}
+                onUpdate={handleUpdateTransaction}
+                onClose={() => setIsEditFormOpen(false)}
+                onDelete={handleDeleteTransaction}
+              />
+            )}
           </SheetContent>
         </Sheet>
       </div>

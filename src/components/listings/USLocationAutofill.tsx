@@ -353,15 +353,15 @@ export function USLocationAutofill({
 
       {/* Suggestions dropdown */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-auto">
+        <div className="absolute z-[100] w-full mt-1 bg-white dark:bg-gray-800 border border-border rounded-md shadow-lg max-h-60 overflow-auto backdrop-blur-sm">
           {suggestions.map((suggestion, index) => (
             <div
               key={suggestion.place_id}
               className={cn(
-                "px-3 py-2 cursor-pointer border-b border-border/50 last:border-b-0",
+                "px-3 py-2 cursor-pointer border-b border-border/50 last:border-b-0 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors",
                 selectedIndex === index 
-                  ? "bg-accent text-accent-foreground" 
-                  : "hover:bg-muted"
+                  ? "bg-blue-50 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100" 
+                  : ""
               )}
               onClick={() => handleSuggestionSelect(suggestion)}
             >
