@@ -38,7 +38,7 @@ import { Card } from "@/components/ui/card";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
-import { LocationAutofill } from "./LocationAutofill";
+import { USLocationAutofill } from "./USLocationAutofill";
 
 interface Unit {
   id: string;
@@ -66,6 +66,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
     city: listing.city || "",
     address: listing.address || "",
     country: listing.country || "",
+    region: listing.region || "",
     postalCode: listing.postalCode || "",
     type: listing.type || "",
     category: listing.category || "",
@@ -145,10 +146,17 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
     }));
   };
 
-  const handleLocationSelect = (locationData: { city?: string; country?: string; address?: string }) => {
+  const handleLocationSelect = (locationData: { 
+    city?: string; 
+    state?: string;
+    country?: string; 
+    address?: string;
+    formatted_address?: string;
+  }) => {
     setFormData(prev => ({
       ...prev,
       ...(locationData.city && { city: locationData.city }),
+      ...(locationData.state && { region: locationData.state }),
       ...(locationData.country && { country: locationData.country }),
       ...(locationData.address && { address: locationData.address })
     }));
@@ -361,16 +369,49 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="city" className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
-                  <Input
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    placeholder="e.g., Belgrade"
-                    className="h-10"
+                  <USLocationAutofill 
+                    value={formData.city} 
+                    onChange={value => setFormData(prev => ({
+                      ...prev,
+                      city: value
+                    }))} 
+                    placeholder="e.g., New York" 
+                    label="City" 
+                    type="city" 
+                    className="h-10" 
+                    onLocationSelect={handleLocationSelect} 
                   />
                 </div>
+                <div>
+                  <Label htmlFor="region" className="text-sm font-medium text-foreground mb-1.5 block">State</Label>
+                  <Input
+                    id="region"
+                    name="region"
+                    value={formData.region || ""}
+                    onChange={handleChange}
+                    placeholder="e.g., NY"
+                    className="h-10"
+                    readOnly
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <USLocationAutofill 
+                  value={formData.address} 
+                  onChange={value => setFormData(prev => ({
+                    ...prev,
+                    address: value
+                  }))} 
+                  placeholder="e.g., 123 Main Street" 
+                  label="Street Address" 
+                  type="address" 
+                  className="h-10" 
+                  onLocationSelect={handleLocationSelect} 
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label htmlFor="country" className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
                   <Input
@@ -378,34 +419,22 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    placeholder="e.g., Serbia"
+                    placeholder="United States"
+                    className="h-10"
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">ZIP Code</Label>
+                  <Input
+                    id="postalCode"
+                    name="postalCode"
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    placeholder="e.g., 10001"
                     className="h-10"
                   />
                 </div>
-              </div>
-              
-              <div>
-                <Label htmlFor="address" className="text-sm font-medium text-foreground mb-1.5 block">Full Address</Label>
-                <Input
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="e.g., Knez Mihailova 42"
-                  className="h-10"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
-                <Input
-                  id="postalCode"
-                  name="postalCode"
-                  value={formData.postalCode}
-                  onChange={handleChange}
-                  placeholder="e.g., 11000"
-                  className="h-10"
-                />
               </div>
             </div>
           </div>

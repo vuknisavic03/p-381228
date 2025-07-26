@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
-import { LocationAutofill } from "./LocationAutofill";
+import { USLocationAutofill } from "./USLocationAutofill";
 interface Unit {
   id: string;
   unitNumber: string;
@@ -185,20 +185,17 @@ export function ListingForm({
   };
   const handleLocationSelect = (locationData: {
     city?: string;
+    state?: string;
     country?: string;
     address?: string;
+    formatted_address?: string;
   }) => {
     setFormData(prev => ({
       ...prev,
-      ...(locationData.city && {
-        city: locationData.city
-      }),
-      ...(locationData.country && {
-        country: locationData.country
-      }),
-      ...(locationData.address && {
-        address: locationData.address
-      })
+      ...(locationData.city && { city: locationData.city }),
+      ...(locationData.state && { region: locationData.state }),
+      ...(locationData.country && { country: locationData.country }),
+      ...(locationData.address && { address: locationData.address })
     }));
   };
   const toggleTenantType = () => {
@@ -309,24 +306,67 @@ export function ListingForm({
             </div>
             
             <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <USLocationAutofill 
+                    value={formData.city} 
+                    onChange={value => setFormData(prev => ({
+                      ...prev,
+                      city: value
+                    }))} 
+                    placeholder="e.g., New York" 
+                    label="City" 
+                    type="city" 
+                    className="h-10" 
+                    onLocationSelect={handleLocationSelect} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="region" className="text-sm font-medium text-foreground mb-1.5 block">State</Label>
+                  <Input
+                    id="region"
+                    name="region"
+                    value={formData.region}
+                    onChange={handleChange}
+                    placeholder="e.g., NY"
+                    className="h-10"
+                    readOnly
+                  />
+                </div>
+              </div>
+              
               <div>
-                <LocationAutofill 
+                <USLocationAutofill 
                   value={formData.address} 
                   onChange={value => setFormData(prev => ({
                     ...prev,
                     address: value
                   }))} 
-                  placeholder="Address" 
-                  label="Address" 
+                  placeholder="e.g., 123 Main Street" 
+                  label="Street Address" 
                   type="address" 
                   className="h-10" 
                   onLocationSelect={handleLocationSelect} 
                 />
               </div>
                
-               <div>
-                 <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal Code</Label>
-                 <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 11000" className="h-10" />
+               <div className="grid grid-cols-2 gap-3">
+                 <div>
+                   <Label htmlFor="country" className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
+                   <Input
+                     id="country"
+                     name="country"
+                     value={formData.country}
+                     onChange={handleChange}
+                     placeholder="United States"
+                     className="h-10"
+                     readOnly
+                   />
+                 </div>
+                 <div>
+                   <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">ZIP Code</Label>
+                   <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 10001" className="h-10" />
+                 </div>
                </div>
             </div>
           </div>
