@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit2, Trash2, DollarSign } from "lucide-react";
+import { PropertyType } from "./TransactionFormTypes";
+import { getPropertyTypeColorVar } from "@/utils/propertyTypeUtils";
 
 interface Transaction {
   id: number;
@@ -43,6 +45,19 @@ export function TransactionsTable({
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  };
+
+  const getPropertyTypeFromId = (listingId: string): PropertyType | null => {
+    const listings = [
+      { id: "1", type: "commercial_rental" as PropertyType },
+      { id: "2", type: "commercial_rental" as PropertyType },
+      { id: "3", type: "hospitality" as PropertyType },
+      { id: "4", type: "hospitality" as PropertyType },
+      { id: "5", type: "residential_rental" as PropertyType },
+    ];
+    
+    const listing = listings.find(l => l.id === listingId);
+    return listing ? listing.type : null;
   };
 
   const getListingAddress = (listingId: string): string => {
@@ -172,7 +187,14 @@ export function TransactionsTable({
                 
                 <td className="py-5 px-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-2.5 h-2.5 rounded-full ${getCategoryColor(transaction.category)}`} />
+                    <div 
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ 
+                        backgroundColor: getPropertyTypeFromId(transaction.selectedListingId) 
+                          ? getPropertyTypeColorVar(getPropertyTypeFromId(transaction.selectedListingId)!)
+                          : 'hsl(var(--muted))'
+                      }}
+                    />
                     <Badge variant="secondary" className="text-xs font-medium px-2.5 py-1">
                       {getPropertyType(transaction.selectedListingId)}
                     </Badge>

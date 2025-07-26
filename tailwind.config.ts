@@ -66,6 +66,14 @@ export default {
 					bg: 'hsl(var(--filter-selected-bg))',
 					border: 'hsl(var(--filter-selected-border))',
 					text: 'hsl(var(--filter-selected-text))'
+				},
+				'property': {
+					residential: 'hsl(var(--property-residential))',
+					commercial: 'hsl(var(--property-commercial))',
+					industrial: 'hsl(var(--property-industrial))',
+					hospitality: 'hsl(var(--property-hospitality))',
+					vacation: 'hsl(var(--property-vacation))',
+					mixed: 'hsl(var(--property-mixed))'
 				}
 			},
 			borderRadius: {

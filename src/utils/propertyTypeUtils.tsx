@@ -47,6 +47,46 @@ export const getPropertyTypeIcon = (propertyType: PropertyType) => {
   }
 };
 
+// Get property type color
+export const getPropertyTypeColor = (propertyType: PropertyType): string => {
+  switch (propertyType) {
+    case "residential_rental":
+      return "property-residential";
+    case "commercial_rental":
+      return "property-commercial";
+    case "industrial":
+      return "property-industrial";
+    case "hospitality":
+      return "property-hospitality";
+    case "vacation_rental":
+      return "property-vacation";
+    case "mixed_use":
+      return "property-mixed";
+    default:
+      return "muted";
+  }
+};
+
+// Get property type color as CSS variable
+export const getPropertyTypeColorVar = (propertyType: PropertyType): string => {
+  switch (propertyType) {
+    case "residential_rental":
+      return "hsl(var(--property-residential))";
+    case "commercial_rental":
+      return "hsl(var(--property-commercial))";
+    case "industrial":
+      return "hsl(var(--property-industrial))";
+    case "hospitality":
+      return "hsl(var(--property-hospitality))";
+    case "vacation_rental":
+      return "hsl(var(--property-vacation))";
+    case "mixed_use":
+      return "hsl(var(--property-mixed))";
+    default:
+      return "hsl(var(--muted))";
+  }
+};
+
 // Component to display property type with icon
 export const PropertyTypeDisplay = ({ 
   type, 

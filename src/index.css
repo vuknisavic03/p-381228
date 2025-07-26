@@ -40,6 +40,14 @@
     --filter-selected-border: 206 100% 85%;
     --filter-selected-text: 206 100% 30%;
 
+    /* Property Type Colors */
+    --property-residential: 224 71% 60%;    /* Indigo */
+    --property-commercial: 197 83% 52%;     /* Cyan */
+    --property-industrial: 0 73% 50%;       /* Red */
+    --property-hospitality: 158 64% 52%;    /* Emerald */
+    --property-vacation: 32 95% 44%;        /* Orange */
+    --property-mixed: 271 81% 56%;          /* Purple */
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -85,6 +93,15 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Property Type Colors - Dark Mode */
+    --property-residential: 224 71% 65%;    /* Slightly lighter indigo */
+    --property-commercial: 197 83% 57%;     /* Slightly lighter cyan */
+    --property-industrial: 0 73% 55%;       /* Slightly lighter red */
+    --property-hospitality: 158 64% 57%;    /* Slightly lighter emerald */
+    --property-vacation: 32 95% 49%;        /* Slightly lighter orange */
+    --property-mixed: 271 81% 61%;          /* Slightly lighter purple */
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

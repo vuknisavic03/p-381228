@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PropertyType } from "@/components/transactions/TransactionFormTypes";
-import { formatPropertyType } from "@/utils/propertyTypeUtils";
+import { formatPropertyType, getPropertyTypeColorVar } from "@/utils/propertyTypeUtils";
 import { handleMapsApiLoadError } from '@/utils/googleMapsUtils';
 import { GoogleMapsApiInput } from './GoogleMapsApiInput';
 import { useGoogleMapsApi } from '@/hooks/useGoogleMapsApi';
@@ -490,16 +490,28 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
         </h4>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="h-3 w-3 rounded-full bg-[#4f46e5]"></div>
+            <div className="h-3 w-3 rounded-full bg-[#5b6ee1]"></div>
             <span className="text-sm text-gray-700">Residential</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="h-3 w-3 rounded-full bg-[#0891b2]"></div>
+            <div className="h-3 w-3 rounded-full bg-[#06a3d2]"></div>
             <span className="text-sm text-gray-700">Commercial</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="h-3 w-3 rounded-full bg-[#059669]"></div>
+            <div className="h-3 w-3 rounded-full bg-[#22c55e]"></div>
             <span className="text-sm text-gray-700">Hospitality</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-3 w-3 rounded-full bg-[#f57c00]"></div>
+            <span className="text-sm text-gray-700">Vacation Rental</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-3 w-3 rounded-full bg-[#a855f7]"></div>
+            <span className="text-sm text-gray-700">Mixed Use</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-3 w-3 rounded-full bg-[#e24a4a]"></div>
+            <span className="text-sm text-gray-700">Industrial</span>
           </div>
         </div>
       </div>
@@ -523,19 +535,23 @@ export function ListingMap({ listings, onListingClick, onApiKeySubmit }: Listing
 }
 
 function getMarkerColor(type: PropertyType): string {
+  // Use the design system colors, but convert from HSL to hex for Google Maps
+  const colorVar = getPropertyTypeColorVar(type);
+  
+  // For Google Maps, we need to use these hex colors that match our design system
   switch (type) {
     case "residential_rental":
-      return "#4f46e5";
+      return "#5b6ee1"; // matches --property-residential
     case "commercial_rental":
-      return "#0891b2";
-    case "hospitality":
-      return "#059669";
-    case "vacation_rental":
-      return "#d97706";
-    case "mixed_use":
-      return "#9333ea";
+      return "#06a3d2"; // matches --property-commercial
     case "industrial":
-      return "#dc2626";
+      return "#e24a4a"; // matches --property-industrial
+    case "hospitality":
+      return "#22c55e"; // matches --property-hospitality
+    case "vacation_rental":
+      return "#f57c00"; // matches --property-vacation
+    case "mixed_use":
+      return "#a855f7"; // matches --property-mixed
     default:
       return "#6b7280";
   }
