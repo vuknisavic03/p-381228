@@ -353,19 +353,6 @@ export function ListingList({ onListingClick, listings, isLoading }: ListingList
 
   return (
     <div className="h-full flex flex-col">
-      {/* Horizontal Filter Header */}
-      <div className="bg-background border-b border-border/30 px-6 py-4">
-        <HorizontalFilter
-          searchValue={searchTerm}
-          onSearchChange={setSearchTerm}
-          searchPlaceholder="Search by Address, Tenant or ID..."
-          filterSections={filterSections}
-          activeFilterCount={activeFilterCount}
-          onClearFilters={clearFilters}
-          className="border-0 p-0"
-        />
-      </div>
-
       {/* Scrollable content area */}
       <ScrollArea className="flex-1">
         <div className="p-4">
