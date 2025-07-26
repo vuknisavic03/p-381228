@@ -33,6 +33,7 @@ export function ListingForm({
   onClose,
   onListingAdded
 }: ListingFormProps) {
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     city: "",
     address: "",
@@ -50,6 +51,13 @@ export function ListingForm({
   });
   const [units, setUnits] = useState<Unit[]>([]);
   const [useUnitsMode, setUseUnitsMode] = useState(false);
+
+  const steps = [
+    { id: 1, title: "Location", description: "Where is your property?" },
+    { id: 2, title: "Property Type", description: "What type of property is it?" },
+    { id: 3, title: "Details", description: "Configure the details" },
+    { id: 4, title: "Final Details", description: "Add any additional information" }
+  ];
   const propertyTypes: {
     value: PropertyType;
     label: string;
@@ -271,332 +279,472 @@ export function ListingForm({
     }
   };
   const isFormValid = formData.city && formData.address && formData.country && formData.type && (useUnitsMode || formData.category);
-  return <div className="flex flex-col h-full bg-background">
-      {/* Header with action buttons */}
-      <div className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border/50 px-6 py-5">
+  
+  const getStepProgress = () => {
+    let progress = 0;
+    if (formData.city && formData.address && formData.country) progress = 25;
+    if (formData.type) progress = 50;
+    if (useUnitsMode ? units.length > 0 : formData.category) progress = 75;
+    if (isFormValid) progress = 100;
+    return progress;
+  };
+
+  const canProceedToStep = (step: number) => {
+    switch(step) {
+      case 1: return true;
+      case 2: return formData.city && formData.address && formData.country;
+      case 3: return formData.type;
+      case 4: return useUnitsMode ? units.length > 0 : formData.category;
+      default: return false;
+    }
+  };
+
+  const isStepComplete = (step: number) => {
+    switch(step) {
+      case 1: return formData.city && formData.address && formData.country;
+      case 2: return formData.type;
+      case 3: return useUnitsMode ? units.length > 0 : formData.category;
+      case 4: return true; // Notes are optional
+      default: return false;
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-background">
+      {/* Modern Header */}
+      <div className="bg-card border-b border-border/50 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">Add New Listing</h1>
-            <p className="text-sm text-muted-foreground mt-1">Create a new listing for your portfolio</p>
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground">Add New Property</h1>
+              <p className="text-sm text-muted-foreground">Step {currentStep} of {steps.length}: {steps[currentStep - 1]?.description}</p>
+            </div>
           </div>
-          <div className="flex gap-3">
-            <Button onClick={handleSubmit} disabled={!isFormValid} className="px-6 py-2 h-10 font-medium transition-all duration-200 shadow-sm hover:shadow-md">
-              Add Listing
-            </Button>
-            <Button variant="outline" onClick={onClose} className="px-6 py-2 h-10 font-medium transition-all duration-200">
+          <div className="flex items-center gap-3">
+            <div className="text-sm text-muted-foreground">
+              {getStepProgress()}% Complete
+            </div>
+            <Button variant="outline" onClick={onClose} size="sm">
               Cancel
             </Button>
           </div>
         </div>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
-        <div className="w-[98%] max-w-none space-y-8">
+        
+        {/* Progress Bar */}
+        <div className="mt-4">
+          <div className="w-full bg-muted rounded-full h-1.5">
+            <div 
+              className="bg-primary h-1.5 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${getStepProgress()}%` }}
+            />
+          </div>
           
-          {/* Location Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-muted rounded-lg">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <h3 className="font-medium text-foreground">Location</h3>
-                <p className="text-sm text-muted-foreground">Where is your listing located?</p>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="city" className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
-                  <Input
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    placeholder="e.g., New York, London, Tokyo"
-                    className="h-10"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="region" className="text-sm font-medium text-foreground mb-1.5 block">State/Region</Label>
-                  <Input
-                    id="region"
-                    name="region"
-                    value={formData.region}
-                    onChange={handleChange}
-                    placeholder="e.g., NY, England, Tokyo"
-                    className="h-10"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <Label htmlFor="address" className="text-sm font-medium text-foreground mb-1.5 block">Street Address</Label>
-                <Input
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="e.g., 123 Main Street"
-                  className="h-10"
-                />
-              </div>
-               
-               <div className="grid grid-cols-2 gap-3">
-                 <div>
-                   <Label htmlFor="country" className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
-                   <Input
-                     id="country"
-                     name="country"
-                     value={formData.country}
-                     onChange={handleChange}
-                     placeholder="e.g., United States, United Kingdom"
-                     className="h-10"
-                   />
-                 </div>
-                 <div>
-                   <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal/ZIP Code</Label>
-                   <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 10001, SW1A 1AA" className="h-10" />
-                 </div>
-               </div>
-            </div>
-          </div>
-
-          {/* Property Type Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-muted rounded-lg">
-                <Building className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <h3 className="font-medium text-foreground">Listing Type</h3>
-                <p className="text-sm text-muted-foreground">What type of listing is this?</p>
-              </div>
-            </div>
-
-            {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg mb-5">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="font-medium text-foreground text-sm">Multiple Units</p>
-                  <p className="text-xs text-muted-foreground">Property has separate units</p>
-                </div>
-              </div>
-              <Button 
-                type="button" 
-                variant={useUnitsMode ? "default" : "outline"} 
-                size="sm" 
-                onClick={() => setUseUnitsMode(!useUnitsMode)} 
-                className="text-xs px-3 py-1.5 h-7 min-w-[60px]"
+          {/* Step Indicators */}
+          <div className="flex justify-between mt-3">
+            {steps.map((step, index) => (
+              <div 
+                key={step.id}
+                className={`flex items-center gap-2 ${
+                  currentStep === step.id ? 'text-primary' : 
+                  isStepComplete(step.id) ? 'text-primary' : 'text-muted-foreground'
+                }`}
               >
-                {useUnitsMode ? "Yes" : "No"}
-              </Button>
-            </div>
-
-            {/* Property Type Selection - 2x3 Grid */}
-            <div className="grid grid-cols-2 gap-3">
-              {propertyTypes.map(type => (
-                <div 
-                  key={type.value} 
-                  className={`relative p-4 border rounded-xl cursor-pointer transition-all duration-200 group hover:shadow-sm ${
-                    formData.type === type.value 
-                      ? "border-primary bg-muted/40 shadow-sm" 
-                      : "border-border hover:border-primary/40 hover:bg-muted/20"
-                  }`}
-                  onClick={() => {
-                    setFormData(prev => ({
-                      ...prev,
-                      type: type.value,
-                      category: ""
-                    }));
-                    setUnits([]);
-                  }}
-                >
-                  {/* Icon with background circle */}
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 transition-colors ${
-                    formData.type === type.value 
-                      ? "bg-primary/20" 
-                      : "bg-muted group-hover:bg-primary/10"
-                  }`}>
-                    {React.cloneElement(getPropertyTypeIcon(type.value), {
-                      className: `h-5 w-5 ${
-                        formData.type === type.value ? "text-primary" : "text-muted-foreground group-hover:text-primary/70"
-                      }`
-                    })}
-                  </div>
-                  
-                  {/* Text content */}
-                  <div className="space-y-1">
-                    <h4 className={`font-medium text-sm leading-tight ${
-                      formData.type === type.value ? "text-foreground" : "text-foreground"
-                    }`}>
-                      {type.label}
-                    </h4>
-                     <p className={`text-xs leading-snug ${
-                       formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"
-                     }`}>
-                       {type.description}
-                     </p>
-                  </div>
-                  
-                  {/* Selection indicator */}
-                  {formData.type === type.value && (
-                    <div className="absolute top-2 right-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                    </div>
-                  )}
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium border-2 transition-colors ${
+                  currentStep === step.id ? 'border-primary bg-primary text-primary-foreground' :
+                  isStepComplete(step.id) ? 'border-primary bg-primary text-primary-foreground' :
+                  'border-muted-foreground/30 bg-background'
+                }`}>
+                  {isStepComplete(step.id) && currentStep !== step.id ? '✓' : step.id}
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Details Section */}
-          {formData.type && <div className="bg-card rounded-lg border border-border p-5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-muted rounded-lg">
-                  <Settings className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">Details</h3>
-                  <p className="text-sm text-muted-foreground">Configure the specific details of your listing</p>
-                </div>
+                <span className="text-sm font-medium hidden sm:block">{step.title}</span>
               </div>
-
-              {/* Units Manager */}
-              {useUnitsMode ? <UnitsManager propertyType={formData.type as PropertyType} units={units} onUnitsChange={setUnits} /> : <div className="mb-4">
-                  <Label className="text-sm font-medium text-foreground mb-2 block">Specific Category</Label>
-                  <div className="grid grid-cols-1 gap-3">
-                    {getAvailableCategories().map(cat => <div key={cat.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.category === cat.value ? "border-primary bg-muted/40" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => setFormData(prev => ({
-                ...prev,
-                category: cat.value
-              }))}>
-                        <div className="flex items-start gap-3">
-                          <cat.Icon className={`h-5 w-5 mt-0.5 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
-                          <div className="flex-1">
-                            <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
-                              {cat.label}
-                            </h4>
-                            <p className={`text-sm mt-0.5 ${formData.category === cat.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
-                              {cat.description}
-                            </p>
-                          </div>
-                          {formData.category === cat.value && <CheckCircle className="h-4 w-4 text-primary mt-0.5" />}
-                        </div>
-                      </div>)}
-                  </div>
-                </div>}
-
-              {/* Occupancy and Tenant Info for Single Unit */}
-              {!useUnitsMode && shouldShowTenantInfo() && formData.category && <div className="space-y-4">
-                  <Separator />
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm font-medium text-foreground mb-2 block">Occupancy Status</Label>
-                      <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          {formData.occupancyStatus === "occupied" ? <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-full">
-                                <Users className="h-4 w-4 text-primary" />
-                              </div>
-                              <div>
-                                <p className="font-medium text-foreground text-sm">Occupied</p>
-                                <p className="text-sm text-muted-foreground">Property has tenants</p>
-                              </div>
-                            </> : <>
-                              <div className="flex items-center justify-center w-8 h-8 bg-muted rounded-full">
-                                <UserX className="h-4 w-4 text-muted-foreground" />
-                              </div>
-                              <div>
-                                <p className="font-medium text-foreground text-sm">Vacant</p>
-                                <p className="text-sm text-muted-foreground">Property is available</p>
-                              </div>
-                            </>}
-                        </div>
-                        <Button type="button" variant="outline" size="sm" onClick={toggleOccupancyStatus} className="text-sm px-3 py-1.5 h-8">
-                          Switch to {formData.occupancyStatus === "occupied" ? "Vacant" : "Occupied"}
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* Tenant Information */}
-                    {formData.occupancyStatus === "occupied" && <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
-                          
-                          {/* Tenant Type Toggle */}
-                          <div className="flex bg-muted rounded-lg p-1">
-                            <button 
-                              type="button" 
-                              onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
-                                formData.tenantType === "individual" 
-                                  ? "bg-card text-foreground shadow-sm" 
-                                  : "text-muted-foreground hover:text-foreground"
-                              }`}
-                            >
-                              <Users className="h-3.5 w-3.5" />
-                              Individual
-                            </button>
-                            <button 
-                              type="button" 
-                              onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
-                                formData.tenantType === "company" 
-                                  ? "bg-card text-foreground shadow-sm" 
-                                  : "text-muted-foreground hover:text-foreground"
-                              }`}
-                            >
-                              <Building2 className="h-3.5 w-3.5" />
-                              Company
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-4">
-                          <div>
-                            <Label htmlFor="tenantName" className="text-sm font-medium text-foreground mb-1.5 block">
-                              {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
-                            </Label>
-                            <Input id="tenantName" name="tenantName" value={formData.tenantName} onChange={handleChange} placeholder={formData.tenantType === "individual" ? "Enter tenant's full name" : "Enter company name"} className="h-10" />
-                          </div>
-                          
-                          <div className="grid grid-cols-2 gap-3">
-                            <div>
-                              <Label htmlFor="tenantPhone" className="text-sm font-medium text-foreground mb-1.5 block">Phone</Label>
-                              <Input id="tenantPhone" name="tenantPhone" value={formData.tenantPhone} onChange={handleChange} placeholder="Phone number" className="h-10" />
-                            </div>
-                            <div>
-                              <Label htmlFor="tenantEmail" className="text-sm font-medium text-foreground mb-1.5 block">Email</Label>
-                              <Input id="tenantEmail" name="tenantEmail" value={formData.tenantEmail} onChange={handleChange} placeholder="Email address" className="h-10" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>}
-                  </div>
-                </div>}
-            </div>}
-
-          {/* Notes Section */}
-          <div className="bg-card rounded-lg border border-border p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-muted rounded-lg">
-                <MessageSquare className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <h3 className="font-medium text-foreground">Notes</h3>
-                <p className="text-sm text-muted-foreground">Add any additional information about this listing</p>
-              </div>
-            </div>
-            
-            <div>
-              <Textarea id="notes" name="notes" value={formData.notes} onChange={handleChange} placeholder="Add any additional notes, special features, maintenance requirements, or important details..." className="min-h-[100px] resize-none" />
-            </div>
+            ))}
           </div>
         </div>
       </div>
-    </div>;
+
+      {/* Step Content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-2xl mx-auto px-6 py-8">
+          
+          {/* Step 1: Location */}
+          {currentStep === 1 && (
+            <Card className="p-6 space-y-6">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <MapPin className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-semibold">Property Location</h2>
+                <p className="text-muted-foreground">Tell us where your property is located</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      placeholder="New York"
+                      className="h-11"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="region">State/Region</Label>
+                    <Input
+                      id="region"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleChange}
+                      placeholder="NY"
+                      className="h-11"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="address">Street Address</Label>
+                  <Input
+                    id="address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="123 Main Street"
+                    className="h-11"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="country">Country</Label>
+                    <Input
+                      id="country"
+                      name="country"
+                      value={formData.country}
+                      onChange={handleChange}
+                      placeholder="United States"
+                      className="h-11"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="postalCode">ZIP/Postal Code</Label>
+                    <Input
+                      id="postalCode"
+                      name="postalCode"
+                      value={formData.postalCode}
+                      onChange={handleChange}
+                      placeholder="10001"
+                      className="h-11"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Step 2: Property Type */}
+          {currentStep === 2 && (
+            <Card className="p-6 space-y-6">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <Building className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-semibold">Property Type</h2>
+                <p className="text-muted-foreground">What type of property are you adding?</p>
+              </div>
+
+              {/* Multiple Units Toggle */}
+              <div className="flex items-center justify-center">
+                <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                  <Building2 className="h-5 w-5 text-muted-foreground" />
+                  <span className="font-medium">Multiple Units Property</span>
+                  <Button 
+                    variant={useUnitsMode ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => setUseUnitsMode(!useUnitsMode)}
+                  >
+                    {useUnitsMode ? "Yes" : "No"}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {propertyTypes.map(type => (
+                  <div 
+                    key={type.value} 
+                    className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                      formData.type === type.value 
+                        ? "border-primary bg-primary/5 shadow-md" 
+                        : "border-border hover:border-primary/50"
+                    }`}
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        type: type.value,
+                        category: ""
+                      }));
+                      setUnits([]);
+                    }}
+                  >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${
+                      formData.type === type.value ? "bg-primary/20" : "bg-muted"
+                    }`}>
+                      {React.cloneElement(getPropertyTypeIcon(type.value), {
+                        className: `h-6 w-6 ${
+                          formData.type === type.value ? "text-primary" : "text-muted-foreground"
+                        }`
+                      })}
+                    </div>
+                    
+                    <h3 className="font-semibold text-lg mb-2">{type.label}</h3>
+                    <p className="text-sm text-muted-foreground">{type.description}</p>
+                    
+                    {formData.type === type.value && (
+                      <div className="absolute top-4 right-4">
+                        <CheckCircle className="h-6 w-6 text-primary" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {/* Step 3: Details */}
+          {currentStep === 3 && formData.type && (
+            <Card className="p-6 space-y-6">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <Settings className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-semibold">Property Details</h2>
+                <p className="text-muted-foreground">Configure your property specifications</p>
+              </div>
+
+              {useUnitsMode ? (
+                <UnitsManager 
+                  propertyType={formData.type as PropertyType} 
+                  units={units} 
+                  onUnitsChange={setUnits} 
+                />
+              ) : (
+                <>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-base font-medium mb-3 block">Select Category</Label>
+                      <div className="grid grid-cols-1 gap-3">
+                        {getAvailableCategories().map(cat => (
+                          <div 
+                            key={cat.value} 
+                            className={`p-4 border-2 rounded-lg cursor-pointer transition-all hover:shadow-sm ${
+                              formData.category === cat.value 
+                                ? "border-primary bg-primary/5" 
+                                : "border-border hover:border-primary/50"
+                            }`} 
+                            onClick={() => setFormData(prev => ({
+                              ...prev,
+                              category: cat.value
+                            }))}
+                          >
+                            <div className="flex items-start gap-3">
+                              <cat.Icon className={`h-6 w-6 mt-0.5 ${
+                                formData.category === cat.value ? "text-primary" : "text-muted-foreground"
+                              }`} />
+                              <div className="flex-1">
+                                <h4 className="font-medium text-base">{cat.label}</h4>
+                                <p className="text-sm text-muted-foreground mt-1">{cat.description}</p>
+                              </div>
+                              {formData.category === cat.value && (
+                                <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Occupancy for single unit */}
+                    {shouldShowTenantInfo() && formData.category && (
+                      <div className="space-y-4 pt-4 border-t">
+                        <div>
+                          <Label className="text-base font-medium mb-3 block">Occupancy Status</Label>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div 
+                              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                                formData.occupancyStatus === "vacant" ? "border-primary bg-primary/5" : "border-border"
+                              }`}
+                              onClick={() => setFormData(prev => ({ ...prev, occupancyStatus: "vacant" }))}
+                            >
+                              <div className="flex items-center gap-3">
+                                <UserX className="h-5 w-5 text-muted-foreground" />
+                                <div>
+                                  <p className="font-medium">Vacant</p>
+                                  <p className="text-sm text-muted-foreground">Available for rent</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div 
+                              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                                formData.occupancyStatus === "occupied" ? "border-primary bg-primary/5" : "border-border"
+                              }`}
+                              onClick={() => setFormData(prev => ({ ...prev, occupancyStatus: "occupied" }))}
+                            >
+                              <div className="flex items-center gap-3">
+                                <Users className="h-5 w-5 text-primary" />
+                                <div>
+                                  <p className="font-medium">Occupied</p>
+                                  <p className="text-sm text-muted-foreground">Has current tenant</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Tenant Information */}
+                        {formData.occupancyStatus === "occupied" && (
+                          <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
+                            <div className="flex items-center justify-between">
+                              <Label className="text-base font-medium">Tenant Information</Label>
+                              <div className="flex bg-background rounded-lg p-1 border">
+                                <button 
+                                  type="button" 
+                                  onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
+                                  className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                                    formData.tenantType === "individual" 
+                                      ? "bg-primary text-primary-foreground shadow-sm" 
+                                      : "text-muted-foreground hover:text-foreground"
+                                  }`}
+                                >
+                                  Individual
+                                </button>
+                                <button 
+                                  type="button" 
+                                  onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
+                                  className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                                    formData.tenantType === "company" 
+                                      ? "bg-primary text-primary-foreground shadow-sm" 
+                                      : "text-muted-foreground hover:text-foreground"
+                                  }`}
+                                >
+                                  Company
+                                </button>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-4">
+                              <div>
+                                <Label htmlFor="tenantName">
+                                  {formData.tenantType === "individual" ? "Full Name" : "Company Name"}
+                                </Label>
+                                <Input 
+                                  id="tenantName" 
+                                  name="tenantName" 
+                                  value={formData.tenantName} 
+                                  onChange={handleChange} 
+                                  placeholder={formData.tenantType === "individual" ? "John Doe" : "Company Inc."} 
+                                  className="h-11 mt-2" 
+                                />
+                              </div>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label htmlFor="tenantEmail">Email</Label>
+                                  <Input 
+                                    id="tenantEmail" 
+                                    name="tenantEmail" 
+                                    type="email"
+                                    value={formData.tenantEmail} 
+                                    onChange={handleChange} 
+                                    placeholder="email@example.com" 
+                                    className="h-11 mt-2" 
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="tenantPhone">Phone</Label>
+                                  <Input 
+                                    id="tenantPhone" 
+                                    name="tenantPhone" 
+                                    type="tel"
+                                    value={formData.tenantPhone} 
+                                    onChange={handleChange} 
+                                    placeholder="(555) 123-4567" 
+                                    className="h-11 mt-2" 
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </Card>
+          )}
+
+          {/* Step 4: Notes */}
+          {currentStep === 4 && (
+            <Card className="p-6 space-y-6">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                  <MessageSquare className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-semibold">Additional Notes</h2>
+                <p className="text-muted-foreground">Add any extra details about your property (optional)</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="notes" className="text-base font-medium">Property Notes</Label>
+                  <Textarea 
+                    id="notes" 
+                    name="notes" 
+                    value={formData.notes} 
+                    onChange={handleChange} 
+                    placeholder="Special features, maintenance notes, rental restrictions, amenities, or any other important information..."
+                    className="min-h-[120px] mt-2 resize-none"
+                  />
+                </div>
+              </div>
+            </Card>
+          )}
+        </div>
+      </div>
+
+      {/* Navigation Footer */}
+      <div className="bg-card border-t px-6 py-4">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <Button 
+            variant="outline" 
+            onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+            disabled={currentStep === 1}
+          >
+            Previous
+          </Button>
+          
+          <div className="flex gap-3">
+            {currentStep < steps.length ? (
+              <Button 
+                onClick={() => setCurrentStep(currentStep + 1)}
+                disabled={!canProceedToStep(currentStep + 1)}
+              >
+                Next Step
+              </Button>
+            ) : (
+              <Button 
+                onClick={handleSubmit} 
+                disabled={!isFormValid}
+                className="px-8"
+              >
+                Add Property
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
