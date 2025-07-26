@@ -377,41 +377,79 @@ export function ListingForm({
             </div>
 
             {/* Units Mode Toggle */}
-            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg mb-4">
-              <div>
-                <p className="font-medium text-foreground text-sm">Property Structure</p>
-                <p className="text-sm text-muted-foreground">Does this property have multiple units?</p>
+            <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg mb-5">
+              <div className="flex items-center gap-2">
+                <Building2 className="h-4 w-4 text-muted-foreground" />
+                <div>
+                  <p className="font-medium text-foreground text-sm">Multiple Units</p>
+                  <p className="text-xs text-muted-foreground">Property has separate units</p>
+                </div>
               </div>
-              <Button type="button" variant={useUnitsMode ? "default" : "outline"} size="sm" onClick={() => setUseUnitsMode(!useUnitsMode)} className="text-sm px-3 py-1.5 h-8">
+              <Button 
+                type="button" 
+                variant={useUnitsMode ? "default" : "outline"} 
+                size="sm" 
+                onClick={() => setUseUnitsMode(!useUnitsMode)} 
+                className="text-xs px-3 py-1.5 h-7 min-w-[60px]"
+              >
                 {useUnitsMode ? "Yes" : "No"}
               </Button>
             </div>
 
-            {/* Property Type Selection */}
-            <div className="grid grid-cols-1 gap-3">
-              {propertyTypes.map(type => <div key={type.value} className={`p-4 border rounded-lg cursor-pointer transition-all ${formData.type === type.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"}`} onClick={() => {
-              setFormData(prev => ({
-                ...prev,
-                type: type.value,
-                category: ""
-              }));
-              setUnits([]);
-            }}>
-                  <div className="flex items-start gap-3">
+            {/* Property Type Selection - Compact Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+              {propertyTypes.map(type => (
+                <div 
+                  key={type.value} 
+                  className={`relative p-4 border rounded-xl cursor-pointer transition-all duration-200 group hover:shadow-sm ${
+                    formData.type === type.value 
+                      ? "border-primary bg-primary/10 shadow-sm" 
+                      : "border-border hover:border-primary/40 hover:bg-muted/20"
+                  }`} 
+                  onClick={() => {
+                    setFormData(prev => ({
+                      ...prev,
+                      type: type.value,
+                      category: ""
+                    }));
+                    setUnits([]);
+                  }}
+                >
+                  {/* Icon with background circle */}
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 transition-colors ${
+                    formData.type === type.value 
+                      ? "bg-primary/20" 
+                      : "bg-muted group-hover:bg-primary/10"
+                  }`}>
                     {React.cloneElement(getPropertyTypeIcon(type.value), {
-                  className: `h-5 w-5 mt-0.5 ${formData.type === type.value ? "text-primary" : "text-muted-foreground"}`
-                })}
-                    <div className="flex-1">
-                      <h4 className={`font-medium text-sm ${formData.type === type.value ? "text-foreground" : "text-foreground"}`}>
-                        {type.label}
-                      </h4>
-                      <p className={`text-sm mt-0.5 ${formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"}`}>
-                        {type.description}
-                      </p>
-                    </div>
-                    {formData.type === type.value && <CheckCircle className="h-4 w-4 text-primary mt-0.5" />}
+                      className: `h-5 w-5 ${
+                        formData.type === type.value ? "text-primary" : "text-muted-foreground group-hover:text-primary/70"
+                      }`
+                    })}
                   </div>
-                </div>)}
+                  
+                  {/* Text content */}
+                  <div className="space-y-1">
+                    <h4 className={`font-medium text-sm leading-tight ${
+                      formData.type === type.value ? "text-foreground" : "text-foreground"
+                    }`}>
+                      {type.label}
+                    </h4>
+                    <p className={`text-xs leading-snug ${
+                      formData.type === type.value ? "text-muted-foreground" : "text-muted-foreground"
+                    }`}>
+                      {type.description}
+                    </p>
+                  </div>
+                  
+                  {/* Selection indicator */}
+                  {formData.type === type.value && (
+                    <div className="absolute top-2 right-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
