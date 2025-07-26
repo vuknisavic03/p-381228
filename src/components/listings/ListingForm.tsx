@@ -12,7 +12,7 @@ import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
 import { USLocationAutofill } from "./USLocationAutofill";
-import { SimpleLocationInput } from "./SimpleLocationInput";
+import { WorldLocationInput } from "./WorldLocationInput";
 interface Unit {
   id: string;
   unitNumber: string;
@@ -309,13 +309,13 @@ export function ListingForm({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <SimpleLocationInput 
+                  <WorldLocationInput 
                     value={formData.city} 
                     onChange={value => setFormData(prev => ({
                       ...prev,
                       city: value
                     }))} 
-                    placeholder="e.g., New York" 
+                    placeholder="e.g., New York, London, Tokyo" 
                     label="City" 
                     type="city" 
                     className="h-10" 
@@ -323,20 +323,20 @@ export function ListingForm({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="region" className="text-sm font-medium text-foreground mb-1.5 block">State</Label>
+                  <Label htmlFor="region" className="text-sm font-medium text-foreground mb-1.5 block">State/Region</Label>
                   <Input
                     id="region"
                     name="region"
                     value={formData.region}
                     onChange={handleChange}
-                    placeholder="e.g., NY"
+                    placeholder="e.g., NY, England, Tokyo"
                     className="h-10"
                   />
                 </div>
               </div>
               
               <div>
-                <SimpleLocationInput 
+                <WorldLocationInput 
                   value={formData.address} 
                   onChange={value => setFormData(prev => ({
                     ...prev,
@@ -356,16 +356,15 @@ export function ListingForm({
                    <Input
                      id="country"
                      name="country"
-                     value={formData.country || "United States"}
+                     value={formData.country}
                      onChange={handleChange}
-                     placeholder="United States"
+                     placeholder="e.g., United States, United Kingdom"
                      className="h-10"
-                     readOnly
                    />
                  </div>
                  <div>
-                   <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">ZIP Code</Label>
-                   <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 10001" className="h-10" />
+                   <Label htmlFor="postalCode" className="text-sm font-medium text-foreground mb-1.5 block">Postal/ZIP Code</Label>
+                   <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="e.g., 10001, SW1A 1AA" className="h-10" />
                  </div>
                </div>
             </div>
