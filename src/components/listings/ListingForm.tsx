@@ -527,71 +527,44 @@ export function ListingForm({
                         <div className="flex items-center justify-between">
                           <Label className="text-sm font-medium text-foreground">Tenant Information</Label>
                           
-                          {/* Tenant Type Selection */}
-                          <div className="grid grid-cols-2 gap-3">
-                            <div 
-                              className={`p-3 border rounded-lg cursor-pointer transition-all duration-200 group hover:shadow-sm ${
-                                formData.tenantType === "individual" 
-                                  ? "border-primary bg-muted/40 shadow-sm" 
-                                  : "border-border hover:border-primary/40 hover:bg-muted/20"
-                              }`}
+                          {/* Tenant Type Toggle */}
+                          <div className="flex items-center gap-2 bg-muted/30 border border-border rounded-lg p-1">
+                            <button 
+                              type="button" 
                               onClick={() => setFormData(prev => ({ ...prev, tenantType: "individual" }))}
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                                  formData.tenantType === "individual" 
-                                    ? "bg-primary/20" 
-                                    : "bg-muted group-hover:bg-primary/10"
-                                }`}>
-                                  <Users className={`h-4 w-4 ${
-                                    formData.tenantType === "individual" ? "text-primary" : "text-muted-foreground group-hover:text-primary/70"
-                                  }`} />
-                                </div>
-                                <div className="flex-1">
-                                  <p className={`font-medium text-sm ${
-                                    formData.tenantType === "individual" ? "text-foreground" : "text-foreground"
-                                  }`}>
-                                    Individual
-                                  </p>
-                                  <p className="text-xs text-muted-foreground">Person or family</p>
-                                </div>
-                                {formData.tenantType === "individual" && (
-                                  <CheckCircle className="h-4 w-4 text-primary" />
-                                )}
-                              </div>
-                            </div>
-                            
-                            <div 
-                              className={`p-3 border rounded-lg cursor-pointer transition-all duration-200 group hover:shadow-sm ${
-                                formData.tenantType === "company" 
-                                  ? "border-primary bg-muted/40 shadow-sm" 
-                                  : "border-border hover:border-primary/40 hover:bg-muted/20"
+                              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                                formData.tenantType === "individual" 
+                                  ? "bg-card text-foreground shadow-sm border border-border" 
+                                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                               }`}
-                              onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
                             >
-                              <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                                  formData.tenantType === "company" 
-                                    ? "bg-primary/20" 
-                                    : "bg-muted group-hover:bg-primary/10"
-                                }`}>
-                                  <Building2 className={`h-4 w-4 ${
-                                    formData.tenantType === "company" ? "text-primary" : "text-muted-foreground group-hover:text-primary/70"
-                                  }`} />
-                                </div>
-                                <div className="flex-1">
-                                  <p className={`font-medium text-sm ${
-                                    formData.tenantType === "company" ? "text-foreground" : "text-foreground"
-                                  }`}>
-                                    Company
-                                  </p>
-                                  <p className="text-xs text-muted-foreground">Business entity</p>
-                                </div>
-                                {formData.tenantType === "company" && (
-                                  <CheckCircle className="h-4 w-4 text-primary" />
-                                )}
+                              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                                formData.tenantType === "individual" ? "bg-primary/20" : "bg-transparent"
+                              }`}>
+                                <Users className={`h-3 w-3 ${
+                                  formData.tenantType === "individual" ? "text-primary" : "text-current"
+                                }`} />
                               </div>
-                            </div>
+                              Individual
+                            </button>
+                            <button 
+                              type="button" 
+                              onClick={() => setFormData(prev => ({ ...prev, tenantType: "company" }))}
+                              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                                formData.tenantType === "company" 
+                                  ? "bg-card text-foreground shadow-sm border border-border" 
+                                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                              }`}
+                            >
+                              <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                                formData.tenantType === "company" ? "bg-primary/20" : "bg-transparent"
+                              }`}>
+                                <Building2 className={`h-3 w-3 ${
+                                  formData.tenantType === "company" ? "text-primary" : "text-current"
+                                }`} />
+                              </div>
+                              Company
+                            </button>
                           </div>
                         </div>
                         
