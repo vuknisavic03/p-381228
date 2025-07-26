@@ -117,8 +117,8 @@ export function TransactionsTable({
   }
 
   return (
-    <div className="bg-card rounded-lg border overflow-hidden">
-      <div className="overflow-x-auto">
+    <div className="bg-card rounded-lg border overflow-hidden h-full">
+      <div className="overflow-x-auto overflow-y-auto h-full">
         <table className="w-full table-fixed min-w-[800px]">
           <thead className="bg-background sticky top-0 z-10 border-b border-border">
             <tr className="border-b border-border/50">
