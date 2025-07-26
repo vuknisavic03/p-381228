@@ -12,6 +12,7 @@ import { PropertyType } from "@/components/transactions/TransactionFormTypes";
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
 import { UnitsManager } from "./UnitsManager";
 import { USLocationAutofill } from "./USLocationAutofill";
+import { SimpleLocationInput } from "./SimpleLocationInput";
 interface Unit {
   id: string;
   unitNumber: string;
@@ -308,7 +309,7 @@ export function ListingForm({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <USLocationAutofill 
+                  <SimpleLocationInput 
                     value={formData.city} 
                     onChange={value => setFormData(prev => ({
                       ...prev,
@@ -330,13 +331,12 @@ export function ListingForm({
                     onChange={handleChange}
                     placeholder="e.g., NY"
                     className="h-10"
-                    readOnly
                   />
                 </div>
               </div>
               
               <div>
-                <USLocationAutofill 
+                <SimpleLocationInput 
                   value={formData.address} 
                   onChange={value => setFormData(prev => ({
                     ...prev,
@@ -356,7 +356,7 @@ export function ListingForm({
                    <Input
                      id="country"
                      name="country"
-                     value={formData.country}
+                     value={formData.country || "United States"}
                      onChange={handleChange}
                      placeholder="United States"
                      className="h-10"
