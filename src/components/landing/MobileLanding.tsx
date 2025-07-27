@@ -41,12 +41,12 @@ export default function MobileLanding() {
           </div>
           
           <h1 className="text-2xl font-bold text-black leading-tight mb-4">
-            Break free from the old way
+            Property Management Has Evolved. Have You?
           </h1>
           
           <p className="text-sm text-gray-600 mb-8 leading-relaxed px-4 max-w-md mx-auto">
-            Personalized to your work.<br />
-            Solution that makes your life simpler.
+            Old tools can't manage a modern portfolio.<br />
+            Goodbye spreadsheets. Hello automation.
           </p>
           
           <div className="flex justify-center mb-12">

@@ -46,12 +46,12 @@ export default function DesktopLanding() {
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-black leading-tight mb-8 max-w-4xl mx-auto">
-            Break free from the old way
+            Property Management Has Evolved. Have You?
           </h1>
           
           <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Personalized to your work.<br />
-            Solution that makes your life simpler.
+            Old tools can't manage a modern portfolio.<br />
+            Goodbye spreadsheets. Hello automation.
           </p>
           
           <div className="flex justify-center mb-16">
