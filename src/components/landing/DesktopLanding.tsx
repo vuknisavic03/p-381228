@@ -71,7 +71,7 @@ export default function DesktopLanding() {
                 </div>
                 <div className="text-left">
                   <div className="text-gray-900 font-semibold text-left">Live Dashboard</div>
-                  <div className="text-gray-600 text-sm text-left">Transactions categorization • Tracks every property • Updates in real-time</div>
+                  <div className="text-gray-600 text-sm text-left">Real-time insights • Categorized transactions • Performance tracking</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
