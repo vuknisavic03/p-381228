@@ -68,7 +68,7 @@ export interface PropertyCategory {
 export interface TransactionFieldsData {
   selectedListingId: string;
   selectedUnitId?: string; // Added unit selection
-  transactionType: "revenue" | "expense" | "all";
+  transactionType: "revenue" | "expense";
   category: string;
   amount: string;
   date: Date | undefined;
