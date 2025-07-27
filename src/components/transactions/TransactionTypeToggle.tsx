@@ -16,36 +16,35 @@ export const TransactionTypeToggle: React.FC<TransactionTypeToggleProps> = ({
 }) => {
   return (
     <div className={cn(
-      "inline-flex items-center rounded-md bg-muted/30 p-0.5 border border-border/40",
+      "flex rounded-full border border-gray-200 bg-white p-0.5 shadow-xs",
       className
     )}>
       <button
         type="button"
-        className={cn(
-          "px-2.5 py-1.5 text-xs font-medium rounded transition-all duration-200 flex items-center gap-1.5",
-          "focus:outline-none focus:ring-1 focus:ring-blue-500/30",
-          value === "revenue"
-            ? "bg-background text-foreground shadow-sm border border-border/60"
-            : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-        )}
-        style={{ minWidth: 68 }}
+        className={`px-3 py-1 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1.5
+          ${value === "revenue"
+            ? "bg-green-50 text-green-600 shadow-sm"
+            : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          }`}
+        style={{
+          minWidth: 80,
+        }}
         aria-pressed={value === "revenue"}
         onClick={() => onChange("revenue")}
       >
         <TrendingUp className="h-3 w-3" />
         Revenue
       </button>
-      
       <button
         type="button"
-        className={cn(
-          "px-2.5 py-1.5 text-xs font-medium rounded transition-all duration-200 flex items-center gap-1.5",
-          "focus:outline-none focus:ring-1 focus:ring-blue-500/30",
-          value === "expense"
-            ? "bg-background text-foreground shadow-sm border border-border/60"
-            : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-        )}
-        style={{ minWidth: 68 }}
+        className={`ml-1 px-3 py-1 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1.5
+          ${value === "expense"
+            ? "bg-red-50 text-red-600 shadow-sm"
+            : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          }`}
+        style={{
+          minWidth: 80,
+        }}
         aria-pressed={value === "expense"}
         onClick={() => onChange("expense")}
       >
