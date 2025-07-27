@@ -137,8 +137,7 @@ export default function DesktopLanding() {
             </div>
             <h2 className="text-4xl font-bold text-black mb-4">All Your Properties. One Interactive View.</h2>
             <p className="text-lg text-gray-600 max-w-2xl">
-              Visualize all your property or business listings in one searchable map.<br />
-              Track occupancy, update availability, and plan with confidence.
+              Visualize all your property or business listings in one searchable map. Track occupancy, update availability, and plan with confidence.
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
