@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
 import UserTypeDialog from "./UserTypeDialog";
-import dashboardHero from "@/assets/dashboard-hero.jpg";
-import propertiesShowcase from "@/assets/properties-showcase.jpg";
-import transactionsFlow from "@/assets/transactions-flow.jpg";
-import workspacesManagement from "@/assets/workspaces-management.jpg";
+import dashboard from "/images/1.svg";
 
 export default function DesktopLanding() {
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
@@ -82,15 +79,8 @@ export default function DesktopLanding() {
                 <span className="text-green-600 text-sm font-medium">Live Updates</span>
               </div>
             </div>
-            <div className="relative">
-              <img 
-                src={dashboardHero} 
-                alt="Modern property management dashboard" 
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
             <div className="p-8">
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 {[
                   { 
@@ -151,14 +141,6 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="relative">
-              <img 
-                src={propertiesShowcase} 
-                alt="Property management listings interface" 
-                className="w-full h-64 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-            </div>
             <div className="p-6">
               <div className="flex flex-wrap gap-3 mb-6">
                 {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
@@ -238,14 +220,6 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="relative">
-              <img 
-                src={transactionsFlow} 
-                alt="Transaction management interface" 
-                className="w-full h-64 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-            </div>
             <div className="p-6">
               <div className="flex gap-3 mb-6">
                 <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
@@ -329,14 +303,6 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
-            <div className="relative">
-              <img 
-                src={workspacesManagement} 
-                alt="Workspace management interface" 
-                className="w-full h-64 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-            </div>
             <div className="p-6">
               <div className="flex gap-3 mb-6">
                 <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
