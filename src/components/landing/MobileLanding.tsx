@@ -122,9 +122,9 @@ export default function MobileLanding() {
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Listings
           </div>
-          <h2 className="text-xl font-bold text-black mb-2">Map your listings with precision</h2>
+          <h2 className="text-xl font-bold text-black mb-2">All Your Properties. One Interactive View.</h2>
           <p className="text-sm text-gray-600">
-            Visualize all your property or business listings on an interactive map. Manage availability, get insights, and plan with confidence.
+            Visualize all your property or business listings in one searchable map. Track occupancy, update availability, and plan with confidence.
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
