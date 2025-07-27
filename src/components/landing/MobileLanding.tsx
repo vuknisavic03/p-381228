@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Building2, TrendingUp, Target } from "lucide-react";
 import UserTypeDialog from "./UserTypeDialog";
+import dashboardHero from "@/assets/dashboard-hero.jpg";
+import propertiesShowcase from "@/assets/properties-showcase.jpg";
+import transactionsFlow from "@/assets/transactions-flow.jpg";
+import workspacesManagement from "@/assets/workspaces-management.jpg";
 
 export default function MobileLanding() {
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
@@ -74,6 +78,14 @@ export default function MobileLanding() {
                   </div>
                 </div>
               </div>
+              <div className="relative">
+                <img 
+                  src={dashboardHero} 
+                  alt="Modern property management dashboard" 
+                  className="w-full h-32 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
             <div className="p-4">
               
               <div className="grid grid-cols-2 gap-3 mb-4">
@@ -128,6 +140,14 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="relative">
+            <img 
+              src={propertiesShowcase} 
+              alt="Property management listings interface" 
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium">All Properties</div>
@@ -193,6 +213,14 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="relative">
+            <img 
+              src={transactionsFlow} 
+              alt="Transaction management interface" 
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
@@ -262,6 +290,14 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="relative">
+            <img 
+              src={workspacesManagement} 
+              alt="Workspace management interface" 
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
