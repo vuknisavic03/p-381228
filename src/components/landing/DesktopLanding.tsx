@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
 import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
 import UserTypeDialog from "./UserTypeDialog";
-import dashboard from "/images/1.svg";
+import dashboardHero from "@/assets/dashboard-hero.jpg";
+import propertiesIllustration from "@/assets/properties-illustration.jpg";
+import transactionsIllustration from "@/assets/transactions-illustration.jpg";
+import workspacesIllustration from "@/assets/workspaces-illustration.jpg";
 
 export default function DesktopLanding() {
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
@@ -79,6 +82,17 @@ export default function DesktopLanding() {
                 <span className="text-green-600 text-sm font-medium">Live Updates</span>
               </div>
             </div>
+            
+            {/* Hero Dashboard Image */}
+            <div className="relative">
+              <img 
+                src={dashboardHero} 
+                alt="Modern dashboard interface showing property management analytics" 
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+            </div>
+            
             <div className="p-8">
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -141,6 +155,16 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            {/* Properties Hero Image */}
+            <div className="relative">
+              <img 
+                src={propertiesIllustration} 
+                alt="Modern property portfolio visualization with building illustrations" 
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent"></div>
+            </div>
+            
             <div className="p-6">
               <div className="flex flex-wrap gap-3 mb-6">
                 {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
@@ -220,6 +244,16 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            {/* Transactions Hero Image */}
+            <div className="relative">
+              <img 
+                src={transactionsIllustration} 
+                alt="Financial analytics visualization with transaction flows and charts" 
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent"></div>
+            </div>
+            
             <div className="p-6">
               <div className="flex gap-3 mb-6">
                 <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
@@ -303,6 +337,16 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            {/* Workspaces Hero Image */}
+            <div className="relative">
+              <img 
+                src={workspacesIllustration} 
+                alt="Modern workspace collaboration with multiple connected screens and analytics" 
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent"></div>
+            </div>
+            
             <div className="p-6">
               <div className="flex gap-3 mb-6">
                 <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">

@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Building2, TrendingUp, Target } from "lucide-react";
 import UserTypeDialog from "./UserTypeDialog";
+import dashboardHero from "@/assets/dashboard-hero.jpg";
+import propertiesIllustration from "@/assets/properties-illustration.jpg";
+import transactionsIllustration from "@/assets/transactions-illustration.jpg";
+import workspacesIllustration from "@/assets/workspaces-illustration.jpg";
 
 export default function MobileLanding() {
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
@@ -74,6 +78,17 @@ export default function MobileLanding() {
                   </div>
                 </div>
               </div>
+              
+              {/* Mobile Dashboard Image */}
+              <div className="relative">
+                <img 
+                  src={dashboardHero} 
+                  alt="Modern dashboard interface" 
+                  className="w-full h-32 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
+              </div>
+              
             <div className="p-4">
               
               <div className="grid grid-cols-2 gap-3 mb-4">
@@ -128,6 +143,16 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          {/* Mobile Properties Image */}
+          <div className="relative">
+            <img 
+              src={propertiesIllustration} 
+              alt="Property portfolio visualization" 
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent"></div>
+          </div>
+          
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium">All Properties</div>
@@ -193,6 +218,16 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          {/* Mobile Transactions Image */}
+          <div className="relative">
+            <img 
+              src={transactionsIllustration} 
+              alt="Financial analytics visualization" 
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent"></div>
+          </div>
+          
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
@@ -262,6 +297,16 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+          {/* Mobile Workspaces Image */}
+          <div className="relative">
+            <img 
+              src={workspacesIllustration} 
+              alt="Workspace collaboration visualization" 
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent"></div>
+          </div>
+          
           <div className="p-4">
             <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
