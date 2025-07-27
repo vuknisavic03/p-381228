@@ -30,20 +30,38 @@ export default function Vision() {
             
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-black mb-2">
-                Our plan for future
+                Vision
               </h1>
               <div className="w-16 h-0.5 bg-black"></div>
+            </div>
+            
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-black text-center">
+                The Future of Real Estate Starts Here
+              </h2>
             </div>
           </div>
 
           {/* Letter Content */}
           <div className="space-y-6 text-gray-700 leading-relaxed mb-12">
-            <p className="text-base">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <p className="text-base font-medium">
+              Dear Property Managers,
             </p>
             
             <p className="text-base">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+              After seeing how needlessly complex and outdated property management can be, we present a solution that's been reinvented for the next generation of property managers. A platform where every part of your business – from rent collection to maintenance to finances – flows seamlessly and intuitively. One that's built to save time, reduce stress, and help you scale without chaos.
+            </p>
+            
+            <p className="text-base">
+              And this is just the beginning. We believe the future of real estate isn't a single tool – it's an ecosystem. After we launch this platform, we're building a suite of apps designed to support every part of the real estate lifecycle: construction, renovation, financing, compliance, vendor coordination, and more. Each tool will integrate deeply with the others, so whether you're managing 3 units or building a 300-unit development, you'll be supported every step of the way.
+            </p>
+            
+            <p className="text-base">
+              Our mission is simple: to give real estate operators the tools they need to run stronger businesses and build better communities.
+            </p>
+            
+            <p className="text-base">
+              We're thrilled to have you on this journey with us. Let's build something that lasts.
             </p>
           </div>
 
