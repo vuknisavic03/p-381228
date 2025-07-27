@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Building2, TrendingUp, Target } from "lucide-react";
 import UserTypeDialog from "./UserTypeDialog";
-import dashboardHero from "@/assets/dashboard-hero.jpg";
-import propertiesShowcase from "@/assets/properties-showcase.jpg";
-import transactionsFlow from "@/assets/transactions-flow.jpg";
-import workspacesManagement from "@/assets/workspaces-management.jpg";
 
 export default function MobileLanding() {
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
@@ -69,7 +65,7 @@ export default function MobileLanding() {
                     <BarChart3 className="w-4 h-4 text-gray-700" />
                     <div className="text-left">
                       <div className="text-sm font-semibold text-gray-900 text-left">Live Dashboard</div>
-                      <div className="text-xs text-gray-600 text-left">Real-time insights • Automated tracking</div>
+                      <div className="text-xs text-gray-600 text-left">Transactions categorization • Tracks • Updates</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -78,15 +74,45 @@ export default function MobileLanding() {
                   </div>
                 </div>
               </div>
-              <div className="relative">
-                <img 
-                  src={dashboardHero} 
-                  alt="Property Management Dashboard"
-                  className="w-full h-auto"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"></div>
+            <div className="p-4">
+              
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {[
+                  { 
+                    metric: "Monthly Revenue", 
+                    value: "$125,430", 
+                    change: "+12.5%",
+                    subtext: "vs last month"
+                  },
+                  { 
+                    metric: "Net Profit", 
+                    value: "$36,220", 
+                    change: "+18.7%",
+                    subtext: "after expenses"
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <div className="text-xs font-medium text-gray-600 mb-1 text-left">{item.metric}</div>
+                    <div className="text-lg font-bold text-gray-900 mb-1 text-left">{item.value}</div>
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 text-green-600" />
+                      <span className="text-xs font-semibold text-green-600">{item.change}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1 text-left">{item.subtext}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs font-semibold text-gray-700">Portfolio Health</span>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">Excellent</span>
+                </div>
+                <div className="text-xs text-gray-600 text-left">All properties performing above target</div>
+                <div className="text-xs text-gray-500 mt-1 text-left">✨ Automatic tracking</div>
               </div>
             </div>
+          </div>
         </div>
       </section>
 
@@ -102,21 +128,55 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex gap-2 text-xs mb-3">
+          <div className="p-4">
+            <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium">All Properties</div>
-              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Map View</div>
-              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Filters</div>
+              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Apartments</div>
+              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Office</div>
             </div>
-            <div className="text-xs text-gray-600">Interactive property management with map view</div>
-          </div>
-          <div className="relative">
-            <img 
-              src={propertiesShowcase} 
-              alt="Property Listings with Map View"
-              className="w-full h-auto"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"></div>
+            <div className="space-y-3">
+              {[
+                { 
+                  name: "Sunset Apartments", 
+                  type: "Residential • 24 units", 
+                  profit: "+$36,000", 
+                  status: "High Performance",
+                  occupancy: "96%",
+                  color: "bg-green-500"
+                },
+                { 
+                  name: "Downtown Office Plaza", 
+                  type: "Commercial • 12 suites", 
+                  profit: "+$54,000", 
+                  status: "Excellent",
+                  occupancy: "100%",
+                  color: "bg-blue-500"
+                },
+                { 
+                  name: "Riverside Condos", 
+                  type: "Residential • 18 units", 
+                  profit: "+$29,000", 
+                  status: "Strong",
+                  occupancy: "89%",
+                  color: "bg-purple-500"
+                },
+              ].map((property, index) => (
+                <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${property.color}`}></div>
+                      <span className="text-sm font-semibold text-gray-900">{property.name}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-green-600">{property.profit}</span>
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">{property.type}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{property.status}</span>
+                    <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">{property.occupancy} occupied</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -133,23 +193,59 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex gap-2 text-xs mb-3">
+          <div className="p-4">
+            <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
                 <Building2 className="w-3 h-3" />
-                All Properties
+                Sunset Apartments
               </div>
-              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Auto-categorized</div>
+              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Maintenance</div>
             </div>
-            <div className="text-xs text-gray-600">Automated transaction categorization and tracking</div>
-          </div>
-          <div className="relative">
-            <img 
-              src={transactionsFlow} 
-              alt="Transaction Management Interface"
-              className="w-full h-auto"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"></div>
+            <div className="space-y-3">
+              {[
+                { 
+                  desc: "HVAC System Repair", 
+                  amount: "-$850", 
+                  vendor: "ServiceMaster HVAC",
+                  date: "Jan 15, 2025",
+                  category: "Maintenance"
+                },
+                { 
+                  desc: "Plumbing Emergency Fix", 
+                  amount: "-$650", 
+                  vendor: "Quick Fix Plumbing",
+                  date: "Jan 12, 2025",
+                  category: "Maintenance"
+                },
+                { 
+                  desc: "Unit 4B Rent Payment", 
+                  amount: "+$2,400", 
+                  vendor: "Tenant Payment",
+                  date: "Jan 1, 2025",
+                  category: "Rent"
+                },
+              ].map((transaction, index) => (
+                <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-900">{transaction.desc}</span>
+                    <span className={`text-sm font-semibold ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                      {transaction.amount}
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">{transaction.vendor} • {transaction.date}</div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      transaction.category === 'Rent' 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                      {transaction.category}
+                    </span>
+                    <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">Sunset Apartments</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -166,24 +262,72 @@ export default function MobileLanding() {
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex gap-2 text-xs mb-3">
+          <div className="p-4">
+            <div className="flex gap-2 text-xs mb-4">
               <div className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full font-medium flex items-center gap-1">
                 <Building2 className="w-3 h-3" />
                 Personal Portfolio
               </div>
               <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Company</div>
-              <div className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">Switch</div>
             </div>
-            <div className="text-xs text-gray-600">Multiple workspace management with unified analytics</div>
-          </div>
-          <div className="relative">
-            <img 
-              src={workspacesManagement} 
-              alt="Workspace Management Interface"
-              className="w-full h-auto"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"></div>
+            <div className="space-y-3">
+              {[
+                { 
+                  workspace: "Personal Portfolio", 
+                  properties: "12 properties", 
+                  revenue: "$89,400", 
+                  change: "+15.2%",
+                  status: "Growing",
+                  color: "bg-green-500"
+                },
+                { 
+                  workspace: "Downtown Commercial", 
+                  properties: "8 buildings", 
+                  revenue: "$156,800", 
+                  change: "+22.1%",
+                  status: "Excellent",
+                  color: "bg-blue-500"
+                },
+                { 
+                  workspace: "Residential Mgmt", 
+                  properties: "24 units", 
+                  revenue: "$74,200", 
+                  change: "+8.9%",
+                  status: "Stable",
+                  color: "bg-purple-500"
+                },
+              ].map((workspace, index) => (
+                <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${workspace.color}`}></div>
+                      <span className="text-sm font-semibold text-gray-900">{workspace.workspace}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-green-600">{workspace.revenue}</span>
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">{workspace.properties}</div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">{workspace.status}</span>
+                      <div className="flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3 text-green-600" />
+                        <span className="text-xs font-semibold text-green-600">{workspace.change}</span>
+                      </div>
+                    </div>
+                    <button className="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full hover:bg-gray-300">Switch</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs font-semibold text-gray-700">Cross-Workspace</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">All performing well</span>
+              </div>
+              <div className="text-xs text-gray-600 text-left">Total: $320,400 • Avg growth: +15.4%</div>
+              <div className="text-xs text-gray-500 mt-1 text-left">✨ Unified analytics across workspaces</div>
+            </div>
           </div>
         </div>
       </section>
