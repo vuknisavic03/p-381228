@@ -25,7 +25,7 @@ export default function Vision() {
           {/* Letter Header */}
           <div className="mb-12">
             <div className="text-right text-sm text-gray-500 mb-8">
-              January 2025
+              2025
             </div>
             
             <div className="mb-8">
