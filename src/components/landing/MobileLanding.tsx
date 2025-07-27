@@ -256,9 +256,9 @@ export default function MobileLanding() {
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Workspaces
           </div>
-          <h2 className="text-xl font-bold text-black mb-2">Workspaces built for managers and individuals</h2>
+          <h2 className="text-xl font-bold text-black mb-2">One Platform. Infinite Workspaces.</h2>
           <p className="text-sm text-gray-600">
-            Switch effortlessly between workspaces. Keep data organized and see performance across them all.
+            Whether you manage one property or hundreds, workspaces help you stay organized and allow you to scale.
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
