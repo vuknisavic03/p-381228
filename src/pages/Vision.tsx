@@ -30,7 +30,7 @@ export default function Vision() {
             
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-black mb-2">
-                Vision
+                The Future of Real Estate Starts Here
               </h1>
               <div className="w-16 h-0.5 bg-black"></div>
             </div>
