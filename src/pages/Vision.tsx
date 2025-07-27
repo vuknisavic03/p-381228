@@ -34,12 +34,6 @@ export default function Vision() {
               </h1>
               <div className="w-16 h-0.5 bg-black"></div>
             </div>
-            
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-black text-center">
-                The Future of Real Estate Starts Here
-              </h2>
-            </div>
           </div>
 
           {/* Letter Content */}
