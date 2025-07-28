@@ -1,7 +1,38 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, MapPin, Mail, Phone, UserX, Building, CreditCard, DollarSign } from "lucide-react";
+import { 
+  Calendar as CalendarIcon, 
+  MapPin, 
+  Mail, 
+  Phone, 
+  UserX, 
+  Building, 
+  CreditCard, 
+  DollarSign,
+  Home,
+  Settings,
+  Car,
+  Package,
+  Dumbbell,
+  Shirt,
+  Clock,
+  Plus,
+  FileText,
+  Receipt,
+  Shield,
+  Zap,
+  Wrench,
+  Sparkles,
+  Users,
+  Megaphone,
+  Scale,
+  HardHat,
+  Laptop,
+  FileCheck,
+  Banknote,
+  MoreHorizontal
+} from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -26,6 +57,37 @@ import { TransactionMapSelector } from "./TransactionMapSelector";
 // Helper function to capitalize tenant type
 const capitalizeTenantType = (type: string) => {
   return type.charAt(0).toUpperCase() + type.slice(1);
+};
+
+// Helper function to get icon component by name
+const getIconComponent = (iconName: string) => {
+  const iconMap: Record<string, React.ComponentType<any>> = {
+    Home,
+    Settings,
+    Car,
+    Package,
+    Dumbbell,
+    Calendar: CalendarIcon,
+    Shirt,
+    Clock,
+    Plus,
+    FileText,
+    Receipt,
+    Shield,
+    Zap,
+    Wrench,
+    Sparkles,
+    Users,
+    Megaphone,
+    Scale,
+    HardHat,
+    Laptop,
+    FileCheck,
+    Banknote,
+    MoreHorizontal
+  };
+  
+  return iconMap[iconName] || FileText;
 };
 
 export function TransactionFields({ 
@@ -291,11 +353,17 @@ export function TransactionFields({
                 </SelectTrigger>
                 <SelectContent className="max-h-60 overflow-y-auto">
                   {transactionCategories.length > 0 ? (
-                    transactionCategories.map(cat => (
-                      <SelectItem key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </SelectItem>
-                    ))
+                    transactionCategories.map(cat => {
+                      const IconComponent = (cat as any).icon ? getIconComponent((cat as any).icon) : null;
+                      return (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          <div className="flex items-center gap-2">
+                            {IconComponent && <IconComponent className="h-4 w-4 text-muted-foreground" />}
+                            <span>{cat.label}</span>
+                          </div>
+                        </SelectItem>
+                      );
+                    })
                   ) : (
                     <SelectItem value="none" disabled>No categories available</SelectItem>
                   )}

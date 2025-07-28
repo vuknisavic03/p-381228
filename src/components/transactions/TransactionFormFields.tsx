@@ -2,7 +2,36 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, DollarSign, FileText, User, Mail, Phone, ShoppingCart } from "lucide-react";
+import { 
+  Calendar as CalendarIcon, 
+  DollarSign, 
+  FileText, 
+  User, 
+  Mail, 
+  Phone, 
+  ShoppingCart,
+  Home,
+  Settings,
+  Car,
+  Package,
+  Dumbbell,
+  Shirt,
+  Clock,
+  Plus,
+  Receipt,
+  Shield,
+  Zap,
+  Wrench,
+  Sparkles,
+  Users,
+  Megaphone,
+  Scale,
+  HardHat,
+  Laptop,
+  FileCheck,
+  Banknote,
+  MoreHorizontal
+} from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
@@ -13,6 +42,38 @@ import { Card } from "@/components/ui/card";
 import { ListingSelector } from "./ListingSelector";
 import { PropertyType } from "@/types/property"; 
 import { getPropertyTypeIcon, formatPropertyType } from "@/utils/propertyTypeUtils";
+import { GENERAL_CATEGORIES } from "./TransactionFormTypes";
+
+// Helper function to get icon component by name
+const getIconComponent = (iconName: string) => {
+  const iconMap: Record<string, React.ComponentType<any>> = {
+    Home,
+    Settings,
+    Car,
+    Package,
+    Dumbbell,
+    Calendar: CalendarIcon,
+    Shirt,
+    Clock,
+    Plus,
+    FileText,
+    Receipt,
+    Shield,
+    Zap,
+    Wrench,
+    Sparkles,
+    Users,
+    Megaphone,
+    Scale,
+    HardHat,
+    Laptop,
+    FileCheck,
+    Banknote,
+    MoreHorizontal
+  };
+  
+  return iconMap[iconName] || FileText;
+};
 
 // Update Listing interface to match the one in TransactionFormTypes.ts
 interface Listing {
@@ -126,22 +187,30 @@ export function TransactionFormFields({ mockListings, initialValues, onChange, e
                   <SelectValue placeholder={`Select ${fields.transactionType === "revenue" ? "revenue" : "expense"} category`} />
                 </SelectTrigger>
                 <SelectContent>
-                  {fields.transactionType === "revenue" ? (
-                    <>
-                      <SelectItem value="rent">Rent</SelectItem>
-                      <SelectItem value="deposit">Deposit</SelectItem>
-                      <SelectItem value="fee">Fee</SelectItem>
-                      <SelectItem value="other-income">Other Income</SelectItem>
-                    </>
-                  ) : (
-                    <>
-                      <SelectItem value="maintenance">Maintenance</SelectItem>
-                      <SelectItem value="utilities">Utilities</SelectItem>
-                      <SelectItem value="insurance">Insurance</SelectItem>
-                      <SelectItem value="tax">Tax</SelectItem>
-                      <SelectItem value="other-expense">Other Expense</SelectItem>
-                    </>
-                  )}
+                  {fields.transactionType === "revenue" ? 
+                    GENERAL_CATEGORIES.revenue.map(cat => {
+                      const IconComponent = getIconComponent(cat.icon);
+                      return (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          <div className="flex items-center gap-2">
+                            <IconComponent className="h-4 w-4 text-muted-foreground" />
+                            <span>{cat.label}</span>
+                          </div>
+                        </SelectItem>
+                      );
+                    }) :
+                    GENERAL_CATEGORIES.expense.map(cat => {
+                      const IconComponent = getIconComponent(cat.icon);
+                      return (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          <div className="flex items-center gap-2">
+                            <IconComponent className="h-4 w-4 text-muted-foreground" />
+                            <span>{cat.label}</span>
+                          </div>
+                        </SelectItem>
+                      );
+                    })
+                  }
                 </SelectContent>
               </Select>
             </div>

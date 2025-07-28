@@ -291,17 +291,33 @@ export const PROPERTY_CATEGORIES: PropertyCategory[] = [
 // For general transactions not tied to a specific property
 export const GENERAL_CATEGORIES = {
   revenue: [
-    { value: "investment", label: "Investment Return" },
-    { value: "interest", label: "Interest" },
-    { value: "tax_refund", label: "Tax Refund" },
-    { value: "other_general_income", label: "Other Income" }
+    { value: "rent_income", label: "Rent Income", icon: "Home" },
+    { value: "service_charges", label: "Service Charges / CAM Fees", icon: "Settings" },
+    { value: "parking_fees", label: "Parking Fees", icon: "Car" },
+    { value: "storage_fees", label: "Storage Fees", icon: "Package" },
+    { value: "amenity_fees", label: "Amenity Fees", icon: "Dumbbell" },
+    { value: "event_space_rental", label: "Event/Conference Space Rental", icon: "Calendar" },
+    { value: "laundry_vending", label: "Laundry/Vending Machine Revenue", icon: "Shirt" },
+    { value: "advertising_signage", label: "Advertising/Signage Income", icon: "Billboard" },
+    { value: "late_payment_penalties", label: "Late Payment Penalties / Fines", icon: "Clock" },
+    { value: "other_income", label: "Other Income", icon: "Plus" }
   ],
   expense: [
-    { value: "software", label: "Software & Tools" },
-    { value: "admin", label: "Administrative" },
-    { value: "legal", label: "Legal Services" },
-    { value: "accounting", label: "Accounting Services" },
-    { value: "marketing", label: "Marketing" },
-    { value: "other_general_expense", label: "Other Expense" }
+    { value: "renting_fees", label: "Renting Fees", icon: "FileText" },
+    { value: "property_taxes", label: "Property Taxes", icon: "Receipt" },
+    { value: "insurance", label: "Insurance", icon: "Shield" },
+    { value: "utilities", label: "Utilities", icon: "Zap" },
+    { value: "maintenance_repairs", label: "Maintenance & Repairs", icon: "Wrench" },
+    { value: "property_management_fees", label: "Property Management Fees", icon: "Building" },
+    { value: "cleaning_services", label: "Cleaning Services", icon: "Sparkles" },
+    { value: "staff_salaries", label: "Staff Salaries & Wages", icon: "Users" },
+    { value: "marketing_advertising", label: "Marketing & Advertising", icon: "Megaphone" },
+    { value: "legal_professional", label: "Legal & Professional Fees", icon: "Scale" },
+    { value: "loan_interest", label: "Loan/Interest Payments", icon: "CreditCard" },
+    { value: "capex", label: "CapEx (Major Improvements)", icon: "HardHat" },
+    { value: "software_it", label: "Software & IT Costs", icon: "Laptop" },
+    { value: "licensing_regulatory", label: "Licensing & Regulatory Fees", icon: "FileCheck" },
+    { value: "bank_fees", label: "Bank Fees / Payment Processing", icon: "Banknote" },
+    { value: "other_expenses", label: "Other Expenses", icon: "MoreHorizontal" }
   ]
 };
