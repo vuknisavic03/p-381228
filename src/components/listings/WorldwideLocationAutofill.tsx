@@ -110,7 +110,7 @@ export function WorldwideLocationAutofill({
 
   // Fetch street suggestions based on selected city
   const fetchStreetSuggestions = async (input: string) => {
-    if (!autocompleteService.current || !selectedCityData || input.length < 2) {
+    if (!autocompleteService.current || !selectedCityData || input.length < 1) {
       setStreetSuggestions([]);
       return;
     }
@@ -118,22 +118,39 @@ export function WorldwideLocationAutofill({
     setIsLoadingStreet(true);
     
     try {
-      // Include city in the search to get relevant street suggestions
-      const searchQuery = `${input}, ${selectedCityData.city}, ${selectedCityData.country}`;
-      
-      const request = {
-        input: searchQuery,
-        types: ['address'],
-        language: 'en'
-      };
+      // Use multiple search strategies for better results
+      const requests = [
+        // Strategy 1: Direct address search in the city
+        {
+          input: `${input}, ${selectedCityData.city}, ${selectedCityData.country}`,
+          types: ['address'],
+          componentRestrictions: { country: selectedCityData.country },
+          language: 'en'
+        },
+        // Strategy 2: Establishment search for better partial matches
+        {
+          input: `${input}, ${selectedCityData.city}`,
+          types: ['establishment'],
+          componentRestrictions: { country: selectedCityData.country },
+          language: 'en'
+        }
+      ];
 
-      autocompleteService.current.getPlacePredictions(request, (predictions, status) => {
-        setIsLoadingStreet(false);
-        
-        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+      // Try the first strategy
+      autocompleteService.current.getPlacePredictions(requests[0], (predictions, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
+          setIsLoadingStreet(false);
           setStreetSuggestions(predictions);
         } else {
-          setStreetSuggestions([]);
+          // If first strategy fails, try the second one
+          autocompleteService.current!.getPlacePredictions(requests[1], (predictions2, status2) => {
+            setIsLoadingStreet(false);
+            if (status2 === window.google.maps.places.PlacesServiceStatus.OK && predictions2) {
+              setStreetSuggestions(predictions2);
+            } else {
+              setStreetSuggestions([]);
+            }
+          });
         }
       });
     } catch (error) {
@@ -257,7 +274,7 @@ export function WorldwideLocationAutofill({
       if (streetValue && isLoaded && selectedCityData) {
         fetchStreetSuggestions(streetValue);
       }
-    }, 300);
+    }, 200);
 
     return () => clearTimeout(timer);
   }, [streetValue, isLoaded, selectedCityData]);
@@ -283,15 +300,9 @@ export function WorldwideLocationAutofill({
   if (!isLoaded) {
     return (
       <div className="space-y-4 opacity-50">
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
-            <Input placeholder="Loading Google Maps..." disabled className="h-10" />
-          </div>
-          <div>
-            <Label className="text-sm font-medium text-foreground mb-1.5 block">State/Region</Label>
-            <Input placeholder="Auto-filled from city" disabled className="h-10" />
-          </div>
+        <div>
+          <Label className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
+          <Input placeholder="Loading Google Maps..." disabled className="h-10" />
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
@@ -309,76 +320,62 @@ export function WorldwideLocationAutofill({
 
   return (
     <div className="space-y-4">
-      {/* City and Region Row */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* City Input with Autocomplete */}
+      {/* City Input with Autocomplete */}
+      <div className="relative">
+        <Label className="text-sm font-medium text-foreground mb-1.5 block">
+          <Globe className="h-3 w-3 inline mr-1" />
+          City
+        </Label>
         <div className="relative">
-          <Label className="text-sm font-medium text-foreground mb-1.5 block">
-            <Globe className="h-3 w-3 inline mr-1" />
-            City
-          </Label>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={cityInputRef}
-              value={cityValue}
-              onChange={(e) => {
-                setCityValue(e.target.value);
-                setShowCitySuggestions(true);
-                // Reset dependent fields when city changes
-                if (selectedCityData) {
-                  setSelectedCityData(null);
-                  setStreetValue('');
-                  setStreetNumberValue('');
-                }
-              }}
-              onFocus={() => setShowCitySuggestions(true)}
-              placeholder="e.g., Belgrade, New York, London"
-              className="h-10 pl-10"
-            />
-          </div>
-          
-          {/* City Suggestions Dropdown */}
-          {showCitySuggestions && citySuggestions.length > 0 && (
-            <div
-              ref={citySuggestionsRef}
-              className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
-            >
-              {citySuggestions.map((suggestion, index) => (
-                <div
-                  key={suggestion.place_id}
-                  className="px-3 py-2 hover:bg-muted cursor-pointer border-b border-border/50 last:border-b-0"
-                  onClick={() => handleCitySelect(suggestion)}
-                >
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                    <div>
-                      <div className="font-medium text-sm">
-                        {suggestion.structured_formatting?.main_text || suggestion.description}
-                      </div>
-                      {suggestion.structured_formatting?.secondary_text && (
-                        <div className="text-xs text-muted-foreground">
-                          {suggestion.structured_formatting.secondary_text}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Region (Auto-filled) */}
-        <div>
-          <Label className="text-sm font-medium text-foreground mb-1.5 block">State/Region</Label>
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            value={selectedCityData?.region || ''}
-            placeholder="Auto-filled from city"
-            disabled
-            className="h-10 bg-muted/50"
+            ref={cityInputRef}
+            value={cityValue}
+            onChange={(e) => {
+              setCityValue(e.target.value);
+              setShowCitySuggestions(true);
+              // Reset dependent fields when city changes
+              if (selectedCityData) {
+                setSelectedCityData(null);
+                setStreetValue('');
+                setStreetNumberValue('');
+              }
+            }}
+            onFocus={() => setShowCitySuggestions(true)}
+            placeholder="e.g., Belgrade, New York, London"
+            className="h-10 pl-10"
           />
         </div>
+        
+        {/* City Suggestions Dropdown */}
+        {showCitySuggestions && citySuggestions.length > 0 && (
+          <div
+            ref={citySuggestionsRef}
+            className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
+          >
+            {citySuggestions.map((suggestion, index) => (
+              <div
+                key={suggestion.place_id}
+                className="px-3 py-2 hover:bg-muted cursor-pointer border-b border-border/50 last:border-b-0"
+                onClick={() => handleCitySelect(suggestion)}
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-sm">
+                      {suggestion.structured_formatting?.main_text || suggestion.description}
+                    </div>
+                    {suggestion.structured_formatting?.secondary_text && (
+                      <div className="text-xs text-muted-foreground">
+                        {suggestion.structured_formatting.secondary_text}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Street Address and Number Row */}
