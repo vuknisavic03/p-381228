@@ -65,7 +65,7 @@ export default function MobileLanding() {
                     <BarChart3 className="w-4 h-4 text-gray-700" />
                     <div className="text-left">
                       <div className="text-sm font-semibold text-gray-900 text-left">Live Dashboard</div>
-                      <div className="text-xs text-gray-600 text-left">Transactions categorization • Tracks • Updates</div>
+                      <div className="text-xs text-gray-600 text-left">Real-time insights</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
