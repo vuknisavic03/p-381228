@@ -118,35 +118,34 @@ export function WorldwideLocationAutofill({
     setIsLoadingStreet(true);
     
     try {
-      // Use multiple search strategies for better results
-      const requests = [
-        // Strategy 1: Direct address search in the city
-        {
-          input: `${input}, ${selectedCityData.city}, ${selectedCityData.country}`,
-          types: ['address'],
-          componentRestrictions: { country: selectedCityData.country },
-          language: 'en'
-        },
-        // Strategy 2: Establishment search for better partial matches
-        {
-          input: `${input}, ${selectedCityData.city}`,
-          types: ['establishment'],
-          componentRestrictions: { country: selectedCityData.country },
-          language: 'en'
-        }
-      ];
+      // Strategy 1: Basic address search in the selected city
+      const searchQuery = `${input}, ${selectedCityData.city}, ${selectedCityData.country}`;
+      
+      const request = {
+        input: searchQuery,
+        types: ['address'],
+        language: 'en'
+      };
 
-      // Try the first strategy
-      autocompleteService.current.getPlacePredictions(requests[0], (predictions, status) => {
+      console.log('Searching for street:', searchQuery); // Debug log
+
+      autocompleteService.current.getPlacePredictions(request, (predictions, status) => {
+        console.log('Street search status:', status, 'Results:', predictions?.length || 0); // Debug log
+        setIsLoadingStreet(false);
+        
         if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
-          setIsLoadingStreet(false);
           setStreetSuggestions(predictions);
         } else {
-          // If first strategy fails, try the second one
-          autocompleteService.current!.getPlacePredictions(requests[1], (predictions2, status2) => {
-            setIsLoadingStreet(false);
-            if (status2 === window.google.maps.places.PlacesServiceStatus.OK && predictions2) {
-              setStreetSuggestions(predictions2);
+          // Strategy 2: Try geocoding search without address type restriction
+          const fallbackRequest = {
+            input: searchQuery,
+            language: 'en'
+          };
+          
+          autocompleteService.current!.getPlacePredictions(fallbackRequest, (fallbackPredictions, fallbackStatus) => {
+            console.log('Fallback search status:', fallbackStatus, 'Results:', fallbackPredictions?.length || 0); // Debug log
+            if (fallbackStatus === window.google.maps.places.PlacesServiceStatus.OK && fallbackPredictions) {
+              setStreetSuggestions(fallbackPredictions);
             } else {
               setStreetSuggestions([]);
             }
