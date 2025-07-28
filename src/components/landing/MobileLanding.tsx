@@ -40,7 +40,7 @@ export default function MobileLanding() {
             </div>
           </div>
           
-          <h1 className="text-2xl font-bold text-black leading-tight mb-4">
+          <h1 className="text-xl font-bold text-black leading-tight mb-4">
             Property Management Has Evolved. Have You?
           </h1>
           
