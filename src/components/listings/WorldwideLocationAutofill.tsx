@@ -354,7 +354,6 @@ export function WorldwideLocationAutofill({
         {/* City Input with Autocomplete */}
         <div className="relative">
           <Label className="text-sm font-medium text-foreground mb-1.5 block">
-            <Globe className="h-3 w-3 inline mr-1" />
             City
           </Label>
           <div className="relative">
