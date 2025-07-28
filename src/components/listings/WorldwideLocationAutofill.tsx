@@ -118,12 +118,11 @@ export function WorldwideLocationAutofill({
     setIsLoadingStreet(true);
     
     try {
-      // Strategy 1: Basic address search in the selected city
+      // Strategy 1: Search for addresses without type restriction for better results
       const searchQuery = `${input}, ${selectedCityData.city}, ${selectedCityData.country}`;
       
       const request = {
         input: searchQuery,
-        types: ['address'],
         language: 'en'
       };
 
@@ -131,19 +130,32 @@ export function WorldwideLocationAutofill({
 
       autocompleteService.current.getPlacePredictions(request, (predictions, status) => {
         console.log('Street search status:', status, 'Results:', predictions?.length || 0); // Debug log
-        setIsLoadingStreet(false);
         
         if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
-          setStreetSuggestions(predictions);
+          // Filter results to prioritize addresses in the selected city
+          const filteredPredictions = predictions.filter(prediction => {
+            const description = prediction.description.toLowerCase();
+            const cityName = selectedCityData.city?.toLowerCase() || '';
+            return description.includes(cityName);
+          });
+          
+          console.log('Filtered results:', filteredPredictions.length); // Debug log
+          setStreetSuggestions(filteredPredictions.length > 0 ? filteredPredictions : predictions);
+          setIsLoadingStreet(false);
         } else {
-          // Strategy 2: Try geocoding search without address type restriction
+          // Strategy 2: Try with just the input + city (no country)
+          const fallbackQuery = `${input}, ${selectedCityData.city}`;
           const fallbackRequest = {
-            input: searchQuery,
+            input: fallbackQuery,
             language: 'en'
           };
           
+          console.log('Trying fallback search:', fallbackQuery); // Debug log
+          
           autocompleteService.current!.getPlacePredictions(fallbackRequest, (fallbackPredictions, fallbackStatus) => {
             console.log('Fallback search status:', fallbackStatus, 'Results:', fallbackPredictions?.length || 0); // Debug log
+            setIsLoadingStreet(false);
+            
             if (fallbackStatus === window.google.maps.places.PlacesServiceStatus.OK && fallbackPredictions) {
               setStreetSuggestions(fallbackPredictions);
             } else {
@@ -306,7 +318,7 @@ export function WorldwideLocationAutofill({
           </div>
           <div>
             <Label className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
-            <Input placeholder="Loading..." disabled className="h-10" />
+            <Input placeholder="" disabled className="h-10" />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3">
@@ -390,7 +402,7 @@ export function WorldwideLocationAutofill({
           <Label className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
           <Input
             value={selectedCityData?.country || ''}
-            placeholder="Select city to auto-fill"
+            placeholder=""
             disabled
             className="h-10 bg-muted/50"
           />
