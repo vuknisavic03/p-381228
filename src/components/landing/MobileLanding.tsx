@@ -187,7 +187,7 @@ export default function MobileLanding() {
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Transactions
           </div>
-          <h2 className="text-base font-bold text-black mb-2">Property Cash Flow. Tracked and Categorized.</h2>
+          <h2 className="text-base font-bold text-black mb-2">Track and Categorize Property Cash Flow.</h2>
           <p className="text-sm text-gray-600">
             View all income and expenses in one place. Take advantage of real-time updates with trend analysis and growth forecasts.
           </p>
