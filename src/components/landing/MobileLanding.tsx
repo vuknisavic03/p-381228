@@ -122,7 +122,7 @@ export default function MobileLanding() {
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Listings
           </div>
-          <h2 className="text-lg font-bold text-black mb-2">All Your Properties. One Interactive View.</h2>
+          <h2 className="text-base font-bold text-black mb-2">All Your Properties. One Interactive View.</h2>
           <p className="text-sm text-gray-600">
             Visualize all your property or business listings in one searchable map. Track occupancy, update availability, and plan with confidence.
           </p>
@@ -187,7 +187,7 @@ export default function MobileLanding() {
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Transactions
           </div>
-          <h2 className="text-lg font-bold text-black mb-2">Your Property Cash Flow. Tracked and Categorized.</h2>
+          <h2 className="text-base font-bold text-black mb-2">Your Property Cash Flow. Tracked and Categorized.</h2>
           <p className="text-sm text-gray-600">
             View all income and expenses in one place. Take advantage of real-time updates with trend analysis and growth forecasts.
           </p>
@@ -256,7 +256,7 @@ export default function MobileLanding() {
           <div className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
             Workspaces
           </div>
-          <h2 className="text-lg font-bold text-black mb-2">One Platform. Infinite Workspaces.</h2>
+          <h2 className="text-base font-bold text-black mb-2">One Platform. Infinite Workspaces.</h2>
           <p className="text-sm text-gray-600">
             Whether you manage one property or hundreds, workspaces help you stay organized and allow you to scale.
           </p>
