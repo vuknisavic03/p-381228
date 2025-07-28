@@ -299,9 +299,15 @@ export function WorldwideLocationAutofill({
   if (!isLoaded) {
     return (
       <div className="space-y-4 opacity-50">
-        <div>
-          <Label className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
-          <Input placeholder="Loading Google Maps..." disabled className="h-10" />
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label className="text-sm font-medium text-foreground mb-1.5 block">City</Label>
+            <Input placeholder="Loading Google Maps..." disabled className="h-10" />
+          </div>
+          <div>
+            <Label className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
+            <Input placeholder="Loading..." disabled className="h-10" />
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
@@ -310,7 +316,7 @@ export function WorldwideLocationAutofill({
           </div>
           <div>
             <Label className="text-sm font-medium text-foreground mb-1.5 block">Street Number</Label>
-            <Input placeholder="Auto-filled" disabled className="h-10" />
+            <Input placeholder="Loading..." disabled className="h-10" />
           </div>
         </div>
       </div>
@@ -319,62 +325,76 @@ export function WorldwideLocationAutofill({
 
   return (
     <div className="space-y-4">
-      {/* City Input with Autocomplete */}
-      <div className="relative">
-        <Label className="text-sm font-medium text-foreground mb-1.5 block">
-          <Globe className="h-3 w-3 inline mr-1" />
-          City
-        </Label>
+      {/* City and Country Row */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* City Input with Autocomplete */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            ref={cityInputRef}
-            value={cityValue}
-            onChange={(e) => {
-              setCityValue(e.target.value);
-              setShowCitySuggestions(true);
-              // Reset dependent fields when city changes
-              if (selectedCityData) {
-                setSelectedCityData(null);
-                setStreetValue('');
-                setStreetNumberValue('');
-              }
-            }}
-            onFocus={() => setShowCitySuggestions(true)}
-            placeholder="e.g., Belgrade, New York, London"
-            className="h-10 pl-10"
-          />
-        </div>
-        
-        {/* City Suggestions Dropdown */}
-        {showCitySuggestions && citySuggestions.length > 0 && (
-          <div
-            ref={citySuggestionsRef}
-            className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
-          >
-            {citySuggestions.map((suggestion, index) => (
-              <div
-                key={suggestion.place_id}
-                className="px-3 py-2 hover:bg-muted cursor-pointer border-b border-border/50 last:border-b-0"
-                onClick={() => handleCitySelect(suggestion)}
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <div>
-                    <div className="font-medium text-sm">
-                      {suggestion.structured_formatting?.main_text || suggestion.description}
-                    </div>
-                    {suggestion.structured_formatting?.secondary_text && (
-                      <div className="text-xs text-muted-foreground">
-                        {suggestion.structured_formatting.secondary_text}
+          <Label className="text-sm font-medium text-foreground mb-1.5 block">
+            <Globe className="h-3 w-3 inline mr-1" />
+            City
+          </Label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              ref={cityInputRef}
+              value={cityValue}
+              onChange={(e) => {
+                setCityValue(e.target.value);
+                setShowCitySuggestions(true);
+                // Reset dependent fields when city changes
+                if (selectedCityData) {
+                  setSelectedCityData(null);
+                  setStreetValue('');
+                  setStreetNumberValue('');
+                }
+              }}
+              onFocus={() => setShowCitySuggestions(true)}
+              placeholder="e.g., Belgrade, New York, London"
+              className="h-10 pl-10"
+            />
+          </div>
+          
+          {/* City Suggestions Dropdown */}
+          {showCitySuggestions && citySuggestions.length > 0 && (
+            <div
+              ref={citySuggestionsRef}
+              className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
+            >
+              {citySuggestions.map((suggestion, index) => (
+                <div
+                  key={suggestion.place_id}
+                  className="px-3 py-2 hover:bg-muted cursor-pointer border-b border-border/50 last:border-b-0"
+                  onClick={() => handleCitySelect(suggestion)}
+                >
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-sm">
+                        {suggestion.structured_formatting?.main_text || suggestion.description}
                       </div>
-                    )}
+                      {suggestion.structured_formatting?.secondary_text && (
+                        <div className="text-xs text-muted-foreground">
+                          {suggestion.structured_formatting.secondary_text}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Country Field */}
+        <div>
+          <Label className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
+          <Input
+            value={selectedCityData?.country || ''}
+            placeholder="Select city to auto-fill"
+            disabled
+            className="h-10 bg-muted/50"
+          />
+        </div>
       </div>
 
       {/* Street Address and Number Row */}
@@ -429,7 +449,7 @@ export function WorldwideLocationAutofill({
           )}
         </div>
 
-        {/* Street Number (Auto-filled) */}
+        {/* Street Number */}
         <div>
           <Label className="text-sm font-medium text-foreground mb-1.5 block">Street Number</Label>
           <Input
@@ -449,17 +469,6 @@ export function WorldwideLocationAutofill({
             className="h-10"
           />
         </div>
-      </div>
-
-      {/* Country (Auto-filled, now read-only) */}
-      <div>
-        <Label className="text-sm font-medium text-foreground mb-1.5 block">Country</Label>
-        <Input
-          value={selectedCityData?.country || ''}
-          placeholder="Auto-filled from city"
-          disabled
-          className="h-10 bg-muted/50"
-        />
       </div>
     </div>
   );
