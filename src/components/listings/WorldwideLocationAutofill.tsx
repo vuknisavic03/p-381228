@@ -118,46 +118,58 @@ export function WorldwideLocationAutofill({
     setIsLoadingStreet(true);
     
     try {
-      // Strategy 1: Search for addresses without type restriction for better results
+      // Search for addresses that start with the user's input
       const searchQuery = `${input}, ${selectedCityData.city}, ${selectedCityData.country}`;
       
       const request = {
         input: searchQuery,
+        types: ['address'],
         language: 'en'
       };
 
       console.log('Searching for street:', searchQuery); // Debug log
 
       autocompleteService.current.getPlacePredictions(request, (predictions, status) => {
-        console.log('Street search status:', status, 'Results:', predictions?.length || 0); // Debug log
+        console.log('Street search status:', status, 'Raw results:', predictions?.length || 0); // Debug log
         
         if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
-          // Filter results to prioritize addresses in the selected city
+          // Filter results to only show addresses that contain the user's input
           const filteredPredictions = predictions.filter(prediction => {
+            const mainText = prediction.structured_formatting?.main_text?.toLowerCase() || '';
             const description = prediction.description.toLowerCase();
-            const cityName = selectedCityData.city?.toLowerCase() || '';
-            return description.includes(cityName);
+            const userInput = input.toLowerCase().trim();
+            
+            // Check if the main text or description starts with or contains the user's input
+            return mainText.includes(userInput) || description.includes(userInput);
           });
           
-          console.log('Filtered results:', filteredPredictions.length); // Debug log
-          setStreetSuggestions(filteredPredictions.length > 0 ? filteredPredictions : predictions);
+          console.log('Filtered results that match input:', filteredPredictions.length); // Debug log
+          setStreetSuggestions(filteredPredictions);
           setIsLoadingStreet(false);
         } else {
-          // Strategy 2: Try with just the input + city (no country)
-          const fallbackQuery = `${input}, ${selectedCityData.city}`;
+          // Fallback: Try broader search without address type restriction
           const fallbackRequest = {
-            input: fallbackQuery,
+            input: searchQuery,
             language: 'en'
           };
           
-          console.log('Trying fallback search:', fallbackQuery); // Debug log
+          console.log('Trying fallback search:', searchQuery); // Debug log
           
           autocompleteService.current!.getPlacePredictions(fallbackRequest, (fallbackPredictions, fallbackStatus) => {
-            console.log('Fallback search status:', fallbackStatus, 'Results:', fallbackPredictions?.length || 0); // Debug log
             setIsLoadingStreet(false);
             
             if (fallbackStatus === window.google.maps.places.PlacesServiceStatus.OK && fallbackPredictions) {
-              setStreetSuggestions(fallbackPredictions);
+              // Also filter fallback results
+              const filteredFallback = fallbackPredictions.filter(prediction => {
+                const mainText = prediction.structured_formatting?.main_text?.toLowerCase() || '';
+                const description = prediction.description.toLowerCase();
+                const userInput = input.toLowerCase().trim();
+                
+                return mainText.includes(userInput) || description.includes(userInput);
+              });
+              
+              console.log('Fallback filtered results:', filteredFallback.length); // Debug log
+              setStreetSuggestions(filteredFallback);
             } else {
               setStreetSuggestions([]);
             }
