@@ -126,19 +126,11 @@ export function TransactionFields({
 
   // Memoize categories to prevent unnecessary re-renders that cause lag
   const transactionCategories = useMemo(() => {
-    if (fields.listingType === "general") {
-      // Return general categories
-      return fields.transactionType === "revenue" 
-        ? GENERAL_CATEGORIES.revenue 
-        : GENERAL_CATEGORIES.expense;
-    } else if (selectedPropertyCategory) {
-      // Use the proper transaction categories from PROPERTY_CATEGORIES
-      return fields.transactionType === "revenue"
-        ? selectedPropertyCategory.revenueCategories
-        : selectedPropertyCategory.expenseCategories;
-    }
-    return []; // Fallback empty array
-  }, [fields.listingType, fields.transactionType, selectedPropertyCategory]);
+    // Use the same simplified categories for both listing and general transactions
+    return fields.transactionType === "revenue" 
+      ? GENERAL_CATEGORIES.revenue 
+      : GENERAL_CATEGORIES.expense;
+  }, [fields.transactionType]);
 
   const handleListingSelect = (listing: Listing) => {
     console.log("Listing selected from map:", listing);
