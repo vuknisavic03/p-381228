@@ -179,6 +179,7 @@ export function TransactionFields({
                     selectedValue={fields.selectedListingId}
                     onSelect={(val) => setFields(f => ({ ...f, selectedListingId: val, category: "", selectedUnitId: "" }))}
                     placeholder="Select property from list"
+                    disabled={mockListings.length === 0}
                   />
                 </div>
 
