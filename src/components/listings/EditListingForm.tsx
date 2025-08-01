@@ -519,7 +519,7 @@ export function EditListingForm({ listing, onClose, onUpdate, onDelete }: EditLi
                       >
                         <div className="flex items-center gap-2">
                           <cat.Icon className={`h-4 w-4 ${formData.category === cat.value ? "text-primary" : "text-muted-foreground"}`} />
-                          <h4 className={`font-medium text-sm ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
+                          <h4 className={`font-medium text-xs ${formData.category === cat.value ? "text-foreground" : "text-foreground"}`}>
                             {cat.label}
                           </h4>
                           {formData.category === cat.value && <CheckCircle className="h-3 w-3 text-primary ml-auto" />}
