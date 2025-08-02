@@ -131,6 +131,17 @@ export function ChartCard({
 
   const renderChart = () => {
     if (chartType === "donut") {
+      // Check if there's no data
+      if (!chartData || chartData.length === 0) {
+        return (
+          <div className="flex items-center justify-center h-[200px]">
+            <div className="text-center">
+              <p className="text-gray-500 text-sm">No data yet</p>
+            </div>
+          </div>
+        );
+      }
+      
       return (
         <div className="flex items-center justify-center h-full gap-4">
           {/* Chart - increased width and moved more to left */}
