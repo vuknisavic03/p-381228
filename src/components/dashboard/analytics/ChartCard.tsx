@@ -135,8 +135,14 @@ export function ChartCard({
       if (!chartData || chartData.length === 0) {
         return (
           <div className="flex items-center justify-center h-[200px]">
-            <div className="text-center">
-              <p className="text-gray-500 text-sm">No data yet</p>
+            <div className="text-center space-y-3">
+              <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
+                <Icon className="w-8 h-8 text-gray-400" />
+              </div>
+              <div>
+                <p className="text-gray-600 font-medium text-sm">No expense data yet</p>
+                <p className="text-gray-400 text-xs mt-1">Add transactions to see expense breakdown</p>
+              </div>
             </div>
           </div>
         );
