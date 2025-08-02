@@ -41,7 +41,7 @@ export function Header({
     <div className="flex justify-between items-start">
       <div>
         <h1 className="text-[32px] md:text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
-          {greeting}, {userFirstName}
+          {greeting}
         </h1>
         <p className="text-[24px] md:text-[28px] text-[#9EA3AD] font-medium leading-none">
           Today, {format(new Date(), "MMM dd")}
