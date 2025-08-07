@@ -112,44 +112,44 @@ export function ModernSidebar({
               <span className="text-sm">Settings</span>
             </button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-96">
-            <SheetHeader>
-              <SheetTitle>Settings</SheetTitle>
+          <SheetContent side="right" className="w-80 p-6">
+            <SheetHeader className="pb-4">
+              <SheetTitle className="text-xl font-semibold">Settings</SheetTitle>
             </SheetHeader>
-            <div className="mt-6 space-y-6">
+            <div className="space-y-8">
               {/* Reset Password Section */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <h3 className="font-medium text-foreground">Reset Password</h3>
-                  <p className="text-sm text-muted-foreground">Change your account password</p>
+                  <h3 className="text-base font-medium text-foreground">Reset Password</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Change your account password</p>
                 </div>
-                <button className="w-full flex items-center justify-between p-3 rounded-lg border hover:bg-accent transition-colors">
+                <button className="w-full flex items-center justify-between p-4 rounded-lg border hover:bg-accent transition-colors group">
                   <span className="text-sm font-medium">Reset Password</span>
-                  <Key className="w-4 h-4" />
+                  <Key className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </button>
               </div>
 
               {/* Support Section */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <h3 className="font-medium text-foreground">Support</h3>
-                  <p className="text-sm text-muted-foreground">Get help with your account</p>
+                  <h3 className="text-base font-medium text-foreground">Support</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Get help with your account</p>
                 </div>
-                <button className="w-full flex items-center justify-between p-3 rounded-lg border hover:bg-accent transition-colors">
+                <button className="w-full flex items-center justify-between p-4 rounded-lg border hover:bg-accent transition-colors group">
                   <span className="text-sm font-medium">Contact Support</span>
-                  <HelpCircle className="w-4 h-4" />
+                  <HelpCircle className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </button>
               </div>
 
               {/* Log Out Section */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
-                  <h3 className="font-medium text-foreground">Log Out</h3>
-                  <p className="text-sm text-muted-foreground">Sign out from your account</p>
+                  <h3 className="text-base font-medium text-foreground">Log Out</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Sign out from your account</p>
                 </div>
-                <button className="w-full flex items-center justify-between p-3 rounded-lg border border-destructive/20 text-destructive hover:bg-destructive/10 transition-colors">
-                  <span className="text-sm font-medium">Log Out</span>
-                  <LogOut className="w-4 h-4" />
+                <button className="w-full flex items-center justify-between p-4 rounded-lg border border-destructive/20 text-destructive hover:bg-destructive/10 transition-colors group">
+                  <span className="text-sm font-medium text-destructive">Log Out</span>
+                  <LogOut className="w-4 h-4 text-destructive" />
                 </button>
               </div>
             </div>
