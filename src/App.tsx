@@ -11,7 +11,7 @@ import Transactions from "./pages/Transactions";
 import Invoicing from "./pages/Invoicing";
 import CashFlow from "./pages/CashFlow";
 import Documents from "./pages/Documents";
-import Settings from "./pages/Settings";
+
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
 import Vision from "./pages/Vision";
@@ -32,10 +32,9 @@ const App = () => {
               <Route path="/workspace" element={<WorkspacePicker />} />
               <Route path="/listings" element={<Listings />} />
               <Route path="/transactions" element={<Transactions />} />
-              <Route path="/invoicing" element={<Invoicing />} />
-              <Route path="/cash-flow" element={<CashFlow />} />
-              <Route path="/documents" element={<Documents />} />
-              <Route path="/settings" element={<Settings />} />
+          <Route path="/invoicing" element={<Invoicing />} />
+          <Route path="/cash-flow" element={<CashFlow />} />
+          <Route path="/documents" element={<Documents />} />
               <Route path="/mobile-welcome" element={<MobilePostRegistration />} />
               <Route path="/index" element={<Index />} />
               <Route path="*" element={<NotFound />} />

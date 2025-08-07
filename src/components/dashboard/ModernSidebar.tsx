@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
@@ -10,6 +10,7 @@ import {
   FolderOpen,
   Settings
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 interface NavItemProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -51,6 +52,7 @@ export function ModernSidebar({
   owner = "User" 
 }: ModernSidebarProps) {
   const location = useLocation();
+  const [settingsOpen, setSettingsOpen] = useState(false);
   
   const navigationItems = [
     { icon: LayoutDashboard, label: "Overview", path: "/" },
@@ -95,12 +97,33 @@ export function ModernSidebar({
 
       {/* Settings Section */}
       <div className="p-4 border-t border-sidebar-border">
-        <NavItem
-          icon={Settings}
-          label="Settings"
-          path="/settings"
-          isActive={location.pathname === '/settings'}
-        />
+        <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
+          <SheetTrigger asChild>
+            <button
+              className={cn(
+                "flex items-center gap-3 px-4 py-3 w-full text-left rounded-lg transition-all duration-200 ease-in-out",
+                "hover:bg-sidebar-accent text-sidebar-foreground font-normal"
+              )}
+            >
+              <Settings className="w-5 h-5 text-sidebar-foreground/70" />
+              <span className="text-sm">Settings</span>
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-96">
+            <SheetHeader>
+              <SheetTitle>Settings</SheetTitle>
+            </SheetHeader>
+            <div className="mt-6">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="bg-muted p-4 rounded-md">
+                    <p className="text-sm text-muted-foreground">Coming soon - User preferences and application settings</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );
