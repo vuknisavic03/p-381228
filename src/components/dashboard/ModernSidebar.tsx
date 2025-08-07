@@ -8,7 +8,7 @@ import {
   FileText, 
   TrendingUp, 
   FolderOpen,
-  User
+  Settings
 } from "lucide-react";
 
 interface NavItemProps {
@@ -93,13 +93,13 @@ export function ModernSidebar({
         ))}
       </nav>
 
-      {/* Profile Section */}
+      {/* Settings Section */}
       <div className="p-4 border-t border-sidebar-border">
         <NavItem
-          icon={User}
-          label="Profile"
-          path="/profile"
-          isActive={location.pathname === '/profile'}
+          icon={Settings}
+          label="Settings"
+          path="/settings"
+          isActive={location.pathname === '/settings'}
         />
       </div>
     </div>
