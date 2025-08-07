@@ -1,6 +1,6 @@
 
 import React from "react";
-import { WorkspaceNav } from "../workspace/WorkspaceNav";
+import { ModernSidebar } from "./ModernSidebar";
 import { Separator } from "@/components/ui/separator";
 
 interface DashboardLayoutProps {
@@ -17,14 +17,13 @@ export function DashboardLayout({
   owner = "Kevin Anderson" 
 }: DashboardLayoutProps) {
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white">
-      <WorkspaceNav 
+    <div className="flex h-screen w-full overflow-hidden bg-background">
+      <ModernSidebar 
         workspaceName={workspaceName}
         userInitials={userInitials}
         owner={owner}
       />
-      <Separator orientation="vertical" className="h-full border-[#EAECF0]" />
-      <main className="flex-1 relative overflow-auto bg-white">
+      <main className="flex-1 relative overflow-auto bg-background">
         {children}
       </main>
     </div>

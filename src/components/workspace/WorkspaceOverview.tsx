@@ -70,21 +70,19 @@ export function WorkspaceOverview({ userName = "Kevin", workspaceName = "Kevin's
   };
 
   return (
-    <div className="h-full flex flex-col bg-white animate-fade-in">
-      <div className="flex-none px-3 sm:px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-3">
-        <Header 
-          userName={userName} 
-          workspaceName={workspaceName} 
-          onDateRangeChange={handleDateRangeChange}
-          onPeriodLabelChange={handlePeriodLabelChange}
-          dateRange={dateRange}
-          activeView={activeView}
-          onViewChange={setActiveView}
-          showViewSelector={true}
-        />
-      </div>
+    <div className="h-full flex flex-col bg-background animate-fade-in">
+      <Header 
+        userName={userName} 
+        workspaceName={workspaceName} 
+        onDateRangeChange={handleDateRangeChange}
+        onPeriodLabelChange={handlePeriodLabelChange}
+        dateRange={dateRange}
+        activeView={activeView}
+        onViewChange={setActiveView}
+        showViewSelector={true}
+      />
       
-      <div className="flex-1 overflow-auto px-4 sm:px-6 lg:px-10 pb-8 pt-2 md:pt-4">
+      <div className="flex-1 overflow-auto px-4 sm:px-6 lg:px-10 pb-8 pt-6">
         <div className="max-w-[1600px] mx-auto">
           {renderActiveView()}
         </div>
