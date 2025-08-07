@@ -8,7 +8,10 @@ import {
   FileText, 
   TrendingUp, 
   FolderOpen,
-  Settings
+  Settings,
+  Key,
+  HelpCircle,
+  LogOut
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -113,13 +116,41 @@ export function ModernSidebar({
             <SheetHeader>
               <SheetTitle>Settings</SheetTitle>
             </SheetHeader>
-            <div className="mt-6">
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="bg-muted p-4 rounded-md">
-                    <p className="text-sm text-muted-foreground">Coming soon - User preferences and application settings</p>
-                  </div>
+            <div className="mt-6 space-y-6">
+              {/* Reset Password Section */}
+              <div className="space-y-3">
+                <div>
+                  <h3 className="font-medium text-foreground">Reset Password</h3>
+                  <p className="text-sm text-muted-foreground">Change your account password</p>
                 </div>
+                <button className="w-full flex items-center justify-between p-3 rounded-lg border hover:bg-accent transition-colors">
+                  <span className="text-sm font-medium">Reset Password</span>
+                  <Key className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Support Section */}
+              <div className="space-y-3">
+                <div>
+                  <h3 className="font-medium text-foreground">Support</h3>
+                  <p className="text-sm text-muted-foreground">Get help with your account</p>
+                </div>
+                <button className="w-full flex items-center justify-between p-3 rounded-lg border hover:bg-accent transition-colors">
+                  <span className="text-sm font-medium">Contact Support</span>
+                  <HelpCircle className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Log Out Section */}
+              <div className="space-y-3">
+                <div>
+                  <h3 className="font-medium text-foreground">Log Out</h3>
+                  <p className="text-sm text-muted-foreground">Sign out from your account</p>
+                </div>
+                <button className="w-full flex items-center justify-between p-3 rounded-lg border border-destructive/20 text-destructive hover:bg-destructive/10 transition-colors">
+                  <span className="text-sm font-medium">Log Out</span>
+                  <LogOut className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </SheetContent>
