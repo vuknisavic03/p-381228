@@ -26,14 +26,31 @@ export function Header({
   onViewChange,
   showViewSelector = false
 }: HeaderProps) {
+  const currentHour = new Date().getHours();
+  let greeting = "Good morning";
+  
+  if (currentHour >= 12 && currentHour < 17) {
+    greeting = "Good afternoon";
+  } else if (currentHour >= 17) {
+    greeting = "Good evening";
+  }
+
+  const userFirstName = userName || workspaceName?.split("'")[0] || "User";
+
   return (
-    <div className="flex justify-between items-center bg-white border-b border-gray-100 px-6 py-4">
-      <div className="flex items-center gap-4">
+    <div className="flex justify-between items-start">
+      <div>
+        <h1 className="text-[32px] md:text-[36px] text-[#1A1A1A] font-semibold leading-tight mb-2">
+          {greeting}
+        </h1>
+        <p className="text-[24px] md:text-[28px] text-[#9EA3AD] font-medium leading-none">
+          Today, {format(new Date(), "MMM dd")}
+        </p>
+      </div>
+      <div className="flex items-center gap-3">
         {showViewSelector && activeView && onViewChange && (
           <ViewSelector activeView={activeView} onViewChange={onViewChange} />
         )}
-      </div>
-      <div className="flex items-center gap-3">
         <DateRangePicker
           dateRange={dateRange}
           onDateRangeChange={onDateRangeChange}
