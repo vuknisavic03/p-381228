@@ -17,9 +17,8 @@ export default function DesktopLanding() {
               <span className="text-white font-bold text-sm">S</span>
             </div>
             <nav className="flex items-center gap-8">
-              <a href="#features" className="text-gray-600 hover:text-black transition-colors">Features</a>
-              <Link to="/vision" className="text-gray-600 hover:text-black transition-colors">About</Link>
-              <a href="#pricing" className="text-gray-600 hover:text-black transition-colors">Pricing</a>
+              <a href="#accounting" className="text-gray-600 hover:text-black transition-colors">Accounting</a>
+              <Link to="/vision" className="text-gray-600 hover:text-black transition-colors">Vision</Link>
             </nav>
           </div>
           
@@ -35,25 +34,13 @@ export default function DesktopLanding() {
         </div>
       </header>
 
-      {/* Announcement Bar */}
-      <div className="bg-gray-50 border-b border-gray-100 pt-20">
-        <div className="container mx-auto px-6 py-3 text-center">
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-            <span className="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full border">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              Square has automated 50,000+ property transactions
-            </span>
-            <ArrowUpRight className="w-4 h-4" />
-          </div>
-        </div>
-      </div>
 
       {/* Hero Section */}
-      <section className="px-6 py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="px-6 py-24 bg-gradient-to-b from-gray-50 to-white pt-32">
         <div className="container mx-auto text-center max-w-6xl">
           <div className="mb-6 flex justify-center">
             <span className="inline-flex items-center gap-2 text-sm text-gray-600 bg-white px-4 py-2 rounded-full border">
-              💗 by 3k+ property owners and accountants
+              Square has automated 10,000+ property transactions
             </span>
           </div>
           
@@ -133,7 +120,7 @@ export default function DesktopLanding() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="px-6 py-24 bg-white">
+      <section id="accounting" className="px-6 py-24 bg-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-black mb-6">Personalize your actions</h2>
@@ -355,7 +342,7 @@ export default function DesktopLanding() {
       </section>
 
       {/* CTA Section */}
-      <section id="pricing" className="px-6 py-24 bg-white">
+      <section className="px-6 py-24 bg-white">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-5xl font-bold text-black mb-8">Ready to automate your property accounting?</h2>
           <p className="text-xl text-gray-600 mb-12">

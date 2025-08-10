@@ -6,21 +6,29 @@ export default function Vision() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="px-4 py-3 border-b border-gray-100 h-16 flex items-center">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-3 md:gap-6">
-            <Link to="/" className="w-7 h-7 md:w-8 md:h-8 bg-black rounded flex items-center justify-center hover:bg-gray-800 transition-colors">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link to="/" className="w-8 h-8 bg-black rounded flex items-center justify-center">
               <span className="text-white font-bold text-sm">S</span>
             </Link>
-            <nav className="flex items-center gap-2 md:gap-6">
-              <Link to="/vision" className="text-black text-sm font-medium bg-blue-100 px-3 py-1.5 rounded hover:bg-blue-200 transition-colors">Vision</Link>
+            <nav className="flex items-center gap-8">
+              <a href="/#accounting" className="text-gray-600 hover:text-black transition-colors">Accounting</a>
+              <Link to="/vision" className="text-black hover:text-black transition-colors">Vision</Link>
             </nav>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button className="text-gray-600 hover:text-black transition-colors">Log in</button>
+            <Button className="bg-black text-white hover:bg-gray-800 transition-colors">
+              Sign up
+            </Button>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-6 py-24 pt-32">
         <div className="max-w-3xl mx-auto bg-white">
           {/* Letter Header */}
           <div className="mb-12">
