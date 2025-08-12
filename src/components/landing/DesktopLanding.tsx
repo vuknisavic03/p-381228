@@ -1,162 +1,473 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { BarChart3, Search, Tag, DollarSign, FileText, TrendingUp, Users, Calendar, Building2, CreditCard, Receipt, PieChart, Target } from "lucide-react";
+import InteractiveCategorizationDemo from "./InteractiveCategorizationDemo";
 import UserTypeDialog from "./UserTypeDialog";
+import dashboard from "/images/1.svg";
 
 export default function DesktopLanding() {
-  const [email, setEmail] = useState("");
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="grid grid-cols-2 min-h-screen">
-        {/* Left Column - Content */}
-        <div className="flex flex-col justify-center px-16 py-12">
-          <div className="max-w-lg">
-            {/* Hero Content */}
-            <h1 className="text-5xl font-bold text-black mb-8 leading-tight">
-              Ship experiences<br />
-              faster, together
-            </h1>
-            
-            {/* Preview Image */}
-            <div className="mb-8">
-              <img 
-                src="/images/1.svg" 
-                alt="Product preview" 
-                className="w-full max-w-md rounded-lg shadow-sm"
-              />
+      {/* Header */}
+      <header className="px-4 py-4 border-b border-gray-100">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
+              <span className="text-white font-bold text-sm">S</span>
             </div>
-            
-            {/* Features List */}
-            <div className="space-y-4 mb-8">
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                </div>
-                <span className="text-gray-700 text-sm">Generate code for 10+ frameworks</span>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                </div>
-                <span className="text-gray-700 text-sm">Connect your component and tokens</span>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                </div>
-                <span className="text-gray-700 text-sm">Make designs interactive with AI</span>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                </div>
-                <span className="text-gray-700 text-sm">APIs to publish to your live site or app</span>
-              </div>
-            </div>
-            
-            {/* Learn More Link */}
-            <div>
-              <span className="text-gray-600 text-sm">New to Builder? </span>
-              <a href="#" className="text-orange-500 text-sm font-medium hover:underline">
-                Learn more
-              </a>
-            </div>
+            <nav className="flex items-center gap-6">
+              <Link to="/" className="text-gray-600 text-sm">Accounting</Link>
+              <Link to="/vision" className="text-blue-600 text-sm font-medium">Vision</Link>
+            </nav>
           </div>
-        </div>
-        
-        {/* Right Column - Account Creation */}
-        <div className="flex flex-col justify-center px-16 py-12 bg-gray-50">
-          <div className="max-w-md">
-            {/* Logo */}
-            <div className="mb-8">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">S</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Form Header */}
-            <h2 className="text-3xl font-bold text-black mb-2">Create an account</h2>
-            <p className="text-gray-600 mb-6">
-              Already have an account? 
-              <a href="#" className="text-orange-500 font-medium ml-1 hover:underline">Log in</a>
-            </p>
-            
-            {/* Social Login Buttons */}
-            <div className="space-y-3 mb-6">
-              <Button 
-                variant="outline" 
-                className="w-full py-3 border-gray-300 hover:bg-gray-50 flex items-center justify-center gap-3"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Continue With Google
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                className="w-full py-3 border-gray-300 hover:bg-gray-50 flex items-center justify-center gap-3 bg-gray-800 text-white hover:bg-gray-700"
-              >
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                Continue With GitHub
-              </Button>
-            </div>
-            
-            {/* Divider */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex-1 h-px bg-gray-300"></div>
-              <span className="text-gray-500 text-sm">Or, sign up with your email</span>
-              <div className="flex-1 h-px bg-gray-300"></div>
-            </div>
-            
-            {/* Email Form */}
-            <div className="space-y-4 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Work email *
-                </label>
-                <Input
-                  type="email"
-                  placeholder="stephanie@mycompany.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-            
-            {/* Terms */}
-            <p className="text-xs text-gray-500 mb-6">
-              By creating an account, I agree to Builder's{" "}
-              <a href="#" className="text-blue-500 hover:underline">terms of service</a>{" "}
-              and{" "}
-              <a href="#" className="text-blue-500 hover:underline">privacy policy</a>
-            </p>
-            
-            {/* Submit Button */}
+          
+          <div className="flex items-center gap-4">
+            <button className="text-gray-600 text-sm">Log in</button>
             <Button 
-              className="w-full py-3 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-not-allowed"
-              disabled
+              className="bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800"
               onClick={() => setShowUserTypeDialog(true)}
             >
-              Get Started
+              Get Square free
             </Button>
           </div>
         </div>
-      </div>
-      
+      </header>
+
+      {/* Hero Section */}
+      <section className="px-4 py-20">
+        <div className="container mx-auto text-center">
+          <div className="mb-12 flex justify-center">
+            <div className="w-20 h-20 flex items-center justify-center">
+              <Building2 className="w-16 h-16 text-black" strokeWidth={1.5} />
+            </div>
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl font-bold text-black leading-tight mb-8 max-w-4xl mx-auto">
+            Property Management Has Evolved. Have You?
+          </h1>
+          
+          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Old tools can't manage a modern portfolio.<br />
+            Goodbye spreadsheets. Hello automation.
+          </p>
+          
+          <div className="flex justify-center mb-16">
+            <Button 
+              className="bg-black text-white text-lg px-8 py-4 rounded-lg hover:bg-gray-800 transition-colors"
+              onClick={() => setShowUserTypeDialog(true)}
+            >
+              Get Square free
+            </Button>
+          </div>
+          
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">S</span>
+                </div>
+                <div className="text-left">
+                  <div className="text-gray-900 font-semibold text-left">Live Dashboard</div>
+                  <div className="text-gray-600 text-sm text-left">Real-time insights • Categorized transactions • Performance tracking</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-green-600 text-sm font-medium">Live Updates</span>
+              </div>
+            </div>
+            <div className="p-8">
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                {[
+                  { 
+                    metric: "Total Revenue", 
+                    value: "$125,430", 
+                    change: "+12.5%", 
+                    subtext: "vs last month"
+                  },
+                  { 
+                    metric: "Net Profit", 
+                    value: "$36,220", 
+                    change: "+18.7%", 
+                    subtext: "after all expenses"
+                  },
+                  { 
+                    metric: "Monthly Growth", 
+                    value: "15.3%", 
+                    change: "+2.1%", 
+                    subtext: "portfolio expansion"
+                  },
+                ].map((item, index) => (
+                  <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                    <div className="text-sm font-medium text-gray-600 mb-2 text-left">{item.metric}</div>
+                    <div className="text-3xl font-bold text-gray-900 mb-2 text-left">{item.value}</div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <TrendingUp className="w-4 h-4 text-green-600" />
+                      <span className="text-sm font-semibold text-green-600">{item.change}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 text-left">{item.subtext}</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm font-semibold text-gray-700">Overall Portfolio Health</span>
+                  <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">Excellent Performance</span>
+                </div>
+                <div className="text-sm text-gray-600 text-left">All 3 properties performing above target • Revenue up 15.3% this quarter</div>
+                <div className="text-xs text-gray-500 mt-2 text-left">✨ Square automatically tracks performance across all your properties</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Property Organization Feature */}
+      <section className="px-4 pb-16">
+        <div className="container mx-auto">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Listings
+            </div>
+            <h2 className="text-4xl font-bold text-black mb-4">All Your Properties. One Interactive View.</h2>
+            <p className="text-lg text-gray-600 max-w-2xl">
+              Visualize all your property or business listings in one searchable map. Track occupancy, update availability, and plan with confidence.
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-wrap gap-3 mb-6">
+                {['All Properties', 'Apartments', 'Office', 'Retail', 'Mixed Use'].map((view, index) => (
+                  <div key={index} className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    index === 0 ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {view}
+                  </div>
+                ))}
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    name: "Sunset Apartments", 
+                    type: "Residential • 24 units", 
+                    profit: "+$36,000", 
+                    status: "High Performance",
+                    occupancy: "96%",
+                    location: "Brooklyn, NY",
+                    color: "bg-green-500"
+                  },
+                  { 
+                    name: "Downtown Office Plaza", 
+                    type: "Commercial • 12 suites", 
+                    profit: "+$54,000", 
+                    status: "Excellent",
+                    occupancy: "100%",
+                    location: "Manhattan, NY",
+                    color: "bg-blue-500"
+                  },
+                  { 
+                    name: "Riverside Condos", 
+                    type: "Residential • 18 units", 
+                    profit: "+$29,000", 
+                    status: "Strong",
+                    occupancy: "89%",
+                    location: "Queens, NY",
+                    color: "bg-purple-500"
+                  },
+                ].map((property, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full ${property.color}`}></div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">{property.name}</div>
+                          <div className="text-xs text-gray-600">{property.location}</div>
+                        </div>
+                      </div>
+                      <div className="text-lg font-semibold text-green-600">{property.profit}</div>
+                    </div>
+                    <div className="text-sm text-gray-700 mb-3">{property.type}</div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{property.status}</span>
+                      <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">{property.occupancy} occupied</span>
+                      <span className="text-xs text-gray-500">Last updated: 2 hours ago</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Transaction Filtering Feature */}
+      <section className="px-4 pb-16">
+        <div className="container mx-auto">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Transactions
+            </div>
+            <h2 className="text-4xl font-bold text-black mb-4">Track and Categorize Property Cash Flow.</h2>
+            <p className="text-lg text-gray-600 max-w-2xl">
+              View all income and expenses in one place. Take advantage of real-time updates with trend analysis and growth forecasts.
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="p-6">
+              <div className="flex gap-3 mb-6">
+                <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Sunset Apartments
+                </div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">Maintenance</div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">$500+</div>
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    desc: "Emergency HVAC System Repair", 
+                    amount: "-$850", 
+                    vendor: "ServiceMaster Commercial",
+                    date: "January 15, 2025",
+                    category: "Maintenance",
+                    property: "Sunset Apartments",
+                    urgent: true
+                  },
+                  { 
+                    desc: "Plumbing Emergency Response", 
+                    amount: "-$650", 
+                    vendor: "Quick Fix Plumbing LLC",
+                    date: "January 12, 2025",
+                    category: "Maintenance",
+                    property: "Sunset Apartments",
+                    urgent: false
+                  },
+                  { 
+                    desc: "Monthly Rent Collection - Unit 4B", 
+                    amount: "+$2,400", 
+                    vendor: "Tenant Payment Portal",
+                    date: "January 1, 2025",
+                    category: "Rent Income",
+                    property: "Sunset Apartments",
+                    urgent: false
+                  },
+                ].map((transaction, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        {transaction.urgent && <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>}
+                        <span className="text-sm font-semibold text-gray-900">{transaction.desc}</span>
+                      </div>
+                      <span className={`text-lg font-semibold ${transaction.amount.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                        {transaction.amount}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 mb-3">{transaction.vendor} • {transaction.date}</div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                        transaction.category === 'Rent Income' 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {transaction.category}
+                      </span>
+                      <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">{transaction.property}</span>
+                      {transaction.urgent && <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full font-medium">Urgent</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Workspace Manager Feature */}
+      <section className="px-4 pb-16">
+        <div className="container mx-auto">
+          <div className="mb-12">
+            <div className="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Workspaces
+            </div>
+            <h2 className="text-4xl font-bold text-black mb-4">One Platform. Infinite Workspaces.</h2>
+            <p className="text-lg text-gray-600 max-w-2xl">
+              Whether you manage one property or hundreds, workspaces help you stay organized and allow you to scale.
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+            <div className="p-6">
+              <div className="flex gap-3 mb-6">
+                <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Personal Portfolio
+                </div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">Company Assets</div>
+                <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium">Client Projects</div>
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    workspace: "Personal Portfolio", 
+                    properties: "12 properties", 
+                    revenue: "$89,400", 
+                    change: "+15.2%",
+                    status: "Growing",
+                    lastUpdate: "2 minutes ago",
+                    color: "bg-green-500"
+                  },
+                  { 
+                    workspace: "Downtown Commercial", 
+                    properties: "8 office buildings", 
+                    revenue: "$156,800", 
+                    change: "+22.1%",
+                    status: "Excellent",
+                    lastUpdate: "5 minutes ago",
+                    color: "bg-blue-500"
+                  },
+                  { 
+                    workspace: "Residential Management Co.", 
+                    properties: "24 apartment units", 
+                    revenue: "$74,200", 
+                    change: "+8.9%",
+                    status: "Stable",
+                    lastUpdate: "12 minutes ago",
+                    color: "bg-purple-500"
+                  },
+                ].map((workspace, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full ${workspace.color}`}></div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">{workspace.workspace}</div>
+                          <div className="text-xs text-gray-600">{workspace.properties}</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-semibold text-gray-900">{workspace.revenue}</div>
+                        <div className="flex items-center gap-1">
+                          <TrendingUp className="w-3 h-3 text-green-600" />
+                          <span className="text-xs font-semibold text-green-600">{workspace.change}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">{workspace.status}</span>
+                        <span className="text-xs text-gray-500">Updated {workspace.lastUpdate}</span>
+                      </div>
+                      <button className="text-xs bg-gray-200 text-gray-700 px-3 py-1 rounded-full font-medium hover:bg-gray-300 transition-colors">
+                        Switch to workspace
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm font-semibold text-gray-700">Cross-Workspace Insights</span>
+                  <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">All workspaces performing well</span>
+                </div>
+                <div className="text-sm text-gray-600 text-left">Total portfolio value: $320,400 • Average growth: +15.4% this quarter</div>
+                <div className="text-xs text-gray-500 mt-2 text-left">✨ Switch between workspaces instantly while keeping unified analytics</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="px-4 py-16">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-black mb-4">What people are saying</h2>
+          </div>
+          
+          <div className="relative overflow-hidden">
+            <div className="flex gap-6 animate-scroll">
+              {[
+                {
+                  quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
+                  author: "Sarah Chen",
+                  handle: "@sarahchen"
+                },
+                {
+                  quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
+                  author: "Marcus Johnson",
+                  handle: "@marcusjohnson"
+                },
+                {
+                  quote: "OK: Square Accounting is pretty sick.",
+                  author: "Alex Rivera",
+                  handle: "@alexrivera"
+                },
+                {
+                  quote: "They really cooked with Square. Especially the AI auto-categorization. Maybe organized books can finally be achieved.",
+                  author: "David Kim",
+                  handle: "@davidkimdata"
+                },
+                {
+                  quote: "Using @Square is like building filtered views for your finances, but the properties are elements from your transactions. So excited to set this up.",
+                  author: "Emily Watson",
+                  handle: "@emilywatson"
+                },
+                {
+                  quote: "Square Accounting is finally bringing innovation to property management accounting.",
+                  author: "Robert Taylor",
+                  handle: "@roberttaylor"
+                },
+                // Duplicate for seamless loop
+                {
+                  quote: "Square Accounting is finally bringing innovation to something that stayed stagnant for decades.",
+                  author: "Sarah Chen",
+                  handle: "@sarahchen"
+                },
+                {
+                  quote: "Square let me create a system so customized to the way I work, my properties, and my financial goals that there's no way I could go back.",
+                  author: "Marcus Johnson",
+                  handle: "@marcusjohnson"
+                },
+                {
+                  quote: "OK: Square Accounting is pretty sick.",
+                  author: "Alex Rivera",
+                  handle: "@alexrivera"
+                }
+              ].map((testimonial, index) => (
+                <div key={index} className="bg-white p-6 rounded-xl border border-gray-100 min-w-[350px] flex-shrink-0">
+                  <blockquote className="text-gray-900 mb-4">
+                    "{testimonial.quote}"
+                  </blockquote>
+                  <div>
+                    <div className="font-medium text-gray-900">{testimonial.author}</div>
+                    <div className="text-gray-500 text-sm">{testimonial.handle}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-4 py-8">
+        <div className="container mx-auto text-center">
+          <div className="text-gray-600 text-sm">
+            © 2025 SquareLabs
+          </div>
+        </div>
+      </footer>
+
       <UserTypeDialog 
         open={showUserTypeDialog} 
         onOpenChange={setShowUserTypeDialog} 
